@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  @apply box-border;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-white text-slate-900 font-sans;
+}
+
+a {
+  @apply text-blue-600 hover:text-blue-700;
+}
+
+button:focus-visible {
+  @apply outline outline-2 outline-offset-2 outline-blue-500;
+}

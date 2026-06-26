@@ -1,0 +1,20 @@
+{
+  "uz": {
+    "filters": "Filtrlar",
+    "rating": "Reyting",
+    "distance": "Masofa",
+    "apply": "Qo'llash"
+  },
+  "ru": {
+    "filters": "Фильтры",
+    "rating": "Рейтинг",
+    "distance": "Расстояние",
+    "apply": "Применить"
+  },
+  "en": {
+    "filters": "Filters",
+    "rating": "Rating",
+    "distance": "Distance",
+    "apply": "Apply"
+  }
+}

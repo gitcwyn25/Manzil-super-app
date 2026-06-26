@@ -1,0 +1,20 @@
+{
+  "uz": {
+    "placeholder": "Biznesnini yoki kategoriyani qidirish...",
+    "search": "Qidirish",
+    "results": "Qidirish Natijalari",
+    "loading": "Natijalar yuklanmoqda..."
+  },
+  "ru": {
+    "placeholder": "Искать бизнес или категорию...",
+    "search": "Поиск",
+    "results": "Результаты поиска",
+    "loading": "Загрузка результатов..."
+  },
+  "en": {
+    "placeholder": "Search for a business or category...",
+    "search": "Search",
+    "results": "Search Results",
+    "loading": "Loading results..."
+  }
+}
