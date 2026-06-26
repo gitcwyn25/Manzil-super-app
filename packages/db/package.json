@@ -1,0 +1,20 @@
+{
+  "name": "db",
+  "version": "0.1.0",
+  "scripts": {
+    "migrate:dev": "prisma migrate dev",
+    "migrate:deploy": "prisma migrate deploy",
+    "db:push": "prisma db push",
+    "db:seed": "ts-node prisma/seed.ts",
+    "studio": "prisma studio"
+  },
+  "devDependencies": {
+    "@prisma/cli": "^5.0.0",
+    "prisma": "^5.0.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.0.0"
+  }
+}

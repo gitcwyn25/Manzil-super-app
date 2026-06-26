@@ -1,0 +1,267 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Users
+model User {
+  id            String    @id @default(cuid())
+  clerkId       String    @unique
+  email         String    @unique
+  displayName   String
+  avatar        String?
+  role          UserRole  @default(CONSUMER)
+  locale        String    @default("uz")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  reviews       Review[]
+  reviewReplies ReviewReply[]
+  businesses    Business[] @relation("BusinessOwner")
+  claims        Claim[]
+  photos        Photo[] @relation("PhotoUploader")
+  reports       Report[] @relation("Reporter")
+  follows       Follow[] @relation("Follower")
+  followedBy    Follow[] @relation("Followed")
+  saves         Save[]
+  achievements  UserAchievement[]
+
+  @@map("users")
+}
+
+enum UserRole {
+  CONSUMER
+  BUSINESS_OWNER
+  ADMIN
+}
+
+// Businesses
+model Business {
+  id            String    @id @default(cuid())
+  name          String
+  categoryId    String
+  description   String?
+  address       String
+  latitude      Float
+  longitude     Float
+  phone         String?
+  hours         Json?
+  priceTier     String    @default("MODERATE")
+  status        ClaimStatus @default(UNCLAIMED)
+  claimedByUserId String?
+  claimedBy     User?     @relation("BusinessOwner", fields: [claimedByUserId], references: [id], onDelete: SetNull)
+  qualityScore  Float     @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  category      Category  @relation(fields: [categoryId], references: [id])
+  reviews       Review[]
+  photos        Photo[] @relation("BusinessPhotos")
+  claims        Claim[]
+  saves         Save[]
+  subscription  Subscription?
+  badges        BusinessBadge[]
+
+  @@map("businesses")
+}
+
+enum ClaimStatus {
+  UNCLAIMED
+  CLAIMED
+  PENDING
+}
+
+// Categories
+model Category {
+  id        String    @id @default(cuid())
+  name      Json      // { uz: string, ru: string, en: string }
+  icon      String?
+  parentId  String?
+  parent    Category? @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
+  children  Category[] @relation("CategoryHierarchy")
+  businesses Business[]
+  createdAt DateTime  @default(now())
+
+  @@map("categories")
+}
+
+// Reviews
+model Review {
+  id            String    @id @default(cuid())
+  businessId    String
+  userId        String
+  rating        Int       @db.SmallInt // 1-5
+  text          String
+  helpfulCount  Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  business      Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  author        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  replies       ReviewReply[]
+  photos        Photo[] @relation("ReviewPhotos")
+  reports       Report[]
+
+  @@unique([businessId, userId])
+  @@map("reviews")
+}
+
+model ReviewReply {
+  id              String    @id @default(cuid())
+  reviewId        String
+  businessOwnerId String
+  text            String
+  createdAt       DateTime  @default(now())
+
+  // Relations
+  review          Review    @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  businessOwner   User      @relation(fields: [businessOwnerId], references: [id], onDelete: Cascade)
+
+  @@map("review_replies")
+}
+
+// Photos
+model Photo {
+  id                String    @id @default(cuid())
+  storageUrl        String
+  uploaderUserId    String
+  uploader          User      @relation("PhotoUploader", fields: [uploaderUserId], references: [id], onDelete: Cascade)
+  businessId        String?
+  business          Business? @relation("BusinessPhotos", fields: [businessId], references: [id], onDelete: Cascade)
+  reviewId          String?
+  review            Review?   @relation("ReviewPhotos", fields: [reviewId], references: [id], onDelete: Cascade)
+  moderationStatus  String    @default("PENDING")
+  createdAt         DateTime  @default(now())
+
+  @@map("photos")
+}
+
+// Claims (business ownership verification)
+model Claim {
+  id                String    @id @default(cuid())
+  businessId        String
+  userId            String
+  status            ClaimStatus @default(PENDING)
+  verificationMethod String
+  reviewedByAdminId String?
+  createdAt         DateTime  @default(now())
+  reviewedAt        DateTime?
+
+  // Relations
+  business          Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("claims")
+}
+
+// Reports (abuse)
+model Report {
+  id              String    @id @default(cuid())
+  targetType      String    // REVIEW, PHOTO
+  targetId        String
+  reporterUserId  String
+  reason          String
+  status          String    @default("PENDING")
+  createdAt       DateTime  @default(now())
+
+  // Relations
+  reporter        User      @relation("Reporter", fields: [reporterUserId], references: [id], onDelete: Cascade)
+  review          Review?   @relation(fields: [targetId], references: [id], onDelete: Cascade)
+
+  @@map("reports")
+}
+
+// Social Graph
+model Follow {
+  id          String    @id @default(cuid())
+  followerId  String
+  followedId  String
+  follower    User      @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+  followed    User      @relation("Followed", fields: [followedId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+
+  @@unique([followerId, followedId])
+  @@map("follows")
+}
+
+model Save {
+  id          String    @id @default(cuid())
+  userId      String
+  businessId  String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  business    Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+
+  @@unique([userId, businessId])
+  @@map("saves")
+}
+
+// Subscriptions (Phase 2)
+model Subscription {
+  id          String    @id @default(cuid())
+  businessId  String    @unique
+  tier        String    @default("STARTER")
+  renewalDate DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  business    Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@map("subscriptions")
+}
+
+// Achievements (Phase 2)
+model Achievement {
+  id          String    @id @default(cuid())
+  key         String    @unique
+  name        Json      // { uz: string, ru: string, en: string }
+  description Json
+  icon        String
+  createdAt   DateTime  @default(now())
+
+  // Relations
+  userAchievements UserAchievement[]
+
+  @@map("achievements")
+}
+
+model UserAchievement {
+  id            String    @id @default(cuid())
+  userId        String
+  achievementId String
+  earnedAt      DateTime  @default(now())
+
+  // Relations
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+  @@map("user_achievements")
+}
+
+// Badges (Phase 2)
+model BusinessBadge {
+  id                String    @id @default(cuid())
+  businessId        String
+  badgeType         String    // ECO_FRIENDLY, BEST_FOR_WORK, etc.
+  confidenceSource  String    // RULE_BASED, AI_INFERRED
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  // Relations
+  business          Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@unique([businessId, badgeType])
+  @@map("business_badges")
+}
