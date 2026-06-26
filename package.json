@@ -1,0 +1,28 @@
+{
+  "name": "manzil-super-app",
+  "version": "0.1.0",
+  "description": "Yelp-style platform for Uzbekistan",
+  "private": true,
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "format": "turbo run format",
+    "db:migrate": "cd packages/db && npm run migrate:dev",
+    "db:push": "cd packages/db && npm run db:push",
+    "db:studio": "cd packages/db && npm run studio",
+    "type-check": "turbo run type-check"
+  },
+  "devDependencies": {
+    "turbo": "^1.10.0",
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}
