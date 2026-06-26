@@ -1,0 +1,47 @@
+name: Database Migrations
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "packages/db/**"
+  push:
+    branches: [main]
+    paths:
+      - "packages/db/**"
+
+jobs:
+  validate-migrations:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate migrations
+        run: npm run migrate:dev --workspace db
+        env:
+          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_db
