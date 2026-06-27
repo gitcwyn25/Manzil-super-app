@@ -24,8 +24,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="uz" className={`${geist.variable} ${geistMono.variable} ${inter.variable}`}>
-      <body>{children}</body>
+    <html lang="uz" className={`${geist.variable} ${geistMono.variable} ${inter.variable}`} suppressHydrationWarning>
+      <body suppressHydrationWarning>{children}</body>
     </html>
   );
 }
