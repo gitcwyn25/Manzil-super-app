@@ -4,11 +4,11 @@ on:
   pull_request:
     branches: [main]
     paths:
-      - "packages/db/**"
+      - "prisma/**"
   push:
     branches: [main]
     paths:
-      - "packages/db/**"
+      - "prisma/**"
 
 jobs:
   validate-migrations:
@@ -42,6 +42,6 @@ jobs:
         run: npm ci
 
       - name: Validate migrations
-        run: npm run migrate:dev --workspace db
+        run: npm run db:migrate
         env:
           DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_db

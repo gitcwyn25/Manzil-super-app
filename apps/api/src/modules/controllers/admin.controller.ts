@@ -1,22 +1,14 @@
 import { Controller, Get } from "@nestjs/common";
-import { DemoRepository } from "../repositories/demo.repository";
+import { DatabaseRepository } from "../repositories/database.repository";
 
 @Controller("admin")
 export class AdminController {
-  constructor(private readonly repository: DemoRepository) {}
+  constructor(private readonly repository: DatabaseRepository) {}
 
   @Get("overview")
-  overview() {
-    const businesses = this.repository.listBusinesses();
-
+  async overview() {
     return {
-      data: {
-        businessCount: businesses.length,
-        pendingClaimCount: businesses.filter((business) => business.status !== "claimed").length,
-        categoryCount: this.repository.listCategories().length,
-        reviewCount: this.repository.listReviews().length,
-        flaggedItemCount: 0
-      }
+      data: await this.repository.getAdminOverview()
     };
   }
 }

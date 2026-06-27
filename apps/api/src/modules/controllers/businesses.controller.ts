@@ -1,32 +1,32 @@
 import { Body, Controller, Get, Param, Post } from "@nestjs/common";
 import type { ReviewCreateRequest } from "@manzil/shared";
-import { DemoRepository } from "../repositories/demo.repository";
+import { DatabaseRepository } from "../repositories/database.repository";
 
 @Controller("businesses")
 export class BusinessesController {
-  constructor(private readonly repository: DemoRepository) {}
+  constructor(private readonly repository: DatabaseRepository) {}
 
   @Get()
-  listBusinesses() {
+  async listBusinesses() {
     return {
       data: {
-        businesses: this.repository.listBusinesses()
+        businesses: await this.repository.listBusinesses()
       }
     };
   }
 
   @Get(":slug")
-  getBusiness(@Param("slug") slug: string) {
+  async getBusiness(@Param("slug") slug: string) {
     return {
-      data: this.repository.getBusiness(slug)
+      data: await this.repository.getBusiness(slug)
     };
   }
 
   @Post(":slug/reviews")
-  createReview(@Param("slug") slug: string, @Body() body: Omit<ReviewCreateRequest, "businessSlug">) {
+  async createReview(@Param("slug") slug: string, @Body() body: Omit<ReviewCreateRequest, "businessSlug">) {
     return {
       data: {
-        review: this.repository.createReview({
+        review: await this.repository.createReview({
           businessSlug: slug,
           rating: Number(body.rating),
           text: body.text

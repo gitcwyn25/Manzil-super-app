@@ -7,7 +7,8 @@ import { ClaimsController } from "./controllers/claims.controller";
 import { HealthController } from "./controllers/health.controller";
 import { MediaController } from "./controllers/media.controller";
 import { SearchController } from "./controllers/search.controller";
-import { DemoRepository } from "./repositories/demo.repository";
+import { PrismaService } from "./prisma.service";
+import { DatabaseRepository } from "./repositories/database.repository";
 
 @Module({
   controllers: [
@@ -20,6 +21,6 @@ import { DemoRepository } from "./repositories/demo.repository";
     MediaController,
     SearchController
   ],
-  providers: [DemoRepository]
+  providers: [PrismaService, DatabaseRepository]
 })
 export class AppModule {}

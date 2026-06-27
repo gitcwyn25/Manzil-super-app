@@ -1,17 +1,14 @@
 import { Body, Controller, Post } from "@nestjs/common";
+import { DatabaseRepository } from "../repositories/database.repository";
 
 @Controller("auth")
 export class AuthController {
+  constructor(private readonly repository: DatabaseRepository) {}
+
   @Post("sync")
-  syncUser(@Body() body: { clerkId?: string; email?: string; displayName?: string; locale?: string }) {
+  async syncUser(@Body() body: { clerkId?: string; email?: string; displayName?: string; locale?: string }) {
     return {
-      data: {
-        id: body.clerkId ?? "demo_user",
-        email: body.email,
-        displayName: body.displayName ?? "Demo User",
-        locale: body.locale ?? "uz",
-        role: "consumer"
-      }
+      data: await this.repository.syncUser(body)
     };
   }
 }

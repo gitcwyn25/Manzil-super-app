@@ -42,7 +42,7 @@ model User {
   id          String   @id @default(cuid())
   clerkId     String?  @unique
   email       String?  @unique
-  phone       String?
+  phone       String?  @unique
   displayName String
   avatarUrl   String?
   locale      String   @default("uz")

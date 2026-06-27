@@ -1,16 +1,16 @@
 import { Controller, Get, Query } from "@nestjs/common";
-import { DemoRepository } from "../repositories/demo.repository";
+import { DatabaseRepository } from "../repositories/database.repository";
 
 @Controller("search")
 export class SearchController {
-  constructor(private readonly repository: DemoRepository) {}
+  constructor(private readonly repository: DatabaseRepository) {}
 
   @Get()
-  search(@Query("q") query = "", @Query("category") category = "all") {
+  async search(@Query("q") query = "", @Query("category") category = "all") {
     return {
       data: {
-        businesses: this.repository.search(query, category),
-        categories: this.repository.listCategories()
+        businesses: await this.repository.search(query, category),
+        categories: await this.repository.listCategories()
       }
     };
   }

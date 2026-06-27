@@ -1,15 +1,15 @@
 import { Controller, Get } from "@nestjs/common";
-import { DemoRepository } from "../repositories/demo.repository";
+import { DatabaseRepository } from "../repositories/database.repository";
 
 @Controller("categories")
 export class CategoriesController {
-  constructor(private readonly repository: DemoRepository) {}
+  constructor(private readonly repository: DatabaseRepository) {}
 
   @Get()
-  listCategories() {
+  async listCategories() {
     return {
       data: {
-        categories: this.repository.listCategories()
+        categories: await this.repository.listCategories()
       }
     };
   }
