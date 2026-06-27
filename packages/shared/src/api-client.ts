@@ -1,12 +1,25 @@
 import axios, { AxiosInstance } from 'axios';
-import { Business, Review, SearchFilters, SearchResult } from './types';
+import { Business, Category, Review, SearchFilters } from './types';
+
+type SearchResult = {
+  businesses: Business[];
+  categories: Category[];
+};
+
+function getDefaultBaseUrl() {
+  const globalWithProcess = globalThis as typeof globalThis & {
+    process?: { env?: Record<string, string | undefined> };
+  };
+
+  return globalWithProcess.process?.env?.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/v1';
+}
 
 export class ApiClient {
   private client: AxiosInstance;
 
-  constructor(baseURL: string = process.env.NEXT_PUBLIC_API_URL) {
+  constructor(baseURL: string = getDefaultBaseUrl()) {
     this.client = axios.create({
-      baseURL: baseURL || 'http://localhost:3001/api/v1',
+      baseURL,
       headers: {
         'Content-Type': 'application/json',
       },

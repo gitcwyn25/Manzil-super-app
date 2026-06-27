@@ -20,7 +20,9 @@
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "autoprefixer": "latest",
     "cross-env": "latest",
+    "tailwindcss": "^3.4.17",
     "typescript": "latest"
   }
 }
