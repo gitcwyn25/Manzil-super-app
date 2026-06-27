@@ -8,6 +8,7 @@ type Envelope<T> = {
 
 async function getJson<T>(path: string): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${path}`, {
+    headers: getServerAuthHeaders(path),
     next: { revalidate: 30 }
   });
 
@@ -16,6 +17,18 @@ async function getJson<T>(path: string): Promise<T> {
   }
 
   return response.json() as Promise<T>;
+}
+
+function getServerAuthHeaders(path: string): HeadersInit {
+  if (process.env.NODE_ENV === "production") {
+    return {};
+  }
+
+  if (path.startsWith("/admin")) {
+    return { "x-manzil-role": "admin" };
+  }
+
+  return {};
 }
 
 export async function getCategories() {

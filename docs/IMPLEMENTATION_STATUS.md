@@ -20,11 +20,12 @@ The Phase 0 scaffold is now database-backed locally:
 - `prisma/seed.ts` loads the initial Tashkent categories, businesses, and reviews.
 - NestJS API controllers read and write through Prisma-backed repositories.
 - Next.js web pages fetch from the API instead of importing demo data directly.
+- Admin API routes are protected by a role guard with a local-only development role header fallback.
 - Shared demo data remains as seed/input material and prototype fallback reference.
 
 ## Next implementation slice
 
-1. Add Clerk auth middleware and role checks.
+1. Replace the local-only role fallback with Clerk token verification.
 2. Add admin mutation endpoints for claim approval and moderation.
 3. Add owner-safe business update and review reply endpoints.
 4. Add Meilisearch indexing jobs after business/review writes.

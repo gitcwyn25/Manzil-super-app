@@ -9,6 +9,7 @@ import { MediaController } from "./controllers/media.controller";
 import { SearchController } from "./controllers/search.controller";
 import { PrismaService } from "./prisma.service";
 import { DatabaseRepository } from "./repositories/database.repository";
+import { RolesGuard } from "./auth/roles.guard";
 
 @Module({
   controllers: [
@@ -21,6 +22,6 @@ import { DatabaseRepository } from "./repositories/database.repository";
     MediaController,
     SearchController
   ],
-  providers: [PrismaService, DatabaseRepository]
+  providers: [PrismaService, DatabaseRepository, RolesGuard]
 })
 export class AppModule {}

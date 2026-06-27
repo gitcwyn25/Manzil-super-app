@@ -1,6 +1,8 @@
 import type { Locale } from "@manzil/shared";
 import { getAdminOverview } from "../../lib/api";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminPage({
   params
 }: {

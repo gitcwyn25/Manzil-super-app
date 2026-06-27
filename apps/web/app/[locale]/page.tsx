@@ -6,6 +6,8 @@ import { ReviewForm } from "../components/review-form";
 import { ReviewList } from "../components/review-list";
 import { getBusinesses, getBusiness, getCategories } from "../lib/api";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage({
   params
 }: {
