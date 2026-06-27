@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html lang="uz"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Manzil - Kirish</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed": "#281900",
+                    "primary-fixed-dim": "#85d4d3",
+                    "on-secondary": "#ffffff",
+                    "surface-container-highest": "#e2e3e1",
+                    "inverse-surface": "#2f3130",
+                    "primary-container": "#0f6e6e",
+                    "surface-container": "#eeeeec",
+                    "on-tertiary": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "background": "#f9f9f7",
+                    "tertiary": "#823100",
+                    "on-secondary-container": "#6a4800",
+                    "surface-container-low": "#f4f4f2",
+                    "outline-variant": "#bec9c8",
+                    "secondary-container": "#feb300",
+                    "inverse-primary": "#85d4d3",
+                    "on-background": "#1a1c1b",
+                    "error": "#ba1a1a",
+                    "outline": "#6e7979",
+                    "on-error": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed": "#ffdeac",
+                    "on-error-container": "#93000a",
+                    "on-primary-fixed-variant": "#004f50",
+                    "on-tertiary-container": "#ffd7c7",
+                    "tertiary-container": "#a84305",
+                    "on-tertiary-fixed-variant": "#7c2e00",
+                    "on-primary-container": "#9eedec",
+                    "primary": "#005454",
+                    "secondary": "#7e5700",
+                    "surface-tint": "#03696a",
+                    "inverse-on-surface": "#f1f1ef",
+                    "surface-bright": "#f9f9f7",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed": "#002020",
+                    "on-secondary-fixed-variant": "#604100",
+                    "surface-container-high": "#e8e8e6",
+                    "surface": "#f9f9f7",
+                    "secondary-fixed-dim": "#ffba38",
+                    "primary-fixed": "#a1f0ef",
+                    "on-tertiary-fixed": "#351000",
+                    "tertiary-fixed-dim": "#ffb595",
+                    "tertiary-fixed": "#ffdbcd",
+                    "surface-dim": "#dadad8",
+                    "on-surface": "#1a1c1b",
+                    "on-surface-variant": "#3e4948",
+                    "surface-variant": "#e2e3e1"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "8px",
+                    "xl": "40px",
+                    "sm": "12px",
+                    "md": "16px",
+                    "gutter": "16px",
+                    "lg": "24px",
+                    "container-margin": "20px",
+                    "base": "4px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Geist"],
+                    "label-sm": ["Geist"],
+                    "display-lg": ["Geist"],
+                    "label-md": ["Geist"],
+                    "body-md": ["Inter"],
+                    "headline-lg-mobile": ["Geist"],
+                    "headline-lg": ["Geist"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f9f9f7; }
+        .font-geist { font-family: 'Geist', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .form-transition { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .manzil-card {
+            background-color: #ffffff;
+            box-shadow: 0px 4px 20px rgba(0,0,0,0.04);
+            border: 1px solid #E5E5E0;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="min-h-screen flex flex-col bg-background selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Top Navigation Area (Shell Visibility Logic applied - though Authentication suppresses Nav Bars, it uses TopAppBar branding) -->
+<header class="w-full top-0 sticky bg-background flex justify-between items-center px-container-margin py-md z-50">
+<div class="flex items-center space-x-2">
+<span class="font-headline-md text-headline-md font-bold text-primary">UzDiscover</span>
+</div>
+<!-- Language Selection Pill -->
+<div class="flex bg-surface-container-low p-1 rounded-full border border-outline-variant">
+<button class="px-3 py-1 text-label-md font-label-md text-on-surface bg-white shadow-sm rounded-full transition-all">UZ</button>
+<button class="px-3 py-1 text-label-md font-label-md text-outline hover:text-on-surface transition-all">RU</button>
+<button class="px-3 py-1 text-label-md font-label-md text-outline hover:text-on-surface transition-all">EN</button>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-grow flex items-center justify-center px-container-margin py-xl relative overflow-hidden">
+<!-- Subtle Ambient Background Decoration -->
+<div class="absolute top-1/4 -left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+<div class="absolute bottom-1/4 -right-1/4 w-96 h-96 bg-secondary-container/10 rounded-full blur-3xl"></div>
+<div class="w-full max-w-md z-10">
+<!-- Authentication Card -->
+<div class="manzil-card rounded-lg p-lg md:p-xl space-y-lg">
+<!-- Tab Switcher -->
+<div class="flex w-full bg-surface-container-low p-1 rounded-lg">
+<button class="flex-1 py-2 text-label-md font-label-md rounded-[6px] transition-all duration-200 text-outline hover:text-on-surface" id="tab-consumer" onclick="switchTab('consumer')">
+                        Joy qidiryapman
+                    </button>
+<button class="flex-1 py-2 text-label-md font-label-md rounded-[6px] transition-all duration-200 bg-white text-on-surface shadow-sm ring-1 ring-black/5" id="tab-business" onclick="switchTab('business')">
+                        Biznesim bor
+                    </button>
+</div>
+<!-- Form Section -->
+<div class="space-y-md">
+<div class="space-y-xs" id="business-field">
+<label class="block font-label-md text-label-md text-on-surface-variant" for="business_name">Biznes nomi</label>
+<input class="w-full px-md py-3 rounded-lg border border-outline-variant focus:ring-1 focus:ring-primary focus:border-primary outline-none text-body-md transition-all placeholder:text-outline-variant" id="business_name" placeholder="Masalan: Rayhon Milliy Taomlari" type="text"/>
+</div>
+<div class="space-y-xs">
+<label class="block font-label-md text-label-md text-on-surface-variant" for="auth_identifier">Email yoki telefon</label>
+<input class="w-full px-md py-3 rounded-lg border border-outline-variant focus:ring-1 focus:ring-primary focus:border-primary outline-none text-body-md transition-all placeholder:text-outline-variant" id="auth_identifier" placeholder="example@manzil.uz" type="text"/>
+</div>
+<div class="space-y-xs">
+<div class="flex justify-between items-center">
+<label class="block font-label-md text-label-md text-on-surface-variant" for="password">Parol</label>
+<a class="text-label-sm font-label-sm text-primary hover:underline" href="#">Parolni unutdingizmi?</a>
+</div>
+<div class="relative">
+<input class="w-full px-md py-3 rounded-lg border border-outline-variant focus:ring-1 focus:ring-primary focus:border-primary outline-none text-body-md transition-all placeholder:text-outline-variant" id="password" placeholder="••••••••" type="password"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-outline-variant hover:text-on-surface-variant transition-colors" type="button">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</div>
+</div>
+<button class="w-full bg-primary text-white py-3.5 rounded-lg font-label-md text-label-md font-bold hover:bg-primary-container active:scale-[0.98] transition-all shadow-sm">
+                        Kirish
+                    </button>
+</div>
+<!-- Divider -->
+<div class="relative flex items-center py-base">
+<div class="flex-grow border-t border-outline-variant"></div>
+<span class="flex-shrink mx-4 text-label-sm font-label-sm text-outline-variant">yoki quyidagilar bilan</span>
+<div class="flex-grow border-t border-outline-variant"></div>
+</div>
+<!-- Social Auth -->
+<div class="grid grid-cols-2 gap-md">
+<button class="flex items-center justify-center space-x-2 py-3 rounded-lg border border-outline-variant hover:bg-surface-container-low transition-colors active:scale-95">
+<svg class="w-5 h-5" viewbox="0 0 24 24">
+<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"></path>
+<path d="M12 5.38c1.62 0 3.06.56 4.21 1.66l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 12-4.53z" fill="#EA4335"></path>
+</svg>
+<span class="text-label-md font-label-md text-on-surface">Google</span>
+</button>
+<button class="flex items-center justify-center space-x-2 py-3 rounded-lg border border-outline-variant hover:bg-surface-container-low transition-colors active:scale-95">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24">
+<path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.84-3.12 1.87-2.39 5.98.64 7.3-.63 1.63-1.44 3.14-2.69 3.87zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"></path>
+</svg>
+<span class="text-label-md font-label-md text-on-surface">Apple</span>
+</button>
+</div>
+</div>
+<!-- Footer Link -->
+<div class="mt-lg text-center">
+<p class="text-body-md font-body-md text-on-surface-variant">
+                    Akkauntingiz yo'qmi? 
+                    <a class="text-primary font-bold hover:underline ml-1" href="#">Ro'yxatdan o'ting</a>
+</p>
+</div>
+</div>
+</main>
+<!-- Simple Footer (Legal/Trust) -->
+<footer class="py-lg px-container-margin text-center">
+<div class="flex justify-center space-x-md text-label-sm font-label-sm text-outline">
+<a class="hover:text-primary transition-colors" href="#">Maxfiylik siyosati</a>
+<a class="hover:text-primary transition-colors" href="#">Foydalanish shartlari</a>
+<a class="hover:text-primary transition-colors" href="#">Yordam markazi</a>
+</div>
+<p class="mt-sm text-label-sm font-label-sm text-outline-variant">© 2024 Manzil UzDiscover. Barcha huquqlar himoyalangan.</p>
+</footer>
+<script>
+        /**
+         * Simple tab switcher logic to toggle between Consumer and Business views
+         */
+        function switchTab(type) {
+            const bizField = document.getElementById('business-field');
+            const tabConsumer = document.getElementById('tab-consumer');
+            const tabBusiness = document.getElementById('tab-business');
+            
+            // Shared styling classes
+            const activeClasses = ['bg-white', 'text-on-surface', 'shadow-sm', 'ring-1', 'ring-black/5'];
+            const inactiveClasses = ['text-outline', 'hover:text-on-surface'];
+
+            if (type === 'consumer') {
+                bizField.classList.add('hidden');
+                
+                // Toggle Consumer Active
+                tabConsumer.classList.add(...activeClasses);
+                tabConsumer.classList.remove(...inactiveClasses);
+                
+                // Toggle Business Inactive
+                tabBusiness.classList.remove(...activeClasses);
+                tabBusiness.classList.add(...inactiveClasses);
+            } else {
+                bizField.classList.remove('hidden');
+                
+                // Toggle Business Active
+                tabBusiness.classList.add(...activeClasses);
+                tabBusiness.classList.remove(...inactiveClasses);
+                
+                // Toggle Consumer Inactive
+                tabConsumer.classList.remove(...activeClasses);
+                tabConsumer.classList.add(...inactiveClasses);
+            }
+        }
+
+        // Initialize state (Business selected by default as per request)
+        document.addEventListener('DOMContentLoaded', () => {
+            switchTab('business');
+        });
+    </script>
+</body></html>

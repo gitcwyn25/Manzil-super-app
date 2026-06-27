@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+
+<html lang="uz"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Manzil - Milliy taomlar</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Inter:wght@100..900&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-fixed": "#002020",
+                      "secondary": "#7e5700",
+                      "surface-variant": "#e2e3e1",
+                      "error": "#ba1a1a",
+                      "background": "#f9f9f7",
+                      "on-primary-container": "#9eedec",
+                      "surface-tint": "#03696a",
+                      "primary-container": "#0f6e6e",
+                      "inverse-on-surface": "#f1f1ef",
+                      "on-error-container": "#93000a",
+                      "on-surface": "#1a1c1b",
+                      "on-tertiary-fixed": "#351000",
+                      "primary-fixed-dim": "#85d4d3",
+                      "on-secondary-container": "#6a4800",
+                      "on-secondary": "#ffffff",
+                      "tertiary-container": "#a84305",
+                      "inverse-primary": "#85d4d3",
+                      "tertiary": "#823100",
+                      "surface-dim": "#dadad8",
+                      "on-secondary-fixed-variant": "#604100",
+                      "on-tertiary": "#ffffff",
+                      "on-surface-variant": "#3e4948",
+                      "surface-container-highest": "#e2e3e1",
+                      "on-primary-fixed-variant": "#004f50",
+                      "error-container": "#ffdad6",
+                      "surface": "#f9f9f7",
+                      "tertiary-fixed": "#ffdbcd",
+                      "surface-container-lowest": "#ffffff",
+                      "on-background": "#1a1c1b",
+                      "primary": "#005454",
+                      "surface-container-high": "#e8e8e6",
+                      "secondary-fixed": "#ffdeac",
+                      "tertiary-fixed-dim": "#ffb595",
+                      "outline-variant": "#bec9c8",
+                      "outline": "#6e7979",
+                      "on-tertiary-fixed-variant": "#7c2e00",
+                      "on-tertiary-container": "#ffd7c7",
+                      "surface-container-low": "#f4f4f2",
+                      "surface-container": "#eeeeec",
+                      "on-error": "#ffffff",
+                      "on-secondary-fixed": "#281900",
+                      "on-primary": "#ffffff",
+                      "surface-bright": "#f9f9f7",
+                      "inverse-surface": "#2f3130",
+                      "secondary-fixed-dim": "#ffba38",
+                      "secondary-container": "#feb300",
+                      "primary-fixed": "#a1f0ef"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sm": "12px",
+                      "base": "4px",
+                      "gutter": "16px",
+                      "md": "16px",
+                      "xl": "40px",
+                      "container-margin": "20px",
+                      "lg": "24px",
+                      "xs": "8px"
+              },
+              "fontFamily": {
+                      "headline-md": ["Geist"],
+                      "display-lg": ["Geist"],
+                      "label-md": ["Geist"],
+                      "headline-lg-mobile": ["Geist"],
+                      "body-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-lg": ["Geist"],
+                      "label-sm": ["Geist"]
+              },
+              "fontSize": {
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md text-body-md overflow-x-hidden">
+<!-- Top Navigation Bar -->
+<header class="bg-surface fixed top-0 left-0 right-0 z-50">
+<div class="flex justify-between items-center w-full px-container-margin py-base max-w-7xl mx-auto h-16">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary cursor-pointer active:scale-95 duration-150">menu</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">Manzil</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="font-label-md text-label-md text-primary flex items-center gap-1 px-3 py-2 hover:bg-surface-container-low transition-colors rounded-lg">
+                    🇺🇿 O'zb
+                </button>
+</div>
+</div>
+<!-- Search Bar Header Context -->
+<div class="px-container-margin pb-4 max-w-7xl mx-auto">
+<div class="relative w-full group">
+<div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline">search</span>
+</div>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-xl py-3 pl-12 pr-4 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all font-body-md text-on-surface" placeholder="Taom yoki joy qidirish..." type="text" value="Milliy taomlar"/>
+<div class="absolute inset-y-0 right-4 flex items-center">
+<span class="material-symbols-outlined text-outline cursor-pointer">tune</span>
+</div>
+</div>
+</div>
+</header>
+<main class="pt-36 pb-24 max-w-7xl mx-auto px-container-margin">
+<!-- Filter Pills Scrollable -->
+<div class="flex items-center gap-2 overflow-x-auto hide-scrollbar mb-6 -mx-container-margin px-container-margin">
+<button class="bg-primary text-on-primary whitespace-nowrap px-4 py-2 rounded-full font-label-md text-label-md flex items-center gap-2">
+                Ochiq hozir
+                <span class="material-symbols-outlined text-sm">close</span>
+</button>
+<button class="bg-surface-container-high text-on-surface-variant whitespace-nowrap px-4 py-2 rounded-full font-label-md text-label-md flex items-center gap-1 border border-outline-variant">
+                Reyting 4.5+
+            </button>
+<button class="bg-surface-container-high text-on-surface-variant whitespace-nowrap px-4 py-2 rounded-full font-label-md text-label-md flex items-center gap-1 border border-outline-variant">
+                Narx <span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+<button class="bg-surface-container-high text-on-surface-variant whitespace-nowrap px-4 py-2 rounded-full font-label-md text-label-md flex items-center gap-1 border border-outline-variant">
+                Osh markazi
+            </button>
+<button class="bg-surface-container-high text-on-surface-variant whitespace-nowrap px-4 py-2 rounded-full font-label-md text-label-md flex items-center gap-1 border border-outline-variant">
+                Somsa
+            </button>
+</div>
+<!-- Result Stats & View Toggle -->
+<div class="flex justify-between items-center mb-6">
+<p class="font-label-md text-label-md text-on-surface-variant">42 ta natija topildi</p>
+<button class="bg-primary-container text-on-primary-container px-4 py-2 rounded-lg flex items-center gap-2 font-label-md text-label-md hover:opacity-90 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm">map</span>
+                Xarita
+            </button>
+</div>
+<!-- Grid Results -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Business Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm border border-outline-variant group cursor-pointer hover:shadow-md transition-shadow">
+<div class="relative h-48 w-full overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A high-end, professional photograph of a traditional Uzbek restaurant interior in Tashkent. The setting features ornate carved wooden pillars, vibrant blue mosaic tiles, and warm atmospheric lighting. In the foreground, a beautifully presented platter of steaming Osh Palov is served on a traditional ceramic plate. The mood is welcoming and celebratory of local culinary heritage, captured with a shallow depth of field." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKIWls0c5-wM28fCrLWOrWUtl8D3qTd8YFY86hVLpQ-5hBtTD7RYoN7txRQGk5CK6tFn_KbhM6JeeqMmuY1dhHeuIcqTWiONmIM2Hm0NyTal1bl5ouGJqIeNrFH8ij1dwcKrtEBh116CBfi1_lPwPyQTqIxcR_MoTLOnWZxcIT6VEmqu9Sr-JQUrtdVoKbM_b08szt68oc9fgsqxGVwiOft4m-UxmmxNPQ2AleCXa6mb21VEM_09BcpVGGuAV78ziew_gwGbI2__o"/>
+<div class="absolute top-3 right-3 bg-surface-container-lowest/90 backdrop-blur rounded-full p-1.5 shadow-sm">
+<span class="material-symbols-outlined text-primary text-xl">bookmark</span>
+</div>
+<div class="absolute bottom-3 left-3 bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded text-label-sm font-label-sm">
+                        Ochiq
+                    </div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-1">
+<h3 class="font-headline-md text-headline-md text-on-surface leading-tight">Yunusobod Osh Markazi</h3>
+<div class="flex items-center gap-1 bg-surface-container-high px-2 py-0.5 rounded">
+<span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-label-md text-on-surface">4.8</span>
+</div>
+</div>
+<p class="text-on-surface-variant font-body-md text-sm mb-3">Yunusobod tumani, Bog'ishamol ko'chasi</p>
+<div class="flex items-center justify-between border-t border-outline-variant pt-3">
+<div class="flex items-center gap-4">
+<span class="text-primary font-bold">55 000 – 120 000 UZS</span>
+</div>
+<div class="text-on-surface-variant text-label-sm">(1,240 ta sharh)</div>
+</div>
+</div>
+</div>
+<!-- Business Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm border border-outline-variant group cursor-pointer hover:shadow-md transition-shadow">
+<div class="relative h-48 w-full overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A vibrant, daylight-filled shot of a modern food stall in Tashkent, Chilonzor district. The focal point is a stack of freshly baked, golden-brown Tandir Somsas being pulled from a traditional clay oven. Steam rises elegantly from the pastries. The lighting is crisp and natural, highlighting the textures of the flaky dough and sesame seeds. The background shows a clean, bustling marketplace scene." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCs8eySRo7dEdVQzq1aBCRFvmwEM6xaVRCRDAdshCLtbvgOPnIPtGCdWey6I1O4iDOka4n5RxXcmlvh911eRxa6Mte_2KTnUeHlu1fXm8ZzyV2AV1e45ZpxW-Rzh0uC3hWYtjg3us_9elyAZWQILgDIdlqPF8vFghtVBUhEEJha94JrHvTUq6SUnCsXGYnRGOBPyk_R_o0n1dAlpx4kORZmISV7yEr3buOd-f4TZo0W8d09XpjA_4Khz6R60m25XqfsaTrFVAbxUIA"/>
+<div class="absolute top-3 right-3 bg-surface-container-lowest/90 backdrop-blur rounded-full p-1.5 shadow-sm">
+<span class="material-symbols-outlined text-outline text-xl">bookmark</span>
+</div>
+<div class="absolute bottom-3 left-3 bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded text-label-sm font-label-sm">
+                        Yopiladi 21:00
+                    </div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-1">
+<h3 class="font-headline-md text-headline-md text-on-surface leading-tight">Chilonzor Somsa Saroyi</h3>
+<div class="flex items-center gap-1 bg-surface-container-high px-2 py-0.5 rounded">
+<span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-label-md text-on-surface">4.6</span>
+</div>
+</div>
+<p class="text-on-surface-variant font-body-md text-sm mb-3">Chilonzor 3-mavze, Bunyodkor shoh ko'chasi</p>
+<div class="flex items-center justify-between border-t border-outline-variant pt-3">
+<div class="flex items-center gap-4">
+<span class="text-primary font-bold">12 000 – 45 000 UZS</span>
+</div>
+<div class="text-on-surface-variant text-label-sm">(850 ta sharh)</div>
+</div>
+</div>
+</div>
+<!-- Business Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm border border-outline-variant group cursor-pointer hover:shadow-md transition-shadow">
+<div class="relative h-48 w-full overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="An elegant evening view of a high-end restaurant in the Shayxontohur district of Tashkent. The architecture combines modern glass walls with traditional geometric latticework (panjara). Tables are set with fine white linens and traditional silk runners. Soft, golden outdoor lighting illuminates the facade. The atmosphere is sophisticated and premium, blending modern corporate design with heritage elements." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqtrzj1T82VZ6_KYOD12AnmEsj1q4vVll-rQXkwwhPuDGlQEbbnD8mYkBBgYsNKLXZRoJ8eR3y2vIahNAxgKc9A2dI-OLGlm2MCE3tGoWYrzy-VipAGmd2RQlImhlclIRGlizp35ZaysJ9I35LcjyDXpkmdo_8EuDoC0v0QUkEeTFeTtyFMwNX4GRHZ7kGItSwF6GYwzTEPZ38FriHECGYzIlBH7dVX3b1B6D0NM5tigAxi0OpikXnzj7cvkTIgybhnYJTU-7Z3Yc"/>
+<div class="absolute top-3 right-3 bg-surface-container-lowest/90 backdrop-blur rounded-full p-1.5 shadow-sm">
+<span class="material-symbols-outlined text-outline text-xl">bookmark</span>
+</div>
+<div class="absolute bottom-3 left-3 bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded text-label-sm font-label-sm">
+                        Ochiq
+                    </div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-1">
+<h3 class="font-headline-md text-headline-md text-on-surface leading-tight">Milliy Taomlar #1</h3>
+<div class="flex items-center gap-1 bg-surface-container-high px-2 py-0.5 rounded">
+<span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-label-md text-on-surface">4.9</span>
+</div>
+</div>
+<p class="text-on-surface-variant font-body-md text-sm mb-3">Shayxontohur tumani, Navoiy ko'chasi</p>
+<div class="flex items-center justify-between border-t border-outline-variant pt-3">
+<div class="flex items-center gap-4">
+<span class="text-primary font-bold">80 000 – 250 000 UZS</span>
+</div>
+<div class="text-on-surface-variant text-label-sm">(2,105 ta sharh)</div>
+</div>
+</div>
+</div>
+<!-- Business Card 4 (Mobile/Tablet spacing filler) -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm border border-outline-variant group cursor-pointer hover:shadow-md transition-shadow">
+<div class="relative h-48 w-full overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A close-up shot of a traditional tea set and sweets on an outdoor terrace in Old Tashkent. A blue and white 'paxta' pattern teapot and small bowls sit on a wooden table. Background shows a blurred courtyard with a mulberry tree. The lighting is the golden hour of sunset, casting warm long shadows. The style is serene and focuses on the authentic hospitality experience of Uzbekistan." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxUP87_iSxJB9QJsBzk7wOkoaReuP134qK86MZV_wKJAJv0Hik7_CLo8xp5mL-qNzjad3hI3cwOTutIfAbxgb9mEYV4_o10mENVdDGTQjfgaxrgzk4sfZlh_JENYChcaxWeM6F5UfO2EbYRPixOGgGQm5KhaeVYiDkIx571EQyd3K3TBfrWIxsWGvsRmLsHzxjlpcDqTl35vAyiB2PR0lgr6Acfzi0anuWGJnUpPCujFRH9E3XeO5OUr4Qybwdv1I9Pgx0V7MmKpk"/>
+<div class="absolute top-3 right-3 bg-surface-container-lowest/90 backdrop-blur rounded-full p-1.5 shadow-sm">
+<span class="material-symbols-outlined text-outline text-xl">bookmark</span>
+</div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-1">
+<h3 class="font-headline-md text-headline-md text-on-surface leading-tight">Zig'ir Osh - Mirobod</h3>
+<div class="flex items-center gap-1 bg-surface-container-high px-2 py-0.5 rounded">
+<span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-label-md text-on-surface">4.7</span>
+</div>
+</div>
+<p class="text-on-surface-variant font-body-md text-sm mb-3">Mirobod tumani, Shahrisabz ko'chasi</p>
+<div class="flex items-center justify-between border-t border-outline-variant pt-3">
+<div class="flex items-center gap-4">
+<span class="text-primary font-bold">45 000 – 90 000 UZS</span>
+</div>
+<div class="text-on-surface-variant text-label-sm">(512 ta sharh)</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination / Load More -->
+<div class="mt-12 flex justify-center">
+<button class="border border-primary text-primary px-8 py-3 rounded-lg font-label-md text-label-md hover:bg-primary/5 transition-colors active:scale-95">
+                Yana yuklash
+            </button>
+</div>
+</main>
+<!-- Map View Overlay (Asymmetric UI Highlight) -->
+<section class="mt-12 mb-24 px-container-margin">
+<div class="max-w-7xl mx-auto">
+<div class="bg-surface-container-low rounded-2xl p-6 md:p-8 flex flex-col md:flex-row gap-8 items-center overflow-hidden relative">
+<div class="flex-1 z-10">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-4">Atrofingizdagi eng sara taomlar</h2>
+<p class="text-on-surface-variant mb-6 max-w-md">Xarita orqali yaqin masofadagi restoranlarni toping, narxlarni solishtiring va eng qisqa yo'lni tanlang.</p>
+<button class="bg-primary text-on-primary px-6 py-3 rounded-lg font-label-md text-label-md flex items-center gap-2 shadow-lg">
+<span class="material-symbols-outlined">explore</span>
+                        Xaritada ko'rish
+                    </button>
+</div>
+<div class="w-full md:w-1/2 h-64 md:h-80 rounded-xl overflow-hidden shadow-xl transform md:rotate-2 hover:rotate-0 transition-transform duration-500">
+<!-- Map Mockup -->
+<div class="w-full h-full relative">
+<img class="w-full h-full object-cover" data-location="Tashkent" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRt37zUug2QxJnUSbk46C6ZGoZkFsNe_l_94_NUHIjSsuGLrHoWCmdhhdMcEO6GzEew0fs7zgMVpMQI0Bq9L-GVymYqkfxA3e0QxBaevV1NqrrcdWCfOgXUVkoA-pSMsNhEh3rJed8VRc4o_UmmA_efyhDUQj66YViwQd2SWa9xSkbY14qLEXwewEGGoKncazDFTAFN0w3gMct32D4ELoE8jEVGtl5izTL4PMg-gMWKORpHbL6-ueylYUabdRhNtfXzBpI9qTDTQI"/>
+<div class="absolute inset-0 bg-primary/10"></div>
+<!-- Mockup Pins -->
+<div class="absolute top-1/4 left-1/3 glass-card p-2 rounded-lg border border-primary/20 shadow-lg flex items-center gap-2">
+<div class="bg-primary text-on-primary rounded px-2 py-0.5 text-xs font-bold">65k</div>
+<span class="text-[10px] font-bold">Osh Markazi</span>
+</div>
+<div class="absolute bottom-1/3 right-1/4 glass-card p-2 rounded-lg border border-primary/20 shadow-lg flex items-center gap-2">
+<div class="bg-primary text-on-primary rounded px-2 py-0.5 text-xs font-bold">15k</div>
+<span class="text-[10px] font-bold">Somsa Saroyi</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Bottom Navigation Bar (Mobile only via destination count/layout) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container-lowest dark:bg-inverse-surface rounded-t-xl shadow-md md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1 hover:text-primary transition-transform duration-200 active:scale-90" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm">Asosiy</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">search</span>
+<span class="font-label-sm text-label-sm">Qidiruv</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1 hover:text-primary transition-transform duration-200 active:scale-90" href="#">
+<span class="material-symbols-outlined">bookmark</span>
+<span class="font-label-sm text-label-sm">Saqlangan</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1 hover:text-primary transition-transform duration-200 active:scale-90" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">Profil</span>
+</a>
+</nav>
+<!-- Desktop Navigation Side Anchors / Simplified Footer -->
+<footer class="hidden md:block py-12 border-t border-outline-variant bg-surface-container-low">
+<div class="max-w-7xl mx-auto px-container-margin grid grid-cols-4 gap-8">
+<div class="col-span-1">
+<h2 class="font-headline-md text-headline-md text-primary font-bold mb-4">Manzil</h2>
+<p class="text-on-surface-variant text-sm">O'zbekiston bo'ylab eng yaxshi joylarni kashf eting. Biz sizga mahalliy va sayyohlar uchun eng ma'qul maskanlarni topishda yordam beramiz.</p>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface font-bold mb-4">Bo'limlar</h4>
+<ul class="space-y-2 text-on-surface-variant text-sm">
+<li><a class="hover:text-primary" href="#">Asosiy</a></li>
+<li><a class="hover:text-primary" href="#">Restoranlar</a></li>
+<li><a class="hover:text-primary" href="#">Mehmonxonalar</a></li>
+<li><a class="hover:text-primary" href="#">Diqqatga sazovor joylar</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface font-bold mb-4">Yordam</h4>
+<ul class="space-y-2 text-on-surface-variant text-sm">
+<li><a class="hover:text-primary" href="#">Biz haqimizda</a></li>
+<li><a class="hover:text-primary" href="#">Bog'lanish</a></li>
+<li><a class="hover:text-primary" href="#">Maxfiylik siyosati</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface font-bold mb-4">Ilovani yuklab oling</h4>
+<div class="flex flex-col gap-2">
+<button class="bg-on-surface text-surface py-2 px-4 rounded-lg flex items-center gap-2 text-sm justify-center">
+<span class="material-symbols-outlined">play_books</span>
+                        Google Play
+                    </button>
+<button class="bg-on-surface text-surface py-2 px-4 rounded-lg flex items-center gap-2 text-sm justify-center">
+<span class="material-symbols-outlined">apps</span>
+                        App Store
+                    </button>
+</div>
+</div>
+</div>
+<div class="max-w-7xl mx-auto px-container-margin mt-12 pt-6 border-t border-outline-variant flex justify-between items-center text-on-surface-variant text-xs">
+<p>© 2024 Manzil. Barcha huquqlar himoyalangan.</p>
+<div class="flex gap-4">
+<span class="material-symbols-outlined">face_nod</span>
+<span class="material-symbols-outlined">public</span>
+<span class="material-symbols-outlined">alternate_email</span>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interaction for bookmark toggle
+        document.querySelectorAll('.material-symbols-outlined').forEach(icon => {
+            if (icon.innerText === 'bookmark') {
+                icon.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isFilled = icon.style.fontVariationSettings.includes("'FILL' 1");
+                    icon.style.fontVariationSettings = isFilled ? "'FILL' 0" : "'FILL' 1";
+                    icon.classList.toggle('text-primary');
+                });
+            }
+        });
+
+        // Search bar focus effect
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('scale-[1.01]');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('scale-[1.01]');
+        });
+    </script>
+</body></html>

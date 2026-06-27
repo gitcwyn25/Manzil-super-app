@@ -1,28 +1,27 @@
 {
-  "name": "manzil-super-app",
-  "version": "0.1.0",
-  "description": "Yelp-style platform for Uzbekistan",
+  "name": "manzil-platform",
   "private": true,
+  "version": "0.1.0",
+  "description": "Manzil local business discovery and reviews platform for Uzbekistan.",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
   "scripts": {
-    "dev": "turbo run dev --parallel",
-    "build": "turbo run build",
-    "test": "turbo run test",
-    "lint": "turbo run lint",
-    "format": "turbo run format",
-    "db:migrate": "cd packages/db && npm run migrate:dev",
-    "db:push": "cd packages/db && npm run db:push",
-    "db:studio": "cd packages/db && npm run studio",
-    "type-check": "turbo run type-check"
+    "dev": "npm run dev --workspace @manzil/web",
+    "dev:web": "npm run dev --workspace @manzil/web",
+    "dev:api": "npm run start:dev --workspace @manzil/api",
+    "build": "npm run build --workspaces --if-present",
+    "build:shared": "npm run build --workspace @manzil/shared",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "prisma:generate": "prisma generate --schema prisma/schema.prisma",
+    "prisma:migrate": "prisma migrate dev --schema prisma/schema.prisma",
+    "seed:validate": "tsx tools/validate-seed.ts data/tashkent-seed-template.csv"
   },
   "devDependencies": {
-    "turbo": "^1.10.0",
-    "typescript": "^5.0.0",
-    "@types/node": "^20.0.0",
-    "eslint": "^8.0.0",
-    "prettier": "^3.0.0"
-  },
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ]
+    "prisma": "latest",
+    "tsx": "latest",
+    "typescript": "latest"
+  }
 }

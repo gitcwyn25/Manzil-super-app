@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+
+<html lang="uz"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Manzil - Faoliyat</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Geist:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed": "#281900",
+                    "on-tertiary-fixed": "#351000",
+                    "inverse-on-surface": "#f1f1ef",
+                    "tertiary-fixed-dim": "#ffb595",
+                    "surface-variant": "#e2e3e1",
+                    "surface": "#f9f9f7",
+                    "outline": "#6e7979",
+                    "tertiary": "#823100",
+                    "surface-container-highest": "#e2e3e1",
+                    "on-primary-fixed-variant": "#004f50",
+                    "tertiary-fixed": "#ffdbcd",
+                    "on-secondary-fixed-variant": "#604100",
+                    "on-primary-container": "#9eedec",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface-variant": "#3e4948",
+                    "primary-container": "#0f6e6e",
+                    "on-tertiary-container": "#ffd7c7",
+                    "primary-fixed": "#a1f0ef",
+                    "on-background": "#1a1c1b",
+                    "inverse-surface": "#2f3130",
+                    "on-tertiary-fixed-variant": "#7c2e00",
+                    "surface-container-high": "#e8e8e6",
+                    "surface-container": "#eeeeec",
+                    "secondary-fixed": "#ffdeac",
+                    "inverse-primary": "#85d4d3",
+                    "on-primary-fixed": "#002020",
+                    "on-secondary-container": "#6a4800",
+                    "on-error": "#ffffff",
+                    "tertiary-container": "#a84305",
+                    "surface-bright": "#f9f9f7",
+                    "on-error-container": "#93000a",
+                    "secondary": "#7e5700",
+                    "outline-variant": "#bec9c8",
+                    "surface-dim": "#dadad8",
+                    "secondary-container": "#feb300",
+                    "primary": "#005454",
+                    "on-secondary": "#ffffff",
+                    "background": "#f9f9f7",
+                    "primary-fixed-dim": "#85d4d3",
+                    "surface-tint": "#03696a",
+                    "error-container": "#ffdad6",
+                    "secondary-fixed-dim": "#ffba38",
+                    "on-primary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "surface-container-low": "#f4f4f2",
+                    "on-surface": "#1a1c1b"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "12px",
+                    "md": "16px",
+                    "lg": "24px",
+                    "base": "4px",
+                    "container-margin": "20px",
+                    "xs": "8px",
+                    "xl": "40px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Geist"],
+                    "label-md": ["Geist"],
+                    "headline-md": ["Geist"],
+                    "headline-lg-mobile": ["Geist"],
+                    "headline-lg": ["Geist"],
+                    "label-sm": ["Geist"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #f9f9f7;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-tab-indicator {
+            height: 3px;
+            background-color: #005454;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            border-radius: 3px 3px 0 0;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .achievement-card {
+            min-width: 120px;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-on-surface">
+<!-- TopAppBar from JSON Authority -->
+<header class="w-full sticky top-0 bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline z-40 flex items-center justify-between px-container-margin py-md">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim">location_on</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary dark:text-primary-fixed-dim tracking-tight">Faoliyat</h1>
+</div>
+<button class="hover:bg-surface-container-high transition-colors p-2 rounded-full active:scale-95 duration-150">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim">language</span>
+</button>
+</header>
+<main class="pb-32">
+<!-- Achievements Section (Yutuqlar) -->
+<section class="mt-lg">
+<div class="px-container-margin flex items-center justify-between mb-md">
+<h2 class="font-headline-md text-headline-md text-on-surface">Yutuqlar</h2>
+<button class="text-primary font-label-md">Hammasi</button>
+</div>
+<div class="flex overflow-x-auto custom-scrollbar px-container-margin gap-md">
+<!-- Achievement 1 -->
+<div class="achievement-card flex flex-col items-center bg-surface-container-lowest p-md rounded-xl shadow-sm border border-outline-variant/30 text-center">
+<div class="w-16 h-16 bg-secondary-container flex items-center justify-center rounded-full mb-xs">
+<span class="material-symbols-outlined text-on-secondary-container text-3xl" style="font-variation-settings: 'FILL' 1;">explore</span>
+</div>
+<span class="font-label-md text-on-surface">Kashfiyotchi</span>
+<span class="text-[10px] text-outline">12 joy</span>
+</div>
+<!-- Achievement 2 -->
+<div class="achievement-card flex flex-col items-center bg-surface-container-lowest p-md rounded-xl shadow-sm border border-outline-variant/30 text-center">
+<div class="w-16 h-16 bg-primary-container flex items-center justify-center rounded-full mb-xs">
+<span class="material-symbols-outlined text-on-primary-container text-3xl" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+</div>
+<span class="font-label-md text-on-surface">Gurman</span>
+<span class="text-[10px] text-outline">8 ta'riz</span>
+</div>
+<!-- Achievement 3 -->
+<div class="achievement-card flex flex-col items-center bg-surface-container-lowest p-md rounded-xl shadow-sm border border-outline-variant/30 text-center opacity-50">
+<div class="w-16 h-16 bg-surface-container-high flex items-center justify-center rounded-full mb-xs">
+<span class="material-symbols-outlined text-on-surface-variant text-3xl">verified</span>
+</div>
+<span class="font-label-md text-on-surface">Ekspert</span>
+<span class="text-[10px] text-outline">Qulflangan</span>
+</div>
+</div>
+</section>
+<!-- Tabs Section -->
+<div class="mt-lg bg-surface sticky top-[72px] z-30">
+<div class="flex border-b border-outline-variant">
+<button class="flex-1 py-4 text-center font-label-md text-primary relative" id="tab-reviews" onclick="switchTab('reviews')">
+                    Fikrlarim
+                    <div class="active-tab-indicator" id="indicator-reviews"></div>
+</button>
+<button class="flex-1 py-4 text-center font-label-md text-on-surface-variant relative" id="tab-recent" onclick="switchTab('recent')">
+                    Yaqinda ko'rilganlar
+                    <div class="active-tab-indicator hidden" id="indicator-recent"></div>
+</button>
+</div>
+</div>
+<!-- Reviews List Content -->
+<div class="px-container-margin mt-md space-y-md" id="content-reviews">
+<!-- Review Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-md shadow-sm border border-outline-variant/20">
+<div class="flex justify-between items-start mb-xs">
+<div class="flex gap-3">
+<div class="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A cinematic, high-angle shot of a traditional Uzbek restaurant interior with warm lighting, carved wooden pillars, and vibrant silk table runners. The atmosphere is upscale and inviting, featuring rich Deep Teal and Warm Gold accents. Soft natural light filters through arched windows onto a table set with exquisite blue-and-white ceramics." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCh7gbgOmGNIM7aRZFi0Dhle2tLBtiXUR6ro-H5MGN4xGyG31cJI3-GoQdaAYoGNjtQXvYqSFHI93dpYPwPoayGG6AjY2c23CpZDzLu4Lc7qgMDOD5-vzP3WNXOa-pUVD1Bv298gLVdt13fQ-WXJa5BCXldr8qmqBXnO5oQQw6z1svIGR_eX7_19hRe1mYo0Gs5DoGnWa4cMm3UZYKmIIycBfVP1mAoJsSy6oUrZICFVpdw1hbvM8xGLUIIk6lQvCAjufhY0Et3g5A"/>
+</div>
+<div>
+<h3 class="font-headline-md text-body-lg font-semibold text-on-surface">Osh Markazi</h3>
+<div class="flex items-center text-secondary-container">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div></div></div></div></div></div></main></body></html>

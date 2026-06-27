@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html lang="uz"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Manzil Business - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        @font-face {
+            font-family: 'Geist';
+            src: url('https://cdn.jsdelivr.net/npm/geist@1.0.3/dist/fonts/geist-sans/Geist-Regular.woff2') format('woff2');
+            font-weight: 400;
+        }
+        @font-face {
+            font-family: 'Geist';
+            src: url('https://cdn.jsdelivr.net/npm/geist@1.0.3/dist/fonts/geist-sans/Geist-Medium.woff2') format('woff2');
+            font-weight: 500;
+        }
+        @font-face {
+            font-family: 'Geist';
+            src: url('https://cdn.jsdelivr.net/npm/geist@1.0.3/dist/fonts/geist-sans/Geist-Bold.woff2') format('woff2');
+            font-weight: 700;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9f9f7;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 200px;
+            width: 100%;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-container": "#9eedec",
+                        "inverse-on-surface": "#f1f1ef",
+                        "surface-tint": "#03696a",
+                        "tertiary-fixed-dim": "#ffb595",
+                        "surface-container-high": "#e8e8e6",
+                        "error": "#ba1a1a",
+                        "on-tertiary": "#ffffff",
+                        "inverse-primary": "#85d4d3",
+                        "secondary-fixed-dim": "#ffba38",
+                        "surface-variant": "#e2e3e1",
+                        "primary-container": "#0f6e6e",
+                        "outline": "#6e7979",
+                        "on-background": "#1a1c1b",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#bec9c8",
+                        "on-tertiary-fixed-variant": "#7c2e00",
+                        "on-tertiary-fixed": "#351000",
+                        "on-error-container": "#93000a",
+                        "primary-fixed-dim": "#85d4d3",
+                        "on-error": "#ffffff",
+                        "tertiary": "#823100",
+                        "surface-bright": "#f9f9f7",
+                        "on-secondary-fixed": "#281900",
+                        "on-surface": "#1a1c1b",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-container": "#ffd7c7",
+                        "on-primary-fixed-variant": "#004f50",
+                        "on-primary-fixed": "#002020",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#feb300",
+                        "surface-container-low": "#f4f4f2",
+                        "on-surface-variant": "#3e4948",
+                        "surface": "#f9f9f7",
+                        "surface-container": "#eeeeec",
+                        "on-secondary-container": "#6a4800",
+                        "tertiary-container": "#a84305",
+                        "inverse-surface": "#2f3130",
+                        "primary": "#005454",
+                        "secondary-fixed": "#ffdeac",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#dadad8",
+                        "on-secondary-fixed-variant": "#604100",
+                        "tertiary-fixed": "#ffdbcd",
+                        "background": "#f9f9f7",
+                        "primary-fixed": "#a1f0ef",
+                        "secondary": "#7e5700",
+                        "surface-container-highest": "#e2e3e1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "12px",
+                        "md": "16px",
+                        "base": "4px",
+                        "lg": "24px",
+                        "gutter": "16px",
+                        "xs": "8px",
+                        "xl": "40px",
+                        "container-margin": "20px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Geist"],
+                        "label-md": ["Geist"],
+                        "display-lg": ["Geist"],
+                        "headline-md": ["Geist"],
+                        "headline-lg-mobile": ["Geist"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Geist"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-surface dark:bg-inverse-surface shadow-sm flex flex-col border-r border-outline-variant dark:border-outline z-50">
+<div class="p-lg">
+<h1 class="text-headline-md font-headline-md font-bold text-primary dark:text-inverse-primary">Manzil Business</h1>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Verified Merchant</p>
+</div>
+<nav class="flex-1 px-md py-sm space-y-1">
+<!-- Active Tab: Dashboard -->
+<a class="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container rounded-lg opacity-90 transition-all duration-150" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-label-md font-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined">storefront</span>
+<span class="text-label-md font-label-md">My Listing</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined">reviews</span>
+<span class="text-label-md font-label-md">Reviews</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined">photo_library</span>
+<span class="text-label-md font-label-md">Photos</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-label-md font-label-md">Insights</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-label-md font-label-md">Settings</span>
+</a>
+</nav>
+<div class="p-md border-t border-outline-variant">
+<button class="w-full py-3 bg-secondary-container text-on-secondary-container font-bold rounded-lg mb-4 hover:opacity-90 transition-all scale-100 active:scale-95">
+                Upgrade to Premium
+            </button>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-label-md font-label-md">Logout</span>
+</a>
+</div>
+</aside>
+<!-- TopAppBar -->
+<header class="fixed top-0 right-0 left-64 h-16 bg-surface dark:bg-surface-container-lowest border-b border-outline-variant flex justify-between items-center px-lg z-40">
+<div class="flex items-center bg-surface-container-low rounded-full px-md py-xs w-96">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md w-full ml-xs" placeholder="Qidirish..." type="text"/>
+</div>
+<div class="flex items-center gap-md">
+<button class="hover:bg-surface-container-high dark:hover:bg-inverse-surface rounded-full p-2 transition-all active:scale-95">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="hover:bg-surface-container-high dark:hover:bg-inverse-surface rounded-full p-2 transition-all active:scale-95">
+<span class="material-symbols-outlined">help</span>
+</button>
+<button class="hover:bg-surface-container-high dark:hover:bg-inverse-surface rounded-full p-2 transition-all active:scale-95 flex items-center gap-xs">
+<span class="material-symbols-outlined">language</span>
+<span class="text-label-sm uppercase">UZ</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a business owner, a middle-aged Uzbek man in business casual attire, smiling confidently against a minimalist corporate office background. The lighting is soft and natural, emphasizing a trustworthy and successful persona within a clean, modern digital interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4OlLGI1EhJPIknA85-mjFTJHxNO30sJ5i4dnO8OaeCWAgyuz62pifLhXksCQryRSls0-9KHKnRWIa_82QN2KuASTii8-OLhxtZ1TVXEyOFNBWBVSKhYP4_TeXBuBYZb2AckczgzJfg5vdlZ0kgpIc_77STr4QhyiqNtALlXVak8FRA-a1O3etkaeb6jk03U5enZfiChxPqSKESKwu1CFKlNGBTB_QGFrzJtM421srhjyghLi2d67fbl4UxgwR4VJOXdDVZNFqS_E"/>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-64 mt-16 p-lg">
+<div class="max-w-6xl mx-auto space-y-lg">
+<!-- Performance Stats Grid -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<div class="bg-surface-container-lowest p-md rounded-lg shadow-sm border border-outline-variant">
+<div class="flex justify-between items-start mb-xs">
+<span class="text-label-md text-on-surface-variant">Profil ko'rishlar</span>
+<span class="text-primary text-label-sm font-bold bg-primary-fixed px-2 py-0.5 rounded-full">+12%</span>
+</div>
+<p class="text-headline-md font-headline-md">1,240</p>
+<p class="text-label-sm text-outline">bu hafta</p>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-lg shadow-sm border border-outline-variant">
+<div class="flex justify-between items-start mb-xs">
+<span class="text-label-md text-on-surface-variant">Yangi fikrlar</span>
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">rate_review</span>
+</div>
+<p class="text-headline-md font-headline-md">8</p>
+<p class="text-label-sm text-outline">javob berilmagan</p>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-lg shadow-sm border border-outline-variant">
+<div class="flex justify-between items-start mb-xs">
+<span class="text-label-md text-on-surface-variant">O'rtacha reyting</span>
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<div class="flex items-center gap-xs">
+<p class="text-headline-md font-headline-md">4.8</p>
+<span class="text-label-sm text-outline">(240 ta)</span>
+</div>
+<div class="flex gap-0.5 mt-xs">
+<span class="material-symbols-outlined text-secondary-container text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary-container text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary-container text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary-container text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary-container text-sm" style="font-variation-settings: 'FILL' 1;">star_half</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-lg shadow-sm border border-outline-variant">
+<div class="flex justify-between items-start mb-xs">
+<span class="text-label-md text-on-surface-variant">Qidiruvda chiqish</span>
+<span class="material-symbols-outlined text-primary">visibility</span>
+</div>
+<p class="text-headline-md font-headline-md">3,500</p>
+<p class="text-label-sm text-outline">oxirgi 7 kun</p>
+</div>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+<!-- Review Response Queue -->
+<section class="lg:col-span-2 space-y-md">
+<div class="flex justify-between items-center">
+<h2 class="text-headline-md font-headline-md text-on-surface">Fikrlarga javob bering</h2>
+<span class="bg-error-container text-on-error-container px-3 py-1 rounded-full text-label-sm">2 ta yangi</span>
+</div>
+<!-- Review Card 1 -->
+<div class="bg-surface-container-lowest p-lg rounded-lg shadow-sm border border-outline-variant space-y-md">
+<div class="flex justify-between">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed font-bold">A</div>
+<div>
+<h4 class="font-bold text-body-md">Azizbek Rahimov</h4>
+<div class="flex text-secondary-container text-xs">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+</div></div></div></div></div></section></div></div></main></body></html>

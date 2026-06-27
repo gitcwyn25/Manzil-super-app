@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+
+<html lang="uz"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-fixed": "#002020",
+                    "secondary": "#7e5700",
+                    "surface-variant": "#e2e3e1",
+                    "error": "#ba1a1a",
+                    "background": "#f9f9f7",
+                    "on-primary-container": "#9eedec",
+                    "surface-tint": "#03696a",
+                    "primary-container": "#0f6e6e",
+                    "inverse-on-surface": "#f1f1ef",
+                    "on-error-container": "#93000a",
+                    "on-surface": "#1a1c1b",
+                    "on-tertiary-fixed": "#351000",
+                    "primary-fixed-dim": "#85d4d3",
+                    "on-secondary-container": "#6a4800",
+                    "on-secondary": "#ffffff",
+                    "tertiary-container": "#a84305",
+                    "inverse-primary": "#85d4d3",
+                    "tertiary": "#823100",
+                    "surface-dim": "#dadad8",
+                    "on-secondary-fixed-variant": "#604100",
+                    "on-tertiary": "#ffffff",
+                    "on-surface-variant": "#3e4948",
+                    "surface-container-highest": "#e2e3e1",
+                    "on-primary-fixed-variant": "#004f50",
+                    "error-container": "#ffdad6",
+                    "surface": "#f9f9f7",
+                    "tertiary-fixed": "#ffdbcd",
+                    "surface-container-lowest": "#ffffff",
+                    "on-background": "#1a1c1b",
+                    "primary": "#005454",
+                    "surface-container-high": "#e8e8e6",
+                    "secondary-fixed": "#ffdeac",
+                    "tertiary-fixed-dim": "#ffb595",
+                    "outline-variant": "#bec9c8",
+                    "outline": "#6e7979",
+                    "on-tertiary-fixed-variant": "#7c2e00",
+                    "on-tertiary-container": "#ffd7c7",
+                    "surface-container-low": "#f4f4f2",
+                    "surface-container": "#eeeeec",
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed": "#281900",
+                    "on-primary": "#ffffff",
+                    "surface-bright": "#f9f9f7",
+                    "inverse-surface": "#2f3130",
+                    "secondary-fixed-dim": "#ffba38",
+                    "secondary-container": "#feb300",
+                    "primary-fixed": "#a1f0ef"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "12px",
+                    "base": "4px",
+                    "gutter": "16px",
+                    "md": "16px",
+                    "xl": "40px",
+                    "container-margin": "20px",
+                    "lg": "24px",
+                    "xs": "8px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Geist"],
+                    "display-lg": ["Geist"],
+                    "label-md": ["Geist"],
+                    "headline-lg-mobile": ["Geist"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-lg": ["Geist"],
+                    "label-sm": ["Geist"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #f9f9f7;
+            font-family: 'Inter', sans-serif;
+            color: #1a1c1b;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .star-active {
+            font-variation-settings: 'FILL' 1 !important;
+            color: #feb300;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #bec9c8;
+            border-radius: 10px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface dark:bg-surface-dim min-h-screen pb-24">
+<!-- Top AppBar (from Shared Components) -->
+<header class="bg-surface dark:bg-surface-dim sticky top-0 z-40">
+<div class="flex justify-between items-center w-full px-container-margin py-lg max-w-7xl mx-auto">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary hover:bg-surface-container-low p-2 rounded-full transition-colors active:scale-95 duration-150">arrow_back</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary dark:text-primary-fixed-dim">Fikr qoldirish</h1>
+</div>
+<div class="font-label-md text-label-md text-primary font-bold">🇺🇿 O'zb</div>
+</div>
+</header>
+<main class="max-w-2xl mx-auto px-container-margin mt-lg space-y-xl">
+<!-- Business Context Section -->
+<section class="flex items-center gap-md bg-surface-container-lowest p-md rounded-xl shadow-sm">
+<div class="w-16 h-16 rounded-lg overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="A professional architectural photograph of a modern, upscale restaurant interior in Tashkent, featuring warm ambient lighting, elegant Deep Teal velvet seating, and traditional Uzbek ceramic patterns subtly integrated into the minimalist decor. High-quality commercial photography style, soft natural light, clean and premium atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqnQ52_LivZN2rYmYns7b9C3SDCCXv0GWhI2__1cG2dXKT-nLMoWzlSvFmsa6IoYsbNCGPXKM-93R5FyRj2cdVn5WRpesO7iJAWVjJgS74x2hTb9Khxf1VVrKQJPv0PIK3YatlKUObrUD0CtHfKWU35g8EktCWP8_HjsDGkdvS2VfyQFDzrWIiCFh60tZvnYC5QTh4Nqk4Ai11W0j_Q7MtJCUH7_vrQZLE3VvvR1xQZWpaNeQTifslxr_yqQSTNhVlFV30Xa1NuF8"/>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Manzil Gourmet</h2>
+<p class="font-label-md text-label-md text-on-surface-variant">Toshkent, Mirobod tumani</p>
+</div>
+</section>
+<!-- Rating Section -->
+<section class="text-center space-y-md">
+<p class="font-headline-md text-headline-md text-on-surface">Tajribangizni baholang</p>
+<div class="flex justify-center gap-xs" id="rating-container">
+<button class="star-btn active:scale-90 transition-transform duration-150" data-index="1">
+<span class="material-symbols-outlined text-4xl text-outline-variant hover:text-secondary-container transition-colors">star</span>
+</button>
+<button class="star-btn active:scale-90 transition-transform duration-150" data-index="2">
+<span class="material-symbols-outlined text-4xl text-outline-variant hover:text-secondary-container transition-colors">star</span>
+</button>
+<button class="star-btn active:scale-90 transition-transform duration-150" data-index="3">
+<span class="material-symbols-outlined text-4xl text-outline-variant hover:text-secondary-container transition-colors">star</span>
+</button>
+<button class="star-btn active:scale-90 transition-transform duration-150" data-index="4">
+<span class="material-symbols-outlined text-4xl text-outline-variant hover:text-secondary-container transition-colors">star</span>
+</button>
+<button class="star-btn active:scale-90 transition-transform duration-150" data-index="5">
+<span class="material-symbols-outlined text-4xl text-outline-variant hover:text-secondary-container transition-colors">star</span>
+</button>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant h-5 italic" id="rating-label">Tanlang</p>
+</section>
+<!-- Form Section -->
+<form class="space-y-lg" id="review-form">
+<div class="space-y-xs">
+<label class="font-label-md text-label-md text-on-surface-variant ml-1" for="review-text">Fikringizni yozing...</label>
+<textarea class="w-full bg-surface-container-lowest border-outline-variant border rounded-lg p-md font-body-md text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all resize-none" id="review-text" placeholder="Taassurotlaringiz bilan o'rtoqlashing..." rows="6"></textarea>
+</div>
+<!-- Photo Upload -->
+<div class="space-y-xs">
+<label class="font-label-md text-label-md text-on-surface-variant ml-1">Rasmlar qo'shing</label>
+<div class="flex gap-md overflow-x-auto pb-base custom-scrollbar">
+<label class="shrink-0 w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed border-outline-variant rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container transition-colors active:scale-95">
+<span class="material-symbols-outlined text-primary text-3xl">add_a_photo</span>
+<input accept="image/*" class="hidden" multiple="" type="file"/>
+</label>
+<!-- Mock uploaded photos -->
+<div class="shrink-0 w-24 h-24 rounded-xl overflow-hidden relative group">
+<img class="w-full h-full object-cover" data-alt="A close-up, high-detail food photograph of a traditional Uzbek plov served in a modern ceramic bowl. The lighting is soft and warm, highlighting the textures of the golden rice, tender meat, and colorful carrots. 4k resolution, gourmet dining aesthetic, shallow depth of field." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKZJ6kGvkBtv8o7WWTPckfoM5vzRt6bYK-sO_tQPlxbgKLKt7V_zQp-_cI7vbupSaZghQ70AVwq8pdXU1RBvDL45XKBXT7yc5S5TU9xAaTfbpKctB5_KH1kmB6UlmqIqfGay9IvVdotSSS7z7VJ1tntHhEQIPziSyBPOTGIZWM_Twm_t8_XJQorJZ6wO-iJrXoPfxl2s5037XaLuzU3BtK91Z5Tq5hd39FE6w4hTPuC2uYIhxg-xBdalTnjKO_zJcaMuXtwn-FDw0"/>
+<button class="absolute top-1 right-1 bg-black/50 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-sm">close</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Submit Button -->
+<div class="pt-lg">
+<button class="w-full bg-primary text-on-primary py-md rounded-lg font-headline-md text-headline-md shadow-md active:scale-[0.98] transition-transform duration-200" type="submit">
+                    Yuborish
+                </button>
+</div>
+</form>
+</main>
+<!-- Bottom Navigation (from Shared Components) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container-lowest dark:bg-inverse-surface rounded-t-xl shadow-lg">
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1 hover:text-primary transition-colors active:scale-90 duration-200">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm">Asosiy</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1 hover:text-primary transition-colors active:scale-90 duration-200">
+<span class="material-symbols-outlined">search</span>
+<span class="font-label-sm text-label-sm">Qidiruv</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1 hover:text-primary transition-colors active:scale-90 duration-200">
+<span class="material-symbols-outlined">bookmark</span>
+<span class="font-label-sm text-label-sm">Saqlangan</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">Profil</span>
+</button>
+</nav>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const starBtns = document.querySelectorAll('.star-btn');
+            const ratingLabel = document.getElementById('rating-label');
+            const labels = ["Yomon", "Qoniqarsiz", "Yaxshi", "Juda yaxshi", "Ajoyib!"];
+            
+            starBtns.forEach((btn, index) => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const rating = index + 1;
+                    
+                    // Reset all
+                    starBtns.forEach(b => {
+                        b.querySelector('.material-symbols-outlined').classList.remove('star-active');
+                    });
+                    
+                    // Fill up to rating
+                    for(let i = 0; i < rating; i++) {
+                        starBtns[i].querySelector('.material-symbols-outlined').classList.add('star-active');
+                    }
+                    
+                    ratingLabel.textContent = labels[index];
+                    ratingLabel.classList.add('text-secondary-container', 'font-bold');
+                });
+            });
+
+            // Prevent default form submission for demo
+            document.getElementById('review-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('Rahmat! Fikringiz qabul qilindi.');
+            });
+        });
+    </script>
+</body></html>

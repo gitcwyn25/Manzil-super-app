@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+
+<html class="light" lang="uz"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Inter:wght@100..900&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-fixed": "#002020",
+                      "secondary": "#7e5700",
+                      "surface-variant": "#e2e3e1",
+                      "error": "#ba1a1a",
+                      "background": "#f9f9f7",
+                      "on-primary-container": "#9eedec",
+                      "surface-tint": "#03696a",
+                      "primary-container": "#0f6e6e",
+                      "inverse-on-surface": "#f1f1ef",
+                      "on-error-container": "#93000a",
+                      "on-surface": "#1a1c1b",
+                      "on-tertiary-fixed": "#351000",
+                      "primary-fixed-dim": "#85d4d3",
+                      "on-secondary-container": "#6a4800",
+                      "on-secondary": "#ffffff",
+                      "tertiary-container": "#a84305",
+                      "inverse-primary": "#85d4d3",
+                      "tertiary": "#823100",
+                      "surface-dim": "#dadad8",
+                      "on-secondary-fixed-variant": "#604100",
+                      "on-tertiary": "#ffffff",
+                      "on-surface-variant": "#3e4948",
+                      "surface-container-highest": "#e2e3e1",
+                      "on-primary-fixed-variant": "#004f50",
+                      "error-container": "#ffdad6",
+                      "surface": "#f9f9f7",
+                      "tertiary-fixed": "#ffdbcd",
+                      "surface-container-lowest": "#ffffff",
+                      "on-background": "#1a1c1b",
+                      "primary": "#005454",
+                      "surface-container-high": "#e8e8e6",
+                      "secondary-fixed": "#ffdeac",
+                      "tertiary-fixed-dim": "#ffb595",
+                      "outline-variant": "#bec9c8",
+                      "outline": "#6e7979",
+                      "on-tertiary-fixed-variant": "#7c2e00",
+                      "on-tertiary-container": "#ffd7c7",
+                      "surface-container-low": "#f4f4f2",
+                      "surface-container": "#eeeeec",
+                      "on-error": "#ffffff",
+                      "on-secondary-fixed": "#281900",
+                      "on-primary": "#ffffff",
+                      "surface-bright": "#f9f9f7",
+                      "inverse-surface": "#2f3130",
+                      "secondary-fixed-dim": "#ffba38",
+                      "secondary-container": "#feb300",
+                      "primary-fixed": "#a1f0ef"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sm": "12px",
+                      "base": "4px",
+                      "gutter": "16px",
+                      "md": "16px",
+                      "xl": "40px",
+                      "container-margin": "20px",
+                      "lg": "24px",
+                      "xs": "8px"
+              },
+              "fontFamily": {
+                      "headline-md": ["Geist"],
+                      "display-lg": ["Geist"],
+                      "label-md": ["Geist"],
+                      "headline-lg-mobile": ["Geist"],
+                      "body-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-lg": ["Geist"],
+                      "label-sm": ["Geist"]
+              },
+              "fontSize": {
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container pb-24">
+<!-- Top AppBar -->
+<header class="bg-surface sticky top-0 z-50 transition-all duration-300">
+<div class="flex justify-between items-center w-full px-container-margin py-base max-w-7xl mx-auto">
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-surface-container-low transition-colors rounded-full active:scale-95 duration-150">
+<span class="material-symbols-outlined text-primary">menu</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">Manzil</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex items-center gap-1 font-label-md text-label-md px-3 py-1.5 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface-variant active:scale-95">
+<span class="text-lg">🇺🇿</span>
+<span>O'zb</span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-container-margin pt-6 space-y-8">
+<!-- Hero Search Section -->
+<section class="relative rounded-xl overflow-hidden h-64 flex items-center justify-center">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover brightness-50" data-alt="A cinematic, wide-angle shot of a vibrant Tashkent cityscape during blue hour, featuring modern glass buildings and traditional Uzbek architecture illuminated by warm golden streetlights. The scene is shot with high-end architectural photography style, emphasizing deep teal shadows and bright ivory highlights. The atmosphere is upscale and serene, suggesting a premium urban guide experience." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPpGdsvaRMzbuuGgB_4_H26V9MENTLcQ1AM8o0rme6-6q2dUvK_2oCZEAF0-B6yDCQpan87BhgvZo_Zt1A-tY_eEZpuffa0WBrQ2fc7XBw_iBaVamHPlIPeGxt4AM4Dohj6BHvzqxq-qxvAsOri6kdLarjbvfoejw0nisEkKEwSGKBjg77uVe7jZubmN-u-T-PfG4BpqoH5aED-4OrCAn90riplJmznGvgznRiNtNSJWPdjaiUeUzjH3jvIpBkrPsU5eGzAcZ47Vg"/>
+</div>
+<div class="relative z-10 w-full max-w-2xl px-4">
+<div class="flex flex-col gap-4">
+<h2 class="text-white font-headline-lg text-headline-lg text-center drop-shadow-md">Yaqin atrofdagi eng yaxshi joylarni toping</h2>
+<div class="relative group">
+<div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline">search</span>
+</div>
+<input class="w-full h-14 pl-12 pr-4 bg-surface-container-lowest border-none rounded-xl shadow-xl focus:ring-2 focus:ring-primary text-on-surface placeholder:text-outline-variant transition-all" placeholder="Restoranlar, do'konlar, xizmatlar..." type="text"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Featured Categories -->
+<section class="space-y-4">
+<div class="flex justify-between items-center">
+<h3 class="font-headline-md text-headline-md text-on-surface">Kategoriyalar</h3>
+<button class="text-primary font-label-md text-label-md hover:underline">Hammasini ko'rish</button>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="group cursor-pointer flex flex-col items-center p-6 bg-surface-container-lowest rounded-xl border border-outline-variant/30 hover:border-primary hover:shadow-lg transition-all active:scale-95">
+<div class="w-16 h-16 rounded-full bg-primary-fixed-dim flex items-center justify-center mb-3 group-hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined text-on-primary-fixed text-3xl">restaurant</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant group-hover:text-primary">Restoranlar</span>
+</div>
+<div class="group cursor-pointer flex flex-col items-center p-6 bg-surface-container-lowest rounded-xl border border-outline-variant/30 hover:border-primary hover:shadow-lg transition-all active:scale-95">
+<div class="w-16 h-16 rounded-full bg-tertiary-fixed flex items-center justify-center mb-3 group-hover:bg-tertiary-container transition-colors">
+<span class="material-symbols-outlined text-on-tertiary-fixed text-3xl">content_cut</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant group-hover:text-primary">Go'zallik</span>
+</div>
+<div class="group cursor-pointer flex flex-col items-center p-6 bg-surface-container-lowest rounded-xl border border-outline-variant/30 hover:border-primary hover:shadow-lg transition-all active:scale-95">
+<div class="w-16 h-16 rounded-full bg-secondary-fixed flex items-center justify-center mb-3 group-hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined text-on-secondary-fixed text-3xl">shopping_bag</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant group-hover:text-primary">Do'konlar</span>
+</div>
+<div class="group cursor-pointer flex flex-col items-center p-6 bg-surface-container-lowest rounded-xl border border-outline-variant/30 hover:border-primary hover:shadow-lg transition-all active:scale-95">
+<div class="w-16 h-16 rounded-full bg-primary-fixed flex items-center justify-center mb-3 group-hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined text-on-primary-fixed text-3xl">directions_car</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant group-hover:text-primary">Avtoservis</span>
+</div>
+</div>
+</section>
+<!-- Near You Section -->
+<section class="space-y-4">
+<div class="flex justify-between items-center">
+<h3 class="font-headline-md text-headline-md text-on-surface">Sizga yaqin</h3>
+<div class="flex items-center gap-2">
+<span class="text-xs font-label-sm uppercase tracking-wider text-outline">Filterlash:</span>
+<button class="bg-surface-container text-on-surface px-3 py-1 rounded-full text-xs font-label-md">UZS</button>
+<button class="text-outline hover:text-primary px-3 py-1 rounded-full text-xs font-label-md">USD</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Business Card 1 -->
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow border border-outline-variant/20">
+<div class="relative h-48">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A high-end restaurant interior in Uzbekistan, featuring ornate traditional wood carvings blended with minimalist modern furniture. Soft ambient lighting creates a warm and inviting atmosphere. Professional food photography style with a focus on elegant table settings and a glimpse of a lush outdoor terrace. Deep teal and ivory color palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrpVdsOIn0qfC_EQG5HMUbAQPEPJCi2Ejm1b0yuYq9PaZRseCJrumfDFS1ZcYfRdiJkzelm9kAFAnLYOFkyQxawSXf5DVsOzCQNAOGxa-duUz91per_T3l9e8Lay1D5NpPpaBvlZrEIphgUuAjIXES-BCeNPj-p37Ds6C_TMh3qKM76nBeLlZ__Ih-aMkWageGisEyiq2CRa8U1PaqhQkfrrAoCrlKzCtqxV4MTwBCNBiMlBX8X_0FFmEUDa7RRX-VERtJIsG4pVA"/>
+<div class="absolute top-3 right-3 glass-card px-2 py-1 rounded-lg flex items-center gap-1">
+<span class="material-symbols-outlined text-secondary text-base" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-sm text-on-surface">4.8</span>
+</div>
+</div>
+<div class="p-4 space-y-2">
+<div class="flex justify-between items-start">
+<h4 class="font-headline-md text-lg text-on-surface">Osh Markazi</h4>
+<span class="text-primary font-bold">So'm So'm</span>
+</div>
+<div class="flex items-center gap-2 text-outline text-sm">
+<span class="material-symbols-outlined text-base">location_on</span>
+<span>1.2 km uzoqlikda</span>
+<span class="mx-1 text-outline-variant">•</span>
+<span>124 ta sharh</span>
+</div>
+<div class="pt-2 flex gap-2">
+<span class="bg-surface-container text-on-surface-variant px-2 py-0.5 rounded text-xs">Milliy taomlar</span>
+<span class="bg-surface-container text-on-surface-variant px-2 py-0.5 rounded text-xs">Oila uchun</span>
+</div>
+</div>
+</div>
+<!-- Business Card 2 -->
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow border border-outline-variant/20">
+<div class="relative h-48">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A modern, high-tech hair salon with sleek white surfaces, large circular mirrors, and vibrant teal accent lighting. The space is clean and professional, showcasing high-end styling equipment. The image has a sharp, bright aesthetic, emphasizing cleanliness and premium service. Luxury boutique style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRzac8kJGhtvOkXS1DWNPk0sHWnUnu2YqtOi4Wr8FxKZGPoJlk33xVDQ2xakxyLQYqiPMpDUKLKiUIq22KCa8c6e498xTj0Rl7Scr8G0vnJP-UUgQXswwO2BeGbWjJo6HTp5OfnegHOiEa7CLqsG4dc6Eayq6uVUTNUm6rScPYbMPhQUjk4zkIvm2fsn8nxnn7a6EWsVR4-LBu2RFSJwH59KfoHrGRlG46LfdI4UhVSPN07tU3JLT9H9uMZE7nLAiII-zavymFUZE"/>
+<div class="absolute top-3 right-3 glass-card px-2 py-1 rounded-lg flex items-center gap-1">
+<span class="material-symbols-outlined text-secondary text-base" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-sm text-on-surface">4.9</span>
+</div>
+</div>
+<div class="p-4 space-y-2">
+<div class="flex justify-between items-start">
+<h4 class="font-headline-md text-lg text-on-surface">Glow Beauty</h4>
+<span class="text-primary font-bold">So'm So'm So'm</span>
+</div>
+<div class="flex items-center gap-2 text-outline text-sm">
+<span class="material-symbols-outlined text-base">location_on</span>
+<span>0.8 km uzoqlikda</span>
+<span class="mx-1 text-outline-variant">•</span>
+<span>86 ta sharh</span>
+</div>
+<div class="pt-2 flex gap-2">
+<span class="bg-surface-container text-on-surface-variant px-2 py-0.5 rounded text-xs">Go'zallik saloni</span>
+<span class="bg-surface-container text-on-surface-variant px-2 py-0.5 rounded text-xs">Premium</span>
+</div>
+</div>
+</div>
+<!-- Business Card 3 -->
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow border border-outline-variant/20">
+<div class="relative h-48">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A luxury coffee shop and bakery interior with dark wood textures and marble countertops. Large windows reveal a glimpse of an Uzbek boulevard. The mood is sophisticated and cozy with soft morning light. The image features high-contrast textures of warm bread and cool stone. Modern corporate aesthetic with cultural resonance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMP1VlkWbdzg36_9K6BzrFQKwH-BrVcBUU9EHNmI2XbPqjyGiOB1sXIS_NsS5sUSWNJxt1RpC1AGsPdYgjMFGI-nRL3AvVPo3s8i8r-lh6ZhzGrIMtzGoPHzcdWlA32sKqvtLVJH2lYlZHibo8KiAFgstwNd8hl4Hx3LGB0zRT1eiNvL67AsbJSSO5zNx7NOFaAefuXsecLtftXCpA5grdHGPUpRe2rn9HjQK-rmO7hET5zhQy0AwtAQPr5bPDQs_i5is3qqptkng"/>
+<div class="absolute top-3 right-3 glass-card px-2 py-1 rounded-lg flex items-center gap-1">
+<span class="material-symbols-outlined text-secondary text-base" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-sm text-on-surface">4.5</span>
+</div>
+</div>
+<div class="p-4 space-y-2">
+<div class="flex justify-between items-start">
+<h4 class="font-headline-md text-lg text-on-surface">Book & Coffee</h4>
+<span class="text-primary font-bold">So'm</span>
+</div>
+<div class="flex items-center gap-2 text-outline text-sm">
+<span class="material-symbols-outlined text-base">location_on</span>
+<span>2.5 km uzoqlikda</span>
+<span class="mx-1 text-outline-variant">•</span>
+<span>210 ta sharh</span>
+</div>
+<div class="pt-2 flex gap-2">
+<span class="bg-surface-container text-on-surface-variant px-2 py-0.5 rounded text-xs">Kofexona</span>
+<span class="bg-surface-container text-on-surface-variant px-2 py-0.5 rounded text-xs">Wi-Fi mavjud</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- New Trends horizontal scroll -->
+<section class="space-y-4">
+<div class="flex justify-between items-center">
+<h3 class="font-headline-md text-headline-md text-on-surface">Trenddagi joylar</h3>
+</div>
+<div class="flex gap-4 overflow-x-auto hide-scrollbar pb-4 snap-x">
+<div class="flex-none w-72 snap-start">
+<div class="relative h-40 rounded-xl overflow-hidden group cursor-pointer">
+<img class="w-full h-full object-cover" data-alt="Top view of an artisan craft shop in Bukhara, Uzbekistan, showing colourful silk fabrics and handmade ceramics. Bright natural lighting with high saturation of traditional colors. High-quality lifestyle photography. The scene feels authentic yet curated for a modern directory." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXonb5YmQH2KKvYXgPSecmLoUTUlEKrePNwst8qpCvASWhRNRV-tKzqqRcZgtZb_rje_b2Obw2KnQ0brodF8_XHUQGjLFI0ygI3zroKywN9v2F6PkCvHQojM7ljb7tklK5Z2OfIYU9akS0BZWWq58GtxnjDglH5Zo3Of8f03wVVNRnSBch95VzCKcMsTgN6lwAgLakDXP3gOVZ-XX45o-DBxYSMGdeulbuNOAZ_V8N-43v4vqpg2CEl6NUOFqWtL45reBYN0JZ5Rw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-4 left-4 text-white">
+<p class="font-headline-md text-sm">An'anaviy Hunarmandlar</p>
+<p class="text-xs opacity-80">Do'kon</p>
+</div>
+</div>
+</div>
+<div class="flex-none w-72 snap-start">
+<div class="relative h-40 rounded-xl overflow-hidden group cursor-pointer">
+<img class="w-full h-full object-cover" data-alt="A sleek, modern gym facility in Samarkand with state-of-the-art machines and a panoramic view of the city. Cool neon blue and warm golden lighting balance. Action-oriented, professional sports photography. Clean, motivating, and high-energy atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzSQ8Rsq12cKHKPa3dOlCDUUugV2e-k067-SBgGDi3oxF6LRSdNmJhVmIReeV73-UBL0V5vtM9VcSZuSg2H5OLw9j83F74QUso-V23ceXy-ZTzbaytXcfRb2VFxoCT6-4s3H2ebAphf3kpbvTccnNuomjy8J8F8TcuamW-gizAbhyvv9-2xxHddO-nW_cX3V44hBnoTzfivBYoWLNDj_-VxCN_zkxb7w29T1JYgB8FrfL4uNq7xn4UJsl3z1n5VbjizmtHUI0WLHk"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-4 left-4 text-white">
+<p class="font-headline-md text-sm">Titan Fitness Club</p>
+<p class="text-xs opacity-80">Sport</p>
+</div>
+</div>
+</div>
+<div class="flex-none w-72 snap-start">
+<div class="relative h-40 rounded-xl overflow-hidden group cursor-pointer">
+<img class="w-full h-full object-cover" data-alt="Exterior of a modern concept store with glass walls reflecting a sunset over Tashkent. Minimalist architecture with deep teal metal frames. High-end retail design aesthetic. Elegant and forward-thinking." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDO_rrZs9Q1AglZtr6j3XOQ-gbFf9sRvCOCthfviaUjUIQvVqXE9TX-PrU_nLNQg4A-EFhNXOMjjqzLxSo9y0nmtNL-B2KvHosrPA2tvhAo-kTNfnhhrWUjYgP1tqapDtBqqRlWeUAFbprwS3UzQZt2f_mL5eMapox2BcxZQCOaKMl_BqccnWxMczqeDr9jUiVnOWFUK8UfetEZzfBmJwYzVesdUle8oPU-KxsRof4SSiozks_nXTatO1SDjcZ-Z-wtsvb6jMdiX88"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-4 left-4 text-white">
+<p class="font-headline-md text-sm">The Showroom</p>
+<p class="text-xs opacity-80">Moda</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 shadow-lg dark:shadow-none bg-surface-container-lowest dark:bg-inverse-surface rounded-t-xl">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-sm text-label-sm">Asosiy</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1 hover:text-primary active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">search</span>
+<span class="font-label-sm text-label-sm">Qidiruv</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1 hover:text-primary active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">bookmark</span>
+<span class="font-label-sm text-label-sm">Saqlangan</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1 hover:text-primary active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">Profil</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('click', function(e) {
+                // Prevent default for demo links
+                if(this.getAttribute('href') === '#') e.preventDefault();
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 20) {
+                header.classList.add('shadow-md', 'bg-surface/90', 'backdrop-blur-md');
+            } else {
+                header.classList.remove('shadow-md', 'bg-surface/90', 'backdrop-blur-md');
+            }
+        });
+    </script>
+</body></html>

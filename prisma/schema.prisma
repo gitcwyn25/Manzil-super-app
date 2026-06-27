@@ -1,0 +1,201 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  consumer
+  business_owner
+  admin
+}
+
+enum BusinessStatus {
+  unclaimed
+  pending_claim
+  claimed
+  suspended
+}
+
+enum ModerationStatus {
+  pending
+  approved
+  rejected
+}
+
+enum ClaimStatus {
+  pending
+  approved
+  rejected
+}
+
+enum ReportStatus {
+  open
+  resolved
+  rejected
+}
+
+model User {
+  id          String   @id @default(cuid())
+  clerkId     String?  @unique
+  email       String?  @unique
+  phone       String?
+  displayName String
+  avatarUrl   String?
+  locale      String   @default("uz")
+  role        UserRole @default(consumer)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  businesses     Business[] @relation("BusinessOwner")
+  reviews        Review[]
+  replies        ReviewReply[]
+  claims         Claim[] @relation("ClaimRequester")
+  reviewedClaims Claim[] @relation("ClaimReviewer")
+  reports        Report[]
+
+  @@index([role])
+}
+
+model Category {
+  id       String  @id @default(cuid())
+  slug     String  @unique
+  nameUz   String
+  nameRu   String
+  nameEn   String
+  parentId String?
+
+  parent     Category?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children   Category[] @relation("CategoryTree")
+  businesses Business[]
+
+  @@index([parentId])
+}
+
+model Business {
+  id              String         @id @default(cuid())
+  slug            String         @unique
+  name            String
+  categoryId      String
+  descriptionUz   String
+  descriptionRu   String?
+  descriptionEn   String?
+  address         String
+  district        String
+  city            String         @default("Tashkent")
+  lat             Decimal?       @db.Decimal(9, 6)
+  lng             Decimal?       @db.Decimal(9, 6)
+  phone           String?
+  hoursJson       Json?
+  priceTier       String?
+  status          BusinessStatus @default(unclaimed)
+  claimedByUserId String?
+  avgRating       Decimal        @default(0) @db.Decimal(3, 2)
+  reviewCount     Int            @default(0)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  category      Category @relation(fields: [categoryId], references: [id])
+  claimedByUser User?    @relation("BusinessOwner", fields: [claimedByUserId], references: [id])
+  reviews       Review[]
+  photos        Photo[]
+  claims        Claim[]
+
+  @@index([categoryId])
+  @@index([city, district])
+  @@index([status])
+  @@index([avgRating, reviewCount])
+}
+
+model Review {
+  id             String   @id @default(cuid())
+  businessId     String
+  userId         String
+  rating         Int
+  text           String
+  helpfulCount   Int      @default(0)
+  moderationStatus ModerationStatus @default(approved)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  business Business      @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  user     User          @relation(fields: [userId], references: [id])
+  reply    ReviewReply?
+  photos   Photo[]
+  reports  Report[]
+
+  @@unique([businessId, userId])
+  @@index([businessId, createdAt])
+  @@index([moderationStatus])
+}
+
+model ReviewReply {
+  id              String   @id @default(cuid())
+  reviewId        String   @unique
+  businessOwnerId String
+  text            String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  review        Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  businessOwner User   @relation(fields: [businessOwnerId], references: [id])
+}
+
+model Photo {
+  id               String           @id @default(cuid())
+  businessId        String?
+  reviewId          String?
+  storageKey        String
+  publicUrl         String?
+  moderationStatus  ModerationStatus @default(pending)
+  createdAt         DateTime         @default(now())
+
+  business Business? @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  review   Review?   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  reports  Report[]
+
+  @@index([businessId])
+  @@index([reviewId])
+  @@index([moderationStatus])
+}
+
+model Claim {
+  id                String      @id @default(cuid())
+  businessId        String
+  userId            String
+  verificationMethod String     @default("manual")
+  status            ClaimStatus @default(pending)
+  reviewedByAdminId String?
+  note              String?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  business        Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  user            User     @relation("ClaimRequester", fields: [userId], references: [id])
+  reviewedByAdmin User?    @relation("ClaimReviewer", fields: [reviewedByAdminId], references: [id])
+
+  @@index([status])
+  @@index([businessId])
+}
+
+model Report {
+  id             String       @id @default(cuid())
+  reporterUserId String
+  reviewId       String?
+  photoId        String?
+  reason         String
+  status         ReportStatus @default(open)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  reporter User   @relation(fields: [reporterUserId], references: [id])
+  review   Review? @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  photo    Photo?  @relation(fields: [photoId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+  @@index([reviewId])
+  @@index([photoId])
+}

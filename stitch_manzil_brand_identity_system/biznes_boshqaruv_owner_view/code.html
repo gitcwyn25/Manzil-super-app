@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+<html lang="uz"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Osh Markazi - Boshqaruv</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Geist:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-container": "#ffd7c7",
+                    "on-tertiary-fixed-variant": "#7c2e00",
+                    "on-secondary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "on-background": "#1a1c1b",
+                    "surface-container-low": "#f4f4f2",
+                    "on-primary-container": "#9eedec",
+                    "inverse-primary": "#85d4d3",
+                    "secondary-fixed": "#ffdeac",
+                    "primary-container": "#0f6e6e",
+                    "tertiary-fixed": "#ffdbcd",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary": "#823100",
+                    "surface-bright": "#f9f9f7",
+                    "error-container": "#ffdad6",
+                    "outline-variant": "#bec9c8",
+                    "secondary-container": "#feb300",
+                    "inverse-on-surface": "#f1f1ef",
+                    "background": "#f9f9f7",
+                    "on-tertiary-fixed": "#351000",
+                    "inverse-surface": "#2f3130",
+                    "on-tertiary": "#ffffff",
+                    "surface-container": "#eeeeec",
+                    "on-primary-fixed": "#002020",
+                    "surface-dim": "#dadad8",
+                    "surface": "#f9f9f7",
+                    "on-primary-fixed-variant": "#004f50",
+                    "surface-container-high": "#e8e8e6",
+                    "secondary-fixed-dim": "#ffba38",
+                    "primary-fixed-dim": "#85d4d3",
+                    "on-error": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb595",
+                    "surface-tint": "#03696a",
+                    "primary-fixed": "#a1f0ef",
+                    "on-error-container": "#93000a",
+                    "surface-variant": "#e2e3e1",
+                    "on-surface-variant": "#3e4948",
+                    "on-secondary-fixed-variant": "#604100",
+                    "on-surface": "#1a1c1b",
+                    "on-secondary-container": "#6a4800",
+                    "on-primary": "#ffffff",
+                    "tertiary-container": "#a84305",
+                    "primary": "#005454",
+                    "on-secondary-fixed": "#281900",
+                    "secondary": "#7e5700",
+                    "surface-container-highest": "#e2e3e1",
+                    "outline": "#6e7979"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "lg": "24px",
+                    "container-margin": "20px",
+                    "sm": "12px",
+                    "md": "16px",
+                    "xl": "40px",
+                    "xs": "8px",
+                    "gutter": "16px",
+                    "base": "4px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Geist"],
+                    "display-lg": ["Geist"],
+                    "body-md": ["Inter"],
+                    "label-md": ["Geist"],
+                    "headline-lg": ["Geist"],
+                    "headline-md": ["Geist"],
+                    "headline-lg-mobile": ["Geist"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #f9f9f7;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .custom-scroll-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .custom-scroll-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-on-surface">
+<!-- Top App Bar -->
+<header class="w-full top-0 sticky z-40 bg-surface flex items-center justify-between px-container-margin h-16 shadow-sm transition-colors duration-200 ease-in-out">
+<div class="flex items-center gap-3">
+<button class="material-symbols-outlined text-primary p-2 -ml-2 hover:bg-surface-container-low rounded-full transition-colors">menu</button>
+<span class="font-headline-md text-headline-md-mobile text-primary">Uzbek Business Hub</span>
+</div>
+<div class="h-10 w-10 rounded-full border-2 border-primary-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional portrait of a smiling Uzbek business owner in a modern office setting. The lighting is warm and natural, suggesting a reliable and welcoming persona. The background is a clean, corporate environment with subtle traditional Uzbek ceramic patterns on a shelf. High-end photography style with a shallow depth of field." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzbJxibpFYgmSjXYQS57zJzmqxyPONQ3Mc9oSTBS2pKiqmmwS3LPEKx8ERcNdlS9m4DWFsXclBfCYV95ge7sCLvHG8AFnDZiMA8sY8KlEVRzicLQBemdNYLgb1EHn142C6RTU6oM0R83W-IMJQ2_Lg0xsxpq7XInCqyYHKDqkN4ScqME8J8QZ-39qtZpq4eUSmccSGQ1_N1MCu5xG0BPuDeuvNMjvCdaZKBZvBXgo1M3KQ63N0VgNVPjmzqSp6m_INGxWH2yxciRQ"/>
+</div>
+</header>
+<main class="pb-32 px-container-margin pt-6">
+<!-- Business Identity Card -->
+<section class="bg-surface-container-lowest rounded-xl p-md mb-6 shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-outline-variant/30">
+<div class="flex justify-between items-start">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<h1 class="font-headline-md text-headline-md-mobile text-on-surface">Osh Markazi</h1>
+<span class="material-symbols-outlined text-[#005454] text-[20px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-secondary text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-label-md text-on-surface">4.9</span>
+<span class="font-label-md text-label-md text-outline">(1.2k fikrlar)</span>
+</div>
+</div>
+<div class="bg-secondary-container/10 text-secondary px-3 py-1 rounded-full font-label-sm text-label-sm">
+                    🇺🇿 UZ
+                </div>
+</div>
+</section>
+<!-- Performance Metrics -->
+<section class="mb-8">
+<div class="flex items-center justify-between mb-4">
+<h2 class="font-label-md text-label-md uppercase tracking-wider text-outline">Ko'rsatkichlar</h2>
+<span class="text-primary font-label-sm text-label-sm">Oxirgi 30 kun</span>
+</div>
+<div class="flex gap-4 overflow-x-auto pb-2 custom-scroll-hide">
+<!-- Views Stat -->
+<div class="min-w-[140px] bg-surface-container-lowest p-md rounded-xl shadow-sm border border-outline-variant/20">
+<div class="flex items-center justify-between mb-2">
+<span class="material-symbols-outlined text-outline text-[20px]">visibility</span>
+<span class="text-[#008544] font-label-sm text-label-sm">+12%</span>
+</div>
+<p class="font-headline-md text-headline-md-mobile">1,240</p>
+<p class="font-label-sm text-label-sm text-outline">ko'rishlar</p>
+</div>
+<!-- Reviews Stat -->
+<div class="min-w-[140px] bg-surface-container-lowest p-md rounded-xl shadow-sm border border-outline-variant/20">
+<div class="flex items-center justify-between mb-2">
+<span class="material-symbols-outlined text-outline text-[20px]">chat_bubble</span>
+<div class="w-2 h-2 rounded-full bg-error"></div>
+</div>
+<p class="font-headline-md text-headline-md-mobile">8</p>
+<p class="font-label-sm text-label-sm text-outline">yangi fikrlar</p>
+</div>
+<!-- Rating Stat -->
+<div class="min-w-[140px] bg-surface-container-lowest p-md rounded-xl shadow-sm border border-outline-variant/20">
+<div class="flex items-center justify-between mb-2">
+<span class="material-symbols-outlined text-secondary text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="font-headline-md text-headline-md-mobile">4.9</p>
+<p class="font-label-sm text-label-sm text-outline">o'rtacha</p>
+</div>
+</div>
+</section>
+<!-- Quick Actions -->
+<section class="mb-8">
+<button class="w-full bg-primary text-on-primary py-4 rounded-lg font-label-md text-label-md flex items-center justify-center gap-3 active:scale-[0.98] transition-transform shadow-md">
+<span class="material-symbols-outlined">edit_calendar</span>
+                Ish vaqtini/rasmlarni yangilash
+            </button>
+</section>
+<!-- Reviews List -->
+<section>
+<div class="flex items-center justify-between mb-4">
+<h2 class="font-headline-md text-headline-md-mobile">Yangi fikrlar</h2>
+<button class="text-primary font-label-md text-label-md">Hammasini ko'rish</button>
+</div>
+<div class="space-y-4">
+<!-- Review 1 -->
+<article class="bg-surface-container-lowest p-md rounded-xl border border-outline-variant/30 shadow-sm">
+<div class="flex justify-between items-start mb-3">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container/20 flex items-center justify-center font-bold text-primary">AR</div>
+<div>
+<h3 class="font-label-md text-label-md">Azizbek Rahimov</h3>
+<div class="flex text-secondary">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div></div></div></div></article></div></section></main></body></html>

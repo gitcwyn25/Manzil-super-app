@@ -1,143 +1,68 @@
-// API Response types
-export interface ApiResponse<T> {
-  success: boolean;
-  data: T;
-  message?: string;
-}
+import type { LocalizedText } from "./locales";
 
-// User types
-export interface User {
-  id: string;
-  email: string;
-  displayName: string;
-  role: 'CONSUMER' | 'BUSINESS_OWNER' | 'ADMIN';
-  locale: 'uz' | 'ru' | 'en';
-  createdAt: Date;
-}
+export type UserRole = "consumer" | "business_owner" | "admin";
+export type BusinessStatus = "unclaimed" | "pending_claim" | "claimed" | "suspended";
+export type ModerationStatus = "pending" | "approved" | "rejected";
+export type ClaimStatus = "pending" | "approved" | "rejected";
+export type ReportStatus = "open" | "resolved" | "rejected";
 
-// Business types
-export interface Business {
+export type Category = {
   id: string;
+  slug: string;
+  name: LocalizedText;
+  parentId?: string;
+};
+
+export type Business = {
+  id: string;
+  slug: string;
   name: string;
-  categoryId: string;
-  description: string;
+  categorySlug: string;
+  description: LocalizedText;
   address: string;
-  latitude: number;
-  longitude: number;
-  phone: string;
-  hours: Record<string, string>;
-  priceTier: 'BUDGET' | 'MODERATE' | 'EXPENSIVE' | 'LUXURY';
-  status: 'UNCLAIMED' | 'CLAIMED' | 'PENDING';
-  claimedByUserId?: string;
-  rating: number;
+  district: string;
+  city: "Tashkent";
+  phone?: string;
+  lat?: number;
+  lng?: number;
+  hours: string;
+  priceTier: "$" | "$$" | "$$$";
+  status: BusinessStatus;
+  avgRating: number;
   reviewCount: number;
-  createdAt: Date;
-  updatedAt: Date;
-}
+  photo: string;
+  tags: string[];
+  foundingBusiness?: boolean;
+};
 
-// Review types
-export interface Review {
+export type Review = {
   id: string;
-  businessId: string;
-  userId: string;
+  businessSlug: string;
+  authorName: string;
+  authorBadge?: string;
   rating: number;
   text: string;
-  photos: string[];
+  locale: "uz" | "ru" | "en";
+  createdAt: string;
   helpfulCount: number;
-  createdAt: Date;
-  updatedAt: Date;
-}
+};
 
-export interface ReviewReply {
-  id: string;
-  reviewId: string;
-  businessOwnerId: string;
+export type ClaimRequest = {
+  businessSlug?: string;
+  businessName: string;
+  ownerName: string;
+  phone: string;
+  note?: string;
+};
+
+export type ReviewCreateInput = {
+  businessSlug: string;
+  rating: number;
   text: string;
-  createdAt: Date;
-}
+};
 
-// Search types
-export interface SearchFilters {
+export type SearchFilters = {
   query?: string;
   category?: string;
-  latitude?: number;
-  longitude?: number;
-  radius?: number;
-  minRating?: number;
-  locale?: 'uz' | 'ru' | 'en';
-}
-
-export interface SearchResult {
-  businesses: Business[];
-  total: number;
-  page: number;
-}
-
-// Category types
-export interface Category {
-  id: string;
-  name: Record<string, string>; // { uz: string, ru: string, en: string }
-  icon?: string;
-  parentId?: string;
-}
-
-// Claim types
-export interface Claim {
-  id: string;
-  businessId: string;
-  userId: string;
-  status: 'PENDING' | 'APPROVED' | 'REJECTED';
-  verificationMethod: 'PHONE' | 'EMAIL' | 'MANUAL';
-  createdAt: Date;
-  reviewedAt?: Date;
-}
-
-// Photo types
-export interface Photo {
-  id: string;
-  url: string;
-  ownerType: 'BUSINESS' | 'REVIEW';
-  ownerId: string;
-  moderationStatus: 'PENDING' | 'APPROVED' | 'REJECTED';
-  createdAt: Date;
-}
-
-// Subscription types
-export interface Subscription {
-  id: string;
-  businessId: string;
-  tier: 'STARTER' | 'GROWTH' | 'PREMIUM';
-  renewalDate: Date;
-  createdAt: Date;
-}
-
-// Social types
-export interface Follow {
-  id: string;
-  followerId: string;
-  followedId: string;
-  createdAt: Date;
-}
-
-export interface Save {
-  id: string;
-  userId: string;
-  businessId: string;
-  createdAt: Date;
-}
-
-// Achievements
-export interface Achievement {
-  id: string;
-  key: string;
-  name: Record<string, string>;
-  description: Record<string, string>;
-  icon: string;
-}
-
-export interface UserAchievement {
-  id: string;
-  userId: string;
-  achievementId: string;
-  earnedAt: Date;
-}
+  locale?: string;
+};

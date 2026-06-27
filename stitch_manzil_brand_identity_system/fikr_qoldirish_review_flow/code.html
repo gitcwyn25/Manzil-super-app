@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+
+<html lang="uz"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>UzDiscover - Fikr qoldirish</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Geist:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary": "#ffffff",
+                    "tertiary-container": "#a84305",
+                    "inverse-primary": "#85d4d3",
+                    "tertiary": "#823100",
+                    "surface-dim": "#dadad8",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed-variant": "#604100",
+                    "on-surface-variant": "#3e4948",
+                    "on-primary-fixed-variant": "#004f50",
+                    "surface-container-highest": "#e2e3e1",
+                    "error-container": "#ffdad6",
+                    "surface-variant": "#e2e3e1",
+                    "secondary": "#7e5700",
+                    "on-primary-fixed": "#002020",
+                    "on-primary-container": "#9eedec",
+                    "background": "#f9f9f7",
+                    "error": "#ba1a1a",
+                    "primary-container": "#0f6e6e",
+                    "inverse-on-surface": "#f1f1ef",
+                    "surface-tint": "#03696a",
+                    "on-error-container": "#93000a",
+                    "primary-fixed-dim": "#85d4d3",
+                    "on-tertiary-fixed": "#351000",
+                    "on-surface": "#1a1c1b",
+                    "on-secondary-container": "#6a4800",
+                    "surface-container-low": "#f4f4f2",
+                    "on-tertiary-container": "#ffd7c7",
+                    "surface-container": "#eeeeec",
+                    "on-error": "#ffffff",
+                    "surface-bright": "#f9f9f7",
+                    "secondary-fixed-dim": "#ffba38",
+                    "on-primary": "#ffffff",
+                    "inverse-surface": "#2f3130",
+                    "on-secondary-fixed": "#281900",
+                    "primary-fixed": "#a1f0ef",
+                    "secondary-container": "#feb300",
+                    "surface": "#f9f9f7",
+                    "tertiary-fixed": "#ffdbcd",
+                    "surface-container-lowest": "#ffffff",
+                    "on-background": "#1a1c1b",
+                    "primary": "#005454",
+                    "tertiary-fixed-dim": "#ffb595",
+                    "surface-container-high": "#e8e8e6",
+                    "secondary-fixed": "#ffdeac",
+                    "on-tertiary-fixed-variant": "#7c2e00",
+                    "outline-variant": "#bec9c8",
+                    "outline": "#6e7979"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "12px",
+                    "base": "4px",
+                    "xl": "40px",
+                    "container-margin": "20px",
+                    "md": "16px",
+                    "gutter": "16px",
+                    "xs": "8px",
+                    "lg": "24px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Geist"],
+                    "display-lg": ["Geist"],
+                    "label-md": ["Geist"],
+                    "headline-lg-mobile": ["Geist"],
+                    "body-lg": ["Inter"],
+                    "headline-lg": ["Geist"],
+                    "body-md": ["Inter"],
+                    "label-sm": ["Geist"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #f9f9f7;
+            color: #1a1c1b;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .star-active {
+            font-variation-settings: 'FILL' 1;
+            color: #feb300;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(229, 229, 224, 0.5);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="min-h-screen flex flex-col font-body-md text-body-md">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-50 bg-background dark:bg-background flex justify-between items-center px-container-margin py-md">
+<button class="text-primary dark:text-primary-fixed-dim hover:bg-surface-container-low transition-colors rounded-full p-2 active:scale-95 duration-100" onclick="window.history.back()">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile dark:text-on-background flex-1 text-center font-bold">Fikr qoldirish</h1>
+<button class="text-primary dark:text-primary-fixed-dim hover:bg-surface-container-low transition-colors rounded-full p-2 active:scale-95 duration-100">
+<span class="material-symbols-outlined" data-icon="language">language</span>
+</button>
+</header>
+<main class="flex-grow px-container-margin py-lg space-y-lg max-w-md mx-auto w-full">
+<!-- Context Card -->
+<div class="flex items-center space-x-md p-md bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant">
+<div class="w-16 h-16 rounded-lg bg-cover bg-center shrink-0" data-alt="A professional architectural photograph of a modern boutique hotel in Tashkent, Uzbekistan. The building features clean lines and large windows reflecting the golden afternoon sun. The surrounding landscaping is lush and perfectly manicured, maintaining a high-end corporate and welcoming aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuATIQaab3IKrU4wjnNKVWHlgjjwm8zp1si7qpgGK1Q5Len2lYL9FDhZkLfARrvdksQPubx0FSNRiClwLyDkokHX1DbmKNOi5C1gDxk2pNoI7pAoFE2cAcHL5rb60hg_6WcAakGoTvGd2JJyxpdaIcGIp3dcPZEZVzGpSCUfEQyDh6inOSOM2FxStLq2JNMKgbrNB3ARmRaRShv98NU_AWjXRgPu8cRROEmqEn6NAH2LrnXtv4SX8Mh2yQuE1dBEYxWc8-UZR1qwkyQ')"></div>
+<div>
+<h3 class="font-headline-md text-headline-md text-primary">Lotte City Hotel Tashkent</h3>
+<p class="text-on-surface-variant font-label-md text-label-md">Markaziy joylashuv va ajoyib xizmat</p>
+</div>
+</div>
+<!-- Star Rating Selector -->
+<section class="text-center py-md">
+<p class="text-on-surface-variant font-label-md text-label-md mb-xs">Tajribangizni baholang</p>
+<div class="flex justify-center items-center gap-xs" id="star-rating">
+<span class="material-symbols-outlined text-[48px] cursor-pointer transition-transform active:scale-90" data-icon="star" data-rating="1">star</span>
+<span class="material-symbols-outlined text-[48px] cursor-pointer transition-transform active:scale-90" data-icon="star" data-rating="2">star</span>
+<span class="material-symbols-outlined text-[48px] cursor-pointer transition-transform active:scale-90" data-icon="star" data-rating="3">star</span>
+<span class="material-symbols-outlined text-[48px] cursor-pointer transition-transform active:scale-90" data-icon="star" data-rating="4">star</span>
+<span class="material-symbols-outlined text-[48px] cursor-pointer transition-transform active:scale-90" data-icon="star" data-rating="5">star</span>
+</div>
+</section>
+<!-- Text Review Area -->
+<section class="space-y-xs">
+<label class="block font-label-md text-label-md text-on-surface-variant" for="review-text">O'z fikringizni yozing...</label>
+<textarea class="w-full p-md bg-surface-container-lowest border border-outline-variant rounded-xl focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all resize-none font-body-md text-body-md placeholder:text-outline" id="review-text" placeholder="Bu joy haqida nimalarni bilasiz? Masalan, xizmat ko'rsatish darajasi, muhit yoki narxlar..." rows="6"></textarea>
+</section>
+<!-- Multi-photo Upload -->
+<section class="space-y-sm">
+<h4 class="font-label-md text-label-md text-on-surface-variant">Rasm qo'shish</h4>
+<div class="flex flex-wrap gap-sm">
+<!-- Add Photo Button -->
+<button class="w-24 h-24 flex flex-col items-center justify-center border-2 border-dashed border-outline-variant rounded-xl hover:bg-surface-container-low transition-colors active:scale-95 group" id="add-photo-btn">
+<span class="material-symbols-outlined text-outline group-hover:text-primary" data-icon="add_a_photo">add_a_photo</span>
+<span class="text-[10px] font-label-sm text-outline mt-1">Rasm yuklash</span>
+</button>
+<!-- Preview Placeholder (Interactive Simulation) -->
+<div class="relative w-24 h-24 rounded-xl bg-cover bg-center border border-outline-variant shadow-sm group overflow-hidden" data-alt="A bright, clear interior photo of a modern Uzbek cafe with teal accents and warm lighting. The image captures the fresh atmosphere and modern corporate aesthetic of UzDiscover's platform. Natural light streams through large windows, highlighting the clean textures of the wood and stone surfaces." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA4EHlkStdBamKJOW6XrRW1l2hhceT74In6tDRXqPmSpaCbxdJ15DE7-_nVGNfFynAUoTnciOCdBbWiSY4laqQGhCf0AAmRU3yxgfplcnRy7uRVCJKSDGqFuRNIZASyW_WvXsuJTpUPUD6p0bZv4Y_NyXlCcVvWPFTxzLilrTrs0GZZPiWU5jmeXkSCc4fElpKhPN4yV3Hl9m2m26LhbJAS8MMSSU4Mu-7s7HjuKNtf56PK4r_CVmW2oLz9BuiS46_6FVuaIcSsYsw')">
+<button class="absolute top-1 right-1 bg-black/50 text-white rounded-full p-1 leading-none hover:bg-red-500 transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="close">close</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Action Area -->
+<footer class="p-container-margin sticky bottom-0 bg-background/80 backdrop-blur-md">
+<button class="w-full bg-primary text-on-primary py-md rounded-xl font-headline-md text-headline-md shadow-md hover:bg-primary-container active:scale-[0.98] transition-all flex items-center justify-center gap-sm" id="submit-btn">
+<span>Yuborish</span>
+<span class="material-symbols-outlined" data-icon="send">send</span>
+</button>
+</footer>
+<script>
+        // Star Rating Logic
+        const starContainer = document.getElementById('star-rating');
+        const stars = starContainer.querySelectorAll('span');
+        let currentRating = 0;
+
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                const rating = parseInt(star.getAttribute('data-rating'));
+                currentRating = rating;
+                updateStars(rating);
+            });
+        });
+
+        function updateStars(rating) {
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('star-active');
+                } else {
+                    star.classList.remove('star-active');
+                }
+            });
+        }
+
+        // Simple button interaction
+        const submitBtn = document.getElementById('submit-btn');
+        submitBtn.addEventListener('click', () => {
+            if (currentRating === 0) {
+                alert('Iltimos, avval baho bering!');
+                return;
+            }
+            
+            submitBtn.innerHTML = '<span class="material-symbols-outlined animate-spin" data-icon="progress_activity">progress_activity</span> <span>Yuborilmoqda...</span>';
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-80');
+            
+            setTimeout(() => {
+                submitBtn.innerHTML = '<span class="material-symbols-outlined" data-icon="check_circle">check_circle</span> <span>Muvaffaqiyatli yuborildi!</span>';
+                submitBtn.classList.replace('bg-primary', 'bg-secondary-container');
+                submitBtn.classList.replace('text-on-primary', 'text-on-secondary-container');
+                
+                setTimeout(() => {
+                    window.history.back();
+                }, 1500);
+            }, 2000);
+        });
+
+        // Photo Upload Simulation
+        const addPhotoBtn = document.getElementById('add-photo-btn');
+        addPhotoBtn.addEventListener('click', () => {
+            // Triggering visual feedback
+            addPhotoBtn.classList.add('bg-primary-container', 'border-primary');
+            setTimeout(() => {
+                addPhotoBtn.classList.remove('bg-primary-container', 'border-primary');
+            }, 200);
+        });
+    </script>
+</body></html>

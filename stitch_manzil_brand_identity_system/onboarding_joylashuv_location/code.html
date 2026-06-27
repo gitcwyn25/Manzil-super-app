@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html class="light" lang="uz"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-surface": "#2f3130",
+                    "on-surface-variant": "#3e4948",
+                    "tertiary-fixed-dim": "#ffb595",
+                    "on-primary-fixed-variant": "#004f50",
+                    "primary-fixed-dim": "#85d4d3",
+                    "on-error-container": "#93000a",
+                    "on-secondary-fixed": "#281900",
+                    "on-tertiary": "#ffffff",
+                    "surface": "#f9f9f7",
+                    "tertiary": "#823100",
+                    "surface-tint": "#03696a",
+                    "background": "#f9f9f7",
+                    "secondary": "#7e5700",
+                    "surface-container-high": "#e8e8e6",
+                    "surface-variant": "#e2e3e1",
+                    "on-error": "#ffffff",
+                    "error": "#ba1a1a",
+                    "primary-fixed": "#a1f0ef",
+                    "surface-container": "#eeeeec",
+                    "secondary-container": "#feb300",
+                    "on-tertiary-fixed-variant": "#7c2e00",
+                    "outline": "#6e7979",
+                    "tertiary-fixed": "#ffdbcd",
+                    "primary": "#005454",
+                    "on-tertiary-fixed": "#351000",
+                    "on-background": "#1a1c1b",
+                    "inverse-primary": "#85d4d3",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#f1f1ef",
+                    "surface-bright": "#f9f9f7",
+                    "secondary-fixed": "#ffdeac",
+                    "primary-container": "#0f6e6e",
+                    "surface-container-low": "#f4f4f2",
+                    "on-secondary-fixed-variant": "#604100",
+                    "on-primary": "#ffffff",
+                    "surface-container-highest": "#e2e3e1",
+                    "tertiary-container": "#a84305",
+                    "on-secondary-container": "#6a4800",
+                    "on-primary-container": "#9eedec",
+                    "on-tertiary-container": "#ffd7c7",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed-dim": "#ffba38",
+                    "outline-variant": "#bec9c8",
+                    "on-surface": "#1a1c1b",
+                    "on-primary-fixed": "#002020",
+                    "error-container": "#ffdad6",
+                    "surface-dim": "#dadad8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "12px",
+                    "md": "16px",
+                    "container-margin": "20px",
+                    "xl": "40px",
+                    "lg": "24px",
+                    "xs": "8px",
+                    "gutter": "16px",
+                    "base": "4px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Geist"],
+                    "label-sm": ["Geist"],
+                    "headline-md": ["Geist"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Geist"],
+                    "label-md": ["Geist"],
+                    "headline-lg": ["Geist"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .perspective-text {
+            perspective: 1000px;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(.33); opacity: 1; }
+            80%, 100% { opacity: 0; }
+        }
+        .pulse-effect::before {
+            content: '';
+            position: absolute;
+            width: 300%;
+            height: 300%;
+            border-radius: 50%;
+            background-color: #0f6e6e;
+            animation: pulse-ring 1.25s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md overflow-x-hidden">
+<!-- Sticky Header (Contextual Suppression applies if sub-page, but TopAppBar for brand identity) -->
+<header class="w-full top-0 flex justify-between items-center px-container-margin py-sm bg-background dark:bg-background z-50">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary font-bold text-headline-md-mobile" data-icon="explore">explore</span>
+<h1 class="font-headline-md text-headline-md-mobile font-bold text-primary">UzbekDiscover</h1>
+</div>
+<button class="text-on-surface-variant hover:opacity-80 transition-opacity duration-200">
+<span class="material-symbols-outlined" data-icon="translate">translate</span>
+</button>
+</header>
+<main class="flex-1 flex flex-col items-center justify-center px-container-margin py-xl max-w-lg mx-auto w-full">
+<!-- Hero Illustration Section -->
+<div class="relative w-full aspect-square mb-xl flex items-center justify-center">
+<!-- Decorative atmospheric circles -->
+<div class="absolute inset-0 bg-primary/5 rounded-full blur-3xl scale-75 animate-pulse"></div>
+<div class="relative z-10 w-full h-full rounded-xl overflow-hidden shadow-sm bg-surface-container-lowest p-md group">
+<img alt="UzbekDiscover Location Access Illustration" class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD00ZE64CWy8TQmIg15b_0iCB2h0AWBBoZBv1DEUjkB7TKCfKcn_OzeWQ-RGhbnZKrj-zqFGAWIEWK9epcw82dFZHlFx-Xu9jh7Lpj6zvbkN1Z6GvG1T0Yc9fff39yAMfArDvtDOHRGygYl4bRWn2cr2yqxvDKsqYEn5nnOGEVMiIEpsreTnV0PCz8MQ0uY59Vyx2Urjy3N1ZVBO9dNmstbetOeHaVW8cEd559aVvoL84Dr6luHIQeuS0JQ74rkEBLlvVGyP55ImTk"/>
+<!-- Animated Floating Interaction Overlay -->
+<div class="absolute bottom-md right-md bg-secondary-container text-on-secondary-container p-sm rounded-lg shadow-lg flex items-center gap-xs animate-bounce">
+<span class="material-symbols-outlined" data-icon="my_location" style="font-variation-settings: 'FILL' 1;">my_location</span>
+<span class="font-label-md text-label-md">Toshkent</span>
+</div>
+</div>
+</div>
+<!-- Content Section -->
+<div class="text-center space-y-md animate-in fade-in slide-in-from-bottom-4 duration-700">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-bold">
+                Yaqin atrofingizdagi qulayliklarni toping
+            </h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-[320px] mx-auto">
+                Manzilingizni aniqlashga ruxsat bering va biz sizga eng yaqin va eng yaxshi joylarni ko'rsatamiz.
+            </p>
+</div>
+<!-- Actions Section -->
+<div class="w-full mt-xl space-y-sm">
+<button class="w-full py-md bg-primary text-on-primary rounded-lg font-headline-md text-headline-md-mobile shadow-md hover:shadow-lg active:scale-95 transition-all duration-200 flex items-center justify-center gap-sm group" onclick="handleLocationRequest()">
+<span class="material-symbols-outlined group-hover:animate-spin" data-icon="location_searching">location_searching</span>
+                Manzilni aniqlash
+            </button>
+<button class="w-full py-md bg-transparent border-[1.5px] border-primary text-primary rounded-lg font-label-md text-label-md hover:bg-primary/5 transition-colors duration-200 uppercase tracking-wider">
+                Keyinroq
+            </button>
+</div>
+</main>
+<!-- Navigation Shell (Bottom Navigation Indicator) -->
+<!-- Applying Shared Component Logic: BottomNavBar isicons_only but for onboarding we use progress indicators -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex flex-col items-center gap-base pb-lg">
+<!-- Progress Indicators -->
+<div class="flex gap-sm mb-xl">
+<div class="w-2 h-2 rounded-full bg-outline-variant opacity-40"></div>
+<div class="w-2 h-2 rounded-full bg-outline-variant opacity-40"></div>
+<!-- Active indicator mapping to "third one active" requirement -->
+<div class="w-6 h-2 rounded-full bg-secondary-container transition-all duration-500 shadow-sm"></div>
+</div>
+<!-- Language Switcher (Brand Identity Requirement) -->
+<div class="flex items-center gap-xs bg-surface-container-high px-md py-xs rounded-full cursor-pointer hover:bg-surface-container-highest transition-colors">
+<span class="text-lg">🇺🇿</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">UZ</span>
+<span class="material-symbols-outlined text-sm" data-icon="expand_more">expand_more</span>
+</div>
+</nav>
+<!-- Location Success Toast (Hidden by default) -->
+<div class="fixed top-container-margin left-container-margin right-container-margin bg-inverse-surface text-inverse-on-surface p-md rounded-xl shadow-xl flex items-center gap-md transform translate-y-[-150%] transition-transform duration-500 z-[100]" id="locationToast">
+<div class="bg-primary-container p-xs rounded-full">
+<span class="material-symbols-outlined text-on-primary-container" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<p class="font-label-md text-label-md">Manzil muvaffaqiyatli aniqlandi</p>
+<p class="text-xs opacity-70">Atrofingizdagi mo'jizalarni kashf eting.</p>
+</div>
+</div>
+<script>
+        function handleLocationRequest() {
+            // UI Feedback
+            const btn = event.currentTarget;
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = `<span class='material-symbols-outlined animate-spin' data-icon='sync'>sync</span> Joylashuv qidirilmoqda...`;
+            btn.disabled = true;
+
+            // Simulate permission request
+            setTimeout(() => {
+                const toast = document.getElementById('locationToast');
+                toast.classList.remove('translate-y-[-150%]');
+                toast.classList.add('translate-y-0');
+
+                setTimeout(() => {
+                    toast.classList.add('translate-y-[-150%]');
+                    btn.innerHTML = originalContent;
+                    btn.disabled = false;
+                }, 3000);
+            }, 1500);
+        }
+
+        // Simple enter animation for content
+        window.addEventListener('DOMContentLoaded', () => {
+            const content = document.querySelector('main');
+            content.style.opacity = '0';
+            setTimeout(() => {
+                content.style.transition = 'opacity 1s ease-out';
+                content.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body></html>

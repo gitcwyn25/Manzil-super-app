@@ -1,0 +1,4 @@
+name,category_slug,district,address,phone,lat,lng,price_tier,description_uz,description_ru,description_en,status
+Yunusobod Osh Markazi,restaurants,Yunusobod,"Bog'ishamol ko'chasi, Toshkent",+998900000001,41.3567,69.2846,$$,"Oilaviy osh markazi, tushlik payti tez xizmat va katta porsiyalari bilan mashhur.","Семейный центр плова с быстрым обслуживанием и большими порциями.","Family plov restaurant known for fast lunch service and generous portions.",unclaimed
+Caravan Coffee,cafes,Mirobod,"Shahrisabz ko'chasi, Toshkent",+998900000002,41.3031,69.2797,$$$,"Ishlash va uchrashuvlar uchun sokin qahvaxona.","Спокойная кофейня для работы и встреч.","Calm coffee shop for work and meetings.",unclaimed
+Chilonzor Somsa Saroyi,restaurants,Chilonzor,"Bunyodkor shoh ko'chasi, Toshkent",+998900000003,41.2854,69.2032,$,"Tandir somsa va milliy pishiriqlar.","Тандырная самса и национальная выпечка.","Tandir somsa and local pastries.",unclaimed

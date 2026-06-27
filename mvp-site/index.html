@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Manzil helps people in Tashkent discover trusted local businesses, compare reviews, and support Uzbek small businesses."
+    />
+    <title>Manzil | Toshkentdagi ishonchli joylarni toping</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Manzil bosh sahifa">
+        <span class="brand-mark">M</span>
+        <span>Manzil</span>
+      </a>
+      <nav class="desktop-nav" aria-label="Asosiy navigatsiya">
+        <a href="#discover">Kashfiyot</a>
+        <a href="#reviews">Sharhlar</a>
+        <a href="#business">Biznes egalari</a>
+      </nav>
+      <div class="header-actions">
+        <button class="language-button" type="button">UZ</button>
+        <a class="ghost-button" href="#business">Biznes qo'shish</a>
+        <a class="primary-button small" href="#discover">Izlash</a>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero-section">
+        <div class="hero-copy">
+          <p class="section-kicker">Toshkent uchun mahalliy qo'llanma</p>
+          <h1>Yaqiningizdagi ishonchli joylarni toping.</h1>
+          <p class="hero-text">
+            Restoranlar, qahvaxonalar, salonlar va xizmatlarni reyting, sharh,
+            narx va joylashuv bo'yicha tez solishtiring.
+          </p>
+
+          <form class="search-panel" id="searchForm">
+            <label>
+              <span>Nima qidiryapsiz?</span>
+              <input
+                id="searchInput"
+                type="search"
+                placeholder="Masalan: osh, qahva, go'zallik"
+                autocomplete="off"
+              />
+            </label>
+            <label>
+              <span>Hudud</span>
+              <input id="locationInput" type="text" value="Toshkent" />
+            </label>
+            <button class="primary-button" type="submit">Natijalarni ko'rish</button>
+          </form>
+
+          <div class="trust-row" aria-label="Platforma ko'rsatkichlari">
+            <span>500+ boshlang'ich listing</span>
+            <span>3 tilda tajriba</span>
+            <span>Ta'sischi sharhlovchi badge</span>
+          </div>
+        </div>
+
+        <aside class="hero-preview" aria-label="Manzil ilovasi ko'rinishi">
+          <div class="phone-shell">
+            <div class="phone-top">
+              <span>Manzil</span>
+              <span>Toshkent</span>
+            </div>
+            <div class="mini-search">Milliy taomlar</div>
+            <div class="mini-card">
+              <div class="mini-photo photo-plov"></div>
+              <div>
+                <strong>Yunusobod Osh Markazi</strong>
+                <p>4.8 (1,240) · Ochiq</p>
+              </div>
+            </div>
+            <div class="mini-card">
+              <div class="mini-photo photo-coffee"></div>
+              <div>
+                <strong>Caravan Coffee</strong>
+                <p>4.7 (328) · Wi-Fi bor</p>
+              </div>
+            </div>
+            <div class="map-strip">
+              <span class="pin one"></span>
+              <span class="pin two"></span>
+              <span class="pin three"></span>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="category-section" aria-label="Kategoriyalar">
+        <button class="category-chip active" data-category="all">Hammasi</button>
+        <button class="category-chip" data-category="restaurant">Restoranlar</button>
+        <button class="category-chip" data-category="cafe">Qahvaxonalar</button>
+        <button class="category-chip" data-category="beauty">Go'zallik</button>
+        <button class="category-chip" data-category="auto">Avtoservis</button>
+        <button class="category-chip" data-category="repair">Ta'mirlash</button>
+        <button class="category-chip" data-category="health">Sog'liq</button>
+      </section>
+
+      <section class="content-grid" id="discover">
+        <div class="section-heading">
+          <p class="section-kicker">Kashfiyot</p>
+          <h2>Toshkentda hozir trendda</h2>
+          <p>
+            MVP uchun statik ma'lumotlar bilan boshlaymiz. Keyingi bosqichda
+            ular qidiruv API va biznes profilingizdan keladi.
+          </p>
+        </div>
+
+        <div class="results-toolbar">
+          <p id="resultCount">6 ta natija</p>
+          <div class="segmented-control" aria-label="Natija ko'rinishi">
+            <button class="active" type="button">Ro'yxat</button>
+            <button type="button">Xarita</button>
+          </div>
+        </div>
+
+        <div class="business-grid" id="businessGrid"></div>
+      </section>
+
+      <section class="profile-section" id="profile">
+        <div class="profile-media">
+          <div class="profile-main-photo photo-plov"></div>
+          <div class="profile-side-photo photo-somsa"></div>
+          <div class="profile-side-photo photo-tea"></div>
+        </div>
+        <div class="profile-copy">
+          <p class="section-kicker">Biznes profili</p>
+          <h2>Yunusobod Osh Markazi</h2>
+          <div class="rating-line">
+            <strong>4.8</strong>
+            <span>1,240 ta sharh</span>
+            <span>Milliy taomlar</span>
+          </div>
+          <p>
+            Oilaviy osh markazi, tushlik payti tez xizmat va katta porsiyalari
+            bilan mashhur. Profil sahifasi SEO uchun server-render qilinadigan
+            asosiy sahifalardan biri bo'ladi.
+          </p>
+          <dl class="profile-facts">
+            <div>
+              <dt>Manzil</dt>
+              <dd>Yunusobod tumani, Bog'ishamol ko'chasi</dd>
+            </div>
+            <div>
+              <dt>Ish vaqti</dt>
+              <dd>Bugun 10:00 dan 22:00 gacha</dd>
+            </div>
+            <div>
+              <dt>Narx</dt>
+              <dd>55 000 - 120 000 UZS</dd>
+            </div>
+          </dl>
+          <div class="button-row">
+            <a class="primary-button" href="#review">Sharh yozish</a>
+            <a class="secondary-button" href="#business">Bu sizning biznesingizmi?</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="reviews-section" id="reviews">
+        <div class="section-heading compact">
+          <p class="section-kicker">Ishonch signallari</p>
+          <h2>Sharhlar foydalanuvchiga qaror qilishga yordam beradi</h2>
+        </div>
+        <div class="review-list">
+          <article class="review-card">
+            <div class="review-avatar">AR</div>
+            <div>
+              <strong>Azizbek Rahimov</strong>
+              <p class="stars">5.0 · Ta'sischi sharhlovchi</p>
+              <p>
+                Osh juda mazali, xizmat tez. Narx va joylashuvni oldindan ko'rib
+                borganim qulay bo'ldi.
+              </p>
+            </div>
+          </article>
+          <article class="review-card">
+            <div class="review-avatar">DN</div>
+            <div>
+              <strong>Dilnoza Nurmatova</strong>
+              <p class="stars">4.7 · 18 ta sharh</p>
+              <p>
+                Kartadagi masofa va ish vaqti to'g'ri chiqdi. Rasmlar ham
+                tanlashda yordam berdi.
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="review-form-section" id="review">
+        <div>
+          <p class="section-kicker">MVP formasi</p>
+          <h2>Sharh qoldiring</h2>
+          <p>
+            Hozircha forma brauzerda demo sifatida ishlaydi. Backend ulanganda
+            bir foydalanuvchi bir biznesga bitta tahrirlanadigan sharh qoldiradi.
+          </p>
+        </div>
+        <form class="review-form" id="reviewForm">
+          <label>
+            <span>Reyting</span>
+            <select id="ratingInput">
+              <option value="5">5 - A'lo</option>
+              <option value="4">4 - Yaxshi</option>
+              <option value="3">3 - O'rtacha</option>
+              <option value="2">2 - Qoniqarsiz</option>
+              <option value="1">1 - Tavsiya qilmayman</option>
+            </select>
+          </label>
+          <label>
+            <span>Sharhingiz</span>
+            <textarea
+              id="reviewText"
+              rows="4"
+              minlength="20"
+              placeholder="Nima yoqdi? Narx, xizmat, muhit haqida yozing."
+            ></textarea>
+          </label>
+          <button class="primary-button" type="submit">Sharhni yuborish</button>
+          <p class="form-note" id="reviewMessage" role="status"></p>
+        </form>
+      </section>
+
+      <section class="business-cta" id="business">
+        <div>
+          <p class="section-kicker inverse">Biznes egalari uchun</p>
+          <h2>Listingni bepul oling va mijozlarga ko'rining.</h2>
+          <p>
+            Manzil MVP bizneslarga profilni claim qilish, rasmlar va ish vaqtini
+            yangilash, sharhlarga javob berish imkoniyatini beradi.
+          </p>
+        </div>
+        <form class="claim-form" id="claimForm">
+          <label>
+            <span>Biznes nomi</span>
+            <input id="claimName" type="text" placeholder="Masalan: Caravan Coffee" />
+          </label>
+          <label>
+            <span>Aloqa raqami</span>
+            <input id="claimPhone" type="tel" placeholder="+998 90 000 00 00" />
+          </label>
+          <button class="gold-button" type="submit">Claim so'rovini boshlash</button>
+          <p id="claimMessage" class="claim-message" role="status"></p>
+        </form>
+      </section>
+    </main>
+
+    <nav class="mobile-nav" aria-label="Mobil navigatsiya">
+      <a href="#top">Asosiy</a>
+      <a href="#discover">Izlash</a>
+      <a href="#profile">Profil</a>
+      <a href="#business">Biznes</a>
+    </nav>
+
+    <footer class="site-footer">
+      <div>
+        <strong>Manzil</strong>
+        <p>O'zbekistonda mahalliy bizneslarni kashf qilish platformasi.</p>
+      </div>
+      <div class="footer-links">
+        <a href="#discover">Kashfiyot</a>
+        <a href="#business">Biznes qo'shish</a>
+        <a href="#review">Sharh yozish</a>
+      </div>
+    </footer>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

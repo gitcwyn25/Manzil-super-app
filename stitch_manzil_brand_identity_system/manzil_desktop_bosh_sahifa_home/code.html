@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+
+<html lang="uz"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Manzil — O'zbekistondagi mahalliy bizneslarni kashf qiling</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Geist:wght@400;500;600;700&display=swap');
+        
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-fixed": "#ffdbcd",
+                      "tertiary-fixed-dim": "#ffb595",
+                      "on-tertiary-fixed": "#351000",
+                      "on-primary": "#ffffff",
+                      "surface-container-highest": "#e2e3e1",
+                      "on-primary-container": "#9eedec",
+                      "on-error-container": "#93000a",
+                      "surface-container": "#eeeeec",
+                      "on-secondary": "#ffffff",
+                      "surface-variant": "#e2e3e1",
+                      "surface-container-lowest": "#ffffff",
+                      "surface": "#f9f9f7",
+                      "secondary-fixed-dim": "#ffba38",
+                      "error": "#ba1a1a",
+                      "on-secondary-fixed-variant": "#604100",
+                      "on-surface": "#1a1c1b",
+                      "on-tertiary-container": "#ffd7c7",
+                      "primary": "#005454",
+                      "inverse-on-surface": "#f1f1ef",
+                      "inverse-primary": "#85d4d3",
+                      "surface-bright": "#f9f9f7",
+                      "secondary-container": "#feb300",
+                      "on-secondary-container": "#6a4800",
+                      "background": "#f9f9f7",
+                      "on-primary-fixed": "#002020",
+                      "tertiary-container": "#a84305",
+                      "on-tertiary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#7c2e00",
+                      "surface-tint": "#03696a",
+                      "surface-dim": "#dadad8",
+                      "secondary-fixed": "#ffdeac",
+                      "on-error": "#ffffff",
+                      "surface-container-low": "#f4f4f2",
+                      "primary-fixed": "#a1f0ef",
+                      "outline": "#6e7979",
+                      "error-container": "#ffdad6",
+                      "tertiary": "#823100",
+                      "surface-container-high": "#e8e8e6",
+                      "secondary": "#7e5700",
+                      "outline-variant": "#bec9c8",
+                      "on-secondary-fixed": "#281900",
+                      "on-primary-fixed-variant": "#004f50",
+                      "primary-fixed-dim": "#85d4d3",
+                      "primary-container": "#0f6e6e",
+                      "on-surface-variant": "#3e4948",
+                      "on-background": "#1a1c1b",
+                      "inverse-surface": "#2f3130"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sm": "12px",
+                      "md": "16px",
+                      "gutter": "16px",
+                      "base": "4px",
+                      "xs": "8px",
+                      "xl": "40px",
+                      "lg": "24px",
+                      "container-margin": "20px"
+              },
+              "fontFamily": {
+                      "headline-md": ["Geist"],
+                      "label-md": ["Geist"],
+                      "body-md": ["Inter"],
+                      "display-lg": ["Geist"],
+                      "label-sm": ["Geist"],
+                      "headline-lg": ["Geist"],
+                      "body-lg": ["Inter"],
+                      "headline-lg-mobile": ["Geist"]
+              },
+              "fontSize": {
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen overflow-x-hidden">
+<!-- Top Navigation Anchor -->
+<header class="sticky top-0 z-[100] bg-surface dark:bg-surface-dim transition-all duration-300 border-b border-outline-variant/30">
+<div class="flex justify-between items-center w-full px-container-margin py-base max-w-7xl mx-auto h-16">
+<!-- Brand Identity -->
+<div class="flex items-center gap-xl">
+<a class="font-headline-lg text-headline-lg font-bold text-primary dark:text-primary-fixed-dim tracking-tight" href="#">Manzil</a>
+<!-- Desktop Search in Nav -->
+<div class="hidden lg:flex items-center bg-surface-container-low border border-outline-variant rounded-full px-md py-xs w-[400px]">
+<span class="material-symbols-outlined text-outline mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-label-md w-full" placeholder="Restoran, go'zallik saloni..." type="text"/>
+<div class="h-4 w-px bg-outline-variant mx-2"></div>
+<div class="flex items-center text-primary font-bold whitespace-nowrap cursor-pointer">
+<span class="material-symbols-outlined text-[20px] mr-1">location_on</span>
+<span class="text-label-md">Toshkent</span>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-lg">
+<button class="hidden md:flex items-center gap-xs text-on-surface-variant font-label-md hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">storefront</span>
+                    Biznes egalari uchun
+                </button>
+<div class="flex items-center gap-xs px-sm py-xs bg-surface-container rounded-lg cursor-pointer hover:bg-surface-container-high transition-colors">
+<span class="text-label-md font-bold">🇺🇿 UZ</span>
+<span class="material-symbols-outlined text-[16px]">expand_more</span>
+</div>
+<button class="bg-primary text-on-primary px-lg py-xs rounded-lg font-label-md hover:brightness-110 active:scale-95 transition-all">
+                    Kirish
+                </button>
+</div>
+</div>
+</header>
+<!-- Hero Section -->
+<section class="relative h-[480px] flex items-center justify-center overflow-hidden">
+<!-- Shader/Background -->
+<div class="absolute inset-0 z-0">
+<div class="absolute inset-0 bg-gradient-to-b from-primary/10 to-background"></div>
+<div class="w-full h-full object-cover opacity-30 grayscale-[20%]" data-alt="A cinematic, wide-angle photograph of Tashkent city center at dusk. The scene captures the blend of modern glass architecture and traditional Uzbek motifs under a soft lavender and gold sky. The lighting is warm and inviting, highlighting the pristine white city surfaces and lush greenery. Professional travel photography style with a premium, reliable atmosphere." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCxIjdt4dMn_9Vuj40B9edvuKmeinilzHptr4orgBKckLggmLzebhLhmmWDnaH0yQeTteTky9qIyMK1vdfgVCgec29zBAspEdLKEf3mielXEmLk2POEtRa_z6CdmC-wCvePaKf9nU7HQka1ftoo7YmRhQdgJ5H7IaFG9XPtLpcFidMfI56-chTY6xj1mOavpJ-1jBbpwpoBH4GTLq9afQI1Ov-5iNKK4-Nyeck-kMNC6FNUclc1q4Eo51sVDecOqOsAmNQXWFOFso4')"></div>
+</div>
+<div class="relative z-10 max-w-4xl w-full px-container-margin text-center">
+<h1 class="font-display-lg text-display-lg text-on-background mb-lg">
+                Mahalliy kashfiyotlar <span class="text-primary">shu yerdan boshlanadi</span>
+</h1>
+<div class="glass-effect p-base rounded-2xl shadow-2xl flex flex-col md:flex-row items-stretch gap-base border border-white/40">
+<div class="flex-[2] bg-white rounded-xl px-lg py-md flex items-center">
+<span class="material-symbols-outlined text-outline mr-md">search</span>
+<input class="w-full border-none focus:ring-0 text-body-md font-medium" placeholder="Nima qidiryapsiz? Masalan: Palov markazi" type="text"/>
+</div>
+<div class="flex-1 bg-white rounded-xl px-lg py-md flex items-center border-l md:border-l-0">
+<span class="material-symbols-outlined text-primary mr-md">near_me</span>
+<input class="w-full border-none focus:ring-0 text-body-md font-semibold text-primary" type="text" value="Toshkent"/>
+</div>
+<button class="bg-primary text-on-primary px-xl py-md rounded-xl font-headline-md flex items-center justify-center gap-sm hover:shadow-lg transition-all active:scale-95">
+                    Izlash
+                </button>
+</div>
+<!-- Quick Stats/Trust -->
+<div class="mt-lg flex justify-center gap-xl text-on-surface-variant font-label-md">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+                    15,000+ Tasdiqlangan bizneslar
+                </div>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]" style="font-variation-settings: 'FILL' 1;">stars</span>
+                    450,000+ Haqiqiy sharhlar
+                </div>
+</div>
+</div>
+</section>
+<!-- Category Filters -->
+<section class="max-w-7xl mx-auto px-container-margin py-xl">
+<div class="flex overflow-x-auto no-scrollbar gap-lg pb-base">
+<button class="flex flex-col items-center gap-sm min-w-[100px] group">
+<div class="w-16 h-16 rounded-2xl bg-surface-container-low flex items-center justify-center group-hover:bg-primary-container group-hover:text-on-primary-container transition-all duration-300">
+<span class="material-symbols-outlined text-[32px]">restaurant</span>
+</div>
+<span class="font-label-md text-on-surface-variant">Restoranlar</span>
+</button>
+<button class="flex flex-col items-center gap-sm min-w-[100px] group">
+<div class="w-16 h-16 rounded-2xl bg-surface-container-low flex items-center justify-center group-hover:bg-primary-container group-hover:text-on-primary-container transition-all duration-300">
+<span class="material-symbols-outlined text-[32px]">local_cafe</span>
+</div>
+<span class="font-label-md text-on-surface-variant">Qahvaxonalar</span>
+</button>
+<button class="flex flex-col items-center gap-sm min-w-[100px] group">
+<div class="w-16 h-16 rounded-2xl bg-surface-container-low flex items-center justify-center group-hover:bg-primary-container group-hover:text-on-primary-container transition-all duration-300">
+<span class="material-symbols-outlined text-[32px]">content_cut</span>
+</div>
+<span class="font-label-md text-on-surface-variant">Go'zallik</span>
+</button>
+<button class="flex flex-col items-center gap-sm min-w-[100px] group">
+<div class="w-16 h-16 rounded-2xl bg-surface-container-low flex items-center justify-center group-hover:bg-primary-container group-hover:text-on-primary-container transition-all duration-300">
+<span class="material-symbols-outlined text-[32px]">car_repair</span>
+</div>
+<span class="font-label-md text-on-surface-variant">Avtoservis</span>
+</button>
+<button class="flex flex-col items-center gap-sm min-w-[100px] group">
+<div class="w-16 h-16 rounded-2xl bg-surface-container-low flex items-center justify-center group-hover:bg-primary-container group-hover:text-on-primary-container transition-all duration-300">
+<span class="material-symbols-outlined text-[32px]">construction</span>
+</div>
+<span class="font-label-md text-on-surface-variant">Ta'mirlash</span>
+</button>
+<button class="flex flex-col items-center gap-sm min-w-[100px] group">
+<div class="w-16 h-16 rounded-2xl bg-surface-container-low flex items-center justify-center group-hover:bg-primary-container group-hover:text-on-primary-container transition-all duration-300">
+<span class="material-symbols-outlined text-[32px]">medical_services</span>
+</div>
+<span class="font-label-md text-on-surface-variant">Sog'liqni saqlash</span>
+</button>
+<button class="flex flex-col items-center gap-sm min-w-[100px] group">
+<div class="w-16 h-16 rounded-2xl bg-surface-container-low flex items-center justify-center group-hover:bg-primary-container group-hover:text-on-primary-container transition-all duration-300">
+<span class="material-symbols-outlined text-[32px]">shopping_bag</span>
+</div>
+<span class="font-label-md text-on-surface-variant">Do'konlar</span>
+</button>
+<button class="flex flex-col items-center gap-sm min-w-[100px] group">
+<div class="w-16 h-16 rounded-2xl bg-surface-container-low flex items-center justify-center group-hover:bg-primary-container group-hover:text-on-primary-container transition-all duration-300">
+<span class="material-symbols-outlined text-[32px]">fitness_center</span>
+</div>
+<span class="font-label-md text-on-surface-variant">Sport</span>
+</button>
+</div>
+</section>
+<!-- Trending Section (Horizontal Row) -->
+<section class="max-w-7xl mx-auto px-container-margin py-lg mb-xl">
+<div class="flex justify-between items-end mb-lg">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-background">Toshkentda trendda</h2>
+<p class="text-on-surface-variant text-body-md">Hozirda foydalanuvchilar tomonidan eng ko'p qidirilayotgan joylar</p>
+</div>
+<button class="text-primary font-bold flex items-center gap-xs hover:underline">
+                Hammasini ko'rish
+                <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-lg">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group cursor-pointer border border-outline-variant/20">
+<div class="relative h-48 overflow-hidden">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="A professional food photography shot of a large, steaming traditional Uzbek Osh (Plov) served on a beautiful blue and white ceramic plate. Yellow carrots, tender beef chunks, and quails eggs are visible on top of perfectly cooked rice. The background is a warm, rustic restaurant interior in Tashkent with ethnic patterns. Soft natural lighting, vibrant colors." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAt-Le88YnbdtSh0m580SAZF2B5NPmhBUQbiXb6b7-toI4mOz0GyFdBrzUkT6UqMtPIfLycZGrTMcNDyHXmIlnqOpK7Sq79UiuvCFEHIlvuF2qRifILHLyrDQil9rCIN8sUq8fIVKkX76JjlMynmKfHAbOI_q0bDSG6ZhI9fqY547TEnfwLq-aDzakMKZCMwkoO1tb6_nbzNmgu4h5vAQdRPTSw-TNZoQRX0C53qYrDu4fUZe57uxv2uDII7iRoUl5Lo8aKaGk1Cbs')"></div>
+<div class="absolute top-sm right-sm bg-white/90 backdrop-blur rounded-lg px-sm py-xs flex items-center gap-xs font-bold text-label-md">
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">star</span>
+                        4.9
+                    </div>
+</div>
+<div class="p-md">
+<div class="flex justify-between items-start mb-xs">
+<h3 class="font-headline-md text-headline-md text-on-surface">Plov Markazi</h3>
+<span class="text-primary font-bold text-label-sm">$$</span>
+</div>
+<p class="text-on-surface-variant text-body-md mb-md">Osh markazi • Yunusobod tumani</p>
+<div class="flex items-center gap-lg border-t border-outline-variant/30 pt-md">
+<div class="flex items-center gap-xs text-on-surface-variant text-label-sm">
+<span class="material-symbols-outlined text-[18px]">directions_walk</span>
+                            12 daqiqa
+                        </div>
+<div class="flex items-center gap-xs text-on-surface-variant text-label-sm">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+                            Ochiq: 22:00 gacha
+                        </div>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group cursor-pointer border border-outline-variant/20">
+<div class="relative h-48 overflow-hidden">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="A modern, minimalist coffee shop interior in Tashkent called Caravan Coffee. The design features light wood textures, hanging Edison bulbs, and large floor-to-ceiling windows showing a bright city street. A barista is expertly preparing a latte with intricate foam art. The atmosphere is calm, sophisticated, and perfect for working. High-quality commercial photography style." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAVdzb15RAxoVAwOTbILQC10iQz0--xtJuRgBt5pWmWQ129M3awzl6p1cy_G3cQxCAQm6omdU6N0avzsxZg8NoXZO1vOMVDiM_MP6Tw88NzVJEVBjZ9wUUYNnmSi0E72zwJdxuUiCoVyuyzedbuRweD23jIjk4ivL3ORQtvo4iQ6LA4ikKpDUYt59sPbE6fRmTAze-Kcehmm4tpyOEFyNwMj6eTF3TQBzRedNPu35JZ50XvtOa8SHZnv_CBZl8YDF5XZnqueOpDszs')"></div>
+<div class="absolute top-sm right-sm bg-white/90 backdrop-blur rounded-lg px-sm py-xs flex items-center gap-xs font-bold text-label-md">
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">star</span>
+                        4.8
+                    </div>
+</div>
+<div class="p-md">
+<div class="flex justify-between items-start mb-xs">
+<h3 class="font-headline-md text-headline-md text-on-surface">Caravan Coffee</h3>
+<span class="text-primary font-bold text-label-sm">$$$</span>
+</div>
+<p class="text-on-surface-variant text-body-md mb-md">Qahvaxona • Mirobod tumani</p>
+<div class="flex items-center gap-lg border-t border-outline-variant/30 pt-md">
+<div class="flex items-center gap-xs text-on-surface-variant text-label-sm">
+<span class="material-symbols-outlined text-[18px]">directions_car</span>
+                            5 daqiqa
+                        </div>
+<div class="flex items-center gap-xs text-on-surface-variant text-label-sm">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+                            Ochiq: 23:00 gacha
+                        </div>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group cursor-pointer border border-outline-variant/20">
+<div class="relative h-48 overflow-hidden">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="A luxurious beauty salon interior with soft teal and gold accents. High-end equipment, elegant mirrors, and comfortable seating are visible. The lighting is flattering and soft, creating a spa-like mood. Professional skin treatment products are neatly displayed on white marble shelves. This represents Glow Beauty in Uzbekistan, showcasing a premium local service business." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDrLukavk-4Hp-tTisO4dynmJ2Aa8NJ0huBuCUOUy-zxZDJXcKvAKa4l1TGBVyMJU2CfaKbYT64bixS9DJB-FGUJ1rWTHlgTzRJ1NYrJfPwllbrGbUI7IMp9cfAUHK4oKPUOzlksaNackTw6R1zTCVmLR7mlz1w71Phs_vYys9UOFtm7UXHPqVQDyHA3R-wD90H1OoHl4TkT1nR54uYx6RAQPtECwxAPILjRatosihafpqMNNHrOtkXTBb1YTXeRansWAEycrK9utM')"></div>
+<div class="absolute top-sm right-sm bg-white/90 backdrop-blur rounded-lg px-sm py-xs flex items-center gap-xs font-bold text-label-md">
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">star</span>
+                        4.7
+                    </div>
+</div>
+<div class="p-md">
+<div class="flex justify-between items-start mb-xs">
+<h3 class="font-headline-md text-headline-md text-on-surface">Glow Beauty</h3>
+<span class="text-primary font-bold text-label-sm">$$$</span>
+</div>
+<p class="text-on-surface-variant text-body-md mb-md">Go'zallik saloni • Chilonzor tumani</p>
+<div class="flex items-center gap-lg border-t border-outline-variant/30 pt-md">
+<div class="flex items-center gap-xs text-on-surface-variant text-label-sm">
+<span class="material-symbols-outlined text-[18px]">directions_walk</span>
+                            20 daqiqa
+                        </div>
+<div class="flex items-center gap-xs text-on-surface-variant text-label-sm">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+                            Ochiq: 20:00 gacha
+                        </div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Interactive Discovery (Map & List) -->
+<section class="max-w-7xl mx-auto px-container-margin py-xl">
+<div class="bg-surface-container-low rounded-3xl overflow-hidden h-[600px] flex flex-col md:flex-row shadow-xl">
+<!-- Sidebar / List -->
+<div class="w-full md:w-1/3 bg-white border-r border-outline-variant/20 flex flex-col">
+<div class="p-lg border-b border-outline-variant/10 flex justify-between items-center">
+<h2 class="font-headline-md text-headline-md">Atrofingizda</h2>
+<div class="flex bg-surface-container rounded-lg p-1">
+<button class="bg-white shadow px-sm py-1 rounded-md text-label-sm font-bold text-primary">Ro'yxat</button>
+<button class="px-sm py-1 rounded-md text-label-sm font-bold text-on-surface-variant">Xarita</button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-md space-y-md">
+<!-- List Item 1 -->
+<div class="flex gap-md p-sm hover:bg-surface-container-low rounded-xl transition-colors cursor-pointer group">
+<div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<div class="w-full h-full bg-cover bg-center" data-alt="A cozy traditional Uzbek tea house (Choyxona) interior. Low wooden tables, colorful ikat cushions, and copper tea sets. Soft warm light through wooden shutters. Authentic atmosphere." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDdUsHB2Bamr_yD2_qyid9xjyAKrB5eX_dS7TXRuG-j5DAM7IdJeJIETj1mwb3a0EOIDwUD0s1dEy0m63TXJdn61WNVOsJB0DAa1yGdWNxNot0ZTCjrorw-Ae7lEs719XpZQUS7no8rNhDCxjKFZQkIPOgC7YXr8l4cyB0D5Sg1Ih1VZizjr-5ym4wk5tCGXL_J50Hmad-kpqWjnnGCp_Ct5l6pJXropZ7Z3A-4ehhAbPi_sub-5r_Dk0yYHZ2rQJVljrkUAgx2v-E')"></div>
+</div>
+<div>
+<h4 class="font-bold text-on-surface group-hover:text-primary transition-colors">Afsona Choyxonasi</h4>
+<div class="flex items-center gap-1 text-label-sm mb-1">
+<span class="material-symbols-outlined text-secondary-container text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                                4.5 (128) • $$$
+                            </div>
+<p class="text-label-sm text-on-surface-variant">Milliy taomlar • 1.2 km</p>
+</div>
+</div>
+<!-- List Item 2 -->
+<div class="flex gap-md p-sm hover:bg-surface-container-low rounded-xl transition-colors cursor-pointer group">
+<div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<div class="w-full h-full bg-cover bg-center" data-alt="A modern tech repair shop in Tashkent. Bright clean interior, organized tools on benches, and high-tech gadgets being repaired under bright LED lights. Professional and trustworthy." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBlKO4bJpcDs6p6rUXhbsVfaBqf2ExafWJoN35F-8uuzaPVm6Ik8cAX931dG4fNaP3s5scunx4C0WldFJ7bWRU9oI4AtphFQAmV266LENPco3-xS3oxB55jQlU0nMigA05uwusUj8J7AGW_MF-dBANuOjb8QlaNAndf2NnD3nqxDkvg_FvqFwBziaIVmbWgHKNzcfe77XHii-um2NajzVn0rne5munTXmf10AvJMm10_-BlHBxhufeIhb2FbDp4_aVKM6bdgT2O7Dg')"></div>
+</div>
+<div>
+<h4 class="font-bold text-on-surface group-hover:text-primary transition-colors">TechFix Xizmati</h4>
+<div class="flex items-center gap-1 text-label-sm mb-1">
+<span class="material-symbols-outlined text-secondary-container text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                                4.9 (56) • $$
+                            </div>
+<p class="text-label-sm text-on-surface-variant">Ta'mirlash • 0.8 km</p>
+</div>
+</div>
+<!-- List Item 3 -->
+<div class="flex gap-md p-sm hover:bg-surface-container-low rounded-xl transition-colors cursor-pointer group">
+<div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<div class="w-full h-full bg-cover bg-center" data-alt="Exterior of a modern pharmacy in Uzbekistan at night. Glowing green cross sign, clean glass windows showing well-stocked shelves. Professional medical setting." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBvkrtBUblE-hGEmz8mtHY_6-mVvtaaLNbjgnDkZun_0PHj9XAHrQUDUWnj2bmyeOcFg4dz0-8Hj3uJFKH8jxPtGF4Z6jlmmmmDZR626wuQYSRLWmu5sPtFqEGihcyx8FhVtytREruSl4F0nVazq1rB6InLAYTmHdzHN2hBIXXli02JnLCB_9P6dzKFh08sSjPS7mowduWrXuG2JX7mI8VllqnN0H8NmLbvyGPG8DP0q2MksMF73TUHXj0SmvLG-C8zNcG4LenPIVg')"></div>
+</div>
+<div>
+<h4 class="font-bold text-on-surface group-hover:text-primary transition-colors">Dori-Darmon 24/7</h4>
+<div class="flex items-center gap-1 text-label-sm mb-1">
+<span class="material-symbols-outlined text-secondary-container text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                                4.2 (210) • $
+                            </div>
+<p class="text-label-sm text-on-surface-variant">Sog'liqni saqlash • 2.4 km</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Map Area -->
+<div class="flex-1 relative bg-surface-container-highest">
+<div class="absolute inset-0 grayscale-[50%] contrast-[110%]" data-location="Tashkent" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuChR2yX0L9Jm7BnSU4DHdC6qkiHlvJXMebMyI-eWJuX2IYlzHlSO-rEsIL2vgkbZl6UHa32WpCB2IZLEGYQqwuzhE2nbPYTTpYiSgMx1SZfzU0AggJXkWH8IdE05nnPFvqha9tm-i5wO5ivsP62r1CpxUlUwxtEJr-nk06Sl7HTzEWi4dBQsTgbw1JK-b7-PBQUHQ3ktv5rkI-AXGd1XOh1aYGGElceZI88Vya95-ittAM0AOLd4z0Rt7sRR1aG8MmC7bS6WLbZ-pg')"></div>
+<!-- Custom Pins (Representational) -->
+<div class="absolute top-[30%] left-[40%] animate-bounce">
+<div class="bg-primary text-on-primary p-xs rounded-full shadow-lg border-2 border-white cursor-pointer hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[20px]">restaurant</span>
+</div>
+</div>
+<div class="absolute top-[60%] left-[25%]">
+<div class="bg-secondary text-on-secondary p-xs rounded-full shadow-lg border-2 border-white cursor-pointer hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[20px]">local_cafe</span>
+</div>
+</div>
+<div class="absolute top-[45%] left-[70%]">
+<div class="bg-tertiary text-on-tertiary p-xs rounded-full shadow-lg border-2 border-white cursor-pointer hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[20px]">construction</span>
+</div>
+</div>
+<!-- Map Overlay -->
+<div class="absolute bottom-md right-md flex flex-col gap-xs">
+<button class="bg-white p-xs rounded-lg shadow-md hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">add</span>
+</button>
+<button class="bg-white p-xs rounded-lg shadow-md hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">remove</span>
+</button>
+<button class="bg-primary text-white p-xs rounded-lg shadow-md mt-2">
+<span class="material-symbols-outlined">my_location</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Business Promo CTA -->
+<section class="max-w-7xl mx-auto px-container-margin py-xl">
+<div class="bg-primary rounded-3xl p-xl flex flex-col lg:flex-row items-center justify-between gap-xl relative overflow-hidden">
+<div class="absolute -right-20 -bottom-20 w-80 h-80 bg-white/5 rounded-full blur-3xl"></div>
+<div class="absolute -left-20 -top-20 w-80 h-80 bg-secondary/10 rounded-full blur-3xl"></div>
+<div class="relative z-10 lg:max-w-xl text-center lg:text-left">
+<h2 class="font-display-lg text-display-lg text-white mb-md">O'z biznesingizni Manzil bilan kengaytiring</h2>
+<p class="text-on-primary-container text-body-lg mb-lg opacity-80">
+                    O'zbekistondagi millionlab foydalanuvchilarga xizmatlaringizni ko'rsating va mijozlar oqimini oshiring.
+                </p>
+<div class="flex flex-wrap justify-center lg:justify-start gap-md">
+<button class="bg-secondary-container text-on-secondary-container px-xl py-md rounded-xl font-headline-md hover:shadow-lg transition-all active:scale-95">
+                        Bepul qo'shilish
+                    </button>
+<button class="bg-white/10 text-white border border-white/20 px-xl py-md rounded-xl font-headline-md hover:bg-white/20 transition-all">
+                        Ma'lumot olish
+                    </button>
+</div>
+</div>
+<div class="relative z-10 hidden lg:block w-96 h-64 bg-surface-container-low rounded-2xl p-md shadow-2xl rotate-3">
+<div class="flex items-center gap-md mb-md">
+<div class="w-12 h-12 bg-primary-container rounded-full flex items-center justify-center text-primary font-bold">M</div>
+<div class="flex-1">
+<div class="h-3 w-3/4 bg-outline-variant/30 rounded-full mb-2"></div>
+<div class="h-2 w-1/2 bg-outline-variant/30 rounded-full"></div>
+</div>
+</div>
+<div class="space-y-sm">
+<div class="flex items-center justify-between">
+<div class="h-2 w-1/3 bg-primary/20 rounded-full"></div>
+<div class="h-2 w-1/4 bg-secondary/40 rounded-full"></div>
+</div>
+<div class="h-32 bg-outline-variant/10 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-outline-variant text-[48px]">analytics</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-surface-container-highest/50 border-t border-outline-variant/20 mt-xl">
+<div class="max-w-7xl mx-auto px-container-margin py-xl">
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-xl">
+<div class="col-span-2">
+<a class="font-headline-lg text-headline-lg font-bold text-primary mb-md block" href="#">Manzil</a>
+<p class="text-on-surface-variant text-body-md mb-lg pr-xl">
+                        O'zbekistondagi eng yirik mahalliy bizneslarni kashf qilish platformasi. Biz mahalliy tadbirkorlar va iste'molchilar orasidagi masofani qisqartiramiz.
+                    </p>
+<div class="flex gap-md">
+<a class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all" href="#">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path></svg>
+</a>
+<a class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all" href="#">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path></svg>
+</a>
+</div>
+</div>
+<div>
+<h5 class="font-bold mb-md">Kompaniya</h5>
+<ul class="space-y-sm text-on-surface-variant text-label-md">
+<li><a class="hover:text-primary" href="#">Biz haqimizda</a></li>
+<li><a class="hover:text-primary" href="#">Vakansiyalar</a></li>
+<li><a class="hover:text-primary" href="#">Press</a></li>
+<li><a class="hover:text-primary" href="#">Blog</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold mb-md">Xizmatlar</h5>
+<ul class="space-y-sm text-on-surface-variant text-label-md">
+<li><a class="hover:text-primary" href="#">Biznes qo'shish</a></li>
+<li><a class="hover:text-primary" href="#">Reklama</a></li>
+<li><a class="hover:text-primary" href="#">Manzil Pro</a></li>
+<li><a class="hover:text-primary" href="#">Hamkorlik</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold mb-md">Yordam</h5>
+<ul class="space-y-sm text-on-surface-variant text-label-md">
+<li><a class="hover:text-primary" href="#">Savol-javob</a></li>
+<li><a class="hover:text-primary" href="#">Bog'lanish</a></li>
+<li><a class="hover:text-primary" href="#">Xavfsizlik</a></li>
+<li><a class="hover:text-primary" href="#">Qoidalar</a></li>
+</ul>
+</div>
+</div>
+<div class="mt-xl pt-lg border-t border-outline-variant/20 flex flex-col md:flex-row justify-between items-center gap-md text-label-sm text-on-surface-variant">
+<p>© 2024 Manzil. Barcha huquqlar himoyalangan.</p>
+<div class="flex gap-lg">
+<a class="hover:underline" href="#">Maxfiylik siyosati</a>
+<a class="hover:underline" href="#">Ommaviy oferta</a>
+</div>
+</div>
+</div>
+</footer>
+<!-- FAB for Language (Mobile) / Feedback (Desktop) -->
+<button class="fixed bottom-xl right-container-margin bg-primary text-on-primary w-14 h-14 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined">chat_bubble</span>
+</button>
+<script>
+        // Micro-interactions
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                // Subtle hover effects handled by tailwind classes
+            });
+        });
+
+        // Simple scroll behavior for header
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 20) {
+                header.classList.add('shadow-md', 'py-1');
+                header.classList.remove('py-base');
+            } else {
+                header.classList.remove('shadow-md', 'py-1');
+                header.classList.add('py-base');
+            }
+        });
+    </script>
+</body></html>
