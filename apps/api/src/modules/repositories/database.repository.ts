@@ -1,6 +1,12 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import type { Business, Category, ClaimCreateRequest, Review, ReviewCreateRequest } from "@manzil/shared";
-import type { Business as PrismaBusiness, Category as PrismaCategory, Review as PrismaReview, User } from "@prisma/client";
+import type {
+  Business as PrismaBusiness,
+  Category as PrismaCategory,
+  ClaimStatus,
+  Review as PrismaReview,
+  User
+} from "@prisma/client";
 import { PrismaService } from "../prisma.service";
 
 type BusinessWithCategory = PrismaBusiness & {
@@ -224,6 +230,164 @@ export class DatabaseRepository {
     };
   }
 
+  async listClaims(status: ClaimStatus = "pending") {
+    const claims = await this.prisma.claim.findMany({
+      where: { status },
+      include: {
+        business: {
+          include: { category: true }
+        },
+        user: true,
+        reviewedByAdmin: true
+      },
+      orderBy: { createdAt: "desc" }
+    });
+
+    return claims.map((claim) => ({
+      id: claim.id,
+      status: claim.status,
+      verificationMethod: claim.verificationMethod,
+      note: claim.note,
+      createdAt: claim.createdAt.toISOString(),
+      updatedAt: claim.updatedAt.toISOString(),
+      business: this.mapBusiness(claim.business),
+      requester: {
+        id: claim.user.id,
+        displayName: claim.user.displayName,
+        email: claim.user.email,
+        phone: claim.user.phone,
+        role: claim.user.role
+      },
+      reviewedByAdmin: claim.reviewedByAdmin
+        ? {
+            id: claim.reviewedByAdmin.id,
+            displayName: claim.reviewedByAdmin.displayName
+          }
+        : null
+    }));
+  }
+
+  async approveClaim(claimId: string, adminId = "dev-admin") {
+    const admin = await this.ensureAdminUser(adminId);
+
+    return this.prisma.$transaction(async (tx) => {
+      const claim = await tx.claim.findUnique({
+        where: { id: claimId },
+        include: {
+          business: { include: { category: true } },
+          user: true
+        }
+      });
+
+      if (!claim) {
+        throw new NotFoundException("Claim not found");
+      }
+
+      const [updatedClaim, updatedBusiness, updatedUser] = await Promise.all([
+        tx.claim.update({
+          where: { id: claimId },
+          data: {
+            status: "approved",
+            reviewedByAdminId: admin.id
+          }
+        }),
+        tx.business.update({
+          where: { id: claim.businessId },
+          data: {
+            status: "claimed",
+            claimedByUserId: claim.userId
+          },
+          include: { category: true }
+        }),
+        tx.user.update({
+          where: { id: claim.userId },
+          data: { role: "business_owner" }
+        })
+      ]);
+
+      await tx.claim.updateMany({
+        where: {
+          businessId: claim.businessId,
+          id: { not: claimId },
+          status: "pending"
+        },
+        data: {
+          status: "rejected",
+          reviewedByAdminId: admin.id
+        }
+      });
+
+      return {
+        id: updatedClaim.id,
+        status: updatedClaim.status,
+        business: this.mapBusiness(updatedBusiness),
+        owner: {
+          id: updatedUser.id,
+          displayName: updatedUser.displayName,
+          email: updatedUser.email,
+          phone: updatedUser.phone,
+          role: updatedUser.role
+        }
+      };
+    });
+  }
+
+  async rejectClaim(claimId: string, adminId = "dev-admin", note?: string) {
+    const admin = await this.ensureAdminUser(adminId);
+
+    return this.prisma.$transaction(async (tx) => {
+      const claim = await tx.claim.findUnique({
+        where: { id: claimId },
+        include: { business: { include: { category: true } } }
+      });
+
+      if (!claim) {
+        throw new NotFoundException("Claim not found");
+      }
+
+      const updatedClaim = await tx.claim.update({
+        where: { id: claimId },
+        data: {
+          status: "rejected",
+          reviewedByAdminId: admin.id,
+          note: note ?? claim.note
+        }
+      });
+
+      const approvedClaimCount = await tx.claim.count({
+        where: {
+          businessId: claim.businessId,
+          status: "approved"
+        }
+      });
+
+      const pendingClaimCount = await tx.claim.count({
+        where: {
+          businessId: claim.businessId,
+          status: "pending"
+        }
+      });
+
+      const business =
+        approvedClaimCount === 0 && pendingClaimCount === 0
+          ? await tx.business.update({
+              where: { id: claim.businessId },
+              data: {
+                status: "unclaimed",
+                claimedByUserId: null
+              },
+              include: { category: true }
+            })
+          : claim.business;
+
+      return {
+        id: updatedClaim.id,
+        status: updatedClaim.status,
+        business: this.mapBusiness(business)
+      };
+    });
+  }
+
   private async getBusinessReviews(slug: string): Promise<Review[]> {
     const reviews = await this.prisma.review.findMany({
       where: {
@@ -267,6 +431,22 @@ export class DatabaseRepository {
       data: {
         avgRating: aggregate._avg.rating ?? 0,
         reviewCount: aggregate._count.rating
+      }
+    });
+  }
+
+  private ensureAdminUser(adminId: string) {
+    return this.prisma.user.upsert({
+      where: { id: adminId },
+      update: {
+        role: "admin"
+      },
+      create: {
+        id: adminId,
+        displayName: "Development Admin",
+        email: "admin@manzil.local",
+        locale: "uz",
+        role: "admin"
       }
     });
   }

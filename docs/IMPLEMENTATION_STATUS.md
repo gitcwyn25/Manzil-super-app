@@ -21,12 +21,13 @@ The Phase 0 scaffold is now database-backed locally:
 - NestJS API controllers read and write through Prisma-backed repositories.
 - Next.js web pages fetch from the API instead of importing demo data directly.
 - Admin API routes are protected by a role guard with a local-only development role header fallback.
+- Admin claim queue can list, approve, and reject business ownership claims.
 - Shared demo data remains as seed/input material and prototype fallback reference.
 
 ## Next implementation slice
 
 1. Replace the local-only role fallback with Clerk token verification.
-2. Add admin mutation endpoints for claim approval and moderation.
+2. Add moderation endpoints for flagged reviews/photos.
 3. Add owner-safe business update and review reply endpoints.
 4. Add Meilisearch indexing jobs after business/review writes.
 5. Add media metadata and Cloudflare R2 presigned upload implementation.

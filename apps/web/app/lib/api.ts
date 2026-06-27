@@ -1,4 +1,4 @@
-import type { Business, Category, Review } from "@manzil/shared";
+import type { Business, Category, ClaimStatus, Review, UserRole } from "@manzil/shared";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/v1";
 
@@ -74,4 +74,55 @@ export async function getAdminOverview() {
   >("/admin/overview");
 
   return payload.data;
+}
+
+export async function getAdminClaims(status: ClaimStatus = "pending") {
+  const payload = await getJson<
+    Envelope<{
+      claims: Array<{
+        id: string;
+        status: ClaimStatus;
+        verificationMethod: string;
+        note: string | null;
+        createdAt: string;
+        updatedAt: string;
+        business: Business;
+        requester: {
+          id: string;
+          displayName: string;
+          email: string | null;
+          phone: string | null;
+          role: UserRole;
+        };
+      }>;
+    }>
+  >(`/admin/claims?status=${status}`);
+
+  return payload.data.claims;
+}
+
+export async function approveClaim(id: string) {
+  return postAdminAction(`/admin/claims/${id}/approve`);
+}
+
+export async function rejectClaim(id: string) {
+  return postAdminAction(`/admin/claims/${id}/reject`);
+}
+
+async function postAdminAction(path: string) {
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      ...getServerAuthHeaders(path)
+    },
+    body: "{}",
+    cache: "no-store"
+  });
+
+  if (!response.ok) {
+    throw new Error(`API request failed: ${response.status} ${path}`);
+  }
+
+  return response.json() as Promise<Envelope<unknown>>;
 }
