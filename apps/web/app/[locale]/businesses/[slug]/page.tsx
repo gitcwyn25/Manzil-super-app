@@ -1,9 +1,10 @@
-import { findBusiness, getBusinessReviews, type Locale } from "@manzil/shared";
+import type { Locale } from "@manzil/shared";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ClaimForm } from "../../../components/claim-form";
 import { ReviewForm } from "../../../components/review-form";
 import { ReviewList } from "../../../components/review-list";
+import { getBusiness } from "../../../lib/api";
 
 export async function generateMetadata({
   params
@@ -11,7 +12,7 @@ export async function generateMetadata({
   params: Promise<{ locale: Locale; slug: string }>;
 }): Promise<Metadata> {
   const { slug, locale } = await params;
-  const business = findBusiness(slug);
+  const { business } = await getBusiness(slug).catch(() => ({ business: null }));
 
   if (!business) {
     return {};
@@ -29,13 +30,13 @@ export default async function BusinessProfilePage({
   params: Promise<{ locale: Locale; slug: string }>;
 }) {
   const { locale, slug } = await params;
-  const business = findBusiness(slug);
+  const profile = await getBusiness(slug).catch(() => null);
 
-  if (!business) {
+  if (!profile) {
     notFound();
   }
 
-  const reviews = getBusinessReviews(slug);
+  const { business, reviews } = profile;
 
   return (
     <>

@@ -1,4 +1,5 @@
-import { businesses, categories, reviews, type Locale } from "@manzil/shared";
+import type { Locale } from "@manzil/shared";
+import { getAdminOverview } from "../../lib/api";
 
 export default async function AdminPage({
   params
@@ -6,7 +7,7 @@ export default async function AdminPage({
   params: Promise<{ locale: Locale }>;
 }) {
   await params;
-  const pendingClaims = businesses.filter((business) => business.status !== "claimed");
+  const overview = await getAdminOverview();
 
   return (
     <section className="section-block">
@@ -20,20 +21,24 @@ export default async function AdminPage({
       </div>
       <div className="admin-grid" style={{ marginTop: 28 }}>
         <article className="admin-card">
-          <h3>{businesses.length}</h3>
-          <p>Demo listinglar</p>
+          <h3>{overview.businessCount}</h3>
+          <p>Database listinglari</p>
         </article>
         <article className="admin-card">
-          <h3>{pendingClaims.length}</h3>
-          <p>Claim qilinmagan yoki pending bizneslar</p>
+          <h3>{overview.pendingClaimCount}</h3>
+          <p>Pending claimlar</p>
         </article>
         <article className="admin-card">
-          <h3>{reviews.length}</h3>
+          <h3>{overview.reviewCount}</h3>
           <p>Sharhlar</p>
         </article>
         <article className="admin-card">
-          <h3>{categories.length}</h3>
+          <h3>{overview.categoryCount}</h3>
           <p>Kategoriyalar</p>
+        </article>
+        <article className="admin-card">
+          <h3>{overview.flaggedItemCount}</h3>
+          <p>Moderatsiya navbati</p>
         </article>
       </div>
     </section>

@@ -13,19 +13,29 @@
 
 ## Current architecture mode
 
-The platform is intentionally local-data-backed for the first runnable scaffold:
+The Phase 0 scaffold is now database-backed locally:
 
-- Web pages import shared demo data for server-rendered MVP pages.
-- API controllers expose `/v1` endpoints using the same shared demo data.
-- Prisma schema defines the target database model but repositories are not wired to PostgreSQL yet.
-
-This keeps the product UI and API contracts buildable before Clerk, R2, Meilisearch, and PostgreSQL credentials exist.
+- PostgreSQL 18 local service is used for development.
+- Prisma schema is pushed to the local `manzil` database.
+- `prisma/seed.ts` loads the initial Tashkent categories, businesses, and reviews.
+- NestJS API controllers read and write through Prisma-backed repositories.
+- Next.js web pages fetch from the API instead of importing demo data directly.
+- Shared demo data remains as seed/input material and prototype fallback reference.
 
 ## Next implementation slice
 
-1. Install dependencies and run type/build verification.
-2. Connect API repositories to Prisma.
-3. Replace web direct data imports with API calls where appropriate.
-4. Add Clerk auth middleware and role checks.
-5. Add admin mutation endpoints for claim approval and moderation.
-6. Add Meilisearch indexing jobs after business/review writes.
+1. Add Clerk auth middleware and role checks.
+2. Add admin mutation endpoints for claim approval and moderation.
+3. Add owner-safe business update and review reply endpoints.
+4. Add Meilisearch indexing jobs after business/review writes.
+5. Add media metadata and Cloudflare R2 presigned upload implementation.
+6. Add seed import tooling for the first 500+ Tashkent listings.
+
+## Last verified
+
+- `npm run db:push`
+- `npm run db:seed`
+- `npm run typecheck`
+- `npm run build`
+- Local API smoke tests for health, categories, businesses, search, business detail, and review creation.
+- Local web smoke tests for `/uz`, `/uz/discover?q=osh`, `/uz/businesses/yunusobod-osh-markazi`, and `/uz/admin`.

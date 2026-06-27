@@ -1,6 +1,7 @@
-import { categories, searchBusinesses, type Locale } from "@manzil/shared";
+import type { Locale } from "@manzil/shared";
 import { BusinessCard } from "../../components/business-card";
 import { SearchControls } from "../../components/search-controls";
+import { searchBusinesses } from "../../lib/api";
 
 export default async function DiscoverPage({
   params,
@@ -12,7 +13,7 @@ export default async function DiscoverPage({
   const [{ locale }, filters] = await Promise.all([params, searchParams]);
   const category = filters.category ?? "all";
   const query = filters.q ?? "";
-  const results = searchBusinesses(query, category);
+  const { businesses: results, categories } = await searchBusinesses(query, category);
 
   return (
     <section className="section-block">

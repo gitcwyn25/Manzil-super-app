@@ -1,10 +1,10 @@
-import { businesses, categories, getBusinessReviews } from "@manzil/shared";
 import type { Locale } from "@manzil/shared";
 import { BusinessCard } from "../components/business-card";
 import { ClaimForm } from "../components/claim-form";
 import { HomeSearch } from "../components/home-search";
 import { ReviewForm } from "../components/review-form";
 import { ReviewList } from "../components/review-list";
+import { getBusinesses, getBusiness, getCategories } from "../lib/api";
 
 export default async function HomePage({
   params
@@ -12,8 +12,9 @@ export default async function HomePage({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
+  const [businesses, categories] = await Promise.all([getBusinesses(), getCategories()]);
   const featured = businesses[0];
-  const featuredReviews = getBusinessReviews(featured.slug);
+  const { reviews: featuredReviews } = await getBusiness(featured.slug);
 
   return (
     <>
