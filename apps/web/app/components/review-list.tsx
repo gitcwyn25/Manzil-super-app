@@ -1,14 +1,17 @@
-import type { Review } from "@manzil/shared";
+import type { Locale, Review } from "@manzil/shared";
+import { getUiCopy } from "@manzil/shared";
 
-export function ReviewList({ reviews }: { reviews: Review[] }) {
+export function ReviewList({ reviews, locale }: { reviews: Review[]; locale: Locale }) {
+  const copy = getUiCopy(locale);
+
   if (reviews.length === 0) {
     return (
       <div className="review-list">
         <article className="review-card">
           <div className="review-avatar">M</div>
           <div>
-            <strong>Hali sharh yo'q</strong>
-            <p>Bu listing uchun birinchi foydali sharhni qoldiring.</p>
+            <strong>{copy.reviewsList.emptyTitle}</strong>
+            <p>{copy.reviewsList.emptyBody}</p>
           </div>
         </article>
       </div>
@@ -23,9 +26,15 @@ export function ReviewList({ reviews }: { reviews: Review[] }) {
           <div>
             <strong>{review.authorName}</strong>
             <p className="stars">
-              {review.rating} - {review.authorBadge ?? `${review.helpfulCount} helpful`}
+              {review.rating} - {review.authorBadge ?? `${review.helpfulCount} ${copy.reviewsList.helpful}`}
             </p>
             <p>{review.text}</p>
+            {review.reply ? (
+              <div className="owner-reply">
+                <strong>{copy.reviewsList.businessReply}</strong>
+                <p>{review.reply.text}</p>
+              </div>
+            ) : null}
           </div>
         </article>
       ))}

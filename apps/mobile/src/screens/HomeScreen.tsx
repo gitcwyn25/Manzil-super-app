@@ -1,49 +1,138 @@
-import { useTranslations } from '@/i18n';
-import { View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
-import { useState } from 'react';
+import React from 'react';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import {
+  getFeedItems,
+  getOccasions,
+  getPlatformBusinesses,
+  getSocialActivities,
+  getUiCopy
+} from '@manzil/shared';
+
+const locale = 'uz' as const;
 
 export default function HomeScreen() {
-  const [search, setSearch] = useState('');
-  const t = useTranslations('home');
+  const copy = getUiCopy(locale);
+  const feedItems = getFeedItems();
+  const occasions = getOccasions();
+  const businesses = getPlatformBusinesses();
+  const activities = getSocialActivities();
+  const businessBySlug = new Map(businesses.map((business) => [business.slug, business]));
 
   return (
-    <ScrollView className="flex-1 bg-white">
-      <View className="p-4">
-        <Text className="text-3xl font-bold mb-2 text-gray-900">
-          {t('title')}
+    <ScrollView style={{ flex: 1, backgroundColor: '#f9f9f7' }}>
+      <View style={{ padding: 20 }}>
+        <Text style={{ color: '#005454', fontSize: 14, fontWeight: '700' }}>
+          {copy.brand.tagline} · {copy.brand.city}
         </Text>
-        <Text className="text-base text-gray-600 mb-6">{t('subtitle')}</Text>
-
-        {/* Search Bar */}
-        <View className="mb-6">
-          <TextInput
-            placeholder={t('search_placeholder')}
-            value={search}
-            onChangeText={setSearch}
-            className="bg-gray-100 p-3 rounded-lg text-base"
-          />
-        </View>
-
-        {/* Categories */}
-        <Text className="text-xl font-bold mb-4 text-gray-900">
-          {t('categories')}
+        <Text style={{ fontSize: 32, fontWeight: '800', marginTop: 8, color: '#1a1c1b' }}>
+          {copy.mobile.homeTitle}
         </Text>
-        <View className="grid grid-cols-2 gap-4 mb-6">
-          {[
-            { name: 'Restaurants', emoji: '🍽️' },
-            { name: 'Cafes', emoji: '☕' },
-            { name: 'Beauty', emoji: '💇' },
-            { name: 'Healthcare', emoji: '⚕️' },
-          ].map((cat) => (
-            <TouchableOpacity
-              key={cat.name}
-              className="bg-gray-50 p-4 rounded-lg items-center"
+        <Text style={{ color: '#3e4948', marginTop: 8, lineHeight: 22 }}>
+          {copy.mobile.homeSubtitle}
+        </Text>
+
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 24 }}>
+          {occasions.map((occasion) => (
+            <View
+              key={occasion.slug}
+              style={{
+                backgroundColor: '#f4f4f2',
+                borderRadius: 999,
+                paddingHorizontal: 16,
+                paddingVertical: 12,
+                marginRight: 10
+              }}
             >
-              <Text className="text-3xl mb-2">{cat.emoji}</Text>
-              <Text className="text-sm font-medium">{cat.name}</Text>
-            </TouchableOpacity>
+              <Text style={{ fontWeight: '700' }}>
+                {occasion.emoji} {occasion.name[locale]}
+              </Text>
+            </View>
           ))}
-        </View>
+        </ScrollView>
+
+        {feedItems.map((item) => (
+          <View
+            key={item.id}
+            style={{
+              backgroundColor: '#fff',
+              borderRadius: 20,
+              padding: 18,
+              marginTop: 18,
+              shadowColor: '#000',
+              shadowOpacity: 0.06,
+              shadowRadius: 12,
+              elevation: 2
+            }}
+          >
+            <Text style={{ fontSize: 22, fontWeight: '800' }}>
+              {item.emoji} {item.title[locale]}
+            </Text>
+            {item.subtitle ? (
+              <Text style={{ color: '#3e4948', marginTop: 6 }}>{item.subtitle[locale]}</Text>
+            ) : null}
+            {item.businessSlugs.map((slug) => {
+              const business = businessBySlug.get(slug);
+              if (!business) return null;
+              return (
+                <View
+                  key={slug}
+                  style={{
+                    marginTop: 12,
+                    padding: 14,
+                    borderRadius: 14,
+                    backgroundColor: '#f9f9f7'
+                  }}
+                >
+                  <Text style={{ fontWeight: '800', fontSize: 16 }}>{business.name}</Text>
+                  <Text style={{ color: '#3e4948', marginTop: 4 }}>
+                    {business.avgRating} ★ · {business.district}
+                  </Text>
+                  {business.badges?.slice(0, 2).map((badge) => (
+                    <Text key={badge.slug} style={{ marginTop: 6 }}>
+                      {badge.emoji} {badge.label[locale]}
+                    </Text>
+                  ))}
+                </View>
+              );
+            })}
+          </View>
+        ))}
+
+        <Text style={{ fontSize: 22, fontWeight: '800', marginTop: 28, marginBottom: 12 }}>
+          {copy.mobile.friendActivity}
+        </Text>
+        {activities.map((activity) => (
+          <View
+            key={activity.id}
+            style={{
+              backgroundColor: '#fff',
+              borderRadius: 16,
+              padding: 16,
+              marginBottom: 10
+            }}
+          >
+            <Text style={{ fontWeight: '700' }}>
+              {activity.actorName} {activity.action[locale]}
+            </Text>
+            <Text style={{ color: '#005454', marginTop: 4 }}>
+              {businessBySlug.get(activity.businessSlug)?.name}
+            </Text>
+          </View>
+        ))}
+
+        <TouchableOpacity
+          style={{
+            backgroundColor: '#feb300',
+            borderRadius: 12,
+            padding: 16,
+            marginTop: 24,
+            marginBottom: 40
+          }}
+        >
+          <Text style={{ textAlign: 'center', fontWeight: '800', color: '#6a4800' }}>
+            {copy.mobile.continueDiscover}
+          </Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );

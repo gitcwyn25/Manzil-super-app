@@ -1,5 +1,14 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import type { Business, Category, ClaimCreateRequest, Review, ReviewCreateRequest } from "@manzil/shared";
+import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
+import type {
+  Business,
+  BusinessUpdateInput,
+  Category,
+  ClaimCreateRequest,
+  Review,
+  ReviewCreateRequest,
+  ReviewReply,
+  UserRole
+} from "@manzil/shared";
 import type {
   Business as PrismaBusiness,
   Category as PrismaCategory,
@@ -15,6 +24,19 @@ type BusinessWithCategory = PrismaBusiness & {
 
 type ReviewWithUser = PrismaReview & {
   user: User;
+  reply?: {
+    id: string;
+    reviewId: string;
+    businessOwnerId: string;
+    text: string;
+    createdAt: Date;
+    updatedAt: Date;
+  } | null;
+};
+
+export type AuthActor = {
+  userId: string;
+  role?: UserRole;
 };
 
 @Injectable()
@@ -81,6 +103,37 @@ export class DatabaseRepository {
     };
   }
 
+  async updateBusiness(slug: string, input: BusinessUpdateInput, actor: AuthActor) {
+    const business = await this.prisma.business.findUnique({
+      where: { slug },
+      include: { category: true }
+    });
+
+    if (!business) {
+      throw new NotFoundException("Business not found");
+    }
+
+    this.assertCanManageBusiness(business, actor);
+
+    const updatedBusiness = await this.prisma.business.update({
+      where: { id: business.id },
+      data: {
+        name: input.name,
+        descriptionUz: input.description?.uz,
+        descriptionRu: input.description?.ru,
+        descriptionEn: input.description?.en,
+        address: input.address,
+        district: input.district,
+        phone: input.phone,
+        hoursJson: input.hours ? { weekdays: input.hours } : undefined,
+        priceTier: input.priceTier
+      },
+      include: { category: true }
+    });
+
+    return this.mapBusiness(updatedBusiness);
+  }
+
   async listReviews(): Promise<Review[]> {
     const reviews = await this.prisma.review.findMany({
       include: { user: true, business: true },
@@ -90,7 +143,25 @@ export class DatabaseRepository {
     return reviews.map((review) => this.mapReview(review, review.business.slug));
   }
 
-  async createReview(input: ReviewCreateRequest): Promise<Review> {
+  async getUserById(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId }
+    });
+
+    if (!user) {
+      throw new NotFoundException("User not found");
+    }
+
+    return {
+      id: user.id,
+      email: user.email,
+      displayName: user.displayName,
+      locale: user.locale,
+      role: user.role
+    };
+  }
+
+  async createReview(input: ReviewCreateRequest, actor: AuthActor): Promise<Review> {
     const business = await this.prisma.business.findUnique({
       where: { slug: input.businessSlug }
     });
@@ -99,21 +170,11 @@ export class DatabaseRepository {
       throw new NotFoundException("Business not found");
     }
 
-    const user = await this.prisma.user.upsert({
-      where: { email: "demo-reviewer@manzil.local" },
-      update: {},
-      create: {
-        email: "demo-reviewer@manzil.local",
-        displayName: "Demo Reviewer",
-        locale: "uz"
-      }
-    });
-
     const review = await this.prisma.review.upsert({
       where: {
         businessId_userId: {
           businessId: business.id,
-          userId: user.id
+          userId: actor.userId
         }
       },
       update: {
@@ -123,7 +184,7 @@ export class DatabaseRepository {
       },
       create: {
         businessId: business.id,
-        userId: user.id,
+        userId: actor.userId,
         rating: Math.round(input.rating),
         text: input.text,
         moderationStatus: "approved"
@@ -136,23 +197,48 @@ export class DatabaseRepository {
     return this.mapReview(review, business.slug);
   }
 
-  async createClaim(input: ClaimCreateRequest) {
+  async createReviewReply(reviewId: string, text: string, actor: AuthActor): Promise<ReviewReply> {
+    const review = await this.prisma.review.findUnique({
+      where: { id: reviewId },
+      include: {
+        business: {
+          include: { category: true }
+        }
+      }
+    });
+
+    if (!review) {
+      throw new NotFoundException("Review not found");
+    }
+
+    this.assertCanManageBusiness(review.business, actor);
+
+    const reply = await this.prisma.reviewReply.upsert({
+      where: { reviewId },
+      update: { text },
+      create: {
+        reviewId,
+        businessOwnerId: actor.userId,
+        text
+      }
+    });
+
+    return this.mapReviewReply(reply);
+  }
+
+  async createClaim(input: ClaimCreateRequest, actor: AuthActor) {
     const business = await this.findClaimBusiness(input);
 
     if (!business) {
       throw new NotFoundException("Business not found for claim");
     }
 
-    const user = await this.prisma.user.upsert({
-      where: { phone: input.phone },
-      update: {
-        displayName: input.ownerName
-      },
-      create: {
+    const user = await this.prisma.user.update({
+      where: { id: actor.userId },
+      data: {
         phone: input.phone,
         displayName: input.ownerName,
-        locale: "uz",
-        role: "business_owner"
+        ...(actor.role === "consumer" ? { role: "business_owner" } : {})
       }
     });
 
@@ -394,7 +480,7 @@ export class DatabaseRepository {
         business: { slug },
         moderationStatus: "approved"
       },
-      include: { user: true },
+      include: { user: true, reply: true },
       orderBy: { createdAt: "desc" }
     });
 
@@ -433,6 +519,21 @@ export class DatabaseRepository {
         reviewCount: aggregate._count.rating
       }
     });
+  }
+
+  private assertCanManageBusiness(
+    business: Pick<PrismaBusiness, "claimedByUserId">,
+    actor: AuthActor
+  ) {
+    if (actor.role === "admin") {
+      return;
+    }
+
+    if (actor.role === "business_owner" && actor.userId && business.claimedByUserId === actor.userId) {
+      return;
+    }
+
+    throw new ForbiddenException("Only the claimed owner or an admin can manage this business");
   }
 
   private ensureAdminUser(adminId: string) {
@@ -502,7 +603,26 @@ export class DatabaseRepository {
       text: review.text,
       locale: review.user.locale as Review["locale"],
       createdAt: review.createdAt.toISOString(),
-      helpfulCount: review.helpfulCount
+      helpfulCount: review.helpfulCount,
+      reply: review.reply ? this.mapReviewReply(review.reply) : undefined
+    };
+  }
+
+  private mapReviewReply(reply: {
+    id: string;
+    reviewId: string;
+    businessOwnerId: string;
+    text: string;
+    createdAt: Date;
+    updatedAt: Date;
+  }): ReviewReply {
+    return {
+      id: reply.id,
+      reviewId: reply.reviewId,
+      businessOwnerId: reply.businessOwnerId,
+      text: reply.text,
+      createdAt: reply.createdAt.toISOString(),
+      updatedAt: reply.updatedAt.toISOString()
     };
   }
 

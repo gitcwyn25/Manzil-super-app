@@ -35,6 +35,25 @@ export type Business = {
   foundingBusiness?: boolean;
 };
 
+export type BusinessUpdateInput = Partial<{
+  name: string;
+  description: Partial<LocalizedText>;
+  address: string;
+  district: string;
+  phone: string;
+  hours: string;
+  priceTier: "$" | "$$" | "$$$";
+}>;
+
+export type ReviewReply = {
+  id: string;
+  reviewId: string;
+  businessOwnerId: string;
+  text: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type Review = {
   id: string;
   businessSlug: string;
@@ -45,6 +64,7 @@ export type Review = {
   locale: "uz" | "ru" | "en";
   createdAt: string;
   helpfulCount: number;
+  reply?: ReviewReply;
 };
 
 export type ClaimRequest = {

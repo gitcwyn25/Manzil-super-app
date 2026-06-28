@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import { Business, Category, Review, SearchFilters } from './types';
+import { Business, BusinessUpdateInput, Category, Review, ReviewReply, SearchFilters } from './types';
 
 type SearchResult = {
   businesses: Business[];
@@ -45,7 +45,7 @@ export class ApiClient {
     return this.client.post<{ data: Business }>('/businesses', data);
   }
 
-  async updateBusiness(id: string, data: Partial<Business>) {
+  async updateBusiness(id: string, data: BusinessUpdateInput) {
     return this.client.patch<{ data: Business }>(`/businesses/${id}`, data);
   }
 
@@ -75,7 +75,7 @@ export class ApiClient {
   }
 
   async replyToReview(reviewId: string, text: string) {
-    return this.client.post(`/reviews/${reviewId}/replies`, { text });
+    return this.client.post<{ data: { reply: ReviewReply } }>(`/reviews/${reviewId}/replies`, { text });
   }
 
   // Search

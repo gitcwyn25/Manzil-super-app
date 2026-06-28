@@ -1,63 +1,70 @@
-import { View, Text, ScrollView, FlatList, TouchableOpacity } from 'react-native';
-import { useTranslations } from '@/i18n';
-import { useState, useEffect } from 'react';
+import { useMemo, useState } from 'react';
+import { FlatList, ScrollView, Text, TextInput, View } from 'react-native';
+import { getPlatformBusinesses, getUiCopy, searchPlatformBusinesses } from '@manzil/shared';
+
+const locale = 'uz' as const;
 
 export default function SearchScreen() {
-  const [results, setResults] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
-  const t = useTranslations('search');
-
-  const fetchResults = async () => {
-    setLoading(true);
-    try {
-      // TODO: Fetch from API
-      setResults([
-        {
-          id: '1',
-          name: 'Restaurant A',
-          category: 'Restaurant',
-          rating: 4.5,
-          reviews: 128,
-        },
-      ]);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchResults();
-  }, []);
+  const copy = getUiCopy(locale);
+  const businesses = useMemo(() => getPlatformBusinesses(), []);
+  const [query, setQuery] = useState('');
+  const results = useMemo(
+    () => searchPlatformBusinesses(query, 'all'),
+    [query]
+  );
 
   return (
-    <ScrollView className="flex-1 bg-gray-50">
-      <View className="p-4">
-        <Text className="text-2xl font-bold mb-4">{t('results')}</Text>
-        {loading ? (
-          <Text>{t('loading')}</Text>
-        ) : (
-          <FlatList
-            data={results}
-            keyExtractor={(item) => item.id}
-            scrollEnabled={false}
-            renderItem={({ item }) => (
-              <TouchableOpacity className="bg-white p-4 rounded-lg mb-3">
-                <Text className="font-bold text-lg">{item.name}</Text>
-                <Text className="text-gray-600 text-sm mb-2">
-                  {item.category}
+    <ScrollView style={{ flex: 1, backgroundColor: '#f9f9f7' }}>
+      <View style={{ padding: 20 }}>
+        <Text style={{ color: '#005454', fontWeight: '700' }}>{copy.search.kicker}</Text>
+        <Text style={{ fontSize: 28, fontWeight: '800', marginTop: 8, marginBottom: 16 }}>
+          {copy.mobile.searchTitle}
+        </Text>
+
+        <TextInput
+          value={query}
+          onChangeText={setQuery}
+          placeholder={copy.mobile.searchPlaceholder}
+          style={{
+            backgroundColor: '#fff',
+            borderRadius: 12,
+            paddingHorizontal: 14,
+            paddingVertical: 12,
+            marginBottom: 16
+          }}
+        />
+
+        <Text style={{ fontWeight: '700', marginBottom: 12 }}>{copy.search.results(results.length)}</Text>
+
+        <FlatList
+          data={results}
+          keyExtractor={(item) => item.id}
+          scrollEnabled={false}
+          ListEmptyComponent={
+            <Text style={{ color: '#3e4948' }}>{copy.search.emptyTitle}</Text>
+          }
+          renderItem={({ item }) => (
+            <View
+              style={{
+                backgroundColor: '#fff',
+                padding: 16,
+                borderRadius: 16,
+                marginBottom: 12
+              }}
+            >
+              <Text style={{ fontWeight: '800', fontSize: 18 }}>{item.name}</Text>
+              <Text style={{ color: '#3e4948', marginTop: 4 }}>
+                {item.district} · {item.description[locale]}
+              </Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8 }}>
+                <Text style={{ color: '#feb300' }}>★</Text>
+                <Text style={{ marginLeft: 6, fontWeight: '700' }}>
+                  {item.avgRating} ({item.reviewCount})
                 </Text>
-                <View className="flex-row items-center">
-                  <Text className="text-yellow-400">★</Text>
-                  <Text className="ml-2 font-medium">
-                    {item.rating} ({item.reviews})
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            )}
-          />
-        )}
+              </View>
+            </View>
+          )}
+        />
       </View>
     </ScrollView>
   );

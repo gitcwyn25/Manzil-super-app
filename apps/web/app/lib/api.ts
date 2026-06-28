@@ -1,128 +1,208 @@
-import type { Business, Category, ClaimStatus, Review, UserRole } from "@manzil/shared";
+import type {
+  Achievement,
+  BusinessPlatform,
+  Category,
+  ClaimStatus,
+  CommunityList,
+  DiscoverableUser,
+  Occasion,
+  Review,
+  SocialActivity,
+  SubscriptionPlan,
+  UserProfile,
+  UserRole
+} from "@manzil/shared";
+import * as mockApi from "./mock-api";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/v1";
+const useMockData = process.env.NEXT_PUBLIC_USE_MOCK !== "false";
 
-type Envelope<T> = {
-  data: T;
-};
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/v1";
 
-async function getJson<T>(path: string): Promise<T> {
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    headers: getServerAuthHeaders(path),
+export async function getCategories(): Promise<Category[]> {
+  if (useMockData) {
+    return mockApi.getCategories();
+  }
+
+  const { getServerAuthHeaders } = await import("./auth");
+  const response = await fetch(`${API_BASE_URL}/categories`, {
+    headers: await getServerAuthHeaders("/categories"),
     next: { revalidate: 30 }
   });
-
-  if (!response.ok) {
-    throw new Error(`API request failed: ${response.status} ${path}`);
-  }
-
-  return response.json() as Promise<T>;
-}
-
-function getServerAuthHeaders(path: string): HeadersInit {
-  if (process.env.NODE_ENV === "production") {
-    return {};
-  }
-
-  if (path.startsWith("/admin")) {
-    return { "x-manzil-role": "admin" };
-  }
-
-  return {};
-}
-
-export async function getCategories() {
-  const payload = await getJson<Envelope<{ categories: Category[] }>>("/categories");
+  const payload = await response.json();
   return payload.data.categories;
 }
 
-export async function getBusinesses() {
-  const payload = await getJson<Envelope<{ businesses: Business[] }>>("/businesses");
+export async function getBusinesses(): Promise<BusinessPlatform[]> {
+  if (useMockData) {
+    return mockApi.getBusinesses();
+  }
+
+  const { getServerAuthHeaders } = await import("./auth");
+  const response = await fetch(`${API_BASE_URL}/businesses`, {
+    headers: await getServerAuthHeaders("/businesses"),
+    next: { revalidate: 30 }
+  });
+  const payload = await response.json();
   return payload.data.businesses;
 }
 
-export async function searchBusinesses(query = "", category = "all") {
+export async function searchBusinesses(query = "", category = "all"): Promise<{
+  businesses: BusinessPlatform[];
+  categories: Category[];
+}> {
+  if (useMockData) {
+    return mockApi.searchBusinesses(query, category);
+  }
+
   const params = new URLSearchParams();
-
-  if (query) {
-    params.set("q", query);
-  }
-
-  if (category && category !== "all") {
-    params.set("category", category);
-  }
-
+  if (query) params.set("q", query);
+  if (category && category !== "all") params.set("category", category);
   const suffix = params.size > 0 ? `?${params.toString()}` : "";
-  const payload = await getJson<Envelope<{ businesses: Business[]; categories: Category[] }>>(`/search${suffix}`);
+  const { getServerAuthHeaders } = await import("./auth");
+  const response = await fetch(`${API_BASE_URL}/search${suffix}`, {
+    headers: await getServerAuthHeaders("/search"),
+    next: { revalidate: 30 }
+  });
+  const payload = await response.json();
   return payload.data;
 }
 
-export async function getBusiness(slug: string) {
-  const payload = await getJson<Envelope<{ business: Business; reviews: Review[] }>>(`/businesses/${slug}`);
+export async function getBusiness(slug: string): Promise<{ business: BusinessPlatform; reviews: Review[] }> {
+  if (useMockData) {
+    return mockApi.getBusiness(slug);
+  }
+
+  const { getServerAuthHeaders } = await import("./auth");
+  const response = await fetch(`${API_BASE_URL}/businesses/${slug}`, {
+    headers: await getServerAuthHeaders(`/businesses/${slug}`),
+    next: { revalidate: 30 }
+  });
+  const payload = await response.json();
   return payload.data;
+}
+
+export async function getHomeFeed() {
+  return mockApi.getHomeFeed();
+}
+
+export async function getOccasions(): Promise<Occasion[]> {
+  return mockApi.getOccasions();
+}
+
+export async function getListsPage(): Promise<CommunityList[]> {
+  if (useMockData) {
+    return mockApi.getListsPage();
+  }
+  throw new Error("Lists API not implemented");
+}
+
+export async function getAchievements(): Promise<Achievement[]> {
+  return mockApi.getAchievements();
 }
 
 export async function getAdminOverview() {
-  const payload = await getJson<
-    Envelope<{
-      businessCount: number;
-      pendingClaimCount: number;
-      categoryCount: number;
-      reviewCount: number;
-      flaggedItemCount: number;
-    }>
-  >("/admin/overview");
+  if (useMockData) {
+    return mockApi.getAdminOverview();
+  }
 
+  const { getServerAuthHeaders } = await import("./auth");
+  const response = await fetch(`${API_BASE_URL}/admin/overview`, {
+    headers: await getServerAuthHeaders("/admin/overview"),
+    next: { revalidate: 30 }
+  });
+  const payload = await response.json();
   return payload.data;
 }
 
-export async function getAdminClaims(status: ClaimStatus = "pending") {
-  const payload = await getJson<
-    Envelope<{
-      claims: Array<{
-        id: string;
-        status: ClaimStatus;
-        verificationMethod: string;
-        note: string | null;
-        createdAt: string;
-        updatedAt: string;
-        business: Business;
-        requester: {
-          id: string;
-          displayName: string;
-          email: string | null;
-          phone: string | null;
-          role: UserRole;
-        };
-      }>;
-    }>
-  >(`/admin/claims?status=${status}`);
+export type AdminClaim = {
+  id: string;
+  status: ClaimStatus;
+  verificationMethod: string;
+  note: string | null;
+  createdAt: string;
+  updatedAt: string;
+  business: BusinessPlatform;
+  requester: {
+    id: string;
+    displayName: string;
+    email: string | null;
+    phone: string | null;
+    role: UserRole;
+  };
+};
 
+export async function getAdminClaims(status: ClaimStatus = "pending"): Promise<AdminClaim[]> {
+  if (useMockData) {
+    return mockApi.getAdminClaims(status);
+  }
+
+  const { getServerAuthHeaders } = await import("./auth");
+  const response = await fetch(`${API_BASE_URL}/admin/claims?status=${status}`, {
+    headers: await getServerAuthHeaders("/admin/claims"),
+    next: { revalidate: 30 }
+  });
+  const payload = await response.json();
   return payload.data.claims;
 }
 
+export async function getUserProfile(): Promise<UserProfile> {
+  return mockApi.getUserProfile();
+}
+
+export async function getDiscoverableUsers(): Promise<DiscoverableUser[]> {
+  return mockApi.getDiscoverableUsers();
+}
+
+export async function getSubscriptionPlans(): Promise<SubscriptionPlan[]> {
+  return mockApi.getSubscriptionPlans();
+}
+
+export async function getConciergePrompts() {
+  return mockApi.getConciergePrompts();
+}
+
+export async function getSocialActivities(): Promise<SocialActivity[]> {
+  return mockApi.getSocialActivities();
+}
+
 export async function approveClaim(id: string) {
-  return postAdminAction(`/admin/claims/${id}/approve`);
-}
+  if (useMockData) {
+    return mockApi.approveClaim(id);
+  }
 
-export async function rejectClaim(id: string) {
-  return postAdminAction(`/admin/claims/${id}/reject`);
-}
-
-async function postAdminAction(path: string) {
-  const response = await fetch(`${API_BASE_URL}${path}`, {
+  const { getServerAuthHeaders } = await import("./auth");
+  const response = await fetch(`${API_BASE_URL}/admin/claims/${id}/approve`, {
     method: "POST",
     headers: {
       "content-type": "application/json",
-      ...getServerAuthHeaders(path)
+      ...(await getServerAuthHeaders(`/admin/claims/${id}/approve`))
     },
     body: "{}",
     cache: "no-store"
   });
+  return response.json();
+}
 
-  if (!response.ok) {
-    throw new Error(`API request failed: ${response.status} ${path}`);
+export async function rejectClaim(id: string) {
+  if (useMockData) {
+    return mockApi.rejectClaim(id);
   }
 
-  return response.json() as Promise<Envelope<unknown>>;
+  const { getServerAuthHeaders } = await import("./auth");
+  const response = await fetch(`${API_BASE_URL}/admin/claims/${id}/reject`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      ...(await getServerAuthHeaders(`/admin/claims/${id}/reject`))
+    },
+    body: "{}",
+    cache: "no-store"
+  });
+  return response.json();
 }
+
+export {
+  getHomeFeed as getHomeFeedMock,
+  getListDetail,
+  getOccasionPage
+} from "./mock-api";

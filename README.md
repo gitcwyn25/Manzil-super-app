@@ -20,11 +20,33 @@ Manzil is a Tashkent-first local business discovery and reviews platform for Uzb
 
 The first implementation is local-data-backed so the web app can run before PostgreSQL, Clerk, R2, and Meilisearch credentials are configured.
 
+## Clerk authentication
+
+1. Create a Clerk application at [clerk.com](https://clerk.com).
+2. Copy keys into your env file:
+
+```env
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+CLERK_SECRET_KEY=sk_test_...
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/uz/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/uz/sign-up
+```
+
+3. In the Clerk dashboard, allow redirect URLs for `http://localhost:3000/*`.
+4. Sign in on the web app, then promote your user to admin in PostgreSQL if you need the admin panel:
+
+```sql
+UPDATE users SET role = 'admin' WHERE email = 'you@example.com';
+```
+
+Without Clerk keys, public browsing still works. Admin APIs fall back to dev headers when `MANZIL_DEV_AUTH=true` and `CLERK_SECRET_KEY` is unset.
+
 ## Local URLs
 
 - Web: `http://localhost:3000/uz`
 - Discovery: `http://localhost:3000/uz/discover`
 - Business profile: `http://localhost:3000/uz/businesses/yunusobod-osh-markazi`
+- Sign in: `http://localhost:3000/uz/sign-in`
 - Admin scaffold: `http://localhost:3000/uz/admin`
 - API health: `http://localhost:4000/v1/health`
 - API search: `http://localhost:4000/v1/search?q=osh`

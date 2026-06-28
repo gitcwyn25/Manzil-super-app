@@ -1,11 +1,12 @@
-import { Body, Controller, Get, Param, Post, Query, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Query, Req, UseGuards } from "@nestjs/common";
 import type { ClaimStatus } from "@prisma/client";
+import type { ManzilRequest } from "../auth/auth.types";
+import { ManzilAuthGuard } from "../auth/manzil-auth.guard";
 import { Roles } from "../auth/roles.decorator";
-import { RolesGuard } from "../auth/roles.guard";
 import { DatabaseRepository } from "../repositories/database.repository";
 
 @Controller("admin")
-@UseGuards(RolesGuard)
+@UseGuards(ManzilAuthGuard)
 @Roles("admin")
 export class AdminController {
   constructor(private readonly repository: DatabaseRepository) {}
@@ -27,16 +28,20 @@ export class AdminController {
   }
 
   @Post("claims/:id/approve")
-  async approveClaim(@Param("id") id: string) {
+  async approveClaim(@Param("id") id: string, @Req() request: ManzilRequest) {
     return {
-      data: await this.repository.approveClaim(id)
+      data: await this.repository.approveClaim(id, request.manzilActor!.userId)
     };
   }
 
   @Post("claims/:id/reject")
-  async rejectClaim(@Param("id") id: string, @Body() body: { note?: string }) {
+  async rejectClaim(
+    @Param("id") id: string,
+    @Body() body: { note?: string },
+    @Req() request: ManzilRequest
+  ) {
     return {
-      data: await this.repository.rejectClaim(id, "dev-admin", body.note)
+      data: await this.repository.rejectClaim(id, request.manzilActor!.userId, body.note)
     };
   }
 }

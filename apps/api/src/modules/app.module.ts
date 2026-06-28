@@ -6,10 +6,12 @@ import { CategoriesController } from "./controllers/categories.controller";
 import { ClaimsController } from "./controllers/claims.controller";
 import { HealthController } from "./controllers/health.controller";
 import { MediaController } from "./controllers/media.controller";
+import { ReviewsController } from "./controllers/reviews.controller";
 import { SearchController } from "./controllers/search.controller";
 import { PrismaService } from "./prisma.service";
 import { DatabaseRepository } from "./repositories/database.repository";
-import { RolesGuard } from "./auth/roles.guard";
+import { ClerkAuthService } from "./auth/clerk-auth.service";
+import { ManzilAuthGuard } from "./auth/manzil-auth.guard";
 
 @Module({
   controllers: [
@@ -20,8 +22,9 @@ import { RolesGuard } from "./auth/roles.guard";
     ClaimsController,
     HealthController,
     MediaController,
+    ReviewsController,
     SearchController
   ],
-  providers: [PrismaService, DatabaseRepository, RolesGuard]
+  providers: [PrismaService, DatabaseRepository, ClerkAuthService, ManzilAuthGuard]
 })
 export class AppModule {}

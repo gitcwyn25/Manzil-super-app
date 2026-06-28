@@ -1,6 +1,7 @@
 "use client";
 
 import type { Category, Locale } from "@manzil/shared";
+import { getUiCopy } from "@manzil/shared";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 
@@ -15,6 +16,7 @@ export function SearchControls({
   locale: Locale;
   query: string;
 }) {
+  const copy = getUiCopy(locale);
   const router = useRouter();
   const [queryValue, setQueryValue] = useState(query);
   const [categoryValue, setCategoryValue] = useState(category);
@@ -35,20 +37,20 @@ export function SearchControls({
   }
 
   return (
-    <form className="search-panel" onSubmit={submit} style={{ marginTop: 28 }}>
+    <form className="search-panel glass-panel" onSubmit={submit} style={{ marginTop: 28 }}>
       <label>
-        <span>Qidiruv</span>
+        <span>{copy.search.queryLabel}</span>
         <input
           type="search"
           value={queryValue}
           onChange={(event) => setQueryValue(event.target.value)}
-          placeholder="Masalan: osh yoki Yunusobod"
+          placeholder={copy.search.queryPlaceholder}
         />
       </label>
       <label>
-        <span>Kategoriya</span>
+        <span>{copy.search.categoryLabel}</span>
         <select value={categoryValue} onChange={(event) => setCategoryValue(event.target.value)}>
-          <option value="all">Hammasi</option>
+          <option value="all">{copy.search.allCategories}</option>
           {categories.map((item) => (
             <option key={item.id} value={item.slug}>
               {item.name[locale] ?? item.name.uz}
@@ -56,7 +58,7 @@ export function SearchControls({
           ))}
         </select>
       </label>
-      <button className="primary-button" type="submit">Filtrlash</button>
+      <button className="primary-button" type="submit">{copy.search.filter}</button>
     </form>
   );
 }

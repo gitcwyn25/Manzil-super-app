@@ -29,7 +29,7 @@
     "expo-location": "~16.1.0",
     "expo-permissions": "~14.2.0",
     "zustand": "^4.4.0",
-    "axios": "^1.6.0",
+    "@manzil/shared": "file:../../packages/shared",
     "@clerk/clerk-expo": "^0.19.2",
     "i18n-js": "^3.9.2"
   },

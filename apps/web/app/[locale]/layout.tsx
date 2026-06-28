@@ -2,6 +2,7 @@ import { isLocale, type Locale } from "@manzil/shared";
 import { notFound } from "next/navigation";
 import { Footer } from "../components/footer";
 import { Header } from "../components/header";
+import { LocaleProviders } from "../components/locale-providers";
 import { MobileNav } from "../components/mobile-nav";
 
 export function generateStaticParams() {
@@ -22,11 +23,11 @@ export default async function LocaleLayout({
   }
 
   return (
-    <>
+    <LocaleProviders locale={locale as Locale}>
       <Header locale={locale as Locale} />
       <main>{children}</main>
       <MobileNav locale={locale as Locale} />
       <Footer locale={locale as Locale} />
-    </>
+    </LocaleProviders>
   );
 }

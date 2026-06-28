@@ -3,7 +3,9 @@
     "name": "manzil-mobile",
     "slug": "manzil-mobile",
     "version": "0.1.0",
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTabletMode": true
     },
@@ -11,10 +13,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.sunnatillauchkunovich.manzilmobilenpx expo start"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "419cb825-f780-4efa-8012-c3e9af72d84b"
+      }
     }
   }
 }

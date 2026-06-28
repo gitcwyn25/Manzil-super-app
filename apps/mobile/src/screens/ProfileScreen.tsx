@@ -1,53 +1,94 @@
-import { View, Text, ScrollView, TouchableOpacity, TextInput } from 'react-native';
-import { useTranslations } from '@/i18n';
-import { useState } from 'react';
+import { ScrollView, Text, View } from 'react-native';
+import {
+  getAchievements,
+  getDiscoverableUsers,
+  getPlatformBusinesses,
+  getUserProfile,
+  getUiCopy
+} from '@manzil/shared';
+
+const locale = 'uz' as const;
 
 export default function ProfileScreen() {
-  const [isEditing, setIsEditing] = useState(false);
-  const t = useTranslations('profile');
+  const copy = getUiCopy(locale);
+  const profile = getUserProfile();
+  const achievements = getAchievements();
+  const users = getDiscoverableUsers();
+  const businesses = getPlatformBusinesses();
+  const saved = businesses.filter((business) => profile.defaultSavedSlugs.includes(business.slug));
 
   return (
-    <ScrollView className="flex-1 bg-white">
-      <View className="p-4">
-        {/* User Info */}
-        <View className="mb-6 items-center">
-          <View className="w-20 h-20 bg-gray-300 rounded-full mb-4" />
-          <Text className="text-2xl font-bold">{t('username')}</Text>
-          <Text className="text-gray-600">{t('member_since')}</Text>
+    <ScrollView style={{ flex: 1, backgroundColor: '#f9f9f7' }}>
+      <View style={{ padding: 20 }}>
+        <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center', marginBottom: 24 }}>
+          <View
+            style={{
+              width: 72,
+              height: 72,
+              borderRadius: 36,
+              backgroundColor: '#a1f0ef',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <Text style={{ fontSize: 28, fontWeight: '800', color: '#005454' }}>
+              {profile.displayName.charAt(0)}
+            </Text>
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={{ fontSize: 24, fontWeight: '800' }}>{profile.displayName}</Text>
+            <Text style={{ color: '#3e4948' }}>@{profile.handle}</Text>
+            <Text style={{ color: '#3e4948', marginTop: 6 }}>{profile.bio[locale]}</Text>
+          </View>
         </View>
 
-        {/* Stats */}
-        <View className="flex-row justify-around mb-6 bg-gray-50 p-4 rounded-lg">
-          <View className="items-center">
-            <Text className="text-2xl font-bold text-blue-600">5</Text>
-            <Text className="text-gray-600">{t('reviews')}</Text>
-          </View>
-          <View className="items-center">
-            <Text className="text-2xl font-bold text-blue-600">2</Text>
-            <Text className="text-gray-600">{t('saved')}</Text>
-          </View>
-          <View className="items-center">
-            <Text className="text-2xl font-bold text-blue-600">1</Text>
-            <Text className="text-gray-600">{t('photos')}</Text>
-          </View>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12, marginBottom: 24 }}>
+          <Text>{profile.stats.reviews} {copy.profile.reviews}</Text>
+          <Text>{profile.stats.saved} {copy.profile.saved}</Text>
+          <Text>{profile.stats.followers} {copy.profile.followers}</Text>
         </View>
 
-        {/* Actions */}
-        <TouchableOpacity className="bg-blue-600 p-4 rounded-lg mb-3">
-          <Text className="text-white font-bold text-center">
-            {t('my_reviews')}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity className="bg-gray-200 p-4 rounded-lg mb-3">
-          <Text className="text-gray-900 font-bold text-center">
-            {t('saved_places')}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity className="bg-gray-200 p-4 rounded-lg">
-          <Text className="text-gray-900 font-bold text-center">
-            {t('settings')}
-          </Text>
-        </TouchableOpacity>
+        <Text style={{ fontSize: 20, fontWeight: '800', marginBottom: 12 }}>{copy.mobile.achievements}</Text>
+        {achievements.map((achievement) => {
+          const earned = profile.earnedAchievementSlugs.includes(achievement.slug);
+          return (
+            <View
+              key={achievement.slug}
+              style={{
+                backgroundColor: '#fff',
+                borderRadius: 16,
+                padding: 16,
+                marginBottom: 10,
+                opacity: earned ? 1 : 0.65
+              }}
+            >
+              <Text style={{ fontSize: 18, fontWeight: '800' }}>
+                {achievement.emoji} {achievement.name[locale]}
+              </Text>
+              <Text style={{ color: '#3e4948', marginTop: 4 }}>{achievement.description[locale]}</Text>
+            </View>
+          );
+        })}
+
+        <Text style={{ fontSize: 20, fontWeight: '800', marginTop: 16, marginBottom: 12 }}>
+          {copy.mobile.savedPlaces}
+        </Text>
+        {saved.map((business) => (
+          <View key={business.slug} style={{ backgroundColor: '#fff', borderRadius: 16, padding: 16, marginBottom: 10 }}>
+            <Text style={{ fontWeight: '800' }}>{business.name}</Text>
+            <Text style={{ color: '#3e4948' }}>{business.district}</Text>
+          </View>
+        ))}
+
+        <Text style={{ fontSize: 20, fontWeight: '800', marginTop: 16, marginBottom: 12 }}>
+          {copy.mobile.followingPeople}
+        </Text>
+        {users.slice(0, 2).map((user) => (
+          <View key={user.id} style={{ backgroundColor: '#fff', borderRadius: 16, padding: 16, marginBottom: 10 }}>
+            <Text style={{ fontWeight: '800' }}>{user.displayName}</Text>
+            <Text style={{ color: '#3e4948' }}>{user.bio[locale]}</Text>
+          </View>
+        ))}
       </View>
     </ScrollView>
   );

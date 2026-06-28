@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@clerk/backend": "^3.8.4",
     "@manzil/shared": "file:../../packages/shared",
     "@nestjs/common": "latest",
     "@nestjs/core": "latest",

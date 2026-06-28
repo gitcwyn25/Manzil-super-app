@@ -1,4 +1,4 @@
-import type { Business, Category, ClaimRequest, Review, ReviewCreateInput } from "./types";
+import type { Business, BusinessUpdateInput, Category, ClaimRequest, Review, ReviewCreateInput, ReviewReply } from "./types";
 
 export type ApiEnvelope<T> = {
   data: T;
@@ -37,4 +37,18 @@ export type ReviewCreateRequest = ReviewCreateInput;
 
 export type ReviewCreateResponse = ApiEnvelope<{
   review: Review;
+}>;
+
+export type BusinessUpdateRequest = BusinessUpdateInput;
+
+export type BusinessUpdateResponse = ApiEnvelope<{
+  business: Business;
+}>;
+
+export type ReviewReplyCreateRequest = {
+  text: string;
+};
+
+export type ReviewReplyCreateResponse = ApiEnvelope<{
+  reply: ReviewReply;
 }>;

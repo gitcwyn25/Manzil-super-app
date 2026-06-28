@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ClerkProvider } from "@clerk/nextjs";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 
@@ -24,8 +25,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="uz" className={`${geist.variable} ${geistMono.variable} ${inter.variable}`} suppressHydrationWarning>
-      <body suppressHydrationWarning>{children}</body>
-    </html>
+    <ClerkProvider>
+      <html lang="uz" className={`${geist.variable} ${geistMono.variable} ${inter.variable}`} suppressHydrationWarning>
+        <body suppressHydrationWarning>{children}</body>
+      </html>
+    </ClerkProvider>
   );
 }

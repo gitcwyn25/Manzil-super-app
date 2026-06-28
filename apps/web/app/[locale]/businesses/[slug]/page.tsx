@@ -1,9 +1,16 @@
 import type { Locale } from "@manzil/shared";
+import { getUiCopy } from "@manzil/shared";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { AiSummaryBlock } from "../../../components/ai-summary-block";
+import { BadgeRow } from "../../../components/badge-chip";
 import { ClaimForm } from "../../../components/claim-form";
+import { SaveBusinessButton } from "../../../components/follow-actions";
+import { LiveStatusDetails } from "../../../components/live-status-pill";
+import { QualityScoreCard } from "../../../components/quality-score-card";
 import { ReviewForm } from "../../../components/review-form";
 import { ReviewList } from "../../../components/review-list";
+import { formatCount } from "../../../lib/locale-text";
 import { getBusiness } from "../../../lib/api";
 
 export async function generateMetadata({
@@ -12,15 +19,15 @@ export async function generateMetadata({
   params: Promise<{ locale: Locale; slug: string }>;
 }): Promise<Metadata> {
   const { slug, locale } = await params;
-  const { business } = await getBusiness(slug).catch(() => ({ business: null }));
+  const profile = await getBusiness(slug).catch(() => null);
 
-  if (!business) {
+  if (!profile) {
     return {};
   }
 
   return {
-    title: `${business.name} | Manzil`,
-    description: business.description[locale] ?? business.description.uz
+    title: `${profile.business.name} | Manzil`,
+    description: profile.business.description[locale] ?? profile.business.description.uz
   };
 }
 
@@ -30,6 +37,7 @@ export default async function BusinessProfilePage({
   params: Promise<{ locale: Locale; slug: string }>;
 }) {
   const { locale, slug } = await params;
+  const copy = getUiCopy(locale);
   const profile = await getBusiness(slug).catch(() => null);
 
   if (!profile) {
@@ -47,58 +55,83 @@ export default async function BusinessProfilePage({
           <div className="profile-side-photo photo-block photo-coffee" />
         </div>
         <div className="profile-copy">
-          <p className="section-kicker">SEO biznes profili</p>
+          <p className="section-kicker">{copy.business.profileKicker}</p>
           <h1>{business.name}</h1>
           <div className="rating-line">
+            <span className="star-gold" aria-hidden="true">★</span>
             <strong>{business.avgRating}</strong>
-            <span>{business.reviewCount} ta sharh</span>
-            <span>{business.status === "claimed" ? "Tasdiqlangan" : "Claim qilinmagan"}</span>
+            <span>{business.reviewCount} {copy.business.reviews}</span>
+            <span>{business.status === "claimed" ? copy.business.verified : copy.business.unclaimed}</span>
+            <SaveBusinessButton businessSlug={business.slug} locale={locale} />
           </div>
+          <BadgeRow badges={business.badges} locale={locale} />
           <p>{business.description[locale] ?? business.description.uz}</p>
+          {business.liveStatus ? <LiveStatusDetails locale={locale} status={business.liveStatus} /> : null}
+          {business.socialProof ? (
+            <div className="social-proof-row">
+              <span>{business.socialProof.friendsVisited} {copy.business.friendsVisited}</span>
+              <span>{formatCount(business.socialProof.bookmarkedCount)} {copy.business.bookmarks}</span>
+              {business.socialProof.orderedToday ? (
+                <span>{business.socialProof.orderedToday} {copy.business.ordersToday}</span>
+              ) : null}
+            </div>
+          ) : null}
           <div className="tag-row">
             {business.tags.map((tag) => <span key={tag}>{tag}</span>)}
           </div>
           <dl className="profile-facts">
             <div>
-              <dt>Manzil</dt>
+              <dt>{copy.business.addressLabel}</dt>
               <dd>{business.address}</dd>
             </div>
             <div>
-              <dt>Telefon</dt>
+              <dt>{copy.business.phoneLabel}</dt>
               <dd>{business.phone}</dd>
             </div>
             <div>
-              <dt>Ish vaqti</dt>
+              <dt>{copy.business.hoursLabel}</dt>
               <dd>{business.hours}</dd>
             </div>
           </dl>
         </div>
       </section>
 
+      {business.insight ? (
+        <section className="section-block">
+          <AiSummaryBlock insight={business.insight} locale={locale} />
+        </section>
+      ) : null}
+
+      {business.qualityScore ? (
+        <section className="section-block">
+          <QualityScoreCard locale={locale} score={business.qualityScore} />
+        </section>
+      ) : null}
+
       <section className="section-block reviews-section">
         <div className="section-heading">
-          <p className="section-kicker">Sharhlar</p>
-          <h2>Foydalanuvchilar fikri</h2>
+          <p className="section-kicker">{copy.business.reviewsKicker}</p>
+          <h2>{copy.business.reviewsTitle}</h2>
         </div>
-        <ReviewList reviews={reviews} />
+        <ReviewList locale={locale} reviews={reviews} />
       </section>
 
       <section className="section-block review-form-section">
         <div>
-          <p className="section-kicker">Sharh yozish</p>
-          <h2>Tajriba bilan bo'lishing</h2>
-          <p>Sharhlar minimum uzunlik va bitta foydalanuvchi bitta sharh qoidasi bilan saqlanadi.</p>
+          <p className="section-kicker">{copy.business.writeKicker}</p>
+          <h2>{copy.business.writeTitle}</h2>
+          <p>{copy.business.writeBody}</p>
         </div>
-        <ReviewForm businessSlug={business.slug} />
+        <ReviewForm businessSlug={business.slug} locale={locale} />
       </section>
 
       <section className="container business-cta">
         <div>
-          <p className="section-kicker inverse">Claim flow</p>
-          <h2>Bu sizning biznesingizmi?</h2>
-          <p>Profilni claim qiling, rasmlar va ish vaqtini yangilang, sharhlarga javob bering.</p>
+          <p className="section-kicker inverse">{copy.business.claimKicker}</p>
+          <h2>{copy.business.claimTitle}</h2>
+          <p>{copy.business.claimBody}</p>
         </div>
-        <ClaimForm businessName={business.name} businessSlug={business.slug} />
+        <ClaimForm businessName={business.name} businessSlug={business.slug} locale={locale} />
       </section>
     </>
   );

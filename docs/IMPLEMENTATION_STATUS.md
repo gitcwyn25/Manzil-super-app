@@ -1,43 +1,50 @@
 # Implementation Status
 
-## Completed in this scaffold
+## Current focus: Phase 0 — frontend end-to-end (mock data)
 
-- Root npm workspace for `apps/*` and `packages/*`.
-- Production-shaped Next.js web app in `apps/web`.
-- NestJS REST API skeleton in `apps/api`.
-- Shared TypeScript contracts and demo data in `packages/shared`.
-- PostgreSQL Prisma schema for MVP entities.
-- Seed-data CSV template for initial Tashkent listings.
-- Local Docker Compose services for PostgreSQL, Redis, and Meilisearch.
-- Static `mvp-site` preserved as UX reference.
+Build order agreed with product:
 
-## Current architecture mode
+1. **Frontend end-to-end (mock data)** — Phase 0A–0C complete
+2. API / backend logic
+3. Database & storage
+4. Clerk auth
+5. Deploy (Vercel + Railway) → custom domain
+6. CI/CD, security, scaling
 
-The Phase 0 scaffold is now database-backed locally:
+Clerk routes exist in the repo but auth integration is **deferred** until after frontend + deploy.
 
-- PostgreSQL 18 local service is used for development.
-- Prisma schema is pushed to the local `manzil` database.
-- `prisma/seed.ts` loads the initial Tashkent categories, businesses, and reviews.
-- NestJS API controllers read and write through Prisma-backed repositories.
-- Next.js web pages fetch from the API instead of importing demo data directly.
-- Admin API routes are protected by a role guard with a local-only development role header fallback.
-- Admin claim queue can list, approve, and reject business ownership claims.
-- Shared demo data remains as seed/input material and prototype fallback reference.
+---
 
-## Next implementation slice
+## Phase 0A — Feed-first platform (done)
 
-1. Replace the local-only role fallback with Clerk token verification.
-2. Add moderation endpoints for flagged reviews/photos.
-3. Add owner-safe business update and review reply endpoints.
-4. Add Meilisearch indexing jobs after business/review writes.
-5. Add media metadata and Cloudflare R2 presigned upload implementation.
-6. Add seed import tooling for the first 500+ Tashkent listings.
+**Shared layer** (`packages/shared/`): platform types, mock data, feed/occasions/lists helpers.
+
+**Web routes:** home feed, discover, business profile, occasions, lists.
+
+**Mock mode:** `NEXT_PUBLIC_USE_MOCK` defaults to mock; set `false` for real API later.
+
+---
+
+## Phase 0B — Social + concierge (done)
+
+User profile, concierge chat, business pricing, save/follow preferences (localStorage), mobile tab parity.
+
+---
+
+## Phase 0C — Design polish + i18n (done)
+
+- `packages/shared/src/ui-copy.ts` — `getUiCopy(locale)` for uz / ru / en
+- Web + mobile wired to shared copy; CSS polish per design system (glass, 16:9 cards, gold stars)
+
+---
+
+## Legacy scaffold (still in repo)
+
+NestJS API, Prisma, Docker Compose, Clerk admin — used when `NEXT_PUBLIC_USE_MOCK=false`. Not current dev priority.
+
+---
 
 ## Last verified
 
-- `npm run db:push`
-- `npm run db:seed`
+- `npm run build --workspace @manzil/shared`
 - `npm run typecheck`
-- `npm run build`
-- Local API smoke tests for health, categories, businesses, search, business detail, and review creation.
-- Local web smoke tests for `/uz`, `/uz/discover?q=osh`, `/uz/businesses/yunusobod-osh-markazi`, and `/uz/admin`.

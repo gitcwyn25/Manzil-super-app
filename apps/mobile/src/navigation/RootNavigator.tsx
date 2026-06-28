@@ -1,11 +1,16 @@
 import React from 'react';
+import { Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import HomeScreen from './screens/HomeScreen';
-import SearchScreen from './screens/SearchScreen';
-import ProfileScreen from './screens/ProfileScreen';
+import { getUiCopy } from '@manzil/shared';
+import HomeScreen from '../screens/HomeScreen';
+import SearchScreen from '../screens/SearchScreen';
+import ConciergeScreen from '../screens/ConciergeScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 
+const locale = 'uz' as const;
+const copy = getUiCopy(locale);
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -26,8 +31,8 @@ export default function RootNavigator() {
     <NavigationContainer>
       <Tab.Navigator
         screenOptions={{
-          tabBarActiveTintColor: '#2563eb',
-          tabBarInactiveTintColor: '#9ca3af',
+          tabBarActiveTintColor: '#005454',
+          tabBarInactiveTintColor: '#6e7979',
           headerShown: false,
         }}
       >
@@ -35,7 +40,7 @@ export default function RootNavigator() {
           name="Home"
           component={HomeStackNavigator}
           options={{
-            tabBarLabel: 'Home',
+            tabBarLabel: copy.nav.feed,
             tabBarIcon: ({ color }) => <Text style={{ color }}>🏠</Text>,
           }}
         />
@@ -43,16 +48,23 @@ export default function RootNavigator() {
           name="Search"
           component={SearchScreen}
           options={{
-            tabBarLabel: 'Search',
+            tabBarLabel: copy.nav.discover,
             tabBarIcon: ({ color }) => <Text style={{ color }}>🔍</Text>,
+          }}
+        />
+        <Tab.Screen
+          name="Concierge"
+          component={ConciergeScreen}
+          options={{
+            tabBarLabel: copy.nav.concierge,
+            tabBarIcon: ({ color }) => <Text style={{ color }}>✨</Text>,
           }}
         />
         <Tab.Screen
           name="Profile"
           component={ProfileScreen}
           options={{
-            tabBarLabel: 'Profile',
-            tabBarIcon: ({ color }) => <Text style={{ color }}>👤</Text>,
+            tabBarLabel: copy.nav.profile,            tabBarIcon: ({ color }) => <Text style={{ color }}>👤</Text>,
           }}
         />
       </Tab.Navigator>
