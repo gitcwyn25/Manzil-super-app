@@ -5,7 +5,9 @@ import { BusinessesController } from "./controllers/businesses.controller";
 import { CategoriesController } from "./controllers/categories.controller";
 import { ClaimsController } from "./controllers/claims.controller";
 import { HealthController } from "./controllers/health.controller";
+import { ListsController } from "./controllers/lists.controller";
 import { MediaController } from "./controllers/media.controller";
+import { OccasionsController } from "./controllers/occasions.controller";
 import { ReviewsController } from "./controllers/reviews.controller";
 import { SearchController } from "./controllers/search.controller";
 import { PrismaService } from "./prisma.service";
@@ -21,7 +23,9 @@ import { ManzilAuthGuard } from "./auth/manzil-auth.guard";
     CategoriesController,
     ClaimsController,
     HealthController,
+    ListsController,
     MediaController,
+    OccasionsController,
     ReviewsController,
     SearchController
   ],

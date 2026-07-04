@@ -1,27 +1,32 @@
 {
   "expo": {
-    "name": "manzil-mobile",
-    "slug": "manzil-mobile",
-    "version": "0.1.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "name": "mobile",
+    "slug": "mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
     "ios": {
-      "supportsTabletMode": true
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "package": "com.sunnatillauchkunovich.manzilmobilenpx expo start"
+      "predictiveBackGestureEnabled": false
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    "plugins": [
+      "expo-web-browser"
+    ],
     "extra": {
       "eas": {
-        "projectId": "419cb825-f780-4efa-8012-c3e9af72d84b"
+        "projectId": "aa1b6dbb-f7ac-45ba-b654-361fb833094d"
       }
     }
   }

@@ -5,7 +5,10 @@ import type {
   ClaimStatus,
   CommunityList,
   DiscoverableUser,
+  ModerationQueueItem,
+  ModerationStatus,
   Occasion,
+  ReportStatus,
   Review,
   SocialActivity,
   SubscriptionPlan,
@@ -13,10 +16,9 @@ import type {
   UserRole
 } from "@manzil/shared";
 import * as mockApi from "./mock-api";
+import { API_BASE_URL } from "./api-base-url";
 
 const useMockData = process.env.NEXT_PUBLIC_USE_MOCK !== "false";
-
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/v1";
 
 export async function getCategories(): Promise<Category[]> {
   if (useMockData) {
@@ -86,6 +88,16 @@ export async function getHomeFeed() {
 }
 
 export async function getOccasions(): Promise<Occasion[]> {
+  if (!useMockData) {
+    const { getServerAuthHeaders } = await import("./auth");
+    const response = await fetch(`${API_BASE_URL}/occasions`, {
+      headers: await getServerAuthHeaders("/occasions"),
+      next: { revalidate: 300 }
+    });
+    const payload = await response.json();
+    return payload.data.occasions;
+  }
+
   return mockApi.getOccasions();
 }
 
@@ -93,7 +105,14 @@ export async function getListsPage(): Promise<CommunityList[]> {
   if (useMockData) {
     return mockApi.getListsPage();
   }
-  throw new Error("Lists API not implemented");
+
+  const { getServerAuthHeaders } = await import("./auth");
+  const response = await fetch(`${API_BASE_URL}/lists`, {
+    headers: await getServerAuthHeaders("/lists"),
+    next: { revalidate: 300 }
+  });
+  const payload = await response.json();
+  return payload.data.lists;
 }
 
 export async function getAchievements(): Promise<Achievement[]> {
@@ -165,6 +184,16 @@ export async function getSocialActivities(): Promise<SocialActivity[]> {
   return mockApi.getSocialActivities();
 }
 
+type ListDetailResponse = {
+  list: CommunityList;
+  businesses: BusinessPlatform[];
+};
+
+type OccasionDetailResponse = {
+  occasion: Occasion;
+  businesses: BusinessPlatform[];
+};
+
 export async function approveClaim(id: string) {
   if (useMockData) {
     return mockApi.approveClaim(id);
@@ -201,8 +230,84 @@ export async function rejectClaim(id: string) {
   return response.json();
 }
 
+export async function getModerationQueue(status: ReportStatus = "open"): Promise<ModerationQueueItem[]> {
+  if (useMockData) {
+    return [];
+  }
+
+  const { getServerAuthHeaders } = await import("./auth");
+  const response = await fetch(`${API_BASE_URL}/admin/moderation?status=${status}`, {
+    headers: await getServerAuthHeaders("/admin/moderation"),
+    next: { revalidate: 30 }
+  });
+  const payload = await response.json();
+  return payload.data.reports;
+}
+
+export async function resolveReport(id: string, moderationStatus: ModerationStatus = "rejected") {
+  if (useMockData) {
+    return { data: { ok: true } };
+  }
+
+  const { getServerAuthHeaders } = await import("./auth");
+  const response = await fetch(`${API_BASE_URL}/admin/reports/${id}/resolve`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      ...(await getServerAuthHeaders(`/admin/reports/${id}/resolve`))
+    },
+    body: JSON.stringify({ moderationStatus }),
+    cache: "no-store"
+  });
+  return response.json();
+}
+
+export async function rejectReport(id: string) {
+  if (useMockData) {
+    return { data: { ok: true } };
+  }
+
+  const { getServerAuthHeaders } = await import("./auth");
+  const response = await fetch(`${API_BASE_URL}/admin/reports/${id}/reject`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      ...(await getServerAuthHeaders(`/admin/reports/${id}/reject`))
+    },
+    body: "{}",
+    cache: "no-store"
+  });
+  return response.json();
+}
+
 export {
   getHomeFeed as getHomeFeedMock,
-  getListDetail,
-  getOccasionPage
 } from "./mock-api";
+
+export async function getListDetail(slug: string): Promise<ListDetailResponse> {
+  if (useMockData) {
+    return mockApi.getListDetail(slug);
+  }
+
+  const { getServerAuthHeaders } = await import("./auth");
+  const response = await fetch(`${API_BASE_URL}/lists/${slug}`, {
+    headers: await getServerAuthHeaders(`/lists/${slug}`),
+    next: { revalidate: 300 }
+  });
+  const payload = await response.json();
+  return payload.data;
+}
+
+export async function getOccasionPage(slug: string): Promise<OccasionDetailResponse> {
+  if (useMockData) {
+    return mockApi.getOccasionPage(slug);
+  }
+
+  const { getServerAuthHeaders } = await import("./auth");
+  const response = await fetch(`${API_BASE_URL}/occasions/${slug}`, {
+    headers: await getServerAuthHeaders(`/occasions/${slug}`),
+    next: { revalidate: 300 }
+  });
+  const payload = await response.json();
+  return payload.data;
+}

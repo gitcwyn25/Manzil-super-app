@@ -6,7 +6,7 @@ on:
     paths:
       - "apps/api/**"
       - "packages/shared/**"
-      - "prisma/**"
+      - "packages/db/**"
       - ".github/workflows/deploy-api.yml"
 
 jobs:

@@ -3,7 +3,7 @@
 import { useAuth } from "@clerk/nextjs";
 import type { Locale } from "@manzil/shared";
 import { type FormEvent, useState } from "react";
-import { API_BASE_URL } from "../lib/api";
+import { API_BASE_URL } from "../lib/api-base-url";
 
 export function ReviewForm({ businessSlug, locale }: { businessSlug: string; locale: Locale }) {
   const { getToken, isSignedIn } = useAuth();
@@ -63,9 +63,9 @@ export function ReviewForm({ businessSlug, locale }: { businessSlug: string; loc
       <label>
         <span>Reyting</span>
         <select name="rating" defaultValue="5">
-          <option value="5">5 - A'lo</option>
+          <option value="5">5 - A&apos;lo</option>
           <option value="4">4 - Yaxshi</option>
-          <option value="3">3 - O'rtacha</option>
+          <option value="3">3 - O&apos;rtacha</option>
           <option value="2">2 - Qoniqarsiz</option>
           <option value="1">1 - Tavsiya qilmayman</option>
         </select>

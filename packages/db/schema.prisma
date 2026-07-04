@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,258 +7,195 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Users
-model User {
-  id            String    @id @default(cuid())
-  clerkId       String    @unique
-  email         String    @unique
-  displayName   String
-  avatar        String?
-  role          UserRole  @default(CONSUMER)
-  locale        String    @default("uz")
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-  // Relations
-  reviews       Review[]
-  reviewReplies ReviewReply[]
-  businesses    Business[] @relation("BusinessOwner")
-  claims        Claim[]
-  photos        Photo[] @relation("PhotoUploader")
-  reports       Report[] @relation("Reporter")
-  follows       Follow[] @relation("Follower")
-  followedBy    Follow[] @relation("Followed")
-  saves         Save[]
-  achievements  UserAchievement[]
-
-  @@map("users")
-}
-
 enum UserRole {
-  CONSUMER
-  BUSINESS_OWNER
-  ADMIN
+  consumer
+  business_owner
+  admin
 }
 
-// Businesses
-model Business {
-  id            String    @id @default(cuid())
-  name          String
-  categoryId    String
-  description   String?
-  address       String
-  latitude      Float
-  longitude     Float
-  phone         String?
-  hours         Json?
-  priceTier     String    @default("MODERATE")
-  status        ClaimStatus @default(UNCLAIMED)
-  claimedByUserId String?
-  claimedBy     User?     @relation("BusinessOwner", fields: [claimedByUserId], references: [id], onDelete: SetNull)
-  qualityScore  Float     @default(0)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+enum BusinessStatus {
+  unclaimed
+  pending_claim
+  claimed
+  suspended
+}
 
-  // Relations
-  category      Category  @relation(fields: [categoryId], references: [id])
-  reviews       Review[]
-  photos        Photo[] @relation("BusinessPhotos")
-  claims        Claim[]
-  saves         Save[]
-  subscription  Subscription?
-  badges        BusinessBadge[]
-
-  @@map("businesses")
+enum ModerationStatus {
+  pending
+  approved
+  rejected
 }
 
 enum ClaimStatus {
-  UNCLAIMED
-  CLAIMED
-  PENDING
+  pending
+  approved
+  rejected
 }
 
-// Categories
+enum ReportStatus {
+  open
+  resolved
+  rejected
+}
+
+model User {
+  id          String   @id @default(cuid())
+  clerkId     String?  @unique
+  email       String?  @unique
+  phone       String?  @unique
+  displayName String
+  avatarUrl   String?
+  locale      String   @default("uz")
+  role        UserRole @default(consumer)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  businesses     Business[] @relation("BusinessOwner")
+  reviews        Review[]
+  replies        ReviewReply[]
+  claims         Claim[] @relation("ClaimRequester")
+  reviewedClaims Claim[] @relation("ClaimReviewer")
+  reports        Report[]
+
+  @@index([role])
+}
+
 model Category {
-  id        String    @id @default(cuid())
-  name      Json      // { uz: string, ru: string, en: string }
-  icon      String?
-  parentId  String?
-  parent    Category? @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
-  children  Category[] @relation("CategoryHierarchy")
-  businesses Business[]
-  createdAt DateTime  @default(now())
+  id       String  @id @default(cuid())
+  slug     String  @unique
+  nameUz   String
+  nameRu   String
+  nameEn   String
+  parentId String?
 
-  @@map("categories")
+  parent     Category?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children   Category[] @relation("CategoryTree")
+  businesses Business[]
+
+  @@index([parentId])
 }
 
-// Reviews
-model Review {
-  id            String    @id @default(cuid())
-  businessId    String
-  userId        String
-  rating        Int       @db.SmallInt // 1-5
-  text          String
-  helpfulCount  Int       @default(0)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+model Business {
+  id              String         @id @default(cuid())
+  slug            String         @unique
+  name            String
+  categoryId      String
+  descriptionUz   String
+  descriptionRu   String?
+  descriptionEn   String?
+  address         String
+  district        String
+  city            String         @default("Tashkent")
+  lat             Decimal?       @db.Decimal(9, 6)
+  lng             Decimal?       @db.Decimal(9, 6)
+  phone           String?
+  hoursJson       Json?
+  priceTier       String?
+  status          BusinessStatus @default(unclaimed)
+  claimedByUserId String?
+  avgRating       Decimal        @default(0) @db.Decimal(3, 2)
+  reviewCount     Int            @default(0)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
 
-  // Relations
-  business      Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  author        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  replies       ReviewReply[]
-  photos        Photo[] @relation("ReviewPhotos")
-  reports       Report[]
+  category      Category @relation(fields: [categoryId], references: [id])
+  claimedByUser User?    @relation("BusinessOwner", fields: [claimedByUserId], references: [id])
+  reviews       Review[]
+  photos        Photo[]
+  claims        Claim[]
+
+  @@index([categoryId])
+  @@index([city, district])
+  @@index([status])
+  @@index([avgRating, reviewCount])
+}
+
+model Review {
+  id             String   @id @default(cuid())
+  businessId     String
+  userId         String
+  rating         Int
+  text           String
+  helpfulCount   Int      @default(0)
+  moderationStatus ModerationStatus @default(approved)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  business Business      @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  user     User          @relation(fields: [userId], references: [id])
+  reply    ReviewReply?
+  photos   Photo[]
+  reports  Report[]
 
   @@unique([businessId, userId])
-  @@map("reviews")
+  @@index([businessId, createdAt])
+  @@index([moderationStatus])
 }
 
 model ReviewReply {
-  id              String    @id @default(cuid())
-  reviewId        String
+  id              String   @id @default(cuid())
+  reviewId        String   @unique
   businessOwnerId String
   text            String
-  createdAt       DateTime  @default(now())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
-  // Relations
-  review          Review    @relation(fields: [reviewId], references: [id], onDelete: Cascade)
-  businessOwner   User      @relation(fields: [businessOwnerId], references: [id], onDelete: Cascade)
-
-  @@map("review_replies")
+  review        Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  businessOwner User   @relation(fields: [businessOwnerId], references: [id])
 }
 
-// Photos
 model Photo {
-  id                String    @id @default(cuid())
-  storageUrl        String
-  uploaderUserId    String
-  uploader          User      @relation("PhotoUploader", fields: [uploaderUserId], references: [id], onDelete: Cascade)
+  id               String           @id @default(cuid())
   businessId        String?
-  business          Business? @relation("BusinessPhotos", fields: [businessId], references: [id], onDelete: Cascade)
   reviewId          String?
-  review            Review?   @relation("ReviewPhotos", fields: [reviewId], references: [id], onDelete: Cascade)
-  moderationStatus  String    @default("PENDING")
-  createdAt         DateTime  @default(now())
+  storageKey        String
+  publicUrl         String?
+  moderationStatus  ModerationStatus @default(pending)
+  createdAt         DateTime         @default(now())
 
-  @@map("photos")
+  business Business? @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  review   Review?   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  reports  Report[]
+
+  @@index([businessId])
+  @@index([reviewId])
+  @@index([moderationStatus])
 }
 
-// Claims (business ownership verification)
 model Claim {
-  id                String    @id @default(cuid())
+  id                String      @id @default(cuid())
   businessId        String
   userId            String
-  status            ClaimStatus @default(PENDING)
-  verificationMethod String
+  verificationMethod String     @default("manual")
+  status            ClaimStatus @default(pending)
   reviewedByAdminId String?
-  createdAt         DateTime  @default(now())
-  reviewedAt        DateTime?
+  note              String?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
 
-  // Relations
-  business          Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  business        Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  user            User     @relation("ClaimRequester", fields: [userId], references: [id])
+  reviewedByAdmin User?    @relation("ClaimReviewer", fields: [reviewedByAdminId], references: [id])
 
-  @@map("claims")
+  @@index([status])
+  @@index([businessId])
 }
 
-// Reports (abuse)
 model Report {
-  id              String    @id @default(cuid())
-  targetType      String    // REVIEW, PHOTO
-  targetId        String
-  reporterUserId  String
-  reason          String
-  status          String    @default("PENDING")
-  createdAt       DateTime  @default(now())
+  id             String       @id @default(cuid())
+  reporterUserId String
+  reviewId       String?
+  photoId        String?
+  reason         String
+  status         ReportStatus @default(open)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 
-  // Relations
-  reporter        User      @relation("Reporter", fields: [reporterUserId], references: [id], onDelete: Cascade)
-  review          Review?   @relation(fields: [targetId], references: [id], onDelete: Cascade)
+  reporter User   @relation(fields: [reporterUserId], references: [id])
+  review   Review? @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  photo    Photo?  @relation(fields: [photoId], references: [id], onDelete: Cascade)
 
-  @@map("reports")
-}
-
-// Social Graph
-model Follow {
-  id          String    @id @default(cuid())
-  followerId  String
-  followedId  String
-  follower    User      @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
-  followed    User      @relation("Followed", fields: [followedId], references: [id], onDelete: Cascade)
-  createdAt   DateTime  @default(now())
-
-  @@unique([followerId, followedId])
-  @@map("follows")
-}
-
-model Save {
-  id          String    @id @default(cuid())
-  userId      String
-  businessId  String
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  business    Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  createdAt   DateTime  @default(now())
-
-  @@unique([userId, businessId])
-  @@map("saves")
-}
-
-// Subscriptions (Phase 2)
-model Subscription {
-  id          String    @id @default(cuid())
-  businessId  String    @unique
-  tier        String    @default("STARTER")
-  renewalDate DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-
-  // Relations
-  business    Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
-
-  @@map("subscriptions")
-}
-
-// Achievements (Phase 2)
-model Achievement {
-  id          String    @id @default(cuid())
-  key         String    @unique
-  name        Json      // { uz: string, ru: string, en: string }
-  description Json
-  icon        String
-  createdAt   DateTime  @default(now())
-
-  // Relations
-  userAchievements UserAchievement[]
-
-  @@map("achievements")
-}
-
-model UserAchievement {
-  id            String    @id @default(cuid())
-  userId        String
-  achievementId String
-  earnedAt      DateTime  @default(now())
-
-  // Relations
-  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, achievementId])
-  @@map("user_achievements")
-}
-
-// Badges (Phase 2)
-model BusinessBadge {
-  id                String    @id @default(cuid())
-  businessId        String
-  badgeType         String    // ECO_FRIENDLY, BEST_FOR_WORK, etc.
-  confidenceSource  String    // RULE_BASED, AI_INFERRED
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-
-  // Relations
-  business          Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
-
-  @@unique([businessId, badgeType])
-  @@map("business_badges")
+  @@index([status])
+  @@index([reviewId])
+  @@index([photoId])
 }

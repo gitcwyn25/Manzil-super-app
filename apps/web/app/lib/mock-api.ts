@@ -146,10 +146,12 @@ export async function getAdminClaims(status: ClaimStatus = "pending") {
   ];
 }
 
-export async function approveClaim(_id: string) {
+export async function approveClaim(id: string) {
+  void id;
   return { data: { ok: true } };
 }
 
-export async function rejectClaim(_id: string) {
+export async function rejectClaim(id: string) {
+  void id;
   return { data: { ok: true } };
 }

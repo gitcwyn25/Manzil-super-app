@@ -1,6 +1,14 @@
 import type { Locale } from "@manzil/shared";
 import { revalidatePath } from "next/cache";
-import { approveClaim, getAdminClaims, getAdminOverview, rejectClaim } from "../../lib/api";
+import {
+  approveClaim,
+  getAdminClaims,
+  getAdminOverview,
+  getModerationQueue,
+  rejectClaim,
+  rejectReport,
+  resolveReport
+} from "../../lib/api";
 
 export const dynamic = "force-dynamic";
 
@@ -20,13 +28,33 @@ async function rejectClaimAction(formData: FormData) {
   revalidatePath("/[locale]/admin", "page");
 }
 
+async function resolveReportAction(formData: FormData) {
+  "use server";
+
+  const id = String(formData.get("id") ?? "");
+  await resolveReport(id, "rejected");
+  revalidatePath("/[locale]/admin", "page");
+}
+
+async function rejectReportAction(formData: FormData) {
+  "use server";
+
+  const id = String(formData.get("id") ?? "");
+  await rejectReport(id);
+  revalidatePath("/[locale]/admin", "page");
+}
+
 export default async function AdminPage({
   params
 }: {
   params: Promise<{ locale: Locale }>;
 }) {
   await params;
-  const [overview, claims] = await Promise.all([getAdminOverview(), getAdminClaims("pending")]);
+  const [overview, claims, reports] = await Promise.all([
+    getAdminOverview(),
+    getAdminClaims("pending"),
+    getModerationQueue("open")
+  ]);
 
   return (
     <section className="section-block">
@@ -92,7 +120,48 @@ export default async function AdminPage({
         {claims.length === 0 ? (
           <article className="admin-card">
             <h3>Queue empty</h3>
-            <p>Hozircha pending claimlar yo'q.</p>
+            <p>Hozircha pending claimlar yo&apos;q.</p>
+          </article>
+        ) : null}
+      </div>
+
+      <div className="section-heading" style={{ marginTop: 40 }}>
+        <p className="section-kicker">Moderation queue</p>
+        <h2>Open reports</h2>
+        <p>Reported reviews and photos can be resolved or dismissed here.</p>
+      </div>
+
+      <div className="admin-grid" style={{ marginTop: 20 }}>
+        {reports.map((report) => (
+          <article className="admin-card" key={report.id}>
+            <h3>{report.targetType === "review" ? "Reported review" : "Reported photo"}</h3>
+            <p>{report.reason}</p>
+            <p>
+              Reporter: {report.reporter.displayName}
+              {report.reporter.email ? ` - ${report.reporter.email}` : ""}
+            </p>
+            {report.review ? (
+              <p>
+                {report.review.rating}★ - {report.review.text}
+              </p>
+            ) : null}
+            {report.photo ? <p>{report.photo.publicUrl ?? report.photo.storageKey}</p> : null}
+            <div className="button-row" style={{ marginTop: 16 }}>
+              <form action={resolveReportAction}>
+                <input name="id" type="hidden" value={report.id} />
+                <button className="primary-button" type="submit">Remove content</button>
+              </form>
+              <form action={rejectReportAction}>
+                <input name="id" type="hidden" value={report.id} />
+                <button className="secondary-button" type="submit">Dismiss report</button>
+              </form>
+            </div>
+          </article>
+        ))}
+        {reports.length === 0 ? (
+          <article className="admin-card">
+            <h3>Queue empty</h3>
+            <p>No open moderation reports.</p>
           </article>
         ) : null}
       </div>

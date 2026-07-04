@@ -2,10 +2,10 @@
   "name": "db",
   "version": "0.1.0",
   "scripts": {
-    "migrate:dev": "prisma migrate dev",
-    "migrate:deploy": "prisma migrate deploy",
-    "db:push": "prisma db push",
-    "db:seed": "ts-node prisma/seed.ts",
+    "migrate:dev": "prisma migrate dev --schema schema.prisma",
+    "migrate:deploy": "prisma migrate deploy --schema schema.prisma",
+    "db:push": "prisma db push --schema schema.prisma",
+    "db:seed": "tsx prisma/seed.ts",
     "studio": "prisma studio"
   },
   "devDependencies": {

@@ -1,4 +1,14 @@
-import type { Business, BusinessUpdateInput, Category, ClaimRequest, Review, ReviewCreateInput, ReviewReply } from "./types";
+import type {
+  Business,
+  BusinessUpdateInput,
+  Category,
+  ClaimRequest,
+  ModerationQueueItem,
+  ReportCreateInput,
+  Review,
+  ReviewCreateInput,
+  ReviewReply
+} from "./types";
 
 export type ApiEnvelope<T> = {
   data: T;
@@ -51,4 +61,22 @@ export type ReviewReplyCreateRequest = {
 
 export type ReviewReplyCreateResponse = ApiEnvelope<{
   reply: ReviewReply;
+}>;
+
+export type ReportCreateRequest = ReportCreateInput;
+
+export type ReportCreateResponse = ApiEnvelope<{
+  report: ModerationQueueItem;
+}>;
+
+export type ModerationQueueResponse = ApiEnvelope<{
+  reports: ModerationQueueItem[];
+}>;
+
+export type ReportResolveRequest = {
+  moderationStatus?: "approved" | "rejected";
+};
+
+export type ReportResolveResponse = ApiEnvelope<{
+  report: ModerationQueueItem;
 }>;

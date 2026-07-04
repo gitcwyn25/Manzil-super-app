@@ -1,7 +1,6 @@
 "use client";
 
 import type { DiscoverableUser, Locale } from "@manzil/shared";
-import { getUiCopy } from "@manzil/shared";
 import { formatCount, pickLocalized } from "../lib/locale-text";
 import { FollowUserButton } from "./follow-actions";
 

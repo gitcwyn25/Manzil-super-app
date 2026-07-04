@@ -4,6 +4,8 @@ import type {
   BusinessUpdateInput,
   Category,
   ClaimCreateRequest,
+  ModerationQueueItem,
+  ReportTargetType,
   Review,
   ReviewCreateRequest,
   ReviewReply,
@@ -13,6 +15,8 @@ import type {
   Business as PrismaBusiness,
   Category as PrismaCategory,
   ClaimStatus,
+  ModerationStatus,
+  ReportStatus,
   Review as PrismaReview,
   User
 } from "@prisma/client";
@@ -31,6 +35,25 @@ type ReviewWithUser = PrismaReview & {
     text: string;
     createdAt: Date;
     updatedAt: Date;
+  } | null;
+};
+
+type ReportWithRelations = {
+  id: string;
+  reporterUserId: string;
+  reviewId: string | null;
+  photoId: string | null;
+  reason: string;
+  status: ReportStatus;
+  createdAt: Date;
+  updatedAt: Date;
+  reporter: Pick<User, "id" | "displayName" | "email">;
+  review?: (PrismaReview & { business: Pick<PrismaBusiness, "slug"> }) | null;
+  photo?: {
+    id: string;
+    storageKey: string;
+    publicUrl: string | null;
+    moderationStatus: ModerationStatus;
   } | null;
 };
 
@@ -224,6 +247,89 @@ export class DatabaseRepository {
     });
 
     return this.mapReviewReply(reply);
+  }
+
+  async createReviewReport(reviewId: string, reason: string, actor: AuthActor): Promise<ModerationQueueItem> {
+    const review = await this.prisma.review.findUnique({
+      where: { id: reviewId },
+      select: { id: true }
+    });
+
+    if (!review) {
+      throw new NotFoundException("Review not found");
+    }
+
+    const report = await this.prisma.report.create({
+      data: {
+        reporterUserId: actor.userId,
+        reviewId,
+        reason
+      },
+      include: this.reportInclude()
+    });
+
+    await this.prisma.review.update({
+      where: { id: reviewId },
+      data: { moderationStatus: "pending" }
+    });
+
+    return this.mapReport(report);
+  }
+
+  async listModerationReports(status: ReportStatus = "open"): Promise<ModerationQueueItem[]> {
+    const reports = await this.prisma.report.findMany({
+      where: { status },
+      include: this.reportInclude(),
+      orderBy: { createdAt: "desc" }
+    });
+
+    return reports.map((report) => this.mapReport(report));
+  }
+
+  async resolveReport(
+    reportId: string,
+    moderationStatus: ModerationStatus = "rejected"
+  ): Promise<ModerationQueueItem> {
+    const report = await this.prisma.report.findUnique({
+      where: { id: reportId },
+      include: this.reportInclude()
+    });
+
+    if (!report) {
+      throw new NotFoundException("Report not found");
+    }
+
+    if (report.reviewId) {
+      await this.prisma.review.update({
+        where: { id: report.reviewId },
+        data: { moderationStatus }
+      });
+    }
+
+    if (report.photoId) {
+      await this.prisma.photo.update({
+        where: { id: report.photoId },
+        data: { moderationStatus }
+      });
+    }
+
+    const updatedReport = await this.prisma.report.update({
+      where: { id: reportId },
+      data: { status: "resolved" },
+      include: this.reportInclude()
+    });
+
+    return this.mapReport(updatedReport);
+  }
+
+  async rejectReport(reportId: string): Promise<ModerationQueueItem> {
+    const report = await this.prisma.report.update({
+      where: { id: reportId },
+      data: { status: "rejected" },
+      include: this.reportInclude()
+    });
+
+    return this.mapReport(report);
   }
 
   async createClaim(input: ClaimCreateRequest, actor: AuthActor) {
@@ -623,6 +729,72 @@ export class DatabaseRepository {
       text: reply.text,
       createdAt: reply.createdAt.toISOString(),
       updatedAt: reply.updatedAt.toISOString()
+    };
+  }
+
+  private reportInclude() {
+    return {
+      reporter: {
+        select: {
+          id: true,
+          displayName: true,
+          email: true
+        }
+      },
+      review: {
+        include: {
+          business: {
+            select: {
+              slug: true
+            }
+          }
+        }
+      },
+      photo: {
+        select: {
+          id: true,
+          storageKey: true,
+          publicUrl: true,
+          moderationStatus: true
+        }
+      }
+    } as const;
+  }
+
+  private mapReport(report: ReportWithRelations): ModerationQueueItem {
+    const targetType: ReportTargetType = report.reviewId ? "review" : "photo";
+    const targetId = report.reviewId ?? report.photoId ?? report.id;
+
+    return {
+      id: report.id,
+      targetType,
+      targetId,
+      reason: report.reason,
+      status: report.status,
+      createdAt: report.createdAt.toISOString(),
+      updatedAt: report.updatedAt.toISOString(),
+      reporter: {
+        id: report.reporter.id,
+        displayName: report.reporter.displayName,
+        email: report.reporter.email ?? undefined
+      },
+      review: report.review
+        ? {
+            id: report.review.id,
+            businessSlug: report.review.business.slug,
+            text: report.review.text,
+            rating: report.review.rating,
+            moderationStatus: report.review.moderationStatus
+          }
+        : undefined,
+      photo: report.photo
+        ? {
+            id: report.photo.id,
+            storageKey: report.photo.storageKey,
+            publicUrl: report.photo.publicUrl ?? undefined,
+            moderationStatus: report.photo.moderationStatus
+          }
+        : undefined
     };
   }
 

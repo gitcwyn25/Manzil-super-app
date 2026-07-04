@@ -63,11 +63,15 @@ export function UserPreferencesProvider({
   const [followedListSlugs, setFollowedListSlugs] = useState<string[]>(defaults?.followedListSlugs ?? []);
 
   useEffect(() => {
-    const stored = readStorage();
-    setSavedBusinessSlugs(stored.savedBusinessSlugs.length ? stored.savedBusinessSlugs : defaults?.savedBusinessSlugs ?? []);
-    setFollowedUserIds(stored.followedUserIds.length ? stored.followedUserIds : defaults?.followedUserIds ?? []);
-    setFollowedListSlugs(stored.followedListSlugs.length ? stored.followedListSlugs : defaults?.followedListSlugs ?? []);
-    setReady(true);
+    const timer = window.setTimeout(() => {
+      const stored = readStorage();
+      setSavedBusinessSlugs(stored.savedBusinessSlugs.length ? stored.savedBusinessSlugs : defaults?.savedBusinessSlugs ?? []);
+      setFollowedUserIds(stored.followedUserIds.length ? stored.followedUserIds : defaults?.followedUserIds ?? []);
+      setFollowedListSlugs(stored.followedListSlugs.length ? stored.followedListSlugs : defaults?.followedListSlugs ?? []);
+      setReady(true);
+    }, 0);
+
+    return () => window.clearTimeout(timer);
   }, [defaults?.followedListSlugs, defaults?.followedUserIds, defaults?.savedBusinessSlugs]);
 
   useEffect(() => {

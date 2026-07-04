@@ -81,6 +81,40 @@ export type ReviewCreateInput = {
   text: string;
 };
 
+export type ReportTargetType = "review" | "photo";
+
+export type ReportCreateInput = {
+  reason: string;
+};
+
+export type ModerationQueueItem = {
+  id: string;
+  targetType: ReportTargetType;
+  targetId: string;
+  reason: string;
+  status: ReportStatus;
+  createdAt: string;
+  updatedAt: string;
+  reporter: {
+    id: string;
+    displayName: string;
+    email?: string;
+  };
+  review?: {
+    id: string;
+    businessSlug: string;
+    text: string;
+    rating: number;
+    moderationStatus: ModerationStatus;
+  };
+  photo?: {
+    id: string;
+    storageKey: string;
+    publicUrl?: string;
+    moderationStatus: ModerationStatus;
+  };
+};
+
 export type SearchFilters = {
   query?: string;
   category?: string;

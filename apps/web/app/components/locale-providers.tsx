@@ -3,8 +3,7 @@ import { getUserProfile } from "@manzil/shared";
 import { AppProviders } from "../components/app-providers";
 
 export function LocaleProviders({
-  children,
-  locale: _locale
+  children
 }: {
   children: React.ReactNode;
   locale: Locale;

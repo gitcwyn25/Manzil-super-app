@@ -3,7 +3,7 @@
 import { useAuth } from "@clerk/nextjs";
 import type { Locale } from "@manzil/shared";
 import { type FormEvent, useState } from "react";
-import { API_BASE_URL } from "../lib/api";
+import { API_BASE_URL } from "../lib/api-base-url";
 
 export function ClaimForm({
   businessName,
