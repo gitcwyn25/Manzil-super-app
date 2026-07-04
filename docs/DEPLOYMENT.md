@@ -1,206 +1,102 @@
 # Deployment Guide
 
-## Manzil Super-app Production Deployment
+Architecture: **Vercel (web)** + **Railway (API)** + **Supabase (Postgres)** + **Upstash (Redis)** + **Clerk (auth)** + **Cloudflare R2 (media, optional)**.
 
-This guide covers staging and production deployment for the web app, API, database, search, storage, authentication, and CI/CD workflows.
+```
+Browser ──> Vercel (Next.js, apps/web) ──> Railway (NestJS, apps/api) ──> Supabase Postgres
+                                                     │
+                                                     ├──> Upstash Redis (cache)
+                                                     └──> Cloudflare R2 (media)
+```
 
-## Prerequisites
+The web app is the **business portal** (owners + admins). Consumers use the mobile apps.
 
-- Vercel account and project for the Next.js web app.
-- Railway account and project for the API, PostgreSQL, and Redis.
-- Cloudflare R2 bucket for media storage.
-- Clerk application for authentication.
-- Google Cloud project with Maps APIs enabled.
-- GitHub repository secrets configured for CI/CD.
+---
 
-## Database Setup
+## 1. API on Railway
 
-Create a PostgreSQL service on Railway and copy the `DATABASE_URL`.
+1. Sign up at railway.com → **New Project → Deploy from GitHub repo** → pick this repo.
+2. Service **Settings → Config file path**: `apps/api/railway.json` (uses the monorepo-aware `apps/api/Dockerfile`; keep Root Directory `/`).
+3. Environment variables (Service → Variables):
 
-Run migrations locally before production deployment:
+   | Variable | Value |
+   |---|---|
+   | `DATABASE_URL` | Supabase **pooler** URL (below) |
+   | `CLERK_SECRET_KEY` | Clerk **production** secret key |
+   | `REDIS_URL` | Upstash TLS URL (below) |
+   | `WEB_ORIGIN` | your Vercel domain, e.g. `https://manzil.vercel.app` |
+   | `NODE_ENV` | `production` |
+   | `CLOUDFLARE_R2_ACCOUNT_ID` / `..._ACCESS_KEY_ID` / `..._SECRET_ACCESS_KEY` / `..._BUCKET` / `..._PUBLIC_URL` | optional — media presign returns 503 until set |
+
+   **Never set `MANZIL_DEV_AUTH` in production.** Dev-header auth is also hard-blocked by code when `NODE_ENV=production`.
+
+4. Deploy. Verify: `https://<railway-domain>/v1/health` → `{"ok":true,"database":"up","cache":"redis"}`.
+
+### Supabase `DATABASE_URL`
+
+The direct host (`db.<ref>.supabase.co`) is **IPv6-only**. Use the Supavisor pooler (session mode, port 5432) everywhere:
+
+```
+postgresql://postgres.<project-ref>:<password>@aws-1-ap-southeast-1.pooler.supabase.com:5432/postgres?sslmode=require&connect_timeout=30&pool_timeout=30&connection_limit=5
+```
+
+Copy it from Supabase Dashboard → **Connect → Connection pooling** (this project lives in `aws-1-ap-southeast-1`). The password must be URL-encoded.
+
+### Schema & seed
 
 ```bash
-npm run migrate:dev --workspace db
+npx prisma db push --schema packages/db/schema.prisma   # sync schema (early development)
+npm run db:migrate:deploy                               # real migrations (staging/prod)
+npm run db:seed                                         # optional demo data
 ```
 
-Production migrations are run by `.github/workflows/deploy-api.yml`:
+## 2. Web on Vercel
 
-```bash
-npm run migrate:deploy --workspace db
-```
+1. vercel.com → **Add New Project** → import this repo.
+2. **Root Directory: `apps/web`**, keep “Include files outside root directory” **enabled** (required for `packages/shared`).
+3. Framework preset: Next.js (auto-detected). Default build command.
+4. Environment variables:
 
-Seed initial data when needed:
+   | Variable | Value |
+   |---|---|
+   | `NEXT_PUBLIC_API_URL` | `https://<railway-domain>/v1` |
+   | `NEXT_PUBLIC_APP_URL` | `https://<vercel-domain>` |
+   | `NEXT_PUBLIC_USE_MOCK` | `false` |
+   | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk production `pk_live_…` |
+   | `CLERK_SECRET_KEY` | Clerk production `sk_live_…` |
+   | `NEXT_PUBLIC_CLERK_SIGN_IN_URL` | `/uz/sign-in` |
+   | `NEXT_PUBLIC_CLERK_SIGN_UP_URL` | `/uz/sign-up` |
+   | `NEXT_PUBLIC_SUPABASE_URL` | `https://<ref>.supabase.co` |
+   | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase publishable key |
 
-```bash
-DATABASE_URL="your-production-db-url" npm run db:seed --workspace db
-```
+5. After the first deploy, set the Vercel domain as `WEB_ORIGIN` on Railway (CORS) and as a domain in Clerk.
 
-## Redis Setup
+## 3. Redis on Upstash — where to get the host
 
-Create a Redis service in the same Railway project and add the `REDIS_URL` value to backend environment variables.
+1. **console.upstash.com** → sign in → **Create Database** → region `ap-southeast-1` (Singapore, next to the DB/API).
+2. On the database page copy the **TLS connect URL**:
+   `rediss://default:<password>@<name>-<id>.upstash.io:6379`
+3. Set it as `REDIS_URL` on Railway (and in local `.env` to test).
 
-## Backend Deployment
+If your key came from **Redis Cloud** instead (app.redislabs.com): Databases → your DB → *Configuration* → **Public endpoint**; the URL is `rediss://default:<password>@<endpoint>`.
 
-The backend deploys to Railway. Required Railway environment variables:
+The API degrades gracefully to an in-memory cache when `REDIS_URL` is missing or unreachable — Redis is an optimization, never a hard dependency.
 
-```text
-NODE_ENV=production
-DATABASE_URL=<railway-postgres-url>
-REDIS_URL=<railway-redis-url>
-MEILISEARCH_URL=<meilisearch-url>
-MEILISEARCH_KEY=<meilisearch-key>
-CLERK_SECRET_KEY=<clerk-secret-key>
-OPENAI_API_KEY=<openai-api-key>
-R2_BUCKET_NAME=<cloudflare-r2-bucket>
-R2_ACCOUNT_ID=<cloudflare-account-id>
-R2_ACCESS_KEY_ID=<cloudflare-r2-access-key>
-R2_SECRET_ACCESS_KEY=<cloudflare-r2-secret-key>
-```
+## 4. Clerk production
 
-Manual deployment:
+1. Clerk Dashboard → create a **Production instance** (dev `pk_test/sk_test` keys are rate-limited).
+2. Add the Vercel domain under **Domains**; put `pk_live_…`/`sk_live_…` into Vercel and Railway env.
+3. Grant the first admin after sign-in, directly in Supabase (Table Editor → `users`) or SQL:
 
-```bash
-npm install -g @railway/cli
-railway login
-railway link
-railway up
-```
+   ```sql
+   update users set role = 'admin' where email = 'you@example.com';
+   ```
 
-Automatic deployment runs through `.github/workflows/deploy-api.yml` after changes to backend, shared, or database packages are pushed to `main`.
+## 5. Post-deploy checklist
 
-## Web Deployment
-
-The web app deploys to Vercel with `apps/web` as the project root.
-
-Recommended Vercel settings:
-
-```text
-Build Command: npm run build --workspace @manzil/web
-Output Directory: .next
-Root Directory: apps/web
-```
-
-Required Vercel environment variables:
-
-```text
-NEXT_PUBLIC_API_URL=https://your-api.railway.app/api
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<clerk-publishable-key>
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=<google-maps-api-key>
-```
-
-Automatic deployment runs through `.github/workflows/deploy-web.yml` after changes to web or shared packages are pushed to `main`.
-
-## Meilisearch
-
-For local development:
-
-```bash
-docker run -it --rm -p 7700:7700 -e MEILI_MASTER_KEY=your-master-key getmeili/meilisearch:v1.5
-```
-
-For production, use a managed Meilisearch Cloud project or a dedicated self-hosted instance. Store the URL and key in backend environment variables.
-
-## Cloudflare R2
-
-Create a bucket, create an R2 API token, and configure CORS for browser uploads:
-
-```json
-[
-  {
-    "allowedOrigins": ["https://manzil.app", "https://*.manzil.app"],
-    "allowedMethods": ["GET", "PUT", "POST", "DELETE"],
-    "allowedHeaders": ["*"],
-    "maxAgeSeconds": 3600
-  }
-]
-```
-
-## Clerk Authentication
-
-Create a Clerk application, enable the desired sign-in methods, and copy the publishable and secret keys into Vercel and Railway.
-
-Optional Clerk webhook endpoint:
-
-```text
-https://your-api.railway.app/api/v1/webhooks/clerk
-```
-
-## Google Maps
-
-Enable these APIs in Google Cloud:
-
-- Maps JavaScript API
-- Places API
-- Geocoding API
-
-Restrict the browser API key to production domains and localhost for development.
-
-## GitHub Actions
-
-The repository includes these workflows:
-
-- `lint-test.yml`: type checks, linting, and tests on pull requests and pushes to `main`.
-- `deploy-web.yml`: builds and deploys the web app to Vercel.
-- `deploy-api.yml`: builds the backend, runs migrations, and deploys to Railway.
-- `db-migrate.yml`: validates database migrations against a PostgreSQL service.
-
-Required GitHub secrets:
-
-```text
-NEXT_PUBLIC_API_URL
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
-VERCEL_TOKEN
-VERCEL_ORG_ID
-VERCEL_PROJECT_ID
-DATABASE_URL
-RAILWAY_TOKEN
-```
-
-## Monitoring
-
-Use Railway logs for backend runtime logs and Vercel deployment logs for web builds.
-
-Optional Sentry environment variable:
-
-```text
-NEXT_SENTRY_DSN=<sentry-dsn>
-```
-
-Add uptime checks against:
-
-```text
-https://your-api.railway.app/api/v1/health
-```
-
-## Domain Setup
-
-Point the main domain to Vercel and the API subdomain to Railway or an API gateway.
-
-Recommended pattern:
-
-```text
-manzil.app -> Vercel web app
-api.manzil.app -> Railway backend
-```
-
-## First Deployment Checklist
-
-- Database created and migrations run.
-- Redis instance running.
-- Meilisearch configured.
-- Backend deployed to Railway.
-- Web app deployed to Vercel.
-- Environment variables set in each service.
-- GitHub Actions secrets configured.
-- DNS records pointed to the correct services.
-- SSL certificates active.
-- Database backups enabled.
-
-## Rollback
-
-For Vercel, promote a previous deployment from the Vercel dashboard.
-
-For Railway, redeploy a previous deployment from the Railway dashboard.
-
-For database issues, restore from Railway backups and re-run critical migrations if needed.
+- [ ] `GET /v1/health` → `database: up`, `cache: redis`
+- [ ] Landing renders with live catalogue stats
+- [ ] Clerk sign-in works on the production domain
+- [ ] `/uz/admin` reachable only by admin-role users
+- [ ] Claim → admin approval → owner dashboard unlock works end-to-end
+- [ ] Review reply from the owner dashboard appears on the business profile

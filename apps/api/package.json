@@ -16,6 +16,7 @@
     "@nestjs/core": "latest",
     "@nestjs/platform-express": "latest",
     "@prisma/client": "6.19.3",
+    "ioredis": "^5.11.1",
     "reflect-metadata": "latest",
     "rxjs": "latest"
   },

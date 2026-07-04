@@ -7,6 +7,8 @@ import { BadgeRow } from "../../../components/badge-chip";
 import { ClaimForm } from "../../../components/claim-form";
 import { SaveBusinessButton } from "../../../components/follow-actions";
 import { LiveStatusDetails } from "../../../components/live-status-pill";
+import { VisitPing } from "../../../components/crm/visit-ping";
+import { Reveal } from "../../../components/motion/reveal";
 import { QualityScoreCard } from "../../../components/quality-score-card";
 import { ReviewForm } from "../../../components/review-form";
 import { ReviewList } from "../../../components/review-list";
@@ -48,12 +50,15 @@ export default async function BusinessProfilePage({
 
   return (
     <>
+      <VisitPing slug={business.slug} />
       <section className="section-block profile-section">
-        <div className="profile-media">
-          <div className={`profile-main-photo photo-block photo-${business.photo}`} />
-          <div className="profile-side-photo photo-block photo-somsa" />
-          <div className="profile-side-photo photo-block photo-coffee" />
-        </div>
+        <Reveal variant="slide-right">
+          <div className="profile-media">
+            <div className={`profile-main-photo photo-block photo-${business.photo}`} />
+            <div className="profile-side-photo photo-block photo-somsa" />
+            <div className="profile-side-photo photo-block photo-coffee" />
+          </div>
+        </Reveal>
         <div className="profile-copy">
           <p className="section-kicker">{copy.business.profileKicker}</p>
           <h1>{business.name}</h1>
@@ -98,41 +103,55 @@ export default async function BusinessProfilePage({
 
       {business.insight ? (
         <section className="section-block">
-          <AiSummaryBlock insight={business.insight} locale={locale} />
+          <Reveal variant="fade-up">
+            <AiSummaryBlock insight={business.insight} locale={locale} />
+          </Reveal>
         </section>
       ) : null}
 
       {business.qualityScore ? (
         <section className="section-block">
-          <QualityScoreCard locale={locale} score={business.qualityScore} />
+          <Reveal variant="fade-up">
+            <QualityScoreCard locale={locale} score={business.qualityScore} />
+          </Reveal>
         </section>
       ) : null}
 
       <section className="section-block reviews-section">
-        <div className="section-heading">
-          <p className="section-kicker">{copy.business.reviewsKicker}</p>
-          <h2>{copy.business.reviewsTitle}</h2>
-        </div>
-        <ReviewList locale={locale} reviews={reviews} />
+        <Reveal variant="fade-up">
+          <div className="section-heading">
+            <p className="section-kicker">{copy.business.reviewsKicker}</p>
+            <h2>{copy.business.reviewsTitle}</h2>
+          </div>
+        </Reveal>
+        <Reveal delay={140} variant="fade-up">
+          <ReviewList locale={locale} reviews={reviews} />
+        </Reveal>
       </section>
 
       <section className="section-block review-form-section">
-        <div>
-          <p className="section-kicker">{copy.business.writeKicker}</p>
-          <h2>{copy.business.writeTitle}</h2>
-          <p>{copy.business.writeBody}</p>
-        </div>
-        <ReviewForm businessSlug={business.slug} locale={locale} />
+        <Reveal variant="slide-right">
+          <div>
+            <p className="section-kicker">{copy.business.writeKicker}</p>
+            <h2>{copy.business.writeTitle}</h2>
+            <p>{copy.business.writeBody}</p>
+          </div>
+        </Reveal>
+        <Reveal delay={140} variant="slide-left">
+          <ReviewForm businessSlug={business.slug} locale={locale} />
+        </Reveal>
       </section>
 
-      <section className="container business-cta">
-        <div>
-          <p className="section-kicker inverse">{copy.business.claimKicker}</p>
-          <h2>{copy.business.claimTitle}</h2>
-          <p>{copy.business.claimBody}</p>
-        </div>
-        <ClaimForm businessName={business.name} businessSlug={business.slug} locale={locale} />
-      </section>
+      <Reveal variant="fade-up">
+        <section className="container business-cta">
+          <div>
+            <p className="section-kicker inverse">{copy.business.claimKicker}</p>
+            <h2>{copy.business.claimTitle}</h2>
+            <p>{copy.business.claimBody}</p>
+          </div>
+          <ClaimForm businessName={business.name} businessSlug={business.slug} locale={locale} />
+        </section>
+      </Reveal>
     </>
   );
 }

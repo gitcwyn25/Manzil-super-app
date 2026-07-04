@@ -1,4 +1,10 @@
-import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException
+} from "@nestjs/common";
 import type {
   Business,
   BusinessUpdateInput,
@@ -20,7 +26,22 @@ import type {
   Review as PrismaReview,
   User
 } from "@prisma/client";
+import { CacheService } from "../cache/cache.service";
 import { PrismaService } from "../prisma.service";
+
+const CACHE_NS = {
+  categories: "categories",
+  businesses: "businesses",
+  admin: "admin"
+} as const;
+
+const CACHE_TTL = {
+  categories: 600,
+  businessList: 60,
+  search: 60,
+  businessDetail: 45,
+  adminOverview: 20
+} as const;
 
 type BusinessWithCategory = PrismaBusiness & {
   category: PrismaCategory;
@@ -64,18 +85,31 @@ export type AuthActor = {
 
 @Injectable()
 export class DatabaseRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly cache: CacheService
+  ) {}
 
   async listCategories(): Promise<Category[]> {
-    const categories = await this.prisma.category.findMany({
-      orderBy: [{ parentId: "asc" }, { nameUz: "asc" }]
-    });
+    return this.cache.getOrSet(CACHE_NS.categories, "all", CACHE_TTL.categories, async () => {
+      const categories = await this.prisma.category.findMany({
+        orderBy: [{ parentId: "asc" }, { nameUz: "asc" }]
+      });
 
-    return categories.map((category) => this.mapCategory(category));
+      return categories.map((category) => this.mapCategory(category));
+    });
   }
 
   async search(query = "", category = "all"): Promise<Business[]> {
     const normalizedQuery = query.trim();
+    const cacheKey = `q=${normalizedQuery.toLowerCase().slice(0, 80)}|c=${category}`;
+
+    return this.cache.getOrSet(CACHE_NS.businesses, `search:${cacheKey}`, CACHE_TTL.search, () =>
+      this.searchUncached(normalizedQuery, category)
+    );
+  }
+
+  private async searchUncached(normalizedQuery: string, category: string): Promise<Business[]> {
     const where = {
       ...(category !== "all" ? { category: { slug: category } } : {}),
       ...(normalizedQuery.length > 0
@@ -95,38 +129,93 @@ export class DatabaseRepository {
     const businesses = await this.prisma.business.findMany({
       where,
       include: { category: true },
-      orderBy: [{ avgRating: "desc" }, { reviewCount: "desc" }, { name: "asc" }]
+      orderBy: [{ avgRating: "desc" }, { reviewCount: "desc" }, { name: "asc" }],
+      take: 200
     });
 
     return businesses.map((business) => this.mapBusiness(business));
   }
 
   async listBusinesses(): Promise<Business[]> {
-    const businesses = await this.prisma.business.findMany({
-      include: { category: true },
-      orderBy: [{ avgRating: "desc" }, { reviewCount: "desc" }, { name: "asc" }]
-    });
+    return this.cache.getOrSet(CACHE_NS.businesses, "list", CACHE_TTL.businessList, async () => {
+      const businesses = await this.prisma.business.findMany({
+        include: { category: true },
+        orderBy: [{ avgRating: "desc" }, { reviewCount: "desc" }, { name: "asc" }],
+        take: 500
+      });
 
-    return businesses.map((business) => this.mapBusiness(business));
+      return businesses.map((business) => this.mapBusiness(business));
+    });
   }
 
-  async getBusiness(slug: string): Promise<{ business: Business; reviews: Review[] }> {
-    const business = await this.prisma.business.findUnique({
-      where: { slug },
-      include: { category: true }
+  /** Businesses claimed by the acting owner, with their recent reviews for the portal. */
+  async listOwnedBusinesses(actor: AuthActor): Promise<{ businesses: Business[]; reviews: Review[] }> {
+    // Show both approved (claimed) businesses and ones the user just
+    // registered that are still awaiting admin approval — otherwise the
+    // dashboard reports "no business" right after registration.
+    const owned = await this.prisma.business.findMany({
+      where: {
+        OR: [
+          { claimedByUserId: actor.userId },
+          { createdByUserId: actor.userId, status: "pending_claim" }
+        ]
+      },
+      include: { category: true },
+      orderBy: { name: "asc" },
+      take: 50
     });
 
-    if (!business) {
-      throw new NotFoundException("Business not found");
+    if (owned.length === 0) {
+      return { businesses: [], reviews: [] };
     }
 
+    const slugByBusinessId = new Map(owned.map((business) => [business.id, business.slug]));
+    const reviews = await this.prisma.review.findMany({
+      where: {
+        businessId: { in: owned.map((business) => business.id) },
+        moderationStatus: "approved"
+      },
+      include: { user: true, reply: true },
+      orderBy: { createdAt: "desc" },
+      take: 50
+    });
+
     return {
-      business: this.mapBusiness(business),
-      reviews: await this.getBusinessReviews(slug)
+      businesses: owned.map((business) => this.mapBusiness(business)),
+      reviews: reviews.map((review) => this.mapReview(review, slugByBusinessId.get(review.businessId) ?? ""))
     };
   }
 
-  async updateBusiness(slug: string, input: BusinessUpdateInput, actor: AuthActor) {
+  async getBusiness(slug: string): Promise<{ business: Business; reviews: Review[] }> {
+    return this.cache.getOrSet(CACHE_NS.businesses, `detail:${slug}`, CACHE_TTL.businessDetail, async () => {
+      const business = await this.prisma.business.findUnique({
+        where: { slug },
+        include: { category: true }
+      });
+
+      if (!business) {
+        throw new NotFoundException("Business not found");
+      }
+
+      return {
+        business: this.mapBusiness(business),
+        reviews: await this.getBusinessReviews(slug)
+      };
+    });
+  }
+
+  async updateBusiness(
+    slug: string,
+    input: BusinessUpdateInput & {
+      email?: string;
+      website?: string;
+      instagram?: string;
+      telegram?: string;
+      legalName?: string;
+      taxId?: string;
+    },
+    actor: AuthActor
+  ) {
     const business = await this.prisma.business.findUnique({
       where: { slug },
       include: { category: true }
@@ -148,11 +237,19 @@ export class DatabaseRepository {
         address: input.address,
         district: input.district,
         phone: input.phone,
+        email: input.email,
+        website: input.website,
+        instagram: input.instagram,
+        telegram: input.telegram,
+        legalName: input.legalName,
+        taxId: input.taxId,
         hoursJson: input.hours ? { weekdays: input.hours } : undefined,
         priceTier: input.priceTier
       },
       include: { category: true }
     });
+
+    await this.cache.invalidate(CACHE_NS.businesses);
 
     return this.mapBusiness(updatedBusiness);
   }
@@ -185,6 +282,21 @@ export class DatabaseRepository {
   }
 
   async createReview(input: ReviewCreateRequest, actor: AuthActor): Promise<Review> {
+    const rating = Math.round(Number(input.rating));
+    const text = input.text?.trim();
+
+    if (!Number.isFinite(rating) || rating < 1 || rating > 5) {
+      throw new BadRequestException("Rating must be an integer between 1 and 5");
+    }
+
+    if (!text || text.length < 3) {
+      throw new BadRequestException("Review text must be at least 3 characters");
+    }
+
+    if (text.length > 4000) {
+      throw new BadRequestException("Review text must be at most 4000 characters");
+    }
+
     const business = await this.prisma.business.findUnique({
       where: { slug: input.businessSlug }
     });
@@ -201,26 +313,33 @@ export class DatabaseRepository {
         }
       },
       update: {
-        rating: Math.round(input.rating),
-        text: input.text,
+        rating,
+        text,
         moderationStatus: "approved"
       },
       create: {
         businessId: business.id,
         userId: actor.userId,
-        rating: Math.round(input.rating),
-        text: input.text,
+        rating,
+        text,
         moderationStatus: "approved"
       },
       include: { user: true }
     });
 
     await this.refreshBusinessRating(business.id);
+    await this.cache.invalidate(CACHE_NS.businesses, CACHE_NS.admin);
 
     return this.mapReview(review, business.slug);
   }
 
-  async createReviewReply(reviewId: string, text: string, actor: AuthActor): Promise<ReviewReply> {
+  async createReviewReply(reviewId: string, rawText: string, actor: AuthActor): Promise<ReviewReply> {
+    const text = rawText?.trim();
+
+    if (!text || text.length < 2 || text.length > 4000) {
+      throw new BadRequestException("Reply text must be between 2 and 4000 characters");
+    }
+
     const review = await this.prisma.review.findUnique({
       where: { id: reviewId },
       include: {
@@ -246,10 +365,18 @@ export class DatabaseRepository {
       }
     });
 
+    await this.cache.invalidate(CACHE_NS.businesses);
+
     return this.mapReviewReply(reply);
   }
 
-  async createReviewReport(reviewId: string, reason: string, actor: AuthActor): Promise<ModerationQueueItem> {
+  async createReviewReport(reviewId: string, rawReason: string, actor: AuthActor): Promise<ModerationQueueItem> {
+    const reason = rawReason?.trim();
+
+    if (!reason || reason.length < 3 || reason.length > 1000) {
+      throw new BadRequestException("Report reason must be between 3 and 1000 characters");
+    }
+
     const review = await this.prisma.review.findUnique({
       where: { id: reviewId },
       select: { id: true }
@@ -272,6 +399,8 @@ export class DatabaseRepository {
       where: { id: reviewId },
       data: { moderationStatus: "pending" }
     });
+
+    await this.cache.invalidate(CACHE_NS.businesses, CACHE_NS.admin);
 
     return this.mapReport(report);
   }
@@ -319,6 +448,8 @@ export class DatabaseRepository {
       include: this.reportInclude()
     });
 
+    await this.cache.invalidate(CACHE_NS.businesses, CACHE_NS.admin);
+
     return this.mapReport(updatedReport);
   }
 
@@ -329,6 +460,8 @@ export class DatabaseRepository {
       include: this.reportInclude()
     });
 
+    await this.cache.invalidate(CACHE_NS.businesses, CACHE_NS.admin);
+
     return this.mapReport(report);
   }
 
@@ -337,6 +470,32 @@ export class DatabaseRepository {
 
     if (!business) {
       throw new NotFoundException("Business not found for claim");
+    }
+
+    // A claimed business belongs to its verified owner. New claims must not
+    // hijack it or silently flip its public status back to pending.
+    if (business.status === "claimed" && business.claimedByUserId) {
+      if (business.claimedByUserId === actor.userId) {
+        throw new ConflictException("You already own this business");
+      }
+      throw new ConflictException("This business is already claimed by a verified owner");
+    }
+
+    const existingPendingClaim = await this.prisma.claim.findFirst({
+      where: {
+        businessId: business.id,
+        userId: actor.userId,
+        status: "pending"
+      },
+      select: { id: true, status: true }
+    });
+
+    if (existingPendingClaim) {
+      return {
+        id: existingPendingClaim.id,
+        status: existingPendingClaim.status,
+        businessName: business.name
+      };
     }
 
     const user = await this.prisma.user.update({
@@ -362,6 +521,8 @@ export class DatabaseRepository {
       data: { status: "pending_claim" }
     });
 
+    await this.cache.invalidate(CACHE_NS.businesses, CACHE_NS.admin);
+
     return {
       id: claim.id,
       status: claim.status,
@@ -369,30 +530,113 @@ export class DatabaseRepository {
     };
   }
 
-  async syncUser(input: { clerkId?: string; email?: string; displayName?: string; locale?: string }) {
-    const user = input.clerkId
-      ? await this.prisma.user.upsert({
-          where: { clerkId: input.clerkId },
-          update: {
-            email: input.email,
-            displayName: input.displayName ?? "Manzil User",
-            locale: input.locale ?? "uz"
-          },
-          create: {
-            clerkId: input.clerkId,
-            email: input.email,
-            displayName: input.displayName ?? "Manzil User",
-            locale: input.locale ?? "uz"
-          }
-        })
-      : await this.prisma.user.create({
-          data: {
-            email: input.email,
-            displayName: input.displayName ?? "Manzil User",
-            locale: input.locale ?? "uz"
-          }
+  async syncUser(input: {
+    clerkId?: string;
+    existingUserId?: string;
+    email?: string;
+    displayName?: string;
+    locale?: string;
+  }) {
+    const displayName = input.displayName?.trim() || undefined;
+    const locale = input.locale && ["uz", "ru", "en"].includes(input.locale) ? input.locale : undefined;
+
+    if (input.clerkId) {
+      const user = await this.upsertUserByClerkId(input.clerkId, {
+        email: input.email,
+        displayName,
+        locale
+      });
+      return this.mapUserSummary(user);
+    }
+
+    if (input.existingUserId) {
+      // Dev-header actors: keep a stable local row keyed by the dev user id.
+      const user = await this.prisma.user.upsert({
+        where: { id: input.existingUserId },
+        update: {
+          ...(displayName ? { displayName } : {}),
+          ...(locale ? { locale } : {})
+        },
+        create: {
+          id: input.existingUserId,
+          displayName: displayName ?? "Manzil User",
+          locale: locale ?? "uz"
+        }
+      });
+      return this.mapUserSummary(user);
+    }
+
+    throw new BadRequestException("An authenticated identity is required to sync a user");
+  }
+
+  private async upsertUserByClerkId(
+    clerkId: string,
+    fields: { email?: string; displayName?: string; locale?: string }
+  ) {
+    try {
+      return await this.prisma.user.upsert({
+        where: { clerkId },
+        update: {
+          ...(fields.email ? { email: fields.email } : {}),
+          ...(fields.displayName ? { displayName: fields.displayName } : {}),
+          ...(fields.locale ? { locale: fields.locale } : {})
+        },
+        create: {
+          clerkId,
+          email: fields.email,
+          displayName: fields.displayName ?? "Manzil User",
+          locale: fields.locale ?? "uz"
+        }
+      });
+    } catch (error: unknown) {
+      // P2002 = unique violation. The email may already belong to a row
+      // created before Clerk linked it (e.g. seeded users) — link that row
+      // to the Clerk id instead of failing the whole login.
+      if (this.isUniqueViolation(error) && fields.email) {
+        const existingByEmail = await this.prisma.user.findUnique({
+          where: { email: fields.email }
         });
 
+        if (existingByEmail && !existingByEmail.clerkId) {
+          return this.prisma.user.update({
+            where: { id: existingByEmail.id },
+            data: {
+              clerkId,
+              ...(fields.displayName ? { displayName: fields.displayName } : {}),
+              ...(fields.locale ? { locale: fields.locale } : {})
+            }
+          });
+        }
+
+        // Fall back to syncing without the conflicting email.
+        return this.prisma.user.upsert({
+          where: { clerkId },
+          update: {
+            ...(fields.displayName ? { displayName: fields.displayName } : {}),
+            ...(fields.locale ? { locale: fields.locale } : {})
+          },
+          create: {
+            clerkId,
+            displayName: fields.displayName ?? "Manzil User",
+            locale: fields.locale ?? "uz"
+          }
+        });
+      }
+
+      throw error;
+    }
+  }
+
+  private isUniqueViolation(error: unknown): boolean {
+    return (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      (error as { code?: string }).code === "P2002"
+    );
+  }
+
+  private mapUserSummary(user: User) {
     return {
       id: user.id,
       email: user.email,
@@ -403,23 +647,25 @@ export class DatabaseRepository {
   }
 
   async getAdminOverview() {
-    const [businessCount, pendingClaimCount, categoryCount, reviewCount, flaggedReviewCount, flaggedPhotoCount] =
-      await this.prisma.$transaction([
-        this.prisma.business.count(),
-        this.prisma.claim.count({ where: { status: "pending" } }),
-        this.prisma.category.count(),
-        this.prisma.review.count(),
-        this.prisma.review.count({ where: { moderationStatus: "pending" } }),
-        this.prisma.photo.count({ where: { moderationStatus: "pending" } })
-      ]);
+    return this.cache.getOrSet(CACHE_NS.admin, "overview", CACHE_TTL.adminOverview, async () => {
+      const [businessCount, pendingClaimCount, categoryCount, reviewCount, flaggedReviewCount, flaggedPhotoCount] =
+        await this.prisma.$transaction([
+          this.prisma.business.count(),
+          this.prisma.claim.count({ where: { status: "pending" } }),
+          this.prisma.category.count(),
+          this.prisma.review.count(),
+          this.prisma.review.count({ where: { moderationStatus: "pending" } }),
+          this.prisma.photo.count({ where: { moderationStatus: "pending" } })
+        ]);
 
-    return {
-      businessCount,
-      pendingClaimCount,
-      categoryCount,
-      reviewCount,
-      flaggedItemCount: flaggedReviewCount + flaggedPhotoCount
-    };
+      return {
+        businessCount,
+        pendingClaimCount,
+        categoryCount,
+        reviewCount,
+        flaggedItemCount: flaggedReviewCount + flaggedPhotoCount
+      };
+    });
   }
 
   async listClaims(status: ClaimStatus = "pending") {
@@ -462,7 +708,7 @@ export class DatabaseRepository {
   async approveClaim(claimId: string, adminId = "dev-admin") {
     const admin = await this.ensureAdminUser(adminId);
 
-    return this.prisma.$transaction(async (tx) => {
+    const result = await this.prisma.$transaction(async (tx) => {
       const claim = await tx.claim.findUnique({
         where: { id: claimId },
         include: {
@@ -473,6 +719,10 @@ export class DatabaseRepository {
 
       if (!claim) {
         throw new NotFoundException("Claim not found");
+      }
+
+      if (claim.status !== "pending") {
+        throw new ConflictException(`Claim is already ${claim.status}`);
       }
 
       const [updatedClaim, updatedBusiness, updatedUser] = await Promise.all([
@@ -522,12 +772,16 @@ export class DatabaseRepository {
         }
       };
     });
+
+    await this.cache.invalidate(CACHE_NS.businesses, CACHE_NS.admin);
+
+    return result;
   }
 
   async rejectClaim(claimId: string, adminId = "dev-admin", note?: string) {
     const admin = await this.ensureAdminUser(adminId);
 
-    return this.prisma.$transaction(async (tx) => {
+    const result = await this.prisma.$transaction(async (tx) => {
       const claim = await tx.claim.findUnique({
         where: { id: claimId },
         include: { business: { include: { category: true } } }
@@ -578,6 +832,10 @@ export class DatabaseRepository {
         business: this.mapBusiness(business)
       };
     });
+
+    await this.cache.invalidate(CACHE_NS.businesses, CACHE_NS.admin);
+
+    return result;
   }
 
   private async getBusinessReviews(slug: string): Promise<Review[]> {
@@ -695,8 +953,15 @@ export class DatabaseRepository {
       reviewCount: business.reviewCount,
       photo: "business",
       tags: [business.district, business.category.nameUz],
-      foundingBusiness: business.status === "claimed"
-    };
+      foundingBusiness: business.status === "claimed",
+      // CRM contact/legal fields (superset of the shared Business type).
+      email: business.email ?? undefined,
+      website: business.website ?? undefined,
+      instagram: business.instagram ?? undefined,
+      telegram: business.telegram ?? undefined,
+      legalName: business.legalName ?? undefined,
+      taxId: business.taxId ?? undefined
+    } as Business;
   }
 
   private mapReview(review: ReviewWithUser, businessSlug: string): Review {

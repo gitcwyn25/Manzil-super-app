@@ -1,9 +1,25 @@
-import { Body, Controller, Get, Param, Post, Query, Req, UseGuards } from "@nestjs/common";
+import { BadRequestException, Body, Controller, Get, Param, Post, Query, Req, UseGuards } from "@nestjs/common";
 import type { ClaimStatus, ModerationStatus, ReportStatus } from "@prisma/client";
 import type { ManzilRequest } from "../auth/auth.types";
 import { ManzilAuthGuard } from "../auth/manzil-auth.guard";
 import { Roles } from "../auth/roles.decorator";
 import { DatabaseRepository } from "../repositories/database.repository";
+
+const CLAIM_STATUSES = ["pending", "approved", "rejected"] as const;
+const REPORT_STATUSES = ["open", "resolved", "rejected"] as const;
+const MODERATION_STATUSES = ["pending", "approved", "rejected"] as const;
+
+function parseEnum<T extends string>(value: string | undefined, allowed: readonly T[], fallback: T): T {
+  if (value === undefined || value === "") {
+    return fallback;
+  }
+
+  if (!allowed.includes(value as T)) {
+    throw new BadRequestException(`Invalid value "${value}". Allowed: ${allowed.join(", ")}`);
+  }
+
+  return value as T;
+}
 
 @Controller("admin")
 @UseGuards(ManzilAuthGuard)
@@ -19,10 +35,10 @@ export class AdminController {
   }
 
   @Get("claims")
-  async claims(@Query("status") status: ClaimStatus = "pending") {
+  async claims(@Query("status") status?: string) {
     return {
       data: {
-        claims: await this.repository.listClaims(status)
+        claims: await this.repository.listClaims(parseEnum<ClaimStatus>(status, CLAIM_STATUSES, "pending"))
       }
     };
   }
@@ -46,10 +62,12 @@ export class AdminController {
   }
 
   @Get("moderation")
-  async moderationQueue(@Query("status") status: ReportStatus = "open") {
+  async moderationQueue(@Query("status") status?: string) {
     return {
       data: {
-        reports: await this.repository.listModerationReports(status)
+        reports: await this.repository.listModerationReports(
+          parseEnum<ReportStatus>(status, REPORT_STATUSES, "open")
+        )
       }
     };
   }
@@ -57,11 +75,14 @@ export class AdminController {
   @Post("reports/:id/resolve")
   async resolveReport(
     @Param("id") id: string,
-    @Body() body: { moderationStatus?: ModerationStatus }
+    @Body() body: { moderationStatus?: string }
   ) {
     return {
       data: {
-        report: await this.repository.resolveReport(id, body.moderationStatus)
+        report: await this.repository.resolveReport(
+          id,
+          parseEnum<ModerationStatus>(body.moderationStatus, MODERATION_STATUSES, "rejected")
+        )
       }
     };
   }

@@ -1,0 +1,17 @@
+**/node_modules
+**/dist
+**/.next
+**/.turbo
+.git
+.env
+.env.*
+!.env.example
+*.log
+apps/mobile
+apps/mobile-old
+apps/backend
+apps/web
+stitch_manzil_brand_identity_system
+docs
+data
+tools

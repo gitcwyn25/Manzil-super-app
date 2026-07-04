@@ -7,7 +7,10 @@ import { DatabaseRepository } from "../repositories/database.repository";
 @Injectable()
 export class ClerkAuthService {
   private readonly secretKey = process.env.CLERK_SECRET_KEY;
-  private readonly devAuthEnabled = process.env.MANZIL_DEV_AUTH !== "false";
+  // Dev-header auth is strictly opt-in and never available in production.
+  // Defaulting this on would let anyone forge an admin identity with a header.
+  private readonly devAuthEnabled =
+    process.env.MANZIL_DEV_AUTH === "true" && process.env.NODE_ENV !== "production";
   private readonly clerk = this.secretKey
     ? createClerkClient({ secretKey: this.secretKey })
     : null;

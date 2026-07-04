@@ -1,97 +1,74 @@
 import type { Locale } from "@manzil/shared";
-import { getUiCopy } from "@manzil/shared";
-import { CommunityListCard } from "../components/community-list-card";
-import { FeedCard } from "../components/feed-card";
-import { HomeSearch } from "../components/home-search";
-import { OccasionRail } from "../components/occasion-rail";
-import { SocialActivityRow } from "../components/social-activity-row";
-import { getHomeFeed } from "../lib/api";
+import { AudienceFeatures } from "../components/audience-features";
+import { Reveal } from "../components/motion/reveal";
+import { ScenicBackdrop } from "../components/scenic-hero";
+import { StoreBadges } from "../components/store-badges";
+import { getLandingCopy } from "../lib/landing-copy";
 
-export default async function HomePage({
+export default async function LandingPage({
   params
 }: {
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
-  const copy = getUiCopy(locale);
-  const { feedItems, socialActivities, occasions, lists, businesses } = await getHomeFeed();
-  const businessBySlug = new Map(businesses.map((business) => [business.slug, business]));
+  const copy = getLandingCopy(locale);
 
   return (
     <>
-      <section className="feed-hero">
-        <div className="feed-hero-copy">
-          <p className="section-kicker">{copy.home.kicker}</p>
-          <h1>{copy.home.title}</h1>
-          <p className="hero-text">{copy.home.subtitle}</p>
-          <HomeSearch locale={locale} />
+      {/* Shape reveal on load */}
+      <div aria-hidden="true" className="page-reveal">
+        <span className="page-reveal-panel" />
+        <span className="page-reveal-panel second" />
+      </div>
+
+      {/* ============ HERO — full-bleed scenic landscape, serif headline ============ */}
+      <section className="lp-hero">
+        <ScenicBackdrop />
+        <div className="lp-hero-content">
+          <a className="lp-pill" href={`/${locale}/business/pricing`}>
+            <span className="lp-pill-dot" />
+            {copy.badge}
+            <svg aria-hidden="true" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="13" height="13"><path d="m9 6 6 6-6 6" /></svg>
+          </a>
+          <h1 className="lp-title">
+            <span className="lp-title-line">{copy.titleLine1}</span>
+            <span className="lp-title-line delay">{copy.titleLine2}</span>
+          </h1>
+          <p className="lp-sub">{copy.subtitle}</p>
+          <a className="lp-cta" href={`/${locale}/dashboard`}>{copy.cta}</a>
         </div>
-        <div className="feed-hero-stats" aria-label="Platforma ishonchi">
-          <div className="stat-card">
-            <strong>12.4k</strong>
-            <span>{copy.home.statsViews}</span>
-          </div>
-          <div className="stat-card">
-            <strong>890</strong>
-            <span>{copy.home.statsBookmarks}</span>
-          </div>
-          <div className="stat-card">
-            <strong>45</strong>
-            <span>{copy.home.statsFriends}</span>
-          </div>
-        </div>
+        <p className="lp-hero-footnote">{copy.heroFootnote}</p>
       </section>
 
-      <div className="container feed-layout">
-        <OccasionRail locale={locale} occasions={occasions} />
+      {/* ============ FEATURES — serif headline + audience toggle bento ============ */}
+      <section className="lp-features" id="features">
+        <Reveal variant="fade-up">
+          <h2 className="lp-features-title">
+            {copy.featuresTitle1}
+            <br />
+            {copy.featuresTitle2}
+          </h2>
+        </Reveal>
+        <Reveal delay={120} variant="fade-up">
+          <p className="lp-features-sub">{copy.featuresSubtitle}</p>
+        </Reveal>
+        <Reveal delay={200} variant="fade-up">
+          <AudienceFeatures content={copy.audience} />
+        </Reveal>
+      </section>
 
-        <section className="feed-stack" aria-label={copy.nav.feed}>
-          {feedItems.map((item) => (
-            <FeedCard businesses={businesses} item={item} key={item.id} locale={locale} />
-          ))}
-        </section>
-
-        <section className="section-block">
-          <div className="section-heading">
-            <p className="section-kicker">{copy.home.communityKicker}</p>
-            <h2>{copy.home.communityTitle}</h2>
-          </div>
-          <div className="social-activity-list">
-            {socialActivities.map((activity) => (
-              <SocialActivityRow
-                activity={activity}
-                businessName={businessBySlug.get(activity.businessSlug)?.name ?? activity.businessSlug}
-                key={activity.id}
-                locale={locale}
-              />
-            ))}
-          </div>
-        </section>
-
-        <section className="section-block">
-          <div className="section-heading section-heading-row">
+      {/* ============ APP DOWNLOAD — quiet, spacious ============ */}
+      <section className="lp-download" id="download">
+        <Reveal variant="fade-up">
+          <div className="lp-download-inner">
             <div>
-              <p className="section-kicker">{copy.home.listsKicker}</p>
-              <h2>{copy.home.listsTitle}</h2>
+              <h2>{copy.downloadTitle}</h2>
+              <p>{copy.downloadText}</p>
             </div>
-            <a className="ghost-button" href={`/${locale}/lists`}>{copy.home.allLists}</a>
+            <StoreBadges androidLabel={copy.android} iosLabel={copy.ios} soonLabel={copy.comingSoon} variant="light" />
           </div>
-          <div className="list-card-grid">
-            {lists.map((list) => (
-              <CommunityListCard key={list.slug} list={list} locale={locale} />
-            ))}
-          </div>
-        </section>
-
-        <section className="container business-cta feed-business-cta">
-          <div>
-            <p className="section-kicker inverse">{copy.home.businessKicker}</p>
-            <h2>{copy.home.businessTitle}</h2>
-            <p>{copy.home.businessBody}</p>
-          </div>
-          <a className="gold-button" href={`/${locale}/business/pricing`}>{copy.home.businessCta}</a>
-        </section>
-      </div>
+        </Reveal>
+      </section>
     </>
   );
 }

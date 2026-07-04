@@ -1,14 +1,30 @@
-import { Body, Controller, Get, Param, Patch, Post, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Headers, Ip, Param, Patch, Post, Req, UseGuards } from "@nestjs/common";
 import type { BusinessUpdateInput, ReviewCreateRequest } from "@manzil/shared";
 import type { ManzilRequest } from "../auth/auth.types";
 import { ManzilAuthGuard } from "../auth/manzil-auth.guard";
 import { RequireAuth } from "../auth/require-auth.decorator";
 import { Roles } from "../auth/roles.decorator";
+import { CrmRepository } from "../crm/crm.repository";
 import { DatabaseRepository } from "../repositories/database.repository";
 
 @Controller("businesses")
 export class BusinessesController {
-  constructor(private readonly repository: DatabaseRepository) {}
+  constructor(
+    private readonly repository: DatabaseRepository,
+    private readonly crm: CrmRepository
+  ) {}
+
+  /** Public, anonymous visit tracking for CRM analytics. */
+  @Post(":slug/visit")
+  async recordVisit(
+    @Param("slug") slug: string,
+    @Ip() ip: string,
+    @Headers("user-agent") userAgent?: string
+  ) {
+    return {
+      data: await this.crm.recordVisit(slug, `${ip}|${userAgent ?? ""}`)
+    };
+  }
 
   @Get()
   async listBusinesses() {
@@ -16,6 +32,16 @@ export class BusinessesController {
       data: {
         businesses: await this.repository.listBusinesses()
       }
+    };
+  }
+
+  // NOTE: must stay above the ":slug" route or Nest matches "mine" as a slug.
+  @Get("mine")
+  @UseGuards(ManzilAuthGuard)
+  @RequireAuth()
+  async listOwnedBusinesses(@Req() request: ManzilRequest) {
+    return {
+      data: await this.repository.listOwnedBusinesses(request.manzilActor!)
     };
   }
 

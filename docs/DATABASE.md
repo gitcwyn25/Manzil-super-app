@@ -4,6 +4,29 @@
 
 This document describes the core database model for Manzil: users, business listings, reviews, moderation, claims, saves, social graph features, and future monetization tables.
 
+## Source of truth
+
+The active Prisma schema is [`packages/db/schema.prisma`](../packages/db/schema.prisma). Older root-level Prisma files were moved out of the active path and should not be used for new backend work.
+
+## Supabase connection
+
+For Supabase, set the real connection string in local `.env` only:
+
+```env
+DATABASE_URL=postgresql://postgres:[YOUR-PASSWORD]@db.wfabehnihelxemztmvca.supabase.co:5432/postgres?sslmode=require
+```
+
+Do not commit the real password. The password must be URL-encoded when it contains special characters such as `@`.
+
+Important Windows/network note: the direct Supabase host currently resolves to IPv6 only from this machine. If `npm run db:push` hangs or `Test-NetConnection` cannot reach port `5432`, use Supabase Dashboard → Connect → Connection pooling and copy the IPv4-compatible pooler connection string instead. Put that pooler URL in `.env` as `DATABASE_URL`, then rerun:
+
+```bash
+npm run db:push
+npm run db:seed
+```
+
+The schema already validates locally with the Supabase URL loaded, but pushing requires network access to the database host.
+
 ## Tables Overview
 
 ### Users (`users`)

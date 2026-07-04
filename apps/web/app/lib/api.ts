@@ -125,10 +125,17 @@ export async function getAdminOverview() {
   }
 
   const { getServerAuthHeaders } = await import("./auth");
+  // Admin data is per-authenticated-user and must never be shared across
+  // requests via the Next.js data cache.
   const response = await fetch(`${API_BASE_URL}/admin/overview`, {
     headers: await getServerAuthHeaders("/admin/overview"),
-    next: { revalidate: 30 }
+    cache: "no-store"
   });
+
+  if (!response.ok) {
+    throw new Error(`Admin overview failed: ${response.status}`);
+  }
+
   const payload = await response.json();
   return payload.data;
 }
@@ -158,8 +165,13 @@ export async function getAdminClaims(status: ClaimStatus = "pending"): Promise<A
   const { getServerAuthHeaders } = await import("./auth");
   const response = await fetch(`${API_BASE_URL}/admin/claims?status=${status}`, {
     headers: await getServerAuthHeaders("/admin/claims"),
-    next: { revalidate: 30 }
+    cache: "no-store"
   });
+
+  if (!response.ok) {
+    throw new Error(`Admin claims failed: ${response.status}`);
+  }
+
   const payload = await response.json();
   return payload.data.claims;
 }
@@ -238,8 +250,13 @@ export async function getModerationQueue(status: ReportStatus = "open"): Promise
   const { getServerAuthHeaders } = await import("./auth");
   const response = await fetch(`${API_BASE_URL}/admin/moderation?status=${status}`, {
     headers: await getServerAuthHeaders("/admin/moderation"),
-    next: { revalidate: 30 }
+    cache: "no-store"
   });
+
+  if (!response.ok) {
+    throw new Error(`Moderation queue failed: ${response.status}`);
+  }
+
   const payload = await response.json();
   return payload.data.reports;
 }
@@ -275,6 +292,39 @@ export async function rejectReport(id: string) {
       ...(await getServerAuthHeaders(`/admin/reports/${id}/reject`))
     },
     body: "{}",
+    cache: "no-store"
+  });
+  return response.json();
+}
+
+export async function getMyBusinesses(): Promise<{ businesses: BusinessPlatform[]; reviews: Review[] }> {
+  if (useMockData) {
+    return { businesses: [], reviews: [] };
+  }
+
+  const { getServerAuthHeaders } = await import("./auth");
+  const response = await fetch(`${API_BASE_URL}/businesses/mine`, {
+    headers: await getServerAuthHeaders("/businesses/mine"),
+    cache: "no-store"
+  });
+
+  if (!response.ok) {
+    return { businesses: [], reviews: [] };
+  }
+
+  const payload = await response.json();
+  return payload.data;
+}
+
+export async function replyToReview(reviewId: string, text: string) {
+  const { getServerAuthHeaders } = await import("./auth");
+  const response = await fetch(`${API_BASE_URL}/reviews/${reviewId}/replies`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      ...(await getServerAuthHeaders(`/reviews/${reviewId}/replies`))
+    },
+    body: JSON.stringify({ text }),
     cache: "no-store"
   });
   return response.json();

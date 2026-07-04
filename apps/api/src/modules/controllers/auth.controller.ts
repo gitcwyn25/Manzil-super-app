@@ -12,10 +12,28 @@ export class AuthController {
     private readonly clerkAuth: ClerkAuthService
   ) {}
 
+  /**
+   * Syncs the authenticated user into the local database.
+   * Identity always comes from the verified Clerk token (or explicit dev
+   * headers in dev mode) — never from the request body, which would allow
+   * anyone to overwrite another user's record.
+   */
   @Post("sync")
-  async syncUser(@Body() body: { clerkId?: string; email?: string; displayName?: string; locale?: string }) {
+  @UseGuards(ManzilAuthGuard)
+  @RequireAuth()
+  async syncUser(
+    @Body() body: { displayName?: string; locale?: string },
+    @Req() request: ManzilRequest
+  ) {
+    const actor = request.manzilActor!;
+
     return {
-      data: await this.repository.syncUser(body)
+      data: await this.repository.syncUser({
+        clerkId: actor.clerkId,
+        existingUserId: actor.userId,
+        displayName: body.displayName,
+        locale: body.locale
+      })
     };
   }
 

@@ -49,21 +49,42 @@ export default async function AdminPage({
 }: {
   params: Promise<{ locale: Locale }>;
 }) {
-  await params;
-  const [overview, claims, reports] = await Promise.all([
-    getAdminOverview(),
-    getAdminClaims("pending"),
-    getModerationQueue("open")
-  ]);
+  const { locale } = await params;
+
+  let overview: Awaited<ReturnType<typeof getAdminOverview>>;
+  let claims: Awaited<ReturnType<typeof getAdminClaims>>;
+  let reports: Awaited<ReturnType<typeof getModerationQueue>>;
+
+  try {
+    [overview, claims, reports] = await Promise.all([
+      getAdminOverview(),
+      getAdminClaims("pending"),
+      getModerationQueue("open")
+    ]);
+  } catch {
+    // The API rejected the request — the signed-in account has no admin role.
+    return (
+      <section className="dash-shell">
+        <div className="dash-signin">
+          <h1>Access restricted</h1>
+          <p>
+            This console is available to administrator accounts only. Sign in
+            with an administrator account to continue.
+          </p>
+          <a className="bl-btn-primary" href={`/${locale}/sign-in`}>Sign in</a>
+        </div>
+      </section>
+    );
+  }
 
   return (
-    <section className="section-block">
+    <section className="dash-shell">
       <div className="section-heading">
-        <p className="section-kicker">Admin MVP</p>
-        <h1>Moderatsiya va launch nazorati</h1>
+        <p className="bl-kicker">Admin konsoli</p>
+        <h1>Platforma boshqaruv markazi</h1>
         <p>
-          Bu sahifa claim approval, listing import, flagged content va category
-          management uchun ishlab chiqiladigan admin panel skeletidir.
+          Claim navbati, kontent moderatsiyasi va ma&apos;lumotlar bazasi nazorati —
+          barchasi shu yerda.
         </p>
       </div>
       <div className="admin-grid" style={{ marginTop: 28 }}>

@@ -12,5 +12,5 @@ export function HeaderAuth({ locale }: { locale: Locale }) {
     return <UserButton />;
   }
 
-  return <a className="ghost-button" href={`/${locale}/sign-in`}>{copy.nav.signIn}</a>;
+  return <a className="header-signin" href={`/${locale}/sign-in`}>{copy.nav.signIn}</a>;
 }

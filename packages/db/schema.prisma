@@ -38,6 +38,31 @@ enum ReportStatus {
   rejected
 }
 
+enum AnnouncementKind {
+  news
+  discount
+  broadcast
+}
+
+enum AnnouncementStatus {
+  draft
+  published
+  archived
+}
+
+enum PlanTier {
+  free
+  pro
+  max
+}
+
+enum SubscriptionStatus {
+  trial
+  active
+  invoice_pending
+  canceled
+}
+
 model User {
   id          String   @id @default(cuid())
   clerkId     String?  @unique
@@ -89,10 +114,17 @@ model Business {
   lat             Decimal?       @db.Decimal(9, 6)
   lng             Decimal?       @db.Decimal(9, 6)
   phone           String?
+  email           String?
+  website         String?
+  instagram       String?
+  telegram        String?
+  legalName       String?
+  taxId           String?        // STIR/INN — O'zbekiston soliq identifikatori
   hoursJson       Json?
   priceTier       String?
   status          BusinessStatus @default(unclaimed)
   claimedByUserId String?
+  createdByUserId String?
   avgRating       Decimal        @default(0) @db.Decimal(3, 2)
   reviewCount     Int            @default(0)
   createdAt       DateTime       @default(now())
@@ -103,6 +135,10 @@ model Business {
   reviews       Review[]
   photos        Photo[]
   claims        Claim[]
+  announcements Announcement[]
+  packages      BusinessPackage[]
+  visits        BusinessVisit[]
+  subscription  BusinessSubscription?
 
   @@index([categoryId])
   @@index([city, district])
@@ -179,6 +215,67 @@ model Claim {
 
   @@index([status])
   @@index([businessId])
+}
+
+model Announcement {
+  id              String             @id @default(cuid())
+  businessId      String
+  kind            AnnouncementKind   @default(news)
+  status          AnnouncementStatus @default(draft)
+  title           String
+  body            String
+  discountPercent Int?
+  startsAt        DateTime?
+  endsAt          DateTime?
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@index([businessId, status])
+  @@index([businessId, createdAt])
+}
+
+model BusinessPackage {
+  id          String   @id @default(cuid())
+  businessId  String
+  name        String
+  description String?
+  price       Decimal  @db.Decimal(14, 2)
+  currency    String   @default("UZS")
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@index([businessId, isActive])
+}
+
+model BusinessVisit {
+  id         String   @id @default(cuid())
+  businessId String
+  visitorKey String
+  source     String   @default("web")
+  createdAt  DateTime @default(now())
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@index([businessId, createdAt])
+}
+
+model BusinessSubscription {
+  id         String             @id @default(cuid())
+  businessId String             @unique
+  plan       PlanTier           @default(free)
+  status     SubscriptionStatus @default(active)
+  startedAt  DateTime           @default(now())
+  renewsAt   DateTime?
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
 }
 
 model Report {

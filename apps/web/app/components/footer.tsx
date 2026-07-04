@@ -1,25 +1,44 @@
 import type { Locale } from "@manzil/shared";
-import { getUiCopy } from "@manzil/shared";
+import { getBusinessCopy } from "../lib/business-copy";
+import { getLandingCopy } from "../lib/landing-copy";
 import { MobileSiteNav } from "./site-nav";
+import { StoreBadges } from "./store-badges";
 
 export function MobileNav({ locale }: { locale: Locale }) {
   return <MobileSiteNav locale={locale} />;
 }
 
 export function Footer({ locale }: { locale: Locale }) {
-  const copy = getUiCopy(locale);
+  const copy = getBusinessCopy(locale);
+  const landing = getLandingCopy(locale);
+  const year = new Date().getFullYear();
 
   return (
-    <footer className="site-footer">
-      <div>
-        <strong>Manzil</strong>
-        <p>{copy.brand.tagline}</p>
+    <footer className="lp-footer">
+      <div className="lp-footer-inner">
+        <div className="lp-footer-brand">
+          <div>
+            <strong>Manzil<span aria-hidden="true" className="brand-dot" /></strong>
+            <p>{copy.footer.tagline}</p>
+          </div>
+        </div>
+
+        <nav aria-label={copy.footer.product} className="lp-footer-col">
+          <h4>{copy.footer.product}</h4>
+          <a href={`/${locale}/business`}>{copy.nav.forBusiness}</a>
+          <a href={`/${locale}/dashboard`}>{copy.footer.dashboard}</a>
+        </nav>
+
+        <div className="lp-footer-col lp-footer-apps">
+          <h4>{copy.footer.apps}</h4>
+          <StoreBadges androidLabel={landing.android} iosLabel={landing.ios} variant="light" />
+        </div>
       </div>
-      <div className="footer-links">
-        <a href={`/${locale}/discover`}>{copy.footer.discover}</a>
-        <a href={`/${locale}/concierge`}>{copy.footer.concierge}</a>
-        <a href={`/${locale}/profile`}>{copy.footer.profile}</a>
-        <a href={`/${locale}/business/pricing`}>{copy.footer.business}</a>
+
+      <div className="lp-footer-base">
+        <span>© {year} Manzil. {copy.footer.rights}</span>
+        {/* Intentionally low-key: the admin console entry point. */}
+        <a className="lp-footer-admin" href={`/${locale}/admin`}>{copy.nav.admin}</a>
       </div>
     </footer>
   );
