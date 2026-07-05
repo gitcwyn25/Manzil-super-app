@@ -19,6 +19,14 @@ import { ManzilAuthGuard } from "./auth/manzil-auth.guard";
 import { CrmRepository } from "./crm/crm.repository";
 import { GeocodingService } from "./crm/geocoding.service";
 import { R2PresignService } from "./media/r2-presign.service";
+import { ConsoleController } from "./console/console.controller";
+import { ConsoleRepository } from "./console/console.repository";
+import { AdminAuthService } from "./console/admin-auth.service";
+import { PermissionGuard } from "./console/permission.guard";
+import { AlertService } from "./alerts/alert.service";
+import { PlansController } from "./plans/plans.controller";
+import { PlansRepository } from "./plans/plans.repository";
+import { EntitlementGuard } from "./plans/entitlement.guard";
 
 @Module({
   controllers: [
@@ -33,7 +41,9 @@ import { R2PresignService } from "./media/r2-presign.service";
     MediaController,
     OccasionsController,
     ReviewsController,
-    SearchController
+    SearchController,
+    ConsoleController,
+    PlansController
   ],
   providers: [
     PrismaService,
@@ -43,7 +53,13 @@ import { R2PresignService } from "./media/r2-presign.service";
     GeocodingService,
     ClerkAuthService,
     ManzilAuthGuard,
-    R2PresignService
+    R2PresignService,
+    ConsoleRepository,
+    AdminAuthService,
+    PermissionGuard,
+    AlertService,
+    PlansRepository,
+    EntitlementGuard
   ]
 })
 export class AppModule {}

@@ -8,6 +8,7 @@
     "packages/db",
     "apps/api",
     "apps/web",
+    "apps/admin",
     "apps/mobile"
   ],
   "scripts": {
@@ -32,6 +33,7 @@
     "seed": "tsx packages/db/prisma/seed.ts"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "prisma": "6.19.3",
     "tsx": "latest",
     "typescript": "latest"

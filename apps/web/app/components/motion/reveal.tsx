@@ -50,10 +50,15 @@ export function Reveal({
       return;
     }
 
+    // Safety net: if the observer never fires (hidden tab, headless render,
+    // odd layout), reveal anyway so the section is never left blank.
+    const fallback = window.setTimeout(() => setShown(true), 700);
+
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
+            window.clearTimeout(fallback);
             setShown(true);
             if (once) observer.disconnect();
           } else if (!once) {
@@ -65,7 +70,10 @@ export function Reveal({
     );
 
     observer.observe(node);
-    return () => observer.disconnect();
+    return () => {
+      window.clearTimeout(fallback);
+      observer.disconnect();
+    };
   }, [once]);
 
   return (

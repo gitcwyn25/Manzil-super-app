@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  background: #0b0e14;
+  color: #e6e9ef;
+}
+
+body {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  border-color: #222b3a;
+}
+
+::selection {
+  background: #2b7a78;
+  color: #fff;
+}
+
+/* Dense scrollbars for data-grid feel */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #222b3a;
+  border-radius: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors disabled:opacity-50 disabled:pointer-events-none;
+  }
+  .btn-primary {
+    @apply btn bg-brand text-white hover:bg-brand-dim;
+  }
+  .btn-ghost {
+    @apply btn border border-border bg-transparent text-fg hover:bg-panel-2;
+  }
+  .btn-danger {
+    @apply btn border border-bad/40 bg-transparent text-bad hover:bg-bad/10;
+  }
+  .btn-xs {
+    @apply px-2 py-1 text-xs;
+  }
+  .input {
+    @apply w-full rounded-md border border-border bg-panel px-3 py-1.5 text-sm text-fg placeholder:text-muted outline-none focus:border-brand;
+  }
+  .card {
+    @apply rounded-lg border border-border bg-panel;
+  }
+  .grid-table {
+    @apply w-full text-sm;
+  }
+  .grid-table th {
+    @apply px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-muted border-b border-border;
+  }
+  .grid-table td {
+    @apply px-3 py-2.5 border-b border-border/60 align-top;
+  }
+  .grid-table tr:hover td {
+    @apply bg-panel-2/50;
+  }
+}

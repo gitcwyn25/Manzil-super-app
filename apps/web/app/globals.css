@@ -269,7 +269,10 @@ main {
   will-change: opacity, transform;
 }
 
-.reveal:not(.is-shown) {
+/* Reveal start-states apply ONLY when JS is present (html.js), so content is
+   always visible for no-JS, crawlers, and headless renders — motion is pure
+   enhancement, never a visibility gate. */
+html.js .reveal:not(.is-shown) {
   opacity: 0;
 }
 
@@ -795,12 +798,13 @@ h2 {
 
 .feed-hero-copy h1 {
   margin: 8px 0 12px;
-  font-size: clamp(38px, 5.4vw, 60px);
-  line-height: 1.04;
-  background: linear-gradient(120deg, var(--text) 0%, var(--primary) 74%, var(--primary-bright) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(40px, 6vw, 76px);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  text-wrap: balance;
 }
 
 .feed-hero-stats {

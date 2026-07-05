@@ -63,17 +63,75 @@ enum SubscriptionStatus {
   canceled
 }
 
+enum UserStatus {
+  active
+  suspended
+  banned
+}
+
+enum StaffRole {
+  owner
+  manager
+  staff
+}
+
+enum PaymentProvider {
+  payme
+  click
+  uzcard
+  card
+}
+
+enum PaymentStatus {
+  pending
+  paid
+  failed
+  refunded
+}
+
+enum BookingStatus {
+  pending
+  confirmed
+  canceled
+  completed
+  no_show
+}
+
+enum VerificationMethod {
+  stir
+  document
+  phone
+}
+
+enum VerificationStatus {
+  unverified
+  pending
+  verified
+  rejected
+}
+
+enum BusinessEventType {
+  view
+  call
+  directions
+  message
+  photo_view
+}
+
 model User {
-  id          String   @id @default(cuid())
-  clerkId     String?  @unique
-  email       String?  @unique
-  phone       String?  @unique
+  id          String     @id @default(cuid())
+  clerkId     String?    @unique
+  email       String?    @unique
+  phone       String?    @unique
   displayName String
   avatarUrl   String?
-  locale      String   @default("uz")
-  role        UserRole @default(consumer)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  locale      String     @default("uz")
+  role        UserRole   @default(consumer)
+  status      UserStatus @default(active)
+  bannedAt    DateTime?
+  bannedReason String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 
   businesses     Business[] @relation("BusinessOwner")
   reviews        Review[]
@@ -81,8 +139,11 @@ model User {
   claims         Claim[] @relation("ClaimRequester")
   reviewedClaims Claim[] @relation("ClaimReviewer")
   reports        Report[]
+  adminProfile   AdminUser?
+  staffRoles     BusinessStaff[]
 
   @@index([role])
+  @@index([status])
 }
 
 model Category {
@@ -130,8 +191,17 @@ model Business {
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
 
+  mergedIntoId       String?
+  verificationStatus VerificationStatus @default(unverified)
+  verifiedAt         DateTime?
+  parentBusinessId   String?             // multi-location under one account (Max)
+
   category      Category @relation(fields: [categoryId], references: [id])
   claimedByUser User?    @relation("BusinessOwner", fields: [claimedByUserId], references: [id])
+  mergedInto    Business?  @relation("BusinessMerge", fields: [mergedIntoId], references: [id])
+  mergedFrom    Business[] @relation("BusinessMerge")
+  parent        Business?  @relation("BusinessLocations", fields: [parentBusinessId], references: [id])
+  locations     Business[] @relation("BusinessLocations")
   reviews       Review[]
   photos        Photo[]
   claims        Claim[]
@@ -139,11 +209,17 @@ model Business {
   packages      BusinessPackage[]
   visits        BusinessVisit[]
   subscription  BusinessSubscription?
+  staff         BusinessStaff[]
+  events        BusinessEvent[]
+  bookings      Booking[]
+  payments      Payment[]
+  verifications BusinessVerification[]
 
   @@index([categoryId])
   @@index([city, district])
   @@index([status])
   @@index([avgRating, reviewCount])
+  @@index([parentBusinessId])
 }
 
 model Review {
@@ -266,14 +342,18 @@ model BusinessVisit {
 }
 
 model BusinessSubscription {
-  id         String             @id @default(cuid())
-  businessId String             @unique
-  plan       PlanTier           @default(free)
-  status     SubscriptionStatus @default(active)
-  startedAt  DateTime           @default(now())
-  renewsAt   DateTime?
-  createdAt  DateTime           @default(now())
-  updatedAt  DateTime           @updatedAt
+  id                String             @id @default(cuid())
+  businessId        String             @unique
+  plan              PlanTier           @default(free)
+  status            SubscriptionStatus @default(active)
+  startedAt         DateTime           @default(now())
+  renewsAt          DateTime?
+  provider          PaymentProvider?
+  externalId        String?
+  currentPeriodEnd  DateTime?
+  cancelAtPeriodEnd Boolean            @default(false)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
 
   business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
 }
@@ -295,4 +375,262 @@ model Report {
   @@index([status])
   @@index([reviewId])
   @@index([photoId])
+}
+
+// ============================================================
+// Admin platform — RBAC, audit, feature flags
+// ============================================================
+
+model AdminUser {
+  id          String    @id @default(cuid())
+  clerkId     String    @unique
+  userId      String?   @unique
+  email       String    @unique
+  name        String
+  isActive    Boolean   @default(true)
+  lastLoginAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user      User?           @relation(fields: [userId], references: [id])
+  roles     AdminUserRole[]
+  auditLogs AuditLog[]
+
+  @@index([isActive])
+}
+
+model Role {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  description String?
+  isSystem    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  permissions RolePermission[]
+  admins      AdminUserRole[]
+}
+
+model Permission {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  category    String
+  description String?
+  createdAt   DateTime @default(now())
+
+  roles RolePermission[]
+
+  @@index([category])
+}
+
+model RolePermission {
+  roleId       String
+  permissionId String
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@index([permissionId])
+}
+
+model AdminUserRole {
+  adminUserId       String
+  roleId            String
+  assignedByAdminId String?
+  assignedAt        DateTime @default(now())
+
+  adminUser AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+  role      Role      @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([adminUserId, roleId])
+  @@index([roleId])
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  actorId     String
+  action      String
+  targetType  String
+  targetId    String?
+  beforeState Json?
+  afterState  Json?
+  reason      String?
+  ipAddress   String?
+  createdAt   DateTime @default(now())
+
+  actor AdminUser @relation(fields: [actorId], references: [id])
+
+  @@index([actorId, createdAt])
+  @@index([action])
+  @@index([targetType, targetId])
+  @@index([createdAt])
+}
+
+model FeatureFlag {
+  id               String   @id @default(cuid())
+  key              String   @unique
+  description      String?
+  enabled          Boolean  @default(false)
+  cityScope        String?
+  localeScope      String?
+  updatedByAdminId String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+// ============================================================
+// Business platform — plans, entitlements, team, verification,
+// analytics, bookings, payments
+// ============================================================
+
+// Dynamic, admin-editable pricing. Source of truth for the public pricing
+// page, plan selection, and server-side entitlement checks.
+model Plan {
+  id            String   @id @default(cuid())
+  tier          PlanTier @unique
+  nameUz        String
+  nameRu        String
+  nameEn        String
+  priceMonthly  Decimal  @default(0) @db.Decimal(14, 2)
+  priceYearly   Decimal? @db.Decimal(14, 2)
+  currency      String   @default("UZS")
+  photoLimit    Int? // null = unlimited
+  staffLimit    Int      @default(1)
+  locationLimit Int      @default(1)
+  sortOrder     Int      @default(0)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  features PlanFeature[]
+}
+
+model PlanFeature {
+  id       String  @id @default(cuid())
+  planId   String
+  key      String // entitlement key, e.g. analytics.advanced, booking, telegram.bot
+  labelUz  String?
+  labelRu  String?
+  labelEn  String?
+  included Boolean @default(true)
+
+  plan Plan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@unique([planId, key])
+  @@index([key])
+}
+
+model BusinessStaff {
+  id              String    @id @default(cuid())
+  businessId      String
+  userId          String?
+  phone           String
+  role            StaffRole @default(staff)
+  invitedByUserId String?
+  acceptedAt      DateTime?
+  createdAt       DateTime  @default(now())
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  user     User?    @relation(fields: [userId], references: [id])
+
+  @@unique([businessId, phone])
+  @@index([userId])
+}
+
+model PhoneVerification {
+  id         String    @id @default(cuid())
+  phone      String
+  codeHash   String
+  purpose    String    @default("register")
+  attempts   Int       @default(0)
+  expiresAt  DateTime
+  consumedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([phone, purpose])
+}
+
+model BusinessVerification {
+  id                String             @id @default(cuid())
+  businessId        String
+  method            VerificationMethod
+  status            VerificationStatus @default(pending)
+  taxId             String?
+  documentUrl       String?
+  reviewedByAdminId String?
+  note              String?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@index([businessId, status])
+  @@index([status])
+}
+
+model BusinessEvent {
+  id         String            @id @default(cuid())
+  businessId String
+  type       BusinessEventType
+  visitorKey String?
+  source     String            @default("web")
+  createdAt  DateTime          @default(now())
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@index([businessId, type, createdAt])
+}
+
+model SearchQueryLog {
+  id                String   @id @default(cuid())
+  query             String
+  district          String?
+  categorySlug      String?
+  resultCount       Int
+  clickedBusinessId String?
+  createdAt         DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([resultCount])
+}
+
+model Booking {
+  id             String        @id @default(cuid())
+  businessId     String
+  customerUserId String?
+  customerPhone  String
+  serviceName    String
+  startsAt       DateTime
+  endsAt         DateTime?
+  status         BookingStatus @default(pending)
+  depositAmount  Decimal?      @db.Decimal(14, 2)
+  paymentId      String?       @unique
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  payment  Payment? @relation(fields: [paymentId], references: [id])
+
+  @@index([businessId, startsAt])
+}
+
+model Payment {
+  id         String          @id @default(cuid())
+  businessId String
+  provider   PaymentProvider
+  purpose    String // subscription | booking_deposit
+  amount     Decimal         @db.Decimal(14, 2)
+  currency   String          @default("UZS")
+  status     PaymentStatus   @default(pending)
+  externalId String?
+  rawPayload Json?
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  booking  Booking?
+
+  @@index([businessId, status])
+  @@index([provider, externalId])
 }

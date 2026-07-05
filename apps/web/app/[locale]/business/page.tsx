@@ -2,6 +2,17 @@ import type { Locale } from "@manzil/shared";
 import { AnimatedCounter } from "../../components/motion/animated-counter";
 import { Reveal, RevealStagger } from "../../components/motion/reveal";
 import { getBusinessLandingCopy } from "../../lib/business-landing-copy";
+import { formatPrice, getPlans } from "../../lib/plans";
+
+type RenderPlan = {
+  key: string;
+  name: string;
+  price: string;
+  features: string[];
+  cta: string;
+  highlight: boolean;
+  badge?: string;
+};
 
 export default async function BusinessLandingPage({
   params
@@ -10,11 +21,34 @@ export default async function BusinessLandingPage({
 }) {
   const { locale } = await params;
   const copy = getBusinessLandingCopy(locale);
-  const plans = [
-    { key: "free", plan: copy.plans.free, highlight: false, badge: undefined as string | undefined },
-    { key: "pro", plan: copy.plans.pro, highlight: false, badge: undefined as string | undefined },
-    { key: "max", plan: copy.plans.max, highlight: true, badge: copy.plans.max.badge }
-  ];
+
+  // Dynamic, admin-set pricing from the API; falls back to static copy if the
+  // API is unreachable at build/request time.
+  const apiPlans = await getPlans();
+  const ctaFor: Record<string, string> = {
+    free: copy.plans.free.cta,
+    pro: copy.plans.pro.cta,
+    max: copy.plans.max.cta
+  };
+  const plans: RenderPlan[] = apiPlans.length
+    ? apiPlans.map((p) => ({
+        key: p.tier,
+        name: p.name[locale] ?? p.name.uz,
+        price: formatPrice(p.priceMonthly, p.currency, locale),
+        features: p.features.filter((f) => f.included).map((f) => f.label[locale] ?? f.label.uz),
+        cta: ctaFor[p.tier] ?? copy.plans.free.cta,
+        highlight: p.tier === "max",
+        badge: p.tier === "max" ? copy.plans.max.badge : undefined
+      }))
+    : (["free", "pro", "max"] as const).map((tier) => ({
+        key: tier,
+        name: copy.plans[tier].name,
+        price: copy.plans[tier].price,
+        features: [...copy.plans[tier].features],
+        cta: copy.plans[tier].cta,
+        highlight: tier === "max",
+        badge: tier === "max" ? copy.plans.max.badge : undefined
+      }));
 
   return (
     <div className="bz-page">
@@ -109,9 +143,9 @@ export default async function BusinessLandingPage({
           <p className="bz-section-sub">{copy.pricingText}</p>
         </Reveal>
         <RevealStagger className="bz-plans" step={110} variant="fade-up">
-          {plans.map(({ key, plan, highlight, badge }) => (
-            <article className={highlight ? "bz-plan highlight" : "bz-plan"} key={key}>
-              {badge ? <span className="bz-plan-badge">{badge}</span> : null}
+          {plans.map((plan) => (
+            <article className={plan.highlight ? "bz-plan highlight" : "bz-plan"} key={plan.key}>
+              {plan.badge ? <span className="bz-plan-badge">{plan.badge}</span> : null}
               <h3>{plan.name}</h3>
               <p className="bz-plan-price">
                 {plan.price}
@@ -122,7 +156,7 @@ export default async function BusinessLandingPage({
                   <li key={feature}>{feature}</li>
                 ))}
               </ul>
-              <a className={highlight ? "bz-btn-primary full" : "bz-btn-ghost full"} href={`/${locale}/business/register`}>
+              <a className={plan.highlight ? "bz-btn-primary full" : "bz-btn-ghost full"} href={`/${locale}/business/register`}>
                 {plan.cta}
               </a>
             </article>

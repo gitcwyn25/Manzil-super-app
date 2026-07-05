@@ -14,6 +14,7 @@ import type {
 import { CacheService } from "../cache/cache.service";
 import { PrismaService } from "../prisma.service";
 import { GeocodingService } from "./geocoding.service";
+import { AlertService } from "../alerts/alert.service";
 import type { AuthActor } from "../repositories/database.repository";
 
 export type BusinessRegistrationInput = {
@@ -60,7 +61,8 @@ export class CrmRepository {
   constructor(
     private readonly prisma: PrismaService,
     private readonly cache: CacheService,
-    private readonly geocoding: GeocodingService
+    private readonly geocoding: GeocodingService,
+    private readonly alerts: AlertService
   ) {}
 
   /* ------------------------------------------------------------------ */
@@ -157,6 +159,12 @@ export class CrmRepository {
     });
 
     await this.cache.invalidate("businesses", "admin");
+
+    this.alerts.dispatch({
+      kind: "business_awaiting_approval",
+      title: `New business awaiting approval: ${business.name}`,
+      detail: `${business.district}, ${business.city}`
+    });
 
     return {
       id: business.id,

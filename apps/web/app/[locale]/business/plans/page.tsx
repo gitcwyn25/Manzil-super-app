@@ -3,6 +3,7 @@ import type { Locale } from "@manzil/shared";
 import { getBusinessLandingCopy } from "../../../lib/business-landing-copy";
 import { choosePlanAction } from "../../../lib/crm-actions";
 import { getCrmCopy } from "../../../lib/crm-copy";
+import { formatPrice, getPlans } from "../../../lib/plans";
 
 export const dynamic = "force-dynamic";
 
@@ -27,11 +28,24 @@ export default async function PlanSelectionPage({
     );
   }
 
-  const plans = [
-    { key: "free", plan: landing.plans.free, highlight: false, badge: undefined as string | undefined },
-    { key: "pro", plan: landing.plans.pro, highlight: false, badge: undefined as string | undefined },
-    { key: "max", plan: landing.plans.max, highlight: true, badge: landing.plans.max.badge }
-  ];
+  const apiPlans = await getPlans();
+  const plans = apiPlans.length
+    ? apiPlans.map((p) => ({
+        key: p.tier,
+        name: p.name[locale] ?? p.name.uz,
+        price: formatPrice(p.priceMonthly, p.currency, locale),
+        features: p.features.filter((f) => f.included).map((f) => f.label[locale] ?? f.label.uz),
+        highlight: p.tier === "max",
+        badge: p.tier === "max" ? landing.plans.max.badge : (undefined as string | undefined)
+      }))
+    : (["free", "pro", "max"] as const).map((tier) => ({
+        key: tier,
+        name: landing.plans[tier].name,
+        price: landing.plans[tier].price,
+        features: [...landing.plans[tier].features],
+        highlight: tier === "max",
+        badge: tier === "max" ? landing.plans.max.badge : (undefined as string | undefined)
+      }));
 
   return (
     <section className="crm-plans">
@@ -41,9 +55,9 @@ export default async function PlanSelectionPage({
       </header>
 
       <div className="bz-plans">
-        {plans.map(({ key, plan, highlight, badge }) => (
-          <article className={highlight ? "bz-plan highlight" : "bz-plan"} key={key}>
-            {badge ? <span className="bz-plan-badge">{badge}</span> : null}
+        {plans.map((plan) => (
+          <article className={plan.highlight ? "bz-plan highlight" : "bz-plan"} key={plan.key}>
+            {plan.badge ? <span className="bz-plan-badge">{plan.badge}</span> : null}
             <h3>{plan.name}</h3>
             <p className="bz-plan-price">
               {plan.price}
@@ -57,8 +71,8 @@ export default async function PlanSelectionPage({
             <form action={choosePlanAction}>
               <input name="locale" type="hidden" value={locale} />
               <input name="business" type="hidden" value={business} />
-              <input name="plan" type="hidden" value={key} />
-              <button className={highlight ? "bz-btn-primary full" : "bz-btn-ghost full"} type="submit">
+              <input name="plan" type="hidden" value={plan.key} />
+              <button className={plan.highlight ? "bz-btn-primary full" : "bz-btn-ghost full"} type="submit">
                 {copy.plans.choose}
               </button>
             </form>
