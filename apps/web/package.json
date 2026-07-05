@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "cross-env NODE_OPTIONS=--max-old-space-size=4096 next dev --webpack --hostname 0.0.0.0 --port 3000",
+    "prebuild": "npm --prefix ../../packages/shared run build",
     "build": "cross-env NODE_OPTIONS=--max-old-space-size=4096 next build --webpack",
     "start": "next start",
     "lint": "cross-env NODE_PATH=./node_modules eslint .",

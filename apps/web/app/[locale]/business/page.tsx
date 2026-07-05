@@ -33,7 +33,7 @@ export default async function BusinessLandingPage({
           </Reveal>
           <Reveal delay={220} variant="fade-up">
             <div className="bz-hero-actions">
-              <a className="bz-btn-primary" href={`/${locale}/sign-up`}>{copy.ctaPrimary}</a>
+              <a className="bz-btn-primary" href={`/${locale}/business/register`}>{copy.ctaPrimary}</a>
               <a className="bz-btn-ghost" href={`/${locale}/dashboard`}>{copy.ctaSecondary}</a>
             </div>
           </Reveal>
@@ -122,7 +122,7 @@ export default async function BusinessLandingPage({
                   <li key={feature}>{feature}</li>
                 ))}
               </ul>
-              <a className={highlight ? "bz-btn-primary full" : "bz-btn-ghost full"} href={`/${locale}/sign-up`}>
+              <a className={highlight ? "bz-btn-primary full" : "bz-btn-ghost full"} href={`/${locale}/business/register`}>
                 {plan.cta}
               </a>
             </article>
