@@ -16,3 +16,5 @@ packages/shared/dist/
 packages/shared/*.tsbuildinfo
 apps/mobile/.expo/
 apps/mobile/.claude/
+.vercel
+.env*

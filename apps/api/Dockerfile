@@ -28,9 +28,11 @@ FROM node:22-alpine AS runner
 ENV NODE_ENV=production
 WORKDIR /repo
 
+# npm workspaces hoist all dependencies (incl. the generated Prisma client)
+# to the root node_modules, so apps/api has no separate node_modules — Node
+# resolves runtime deps by walking up to /repo/node_modules.
 COPY --from=builder /repo/node_modules node_modules
 COPY --from=builder /repo/packages packages
-COPY --from=builder /repo/apps/api/node_modules apps/api/node_modules
 COPY --from=builder /repo/apps/api/dist apps/api/dist
 COPY --from=builder /repo/apps/api/package.json apps/api/package.json
 
