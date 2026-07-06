@@ -2,7 +2,6 @@ import type { Locale } from "@manzil/shared";
 import { getBusinessCopy } from "../lib/business-copy";
 import { getLandingCopy } from "../lib/landing-copy";
 import { MobileSiteNav } from "./site-nav";
-import { StoreBadges } from "./store-badges";
 
 export function MobileNav({ locale }: { locale: Locale }) {
   return <MobileSiteNav locale={locale} />;
@@ -29,10 +28,11 @@ export function Footer({ locale }: { locale: Locale }) {
           <a href={`/${locale}/dashboard`}>{copy.footer.dashboard}</a>
         </nav>
 
-        <div className="lp-footer-col lp-footer-apps">
+        <nav aria-label={copy.footer.apps} className="lp-footer-col">
           <h4>{copy.footer.apps}</h4>
-          <StoreBadges androidLabel={landing.android} iosLabel={landing.ios} variant="light" />
-        </div>
+          <a href={`/${locale}#download`}>{landing.ios}</a>
+          <a href={`/${locale}#download`}>{landing.android}</a>
+        </nav>
       </div>
 
       <div className="lp-footer-base">
