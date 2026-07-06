@@ -1,0 +1,782 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Manzil — Master Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #14201f;
+    --muted: #566461;
+    --faint: #8a9490;
+    --teal: #005454;
+    --teal-chart: #00897b;
+    --gold: #c98a1a;
+    --gold-chart: #b0790d;
+    --terra: #a84305;
+    --blue: #265c8f;
+    --violet: #7550a3;
+    --line: #e4ece9;
+    --panel: #f4f8f7;
+    --paper: #ffffff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { font-family: "Inter", Arial, sans-serif; color: var(--ink); font-size: 11px; line-height: 1.55; }
+  @page { size: A4; margin: 0; }
+
+  .page {
+    position: relative;
+    width: 210mm; height: 297mm;
+    padding: 16mm 16mm 20mm;
+    overflow: hidden;
+    page-break-after: always;
+    background: var(--paper);
+  }
+  .page:last-child { page-break-after: auto; }
+
+  .foot {
+    position: absolute; left: 16mm; right: 16mm; bottom: 9mm;
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid var(--line); padding-top: 6px;
+    font-size: 8px; color: var(--faint); letter-spacing: 0.02em;
+  }
+  .foot b { color: var(--teal); font-weight: 600; }
+
+  .serif { font-family: "Libre Caslon Display", Georgia, serif; font-weight: 400; }
+
+  .kicker { display: inline-flex; align-items: center; gap: 9px; color: var(--teal); font-size: 10px; font-weight: 600; margin-bottom: 10px; }
+  .kicker::before { content: ""; width: 20px; height: 1px; background: var(--gold); }
+
+  h1.section { font-family: "Libre Caslon Display", Georgia, serif; font-weight: 400; font-size: 30px; line-height: 1.08; letter-spacing: -0.01em; margin-bottom: 6px; }
+  .lede { color: var(--muted); font-size: 12px; max-width: 150mm; margin-bottom: 16px; }
+
+  p { margin-bottom: 8px; }
+  .cols2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+
+  table.t { width: 100%; border-collapse: collapse; font-size: 10px; }
+  table.t th { text-align: left; color: var(--teal); font-weight: 700; padding: 7px 9px; border-bottom: 1.5px solid var(--teal); }
+  table.t td { padding: 7px 9px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.t td:first-child { font-weight: 600; }
+  table.t tr.total td { font-weight: 700; border-top: 1.5px solid var(--ink); border-bottom: none; }
+  table.t .num { text-align: right; font-variant-numeric: tabular-nums; }
+
+  .tile-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .tile-row.four { grid-template-columns: repeat(4, 1fr); }
+  .tile { border: 1px solid var(--line); border-radius: 10px; padding: 13px 14px; background: var(--paper); }
+  .tile small { display: block; color: var(--muted); font-size: 9px; font-weight: 600; margin-bottom: 4px; }
+  .tile strong { display: block; font-size: 23px; font-weight: 800; letter-spacing: -0.02em; color: var(--teal); font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .tile span { display: block; color: var(--faint); font-size: 8.5px; margin-top: 4px; }
+
+  .panel { background: var(--panel); border-radius: 12px; padding: 14px 16px; }
+  .callout { border-left: none; border: 1px solid rgb(0 84 84 / 0.25); background: rgb(0 84 84 / 0.04); border-radius: 10px; padding: 11px 14px; font-size: 10.5px; }
+  .callout b { color: var(--teal); }
+
+  .chip { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 8.5px; font-weight: 700; }
+  .chip.hi { background: rgb(168 67 5 / 0.12); color: #8a3804; }
+  .chip.mid { background: rgb(176 121 13 / 0.14); color: #8a5f0a; }
+  .chip.lo { background: rgb(0 137 123 / 0.12); color: #00695e; }
+
+  .legend { display: flex; gap: 14px; margin: 6px 0 2px; font-size: 9px; color: var(--muted); }
+  .legend i { display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+
+  .fig-cap { font-size: 8.5px; color: var(--faint); margin-top: 6px; }
+
+  .shot { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; box-shadow: 0 10px 24px -16px rgb(0 84 84 / 0.35); background: #fff; }
+  .shot img { display: block; width: 100%; }
+  .shot-label { font-size: 8.5px; color: var(--muted); margin-top: 5px; font-weight: 600; }
+
+  .phone { width: 100%; max-height: 86mm; overflow: hidden; border-radius: 22px; border: 6px solid #17221f; overflow: hidden; box-shadow: 0 14px 30px -18px rgb(0 0 0 / 0.5); background: #17221f; }
+  .phone img { display: block; width: 100%; }
+
+  /* ---------- Cover ---------- */
+  .cover { background: linear-gradient(168deg, #032a28 0%, #005454 58%, #0a655c 100%); color: #fff; display: flex; flex-direction: column; }
+  .cover .brandline { display: flex; align-items: center; gap: 12px; }
+  .cover .logo { width: 52px; height: 52px; border-radius: 12px; overflow: hidden; }
+  .cover .logo img { width: 100%; height: 100%; object-fit: cover; }
+  .cover .brand { font-size: 19px; font-weight: 800; letter-spacing: -0.01em; }
+  .cover .brand i { font-style: normal; color: #feb300; }
+  .cover .title { font-family: "Libre Caslon Display", Georgia, serif; font-size: 55px; line-height: 1.06; margin: 26mm 0 8mm; letter-spacing: -0.01em; }
+  .cover .sub { font-size: 14px; color: rgb(255 255 255 / 0.82); max-width: 130mm; line-height: 1.65; }
+  .cover .meta { margin-top: auto; display: flex; justify-content: space-between; font-size: 9.5px; color: rgb(255 255 255 / 0.65); border-top: 1px solid rgb(255 255 255 / 0.22); padding-top: 10px; }
+  .arch { position: absolute; right: 14mm; top: 44mm; opacity: 0.9; }
+
+  /* toc */
+  .toc { columns: 2; column-gap: 22px; font-size: 10.5px; }
+  .toc div { display: flex; justify-content: space-between; padding: 6px 2px; border-bottom: 1px solid var(--line); break-inside: avoid; }
+  .toc div b { font-weight: 600; }
+  .toc div span { color: var(--faint); font-variant-numeric: tabular-nums; }
+
+  /* charts */
+  .chart-wrap { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px 10px; }
+  .chart-title { font-size: 10.5px; font-weight: 700; margin-bottom: 2px; }
+  .chart-sub { font-size: 8.5px; color: var(--faint); margin-bottom: 8px; }
+  svg text { font-family: "Inter", Arial, sans-serif; }
+
+  .swot { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .swot .q { border-radius: 12px; padding: 13px 15px; border: 1px solid var(--line); }
+  .swot h3 { font-size: 12px; margin-bottom: 7px; display: flex; align-items: center; gap: 7px; }
+  .swot h3 i { display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 6px; font-style: normal; font-size: 10px; font-weight: 800; color: #fff; }
+  .swot ul { list-style: none; }
+  .swot li { position: relative; padding-left: 12px; font-size: 9.8px; margin-bottom: 4.5px; color: #2c3835; }
+  .swot li::before { content: ""; position: absolute; left: 0; top: 6px; width: 4px; height: 4px; border-radius: 50%; background: var(--faint); }
+  .q.s { background: rgb(0 137 123 / 0.05); } .q.s h3 i { background: var(--teal-chart); }
+  .q.w { background: rgb(176 121 13 / 0.05); } .q.w h3 i { background: var(--gold-chart); }
+  .q.o { background: rgb(38 92 143 / 0.05); } .q.o h3 i { background: var(--blue); }
+  .q.t { background: rgb(168 67 5 / 0.05); } .q.t h3 i { background: var(--terra); }
+
+  .porter { position: relative; height: 160mm; }
+  .pf { position: absolute; width: 62mm; border: 1px solid var(--line); border-radius: 12px; padding: 11px 13px; background: #fff; box-shadow: 0 8px 20px -14px rgb(0 84 84 / 0.3); }
+  .pf h4 { font-size: 10.5px; margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+  .pf p { font-size: 8.8px; color: var(--muted); margin: 0; }
+  .pf.center { background: var(--teal); color: #fff; text-align: center; padding: 16px 14px; }
+  .pf.center h4 { justify-content: center; font-size: 12px; }
+  .pf.center p { color: rgb(255 255 255 / 0.78); }
+
+  .steps { display: grid; gap: 0; }
+  .step { display: grid; grid-template-columns: 34px 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .step:last-child { border-bottom: none; }
+  .step .n { width: 26px; height: 26px; border-radius: 50%; background: rgb(0 84 84 / 0.08); color: var(--teal); display: grid; place-items: center; font-weight: 800; font-size: 11px; }
+  .step h4 { font-size: 11px; margin-bottom: 2px; }
+  .step p { font-size: 9.8px; color: var(--muted); margin: 0; }
+
+  .roadmap { position: relative; padding-left: 14px; }
+  .roadmap::before { content: ""; position: absolute; left: 3px; top: 6px; bottom: 6px; width: 2px; border-radius: 2px; background: var(--line); }
+  .rm { position: relative; padding: 0 0 13px 14px; }
+  .rm::before { content: ""; position: absolute; left: -15px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: #fff; border: 2.5px solid var(--teal-chart); }
+  .rm.gold::before { border-color: var(--gold-chart); }
+  .rm h4 { font-size: 11px; } .rm h4 span { color: var(--gold); font-weight: 800; margin-right: 7px; }
+  .rm p { font-size: 9.8px; color: var(--muted); margin: 0; }
+
+  .vs { width: 100%; border-collapse: collapse; font-size: 9.6px; }
+  .vs th { padding: 8px 10px; text-align: left; }
+  .vs th.m { background: #eef2f0; border-radius: 8px 8px 0 0; }
+  .vs th.z { background: var(--teal); color: #fff; border-radius: 8px 8px 0 0; }
+  .vs td { padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .vs td:first-child { font-weight: 600; width: 26mm; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<!-- ================= 1 · COVER ================= -->
+<section class="page cover">
+  <div class="brandline">
+    <div class="logo"><img src="assets/logo.jpg" alt="Manzil arch logo"></div>
+    <div class="brand">Manzil<i>.</i></div>
+  </div>
+
+  <svg class="arch" width="150" height="210" viewBox="0 0 150 210" fill="none" aria-hidden="true">
+    <path d="M10 210 V96 C10 44 39 14 75 14 C111 14 140 44 140 96 V210" stroke="rgba(255,255,255,0.5)" stroke-width="2.5"/>
+    <path d="M32 210 V104 C32 62 51 40 75 40 C99 40 118 62 118 104 V210" stroke="#feb300" stroke-width="2.5"/>
+    <path d="M54 210 V112 C54 82 63 68 75 68 C87 68 96 82 96 112 V210" stroke="rgba(255,255,255,0.28)" stroke-width="2"/>
+  </svg>
+
+  <div class="title">The address<br>of local life<br>in Uzbekistan.</div>
+  <p class="sub">Master plan &amp; investment memorandum: the trust layer for 37 million people's daily choices, and the operating system for the businesses that serve them. The Meituan playbook, at the scale one focused team can win.</p>
+
+  <div class="meta">
+    <span>MASTER PLAN · JULY 2026</span>
+    <span>manzil-business.vercel.app</span>
+    <span>PREPARED FOR INVESTORS &amp; FOUNDING TEAM</span>
+  </div>
+</section>
+
+<!-- ================= 2 · THESIS + CONTENTS ================= -->
+<section class="page">
+  <p class="kicker">Manzil — Master Plan</p>
+  <h1 class="section serif">One paragraph, then proof.</h1>
+  <p class="lede"><b>Manzil</b> ("address" in Uzbek) is the trust layer for local life in Uzbekistan: consumers find and choose places through real reviews; businesses run their reputation, promotions, and customers from one paid dashboard. It is the Meituan/Dianping sequence (<i>reviews first, transactions second, super-app last</i>), executed in the youngest, fastest-digitizing market in Central Asia, where nobody yet owns the question <b>"where should I go?"</b></p>
+
+  <div class="tile-row" style="margin-bottom:16px">
+    <div class="tile"><small>PRODUCT STATUS</small><strong>Live</strong><span>Web platform + merchant CRM + admin console, deployed &amp; tested in production</span></div>
+    <div class="tile"><small>MARKET SEAT</small><strong>Empty</strong><span>No Dianping-model player in Uzbekistan: maps exist, trusted choice does not</span></div>
+    <div class="tile"><small>MODEL PROVEN BY</small><strong>Meituan</strong><span>Reviews → trust → demand → merchants pay; peak market cap &gt; $200B</span></div>
+  </div>
+
+  <h2 class="serif" style="font-size:19px; margin:10px 0 8px">Contents</h2>
+  <div class="toc">
+    <div><b>The product today</b><span>03–04</span></div>
+    <div><b>Manzil at its peak</b><span>05</span></div>
+    <div><b>The Meituan benchmark</b><span>06</span></div>
+    <div><b>Market &amp; timing</b><span>07</span></div>
+    <div><b>Business &amp; revenue model</b><span>08</span></div>
+    <div><b>Financial projections</b><span>09</span></div>
+    <div><b>Cash flow &amp; funding</b><span>10</span></div>
+    <div><b>Cap table</b><span>11</span></div>
+    <div><b>Porter's Five Forces</b><span>12</span></div>
+    <div><b>SWOT</b><span>13</span></div>
+    <div><b>Challenges → solutions</b><span>14</span></div>
+    <div><b>Goals: short &amp; long term</b><span>15</span></div>
+    <div><b>Team &amp; the ask</b><span>16</span></div>
+  </div>
+
+  <div class="callout" style="margin-top:14px"><b>How to read the numbers.</b> Every projection in this document is illustrative and assumption-driven (assumptions stated where used; FX 1 USD ≈ 13 000 UZS). The working model lives in the company repository (<i>cfo-office/FINANCE.md</i>) and is updated before conclusions are.</div>
+
+  <div class="foot"><span><b>Manzil</b> · Master Plan</span><span>July 2026</span><span>02</span></div>
+</section>
+
+<!-- ================= 3 · PRODUCT: SAAS ================= -->
+<section class="page">
+  <p class="kicker">The product today</p>
+  <h1 class="section serif">Not a deck promise — a shipped platform.</h1>
+  <p class="lede">The business-facing SaaS is live in production: claim flow, review inbox with owner replies, promotions, statistics, dynamic admin-set pricing, RBAC admin console, and a NestJS API on managed Postgres. Screenshots below are the real product, today.</p>
+
+  <div class="shot"><img src="assets/web-business-hero.png" alt="Manzil Business landing — live dashboard product"></div>
+  <p class="shot-label">manzil-business.vercel.app/uz/business. Merchant home: real dashboard, live data (Yunusobod Osh Markazi, ★5.0)</p>
+
+  <div class="cols2" style="margin-top:12px">
+    <div>
+      <div class="shot"><img src="assets/web-business-reviews.png" alt="Review inbox with owner reply"></div>
+      <p class="shot-label">Review inbox: every review answerable in one click</p>
+    </div>
+    <div>
+      <div class="shot"><img src="assets/web-business-pricing.png" alt="Dynamic pricing tiers"></div>
+      <p class="shot-label">Pricing: admin-set in the console, live in 60 seconds</p>
+    </div>
+  </div>
+
+  <div class="foot"><span><b>Manzil</b> · Master Plan</span><span>The product today</span><span>03</span></div>
+</section>
+
+<!-- ================= 4 · PRODUCT: CONSUMER + APP ================= -->
+<section class="page">
+  <p class="kicker">The product today</p>
+  <h1 class="section serif">Consumers on web now; native apps designed and next.</h1>
+  <p class="lede">The consumer surface runs trilingual (uz / ru / en) on web today. The iOS &amp; Android apps are fully designed in the brand system (discovery, search, reviews, saved places) and are the first engineering milestone after this raise.</p>
+
+  <div class="shot"><img src="assets/web-landing-hero.png" alt="Consumer landing"></div>
+  <p class="shot-label">Consumer landing. Editorial brand: teal + gold, Samarkand arch motif, Libre Caslon display</p>
+
+  <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 13px; align-items: start;">
+    <div>
+      <div class="phone"><img src="assets/app-asosiy_kashfiyot_discovery.png" alt="App discovery screen"></div>
+      <p class="shot-label" style="text-align:center">Discovery: nearby, rated, open now</p>
+    </div>
+    <div>
+      <div class="phone"><img src="assets/app-fikr_qoldirish_review.png" alt="App review screen"></div>
+      <p class="shot-label" style="text-align:center">Reviews: the trust engine</p>
+    </div>
+    <div>
+      <div class="phone"><img src="assets/app-qidiruv_search.png" alt="App search screen"></div>
+      <p class="shot-label" style="text-align:center">Search: structured local answers</p>
+    </div>
+  </div>
+
+  <div class="foot"><span><b>Manzil</b> · Master Plan</span><span>The product today</span><span>04</span></div>
+</section>
+
+<!-- ================= 5 · PEAK ================= -->
+<section class="page">
+  <p class="kicker">Vision</p>
+  <h1 class="section serif">Manzil at its peak.</h1>
+  <p class="lede">2031. A family in Yunusobod picks a birthday restaurant by rating and live promos, books a table, redeems a −20% set, and pays less than walk-ins. The owner sees the booking, the review that follows, and answers it before bed. A tourist in Samarkand does the same in English. A barber in Chilonzor wakes to a week of bookings that came from search. At peak, Manzil is:</p>
+
+  <div class="steps" style="margin-bottom:14px">
+    <div class="step"><span class="n">◆</span><div><h4>The default consumer answer to "where?"</h4><p>5M+ monthly active users across every major Uzbek city, plus the Silk Road tourist corridor in three languages.</p></div></div>
+    <div class="step"><span class="n">◆</span><div><h4>The operating system for 25–50k service SMEs</h4><p>Listing, reputation, promotions, bookings, customer base, and statistics: the owner's single pane of glass.</p></div></div>
+    <div class="step"><span class="n">◆</span><div><h4>A transaction platform, not a directory</h4><p>Vouchers, deal-sets, and bookings redeemed in-store; take-rate and advertising out-earn subscriptions.</p></div></div>
+    <div class="step"><span class="n">◆</span><div><h4>The trust monopoly</h4><p>A review graph nobody can copy, protected by a structural rule: <b>reviews are never removable for payment.</b></p></div></div>
+  </div>
+
+  <div class="tile-row four">
+    <div class="tile"><small>CONSUMERS · 2031</small><strong>5M+</strong><span>monthly active users</span></div>
+    <div class="tile"><small>PAYING MERCHANTS</small><strong>25–50k</strong><span>across all major cities</span></div>
+    <div class="tile"><small>REVENUE · 2030 PLAN</small><strong>$6.0M</strong><span>subscriptions + take-rate + ads</span></div>
+    <div class="tile"><small>PROFITABLE FROM</small><strong>2029</strong><span>self-funding before Series A</span></div>
+  </div>
+
+  <div class="callout" style="margin-top:14px"><b>What Manzil brings.</b> To consumers: choice with confidence, and prices that reward planning. To merchants: a customer channel they own, not rent from an algorithm. To Uzbekistan: SME digitization, formalized service commerce, and the data backbone for a tourism economy the state is deliberately growing.</div>
+
+  <div class="foot"><span><b>Manzil</b> · Master Plan</span><span>Vision</span><span>05</span></div>
+</section>
+
+<!-- ================= 6 · MEITUAN ================= -->
+<section class="page">
+  <p class="kicker">Benchmark</p>
+  <h1 class="section serif">Meituan already proved this business.</h1>
+  <p class="lede">Meituan merged with Dianping, China's review platform, in 2015 and built the world's largest local-services company on one flywheel. At peak it passed a $200B market capitalization on ~770M annual transacting users; the in-store segment (reviews + vouchers, the Dianping half) is its profit engine. We are running the same sequence, sized for a market global giants ignore.</p>
+
+  <div style="display:grid; grid-template-columns: 92mm 1fr; gap: 16px; align-items: start;">
+    <table class="vs">
+      <tr><th></th><th class="m">Meituan / Dianping</th><th class="z">Manzil</th></tr>
+      <tr><td>Home market</td><td>China · 1.4B people</td><td>Uzbekistan · ~37M, youngest big market in the region</td></tr>
+      <tr><td>Entry wedge</td><td>Group-buy deals; Dianping reviews</td><td>Reviews + merchant SaaS, <b>live today</b></td></tr>
+      <tr><td>Monetization order</td><td>Deals → ads → delivery → fintech</td><td>SaaS → vouchers/bookings → ads → fintech-adjacent</td></tr>
+      <tr><td>Delivery</td><td>Built own logistics (capital-heavy)</td><td><b>Partner-first</b>: Yandex/Uzum already burn capital there; we own choice, not couriers</td></tr>
+      <tr><td>Merchant tie</td><td>Commission-led</td><td>Subscription-led (predictable), commission layered on</td></tr>
+      <tr><td>The lesson</td><td colspan="2"><b>Win frequency, monetize trust</b>: imported unchanged, at winnable scale.</td></tr>
+    </table>
+
+    <div>
+      <div class="chart-wrap" style="padding:12px 10px 8px">
+        <p class="chart-title" style="text-align:center">The O2O flywheel</p>
+        <svg width="100%" viewBox="0 0 240 236" aria-label="Flywheel: reviews create trust, trust concentrates demand, demand makes merchants pay, offers deepen habit">
+          <defs>
+            <marker id="ah" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0.5 0.5 L7 4 L0.5 7.5 Z" fill="#8a9490"/></marker>
+          </defs>
+          <path d="M120 52 A66 66 0 0 1 180 112" fill="none" stroke="#8a9490" stroke-width="1.6" marker-end="url(#ah)"/>
+          <path d="M180 128 A66 66 0 0 1 122 184" fill="none" stroke="#8a9490" stroke-width="1.6" marker-end="url(#ah)"/>
+          <path d="M104 184 A66 66 0 0 1 60 128" fill="none" stroke="#8a9490" stroke-width="1.6" marker-end="url(#ah)"/>
+          <path d="M60 108 A66 66 0 0 1 106 52" fill="none" stroke="#8a9490" stroke-width="1.6" marker-end="url(#ah)"/>
+          <g text-anchor="middle" font-size="9.5" font-weight="700" fill="#14201f">
+            <g><rect x="72" y="26" width="96" height="26" rx="9" fill="rgba(0,137,123,0.1)"/><text x="120" y="43" fill="#00695e">Real reviews</text></g>
+            <g><rect x="164" y="105" width="72" height="34" rx="9" fill="rgba(176,121,13,0.12)"/><text x="200" y="119" fill="#8a5f0a">Consumer</text><text x="200" y="131" fill="#8a5f0a">trust</text></g>
+            <g><rect x="70" y="184" width="100" height="34" rx="9" fill="rgba(0,84,84,0.9)"/><text x="120" y="198" fill="#fff">Merchants</text><text x="120" y="210" fill="#fff">pay to engage</text></g>
+            <g><rect x="8" y="105" width="70" height="34" rx="9" fill="rgba(168,67,5,0.1)"/><text x="43" y="119" fill="#8a3804">Deals &amp;</text><text x="43" y="131" fill="#8a3804">bookings</text></g>
+          </g>
+                  </svg>
+      </div>
+      <p class="fig-cap">Reviews create trust → trust concentrates demand → merchants pay to engage it → their offers deepen the habit that writes the next review.</p>
+    </div>
+  </div>
+
+  <div class="tile-row four" style="margin-top:16px">
+    <div class="tile"><small>MEITUAN FOUNDED</small><strong>2010</strong><span>group-buy deals in Beijing</span></div>
+    <div class="tile"><small>DIANPING MERGER</small><strong>2015</strong><span>reviews became the trust engine</span></div>
+    <div class="tile"><small>ANNUAL BUYERS · PEAK</small><strong>~770M</strong><span>transacting users, 2023</span></div>
+    <div class="tile"><small>MARKET CAP · PEAK</small><strong>&gt;$200B</strong><span>in-store segment = profit engine</span></div>
+  </div>
+
+  <div class="callout" style="margin-top:14px"><b>The read for Manzil.</b> Every stage of that curve was earned with the same asset we are building first: a review graph consumers trust and merchants cannot ignore. Uzbekistan's version is smaller in absolute terms and almost untouched in relative ones.</div>
+
+  <div class="foot"><span><b>Manzil</b> · Master Plan</span><span>Benchmark</span><span>06</span></div>
+</section>
+
+<!-- ================= 7 · MARKET ================= -->
+<section class="page">
+  <p class="kicker">Market &amp; timing</p>
+  <h1 class="section serif">The rails are laid. The seat is empty.</h1>
+  <p class="lede">Payments went normal (Payme/Click QR everywhere), smartphones saturated, the state pushes SME digitization and tourism, and the only global players in-market solve <i>maps</i>, not <i>choice</i>. Internal planning estimates:</p>
+
+  <div class="tile-row" style="margin-bottom:16px">
+    <div class="tile"><small>TAM · 2030 EST.</small><strong>~$250M/yr</strong><span>marketing + software + transaction take, Uzbekistan service SMEs (200k+ with walk-in custom)</span></div>
+    <div class="tile"><small>SAM</small><strong>~$45M/yr</strong><span>urban service businesses, six largest cities</span></div>
+    <div class="tile"><small>SOM · 5-YEAR PLAN</small><strong>~$6M</strong><span>10k paying merchants + take-rate (matches projections, p. 09)</span></div>
+  </div>
+
+  <div class="cols2">
+    <div class="panel">
+      <h3 style="font-size:12px; margin-bottom:8px">Tailwinds</h3>
+      <div class="steps">
+        <div class="step" style="padding:7px 0"><span class="n">•</span><div><h4>Youngest big market in the region</h4><p>Median age ≈ 29; internet penetration above 80% and climbing.</p></div></div>
+        <div class="step" style="padding:7px 0"><span class="n">•</span><div><h4>Payment rails matured</h4><p>Payme / Click / Uzcard–Humo made QR at the till a habit; take-rate revenue needs no behavior change.</p></div></div>
+        <div class="step" style="padding:7px 0"><span class="n">•</span><div><h4>State-level push</h4><p>SME digitization programs + IT-Park tax incentives (apply to us directly) + a deliberate tourism boom on the Silk Road corridor.</p></div></div>
+      </div>
+    </div>
+    <div class="panel">
+      <h3 style="font-size:12px; margin-bottom:8px">Who holds which seat</h3>
+      <table class="t" style="background:transparent">
+        <tr><th>Player</th><th>Owns</th><th>Doesn't own</th></tr>
+        <tr><td>2GIS / Google / Yandex Maps</td><td>"Where is it?"</td><td>"Is it good? Why this one?"</td></tr>
+        <tr><td>Uzum</td><td>E-commerce + fintech</td><td>Offline services relationship</td></tr>
+        <tr><td>Yandex Eats / Express24</td><td>Food delivery logistics</td><td>In-store choice, non-food services</td></tr>
+        <tr><td>Instagram / Telegram</td><td>Attention</td><td>Structured, searchable, answerable trust</td></tr>
+        <tr><td style="color:var(--teal)">Manzil</td><td colspan="2"><b>The decision: reviews, comparison, deals, booking, and the merchant tools behind it.</b></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:14px"><b>Timing, honestly.</b> This window exists <i>because</i> the market is mid-size: too small for global giants to prioritize today, big enough to build a $50–100M-revenue company at maturity. Windows like this close from the inside, by someone doing exactly what this plan describes.</div>
+
+  <div class="foot"><span><b>Manzil</b> · Master Plan</span><span>Market &amp; timing</span><span>07</span></div>
+</section>
+
+<!-- ================= 8 · BUSINESS MODEL ================= -->
+<section class="page">
+  <p class="kicker">Business model</p>
+  <h1 class="section serif">Two-sided, deliberately sequenced.</h1>
+  <p class="lede">The consumer side stays free forever; it is the audience merchants pay for. Monetization arrives in four waves, each building on the previous one's data and habit.</p>
+
+  <div class="steps" style="margin-bottom:14px">
+    <div class="step"><span class="n">1</span><div><h4>Merchant SaaS · live now</h4><p>Free tier to claim &amp; reply (the wedge) → <b>Pro 399 000 UZS/mo</b> (promotions, gallery, advanced stats) → <b>Max 499 000 UZS/mo</b> (search priority, multi-branch, dedicated manager). Pricing is admin-set data, repriceable without a deploy.</p></div></div>
+    <div class="step"><span class="n">2</span><div><h4>Transactions · 2027</h4><p>Vouchers, deal-sets, and bookings redeemed in-store; 5–10% take-rate on Payme/Click rails. The Dianping in-store model.</p></div></div>
+    <div class="step"><span class="n">3</span><div><h4>Advertising · 2028</h4><p>Clearly-labelled promoted placement in search and discovery. It never touches organic review ranking; that integrity is the asset being rented.</p></div></div>
+    <div class="step"><span class="n">4</span><div><h4>Fintech-adjacent · 2029+ (option)</h4><p>Payment-linked loyalty and cashback with existing rails. Optional; pursued only from profitability.</p></div></div>
+  </div>
+
+  <div class="cols2">
+    <div class="tile"><small>UNIT ECONOMICS · TARGETS</small>
+      <table class="t" style="margin-top:6px">
+        <tr><td>CAC, paying merchant</td><td class="num">≤ $40</td></tr>
+        <tr><td>Blended ARPU</td><td class="num">≈ $32/mo</td></tr>
+        <tr><td>Payback</td><td class="num">&lt; 2 months</td></tr>
+        <tr><td>Software gross margin</td><td class="num">≈ 90%</td></tr>
+        <tr><td>Logo churn guardrail</td><td class="num">&lt; 3%/mo</td></tr>
+      </table>
+    </div>
+    <div class="tile"><small>POLICIES THAT PROTECT THE MODEL</small>
+      <div class="steps" style="margin-top:4px">
+        <div class="step" style="padding:6px 0"><span class="n">✓</span><div><p style="color:var(--ink)"><b>Reviews never removable for payment</b>: structural, in code, including from us.</p></div></div>
+        <div class="step" style="padding:6px 0"><span class="n">✓</span><div><p style="color:var(--ink)"><b>Full data export at every tier</b>: no hostage data; retention must be earned.</p></div></div>
+        <div class="step" style="padding:6px 0"><span class="n">✓</span><div><p style="color:var(--ink)"><b>Natural currency hedge</b>: UZS revenue against ~90% UZS costs; quarterly FX repricing.</p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot"><span><b>Manzil</b> · Master Plan</span><span>Business model</span><span>08</span></div>
+</section>
+
+<!-- ================= 9 · PROJECTIONS ================= -->
+<section class="page">
+  <p class="kicker">Financial projections</p>
+  <h1 class="section serif">$19k to $6.0M in five years.</h1>
+  <p class="lede">Illustrative plan; assumptions: paying merchants 100 → 10 000 (EOY), blended ARPU $32/mo, 7% take on voucher/booking GMV from 2027, labelled advertising from 2028. FX 1 USD ≈ 13 000 UZS.</p>
+
+  <div class="chart-wrap">
+    <p class="chart-title">Revenue by stream, 2026–2030 (USD, thousands)</p>
+    <p class="chart-sub">Stacked annual revenue · totals labelled</p>
+    <div class="legend">
+      <span><i style="background:#00897b"></i>Subscriptions</span>
+      <span><i style="background:#b0790d"></i>Transactions (7% take)</span>
+      <span><i style="background:#a84305"></i>Advertising</span>
+    </div>
+    <svg width="100%" viewBox="0 0 660 240" aria-label="Stacked bar chart of revenue by stream 2026 to 2030">
+      <!-- gridlines -->
+      <g stroke="#e4ece9" stroke-width="1">
+        <line x1="46" y1="200" x2="648" y2="200"/><line x1="46" y1="136" x2="648" y2="136"/>
+        <line x1="46" y1="72" x2="648" y2="72"/><line x1="46" y1="8" x2="648" y2="8"/>
+      </g>
+      <g font-size="9" fill="#8a9490" text-anchor="end">
+        <text x="40" y="203">0</text><text x="40" y="139">2,000</text><text x="40" y="75">4,000</text><text x="40" y="11">6,000</text>
+      </g>
+      <!-- bars: x centers 110,230,350,470,590 ; width 56 ; scale: 1k$ = 0.032px  (192px per 6000) baseline y=200 -->
+      <!-- 2026: subs 19 -->
+      <rect x="82" y="199.4" width="56" height="0.6" fill="#00897b"/>
+      <text x="110" y="192" text-anchor="middle" font-size="9.5" font-weight="700" fill="#14201f">19</text>
+      <!-- 2027: subs 134 (4.3), tx 35 (1.1) -->
+      <rect x="202" y="195.7" width="56" height="4.3" fill="#00897b"/>
+      <rect x="202" y="192.6" width="56" height="1.1" fill="#b0790d"/>
+      <text x="230" y="185" text-anchor="middle" font-size="9.5" font-weight="700" fill="#14201f">169</text>
+      <!-- 2028: subs 499 (16), tx 210 (6.7), ads 50 (1.6) -->
+      <rect x="322" y="184" width="56" height="16" rx="0" fill="#00897b"/>
+      <rect x="322" y="175.3" width="56" height="6.7" fill="#b0790d"/>
+      <rect x="322" y="171.7" width="56" height="1.6" fill="#a84305"/>
+      <text x="350" y="164" text-anchor="middle" font-size="9.5" font-weight="700" fill="#14201f">759</text>
+      <!-- 2029: subs 1344 (43), tx 840 (26.9), ads 250 (8) -->
+      <rect x="442" y="157" width="56" height="43" fill="#00897b"/>
+      <rect x="442" y="128.1" width="56" height="26.9" fill="#b0790d"/>
+      <rect x="442" y="118.1" width="56" height="8" fill="#a84305"/>
+      <text x="470" y="110" text-anchor="middle" font-size="9.5" font-weight="700" fill="#14201f">2,434</text>
+      <!-- 2030: subs 2880 (92.2), tx 2450 (78.4), ads 700 (22.4) : total 193, top y=7 -->
+      <rect x="562" y="107.8" width="56" height="92.2" fill="#00897b"/>
+      <rect x="562" y="27.4" width="56" height="78.4" fill="#b0790d"/>
+      <rect x="562" y="7" width="56" height="20.4" rx="0" fill="#a84305"/>
+      <text x="590" y="0" text-anchor="middle" font-size="9.5" font-weight="800" fill="#14201f" dy="0"> </text>
+      <text x="590" y="4" text-anchor="middle" font-size="0" fill="#14201f"> </text>
+      <text x="590" y="20" text-anchor="middle" font-size="9.5" font-weight="800" fill="#ffffff">6,030</text>
+      <!-- year labels -->
+      <g font-size="9.5" fill="#566461" text-anchor="middle">
+        <text x="110" y="216">2026</text><text x="230" y="216">2027</text><text x="350" y="216">2028</text><text x="470" y="216">2029</text><text x="590" y="216">2030</text>
+      </g>
+      <!-- 2px separators between stacked segments -->
+      <g stroke="#ffffff" stroke-width="2">
+        <line x1="202" y1="192.6" x2="258" y2="192.6"/>
+        <line x1="322" y1="184" x2="378" y2="184"/><line x1="322" y1="175.3" x2="378" y2="175.3"/>
+        <line x1="442" y1="157" x2="498" y2="157"/><line x1="442" y1="128.1" x2="498" y2="128.1"/>
+        <line x1="562" y1="107.8" x2="618" y2="107.8"/><line x1="562" y1="27.4" x2="618" y2="27.4"/>
+      </g>
+    </svg>
+  </div>
+
+  <table class="t" style="margin-top:12px">
+    <tr><th>USD, thousands</th><th class="num">2026</th><th class="num">2027</th><th class="num">2028</th><th class="num">2029</th><th class="num">2030</th></tr>
+    <tr><td>Paying merchants (EOY)</td><td class="num">100</td><td class="num">600</td><td class="num">2 000</td><td class="num">5 000</td><td class="num">10 000</td></tr>
+    <tr><td>Subscriptions</td><td class="num">19</td><td class="num">134</td><td class="num">499</td><td class="num">1 344</td><td class="num">2 880</td></tr>
+    <tr><td>Transactions</td><td class="num">—</td><td class="num">35</td><td class="num">210</td><td class="num">840</td><td class="num">2 450</td></tr>
+    <tr><td>Advertising</td><td class="num">—</td><td class="num">—</td><td class="num">50</td><td class="num">250</td><td class="num">700</td></tr>
+    <tr class="total"><td>Revenue</td><td class="num">19</td><td class="num">169</td><td class="num">759</td><td class="num">2 434</td><td class="num">6 030</td></tr>
+    <tr><td>Total costs</td><td class="num">117</td><td class="num">365</td><td class="num">790</td><td class="num">1 600</td><td class="num">2 750</td></tr>
+    <tr class="total"><td>Net cash flow</td><td class="num">−98</td><td class="num">−196</td><td class="num">−31</td><td class="num">+834</td><td class="num">+3 280</td></tr>
+  </table>
+
+  <div class="foot"><span><b>Manzil</b> · Master Plan</span><span>Financial projections</span><span>09</span></div>
+</section>
+
+<!-- ================= 10 · CASH FLOW ================= -->
+<section class="page">
+  <p class="kicker">Cash flow &amp; funding</p>
+  <h1 class="section serif">A −$325k trough buys a self-funding company.</h1>
+  <p class="lede">Two views of the same plan: annual net cash flow, and the cumulative position. Operating breakeven crosses during 2028–29; from 2029 growth funds itself. Team costs assume Tashkent salaries (loaded avg $1.1–1.8k/mo).</p>
+
+  <div class="cols2">
+    <div class="chart-wrap">
+      <p class="chart-title">Net cash flow by year (USD k)</p>
+      <p class="chart-sub">Investment years vs. profit years</p>
+      <div class="legend"><span><i style="background:#a84305"></i>Investment (net −)</span><span><i style="background:#00897b"></i>Profit (net +)</span></div>
+      <svg width="100%" viewBox="0 0 300 218" aria-label="Bar chart of net cash flow by year">
+        <!-- scale: -400..3400; 0 at y=178; 1k$=0.05px (170px per 3400) -->
+        <g stroke="#e4ece9"><line x1="30" y1="178" x2="296" y2="178" stroke-width="1.4"/><line x1="30" y1="128" x2="296" y2="128"/><line x1="30" y1="78" x2="296" y2="78"/><line x1="30" y1="28" x2="296" y2="28"/></g>
+        <g font-size="8" fill="#8a9490" text-anchor="end"><text x="26" y="181">0</text><text x="26" y="131">1,000</text><text x="26" y="81">2,000</text><text x="26" y="31">3,000</text></g>
+        <!-- bars width 30; centers 55,105,155,205,255 -->
+        <rect x="40" y="178" width="30" height="4.9" fill="#a84305"/>
+        <rect x="90" y="178" width="30" height="9.8" fill="#a84305"/>
+        <rect x="140" y="178" width="30" height="1.6" fill="#a84305"/>
+        <rect x="190" y="136.3" width="30" height="41.7" rx="3" fill="#00897b"/>
+        <rect x="240" y="14" width="30" height="164" rx="3" fill="#00897b"/>
+        <g font-size="8.5" font-weight="700" fill="#14201f" text-anchor="middle">
+          <text x="55" y="193">−98</text><text x="105" y="198">−196</text><text x="155" y="190">−31</text>
+          <text x="205" y="131">+834</text><text x="255" y="9">+3,280</text>
+        </g>
+        <g font-size="8.5" fill="#566461" text-anchor="middle">
+          <text x="55" y="212">2026</text><text x="105" y="212">2027</text><text x="155" y="212">2028</text><text x="205" y="212">2029</text><text x="255" y="212">2030</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="chart-wrap">
+      <p class="chart-title">Cumulative cash position (USD k)</p>
+      <p class="chart-sub">Trough −$325k in 2028 · positive mid-2029</p>
+      <svg width="100%" viewBox="0 0 300 218" aria-label="Line chart of cumulative cash position">
+        <!-- scale: -600..4000; y = 190 - (v+600)*(180/4600) -->
+        <g stroke="#e4ece9"><line x1="30" y1="166.5" x2="296" y2="166.5" stroke-width="1.4"/><line x1="30" y1="127.4" x2="296" y2="127.4"/><line x1="30" y1="49.1" x2="296" y2="49.1"/><line x1="30" y1="88.3" x2="296" y2="88.3"/><line x1="30" y1="10" x2="296" y2="10"/></g>
+        <g font-size="8" fill="#8a9490" text-anchor="end"><text x="26" y="169.5">0</text><text x="26" y="130.4">1,000</text><text x="26" y="91.3">2,000</text><text x="26" y="52.1">3,000</text><text x="26" y="13">4,000</text></g>
+        <!-- points: x 55,105,155,205,255 ; values -98,-294,-325,509,3789 → y: 170.3, 178, 179.2, 146.6, 18.3 -->
+        <path d="M55 170.3 L105 178 L155 179.2 L205 146.6 L255 18.3" fill="none" stroke="#00897b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <g fill="#00897b" stroke="#fff" stroke-width="2">
+          <circle cx="55" cy="170.3" r="4"/><circle cx="105" cy="178" r="4"/><circle cx="155" cy="179.2" r="4.5"/><circle cx="205" cy="146.6" r="4"/><circle cx="255" cy="18.3" r="4.5"/>
+        </g>
+        <g font-size="8.5" font-weight="700" fill="#14201f" text-anchor="middle">
+          <text x="155" y="196">−325 (trough)</text>
+          <text x="255" y="10">+3,789</text>
+        </g>
+        <g font-size="8.5" fill="#566461" text-anchor="middle">
+          <text x="55" y="212">2026</text><text x="105" y="212">2027</text><text x="155" y="212">2028</text><text x="205" y="212">2029</text><text x="255" y="212">2030</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <h3 style="font-size:12.5px; margin:14px 0 8px">Funding plan</h3>
+  <table class="t">
+    <tr><th>Round</th><th>When</th><th>Amount</th><th>Buys</th></tr>
+    <tr><td>Pre-seed</td><td>2026 H2</td><td class="num">~$200k</td><td>Mobile apps shipped, Payme billing live, first sales pod, 12–15 months runway</td></tr>
+    <tr><td>Seed</td><td>2027</td><td class="num">$1–1.5M</td><td>Transaction layer at scale, 3 new cities, team → 15</td></tr>
+    <tr><td>Series A</td><td>2029 · optional</td><td class="num">for speed</td><td>Model self-funds from 2029; a raise accelerates national coverage &amp; fintech, it does not rescue</td></tr>
+  </table>
+
+  <div class="foot"><span><b>Manzil</b> · Master Plan</span><span>Cash flow &amp; funding</span><span>10</span></div>
+</section>
+
+<!-- ================= 11 · CAP TABLE ================= -->
+<section class="page">
+  <p class="kicker">Ownership</p>
+  <h1 class="section serif">Cap table: built to attract the people who build it.</h1>
+  <p class="lede">Today the founder holds 100%. The target structure below reserves real equity for a technical co-founder and a meaningful ESOP, because the plan needs builders more than it needs control.</p>
+
+  <div class="cols2" style="align-items:center">
+    <div class="chart-wrap" style="text-align:center">
+      <p class="chart-title">Target ownership · post pre-seed</p>
+      <p class="chart-sub">illustrative; final terms at signing</p>
+      <svg width="230" height="230" viewBox="0 0 230 230" aria-label="Donut chart of target cap table">
+        <!-- r=78, C=490.09; slices CEO62 CTO16 Team2 ESOP10 Pre-seed10; 2.5px gaps via dash -->
+        <g transform="rotate(-90 115 115)">
+          <circle cx="115" cy="115" r="78" fill="none" stroke="#00897b" stroke-width="36" stroke-dasharray="301.4 188.7" stroke-dashoffset="0"/>
+          <circle cx="115" cy="115" r="78" fill="none" stroke="#b0790d" stroke-width="36" stroke-dasharray="75.9 414.2" stroke-dashoffset="-303.9"/>
+          <circle cx="115" cy="115" r="78" fill="none" stroke="#265c8f" stroke-width="36" stroke-dasharray="7.3 482.8" stroke-dashoffset="-382.3"/>
+          <circle cx="115" cy="115" r="78" fill="none" stroke="#a84305" stroke-width="36" stroke-dasharray="46.5 443.6" stroke-dashoffset="-392.1"/>
+          <circle cx="115" cy="115" r="78" fill="none" stroke="#7550a3" stroke-width="36" stroke-dasharray="46.5 443.6" stroke-dashoffset="-441.1"/>
+        </g>
+        <text x="115" y="110" text-anchor="middle" font-size="21" font-weight="800" fill="#14201f">62%</text>
+        <text x="115" y="126" text-anchor="middle" font-size="9" fill="#566461">Founder &amp; CEO</text>
+      </svg>
+    </div>
+    <div>
+      <table class="t">
+        <tr><th>Holder</th><th class="num">Post pre-seed</th><th class="num">Indicative post-seed</th></tr>
+        <tr><td><i style="display:inline-block;width:9px;height:9px;border-radius:3px;background:#00897b;margin-right:6px"></i>Founder &amp; CEO</td><td class="num">62%</td><td class="num">~47%</td></tr>
+        <tr><td><i style="display:inline-block;width:9px;height:9px;border-radius:3px;background:#b0790d;margin-right:6px"></i>Co-founder CTO</td><td class="num">16%</td><td class="num">~12%</td></tr>
+        <tr><td><i style="display:inline-block;width:9px;height:9px;border-radius:3px;background:#265c8f;margin-right:6px"></i>Founding team</td><td class="num">2%</td><td class="num">~1.5%</td></tr>
+        <tr><td><i style="display:inline-block;width:9px;height:9px;border-radius:3px;background:#a84305;margin-right:6px"></i>ESOP</td><td class="num">10%</td><td class="num">~12%</td></tr>
+        <tr><td><i style="display:inline-block;width:9px;height:9px;border-radius:3px;background:#7550a3;margin-right:6px"></i>Pre-seed investors</td><td class="num">10%</td><td class="num">~7.5%</td></tr>
+        <tr><td style="color:var(--muted)">Seed investors</td><td class="num">—</td><td class="num">~20%</td></tr>
+      </table>
+      <div class="callout" style="margin-top:12px"><b>Why this shape.</b> A 16% CTO stake is a co-founder offer, not a hire; a 10–12% ESOP funds the first ten people; founder majority through seed keeps the review-integrity policy un-negotiable.</div>
+    </div>
+  </div>
+
+  <div class="foot"><span><b>Manzil</b> · Master Plan</span><span>Ownership</span><span>11</span></div>
+</section>
+
+<!-- ================= 12 · PORTER ================= -->
+<section class="page">
+  <p class="kicker">Competitive structure</p>
+  <h1 class="section serif">Porter's Five Forces.</h1>
+  <p class="lede">The structural read of Uzbekistan's local-services O2O market, and where the profit pool defends itself.</p>
+
+  <div class="porter">
+    <div class="pf center" style="left:50%; top:52mm; transform:translateX(-50%); width:58mm">
+      <h4>Manzil's position</h4>
+      <p>The empty Dianping seat: trusted choice + merchant relationship. Moat = review graph, seeded density, doorstep relationships.</p>
+    </div>
+
+    <div class="pf" style="left:50%; top:2mm; transform:translateX(-50%)">
+      <h4>Threat of new entrants <span class="chip mid">MODERATE</span></h4>
+      <p>Code is cheap to copy; the review graph and merchant relationships are not. Global players deprioritize a 37M market; that is the window.</p>
+    </div>
+    <div class="pf" style="left:0; top:40mm">
+      <h4>Supplier power <span class="chip lo">LOW–MOD</span></h4>
+      <p>Cloud is commodity. Payment rails are few (Payme / Click / Uzcard); we integrate multiple rails from day one.</p>
+    </div>
+    <div class="pf" style="right:0; top:40mm">
+      <h4>Buyer power · consumers <span class="chip hi">HIGH</span></h4>
+      <p>Free product, zero switching cost. Counter: review depth nobody else has, deals nobody else aggregates.</p>
+    </div>
+    <div class="pf" style="left:0; top:92mm">
+      <h4>Buyer power · merchants <span class="chip mid">MODERATE</span></h4>
+      <p>Price-sensitive SMEs. The free tier removes resistance; public reviews create the <i>need</i> to engage.</p>
+    </div>
+    <div class="pf" style="right:0; top:92mm">
+      <h4>Substitutes <span class="chip hi">HIGH · the real enemy</span></h4>
+      <p>Telegram groups, Instagram, word of mouth: unstructured, unsearchable, unanswerable. We formalize what people already do.</p>
+    </div>
+    <div class="pf" style="left:50%; top:122mm; transform:translateX(-50%)">
+      <h4>Industry rivalry <span class="chip mid">MOD–HIGH</span></h4>
+      <p>2GIS/Yandex own maps-utility; Uzum owns e-commerce. Nobody owns reviews-and-relationship for service SMEs.</p>
+    </div>
+  </div>
+
+  <div class="foot"><span><b>Manzil</b> · Master Plan</span><span>Five Forces</span><span>12</span></div>
+</section>
+
+<!-- ================= 13 · SWOT ================= -->
+<section class="page">
+  <p class="kicker">Position</p>
+  <h1 class="section serif">SWOT — stated plainly.</h1>
+  <p class="lede">A strategy document that hides its weaknesses is a sales document. Ours are listed, and each maps to a mitigation on the next page.</p>
+
+  <div class="swot">
+    <div class="q s">
+      <h3><i>S</i>Strengths</h3>
+      <ul>
+        <li>Live product: web SaaS + merchant CRM + admin console + API, deployed and tested in production</li>
+        <li>Trilingual by construction (uz / ru / en), not a retrofit</li>
+        <li>Review-integrity policy as brand (never removable for payment, structural)</li>
+        <li>Dynamic admin-set pricing; entitlements enforced server-side</li>
+        <li>Lean Tashkent cost base: every raised dollar goes ~3× further than in the West</li>
+      </ul>
+    </div>
+    <div class="q w">
+      <h3><i>W</i>Weaknesses</h3>
+      <ul>
+        <li>Solo-founder capacity, the binding constraint today</li>
+        <li>No native mobile apps yet (designed, not shipped)</li>
+        <li>Cold-start review inventory; density in one district, not a city</li>
+        <li>Unfunded; no dedicated sales or ops team yet</li>
+        <li>Brand unknown outside early users</li>
+      </ul>
+    </div>
+    <div class="q o">
+      <h3><i>O</i>Opportunities</h3>
+      <ul>
+        <li>The Dianping seat is empty in a 37M-person market</li>
+        <li>State-pushed SME digitization + IT-Park tax incentives</li>
+        <li>Tourism boom: Samarkand / Bukhara / Khiva corridor as a dedicated vertical</li>
+        <li>Mature payment rails make take-rate revenue a switch-flip, not a behavior change</li>
+        <li>A proven playbook (Meituan) to execute, not invent</li>
+      </ul>
+    </div>
+    <div class="q t">
+      <h3><i>T</i>Threats</h3>
+      <ul>
+        <li>Yandex / Uzum expanding from adjacent seats</li>
+        <li>Copycats after the model is proven</li>
+        <li>Review fraud degrading the core asset</li>
+        <li>UZS depreciation squeezing USD-denominated costs</li>
+        <li>Scarce local venture capital; data-regulation shifts</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="foot"><span><b>Manzil</b> · Master Plan</span><span>SWOT</span><span>13</span></div>
+</section>
+
+<!-- ================= 14 · CHALLENGES ================= -->
+<section class="page">
+  <p class="kicker">Execution honesty</p>
+  <h1 class="section serif">Challenges — and exactly how we overcome them.</h1>
+  <p class="lede">Every platform business dies or lives on the same seven problems. Here is our answer to each, most already running in production.</p>
+
+  <table class="t">
+    <tr><th style="width:34mm">Challenge</th><th>How we overcome it</th></tr>
+    <tr><td>Chicken-and-egg</td><td><b>Supply first, district by district.</b> Listings are pre-seeded, so the pitch is "claim your page," not "join another platform." Win Chilonzor completely before the next district; a consumer must always see a full map.</td></tr>
+    <tr><td>Trust &amp; review fraud</td><td>Verified accounts; moderation queue with a full audit trail (built); rate-anomaly detection (planned); and the structural rule of no removal for payment, including from us. Trust is the product; it gets engineering budget.</td></tr>
+    <tr><td>SME digital literacy</td><td><b>Meet owners in Telegram</b>: claim flow, notifications, and the CRM bot live where they already work. Doorstep onboarding closes what apps can't.</td></tr>
+    <tr><td>Monetization timing</td><td>Free until <i>their</i> customers create the pull; a public review demands a reply. Upsell on evidence: weekly stats screenshots, not promises.</td></tr>
+    <tr><td>Big-player entry</td><td>Speed and depth: own the review graph and merchant relationships before the market is worth a giant's attention. Partner for delivery instead of fighting logistics wars we can't fund.</td></tr>
+    <tr><td>Talent</td><td>Meaningful equity (ESOP 10%+), IT-Park tax regime, and a mission an engineer can see live in their own city. The CTO offer is 16%: a founder's seat, not a job.</td></tr>
+    <tr><td>Capital scarcity</td><td>Small raises against visible unit economics (≤ $40 CAC, &lt; 2-month payback) and designed breakeven in 2028–29: fundable in any climate, sovereign if funding vanishes.</td></tr>
+  </table>
+
+  <div class="callout" style="margin-top:12px"><b>The one metric that guards them all:</b> activation: a merchant who replied to a review or posted a promo in their first week. Activated merchants churn under 3%/month; unactivated ones were never customers.</div>
+
+  <div class="foot"><span><b>Manzil</b> · Master Plan</span><span>Challenges → solutions</span><span>14</span></div>
+</section>
+
+<!-- ================= 15 · GOALS ================= -->
+<section class="page">
+  <p class="kicker">Goals</p>
+  <h1 class="section serif">Short term is a checklist. Long term is a map.</h1>
+  <p class="lede">Tracked as OKRs in the company repository and reviewed monthly. Dates are commitments to sequence, not prophecy.</p>
+
+  <div class="cols2">
+    <div>
+      <h3 style="font-size:13px; margin-bottom:10px">Now → Q4 2026 <span class="chip lo" style="vertical-align:2px">SHORT TERM</span></h3>
+      <div class="roadmap">
+        <div class="rm"><h4>1 000 claimed listings</h4><p>≥ 300 in Chilonzor first; density before breadth.</p></div>
+        <div class="rm"><h4>100 paying merchants</h4><p>≥ 20% on Max; upsell only on evidence.</p></div>
+        <div class="rm"><h4>10k consumer MAU · 5k reviews</h4><p>&lt; 2% moderation-removal rate; trust holds.</p></div>
+        <div class="rm"><h4>Payme billing + Telegram CRM bot + mobile beta</h4><p>The three product keys to 2027's transaction layer.</p></div>
+        <div class="rm gold"><h4>Close ~$200k pre-seed · sign CTO co-founder</h4><p>This document is the pitch for both.</p></div>
+      </div>
+    </div>
+    <div>
+      <h3 style="font-size:13px; margin-bottom:10px">2027 → 2031 <span class="chip mid" style="vertical-align:2px">LONG TERM</span></h3>
+      <div class="roadmap">
+        <div class="rm"><h4>2027 · transactions live</h4><p>Vouchers &amp; bookings on Payme rails; 600 paying; Samarkand + 2 cities; seed round; team → 15.</p></div>
+        <div class="rm"><h4>2028 · breakeven crossing</h4><p>2 000 paying; advertising launches; subscriptions fall below 70% of revenue; the platform effect shows.</p></div>
+        <div class="rm"><h4>2029 · profitable</h4><p>5 000 paying; tourist vertical live on the Silk Road corridor; Series A optional, for speed only.</p></div>
+        <div class="rm gold"><h4>2030–31 · the default answer</h4><p>10k+ paying merchants, 5M+ MAU, every major city; evaluate one adjacent market only after Uzbekistan is clearly won.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot"><span><b>Manzil</b> · Master Plan</span><span>Goals</span><span>15</span></div>
+</section>
+
+<!-- ================= 16 · TEAM / ASK ================= -->
+<section class="page">
+  <p class="kicker">The people</p>
+  <h1 class="section serif">The team we are building — and the ask.</h1>
+  <p class="lede">Manzil today is one founder and a shipped platform. The plan needs three more owners before it needs anything else.</p>
+
+  <div class="tile-row" style="margin-bottom:16px">
+    <div class="tile"><small>WANTED · CO-FOUNDER</small><strong style="font-size:16px">CTO</strong><span>Product engineer who ships daily. Modern stack (Next.js 16 / NestJS / Prisma), live in production. 16%: a founder's seat.</span></div>
+    <div class="tile"><small>WANTED · FIRST TEAM</small><strong style="font-size:16px">Growth / City Lead</strong><span>Owns the district playbook: doorstep claims, Telegram activation, the first 1 000 merchants.</span></div>
+    <div class="tile"><small>LATER · AS TRANSACTIONS SCALE</small><strong style="font-size:16px">CFO / Ops</strong><span>Take-rate accounting, merchant payouts, city operations. Hired from revenue, not runway.</span></div>
+  </div>
+
+  <div class="panel" style="margin-bottom:14px">
+    <h3 style="font-size:12.5px; margin-bottom:6px">The ask · pre-seed, 2026 H2</h3>
+    <p style="font-size:10.5px; margin:0"><b>~$200 000 for 10%</b> (target structure, p. 11). It buys: mobile apps shipped, Payme billing live, the first sales pod, and 12–15 months of runway to the metrics that price the seed: 1 000 claimed · 100 paying · 10k MAU. Peak capital need to breakeven is ≈ $325k. This is a plan that intends to owe you profits, not apologies.</p>
+  </div>
+
+  <div class="cols2">
+    <div class="callout"><b>Why now.</b> Payments normal, smartphones saturated, SMEs pressured to digitize, tourism compounding, and the only global players in-market solve maps, not choice. Windows like this close from the inside.</div>
+    <div class="callout"><b>Why us.</b> The seat Meituan proved, in the market everyone ignores, with the product already running, plus a trust policy competitors can't copy without firing their own business model.</div>
+  </div>
+
+  <div style="margin-top:16mm; text-align:center">
+    <svg width="96" height="132" viewBox="0 0 150 210" fill="none" aria-hidden="true" style="opacity:.9">
+      <path d="M10 210 V96 C10 44 39 14 75 14 C111 14 140 44 140 96 V210" stroke="#005454" stroke-width="3"/>
+      <path d="M32 210 V104 C32 62 51 40 75 40 C99 40 118 62 118 104 V210" stroke="#c98a1a" stroke-width="3"/>
+    </svg>
+    <p class="serif" style="font-size:20px; margin-top:6px">Manzil — the address of local life.</p>
+    <p style="color:var(--muted); font-size:10px; margin-top:4px">manzil-business.vercel.app · Tashkent, Uzbekistan · July 2026</p>
+  </div>
+
+  <div class="foot"><span><b>Manzil</b> · Master Plan</span><span>Team &amp; the ask</span><span>16</span></div>
+</section>
+
+</body>
+</html>
