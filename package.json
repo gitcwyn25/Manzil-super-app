@@ -26,7 +26,7 @@
     "db:seed": "tsx packages/db/prisma/seed.ts",
     "prisma:generate": "npm run db:generate",
     "prisma:migrate": "npm run db:migrate",
-    "seed:validate": "tsx tools/validate-seed.ts data/tashkent-seed-template.csv",
+    "seed:validate": "tsx tech-office/tools/validate-seed.ts data/tashkent-seed-template.csv",
     "doctor": "npx react-doctor@latest"
   },
   "prisma": {

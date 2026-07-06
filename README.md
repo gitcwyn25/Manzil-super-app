@@ -1,64 +1,44 @@
-# Manzil Platform
+# Manzil — Company HQ
 
-Manzil is a Tashkent-first local business discovery and reviews platform for Uzbekistan.
+Manzil is Uzbekistan's local business platform: consumers discover and trust places; businesses run their reputation, promotions, and customers from one dashboard. Tashkent-first, O2O by design — the Meituan/Dianping playbook at Uzbekistan scale.
 
-## Workspace
+**Live:** web [manzil-business.vercel.app](https://manzil-business.vercel.app) · API [manzil-api-production.up.railway.app](https://manzil-api-production.up.railway.app/v1/health)
 
-- `apps/web` - production Next.js customer and admin web app.
-- `apps/api` - NestJS REST API skeleton under `/v1`.
-- `packages/shared` - shared TypeScript contracts, demo data, and locale helpers.
-- `prisma/schema.prisma` - PostgreSQL data model for the MVP.
-- `data/tashkent-seed-template.csv` - seed-listing import template for launch operations.
-- `mvp-site` - original static prototype kept as UX reference.
+This repository is the whole company — code *and* shared knowledge, organized as offices:
 
-## Start
+## The offices
 
-1. Copy `.env.example` to `.env.local` or app-specific env files.
-2. Install dependencies with `npm install`.
-3. Run the web app with `npm run dev:web`.
-4. Run the API with `npm run dev:api`.
+| Office | Owns | Start here |
+| --- | --- | --- |
+| [ceo-office/](ceo-office/) | Vision, strategy, fundraising, OKRs | **[MASTER-PLAN.md](ceo-office/MASTER-PLAN.md)** — the company document (+ investor PDF) |
+| [cfo-office/](cfo-office/) | Revenue model, cash flow, cap table, funding | [FINANCE.md](cfo-office/FINANCE.md) |
+| [marketing-office/](marketing-office/) | Brand, story, channels | [README](marketing-office/README.md) + [brand-identity/](marketing-office/brand-identity/) |
+| [sales-office/](sales-office/) | Merchant acquisition & upgrades | [SALES-PLAYBOOK.md](sales-office/SALES-PLAYBOOK.md) |
+| [tech-office/](tech-office/) | Product, architecture, QA, runbooks | [TECH-STACK.md](tech-office/TECH-STACK.md) |
 
-The first implementation is local-data-backed so the web app can run before PostgreSQL, Clerk, R2, and Meilisearch credentials are configured.
+## The product (code)
 
-## Clerk authentication
+Deployable code stays at the root — production build systems pin these paths (see [tech-office/README.md](tech-office/README.md)):
 
-1. Create a Clerk application at [clerk.com](https://clerk.com).
-2. Copy keys into your env file:
+- `apps/web` — Next.js 16 marketing site + business dashboard/CRM (trilingual uz/ru/en)
+- `apps/admin` — admin console: RBAC, moderation, dynamic pricing
+- `apps/api` — NestJS REST API `/v1`
+- `packages/shared` — shared contracts + locale copy · `packages/db` — Prisma schema + seeds
+- `data/` — seed-listing templates
 
-```env
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
-CLERK_SECRET_KEY=sk_test_...
-NEXT_PUBLIC_CLERK_SIGN_IN_URL=/uz/sign-in
-NEXT_PUBLIC_CLERK_SIGN_UP_URL=/uz/sign-up
+## Quick start
+
+```bash
+npm install
+npm run dev        # web  → http://localhost:3000/uz
+npm run dev:api    # api  → http://localhost:4000/v1/health
 ```
 
-3. In the Clerk dashboard, allow redirect URLs for `http://localhost:3000/*`.
-4. Sign in on the web app, then promote your user to admin in PostgreSQL if you need the admin panel:
+Env setup: copy `.env.example`; Clerk keys enable auth (public browsing works without). Full runbook, environments, and sharp edges: [tech-office/TECH-STACK.md](tech-office/TECH-STACK.md).
 
-```sql
-UPDATE users SET role = 'admin' WHERE email = 'you@example.com';
-```
+## House rules
 
-Without Clerk keys, public browsing still works. Admin APIs fall back to dev headers when `MANZIL_DEV_AUTH=true` and `CLERK_SECRET_KEY` is unset.
-
-## Local URLs
-
-- Web: `http://localhost:3000/uz`
-- Discovery: `http://localhost:3000/uz/discover`
-- Business profile: `http://localhost:3000/uz/businesses/yunusobod-osh-markazi`
-- Sign in: `http://localhost:3000/uz/sign-in`
-- Admin scaffold: `http://localhost:3000/uz/admin`
-- API health: `http://localhost:4000/v1/health`
-- API search: `http://localhost:4000/v1/search?q=osh`
-
-## Verification
-
-The scaffold has been verified with:
-
-- `npm run build`
-- `npm run typecheck --workspace @manzil/web`
-- `npm run typecheck --workspace @manzil/api`
-- `npm run seed:validate`
-- HTTP smoke tests for the main web routes and API endpoints
-
-Next.js dev/build scripts explicitly use Webpack and `NODE_OPTIONS=--max-old-space-size=4096` because Turbopack and default worker memory were unstable in this Windows environment.
+- Reviews are never removable for payment — structural, in code, non-negotiable.
+- Pricing is admin-set data, not hardcoded copy.
+- Entitlements enforce server-side; the repo is public — no secrets, ever.
+- E2E before deploy: `cd tech-office/qa && npx playwright test`
