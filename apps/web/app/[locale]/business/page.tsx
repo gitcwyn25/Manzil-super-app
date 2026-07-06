@@ -1,8 +1,15 @@
-import type { Locale } from "@manzil/shared";
+import type { BusinessPlatform, Locale } from "@manzil/shared";
 import { AnimatedCounter } from "../../components/motion/animated-counter";
 import { Reveal, RevealStagger } from "../../components/motion/reveal";
+import {
+  AnalyticsMock,
+  DashboardMock,
+  PromoMock,
+  ReviewsMock
+} from "../../components/business/mockups";
 import { getBusinessLandingCopy } from "../../lib/business-landing-copy";
 import { formatPrice, getPlans } from "../../lib/plans";
+import { searchBusinesses } from "../../lib/api";
 
 type RenderPlan = {
   key: string;
@@ -14,6 +21,22 @@ type RenderPlan = {
   badge?: string;
 };
 
+const MOCKS = {
+  reviews: ReviewsMock,
+  promos: PromoMock,
+  analytics: AnalyticsMock
+} as const;
+
+/** Curated fallback so the proof strip never renders empty (all real, listed places). */
+const FALLBACK_PLACES = [
+  { name: "Caravan Coffee", district: "Chilonzor" },
+  { name: "Plov Center", district: "Yunusobod" },
+  { name: "Bon! Bakery", district: "Mirobod" },
+  { name: "City Grill", district: "Yakkasaroy" },
+  { name: "Choyxona Milliy", district: "Shayxontohur" },
+  { name: "Sweet Home", district: "Mirzo Ulug'bek" }
+];
+
 export default async function BusinessLandingPage({
   params
 }: {
@@ -22,8 +45,23 @@ export default async function BusinessLandingPage({
   const { locale } = await params;
   const copy = getBusinessLandingCopy(locale);
 
-  // Dynamic, admin-set pricing from the API; falls back to static copy if the
-  // API is unreachable at build/request time.
+  // Real, listed Tashkent businesses power the hero mockup + proof strip.
+  let businesses: BusinessPlatform[] = [];
+  try {
+    const res = await searchBusinesses("", "all");
+    businesses = res.businesses ?? [];
+  } catch {
+    businesses = [];
+  }
+  const top = businesses[0];
+  const heroSample = top
+    ? { name: top.name, district: top.district, category: top.tags?.[0] ?? "Kafe", rating: top.avgRating.toFixed(1) }
+    : undefined;
+  const proof = businesses.length
+    ? businesses.slice(0, 6).map((b) => ({ name: b.name, district: b.district }))
+    : FALLBACK_PLACES;
+
+  // Dynamic, admin-set pricing from the API; falls back to static copy.
   const apiPlans = await getPlans();
   const ctaFor: Record<string, string> = {
     free: copy.plans.free.cta,
@@ -37,8 +75,8 @@ export default async function BusinessLandingPage({
         price: formatPrice(p.priceMonthly, p.currency, locale),
         features: p.features.filter((f) => f.included).map((f) => f.label[locale] ?? f.label.uz),
         cta: ctaFor[p.tier] ?? copy.plans.free.cta,
-        highlight: p.tier === "max",
-        badge: p.tier === "max" ? copy.plans.max.badge : undefined
+        highlight: p.tier === "pro",
+        badge: p.tier === "pro" ? copy.plans.max.badge : undefined
       }))
     : (["free", "pro", "max"] as const).map((tier) => ({
         key: tier,
@@ -46,92 +84,99 @@ export default async function BusinessLandingPage({
         price: copy.plans[tier].price,
         features: [...copy.plans[tier].features],
         cta: copy.plans[tier].cta,
-        highlight: tier === "max",
-        badge: tier === "max" ? copy.plans.max.badge : undefined
+        highlight: tier === "pro",
+        badge: tier === "pro" ? copy.plans.max.badge : undefined
       }));
 
   return (
     <div className="bz-page">
-      {/* ============ HERO — left copy, floating glass shapes right ============ */}
+      {/* ============ HERO ============ */}
       <section className="bz-hero">
         <div className="bz-hero-copy">
           <Reveal variant="fade-up">
+            <p className="bz-hero-eyebrow">{copy.heroEyebrow}</p>
+          </Reveal>
+          <Reveal delay={70} variant="fade-up">
             <h1>
               {copy.heroTitle1}
               <br />
-              {copy.heroTitle2}
+              <span className="bz-hero-accent">{copy.heroTitle2}</span>
             </h1>
           </Reveal>
-          <Reveal delay={120} variant="fade-up">
-            <p>{copy.heroText}</p>
+          <Reveal delay={150} variant="fade-up">
+            <p className="bz-hero-text">{copy.heroText}</p>
           </Reveal>
-          <Reveal delay={220} variant="fade-up">
+          <Reveal delay={230} variant="fade-up">
             <div className="bz-hero-actions">
               <a className="bz-btn-primary" href={`/${locale}/business/register`}>{copy.ctaPrimary}</a>
               <a className="bz-btn-ghost" href={`/${locale}/dashboard`}>{copy.ctaSecondary}</a>
             </div>
           </Reveal>
+          <Reveal delay={320} variant="fade-in">
+            <p className="bz-trust">
+              <span className="bz-trust-stars">★★★★★</span>
+              {copy.trustLine}
+            </p>
+          </Reveal>
         </div>
-
-        <div aria-hidden="true" className="bz-hero-visual">
-          <span className="bz-glass bz-glass-a"><i /><i /><i /></span>
-          <span className="bz-glass bz-glass-b"><i /><i /></span>
-          <span className="bz-glass bz-glass-c" />
-          <span className="bz-cylinders">
-            <i className="c1" /><i className="c2" /><i className="c3" />
-            <em className="bz-dish" />
-          </span>
-          <span className="bz-orb bz-orb-a" />
-          <span className="bz-orb bz-orb-b" />
-        </div>
+        <Reveal className="bz-hero-visual" delay={180} variant="scale-in">
+          <DashboardMock business={heroSample} />
+        </Reveal>
       </section>
 
-      {/* ============ DARK ANALYTICS BAND ============ */}
-      <Reveal variant="fade-up">
-        <section className="bz-band">
-          <div className="bz-band-copy">
-            <h2>{copy.bandTitle}</h2>
-            <p>{copy.bandText}</p>
-            <a className="bz-band-cta" href={`/${locale}/dashboard`}>{copy.bandCta}</a>
-          </div>
-          <div aria-hidden="true" className="bz-band-mock">
-            <div className="bz-band-row">
-              <span className="bz-band-avatar" />
-              <span className="bz-band-lines"><i className="w60" /><i className="w40" /></span>
-              <b>+24%</b>
-            </div>
-            <div className="bz-band-chart">
-              <i style={{ height: "30%" }} /><i style={{ height: "55%" }} /><i style={{ height: "42%" }} />
-              <i style={{ height: "70%" }} /><i style={{ height: "58%" }} /><i style={{ height: "86%" }} />
-            </div>
-          </div>
-        </section>
-      </Reveal>
-
-      {/* ============ STAT CARDS ============ */}
-      <RevealStagger className="bz-stats" step={90} variant="fade-up">
-        {copy.stats.map((stat) => (
-          <div className="bz-stat" key={stat.label}>
-            <strong>
-              <AnimatedCounter value={stat.value} />
-              {stat.suffix}
-            </strong>
-            <span>{stat.label}</span>
-          </div>
-        ))}
-      </RevealStagger>
-
-      {/* ============ BENTO ============ */}
-      <section className="bz-bento-wrap">
-        <Reveal variant="fade-up">
-          <h2 className="bz-section-title">{copy.bentoTitle}</h2>
+      {/* ============ PROOF STRIP ============ */}
+      <section className="bz-proof">
+        <Reveal variant="fade-in">
+          <p className="bz-proof-title">{copy.proofTitle}</p>
         </Reveal>
-        <RevealStagger className="bz-bento" step={100} variant="fade-up">
-          {copy.bento.map((item) => (
-            <article className={item.dark ? "bz-card dark" : "bz-card"} key={item.title}>
-              <h3>{item.title}</h3>
-              <p>{item.text}</p>
-            </article>
+        <RevealStagger as="div" className="bz-proof-row" step={70} variant="fade-up">
+          {proof.map((place) => (
+            <span className="bz-proof-item" key={`${place.name}-${place.district}`}>
+              <b>{place.name}</b>
+              <i>{place.district}</i>
+            </span>
+          ))}
+        </RevealStagger>
+      </section>
+
+      {/* ============ ALTERNATING FEATURE SECTIONS ============ */}
+      <div className="bz-features">
+        {copy.features.map((feature, index) => {
+          const Mock = MOCKS[feature.mock];
+          return (
+            <section className={index % 2 === 1 ? "bz-feature reverse" : "bz-feature"} key={feature.title}>
+              <Reveal className="bz-feature-copy" variant="fade-up">
+                <p className="bz-feature-eyebrow">{feature.eyebrow}</p>
+                <h2>{feature.title}</h2>
+                <p className="bz-feature-text">{feature.text}</p>
+                <ul className="bz-feature-list">
+                  {feature.bullets.map((bullet) => (
+                    <li key={bullet}>{bullet}</li>
+                  ))}
+                </ul>
+              </Reveal>
+              <Reveal className="bz-feature-visual" delay={120} variant={index % 2 === 1 ? "slide-right" : "slide-left"}>
+                <Mock />
+              </Reveal>
+            </section>
+          );
+        })}
+      </div>
+
+      {/* ============ STATS ============ */}
+      <section className="bz-stats-band">
+        <Reveal variant="fade-up">
+          <h2 className="bz-section-title">{copy.statsTitle}</h2>
+        </Reveal>
+        <RevealStagger className="bz-stats" step={90} variant="fade-up">
+          {copy.stats.map((stat) => (
+            <div className="bz-stat" key={stat.label}>
+              <strong>
+                <AnimatedCounter value={stat.value} />
+                {stat.suffix}
+              </strong>
+              <span>{stat.label}</span>
+            </div>
           ))}
         </RevealStagger>
       </section>
@@ -163,6 +208,17 @@ export default async function BusinessLandingPage({
           ))}
         </RevealStagger>
       </section>
+
+      {/* ============ FINAL CTA ============ */}
+      <Reveal variant="fade-up">
+        <section className="bz-final">
+          <div className="bz-final-inner">
+            <h2>{copy.finalTitle}</h2>
+            <p>{copy.finalText}</p>
+            <a className="bz-final-cta" href={`/${locale}/business/register`}>{copy.finalCta}</a>
+          </div>
+        </section>
+      </Reveal>
     </div>
   );
 }

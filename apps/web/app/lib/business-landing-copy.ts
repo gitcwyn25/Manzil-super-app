@@ -1,18 +1,27 @@
 import type { Locale } from "@manzil/shared";
 
+/** A single alternating product-feature section on the business landing page. */
+export type BusinessFeature = {
+  eyebrow: string;
+  title: string;
+  text: string;
+  bullets: string[];
+  mock: "reviews" | "promos" | "analytics";
+};
+
 /** Copy for the business landing page (/business). */
 export type BusinessLandingCopy = {
+  heroEyebrow: string;
   heroTitle1: string;
   heroTitle2: string;
   heroText: string;
   ctaPrimary: string;
   ctaSecondary: string;
-  bandTitle: string;
-  bandText: string;
-  bandCta: string;
+  trustLine: string;
+  proofTitle: string;
+  features: BusinessFeature[];
+  statsTitle: string;
   stats: Array<{ value: number; suffix: string; label: string }>;
-  bentoTitle: string;
-  bento: Array<{ title: string; text: string; dark: boolean }>;
   pricingTitle: string;
   pricingText: string;
   perMonth: string;
@@ -21,34 +30,54 @@ export type BusinessLandingCopy = {
     pro: { name: string; price: string; features: string[]; cta: string };
     max: { name: string; price: string; features: string[]; cta: string; badge: string };
   };
+  finalTitle: string;
+  finalText: string;
+  finalCta: string;
 };
 
 const copy: Record<string, BusinessLandingCopy> = {
   uz: {
-    heroTitle1: "Biznesingizni",
-    heroTitle2: "onlayn rivojlantiring",
+    heroEyebrow: "Manzil Biznes",
+    heroTitle1: "Ko'proq mijoz.",
+    heroTitle2: "Bitta oddiy kabinet.",
     heroText:
-      "Manzil'da biznes profilingizni yuriting: narxlar, aksiyalar, e'lonlar va mijozlar bilan aloqa — hammasi bitta kabinetda.",
-    ctaPrimary: "Hisob ochish",
+      "Profilingizni yangilang, sharhlarga javob bering, aksiya e'lon qiling va statistikani kuzating — Toshkentdagi mijozlaringiz uchun barchasi bir joyda.",
+    ctaPrimary: "Bepul boshlash",
     ctaSecondary: "Kabinetga kirish",
-    bandTitle: "Barcha ko'rsatkichlar bitta panelda",
-    bandText: "Ko'rishlar, sharhlar va obunachilar statistikasi har kuni yangilanadi.",
-    bandCta: "Panelni ochish",
+    trustLine: "Toshkent bo'ylab 1 200+ biznes allaqachon Manzil'da.",
+    proofTitle: "Toshkentning ishonchli joylari Manzil'da",
+    features: [
+      {
+        eyebrow: "Obro'",
+        title: "Har bir sharhga javob bering",
+        text: "Yangi sharhlar bitta joyda to'planadi. Bir marta bosib javob bering va mijozlar ishonchini mustahkamlang.",
+        bullets: ["Barcha sharhlar bitta oynada", "Tayyor javob shablonlari", "Yangi sharh haqida bildirishnoma"],
+        mock: "reviews"
+      },
+      {
+        eyebrow: "Sotuv",
+        title: "Aksiya va setlarni bir daqiqada e'lon qiling",
+        text: "Tushlik seti, chegirma yoki maxsus taklif — yarating, muddatini belgilang, mijozlar darhol ko'radi.",
+        bullets: ["Chegirma va setlar", "Amal qilish muddati", "Qidiruvda ko'rinadi"],
+        mock: "promos"
+      },
+      {
+        eyebrow: "O'sish",
+        title: "Nima ishlayotganini aniq biling",
+        text: "Ko'rishlar, sharhlar va eng ko'p so'ralgan xizmatlar — har kuni yangilanadigan statistika bilan qaror qabul qiling.",
+        bullets: ["Haftalik va oylik dinamika", "Eng mashhur xizmatlar", "Reyting o'zgarishi"],
+        mock: "analytics"
+      }
+    ],
+    statsTitle: "Raqamlarda Manzil",
     stats: [
       { value: 1200, suffix: "+", label: "Faol bizneslar" },
       { value: 48000, suffix: "+", label: "Oylik ko'rishlar" },
       { value: 9600, suffix: "+", label: "Mijoz sharhlari" },
       { value: 12, suffix: "", label: "Tumanlar" }
     ],
-    bentoTitle: "Kabinetda nimalar bor",
-    bento: [
-      { title: "CRM va mijozlar bazasi", text: "Mijozlar faoliyati va sharhlar tarixi bitta joyda saqlanadi.", dark: true },
-      { title: "E'lonlar va aksiyalar", text: "Yangi takliflar, paketlar va chegirmalarni e'lon qiling.", dark: false },
-      { title: "Narxlar va xizmatlar", text: "Narxlaringizni istalgan vaqtda yangilang — mijozlar darhol ko'radi.", dark: false },
-      { title: "Statistika va hisobotlar", text: "Haftalik dinamika, eng ko'p ko'rilgan xizmatlar va reyting.", dark: true }
-    ],
-    pricingTitle: "Tariflar",
-    pricingText: "O'zingizga mos rejani tanlang.",
+    pricingTitle: "Sizga mos rejani tanlang",
+    pricingText: "Bepul boshlang. Xohlagan vaqtda yangilang.",
     perMonth: "/oy",
     plans: {
       free: {
@@ -70,33 +99,53 @@ const copy: Record<string, BusinessLandingCopy> = {
         cta: "Max rejani tanlash",
         badge: "Ommabop"
       }
-    }
+    },
+    finalTitle: "Biznesingizni bugun Manzil'ga qo'shing",
+    finalText: "Ro'yxatdan o'tish 2 daqiqa. Karta talab qilinmaydi.",
+    finalCta: "Bepul hisob ochish"
   },
   ru: {
-    heroTitle1: "Развивайте бизнес",
-    heroTitle2: "в интернете",
+    heroEyebrow: "Manzil Бизнес",
+    heroTitle1: "Больше клиентов.",
+    heroTitle2: "Один простой кабинет.",
     heroText:
-      "Ведите профиль бизнеса на Manzil: цены, акции, объявления и связь с клиентами — всё в одном кабинете.",
-    ctaPrimary: "Создать аккаунт",
+      "Обновляйте профиль, отвечайте на отзывы, запускайте акции и следите за статистикой — всё для ваших клиентов в Ташкенте в одном месте.",
+    ctaPrimary: "Начать бесплатно",
     ctaSecondary: "Войти в кабинет",
-    bandTitle: "Все показатели на одной панели",
-    bandText: "Статистика просмотров, отзывов и подписчиков обновляется ежедневно.",
-    bandCta: "Открыть панель",
+    trustLine: "Более 1 200 бизнесов Ташкента уже на Manzil.",
+    proofTitle: "Надёжные места Ташкента — на Manzil",
+    features: [
+      {
+        eyebrow: "Репутация",
+        title: "Отвечайте на каждый отзыв",
+        text: "Новые отзывы собираются в одном месте. Отвечайте в один клик и укрепляйте доверие клиентов.",
+        bullets: ["Все отзывы в одном окне", "Готовые шаблоны ответов", "Уведомления о новых отзывах"],
+        mock: "reviews"
+      },
+      {
+        eyebrow: "Продажи",
+        title: "Запускайте акции и сеты за минуту",
+        text: "Бизнес-ланч, скидка или спецпредложение — создайте, задайте срок, и клиенты сразу увидят.",
+        bullets: ["Скидки и сеты", "Срок действия", "Видно в поиске"],
+        mock: "promos"
+      },
+      {
+        eyebrow: "Рост",
+        title: "Точно знайте, что работает",
+        text: "Просмотры, отзывы и самые популярные услуги — принимайте решения на основе ежедневной статистики.",
+        bullets: ["Недельная и месячная динамика", "Популярные услуги", "Изменение рейтинга"],
+        mock: "analytics"
+      }
+    ],
+    statsTitle: "Manzil в цифрах",
     stats: [
       { value: 1200, suffix: "+", label: "Активных бизнесов" },
       { value: 48000, suffix: "+", label: "Просмотров в месяц" },
       { value: 9600, suffix: "+", label: "Отзывов клиентов" },
       { value: 12, suffix: "", label: "Районов" }
     ],
-    bentoTitle: "Что входит в кабинет",
-    bento: [
-      { title: "CRM и база клиентов", text: "История активности клиентов и отзывов хранится в одном месте.", dark: true },
-      { title: "Объявления и акции", text: "Публикуйте новые предложения, пакеты и скидки.", dark: false },
-      { title: "Цены и услуги", text: "Обновляйте цены в любой момент — клиенты видят их сразу.", dark: false },
-      { title: "Статистика и отчёты", text: "Недельная динамика, популярные услуги и рейтинг.", dark: true }
-    ],
-    pricingTitle: "Тарифы",
-    pricingText: "Выберите подходящий план.",
+    pricingTitle: "Выберите подходящий план",
+    pricingText: "Начните бесплатно. Обновляйтесь в любой момент.",
     perMonth: "/мес",
     plans: {
       free: {
@@ -118,33 +167,53 @@ const copy: Record<string, BusinessLandingCopy> = {
         cta: "Выбрать Max",
         badge: "Популярный"
       }
-    }
+    },
+    finalTitle: "Добавьте бизнес на Manzil сегодня",
+    finalText: "Регистрация за 2 минуты. Карта не нужна.",
+    finalCta: "Создать бесплатно"
   },
   en: {
-    heroTitle1: "Grow your business",
-    heroTitle2: "online",
+    heroEyebrow: "Manzil Business",
+    heroTitle1: "More customers.",
+    heroTitle2: "One simple dashboard.",
     heroText:
-      "Run your business profile on Manzil: prices, promotions, announcements, and customer communication — all in one dashboard.",
-    ctaPrimary: "Create account",
+      "Update your profile, reply to reviews, launch promotions, and track performance — everything for your Tashkent customers in one place.",
+    ctaPrimary: "Start free",
     ctaSecondary: "Open dashboard",
-    bandTitle: "Every metric on one panel",
-    bandText: "Views, reviews, and follower statistics update daily.",
-    bandCta: "Open the panel",
+    trustLine: "1,200+ businesses across Tashkent are already on Manzil.",
+    proofTitle: "Trusted places across Tashkent are on Manzil",
+    features: [
+      {
+        eyebrow: "Reputation",
+        title: "Reply to every review",
+        text: "New reviews land in one place. Reply in a click and build lasting customer trust.",
+        bullets: ["All reviews in one inbox", "Ready-made reply templates", "Alerts for every new review"],
+        mock: "reviews"
+      },
+      {
+        eyebrow: "Sales",
+        title: "Launch deals and sets in a minute",
+        text: "A lunch set, a discount, or a special offer — create it, set the dates, and customers see it instantly.",
+        bullets: ["Discounts and sets", "Validity period", "Shows up in search"],
+        mock: "promos"
+      },
+      {
+        eyebrow: "Growth",
+        title: "Know exactly what works",
+        text: "Views, reviews, and your most-requested services — decide with statistics that update every day.",
+        bullets: ["Weekly and monthly trends", "Top services", "Rating changes over time"],
+        mock: "analytics"
+      }
+    ],
+    statsTitle: "Manzil in numbers",
     stats: [
       { value: 1200, suffix: "+", label: "Active businesses" },
       { value: 48000, suffix: "+", label: "Monthly views" },
       { value: 9600, suffix: "+", label: "Customer reviews" },
       { value: 12, suffix: "", label: "Districts" }
     ],
-    bentoTitle: "What the dashboard includes",
-    bento: [
-      { title: "CRM and customer base", text: "Customer activity and review history stored in one place.", dark: true },
-      { title: "Announcements and promotions", text: "Publish new offers, packages, and discounts.", dark: false },
-      { title: "Prices and services", text: "Update your prices any time — customers see them instantly.", dark: false },
-      { title: "Statistics and reports", text: "Weekly trends, top services, and rating.", dark: true }
-    ],
-    pricingTitle: "Pricing",
-    pricingText: "Choose the plan that fits.",
+    pricingTitle: "Choose the plan that fits",
+    pricingText: "Start free. Upgrade any time.",
     perMonth: "/mo",
     plans: {
       free: {
@@ -166,7 +235,10 @@ const copy: Record<string, BusinessLandingCopy> = {
         cta: "Choose Max",
         badge: "Most popular"
       }
-    }
+    },
+    finalTitle: "Add your business to Manzil today",
+    finalText: "Registration takes 2 minutes. No card required.",
+    finalCta: "Create a free account"
   }
 };
 

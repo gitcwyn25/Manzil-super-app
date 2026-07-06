@@ -7,7 +7,7 @@ function easeOutExpo(t: number) {
 }
 
 const formatters: Record<string, (current: number) => string> = {
-  plain: (current) => `${Math.round(current)}`,
+  plain: (current) => Math.round(current).toLocaleString("ru-RU"),
   thousands: (current) =>
     current >= 1000 ? `${(current / 1000).toFixed(1)}k` : `${Math.round(current)}`
 };
@@ -46,6 +46,24 @@ export function AnimatedCounter({
       setDone(true);
     };
 
+    let started = false;
+    const runAnimation = () => {
+      if (started) return;
+      started = true;
+      const startedAt = performance.now();
+      const tick = (now: number) => {
+        const progress = Math.min(1, (now - startedAt) / duration);
+        const current = value * easeOutExpo(progress);
+        setDisplay(fmt(current));
+        if (progress < 1) {
+          frame.current = requestAnimationFrame(tick);
+        } else {
+          finish();
+        }
+      };
+      frame.current = requestAnimationFrame(tick);
+    };
+
     if (reduced || typeof IntersectionObserver === "undefined") {
       finish();
       return;
@@ -55,28 +73,24 @@ export function AnimatedCounter({
       (entries) => {
         if (!entries.some((entry) => entry.isIntersecting)) return;
         observer.disconnect();
-        const startedAt = performance.now();
-
-        const tick = (now: number) => {
-          const progress = Math.min(1, (now - startedAt) / duration);
-          const eased = easeOutExpo(progress);
-          const current = value * eased;
-          setDisplay(fmt(current));
-          if (progress < 1) {
-            frame.current = requestAnimationFrame(tick);
-          } else {
-            finish();
-          }
-        };
-
-        frame.current = requestAnimationFrame(tick);
+        window.clearTimeout(fallback);
+        runAnimation();
       },
-      { threshold: 0.4 }
+      { threshold: 0.25 }
     );
+
+    // Safety net: if the observer never reports an intersection (fast
+    // programmatic scroll, headless capture, odd layout), animate anyway so
+    // the value is never left stuck at 0.
+    const fallback = window.setTimeout(() => {
+      observer.disconnect();
+      runAnimation();
+    }, 1600);
 
     observer.observe(node);
     return () => {
       observer.disconnect();
+      window.clearTimeout(fallback);
       cancelAnimationFrame(frame.current);
     };
   }, [value, duration, fmt]);
