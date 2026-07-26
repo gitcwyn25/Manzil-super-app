@@ -1,5 +1,6 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
+import { ServiceWorkerRegistration } from "./components/service-worker";
 import { Geist, Geist_Mono, Inter, Libre_Caslon_Display } from "next/font/google";
 import "./globals.css";
 
@@ -29,7 +30,28 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Manzil Business | Biznesingizni Manzil'da boshqaring",
   description:
-    "Manzil biznes platformasi: listingni tasdiqlang, sharhlarga javob bering, obro'ingizni boshqaring. Mijozlar uchun iOS va Android ilovalari."
+    "Manzil biznes platformasi: listingni tasdiqlang, sharhlarga javob bering, obro'ingizni boshqaring. Mijozlar uchun iOS va Android ilovalari.",
+  // Next serves app/manifest.ts at this path; linking it is what makes the app
+  // installable rather than merely offline-capable.
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Manzil"
+  },
+  icons: {
+    icon: [
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" }
+    ],
+    apple: [{ url: "/icons/apple-touch-icon.png", sizes: "180x180" }]
+  }
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0f5b3d",
+  width: "device-width",
+  initialScale: 1
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -47,6 +69,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }}
           />
           {children}
+          <ServiceWorkerRegistration />
         </body>
       </html>
     </ClerkProvider>

@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withSentryConfig } from "@sentry/nextjs";
 
 const isDev = process.env.NODE_ENV !== "production";
 
@@ -27,6 +28,12 @@ const turnstile = "https://challenges.cloudflare.com";
 // Vercel preview comment toolbar (harmless in production).
 const vercel = "https://vercel.live";
 
+// Sentry ingest. Derived from the DSN in the same style as the origins above:
+// a hardcoded region host would silently break reporting the moment the project
+// moves region, and a blocked connect-src fails without any visible error.
+const sentryOrigin = toOrigin(process.env.NEXT_PUBLIC_SENTRY_DSN);
+const sentry = sentryOrigin ?? "";
+
 const csp = [
   `default-src 'self'`,
   `base-uri 'self'`,
@@ -39,7 +46,7 @@ const csp = [
   `style-src 'self' 'unsafe-inline'`,
   `img-src 'self' data: blob: https://img.clerk.com https://*.clerk.com`,
   `font-src 'self' data:`,
-  `connect-src 'self' ${apiOrigin} ${supabaseSources} ${clerk} https://clerk-telemetry.com ${vercel}${
+  `connect-src 'self' ${apiOrigin} ${supabaseSources} ${clerk} https://clerk-telemetry.com ${vercel} ${sentry}${
     isDev ? " ws://localhost:* http://localhost:*" : ""
   }`,
   `worker-src 'self' blob:`,
@@ -71,4 +78,25 @@ const nextConfig: NextConfig = {
   }
 };
 
-export default nextConfig;
+// Only wrap when a Sentry org/project is configured. Unconditional wrapping
+// makes every local and CI build attempt source-map upload and emit warnings.
+export default process.env.SENTRY_ORG && process.env.SENTRY_PROJECT
+  ? withSentryConfig(nextConfig, {
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+
+      // Upload source maps so production stack traces are readable, then delete
+      // them from the deployed bundle — shipping them would expose the app's
+      // original source to anyone who opens devtools.
+      sourcemaps: { deleteSourcemapsAfterUpload: true },
+
+      silent: !process.env.CI,
+
+      // Proxies Sentry through the app's own origin so ad blockers (which block
+      // *.sentry.io by default) do not silently drop error reports.
+      tunnelRoute: "/monitoring",
+
+      disableLogger: true
+    })
+  : nextConfig;
