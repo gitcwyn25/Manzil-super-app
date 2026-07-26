@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Ip, Param, Patch, Post, Query, Req, UseGuards } from "@nestjs/common";
 import { ConsoleRepository } from "./console.repository";
+import { ConsoleCurationRepository } from "./console-curation.repository";
 import { AnalyticsRepository } from "../analytics/analytics.repository";
 import { parseWindow } from "../analytics/analytics.controller";
 import { PermissionGuard, type ConsoleRequest } from "./permission.guard";
@@ -11,6 +12,12 @@ import {
   PlanUpdateDto,
   SetPlanFeatureDto
 } from "../controllers/moderation.dto";
+import {
+  ModeratePhotoDto,
+  PublishLegalDocumentDto,
+  SetFeaturedDto,
+  UpsertCategoryDto
+} from "./curation.dto";
 
 /**
  * Admin console API. Class-level PermissionGuard authorizes every route:
@@ -22,7 +29,8 @@ import {
 export class ConsoleController {
   constructor(
     private readonly repo: ConsoleRepository,
-    private readonly analytics: AnalyticsRepository
+    private readonly analytics: AnalyticsRepository,
+    private readonly curation: ConsoleCurationRepository
   ) {}
 
   private ctx(request: ConsoleRequest, ip: string) {
@@ -70,6 +78,81 @@ export class ConsoleController {
   @RequirePermission("business.view")
   async duplicates(@Param("id") id: string) {
     return { data: { duplicates: await this.repo.findDuplicates(id) } };
+  }
+
+  /** Single business control centre: profile, legal/contract records, pending photos, activity. */
+  @Get("businesses/:id/detail")
+  @RequirePermission("business.view")
+  async businessDetail(@Param("id") id: string) {
+    return { data: await this.curation.getBusinessDetail(id) };
+  }
+
+  @Post("businesses/:id/feature")
+  @RequirePermission("business.edit")
+  async setFeatured(
+    @Param("id") id: string,
+    @Body() body: SetFeaturedDto,
+    @Req() r: ConsoleRequest,
+    @Ip() ip: string
+  ) {
+    return { data: await this.curation.setBusinessFeatured(id, body.featured, this.ctx(r, ip)) };
+  }
+
+  /* ---------- media moderation ---------- */
+
+  /**
+   * Photo moderation is per-business rather than a global queue: pending media
+   * volume is low at this stage, and reviewing a photo alongside the listing it
+   * belongs to gives the moderator the context to judge it. Revisit if the
+   * pending count outgrows the business-detail page.
+   */
+  @Post("photos/:id/moderate")
+  @RequirePermission("media.approve")
+  async moderatePhoto(
+    @Param("id") id: string,
+    @Body() body: ModeratePhotoDto,
+    @Req() r: ConsoleRequest,
+    @Ip() ip: string
+  ) {
+    return {
+      data: await this.curation.moderatePhoto(id, body.decision, body.reason, this.ctx(r, ip))
+    };
+  }
+
+  /* ---------- legal documents ---------- */
+
+  @Get("legal")
+  @RequirePermission("legal.view")
+  async legalDocuments() {
+    return { data: { documents: await this.curation.listLegalDocuments() } };
+  }
+
+  @Post("legal")
+  @RequirePermission("legal.publish")
+  async publishLegal(
+    @Body() body: PublishLegalDocumentDto,
+    @Req() r: ConsoleRequest,
+    @Ip() ip: string
+  ) {
+    return { data: await this.curation.publishLegalDocument(body, this.ctx(r, ip)) };
+  }
+
+  /* ---------- categories ---------- */
+
+  @Get("categories")
+  @RequirePermission("business.view")
+  async categories() {
+    return { data: { categories: await this.curation.listCategories() } };
+  }
+
+  @Post("categories")
+  @RequirePermission("category.manage")
+  async upsertCategory(
+    @Body() body: UpsertCategoryDto,
+    @Req() r: ConsoleRequest,
+    @Ip() ip: string
+  ) {
+    return { data: await this.curation.upsertCategory(body, this.ctx(r, ip)) };
   }
 
   @Post("businesses/:id/approve")

@@ -25,6 +25,7 @@ import { GeocodingService } from "./crm/geocoding.service";
 import { R2PresignService } from "./media/r2-presign.service";
 import { ConsoleController } from "./console/console.controller";
 import { ConsoleRepository } from "./console/console.repository";
+import { ConsoleCurationRepository } from "./console/console-curation.repository";
 import { AdminAuthService } from "./console/admin-auth.service";
 import { PermissionGuard } from "./console/permission.guard";
 import { AlertService } from "./alerts/alert.service";
@@ -87,6 +88,7 @@ import { DEFAULT_THROTTLE } from "./security/throttle.config";
     ManzilAuthGuard,
     R2PresignService,
     ConsoleRepository,
+    ConsoleCurationRepository,
     AdminAuthService,
     PermissionGuard,
     AlertService,

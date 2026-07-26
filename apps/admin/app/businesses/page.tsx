@@ -87,7 +87,12 @@ export default async function BusinessesPage({
             {businesses.map((b) => (
               <tr key={b.id}>
                 <td>
-                  <div className="font-medium">{b.name}</div>
+                  {/* The name is the affordance into the detail page, addressed
+                      by id — the previous "View" link passed a slug to an
+                      id-based route, which could never resolve. */}
+                  <a className="font-medium hover:underline" href={`/businesses/${b.id}`}>
+                    {b.name}
+                  </a>
                   <div className="text-xs text-muted">{b.address}</div>
                   {b.owner ? <div className="text-xs text-muted">owner: {b.owner.email ?? b.owner.displayName}</div> : null}
                 </td>
@@ -104,8 +109,8 @@ export default async function BusinessesPage({
                     {canReject && b.status !== "suspended" ? (
                       <ActionButton action={rejectBusiness} id={b.id} label="Reject" variant="danger" reason />
                     ) : null}
-                    <a className="btn-ghost btn-xs" href={`/businesses/${b.slug}`} target="_blank" rel="noreferrer">
-                      View
+                    <a className="btn-ghost btn-xs" href={`/businesses/${b.id}`}>
+                      Manage
                     </a>
                   </div>
                 </td>

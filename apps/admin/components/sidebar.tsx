@@ -9,7 +9,9 @@ const ITEMS = [
   { href: "/businesses", label: "Business queue", perm: "business.view" },
   { href: "/reviews", label: "Review queue", perm: "review.view" },
   { href: "/users", label: "Users", perm: "user.view" },
+  { href: "/categories", label: "Categories", perm: "business.view" },
   { href: "/plans", label: "Plans & pricing", perm: "plan.manage" },
+  { href: "/legal", label: "Legal & contracts", perm: "legal.view" },
   { href: "/audit", label: "Audit log", perm: "audit.view" }
 ];
 

@@ -125,3 +125,91 @@ export async function togglePlanActive(_prev: ActionState, form: FormData): Prom
   revalidatePath("/plans");
   return r.ok ? { ok: true } : { ok: false, error: r.error };
 }
+
+/* ---------- business detail: edit, feature, media ---------- */
+
+export async function editBusinessDetail(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const denied = await ensure("business.edit");
+  if (denied) return { ok: false, error: denied };
+
+  const id = field(form, "id");
+
+  // Only send fields the admin actually filled in. Sending "" for an untouched
+  // optional field would blank it out, which is a silent data-loss bug when the
+  // form posts every input on every save.
+  const editable = ["name", "address", "district", "phone", "email", "website", "priceTier"] as const;
+  const payload: Record<string, string> = {};
+  for (const key of editable) {
+    const value = field(form, key);
+    if (value) payload[key] = value;
+  }
+
+  if (Object.keys(payload).length === 0) return { ok: false, error: "No changes to save." };
+
+  const r = await consoleSend(`/businesses/${id}`, "PATCH", payload);
+  revalidatePath(`/businesses/${id}`);
+  return r.ok ? { ok: true } : { ok: false, error: r.error };
+}
+
+export async function toggleBusinessFeatured(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const denied = await ensure("business.edit");
+  if (denied) return { ok: false, error: denied };
+  const id = field(form, "id");
+  const r = await consoleSend(`/businesses/${id}/feature`, "POST", {
+    featured: field(form, "featured") === "true"
+  });
+  revalidatePath(`/businesses/${id}`);
+  revalidatePath("/businesses");
+  return r.ok ? { ok: true } : { ok: false, error: r.error };
+}
+
+export async function moderatePhoto(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const decision = field(form, "decision");
+  // Approve and reject are separate permissions in the seed; check the one the
+  // decision actually needs rather than a single blanket "media" permission.
+  const denied = await ensure(decision === "reject" ? "media.reject" : "media.approve");
+  if (denied) return { ok: false, error: denied };
+
+  const r = await consoleSend(`/photos/${field(form, "photoId")}/moderate`, "POST", {
+    decision,
+    reason: field(form, "reason") || undefined
+  });
+  revalidatePath(`/businesses/${field(form, "businessId")}`);
+  return r.ok ? { ok: true } : { ok: false, error: r.error };
+}
+
+/* ---------- legal documents ---------- */
+
+export async function publishLegalDocument(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const denied = await ensure("legal.publish");
+  if (denied) return { ok: false, error: denied };
+
+  const r = await consoleSend("/legal", "POST", {
+    kind: field(form, "kind"),
+    version: field(form, "version"),
+    locale: field(form, "locale") || "uz",
+    title: field(form, "title"),
+    body: field(form, "body")
+  });
+  revalidatePath("/legal");
+  return r.ok ? { ok: true } : { ok: false, error: r.error };
+}
+
+/* ---------- categories ---------- */
+
+export async function upsertCategory(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const denied = await ensure("category.manage");
+  if (denied) return { ok: false, error: denied };
+
+  const id = field(form, "id");
+  const r = await consoleSend("/categories", "POST", {
+    ...(id ? { id } : {}),
+    slug: field(form, "slug"),
+    nameUz: field(form, "nameUz"),
+    nameRu: field(form, "nameRu"),
+    nameEn: field(form, "nameEn"),
+    parentId: field(form, "parentId") || null
+  });
+  revalidatePath("/categories");
+  return r.ok ? { ok: true } : { ok: false, error: r.error };
+}

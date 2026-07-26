@@ -46,7 +46,14 @@ const PERMISSIONS: Array<[string, string, string]> = [
   ["audit.view", "audit", "View the full audit log"],
   ["admin.manage", "admin", "Manage admin users, roles, and permissions"],
   ["plan.manage", "plan", "Set plan pricing and feature entitlements (dynamic pricing)"],
-  ["payout.approve", "payout", "Approve business payouts (reserved for future billing)"]
+  ["payout.approve", "payout", "Approve business payouts (reserved for future billing)"],
+  // legal — publishing is separated from viewing because publishing a document
+  // version is what every future acceptance gets bound to, and is irreversible
+  // in the sense that acceptances against it cannot be un-made.
+  ["legal.view", "legal", "View legal documents, acceptances, and generated contracts"],
+  ["legal.publish", "legal", "Publish a new version of a legal document or contract template"],
+  // catalogue
+  ["category.manage", "category", "Create and edit the category taxonomy shown on the landing page"]
 ];
 
 const ROLES: Array<{
@@ -70,7 +77,10 @@ const ROLES: Array<{
       "review.view", "review.approve", "review.reject", "review.delete",
       "media.view", "media.approve", "media.reject",
       "user.view", "user.suspend", "user.ban", "user.unban",
-      "flag.view", "search.view", "audit.view"
+      "flag.view", "search.view", "audit.view",
+      // Moderators curate the catalogue and read legal state, but publishing a
+      // legal version stays with super_admin.
+      "category.manage", "legal.view"
     ]
   },
   {
