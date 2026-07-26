@@ -101,10 +101,23 @@ function spendForBooking(booking: BookingRow) {
 }
 ```
 
-- [ ] **Step 4: Typecheck**
+- [ ] **Step 4: Verify the script still parses**
 
-Run: `npm run typecheck --workspace db` (from repo root)
-Expected: no errors. If `db` workspace has no `typecheck` script, run `npx tsc --noEmit --project packages/db` instead — check `packages/db/package.json` first; if neither exists, skip this step (the script already typechecked cleanly before this change since it's a one-line conditional edit with no new types).
+Verified during pre-flight: `packages/db` has **no** `typecheck` script and no tsconfig of its own (its scripts are `migrate:dev`, `migrate:deploy`, `db:push`, `db:seed`, `studio`). Do not invent one.
+
+Instead confirm the edited script still compiles under `tsx`:
+
+```bash
+npx tsx --version && node --input-type=module -e "console.log('ok')"
+```
+
+Then confirm the file parses by type-stripping it without executing (the script self-invokes `main()` on import, so it must not actually be run here):
+
+```bash
+npx tsc --noEmit --skipLibCheck --target es2022 --module node16 --moduleResolution node16 packages/db/scripts/backfill-customers.ts
+```
+
+Expected: no output (success). Type errors originating from `@prisma/client` internals can be ignored; errors pointing at `backfill-customers.ts` itself must be fixed.
 
 - [ ] **Step 5: Commit**
 
@@ -747,7 +760,9 @@ export default async function CustomersPage({
 }
 ```
 
-Note: this uses a plain `<table>` with the existing `crm-page-head`/`crm-pending-note`/`crm-muted` classes already present in the dashboard's CSS (used by `overview/page.tsx` and `dashboard/layout.tsx`). If `.crm-table` is not yet a defined class in `apps/web/app/globals.css`, add a minimal rule near the other `.crm-*` table-adjacent styles: `.crm-table { width: 100%; border-collapse: collapse; } .crm-table th, .crm-table td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border, #e1e0d9); font-size: 0.875rem; }` — check `globals.css` for existing `.crm-` table styles first before adding a duplicate.
+**Do not add any CSS for this task.** Verified during pre-flight: `.crm-table` already exists in `apps/web/app/globals.css:5684` (fully styled, including a mobile `overflow-x: auto` rule at line 6043), and `.crm-cell-sub` (line 5721) is the established class for a secondary line beneath a cell's primary text — use it for the phone under the name. `.crm-page-head` and `.crm-pending-note` also already exist and are used by `overview/page.tsx` and `dashboard/layout.tsx`. Adding new rules would duplicate existing ones.
+
+Use `<p className="crm-cell-sub">{customer.phone}</p>` for the phone line rather than the `<br />` + `crm-muted` shown above — `crm-muted` is **not** a defined class in this codebase; `crm-cell-sub` is.
 
 - [ ] **Step 4: Add the sidebar menu entry**
 
