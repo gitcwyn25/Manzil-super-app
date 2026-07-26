@@ -47,8 +47,12 @@ function spendForBooking(booking: BookingRow) {
 async function main() {
   const apply = process.argv.includes("--apply");
 
+  // No `customerId: null` filter here: this is an idempotent full recompute
+  // over each (business, phone)'s complete booking history, not an
+  // incremental linker. Filtering to unlinked bookings would recompute an
+  // existing customer's aggregates from only the newly-unlinked subset and
+  // clobber firstSeenAt/lastVisitAt/visitCount/totalSpend on every re-run.
   const bookings = await prisma.booking.findMany({
-    where: { customerId: null },
     include: { payment: { select: { amount: true, status: true } } },
     orderBy: [{ businessId: "asc" }, { startsAt: "asc" }]
   });
@@ -98,7 +102,10 @@ async function main() {
       const [businessId, phone] = key.split("|");
       const firstSeenAt = rows[0].startsAt;
       const lastVisitAt = rows.reduce((latest, row) => (row.startsAt > latest ? row.startsAt : latest), rows[0].startsAt);
-      const visitCount = rows.filter((row) => row.status === "completed").length || rows.length;
+      // Count completed bookings only. A customer with only canceled/no-show
+      // bookings and zero completed ones correctly counts 0 visits — do not
+      // fall back to rows.length, which would invert the meaning of "visit".
+      const visitCount = rows.filter((row) => row.status === "completed").length;
       const totalSpend = rows.reduce((sum, row) => sum.plus(spendForBooking(row)), new Prisma.Decimal(0));
       const userIds = [...new Set(rows.map((row) => row.customerUserId).filter(Boolean))] as string[];
       const userId = userIds.length === 1 ? userIds[0] : null;
@@ -147,7 +154,7 @@ async function main() {
         });
       }
     }
-  });
+  }, { timeout: 120_000, maxWait: 10_000 });
 
   console.log("Customer backfill complete.");
 }
