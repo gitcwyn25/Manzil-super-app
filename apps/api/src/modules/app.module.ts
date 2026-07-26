@@ -38,6 +38,8 @@ import { AnalyticsService } from "./analytics/analytics.service";
 import { LegalController } from "./legal/legal.controller";
 import { LegalService } from "./legal/legal.service";
 import { ReviewTrustRepository } from "./reviews/review-trust.repository";
+import { HomeController } from "./home/home.controller";
+import { HomeRepository } from "./home/home.repository";
 import { SecurityModule } from "./security/security.module";
 import { RedisThrottlerStorage } from "./security/throttler-redis.storage";
 import { ManzilThrottlerGuard } from "./security/manzil-throttler.guard";
@@ -74,7 +76,8 @@ import { DEFAULT_THROTTLE } from "./security/throttle.config";
     ConsoleController,
     PlansController,
     AnalyticsController,
-    LegalController
+    LegalController,
+    HomeController
   ],
   providers: [
     // Reports unhandled exceptions to Sentry, then delegates to Nest's default
@@ -101,7 +104,8 @@ import { DEFAULT_THROTTLE } from "./security/throttle.config";
     AnalyticsService,
     AnalyticsRepository,
     LegalService,
-    ReviewTrustRepository
+    ReviewTrustRepository,
+    HomeRepository
   ]
 })
 export class AppModule {}

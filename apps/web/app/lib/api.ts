@@ -83,8 +83,65 @@ export async function getBusiness(slug: string): Promise<{ business: BusinessPla
   return payload.data;
 }
 
-export async function getHomeFeed() {
-  return mockApi.getHomeFeed();
+export type HomeCard = {
+  slug: string;
+  name: string;
+  district: string;
+  city: string;
+  priceTier: string | null;
+  avgRating: number;
+  reviewCount: number;
+  claimedAt: string | null;
+  featured: boolean;
+  category: { slug: string; nameUz: string; nameRu: string; nameEn: string };
+};
+
+export type HomeSections = {
+  justJoined: HomeCard[];
+  featured: HomeCard[];
+  categories: Array<{
+    slug: string;
+    nameUz: string;
+    nameRu: string;
+    nameEn: string;
+    businessCount: number;
+  }>;
+  totalBusinesses: number;
+};
+
+/**
+ * Real landing-page sections, with the mock feed retained for the parts that
+ * are still mock (occasions, lists, social activity).
+ *
+ * Previously this returned mock data unconditionally — it did not even consult
+ * `useMockData`, so setting NEXT_PUBLIC_USE_MOCK=false changed nothing here and
+ * the homepage stayed permanently fake.
+ *
+ * A failed fetch degrades to empty sections rather than throwing: the homepage
+ * is the first thing a visitor sees, and rendering it without the curated rows
+ * is better than rendering an error page.
+ */
+export async function getHomeFeed(locale = "uz") {
+  const mock = await mockApi.getHomeFeed();
+
+  if (useMockData) {
+    return { ...mock, sections: null as HomeSections | null };
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/home?locale=${locale}`, {
+      next: { revalidate: 60 }
+    });
+
+    if (!response.ok) {
+      return { ...mock, sections: null as HomeSections | null };
+    }
+
+    const payload = await response.json();
+    return { ...mock, sections: payload.data as HomeSections };
+  } catch {
+    return { ...mock, sections: null as HomeSections | null };
+  }
 }
 
 export async function getOccasions(): Promise<Occasion[]> {

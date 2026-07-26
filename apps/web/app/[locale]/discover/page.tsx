@@ -3,7 +3,8 @@ import { getUiCopy } from "@manzil/shared";
 import { BusinessCard } from "../../components/business-card";
 import { Reveal, RevealStagger } from "../../components/motion/reveal";
 import { SearchControls } from "../../components/search-controls";
-import { searchBusinesses } from "../../lib/api";
+import { getHomeFeed, searchBusinesses } from "../../lib/api";
+import { HomeSections } from "../../components/home-sections";
 
 export default async function DiscoverPage({
   params,
@@ -16,7 +17,16 @@ export default async function DiscoverPage({
   const copy = getUiCopy(locale);
   const category = filters.category ?? "all";
   const query = filters.q ?? "";
-  const { businesses: results, categories } = await searchBusinesses(query, category);
+
+  // The curated sections are the *browse* state. Once a visitor has searched or
+  // filtered, they have told us what they want — pushing editorial picks above
+  // their results would bury the answer they asked for.
+  const isBrowsing = query.trim().length === 0 && category === "all";
+
+  const [{ businesses: results, categories }, feed] = await Promise.all([
+    searchBusinesses(query, category),
+    isBrowsing ? getHomeFeed(locale) : Promise.resolve(null)
+  ]);
 
   return (
     <section className="section-block container discover-page">
@@ -30,6 +40,12 @@ export default async function DiscoverPage({
       <Reveal delay={120} variant="fade-up">
         <SearchControls categories={categories} category={category} locale={locale} query={query} />
       </Reveal>
+      {feed?.sections ? (
+        <Reveal delay={160} variant="fade-up">
+          <HomeSections locale={locale} sections={feed.sections} />
+        </Reveal>
+      ) : null}
+
       <Reveal delay={200} variant="fade-in">
         <div className="results-toolbar">
           <p>{copy.search.results(results.length)}</p>
