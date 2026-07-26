@@ -5,6 +5,52 @@ import { Reveal, RevealStagger } from "../../components/motion/reveal";
 import { SearchControls } from "../../components/search-controls";
 import { getHomeFeed, searchBusinesses } from "../../lib/api";
 import { HomeSections } from "../../components/home-sections";
+import { GurmanHero, type GurmanHeroCopy } from "../../components/gurman-hero";
+
+/**
+ * Hero copy per locale.
+ *
+ * Describes what Gurman AI actually does today — recommends real places from
+ * real reviews. It deliberately does not promise the package-maker or the
+ * business supervisor, which are planned but not built; a hero that oversells
+ * an assistant is the fastest way to lose trust in it.
+ */
+function gurmanCopy(locale: Locale): GurmanHeroCopy {
+  const byLocale: Record<string, GurmanHeroCopy> = {
+    uz: {
+      badge: "Gurman AI",
+      titleLine1: "Qayerga borishni",
+      titleLine2: "Gurman bilan toping",
+      subtitle:
+        "Gurman AI haqiqiy sharhlar va biznes ma'lumotlari asosida sizga mos joyni tavsiya qiladi — o'ylab topilgan bahо emas, faqat real ma'lumot.",
+      cta: "Gurman bilan suhbat",
+      ctaHref: `/${locale}/concierge`,
+      portraitAlt: "Gurman AI — Manzil yordamchisi"
+    },
+    ru: {
+      badge: "Gurman AI",
+      titleLine1: "Куда пойти —",
+      titleLine2: "подскажет Gurman",
+      subtitle:
+        "Gurman AI подбирает места на основе реальных отзывов и данных бизнесов — никаких выдуманных оценок, только настоящая информация.",
+      cta: "Спросить Gurman",
+      ctaHref: `/${locale}/concierge`,
+      portraitAlt: "Gurman AI — помощник Manzil"
+    },
+    en: {
+      badge: "Gurman AI",
+      titleLine1: "Where to go —",
+      titleLine2: "just ask Gurman",
+      subtitle:
+        "Gurman AI recommends places from real reviews and real business data — no invented scores, only what the data actually says.",
+      cta: "Ask Gurman",
+      ctaHref: `/${locale}/concierge`,
+      portraitAlt: "Gurman AI — the Manzil assistant"
+    }
+  };
+
+  return byLocale[locale] ?? byLocale.uz;
+}
 
 export default async function DiscoverPage({
   params,
@@ -40,6 +86,8 @@ export default async function DiscoverPage({
       <Reveal delay={120} variant="fade-up">
         <SearchControls categories={categories} category={category} locale={locale} query={query} />
       </Reveal>
+      {isBrowsing ? <GurmanHero copy={gurmanCopy(locale)} /> : null}
+
       {feed?.sections ? (
         <Reveal delay={160} variant="fade-up">
           <HomeSections locale={locale} sections={feed.sections} />

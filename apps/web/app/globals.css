@@ -6308,3 +6308,180 @@ textarea:focus {
   color: #0f5b3d;
   font-weight: 550;
 }
+
+/* ---------- Gurman AI hero ---------- */
+
+.gurman-hero {
+  position: relative;
+  overflow: hidden;
+  margin: 48px 0;
+  padding: 56px 32px;
+  border-radius: 18px;
+  background: #08110d;
+  isolation: isolate;
+}
+
+.gurman-hero__wash {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 25%, rgba(15, 91, 61, 0.35), transparent 55%),
+    radial-gradient(circle at 80% 70%, rgba(197, 160, 89, 0.22), transparent 55%);
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+.gurman-hero__shapes {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.gurman-shape {
+  position: absolute;
+}
+
+.gurman-shape__body {
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(2px);
+}
+
+.gurman-shape--one { left: -8%; top: 12%; }
+.gurman-shape--two { right: -4%; top: 62%; }
+.gurman-shape--three { left: 6%; bottom: 4%; }
+.gurman-shape--four { right: 16%; top: 8%; }
+
+.gurman-hero__inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 40px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.gurman-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 5px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+}
+
+.gurman-hero__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #c5a059;
+}
+
+.gurman-hero__title {
+  margin: 0 0 16px;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(32px, 5vw, 54px);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.gurman-hero__title span {
+  display: block;
+}
+
+.gurman-hero__title-accent {
+  background: linear-gradient(90deg, #c5a059, #f0e0bf);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.gurman-hero__sub {
+  max-width: 46ch;
+  margin: 0 0 26px;
+  font-size: 15.5px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.gurman-hero__cta {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 26px;
+  border-radius: 999px;
+  background: #c5a059;
+  color: #08110d;
+  font-size: 14.5px;
+  font-weight: 620;
+  text-decoration: none;
+  transition: transform 160ms ease, background 160ms ease;
+}
+
+.gurman-hero__cta:hover {
+  background: #d8b877;
+  transform: translateY(-1px);
+}
+
+.gurman-hero__portrait {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.gurman-hero__img {
+  width: clamp(180px, 22vw, 300px);
+  height: auto;
+  filter: drop-shadow(0 24px 48px rgba(0, 0, 0, 0.45));
+}
+
+.gurman-hero__fallback {
+  display: grid;
+  place-items: center;
+  width: clamp(140px, 16vw, 200px);
+  aspect-ratio: 3 / 4;
+  border: 1px dashed rgba(197, 160, 89, 0.45);
+  border-radius: 14px;
+  background: rgba(197, 160, 89, 0.08);
+  color: #c5a059;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 56px;
+}
+
+@media (max-width: 760px) {
+  .gurman-hero {
+    padding: 40px 20px;
+  }
+
+  .gurman-hero__inner {
+    /* Portrait first would push the copy below the fold on a phone, so the
+       character moves under the message rather than above it. */
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .gurman-hero__sub {
+    margin-inline: auto;
+  }
+
+  .gurman-hero__img {
+    width: clamp(150px, 45vw, 220px);
+  }
+}
+
+/* Motion is decorative; honour a reduced-motion preference by flattening it. */
+@media (prefers-reduced-motion: reduce) {
+  .gurman-hero * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
