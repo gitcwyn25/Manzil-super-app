@@ -1,0 +1,309 @@
+/*
+ * Analytics chart styling.
+ *
+ * Colors are declared as roles, not raw hex, so light/dark swap in one place.
+ * The blue ordinal ramp below was validated with the dataviz palette validator
+ * against both surfaces (monotone lightness, >=0.06 adjacent gaps, single hue,
+ * light end clearing 2:1 on its own surface) — do not re-step it by eye.
+ */
+
+.mz-analytics {
+  --viz-surface: #fcfcfb;
+  --viz-text-primary: #0b0b0b;
+  --viz-text-secondary: #52514e;
+  --viz-text-muted: #898781;
+  --viz-grid: #e1e0d9;
+  --viz-border: rgba(11, 11, 11, 0.1);
+
+  /* Single-series accent. */
+  --viz-series: #2a78d6;
+
+  /* Ordinal ramp, light: blue 250 -> 650. */
+  --viz-step-0: #86b6ef;
+  --viz-step-1: #5598e7;
+  --viz-step-2: #2a78d6;
+  --viz-step-3: #1c5cab;
+  --viz-step-4: #104281;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) .mz-analytics {
+    --viz-surface: #1a1a19;
+    --viz-text-primary: #ffffff;
+    --viz-text-secondary: #c3c2b7;
+    --viz-text-muted: #898781;
+    --viz-grid: #2c2c2a;
+    --viz-border: rgba(255, 255, 255, 0.1);
+
+    --viz-series: #3987e5;
+
+    /* Ordinal ramp, dark: blue 150 -> 600 (lighter end nearest the surface). */
+    --viz-step-0: #b7d3f6;
+    --viz-step-1: #86b6ef;
+    --viz-step-2: #5598e7;
+    --viz-step-3: #2a78d6;
+    --viz-step-4: #184f95;
+  }
+}
+
+:root[data-theme="dark"] .mz-analytics {
+  --viz-surface: #1a1a19;
+  --viz-text-primary: #ffffff;
+  --viz-text-secondary: #c3c2b7;
+  --viz-text-muted: #898781;
+  --viz-grid: #2c2c2a;
+  --viz-border: rgba(255, 255, 255, 0.1);
+
+  --viz-series: #3987e5;
+
+  --viz-step-0: #b7d3f6;
+  --viz-step-1: #86b6ef;
+  --viz-step-2: #5598e7;
+  --viz-step-3: #2a78d6;
+  --viz-step-4: #184f95;
+}
+
+/* ---------- stat tiles ---------- */
+
+.mz-statrow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.mz-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  border: 1px solid var(--viz-border);
+  border-radius: 10px;
+  background: var(--viz-surface);
+}
+
+.mz-stat__label {
+  font-size: 0.8125rem;
+  color: var(--viz-text-secondary);
+}
+
+.mz-stat__value {
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--viz-text-primary);
+  /* Proportional figures deliberately: tabular-nums loosens large numbers. */
+}
+
+.mz-stat__hint {
+  font-size: 0.75rem;
+  color: var(--viz-text-muted);
+}
+
+/* ---------- chart frame ---------- */
+
+.mz-chart {
+  margin: 0 0 28px;
+  padding: 16px;
+  border: 1px solid var(--viz-border);
+  border-radius: 10px;
+  background: var(--viz-surface);
+}
+
+.mz-chart__title {
+  margin-bottom: 10px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--viz-text-primary);
+}
+
+.mz-chart__empty {
+  margin: 0;
+  padding: 28px 0;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--viz-text-muted);
+}
+
+.mz-chart__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.mz-chart__endlabel {
+  margin: 6px 0 0;
+  font-size: 0.8125rem;
+  color: var(--viz-text-secondary);
+}
+
+.mz-chart__endlabel strong {
+  color: var(--viz-text-primary);
+}
+
+/* ---------- marks ---------- */
+
+.mz-grid {
+  stroke: var(--viz-grid);
+  stroke-width: 1;
+}
+
+.mz-line {
+  fill: none;
+  stroke: var(--viz-series);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+/* Wash, never a saturated block. */
+.mz-area {
+  fill: var(--viz-series);
+  opacity: 0.1;
+}
+
+/* >=8px marker with a 2px surface ring so it stays legible over the line. */
+.mz-dot {
+  fill: var(--viz-series);
+  stroke: var(--viz-surface);
+  stroke-width: 2;
+}
+
+/* Axis text wears text tokens, never the series color. */
+.mz-axis {
+  font-size: 11px;
+  fill: var(--viz-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.mz-axis--y {
+  text-anchor: end;
+}
+
+.mz-axis--end {
+  text-anchor: end;
+}
+
+/* ---------- horizontal bars ---------- */
+
+.mz-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mz-bars__row {
+  display: grid;
+  grid-template-columns: minmax(84px, 22%) 1fr auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.mz-bars__label {
+  overflow: hidden;
+  font-size: 0.8125rem;
+  color: var(--viz-text-secondary);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mz-bars__track {
+  display: block;
+  height: 20px; /* <= 24px cap; the row's leftover space is air */
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--viz-grid) 60%, transparent);
+}
+
+.mz-bars__fill {
+  display: block;
+  height: 100%;
+  background: var(--viz-series);
+  /* Square at the baseline, 4px rounded at the data end. */
+  border-radius: 0 4px 4px 0;
+}
+
+.mz-bars__fill[data-step="0"] { background: var(--viz-step-0); }
+.mz-bars__fill[data-step="1"] { background: var(--viz-step-1); }
+.mz-bars__fill[data-step="2"] { background: var(--viz-step-2); }
+.mz-bars__fill[data-step="3"] { background: var(--viz-step-3); }
+.mz-bars__fill[data-step="4"] { background: var(--viz-step-4); }
+
+.mz-bars__value {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--viz-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.mz-bars__note {
+  font-style: normal;
+  font-weight: 400;
+  color: var(--viz-text-muted);
+}
+
+/* ---------- table view ---------- */
+
+.mz-chart__table {
+  margin-top: 12px;
+  font-size: 0.8125rem;
+}
+
+.mz-chart__table summary {
+  color: var(--viz-text-secondary);
+  cursor: pointer;
+}
+
+.mz-chart__table table {
+  width: 100%;
+  margin-top: 8px;
+  border-collapse: collapse;
+}
+
+.mz-chart__table th,
+.mz-chart__table td {
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--viz-border);
+  text-align: left;
+  color: var(--viz-text-secondary);
+}
+
+.mz-chart__table td:last-child,
+.mz-chart__table th:last-child {
+  text-align: right;
+  /* Aligned column of numbers — the case tabular-nums exists for. */
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- upgrade / gating ---------- */
+
+.mz-upgrade {
+  padding: 28px 20px;
+  border: 1px solid var(--viz-border);
+  border-radius: 10px;
+  background: var(--viz-surface);
+  text-align: center;
+}
+
+.mz-upgrade h2 {
+  margin: 0 0 6px;
+  font-size: 1.0625rem;
+  color: var(--viz-text-primary);
+}
+
+.mz-upgrade p {
+  margin: 0 0 16px;
+  font-size: 0.875rem;
+  color: var(--viz-text-secondary);
+}
+
+/* ---------- responsive: wide content scrolls inside its own box ---------- */
+
+@media (max-width: 560px) {
+  .mz-bars__row {
+    grid-template-columns: minmax(64px, 30%) 1fr auto;
+  }
+}
