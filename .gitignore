@@ -21,3 +21,16 @@ apps/mobile/.claude/
 
 # SDD scratch workspace (ledger, briefs, review packages)
 .superpowers/
+
+# Build artifacts of the mobile app. An APK is ~86MB of generated binary —
+# GitHub warns past 50MB and hard-fails at 100MB, and it would live in the
+# pack forever. Ship builds through EAS/releases, not the repo.
+*.apk
+*.aab
+
+# Rendered video output (Remotion). Sources in promo-video/src are tracked;
+# the MP4/PNG renders are regenerable and large.
+marketing-office/promo-video/out/
+
+# Local tooling caches
+.impeccable/

@@ -64,6 +64,22 @@ export class CacheService implements OnModuleDestroy {
     return this.redisHealthy ? "redis" : "memory";
   }
 
+  /**
+   * The live Redis client, or null when Redis is absent/unhealthy.
+   *
+   * Exposed so other infrastructure (rate-limit storage) can share this one
+   * connection instead of provisioning a second datastore. Callers must treat
+   * null as "degrade to local behaviour", never as a fatal error.
+   */
+  get client(): Redis | null {
+    return this.redisHealthy ? this.redis : null;
+  }
+
+  /** Marks the shared connection unhealthy after a caller-observed failure. */
+  markUnhealthy() {
+    this.redisHealthy = false;
+  }
+
   /** Read-through cache. Loader errors are never masked by cache errors. */
   async getOrSet<T>(namespace: string, key: string, ttlSeconds: number, loader: () => Promise<T>): Promise<T> {
     const fullKey = await this.buildKey(namespace, key);

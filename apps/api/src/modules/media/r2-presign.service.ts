@@ -20,14 +20,27 @@ export class R2PresignService {
     return Boolean(this.accountId && this.accessKeyId && this.secretAccessKey && this.bucket);
   }
 
-  /** Presigns a PUT upload for the given storage key. */
-  presignUpload(storageKey: string, expiresSeconds = 900): { uploadUrl: string; publicUrl: string | null } {
+  /**
+   * Presigns a PUT upload for the given storage key.
+   *
+   * `contentType` and `contentLength` are **signed**, not merely advisory. A
+   * presigned URL that signs only `host` places no constraint on the bytes the
+   * client actually PUTs — it could upload an executable of any size and our
+   * server-side MIME/size checks would be decorative. Signing these headers
+   * makes R2 itself reject any upload whose type or length differs from what
+   * was authorised.
+   */
+  presignUpload(
+    storageKey: string,
+    options: { contentType: string; contentLength: number; expiresSeconds?: number }
+  ): { uploadUrl: string; publicUrl: string | null; requiredHeaders: Record<string, string> } {
     if (!this.isConfigured()) {
       throw new ServiceUnavailableException(
         "Media storage is not configured. Set CLOUDFLARE_R2_* environment variables."
       );
     }
 
+    const { contentType, contentLength, expiresSeconds = 900 } = options;
     const host = `${this.accountId}.r2.cloudflarestorage.com`;
     const region = "auto";
     const service = "s3";
@@ -41,12 +54,25 @@ export class R2PresignService {
       .map((segment) => encodeURIComponent(segment))
       .join("/")}`;
 
+    // Signed headers must be lowercase and sorted by name in both the
+    // canonical headers block and the SignedHeaders list.
+    const signedHeaderValues: Record<string, string> = {
+      "content-length": String(contentLength),
+      "content-type": contentType,
+      host
+    };
+    const signedHeaderNames = Object.keys(signedHeaderValues).sort();
+    const signedHeaders = signedHeaderNames.join(";");
+    const canonicalHeaders = `${signedHeaderNames
+      .map((name) => `${name}:${signedHeaderValues[name]}`)
+      .join("\n")}\n`;
+
     const queryParams = new URLSearchParams({
       "X-Amz-Algorithm": "AWS4-HMAC-SHA256",
       "X-Amz-Credential": `${this.accessKeyId}/${credentialScope}`,
       "X-Amz-Date": amzDate,
       "X-Amz-Expires": String(expiresSeconds),
-      "X-Amz-SignedHeaders": "host"
+      "X-Amz-SignedHeaders": signedHeaders
     });
 
     // Canonical query string must be sorted by parameter name.
@@ -59,8 +85,8 @@ export class R2PresignService {
       "PUT",
       canonicalUri,
       canonicalQuery,
-      `host:${host}\n`,
-      "host",
+      canonicalHeaders,
+      signedHeaders,
       "UNSIGNED-PAYLOAD"
     ].join("\n");
 
@@ -83,6 +109,15 @@ export class R2PresignService {
       ? `${this.publicBaseUrl.replace(/\/$/, "")}/${storageKey}`
       : null;
 
-    return { uploadUrl, publicUrl };
+    return {
+      uploadUrl,
+      publicUrl,
+      // The client must replay these verbatim on the PUT; anything else fails
+      // signature verification at R2.
+      requiredHeaders: {
+        "Content-Type": contentType,
+        "Content-Length": String(contentLength)
+      }
+    };
   }
 }

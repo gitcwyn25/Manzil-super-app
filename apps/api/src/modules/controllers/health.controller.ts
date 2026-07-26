@@ -1,7 +1,14 @@
 import { Controller, Get } from "@nestjs/common";
+import { SkipThrottle } from "@nestjs/throttler";
 import { CacheService } from "../cache/cache.service";
 import { PrismaService } from "../prisma.service";
 
+/**
+ * Exempt from rate limiting: Railway's deploy healthcheck and the CI smoke test
+ * poll this endpoint repeatedly from a single address. Throttling it would make
+ * a healthy deploy fail its own health gate.
+ */
+@SkipThrottle()
 @Controller("health")
 export class HealthController {
   constructor(
