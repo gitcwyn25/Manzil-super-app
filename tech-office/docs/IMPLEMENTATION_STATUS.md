@@ -212,6 +212,48 @@ All four workspaces typecheck and build. Schema validates. Endpoint checked live
 
 ---
 
+## CRM M1 — Customer profile (2026-07-26)
+
+Builds on M0. The customer *list* shipped early as part of M0 (so M0 was verifiable in the UI), so M1 is the remaining piece: the per-customer profile and the dashboard entry point.
+
+### Shipped
+
+- **`GET /crm/businesses/:slug/customers/:customerId`** — one customer with bookings, reviews, and visit history. The row is fetched by `id` **and** `businessId` together, so a customer id from another business returns 404 rather than leaking; the id alone is never treated as authorization.
+- **`/[locale]/dashboard/customers/[id]`** — profile page: visit/spend/first-seen stats, contact and consent details, booking table, reviews, and visit history. Trilingual.
+- **List rows link through** to the profile; the name is the affordance rather than adding a "view" column for nothing.
+- **Dashboard home entry point** — customer count on the overview panel links straight to the directory, satisfying the CRM brief's "reachable in one click from `dashboard/page.tsx`, not a buried sub-page". Served off the existing `getStats` call rather than a second round trip.
+
+### Two modelling facts the UI has to be honest about
+
+- **Reviews hang off `User`, not `Customer`.** A customer who booked by phone and never made a Manzil account *cannot* have reviews. `hasAccount` distinguishes that from "left no review", and the page says which — an empty list would otherwise read as a judgment about the customer.
+- **Booking amounts count only settled payments**, mirroring the backfill rule. A pending or refunded payment is not revenue received.
+
+### Verified
+
+Typecheck and build clean across all workspaces. The endpoint was exercised against seeded data spanning two businesses:
+
+| Case | Result |
+|---|---|
+| Owner reads own customer | 200, full profile |
+| Owner requests another business's customer id | 404 (no leak) |
+| Owner reaches for another business entirely | 403 |
+| Unknown customer id | 404 |
+| Anonymous | 401 |
+
+Test rows were deleted afterwards — the database is back to zero customers and zero customer visits.
+
+### Still true from M0
+
+Zero bookings exist, so the directory and profile render their empty states in production until booking data arrives. The pipeline is correct but unexercised against real traffic.
+
+### Next
+
+M2 (segmentation) → M3 (loyalty) → M4 (campaigns, Telegram/SMS-first) → M5 (legal consent gate, required before any campaign reaches a real customer).
+
+Two carried-forward items worth their own tasks: `apps/api` still has **no test framework**, so there is nowhere for regression tests on the money logic to live; and `formatMoney` is now duplicated across three dashboard pages with diverging currency/zero handling.
+
+---
+
 ## Last verified
 
 - `npm run build --workspace @manzil/shared`
