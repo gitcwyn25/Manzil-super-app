@@ -69,8 +69,12 @@ Clients (Web + Mobile) →  Backend API (NestJS) →  Postgres (system of record
 | `follows` | Social graph (Phase 2) |
 | `lists` | Community-curated lists (Phase 2) |
 | `subscriptions` | Tier assignment (Phase 2) |
+| `customers` | Per-business CRM directory — one row per (business, phone), auto-populated from bookings |
+| `customer_visits` | Identified visit/transaction history for a `Customer`, linked to its source `Booking` |
 
 Full schema: see [packages/db/schema.prisma](../packages/db/schema.prisma)
+
+**`CustomerVisit` vs `BusinessVisit`:** these are deliberately separate models, not one folded into the other. `BusinessVisit` records *anonymous* traffic — a hashed IP+user-agent visitor key with no identity, used for public profile-view analytics. `CustomerVisit` records *identified* visits/transactions tied to a real `Customer` row, sourced from booking completions. Merging them would force an anonymous hash and a real identity into the same column on the same table — a modeling and privacy mismatch, not a simplification. `Customer` itself is scoped per-business (`@@unique([businessId, phone])`), not global, because a person is a customer of a specific business independently at each business they visit on the platform.
 
 ---
 
