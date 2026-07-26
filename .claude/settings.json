@@ -1,0 +1,6 @@
+{
+  "enabledPlugins": {
+    "equity-research@claude-for-financial-services": true,
+    "operations@claude-for-financial-services": true
+  }
+}

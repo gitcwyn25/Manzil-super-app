@@ -21,6 +21,7 @@ The deployable code stays at the repo root â€” **`apps/`** and **`packages/`** â
 | [TECH-STACK.md](TECH-STACK.md) | The stack at a glance + environments + deploy runbook. |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | System architecture (original design doc). |
 | [PRD.md](PRD.md) | Product requirements document. |
+| [android/design/](android/design/) | Android consumer app design research, screen plans, and UX direction. |
 | [docs/](docs/) | Engineering reference: API contracts, database, deployment, beta operations, contributor guide. |
 | [qa/](qa/) | Playwright E2E suite + production smoke tests (`cd tech-office/qa && npx playwright test`). |
 | [tools/](tools/) | Seed validation utilities (`npm run seed:validate` from repo root). |
