@@ -45,6 +45,7 @@ export type CrmStats = {
   visits: { totalLast30Days: number; uniqueLast30Days: number; daily: Array<{ date: string; count: number }> };
   announcements: Record<string, number>;
   activePackages: number;
+  customerCount: number;
 };
 
 export type CrmSubscription = {
@@ -82,6 +83,43 @@ export type CustomerSummary = {
 
 export function getCustomers(slug: string) {
   return crmGet<{ customers: CustomerSummary[] }>(`/crm/businesses/${slug}/customers`);
+}
+
+export type CustomerBooking = {
+  id: string;
+  serviceName: string;
+  startsAt: string;
+  status: string;
+  amount: string;
+};
+
+export type CustomerReview = {
+  id: string;
+  rating: number;
+  text: string;
+  createdAt: string;
+};
+
+export type CustomerVisitEntry = {
+  id: string;
+  occurredAt: string;
+  source: string;
+};
+
+export type CustomerDetail = CustomerSummary & {
+  notes: string | null;
+  firstSeenAt: string;
+  /** False when the customer booked by phone without a Manzil account — they cannot have reviews. */
+  hasAccount: boolean;
+  bookings: CustomerBooking[];
+  reviews: CustomerReview[];
+  visits: CustomerVisitEntry[];
+};
+
+export function getCustomer(slug: string, customerId: string) {
+  return crmGet<{ customer: CustomerDetail }>(
+    `/crm/businesses/${slug}/customers/${customerId}`
+  );
 }
 
 export type FunnelStage = {

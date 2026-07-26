@@ -114,6 +114,17 @@ export class CrmController {
     return { data: { customers: await this.customers.listCustomers(slug, request.manzilActor!) } };
   }
 
+  @Get("businesses/:slug/customers/:customerId")
+  async getCustomer(
+    @Param("slug") slug: string,
+    @Param("customerId") customerId: string,
+    @Req() request: ManzilRequest
+  ) {
+    return {
+      data: { customer: await this.customers.getCustomer(slug, customerId, request.manzilActor!) }
+    };
+  }
+
   /* ---------- Statistics ---------- */
 
   @Get("businesses/:slug/stats")

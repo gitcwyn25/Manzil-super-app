@@ -1,4 +1,5 @@
 import type { Locale } from "@manzil/shared";
+import Link from "next/link";
 import { getMyBusinesses } from "../../lib/api";
 import { getStats } from "../../lib/crm-api";
 import { getCrmCopy } from "../../lib/crm-copy";
@@ -119,6 +120,15 @@ export default async function OverviewPage({
             <div>
               <dt>{copy.overview.activePackages}</dt>
               <dd>{stats.activePackages}</dd>
+            </div>
+            {/* The customer directory is the CRM's anchor screen, so it gets a
+                direct entry point from the home view rather than living only
+                behind the sidebar. */}
+            <div>
+              <dt>
+                <Link href={`/${locale}/dashboard/customers`}>{copy.menu.customers}</Link>
+              </dt>
+              <dd>{stats.customerCount}</dd>
             </div>
           </dl>
         </section>

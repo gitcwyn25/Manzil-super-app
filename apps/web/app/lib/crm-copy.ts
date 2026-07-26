@@ -162,6 +162,25 @@ const copy = {
       consentNo: "Yo'q",
       never: "Hech qachon"
     },
+    customerDetail: {
+      back: "Mijozlar ro'yxatiga qaytish",
+      notFound: "Mijoz topilmadi",
+      firstSeen: "Birinchi marta",
+      profile: "Mijoz ma'lumotlari",
+      bookings: "Bandlovlar",
+      reviews: "Sharhlar",
+      visits: "Tashriflar tarixi",
+      noBookings: "Bandlovlar yo'q",
+      noReviews: "Sharhlar yo'q",
+      noVisits: "Tashriflar qayd etilmagan",
+      noAccountHint: "Bu mijoz Manzil hisobiga ulanmagan, shuning uchun sharhlari ko'rsatilmaydi.",
+      colService: "Xizmat",
+      colDate: "Sana",
+      colStatus: "Holat",
+      colAmount: "Summa",
+      notes: "Izohlar",
+      noNotes: "Izoh yo'q"
+    },
     common: {
       signInPrompt: "Kabinet uchun tizimga kiring",
       noBusiness: "Sizda hali biznes yo'q",
@@ -331,6 +350,25 @@ const copy = {
       consentNo: "Нет",
       never: "Никогда"
     },
+    customerDetail: {
+      back: "Назад к списку клиентов",
+      notFound: "Клиент не найден",
+      firstSeen: "Первый визит",
+      profile: "Данные клиента",
+      bookings: "Брони",
+      reviews: "Отзывы",
+      visits: "История визитов",
+      noBookings: "Броней нет",
+      noReviews: "Отзывов нет",
+      noVisits: "Визиты не зафиксированы",
+      noAccountHint: "Клиент не связан с аккаунтом Manzil, поэтому отзывы не отображаются.",
+      colService: "Услуга",
+      colDate: "Дата",
+      colStatus: "Статус",
+      colAmount: "Сумма",
+      notes: "Заметки",
+      noNotes: "Заметок нет"
+    },
     common: {
       signInPrompt: "Войдите, чтобы открыть кабинет",
       noBusiness: "У вас пока нет бизнеса",
@@ -499,6 +537,25 @@ const copy = {
       consentYes: "Yes",
       consentNo: "No",
       never: "Never"
+    },
+    customerDetail: {
+      back: "Back to customers",
+      notFound: "Customer not found",
+      firstSeen: "First seen",
+      profile: "Customer details",
+      bookings: "Bookings",
+      reviews: "Reviews",
+      visits: "Visit history",
+      noBookings: "No bookings yet",
+      noReviews: "No reviews yet",
+      noVisits: "No visits recorded",
+      noAccountHint: "This customer is not linked to a Manzil account, so no reviews can be shown.",
+      colService: "Service",
+      colDate: "Date",
+      colStatus: "Status",
+      colAmount: "Amount",
+      notes: "Notes",
+      noNotes: "No notes"
     },
     common: {
       signInPrompt: "Sign in to open the dashboard",

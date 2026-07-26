@@ -405,7 +405,7 @@ export class CrmRepository {
     const since = new Date();
     since.setDate(since.getDate() - 30);
 
-    const [full, ratingRows, visitRows, announcementCounts, packageCount, reviewsLastWeek] = await Promise.all([
+    const [full, ratingRows, visitRows, announcementCounts, packageCount, customerCount, reviewsLastWeek] = await Promise.all([
       this.prisma.business.findUniqueOrThrow({
         where: { id: business.id },
         select: { avgRating: true, reviewCount: true, name: true, slug: true, status: true }
@@ -425,6 +425,7 @@ export class CrmRepository {
         _count: { status: true }
       }),
       this.prisma.businessPackage.count({ where: { businessId: business.id, isActive: true } }),
+      this.prisma.customer.count({ where: { businessId: business.id } }),
       this.prisma.review.count({
         where: {
           businessId: business.id,
@@ -477,7 +478,8 @@ export class CrmRepository {
         daily: [...dayBuckets.entries()].map(([date, count]) => ({ date, count }))
       },
       announcements,
-      activePackages: packageCount
+      activePackages: packageCount,
+      customerCount
     };
   }
 

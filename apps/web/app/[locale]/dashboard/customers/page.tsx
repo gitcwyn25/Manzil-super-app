@@ -1,5 +1,6 @@
 import type { Locale } from "@manzil/shared";
 import { isLocale } from "@manzil/shared";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getMyBusinesses } from "../../../lib/api";
 import { getCustomers } from "../../../lib/crm-api";
@@ -62,7 +63,11 @@ export default async function CustomersPage({
             {customers.map((customer) => (
               <tr key={customer.id}>
                 <td>
-                  {customer.name ?? "—"}
+                  {/* The name is the row's affordance into the profile — a
+                      separate "view" column would add a column for nothing. */}
+                  <Link href={`/${locale}/dashboard/customers/${customer.id}`}>
+                    {customer.name ?? customer.phone}
+                  </Link>
                   <p className="crm-cell-sub">{customer.phone}</p>
                 </td>
                 <td>
