@@ -6125,3 +6125,72 @@ textarea:focus {
   text-transform: uppercase;
   color: #8a8f9c;
 }
+
+/* ---------- review trust signals ---------- */
+
+.verified-visit {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(15, 91, 61, 0.1);
+  color: #0f5b3d;
+  font-size: 11.5px;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+}
+
+.helpful-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 5px 12px;
+  border: 1px solid #e8eaec;
+  border-radius: 999px;
+  background: #fff;
+  color: #4a4f5a;
+  font-size: 12.5px;
+  font-weight: 550;
+  cursor: pointer;
+  transition: border-color 140ms ease, background 140ms ease, color 140ms ease;
+}
+
+.helpful-button:hover:not(:disabled) {
+  border-color: #0f5b3d;
+  color: #0f5b3d;
+}
+
+.helpful-button.is-voted {
+  border-color: #0f5b3d;
+  background: rgba(15, 91, 61, 0.08);
+  color: #0f5b3d;
+}
+
+.helpful-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ---------- review photo upload ---------- */
+
+.photo-upload__label span {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.photo-upload__status {
+  margin-top: 6px;
+  font-size: 12.5px;
+  color: #8a8f9c;
+}
+
+.photo-upload__error {
+  margin-top: 6px;
+  font-size: 12.5px;
+  color: var(--error, #c0392b);
+}

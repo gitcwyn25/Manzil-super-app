@@ -64,6 +64,8 @@ export type Review = {
   locale: "uz" | "ru" | "en";
   createdAt: string;
   helpfulCount: number;
+  /** True when the review is linked to a completed booking by this reviewer at this business. */
+  verifiedVisit?: boolean;
   reply?: ReviewReply;
 };
 

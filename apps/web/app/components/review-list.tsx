@@ -1,7 +1,17 @@
 import type { Locale, Review } from "@manzil/shared";
 import { getUiCopy } from "@manzil/shared";
+import { HelpfulButton } from "./helpful-button";
 
-export function ReviewList({ reviews, locale }: { reviews: Review[]; locale: Locale }) {
+export function ReviewList({
+  reviews,
+  locale,
+  votedReviewIds = []
+}: {
+  reviews: Review[];
+  locale: Locale;
+  /** Reviews the signed-in viewer already marked helpful, so the button renders in the right state. */
+  votedReviewIds?: string[];
+}) {
   const copy = getUiCopy(locale);
 
   if (reviews.length === 0) {
@@ -26,9 +36,27 @@ export function ReviewList({ reviews, locale }: { reviews: Review[]; locale: Loc
           <div>
             <strong>{review.authorName}</strong>
             <p className="stars">
-              {review.rating} - {review.authorBadge ?? `${review.helpfulCount} ${copy.reviewsList.helpful}`}
+              {review.rating}
+              {review.authorBadge ? ` - ${review.authorBadge}` : null}
+              {/* Only shown when the review is linked to a completed booking by
+                  this reviewer at this business — never inferred. */}
+              {review.verifiedVisit ? (
+                <span className="verified-visit" title="Tasdiqlangan tashrif">
+                  ✓ Tasdiqlangan tashrif
+                </span>
+              ) : null}
             </p>
             <p>{review.text}</p>
+            <HelpfulButton
+              initialCount={review.helpfulCount}
+              initialVoted={votedReviewIds.includes(review.id)}
+              label={copy.reviewsList.helpful}
+              reviewId={review.id}
+            />
+            {/* No incentive is ever offered for leaving a review. Discounting
+                reviews is treated as a trust violation by both Yelp's Trust &
+                Safety rules and Meituan/Dianping's platform policy, not a
+                growth tactic. */}
             {review.reply ? (
               <div className="owner-reply">
                 <strong>{copy.reviewsList.businessReply}</strong>

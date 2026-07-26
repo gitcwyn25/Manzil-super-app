@@ -34,11 +34,59 @@ async function readErrorMessage(response: Response): Promise<string> {
   return fallbackByStatus[response.status] ?? `Sharhni yuborib bo'lmadi (${response.status}).`;
 }
 
+const ALLOWED_PHOTO_TYPES = ["image/jpeg", "image/png", "image/webp", "image/avif"];
+const MAX_PHOTO_BYTES = 8 * 1024 * 1024;
+
+/**
+ * Presigns and uploads one review photo. Returns false on any failure so the
+ * caller can report that the review saved but the photo did not — the review
+ * is the thing the user came to do, and losing it to a photo problem would be
+ * the worse outcome.
+ */
+async function uploadReviewPhoto(
+  file: File,
+  reviewId: string,
+  token: string | null
+): Promise<boolean> {
+  try {
+    const presign = await fetch(`${API_BASE_URL}/media/presign`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      },
+      body: JSON.stringify({
+        ownerType: "review",
+        ownerId: reviewId,
+        contentType: file.type,
+        contentLength: file.size
+      })
+    });
+
+    if (!presign.ok) return false;
+
+    const { data } = await presign.json();
+
+    // Content-Type and Content-Length are signed into the URL, so these headers
+    // must be replayed exactly or R2 rejects the signature.
+    const put = await fetch(data.uploadUrl, {
+      method: "PUT",
+      headers: data.requiredHeaders,
+      body: file
+    });
+
+    return put.ok;
+  } catch {
+    return false;
+  }
+}
+
 export function ReviewForm({ businessSlug, locale }: { businessSlug: string; locale: Locale }) {
   const { getToken, isSignedIn } = useAuth();
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [pendingPhoto, setPendingPhoto] = useState<File | null>(null);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -89,8 +137,38 @@ export function ReviewForm({ businessSlug, locale }: { businessSlug: string; loc
         return;
       }
 
+      // The photo is attached after the review exists, because a review photo
+      // is owned by its review — there is no id to presign against until the
+      // review has been created.
+      const created = (await response.json().catch(() => null)) as
+        | { data?: { review?: { id?: string } } }
+        | null;
+      const reviewId = created?.data?.review?.id;
+
+      if (pendingPhoto && reviewId) {
+        const uploaded = await uploadReviewPhoto(pendingPhoto, reviewId, token);
+
+        if (!uploaded) {
+          // The review itself saved — say so, and be specific that only the
+          // photo failed. Reporting a blanket failure here would push the user
+          // to resubmit and hit the duplicate-review constraint.
+          setError(false);
+          setMessage(
+            "Sharhingiz qabul qilindi, ammo rasmni yuklab bo'lmadi. Rasmni keyinroq qo'shishingiz mumkin."
+          );
+          setPendingPhoto(null);
+          formElement.reset();
+          return;
+        }
+      }
+
       setError(false);
-      setMessage("Sharhingiz qabul qilindi. Sahifa yangilanishi bilan ko'rinadi.");
+      setMessage(
+        pendingPhoto
+          ? "Sharhingiz va rasmingiz qabul qilindi. Moderatsiyadan so'ng ko'rinadi."
+          : "Sharhingiz qabul qilindi. Sahifa yangilanishi bilan ko'rinadi."
+      );
+      setPendingPhoto(null);
       formElement.reset();
     } catch {
       // Only genuinely unexpected failures reach here now: the network never
@@ -124,6 +202,34 @@ export function ReviewForm({ businessSlug, locale }: { businessSlug: string; loc
           placeholder="Nima yoqdi? Narx, xizmat, muhit haqida yozing."
         />
       </label>
+      <label>
+        <span>Rasm qo&apos;shish (ixtiyoriy)</span>
+        <input
+          accept={ALLOWED_PHOTO_TYPES.join(",")}
+          onChange={(event) => {
+            const file = event.target.files?.[0] ?? null;
+
+            if (file && !ALLOWED_PHOTO_TYPES.includes(file.type)) {
+              setError(true);
+              setMessage("Faqat JPEG, PNG, WebP yoki AVIF rasmlar qabul qilinadi.");
+              event.target.value = "";
+              return;
+            }
+
+            if (file && file.size > MAX_PHOTO_BYTES) {
+              setError(true);
+              setMessage("Rasm hajmi 8MB dan oshmasligi kerak.");
+              event.target.value = "";
+              return;
+            }
+
+            setMessage("");
+            setPendingPhoto(file);
+          }}
+          type="file"
+        />
+      </label>
+
       <button className="primary-button" type="submit" disabled={submitting}>
         {submitting ? "Yuborilmoqda..." : "Sharhni yuborish"}
       </button>

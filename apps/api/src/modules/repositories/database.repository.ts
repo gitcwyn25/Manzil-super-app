@@ -1066,6 +1066,11 @@ export class DatabaseRepository {
       locale: review.user.locale as Review["locale"],
       createdAt: review.createdAt.toISOString(),
       helpfulCount: review.helpfulCount,
+      // Reflects a completed booking by this reviewer at this business — see
+      // ReviewTrustRepository.linkBookingToReview for what has to hold before
+      // bookingId is ever set. A badge that is not tied to a real transaction
+      // would launder unverified reviews as trustworthy.
+      verifiedVisit: Boolean(review.bookingId),
       reply: review.reply ? this.mapReviewReply(review.reply) : undefined
     };
   }
