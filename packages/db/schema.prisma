@@ -141,6 +141,7 @@ model User {
   reports        Report[]
   adminProfile   AdminUser?
   staffRoles     BusinessStaff[]
+  customers      Customer[]
 
   @@index([role])
   @@index([status])
@@ -214,6 +215,8 @@ model Business {
   bookings      Booking[]
   payments      Payment[]
   verifications BusinessVerification[]
+  customers     Customer[]
+  customerVisits CustomerVisit[]
 
   @@index([categoryId])
   @@index([city, district])
@@ -339,6 +342,52 @@ model BusinessVisit {
   business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
 
   @@index([businessId, createdAt])
+}
+
+model Customer {
+  id               String   @id @default(cuid())
+  businessId       String
+  userId           String?
+  phone            String
+  name             String?
+  firstSeenAt      DateTime @default(now())
+  lastVisitAt      DateTime?
+  visitCount       Int      @default(0)
+  totalSpend       Decimal  @default(0) @db.Decimal(14, 2)
+  loyaltyPoints    Int      @default(0)
+  tags             String[] @default([])
+  notes            String?
+  consentMarketing Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  user     User?    @relation(fields: [userId], references: [id])
+  bookings Booking[]
+  visits   CustomerVisit[]
+
+  @@unique([businessId, phone])
+  @@index([businessId, lastVisitAt])
+  @@index([businessId, tags])
+  @@index([userId])
+}
+
+model CustomerVisit {
+  id         String   @id @default(cuid())
+  businessId String
+  customerId String
+  bookingId  String?
+  source     String   @default("booking_backfill")
+  occurredAt DateTime @default(now())
+  createdAt  DateTime @default(now())
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  booking  Booking? @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+
+  @@unique([bookingId])
+  @@index([businessId, occurredAt])
+  @@index([customerId, occurredAt])
 }
 
 model BusinessSubscription {
@@ -598,6 +647,7 @@ model SearchQueryLog {
 model Booking {
   id             String        @id @default(cuid())
   businessId     String
+  customerId     String?
   customerUserId String?
   customerPhone  String
   serviceName    String
@@ -610,9 +660,12 @@ model Booking {
   updatedAt      DateTime      @updatedAt
 
   business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  customer Customer? @relation(fields: [customerId], references: [id])
   payment  Payment? @relation(fields: [paymentId], references: [id])
+  customerVisit CustomerVisit?
 
   @@index([businessId, startsAt])
+  @@index([customerId])
 }
 
 model Payment {
