@@ -13,7 +13,7 @@ import type { ManzilRequest } from "../auth/auth.types";
 import { ManzilAuthGuard } from "../auth/manzil-auth.guard";
 import { RequireAuth } from "../auth/require-auth.decorator";
 import { CrmRepository } from "../crm/crm.repository";
-import { CustomersRepository, type CustomerSummary } from "../crm/customers.repository";
+import { CustomersRepository } from "../crm/customers.repository";
 import {
   AnnouncementDto,
   AnnouncementUpdateDto,

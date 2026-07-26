@@ -67,7 +67,7 @@ export default async function CustomersPage({
                 </td>
                 <td>
                   {customer.lastVisitAt
-                    ? new Date(customer.lastVisitAt).toLocaleDateString(locale)
+                    ? new Date(customer.lastVisitAt).toLocaleDateString(locale, { timeZone: "Asia/Tashkent" })
                     : text.never}
                 </td>
                 <td>{customer.visitCount}</td>
