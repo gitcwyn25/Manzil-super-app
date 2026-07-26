@@ -6067,3 +6067,61 @@ textarea:focus {
     filter: none;
   }
 }
+
+/* ---------- terms acceptance + contract (B2B registration) ---------- */
+
+.crm-terms-doc {
+  margin: 12px 0;
+  padding: 12px 14px;
+  border: 1px solid #e8eaec;
+  border-radius: 8px;
+  background: #fafbfc;
+}
+
+.crm-terms-doc summary {
+  cursor: pointer;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.crm-terms-body,
+.crm-contract-body {
+  /* Bounded so a long document scrolls inside its own box rather than pushing
+     the submit button off the page. */
+  max-height: 320px;
+  overflow-y: auto;
+  margin-top: 10px;
+  padding-right: 6px;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  color: #4a4f5a;
+}
+
+.crm-consent {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-top: 12px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.crm-consent input[type="checkbox"] {
+  /* Nudged to sit on the first line of a wrapping label. */
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  accent-color: #0f5b3d;
+}
+
+.crm-subhead {
+  margin: 18px 0 8px;
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #8a8f9c;
+}

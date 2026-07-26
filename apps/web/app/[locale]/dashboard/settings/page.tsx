@@ -2,6 +2,7 @@ import type { Locale } from "@manzil/shared";
 import { getMyBusinesses } from "../../../lib/api";
 import { updateBusinessAction } from "../../../lib/crm-actions";
 import { getSubscription } from "../../../lib/crm-api";
+import { getBusinessAcceptances, getBusinessContract } from "../../../lib/legal-api";
 import { getCrmCopy } from "../../../lib/crm-copy";
 
 export const dynamic = "force-dynamic";
@@ -21,6 +22,13 @@ export default async function SettingsPage({
   const extra = business as unknown as Record<string, string | undefined>;
   const subscriptionData = await getSubscription(business.slug);
   const subscription = subscriptionData?.subscription;
+
+  // Both return null when absent (no contract generated, or the endpoint
+  // failed) — the section renders its own empty state rather than erroring.
+  const [contract, acceptances] = await Promise.all([
+    getBusinessContract(business.slug),
+    getBusinessAcceptances(business.slug)
+  ]);
   const dateFormat = new Intl.DateTimeFormat(locale === "en" ? "en-GB" : locale, { dateStyle: "medium" });
 
   return (
@@ -115,6 +123,54 @@ export default async function SettingsPage({
             <button className="bz-btn-primary" type="submit">{copy.settings.save}</button>
           </div>
         </form>
+      </section>
+
+      <section className="crm-panel">
+        <h2>{copy.terms.contractTitle}</h2>
+
+        {contract ? (
+          <>
+            <dl className="crm-mini-facts">
+              <div>
+                <dt>{copy.terms.contractNo}</dt>
+                <dd>{contract.contract.contractNo}</dd>
+              </div>
+              <div>
+                <dt>{copy.terms.version}</dt>
+                <dd>{contract.contract.templateVersion}</dd>
+              </div>
+            </dl>
+
+            {/* The stored, frozen text — not a re-render of the current
+                template, which may have changed since this was agreed. */}
+            <details className="crm-terms-doc">
+              <summary>{copy.terms.download}</summary>
+              <pre className="crm-contract-body">{contract.contract.body}</pre>
+            </details>
+          </>
+        ) : (
+          <p className="crm-hint">{copy.terms.noContract}</p>
+        )}
+
+        {acceptances && acceptances.acceptances.length > 0 ? (
+          <>
+            <h3 className="crm-subhead">{copy.terms.accepted}</h3>
+            <ul className="crm-mini-facts">
+              {acceptances.acceptances.map((document) => (
+                <li key={document.id}>
+                  <span>
+                    {document.kind.replace(/_/g, " ")} · {copy.terms.version} {document.version}
+                  </span>{" "}
+                  <span className="crm-cell-sub">
+                    {new Date(document.acceptedAt).toLocaleDateString(locale, {
+                      timeZone: "Asia/Tashkent"
+                    })}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </>
+        ) : null}
       </section>
     </>
   );

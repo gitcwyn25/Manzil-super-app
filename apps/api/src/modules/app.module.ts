@@ -35,6 +35,8 @@ import { EntitlementGuard } from "./plans/entitlement.guard";
 import { AnalyticsController } from "./analytics/analytics.controller";
 import { AnalyticsRepository } from "./analytics/analytics.repository";
 import { AnalyticsService } from "./analytics/analytics.service";
+import { LegalController } from "./legal/legal.controller";
+import { LegalService } from "./legal/legal.service";
 import { SecurityModule } from "./security/security.module";
 import { RedisThrottlerStorage } from "./security/throttler-redis.storage";
 import { ManzilThrottlerGuard } from "./security/manzil-throttler.guard";
@@ -70,7 +72,8 @@ import { DEFAULT_THROTTLE } from "./security/throttle.config";
     SearchController,
     ConsoleController,
     PlansController,
-    AnalyticsController
+    AnalyticsController,
+    LegalController
   ],
   providers: [
     // Reports unhandled exceptions to Sentry, then delegates to Nest's default
@@ -95,7 +98,8 @@ import { DEFAULT_THROTTLE } from "./security/throttle.config";
     PlansRepository,
     EntitlementGuard,
     AnalyticsService,
-    AnalyticsRepository
+    AnalyticsRepository,
+    LegalService
   ]
 })
 export class AppModule {}

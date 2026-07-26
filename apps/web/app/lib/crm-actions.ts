@@ -41,6 +41,11 @@ function text(formData: FormData, key: string): string | undefined {
 export async function registerBusinessAction(formData: FormData) {
   const locale = text(formData, "locale") ?? "uz";
 
+  // An unchecked checkbox is simply absent from FormData, so this is false
+  // unless the user actually ticked it. The API enforces the same rule with
+  // @Equals(true) — the client check is for a fast, clear error, not security.
+  const acceptedTerms = formData.get("acceptedTerms") === "on";
+
   const payload = await crmSend("/crm/register", "POST", {
     name: text(formData, "name"),
     categorySlug: text(formData, "categorySlug"),
@@ -54,7 +59,9 @@ export async function registerBusinessAction(formData: FormData) {
     instagram: text(formData, "instagram"),
     telegram: text(formData, "telegram"),
     legalName: text(formData, "legalName"),
-    taxId: text(formData, "taxId")
+    taxId: text(formData, "taxId"),
+    acceptedTerms,
+    acceptedTermsVersion: text(formData, "acceptedTermsVersion")
   });
 
   const slug = (payload as { data: { slug: string } }).data.slug;

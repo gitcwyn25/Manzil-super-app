@@ -181,6 +181,19 @@ const copy = {
       notes: "Izohlar",
       noNotes: "Izoh yo'q"
     },
+    terms: {
+      section: "Shartlar va shartnoma",
+      hint: "Ro'yxatdan o'tish uchun foydalanish shartlarini qabul qilishingiz kerak.",
+      checkbox: "Men foydalanish shartlari va ommaviy oferta shartnomasini o'qib chiqdim va qabul qilaman",
+      read: "Shartlarni o'qish",
+      version: "Versiya",
+      unavailable: "Shartlar hujjati hali chop etilmagan. Ro'yxatdan o'tish davom etadi, ammo qabul qilish yozuvi saqlanmaydi.",
+      contractTitle: "Sizning shartnomangiz",
+      contractNo: "Shartnoma raqami",
+      download: "Shartnomani yuklab olish",
+      noContract: "Shartnoma hali yaratilmagan.",
+      accepted: "Qabul qilingan hujjatlar"
+    },
     common: {
       signInPrompt: "Kabinet uchun tizimga kiring",
       noBusiness: "Sizda hali biznes yo'q",
@@ -369,6 +382,19 @@ const copy = {
       notes: "Заметки",
       noNotes: "Заметок нет"
     },
+    terms: {
+      section: "Условия и договор",
+      hint: "Для регистрации необходимо принять условия использования.",
+      checkbox: "Я прочитал(а) и принимаю условия использования и договор публичной оферты",
+      read: "Прочитать условия",
+      version: "Версия",
+      unavailable: "Документ с условиями ещё не опубликован. Регистрация продолжится, но запись о принятии не будет сохранена.",
+      contractTitle: "Ваш договор",
+      contractNo: "Номер договора",
+      download: "Скачать договор",
+      noContract: "Договор ещё не сформирован.",
+      accepted: "Принятые документы"
+    },
     common: {
       signInPrompt: "Войдите, чтобы открыть кабинет",
       noBusiness: "У вас пока нет бизнеса",
@@ -556,6 +582,19 @@ const copy = {
       colAmount: "Amount",
       notes: "Notes",
       noNotes: "No notes"
+    },
+    terms: {
+      section: "Terms & contract",
+      hint: "You must accept the terms of service to register a business.",
+      checkbox: "I have read and accept the terms of service and the public offer contract",
+      read: "Read the terms",
+      version: "Version",
+      unavailable: "No terms document has been published yet. Registration will continue, but no acceptance record can be stored.",
+      contractTitle: "Your contract",
+      contractNo: "Contract number",
+      download: "Download contract",
+      noContract: "No contract has been generated yet.",
+      accepted: "Accepted documents"
     },
     common: {
       signInPrompt: "Sign in to open the dashboard",

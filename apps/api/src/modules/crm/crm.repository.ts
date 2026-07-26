@@ -14,6 +14,7 @@ import { CacheService } from "../cache/cache.service";
 import { PrismaService } from "../prisma.service";
 import { GeocodingService } from "./geocoding.service";
 import { AlertService } from "../alerts/alert.service";
+import { LegalService } from "../legal/legal.service";
 import type { AuthActor } from "../repositories/database.repository";
 import { requireOwnedBusiness as resolveOwnedBusiness } from "./business-ownership.util";
 
@@ -62,14 +63,19 @@ export class CrmRepository {
     private readonly prisma: PrismaService,
     private readonly cache: CacheService,
     private readonly geocoding: GeocodingService,
-    private readonly alerts: AlertService
+    private readonly alerts: AlertService,
+    private readonly legal: LegalService
   ) {}
 
   /* ------------------------------------------------------------------ */
   /* Registration                                                        */
   /* ------------------------------------------------------------------ */
 
-  async registerBusiness(input: BusinessRegistrationInput, actor: AuthActor) {
+  async registerBusiness(
+    input: BusinessRegistrationInput,
+    actor: AuthActor,
+    acceptance?: { acceptedTerms: boolean; ipAddress?: string | null; userAgent?: string | null }
+  ) {
     const name = input.name?.trim();
     const description = input.descriptionUz?.trim();
     const address = input.address?.trim();
@@ -105,6 +111,13 @@ export class CrmRepository {
 
     const slug = await this.uniqueSlug(name);
     const geo = await this.geocoding.geocode(address, district, input.city ?? "Tashkent");
+
+    // Resolved before the transaction opens: these are reads of immutable
+    // published rows, and doing them inside the transaction pushed it past
+    // Prisma's 5s interactive-transaction timeout on a remote database.
+    const legalDocuments = acceptance?.acceptedTerms
+      ? await this.legal.resolveCurrentDocuments()
+      : null;
 
     // Single transaction: user row, business, and its ownership claim either
     // all exist afterwards or none do — no orphan businesses on failure.
@@ -155,8 +168,25 @@ export class CrmRepository {
         }
       });
 
+      // Terms acceptance and the generated contract commit with the business
+      // and its claim, or not at all — a business must never exist without the
+      // record of what its owner agreed to.
+      if (legalDocuments) {
+        await this.legal.recordAcceptance(
+          tx,
+          {
+            businessId: created.id,
+            userId: actor.userId,
+            ipAddress: acceptance?.ipAddress,
+            userAgent: acceptance?.userAgent
+          },
+          { name: created.name, legalName: created.legalName, taxId: created.taxId },
+          legalDocuments
+        );
+      }
+
       return created;
-    });
+    }, { timeout: 20_000, maxWait: 10_000 });
 
     await this.cache.invalidate("businesses", "admin");
 

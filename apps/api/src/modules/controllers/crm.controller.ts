@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  Headers,
+  Ip,
   Param,
   Patch,
   Post,
@@ -13,6 +15,7 @@ import type { ManzilRequest } from "../auth/auth.types";
 import { ManzilAuthGuard } from "../auth/manzil-auth.guard";
 import { RequireAuth } from "../auth/require-auth.decorator";
 import { CrmRepository } from "../crm/crm.repository";
+import { LegalService } from "../legal/legal.service";
 import { CustomersRepository } from "../crm/customers.repository";
 import {
   AnnouncementDto,
@@ -34,15 +37,34 @@ import { ThrottleRegister, ThrottleWrite } from "../security/throttle.config";
 export class CrmController {
   constructor(
     private readonly crm: CrmRepository,
-    private readonly customers: CustomersRepository
+    private readonly customers: CustomersRepository,
+    private readonly legal: LegalService
   ) {}
 
   /* ---------- Registration ---------- */
 
   @Post("register")
   @ThrottleRegister()
-  async register(@Body() body: BusinessRegistrationDto, @Req() request: ManzilRequest) {
-    return { data: await this.crm.registerBusiness(body, request.manzilActor!) };
+  async register(
+    @Body() body: BusinessRegistrationDto,
+    @Req() request: ManzilRequest,
+    @Ip() ip: string,
+    @Headers("user-agent") userAgent?: string
+  ) {
+    // Reject a stale form before creating anything: if the terms changed while
+    // the page was open, the version the user actually read is no longer the
+    // one we would record.
+    if (body.acceptedTermsVersion) {
+      await this.legal.assertIsCurrentVersion("terms_of_service", body.acceptedTermsVersion);
+    }
+
+    return {
+      data: await this.crm.registerBusiness(body, request.manzilActor!, {
+        acceptedTerms: body.acceptedTerms,
+        ipAddress: ip ?? null,
+        userAgent: userAgent ?? null
+      })
+    };
   }
 
   /* ---------- Announcements ---------- */

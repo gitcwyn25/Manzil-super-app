@@ -2,6 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import type { Locale } from "@manzil/shared";
 import { getCategories } from "../../../lib/api";
 import { registerBusinessAction } from "../../../lib/crm-actions";
+import { getRegistrationTerms } from "../../../lib/legal-api";
 import { getCrmCopy } from "../../../lib/crm-copy";
 
 export const dynamic = "force-dynamic";
@@ -26,6 +27,7 @@ export default async function RegisterBusinessPage({
   }
 
   const categories = await getCategories();
+  const { terms } = await getRegistrationTerms(locale);
 
   return (
     <section className="crm-register">
@@ -109,6 +111,37 @@ export default async function RegisterBusinessPage({
               <input inputMode="numeric" maxLength={9} name="taxId" pattern="\d{9}" type="text" />
             </label>
           </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>{copy.terms.section}</legend>
+          <p className="crm-hint">{copy.terms.hint}</p>
+
+          {terms ? (
+            <>
+              {/* Pinned to the version rendered here. If the terms are
+                  republished while this page sits open, the API rejects the
+                  submission rather than recording acceptance of text the user
+                  never saw. */}
+              <input name="acceptedTermsVersion" type="hidden" value={terms.version} />
+
+              <details className="crm-terms-doc">
+                <summary>
+                  {copy.terms.read} — {terms.title} ({copy.terms.version} {terms.version})
+                </summary>
+                <div className="crm-terms-body">{terms.body}</div>
+              </details>
+            </>
+          ) : (
+            <p className="crm-hint">{copy.terms.unavailable}</p>
+          )}
+
+          {/* Required and unchecked by default: consent has to be a deliberate
+              act, so it is never pre-ticked. */}
+          <label className="crm-consent">
+            <input name="acceptedTerms" required type="checkbox" />
+            <span>{copy.terms.checkbox}</span>
+          </label>
         </fieldset>
 
         <button className="bz-btn-primary crm-submit" type="submit">

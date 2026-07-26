@@ -789,7 +789,13 @@ export class DatabaseRepository {
           where: { id: claim.businessId },
           data: {
             status: "claimed",
-            claimedByUserId: claim.userId
+            claimedByUserId: claim.userId,
+            // The "just joined" moment for the landing page: approval is when
+            // the business actually became real on the platform, not when its
+            // row was seeded or its claim submitted. Only set on first
+            // approval, so a re-claim later does not resurface an old business
+            // as new.
+            claimedAt: claim.business.claimedAt ?? new Date()
           },
           include: { category: true }
         }),

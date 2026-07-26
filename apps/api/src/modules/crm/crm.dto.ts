@@ -1,4 +1,5 @@
 import {
+  Equals,
   IsBoolean,
   IsIn,
   IsInt,
@@ -100,6 +101,29 @@ export class BusinessRegistrationDto {
   @IsString()
   @MaxLength(20)
   priceTier?: string;
+
+  /**
+   * Terms acknowledgment.
+   *
+   * `@Equals(true)` rather than `@IsBoolean()`: the requirement is that the
+   * business actually agreed, so `false` and a missing field must both be
+   * rejected. A merely-boolean field would let the client submit `false` and
+   * register without agreeing to anything.
+   */
+  @Equals(true, {
+    message: "You must accept the terms of service and contract to register a business"
+  })
+  acceptedTerms!: boolean;
+
+  /**
+   * Version the user saw. Checked against the currently published version so a
+   * form left open across a terms update cannot record acceptance of text the
+   * user never read.
+   */
+  @IsOptional()
+  @IsString()
+  @MaxLength(40)
+  acceptedTermsVersion?: string;
 }
 
 export class AnnouncementDto {
