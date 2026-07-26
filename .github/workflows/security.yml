@@ -1,0 +1,88 @@
+name: Security
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  # Dependency advisories are published continuously — a repo that only scans on
+  # push stays green while a vulnerability lands in an untouched lockfile.
+  schedule:
+    - cron: "0 6 * * 1"
+
+# Allow a newer run to supersede an in-flight one on the same ref.
+concurrency:
+  group: security-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  dependency-audit:
+    name: Dependency audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: npm
+
+      # Fails on high/critical only. Gating on `moderate` in a workspace this
+      # size means the build breaks on transitive dev-only advisories that carry
+      # no production risk, and a gate that cries wolf gets disabled.
+      - name: npm audit (production dependencies)
+        run: npm audit --omit=dev --audit-level=high
+
+      # Dev dependencies still matter (a compromised build tool runs in CI with
+      # repo access), but they are reported without blocking the merge.
+      - name: npm audit (all dependencies, advisory only)
+        continue-on-error: true
+        run: npm audit --audit-level=moderate
+
+  secret-scan:
+    name: Secret scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history: a secret committed and then "removed" in a later commit
+          # is still in the pack and still leaked. A shallow clone would miss it.
+          fetch-depth: 0
+
+      # Run the official image directly rather than the marketplace action, which
+      # requires a paid licence key for organisation-owned repositories.
+      - name: gitleaks
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}:/repo" \
+            zricethezav/gitleaks:latest \
+            detect \
+              --source=/repo \
+              --redact \
+              --verbose \
+              --exit-code 1
+
+  codeql:
+    name: CodeQL
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+          queries: security-extended
+
+      - name: Analyze
+        uses: github/codeql-action/analyze@v3

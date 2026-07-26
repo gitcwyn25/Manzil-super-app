@@ -1,0 +1,44 @@
+version: 2
+
+updates:
+  # Single npm entry: this is an npm-workspaces monorepo with one lockfile at
+  # the root, so per-workspace entries would produce duplicate/conflicting PRs.
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - security
+    groups:
+      # Patch/minor updates land as one reviewable PR instead of dozens.
+      production-minor-patch:
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+      development-minor-patch:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+    ignore:
+      # Prisma client and CLI must move together; the schema/engine pairing
+      # breaks if Dependabot bumps one of them alone. Upgrade both by hand.
+      - dependency-name: "prisma"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@prisma/client"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+    labels:
+      - dependencies
+      - ci

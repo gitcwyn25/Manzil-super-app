@@ -3,12 +3,20 @@ name: Database Migrations
 on:
   pull_request:
     branches: [main]
+    # The schema lives at packages/db/schema.prisma — there is no root prisma/
+    # directory, so the previous "prisma/**" filter never matched and this
+    # workflow had never run on any change.
     paths:
-      - "prisma/**"
+      - "packages/db/**"
+      - ".github/workflows/db-migrate.yml"
   push:
     branches: [main]
     paths:
-      - "prisma/**"
+      - "packages/db/**"
+      - ".github/workflows/db-migrate.yml"
+
+permissions:
+  contents: read
 
 jobs:
   validate-migrations:
@@ -29,19 +37,36 @@ jobs:
         ports:
           - 5432:5432
 
+    env:
+      DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_db
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18.x
+          node-version: 20.x
           cache: npm
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Validate migrations
-        run: npm run db:migrate
-        env:
-          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_db
+      - name: Validate schema syntax
+        run: npx prisma validate --schema packages/db/schema.prisma
+
+      # `migrate deploy` applies the committed migration files exactly as
+      # production will. The previous `migrate dev` is interactive and *authors*
+      # new migrations — it could not verify what is actually committed.
+      - name: Apply committed migrations
+        run: npm run db:migrate:deploy
+
+      # Catches the case where schema.prisma was edited but no migration was
+      # generated for it — that change would silently never reach production.
+      - name: Check for schema/migration drift
+        run: |
+          npx prisma migrate diff \
+            --from-url "$DATABASE_URL" \
+            --to-schema-datamodel packages/db/schema.prisma \
+            --exit-code \
+          && echo "No drift: committed migrations match schema.prisma"
