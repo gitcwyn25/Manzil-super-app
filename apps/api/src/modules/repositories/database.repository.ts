@@ -28,6 +28,7 @@ import type {
 } from "@prisma/client";
 import { CacheService } from "../cache/cache.service";
 import { PrismaService } from "../prisma.service";
+import { writeAudit } from "../console/audit.util";
 
 const CACHE_NS = {
   categories: "categories",
@@ -415,37 +416,67 @@ export class DatabaseRepository {
     return reports.map((report) => this.mapReport(report));
   }
 
+  /**
+   * Resolves a report and applies the moderation decision to the reported
+   * review/photo.
+   *
+   * Wrapped in a transaction so the review/photo status change, the report
+   * status change, and the audit row commit together. Previously these were
+   * three independent writes: a failure between them could leave a review
+   * hidden with its report still open, and nothing recorded who did it.
+   */
   async resolveReport(
     reportId: string,
-    moderationStatus: ModerationStatus = "rejected"
+    moderationStatus: ModerationStatus = "rejected",
+    adminId = "dev-admin"
   ): Promise<ModerationQueueItem> {
-    const report = await this.prisma.report.findUnique({
-      where: { id: reportId },
-      include: this.reportInclude()
-    });
+    const admin = await this.ensureAdminUser(adminId);
 
-    if (!report) {
-      throw new NotFoundException("Report not found");
-    }
-
-    if (report.reviewId) {
-      await this.prisma.review.update({
-        where: { id: report.reviewId },
-        data: { moderationStatus }
+    const updatedReport = await this.prisma.$transaction(async (tx) => {
+      const report = await tx.report.findUnique({
+        where: { id: reportId },
+        include: this.reportInclude()
       });
-    }
 
-    if (report.photoId) {
-      await this.prisma.photo.update({
-        where: { id: report.photoId },
-        data: { moderationStatus }
+      if (!report) {
+        throw new NotFoundException("Report not found");
+      }
+
+      if (report.reviewId) {
+        await tx.review.update({
+          where: { id: report.reviewId },
+          data: { moderationStatus }
+        });
+      }
+
+      if (report.photoId) {
+        await tx.photo.update({
+          where: { id: report.photoId },
+          data: { moderationStatus }
+        });
+      }
+
+      const resolved = await tx.report.update({
+        where: { id: reportId },
+        data: { status: "resolved" },
+        include: this.reportInclude()
       });
-    }
 
-    const updatedReport = await this.prisma.report.update({
-      where: { id: reportId },
-      data: { status: "resolved" },
-      include: this.reportInclude()
+      await writeAudit(tx, {
+        actorId: admin.id,
+        action: "report.resolve",
+        targetType: "report",
+        targetId: reportId,
+        beforeState: { reportStatus: report.status },
+        afterState: {
+          reportStatus: resolved.status,
+          moderationStatus,
+          reviewId: report.reviewId,
+          photoId: report.photoId
+        }
+      });
+
+      return resolved;
     });
 
     await this.cache.invalidate(CACHE_NS.businesses, CACHE_NS.admin);
@@ -453,11 +484,32 @@ export class DatabaseRepository {
     return this.mapReport(updatedReport);
   }
 
-  async rejectReport(reportId: string): Promise<ModerationQueueItem> {
-    const report = await this.prisma.report.update({
-      where: { id: reportId },
-      data: { status: "rejected" },
-      include: this.reportInclude()
+  async rejectReport(reportId: string, adminId = "dev-admin"): Promise<ModerationQueueItem> {
+    const admin = await this.ensureAdminUser(adminId);
+
+    const report = await this.prisma.$transaction(async (tx) => {
+      const before = await tx.report.findUnique({ where: { id: reportId } });
+
+      if (!before) {
+        throw new NotFoundException("Report not found");
+      }
+
+      const updated = await tx.report.update({
+        where: { id: reportId },
+        data: { status: "rejected" },
+        include: this.reportInclude()
+      });
+
+      await writeAudit(tx, {
+        actorId: admin.id,
+        action: "report.reject",
+        targetType: "report",
+        targetId: reportId,
+        beforeState: { reportStatus: before.status },
+        afterState: { reportStatus: updated.status }
+      });
+
+      return updated;
     });
 
     await this.cache.invalidate(CACHE_NS.businesses, CACHE_NS.admin);
@@ -759,6 +811,29 @@ export class DatabaseRepository {
         }
       });
 
+      // Approving a claim transfers ownership of a business AND elevates the
+      // claimant to business_owner. Both are exactly the kind of privileged
+      // change AuditLog exists to record; written inside the transaction so the
+      // audit row and the mutation cannot diverge.
+      await writeAudit(tx, {
+        actorId: admin.id,
+        action: "claim.approve",
+        targetType: "claim",
+        targetId: claimId,
+        beforeState: {
+          claimStatus: claim.status,
+          businessStatus: claim.business.status,
+          businessClaimedByUserId: claim.business.claimedByUserId,
+          userRole: claim.user.role
+        },
+        afterState: {
+          claimStatus: updatedClaim.status,
+          businessStatus: updatedBusiness.status,
+          businessClaimedByUserId: updatedBusiness.claimedByUserId,
+          userRole: updatedUser.role
+        }
+      });
+
       return {
         id: updatedClaim.id,
         status: updatedClaim.status,
@@ -825,6 +900,16 @@ export class DatabaseRepository {
               include: { category: true }
             })
           : claim.business;
+
+      await writeAudit(tx, {
+        actorId: admin.id,
+        action: "claim.reject",
+        targetType: "claim",
+        targetId: claimId,
+        beforeState: { claimStatus: claim.status, businessStatus: claim.business.status },
+        afterState: { claimStatus: updatedClaim.status, businessStatus: business.status },
+        reason: note ?? null
+      });
 
       return {
         id: updatedClaim.id,

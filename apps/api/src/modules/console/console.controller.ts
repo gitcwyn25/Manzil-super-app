@@ -1,7 +1,16 @@
 import { Body, Controller, Get, Ip, Param, Patch, Post, Query, Req, UseGuards } from "@nestjs/common";
 import { ConsoleRepository } from "./console.repository";
+import { AnalyticsRepository } from "../analytics/analytics.repository";
+import { parseWindow } from "../analytics/analytics.controller";
 import { PermissionGuard, type ConsoleRequest } from "./permission.guard";
 import { RequirePermission } from "./require-permission.decorator";
+import {
+  AdminReasonDto,
+  ConsoleBusinessEditDto,
+  MergeBusinessDto,
+  PlanUpdateDto,
+  SetPlanFeatureDto
+} from "../controllers/moderation.dto";
 
 /**
  * Admin console API. Class-level PermissionGuard authorizes every route:
@@ -11,7 +20,10 @@ import { RequirePermission } from "./require-permission.decorator";
 @Controller("console")
 @UseGuards(PermissionGuard)
 export class ConsoleController {
-  constructor(private readonly repo: ConsoleRepository) {}
+  constructor(
+    private readonly repo: ConsoleRepository,
+    private readonly analytics: AnalyticsRepository
+  ) {}
 
   private ctx(request: ConsoleRequest, ip: string) {
     return { adminId: request.adminUser!.id, ip: ip ?? request.socket?.remoteAddress ?? null };
@@ -29,6 +41,21 @@ export class ConsoleController {
   @RequirePermission("analytics.view")
   async overview() {
     return { data: await this.repo.overview() };
+  }
+
+  /**
+   * Platform-wide analytics.
+   *
+   * Lives on the console rather than the public `/analytics` controller so it
+   * uses the same AdminUser + permission model as every other admin route. The
+   * `/analytics` controller authenticates against `User.role`, which is a
+   * different identity system — mixing the two on one admin surface is how a
+   * permission check ends up bypassed.
+   */
+  @Get("analytics")
+  @RequirePermission("analytics.view")
+  async platformAnalytics(@Query("days") days?: string) {
+    return { data: await this.analytics.platformOverview(parseWindow(days)) };
   }
 
   /* ---------- businesses ---------- */
@@ -53,25 +80,25 @@ export class ConsoleController {
 
   @Post("businesses/:id/reject")
   @RequirePermission("business.reject")
-  async rejectBusiness(@Param("id") id: string, @Body() body: { reason?: string }, @Req() r: ConsoleRequest, @Ip() ip: string) {
+  async rejectBusiness(@Param("id") id: string, @Body() body: AdminReasonDto, @Req() r: ConsoleRequest, @Ip() ip: string) {
     return { data: await this.repo.rejectBusiness(id, body.reason ?? "", this.ctx(r, ip)) };
   }
 
   @Patch("businesses/:id")
   @RequirePermission("business.edit")
-  async editBusiness(@Param("id") id: string, @Body() body: Record<string, unknown>, @Req() r: ConsoleRequest, @Ip() ip: string) {
-    return { data: await this.repo.editBusiness(id, body, this.ctx(r, ip)) };
+  async editBusiness(@Param("id") id: string, @Body() body: ConsoleBusinessEditDto, @Req() r: ConsoleRequest, @Ip() ip: string) {
+    return { data: await this.repo.editBusiness(id, { ...body }, this.ctx(r, ip)) };
   }
 
   @Post("businesses/:id/merge")
   @RequirePermission("business.merge")
   async mergeBusiness(
     @Param("id") id: string,
-    @Body() body: { targetId?: string; reason?: string },
+    @Body() body: MergeBusinessDto,
     @Req() r: ConsoleRequest,
     @Ip() ip: string
   ) {
-    return { data: await this.repo.mergeBusiness(id, body.targetId ?? "", body.reason ?? "", this.ctx(r, ip)) };
+    return { data: await this.repo.mergeBusiness(id, body.targetId, body.reason ?? "", this.ctx(r, ip)) };
   }
 
   /* ---------- reviews ---------- */
@@ -90,13 +117,13 @@ export class ConsoleController {
 
   @Post("reviews/:id/reject")
   @RequirePermission("review.reject")
-  async rejectReview(@Param("id") id: string, @Body() body: { reason?: string }, @Req() r: ConsoleRequest, @Ip() ip: string) {
+  async rejectReview(@Param("id") id: string, @Body() body: AdminReasonDto, @Req() r: ConsoleRequest, @Ip() ip: string) {
     return { data: await this.repo.setReviewModeration(id, "reject", body.reason, this.ctx(r, ip)) };
   }
 
   @Post("reviews/:id/delete")
   @RequirePermission("review.delete")
-  async deleteReview(@Param("id") id: string, @Body() body: { reason?: string }, @Req() r: ConsoleRequest, @Ip() ip: string) {
+  async deleteReview(@Param("id") id: string, @Body() body: AdminReasonDto, @Req() r: ConsoleRequest, @Ip() ip: string) {
     return { data: await this.repo.setReviewModeration(id, "delete", body.reason, this.ctx(r, ip)) };
   }
 
@@ -116,13 +143,13 @@ export class ConsoleController {
 
   @Post("users/:id/ban")
   @RequirePermission("user.ban")
-  async banUser(@Param("id") id: string, @Body() body: { reason?: string }, @Req() r: ConsoleRequest, @Ip() ip: string) {
+  async banUser(@Param("id") id: string, @Body() body: AdminReasonDto, @Req() r: ConsoleRequest, @Ip() ip: string) {
     return { data: await this.repo.setUserStatus(id, "ban", body.reason, this.ctx(r, ip)) };
   }
 
   @Post("users/:id/suspend")
   @RequirePermission("user.suspend")
-  async suspendUser(@Param("id") id: string, @Body() body: { reason?: string }, @Req() r: ConsoleRequest, @Ip() ip: string) {
+  async suspendUser(@Param("id") id: string, @Body() body: AdminReasonDto, @Req() r: ConsoleRequest, @Ip() ip: string) {
     return { data: await this.repo.setUserStatus(id, "suspend", body.reason, this.ctx(r, ip)) };
   }
 
@@ -144,7 +171,7 @@ export class ConsoleController {
   @RequirePermission("plan.manage")
   async updatePlan(
     @Param("tier") tier: string,
-    @Body() body: Record<string, unknown>,
+    @Body() body: PlanUpdateDto,
     @Req() r: ConsoleRequest,
     @Ip() ip: string
   ) {
@@ -155,11 +182,11 @@ export class ConsoleController {
   @RequirePermission("plan.manage")
   async setPlanFeature(
     @Param("tier") tier: string,
-    @Body() body: { key?: string; included?: boolean },
+    @Body() body: SetPlanFeatureDto,
     @Req() r: ConsoleRequest,
     @Ip() ip: string
   ) {
-    return { data: await this.repo.setPlanFeature(tier, body.key ?? "", body.included ?? true, this.ctx(r, ip)) };
+    return { data: await this.repo.setPlanFeature(tier, body.key, body.included ?? true, this.ctx(r, ip)) };
   }
 
   /* ---------- audit ---------- */

@@ -4,9 +4,10 @@ import type { ManzilRequest } from "../auth/auth.types";
 import { ManzilAuthGuard } from "../auth/manzil-auth.guard";
 import { RequireAuth } from "../auth/require-auth.decorator";
 import { R2PresignService } from "../media/r2-presign.service";
+import { PresignUploadDto } from "../media/presign-upload.dto";
+import { extensionForType, type AllowedImageType } from "../media/upload-policy";
 import { PrismaService } from "../prisma.service";
-
-const ALLOWED_EXTENSIONS = new Set(["jpg", "jpeg", "png", "webp", "avif"]);
+import { ThrottleUpload } from "../security/throttle.config";
 
 @Controller("media")
 export class MediaController {
@@ -16,26 +17,15 @@ export class MediaController {
   ) {}
 
   @Post("presign")
+  @ThrottleUpload()
   @UseGuards(ManzilAuthGuard)
   @RequireAuth()
-  async createPresignedUpload(
-    @Body() body: { ownerType?: "business" | "review"; ownerId?: string; fileName?: string },
-    @Req() request: ManzilRequest
-  ) {
-    const { ownerType, ownerId, fileName } = body;
+  async createPresignedUpload(@Body() body: PresignUploadDto, @Req() request: ManzilRequest) {
+    const { ownerType, ownerId, contentType, contentLength } = body;
 
-    if (ownerType !== "business" && ownerType !== "review") {
-      throw new BadRequestException('ownerType must be "business" or "review"');
-    }
-
-    if (!ownerId || !fileName) {
-      throw new BadRequestException("ownerId and fileName are required");
-    }
-
-    const extension = fileName.split(".").pop()?.toLowerCase() ?? "";
-    if (!ALLOWED_EXTENSIONS.has(extension)) {
-      throw new BadRequestException(`File type .${extension} is not allowed`);
-    }
+    // Type and size are already validated by PresignUploadDto; the extension is
+    // derived from the accepted MIME type so it can never disagree with it.
+    const extension = extensionForType(contentType as AllowedImageType);
 
     // Verify the target exists before issuing an upload URL.
     let businessId: string | undefined;
@@ -63,7 +53,10 @@ export class MediaController {
 
     // Never trust the client-supplied file name for the storage path.
     const storageKey = `${ownerType}/${businessId ?? reviewId}/${randomUUID()}.${extension}`;
-    const { uploadUrl, publicUrl } = this.presign.presignUpload(storageKey);
+    const { uploadUrl, publicUrl, requiredHeaders } = this.presign.presignUpload(storageKey, {
+      contentType,
+      contentLength
+    });
 
     const photo = await this.prisma.photo.create({
       data: {
@@ -79,6 +72,8 @@ export class MediaController {
       data: {
         photoId: photo.id,
         uploadUrl,
+        // The PUT must send these exact headers or R2 rejects the signature.
+        requiredHeaders,
         storageKey,
         publicUrl,
         moderationStatus: photo.moderationStatus

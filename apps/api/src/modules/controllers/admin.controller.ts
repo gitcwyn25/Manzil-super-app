@@ -4,6 +4,7 @@ import type { ManzilRequest } from "../auth/auth.types";
 import { ManzilAuthGuard } from "../auth/manzil-auth.guard";
 import { Roles } from "../auth/roles.decorator";
 import { DatabaseRepository } from "../repositories/database.repository";
+import { RejectClaimDto, ResolveReportDto } from "./moderation.dto";
 
 const CLAIM_STATUSES = ["pending", "approved", "rejected"] as const;
 const REPORT_STATUSES = ["open", "resolved", "rejected"] as const;
@@ -53,7 +54,7 @@ export class AdminController {
   @Post("claims/:id/reject")
   async rejectClaim(
     @Param("id") id: string,
-    @Body() body: { note?: string },
+    @Body() body: RejectClaimDto,
     @Req() request: ManzilRequest
   ) {
     return {
@@ -75,23 +76,25 @@ export class AdminController {
   @Post("reports/:id/resolve")
   async resolveReport(
     @Param("id") id: string,
-    @Body() body: { moderationStatus?: string }
+    @Body() body: ResolveReportDto,
+    @Req() request: ManzilRequest
   ) {
     return {
       data: {
         report: await this.repository.resolveReport(
           id,
-          parseEnum<ModerationStatus>(body.moderationStatus, MODERATION_STATUSES, "rejected")
+          parseEnum<ModerationStatus>(body.moderationStatus, MODERATION_STATUSES, "rejected"),
+          request.manzilActor!.userId
         )
       }
     };
   }
 
   @Post("reports/:id/reject")
-  async rejectReport(@Param("id") id: string) {
+  async rejectReport(@Param("id") id: string, @Req() request: ManzilRequest) {
     return {
       data: {
-        report: await this.repository.rejectReport(id)
+        report: await this.repository.rejectReport(id, request.manzilActor!.userId)
       }
     };
   }

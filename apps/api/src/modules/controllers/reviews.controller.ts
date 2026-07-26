@@ -4,6 +4,7 @@ import { ManzilAuthGuard } from "../auth/manzil-auth.guard";
 import { RequireAuth } from "../auth/require-auth.decorator";
 import { Roles } from "../auth/roles.decorator";
 import { DatabaseRepository } from "../repositories/database.repository";
+import { ReportReviewDto, ReviewReplyDto } from "./moderation.dto";
 
 @Controller("reviews")
 export class ReviewsController {
@@ -14,7 +15,7 @@ export class ReviewsController {
   @Roles("business_owner", "admin")
   async replyToReview(
     @Param("id") id: string,
-    @Body() body: { text: string },
+    @Body() body: ReviewReplyDto,
     @Req() request: ManzilRequest
   ) {
     return {
@@ -29,7 +30,7 @@ export class ReviewsController {
   @RequireAuth()
   async reportReview(
     @Param("id") id: string,
-    @Body() body: { reason: string },
+    @Body() body: ReportReviewDto,
     @Req() request: ManzilRequest
   ) {
     return {

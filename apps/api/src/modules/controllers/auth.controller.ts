@@ -4,6 +4,8 @@ import { ClerkAuthService } from "../auth/clerk-auth.service";
 import { ManzilAuthGuard } from "../auth/manzil-auth.guard";
 import { RequireAuth } from "../auth/require-auth.decorator";
 import { DatabaseRepository } from "../repositories/database.repository";
+import { ThrottleAuth } from "../security/throttle.config";
+import { CreateSessionDto, SyncUserDto } from "./auth.dto";
 
 @Controller("auth")
 export class AuthController {
@@ -22,7 +24,7 @@ export class AuthController {
   @UseGuards(ManzilAuthGuard)
   @RequireAuth()
   async syncUser(
-    @Body() body: { displayName?: string; locale?: string },
+    @Body() body: SyncUserDto,
     @Req() request: ManzilRequest
   ) {
     const actor = request.manzilActor!;
@@ -38,7 +40,8 @@ export class AuthController {
   }
 
   @Post("session")
-  async createSession(@Body() body: { token?: string }, @Headers("authorization") authorization?: string) {
+  @ThrottleAuth()
+  async createSession(@Body() body: CreateSessionDto, @Headers("authorization") authorization?: string) {
     const token = body.token ?? this.extractBearerToken(authorization);
 
     if (!token) {
