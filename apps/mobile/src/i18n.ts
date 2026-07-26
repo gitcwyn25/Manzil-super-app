@@ -1,4 +1,4 @@
-import i18n from 'i18n-js';
+import { I18n } from 'i18n-js';
 
 const translations = {
   uz: {
@@ -69,7 +69,7 @@ const translations = {
   },
 };
 
-i18n.translations = translations;
+const i18n = new I18n(translations);
 i18n.defaultLocale = 'uz';
 i18n.locale = 'uz';
 

@@ -1,95 +1,103 @@
-import { ScrollView, Text, View } from 'react-native';
+import React from 'react';
+import { Text, View } from 'react-native';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
   getAchievements,
   getDiscoverableUsers,
   getPlatformBusinesses,
-  getUserProfile,
-  getUiCopy
+  getSocialActivities,
+  getUiCopy,
+  getUserProfile
 } from '@manzil/shared';
+import { useAppState } from '../app-state';
+import { Body, Card, Chip, Kicker, Screen, SectionHeader, StatPill, Title } from '../components/mobile-ui';
+import { colors, locale, radius, spacing } from '../theme';
+import type { MainStackParamList } from '../navigation/types';
 
-const locale = 'uz' as const;
+type Props = NativeStackScreenProps<MainStackParamList, 'Profile'>;
 
-export default function ProfileScreen() {
+export default function ProfileScreen({ navigation }: Props) {
   const copy = getUiCopy(locale);
   const profile = getUserProfile();
   const achievements = getAchievements();
   const users = getDiscoverableUsers();
+  const activities = getSocialActivities();
   const businesses = getPlatformBusinesses();
-  const saved = businesses.filter((business) => profile.defaultSavedSlugs.includes(business.slug));
+  const { savedSlugs } = useAppState();
+  const businessBySlug = new Map(businesses.map((business) => [business.slug, business]));
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: '#f9f9f7' }}>
-      <View style={{ padding: 20 }}>
-        <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center', marginBottom: 24 }}>
-          <View
-            style={{
-              width: 72,
-              height: 72,
-              borderRadius: 36,
-              backgroundColor: '#a1f0ef',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-          >
-            <Text style={{ fontSize: 28, fontWeight: '800', color: '#005454' }}>
-              {profile.displayName.charAt(0)}
-            </Text>
-          </View>
-          <View style={{ flex: 1 }}>
-            <Text style={{ fontSize: 24, fontWeight: '800' }}>{profile.displayName}</Text>
-            <Text style={{ color: '#3e4948' }}>@{profile.handle}</Text>
-            <Text style={{ color: '#3e4948', marginTop: 6 }}>{profile.bio[locale]}</Text>
-          </View>
+    <Screen>
+      <View style={{ flexDirection: 'row', gap: spacing.md, alignItems: 'center' }}>
+        <View
+          style={{
+            width: 76,
+            height: 76,
+            borderRadius: 38,
+            backgroundColor: colors.primarySoft,
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <Text style={{ fontSize: 30, fontWeight: '900', color: colors.primary }}>
+            {profile.displayName.charAt(0)}
+          </Text>
         </View>
-
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12, marginBottom: 24 }}>
-          <Text>{profile.stats.reviews} {copy.profile.reviews}</Text>
-          <Text>{profile.stats.saved} {copy.profile.saved}</Text>
-          <Text>{profile.stats.followers} {copy.profile.followers}</Text>
+        <View style={{ flex: 1 }}>
+          <Kicker>@{profile.handle}</Kicker>
+          <Title compact>{profile.displayName}</Title>
+          <Body>{profile.bio[locale]}</Body>
         </View>
-
-        <Text style={{ fontSize: 20, fontWeight: '800', marginBottom: 12 }}>{copy.mobile.achievements}</Text>
-        {achievements.map((achievement) => {
-          const earned = profile.earnedAchievementSlugs.includes(achievement.slug);
-          return (
-            <View
-              key={achievement.slug}
-              style={{
-                backgroundColor: '#fff',
-                borderRadius: 16,
-                padding: 16,
-                marginBottom: 10,
-                opacity: earned ? 1 : 0.65
-              }}
-            >
-              <Text style={{ fontSize: 18, fontWeight: '800' }}>
-                {achievement.emoji} {achievement.name[locale]}
-              </Text>
-              <Text style={{ color: '#3e4948', marginTop: 4 }}>{achievement.description[locale]}</Text>
-            </View>
-          );
-        })}
-
-        <Text style={{ fontSize: 20, fontWeight: '800', marginTop: 16, marginBottom: 12 }}>
-          {copy.mobile.savedPlaces}
-        </Text>
-        {saved.map((business) => (
-          <View key={business.slug} style={{ backgroundColor: '#fff', borderRadius: 16, padding: 16, marginBottom: 10 }}>
-            <Text style={{ fontWeight: '800' }}>{business.name}</Text>
-            <Text style={{ color: '#3e4948' }}>{business.district}</Text>
-          </View>
-        ))}
-
-        <Text style={{ fontSize: 20, fontWeight: '800', marginTop: 16, marginBottom: 12 }}>
-          {copy.mobile.followingPeople}
-        </Text>
-        {users.slice(0, 2).map((user) => (
-          <View key={user.id} style={{ backgroundColor: '#fff', borderRadius: 16, padding: 16, marginBottom: 10 }}>
-            <Text style={{ fontWeight: '800' }}>{user.displayName}</Text>
-            <Text style={{ color: '#3e4948' }}>{user.bio[locale]}</Text>
-          </View>
-        ))}
       </View>
-    </ScrollView>
+
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.lg }}>
+        <StatPill value={profile.stats.reviews} label={copy.profile.reviews} />
+        <StatPill value={savedSlugs.length} label={copy.profile.saved} />
+        <StatPill value={profile.stats.photos} label={copy.profile.photos} />
+      </View>
+
+      <SectionHeader title={copy.profile.achievementsTitle} kicker={copy.profile.achievementsKicker} />
+      {achievements.map((achievement) => {
+        const earned = profile.earnedAchievementSlugs.includes(achievement.slug);
+        return (
+          <Card key={achievement.slug} style={{ marginBottom: spacing.sm, opacity: earned ? 1 : 0.68 }}>
+            <View style={{ flexDirection: 'row', gap: spacing.md, alignItems: 'center' }}>
+              <Text style={{ fontSize: 26 }}>{achievement.emoji}</Text>
+              <View style={{ flex: 1 }}>
+                <Text style={{ color: colors.ink, fontSize: 17, fontWeight: '900' }}>{achievement.name[locale]}</Text>
+                <Body>{achievement.description[locale]}</Body>
+              </View>
+              <Chip label={earned ? copy.profile.earned : copy.profile.locked} selected={earned} />
+            </View>
+          </Card>
+        );
+      })}
+
+      <SectionHeader title={copy.profile.followingTitle} kicker={copy.profile.followingKicker} />
+      {users.slice(0, 2).map((user) => (
+        <Card key={user.id} style={{ marginBottom: spacing.sm }}>
+          <Text style={{ color: colors.ink, fontWeight: '900', fontSize: 17 }}>{user.displayName}</Text>
+          <Body>{user.bio[locale]}</Body>
+          <View style={{ flexDirection: 'row', gap: spacing.sm, marginTop: spacing.sm }}>
+            <Chip label={`${user.followerCount} ${copy.profile.followers}`} />
+            <Chip label={user.topCategory[locale]} />
+          </View>
+        </Card>
+      ))}
+
+      <SectionHeader title={copy.profile.activityTitle} kicker={copy.profile.activityKicker} />
+      {activities.map((activity) => (
+        <Card key={activity.id} style={{ marginBottom: spacing.sm, borderRadius: radius.md }}>
+          <Text style={{ color: colors.ink, fontWeight: '900' }}>{activity.actorName}</Text>
+          <Body>{activity.action[locale]}</Body>
+          <Text
+            style={{ color: colors.primary, fontWeight: '900', marginTop: 4 }}
+            onPress={() => navigation.navigate('BusinessDetail', { slug: activity.businessSlug })}
+          >
+            {businessBySlug.get(activity.businessSlug)?.name}
+          </Text>
+        </Card>
+      ))}
+    </Screen>
   );
 }

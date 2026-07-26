@@ -1,21 +1,32 @@
 import React, { useMemo, useState } from 'react';
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, View } from 'react-native';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
   getConciergePrompts,
   getConciergeReply,
   getPlatformBusinesses,
   getUiCopy
 } from '@manzil/shared';
+import { Body, Card, Chip, Kicker, PrimaryButton, Screen, Title } from '../components/mobile-ui';
+import { colors, locale, radius, spacing } from '../theme';
+import type { MainStackParamList } from '../navigation/types';
 
-const locale = 'uz' as const;
+type Props = NativeStackScreenProps<MainStackParamList, 'Concierge'>;
 
-export default function ConciergeScreen() {
+type Message = {
+  id: string;
+  role: 'user' | 'assistant';
+  text: string;
+  suggestions?: { slug: string; name: string; reason: string }[];
+};
+
+export default function ConciergeScreen({ navigation }: Props) {
   const copy = getUiCopy(locale);
   const [input, setInput] = useState('');
-  const [messages, setMessages] = useState([
+  const [messages, setMessages] = useState<Message[]>([
     {
       id: 'welcome',
-      role: 'assistant' as const,
+      role: 'assistant',
       text: copy.concierge.welcome
     }
   ]);
@@ -34,10 +45,10 @@ export default function ConciergeScreen() {
     const reply = getConciergeReply(trimmed);
     setMessages((current) => [
       ...current,
-      { id: `user-${Date.now()}`, role: 'user' as const, text: trimmed },
+      { id: `user-${Date.now()}`, role: 'user', text: trimmed },
       {
         id: `assistant-${Date.now()}`,
-        role: 'assistant' as const,
+        role: 'assistant',
         text: reply.text[locale],
         suggestions: reply.suggestions.map((item) => ({
           slug: item.businessSlug,
@@ -50,73 +61,73 @@ export default function ConciergeScreen() {
   }
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: '#f9f9f7' }}>
-      <View style={{ padding: 20 }}>
-        <Text style={{ color: '#005454', fontWeight: '700' }}>{copy.concierge.kicker}</Text>
-        <Text style={{ fontSize: 28, fontWeight: '800', marginTop: 8 }}>{copy.concierge.title}</Text>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <Screen>
+        <Kicker>{copy.concierge.kicker}</Kicker>
+        <Title compact>{copy.concierge.title}</Title>
+        <Body style={{ marginTop: spacing.xs }}>{copy.concierge.subtitle}</Body>
 
-        {messages.map((message) => (
-          <View
-            key={message.id}
-            style={{
-              alignSelf: message.role === 'user' ? 'flex-end' : 'flex-start',
-              backgroundColor: message.role === 'user' ? '#005454' : '#fff',
-              padding: 14,
-              borderRadius: 16,
-              marginTop: 12,
-              maxWidth: '85%'
-            }}
-          >
-            <Text style={{ color: message.role === 'user' ? '#fff' : '#1a1c1b' }}>{message.text}</Text>
-            {'suggestions' in message && message.suggestions
-              ? message.suggestions.map((suggestion) => (
-                  <Text key={suggestion.slug} style={{ marginTop: 8, color: '#005454', fontWeight: '700' }}>
-                    {suggestion.name} · {suggestion.reason}
-                  </Text>
-                ))
-              : null}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: spacing.lg }}>
+          <View style={{ flexDirection: 'row', gap: spacing.sm }}>
+            {prompts.map((prompt) => (
+              <Chip key={prompt[locale]} label={prompt[locale]} onPress={() => sendMessage(prompt[locale])} />
+            ))}
           </View>
-        ))}
-
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 16 }}>
-          {prompts.map((prompt) => (
-            <TouchableOpacity
-              key={prompt[locale]}
-              onPress={() => sendMessage(prompt[locale])}
-              style={{
-                backgroundColor: '#f4f4f2',
-                borderRadius: 999,
-                paddingHorizontal: 14,
-                paddingVertical: 10,
-                marginRight: 8
-              }}
-            >
-              <Text>{prompt[locale]}</Text>
-            </TouchableOpacity>
-          ))}
         </ScrollView>
 
-        <View style={{ flexDirection: 'row', gap: 8, marginTop: 16, marginBottom: 40 }}>
+        <View style={{ marginTop: spacing.lg }}>
+          {messages.map((message) => (
+            <View
+              key={message.id}
+              style={{
+                alignSelf: message.role === 'user' ? 'flex-end' : 'flex-start',
+                backgroundColor: message.role === 'user' ? colors.primary : colors.surface,
+                borderRadius: radius.lg,
+                padding: spacing.md,
+                marginBottom: spacing.sm,
+                maxWidth: '88%'
+              }}
+            >
+              <Text style={{ color: message.role === 'user' ? colors.surface : colors.ink, lineHeight: 21 }}>
+                {message.text}
+              </Text>
+              {message.suggestions?.map((suggestion) => (
+                <Card key={suggestion.slug} style={{ marginTop: spacing.sm, padding: spacing.sm }}>
+                  <Text style={{ color: colors.ink, fontWeight: '900' }}>{suggestion.name}</Text>
+                  <Text style={{ color: colors.primary, fontWeight: '800', marginTop: 3 }}>{suggestion.reason}</Text>
+                  <View style={{ marginTop: spacing.sm }}>
+                    <PrimaryButton
+                      label="Joyni ochish"
+                      tone="quiet"
+                      onPress={() => navigation.navigate('BusinessDetail', { slug: suggestion.slug })}
+                    />
+                  </View>
+                </Card>
+              ))}
+            </View>
+          ))}
+        </View>
+
+        <View style={{ flexDirection: 'row', gap: spacing.sm, marginTop: spacing.md }}>
           <TextInput
             value={input}
             onChangeText={setInput}
             placeholder={copy.concierge.placeholder}
+            placeholderTextColor={colors.subtle}
             style={{
               flex: 1,
-              backgroundColor: '#fff',
-              borderRadius: 12,
-              paddingHorizontal: 14,
-              paddingVertical: 12
+              minHeight: 50,
+              backgroundColor: colors.surface,
+              borderRadius: radius.md,
+              borderWidth: 1,
+              borderColor: colors.outline,
+              paddingHorizontal: spacing.md,
+              color: colors.ink
             }}
           />
-          <TouchableOpacity
-            onPress={() => sendMessage(input)}
-            style={{ backgroundColor: '#005454', borderRadius: 12, paddingHorizontal: 18, justifyContent: 'center' }}
-          >
-            <Text style={{ color: '#fff', fontWeight: '700' }}>{copy.concierge.send}</Text>
-          </TouchableOpacity>
+          <PrimaryButton label={copy.concierge.send} onPress={() => sendMessage(input)} />
         </View>
-      </View>
-    </ScrollView>
+      </Screen>
+    </KeyboardAvoidingView>
   );
 }

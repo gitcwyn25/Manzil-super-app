@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "mobile",
+    "name": "Manzil",
     "slug": "mobile",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -10,8 +10,11 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.manzil.consumer",
+      "versionCode": 1,
+      "backgroundColor": "#F9F9F7",
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#005454",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"

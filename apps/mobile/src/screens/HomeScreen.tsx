@@ -1,5 +1,6 @@
-import React from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import React, { useMemo } from 'react';
+import { ScrollView, Text, View } from 'react-native';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
   getFeedItems,
   getOccasions,
@@ -7,133 +8,105 @@ import {
   getSocialActivities,
   getUiCopy
 } from '@manzil/shared';
+import { useAppState } from '../app-state';
+import {
+  Body,
+  BusinessCard,
+  Card,
+  Chip,
+  Kicker,
+  PrimaryButton,
+  Screen,
+  SectionHeader,
+  StatPill,
+  Title
+} from '../components/mobile-ui';
+import { colors, locale, spacing } from '../theme';
+import type { MainStackParamList } from '../navigation/types';
 
-const locale = 'uz' as const;
+type Props = NativeStackScreenProps<MainStackParamList, 'Home'>;
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }: Props) {
   const copy = getUiCopy(locale);
   const feedItems = getFeedItems();
   const occasions = getOccasions();
   const businesses = getPlatformBusinesses();
   const activities = getSocialActivities();
-  const businessBySlug = new Map(businesses.map((business) => [business.slug, business]));
+  const businessBySlug = useMemo(() => new Map(businesses.map((business) => [business.slug, business])), [businesses]);
+  const { isSaved, toggleSaved } = useAppState();
+
+  const heroBusiness = businesses[0];
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: '#f9f9f7' }}>
-      <View style={{ padding: 20 }}>
-        <Text style={{ color: '#005454', fontSize: 14, fontWeight: '700' }}>
-          {copy.brand.tagline} · {copy.brand.city}
-        </Text>
-        <Text style={{ fontSize: 32, fontWeight: '800', marginTop: 8, color: '#1a1c1b' }}>
-          {copy.mobile.homeTitle}
-        </Text>
-        <Text style={{ color: '#3e4948', marginTop: 8, lineHeight: 22 }}>
-          {copy.mobile.homeSubtitle}
-        </Text>
+    <Screen>
+      <Kicker>{copy.brand.tagline} · {copy.brand.city}</Kicker>
+      <Title>{copy.mobile.homeTitle}</Title>
+      <Body style={{ marginTop: spacing.xs }}>{copy.mobile.homeSubtitle}</Body>
 
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 24 }}>
+      <Card style={{ marginTop: spacing.lg, backgroundColor: colors.primary }}>
+        <Text style={{ color: colors.primarySoft, fontWeight: '900', fontSize: 13 }}>Bugun eng ishonchli tanlov</Text>
+        <Text style={{ color: colors.surface, fontSize: 24, lineHeight: 30, fontWeight: '900', marginTop: 6 }}>
+          {heroBusiness.name}
+        </Text>
+        <Text style={{ color: '#D8ECE8', lineHeight: 21, marginTop: 6 }}>
+          {heroBusiness.insight?.aiSummary.uz}
+        </Text>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.md }}>
+          <StatPill value={heroBusiness.avgRating.toFixed(1)} label="reyting" />
+          <StatPill value={heroBusiness.liveStatus?.waitMinutes ?? 0} label="daq. kutish" />
+          <StatPill value={heroBusiness.insight?.trendingRank ? `#${heroBusiness.insight.trendingRank}` : 'Top'} label="trend" />
+        </View>
+        <View style={{ marginTop: spacing.md }}>
+          <PrimaryButton label="Batafsil ko'rish" tone="gold" onPress={() => navigation.navigate('BusinessDetail', { slug: heroBusiness.slug })} />
+        </View>
+      </Card>
+
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: spacing.lg }}>
+        <View style={{ flexDirection: 'row', gap: spacing.sm }}>
           {occasions.map((occasion) => (
-            <View
-              key={occasion.slug}
-              style={{
-                backgroundColor: '#f4f4f2',
-                borderRadius: 999,
-                paddingHorizontal: 16,
-                paddingVertical: 12,
-                marginRight: 10
-              }}
-            >
-              <Text style={{ fontWeight: '700' }}>
-                {occasion.emoji} {occasion.name[locale]}
-              </Text>
-            </View>
+            <Chip key={occasion.slug} label={`${occasion.emoji} ${occasion.name[locale]}`} />
           ))}
-        </ScrollView>
+        </View>
+      </ScrollView>
 
-        {feedItems.map((item) => (
-          <View
-            key={item.id}
-            style={{
-              backgroundColor: '#fff',
-              borderRadius: 20,
-              padding: 18,
-              marginTop: 18,
-              shadowColor: '#000',
-              shadowOpacity: 0.06,
-              shadowRadius: 12,
-              elevation: 2
-            }}
-          >
-            <Text style={{ fontSize: 22, fontWeight: '800' }}>
-              {item.emoji} {item.title[locale]}
-            </Text>
-            {item.subtitle ? (
-              <Text style={{ color: '#3e4948', marginTop: 6 }}>{item.subtitle[locale]}</Text>
-            ) : null}
+      <SectionHeader title="Sizga yaqin g'oyalar" kicker="Kashfiyot feed" />
+      {feedItems.slice(0, 4).map((item) => (
+        <Card key={item.id} style={{ marginBottom: spacing.md }}>
+          <Text style={{ color: colors.ink, fontSize: 20, lineHeight: 26, fontWeight: '900' }}>
+            {item.emoji} {item.title[locale]}
+          </Text>
+          {item.subtitle ? <Body style={{ marginTop: 4 }}>{item.subtitle[locale]}</Body> : null}
+          <View style={{ marginTop: spacing.md }}>
             {item.businessSlugs.map((slug) => {
               const business = businessBySlug.get(slug);
               if (!business) return null;
               return (
-                <View
+                <BusinessCard
                   key={slug}
-                  style={{
-                    marginTop: 12,
-                    padding: 14,
-                    borderRadius: 14,
-                    backgroundColor: '#f9f9f7'
-                  }}
-                >
-                  <Text style={{ fontWeight: '800', fontSize: 16 }}>{business.name}</Text>
-                  <Text style={{ color: '#3e4948', marginTop: 4 }}>
-                    {business.avgRating} ★ · {business.district}
-                  </Text>
-                  {business.badges?.slice(0, 2).map((badge) => (
-                    <Text key={badge.slug} style={{ marginTop: 6 }}>
-                      {badge.emoji} {badge.label[locale]}
-                    </Text>
-                  ))}
-                </View>
+                  business={business}
+                  saved={isSaved(slug)}
+                  onSave={() => toggleSaved(slug)}
+                  onPress={() => navigation.navigate('BusinessDetail', { slug })}
+                />
               );
             })}
           </View>
-        ))}
+        </Card>
+      ))}
 
-        <Text style={{ fontSize: 22, fontWeight: '800', marginTop: 28, marginBottom: 12 }}>
-          {copy.mobile.friendActivity}
-        </Text>
-        {activities.map((activity) => (
-          <View
-            key={activity.id}
-            style={{
-              backgroundColor: '#fff',
-              borderRadius: 16,
-              padding: 16,
-              marginBottom: 10
-            }}
-          >
-            <Text style={{ fontWeight: '700' }}>
-              {activity.actorName} {activity.action[locale]}
-            </Text>
-            <Text style={{ color: '#005454', marginTop: 4 }}>
-              {businessBySlug.get(activity.businessSlug)?.name}
-            </Text>
-          </View>
-        ))}
-
-        <TouchableOpacity
-          style={{
-            backgroundColor: '#feb300',
-            borderRadius: 12,
-            padding: 16,
-            marginTop: 24,
-            marginBottom: 40
-          }}
-        >
-          <Text style={{ textAlign: 'center', fontWeight: '800', color: '#6a4800' }}>
-            {copy.mobile.continueDiscover}
+      <SectionHeader title={copy.mobile.friendActivity} kicker="Jamiyat" />
+      {activities.map((activity) => (
+        <Card key={activity.id} style={{ marginBottom: spacing.sm }}>
+          <Text style={{ color: colors.ink, fontWeight: '900' }}>
+            {activity.actorName} {activity.action[locale]}
           </Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+          <Text style={{ color: colors.primary, fontWeight: '900', marginTop: 4 }}>
+            {businessBySlug.get(activity.businessSlug)?.name}
+          </Text>
+        </Card>
+      ))}
+
+      <PrimaryButton label={copy.mobile.continueDiscover} onPress={() => navigation.navigate('Search')} />
+    </Screen>
   );
 }
