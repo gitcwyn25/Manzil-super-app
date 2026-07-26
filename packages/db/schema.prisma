@@ -119,29 +119,31 @@ enum BusinessEventType {
 }
 
 model User {
-  id          String     @id @default(cuid())
-  clerkId     String?    @unique
-  email       String?    @unique
-  phone       String?    @unique
-  displayName String
-  avatarUrl   String?
-  locale      String     @default("uz")
-  role        UserRole   @default(consumer)
-  status      UserStatus @default(active)
-  bannedAt    DateTime?
+  id           String     @id @default(cuid())
+  clerkId      String?    @unique
+  email        String?    @unique
+  phone        String?    @unique
+  displayName  String
+  avatarUrl    String?
+  locale       String     @default("uz")
+  role         UserRole   @default(consumer)
+  status       UserStatus @default(active)
+  bannedAt     DateTime?
   bannedReason String?
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 
-  businesses     Business[] @relation("BusinessOwner")
-  reviews        Review[]
-  replies        ReviewReply[]
-  claims         Claim[] @relation("ClaimRequester")
-  reviewedClaims Claim[] @relation("ClaimReviewer")
-  reports        Report[]
-  adminProfile   AdminUser?
-  staffRoles     BusinessStaff[]
-  customers      Customer[]
+  businesses         Business[]          @relation("BusinessOwner")
+  reviews            Review[]
+  replies            ReviewReply[]
+  claims             Claim[]             @relation("ClaimRequester")
+  reviewedClaims     Claim[]             @relation("ClaimReviewer")
+  reports            Report[]
+  adminProfile       AdminUser?
+  staffRoles         BusinessStaff[]
+  customers          Customer[]
+  reviewHelpfulVotes ReviewHelpfulVote[]
+  legalAcceptances   LegalAcceptance[]
 
   @@index([role])
   @@index([status])
@@ -181,7 +183,7 @@ model Business {
   instagram       String?
   telegram        String?
   legalName       String?
-  taxId           String?        // STIR/INN — O'zbekiston soliq identifikatori
+  taxId           String? // STIR/INN — O'zbekiston soliq identifikatori
   hoursJson       Json?
   priceTier       String?
   status          BusinessStatus @default(unclaimed)
@@ -195,28 +197,39 @@ model Business {
   mergedIntoId       String?
   verificationStatus VerificationStatus @default(unverified)
   verifiedAt         DateTime?
-  parentBusinessId   String?             // multi-location under one account (Max)
+  parentBusinessId   String? // multi-location under one account (Max)
 
-  category      Category @relation(fields: [categoryId], references: [id])
-  claimedByUser User?    @relation("BusinessOwner", fields: [claimedByUserId], references: [id])
-  mergedInto    Business?  @relation("BusinessMerge", fields: [mergedIntoId], references: [id])
-  mergedFrom    Business[] @relation("BusinessMerge")
-  parent        Business?  @relation("BusinessLocations", fields: [parentBusinessId], references: [id])
-  locations     Business[] @relation("BusinessLocations")
-  reviews       Review[]
-  photos        Photo[]
-  claims        Claim[]
-  announcements Announcement[]
-  packages      BusinessPackage[]
-  visits        BusinessVisit[]
-  subscription  BusinessSubscription?
-  staff         BusinessStaff[]
-  events        BusinessEvent[]
-  bookings      Booking[]
-  payments      Payment[]
-  verifications BusinessVerification[]
-  customers     Customer[]
-  customerVisits CustomerVisit[]
+  // Editorial curation for the landing page. Deliberately a manual flag rather
+  // than an algorithmic score: at low business counts a ranked feed reads as
+  // sparse, whereas a hand-picked row reads as intentional.
+  featured  Boolean   @default(false)
+  // When an owner actually took the listing over. Distinct from createdAt,
+  // which is when the row was seeded — seeded listings would otherwise flood
+  // "Just joined" with businesses that never joined anything.
+  claimedAt DateTime?
+
+  category         Category               @relation(fields: [categoryId], references: [id])
+  claimedByUser    User?                  @relation("BusinessOwner", fields: [claimedByUserId], references: [id])
+  mergedInto       Business?              @relation("BusinessMerge", fields: [mergedIntoId], references: [id])
+  mergedFrom       Business[]             @relation("BusinessMerge")
+  parent           Business?              @relation("BusinessLocations", fields: [parentBusinessId], references: [id])
+  locations        Business[]             @relation("BusinessLocations")
+  reviews          Review[]
+  photos           Photo[]
+  claims           Claim[]
+  announcements    Announcement[]
+  packages         BusinessPackage[]
+  visits           BusinessVisit[]
+  subscription     BusinessSubscription?
+  staff            BusinessStaff[]
+  events           BusinessEvent[]
+  bookings         Booking[]
+  payments         Payment[]
+  verifications    BusinessVerification[]
+  customers        Customer[]
+  customerVisits   CustomerVisit[]
+  legalAcceptances LegalAcceptance[]
+  contracts        Contract[]
 
   @@index([categoryId])
   @@index([city, district])
@@ -226,25 +239,51 @@ model Business {
 }
 
 model Review {
-  id             String   @id @default(cuid())
-  businessId     String
-  userId         String
-  rating         Int
-  text           String
-  helpfulCount   Int      @default(0)
+  id               String           @id @default(cuid())
+  businessId       String
+  userId           String
+  rating           Int
+  text             String
+  // Denormalised tally of ReviewHelpfulVote. Kept as a column so review lists
+  // do not need a per-row aggregate; the vote table is the source of truth.
+  helpfulCount     Int              @default(0)
   moderationStatus ModerationStatus @default(approved)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  // Set when the review is traceable to a real booking, which is what makes a
+  // "verified visit" badge meaningful rather than decorative. Unique so one
+  // booking cannot be used to justify several reviews.
+  bookingId        String?          @unique
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
 
-  business Business      @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  user     User          @relation(fields: [userId], references: [id])
-  reply    ReviewReply?
-  photos   Photo[]
-  reports  Report[]
+  business     Business            @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  user         User                @relation(fields: [userId], references: [id])
+  booking      Booking?            @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  reply        ReviewReply?
+  photos       Photo[]
+  reports      Report[]
+  helpfulVotes ReviewHelpfulVote[]
 
   @@unique([businessId, userId])
   @@index([businessId, createdAt])
   @@index([moderationStatus])
+}
+
+/**
+ * One row per user per review. The unique constraint is the whole point: it is
+ * what stops a single user inflating a review's helpful count by clicking
+ * repeatedly, which is why the previous counter-only design was decorative.
+ */
+model ReviewHelpfulVote {
+  id        String   @id @default(cuid())
+  reviewId  String
+  userId    String
+  createdAt DateTime @default(now())
+
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([reviewId, userId])
+  @@index([userId])
 }
 
 model ReviewReply {
@@ -261,12 +300,12 @@ model ReviewReply {
 
 model Photo {
   id               String           @id @default(cuid())
-  businessId        String?
-  reviewId          String?
-  storageKey        String
-  publicUrl         String?
-  moderationStatus  ModerationStatus @default(pending)
-  createdAt         DateTime         @default(now())
+  businessId       String?
+  reviewId         String?
+  storageKey       String
+  publicUrl        String?
+  moderationStatus ModerationStatus @default(pending)
+  createdAt        DateTime         @default(now())
 
   business Business? @relation(fields: [businessId], references: [id], onDelete: Cascade)
   review   Review?   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
@@ -278,15 +317,15 @@ model Photo {
 }
 
 model Claim {
-  id                String      @id @default(cuid())
-  businessId        String
-  userId            String
-  verificationMethod String     @default("manual")
-  status            ClaimStatus @default(pending)
-  reviewedByAdminId String?
-  note              String?
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt
+  id                 String      @id @default(cuid())
+  businessId         String
+  userId             String
+  verificationMethod String      @default("manual")
+  status             ClaimStatus @default(pending)
+  reviewedByAdminId  String?
+  note               String?
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
 
   business        Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
   user            User     @relation("ClaimRequester", fields: [userId], references: [id])
@@ -345,24 +384,24 @@ model BusinessVisit {
 }
 
 model Customer {
-  id               String   @id @default(cuid())
+  id               String    @id @default(cuid())
   businessId       String
   userId           String?
   phone            String
   name             String?
-  firstSeenAt      DateTime @default(now())
+  firstSeenAt      DateTime  @default(now())
   lastVisitAt      DateTime?
-  visitCount       Int      @default(0)
-  totalSpend       Decimal  @default(0) @db.Decimal(14, 2)
-  loyaltyPoints    Int      @default(0)
-  tags             String[] @default([])
+  visitCount       Int       @default(0)
+  totalSpend       Decimal   @default(0) @db.Decimal(14, 2)
+  loyaltyPoints    Int       @default(0)
+  tags             String[]  @default([])
   notes            String?
-  consentMarketing Boolean  @default(false)
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  consentMarketing Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 
-  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  user     User?    @relation(fields: [userId], references: [id])
+  business Business        @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  user     User?           @relation(fields: [userId], references: [id])
   bookings Booking[]
   visits   CustomerVisit[]
 
@@ -417,7 +456,7 @@ model Report {
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
 
-  reporter User   @relation(fields: [reporterUserId], references: [id])
+  reporter User    @relation(fields: [reporterUserId], references: [id])
   review   Review? @relation(fields: [reviewId], references: [id], onDelete: Cascade)
   photo    Photo?  @relation(fields: [photoId], references: [id], onDelete: Cascade)
 
@@ -659,10 +698,11 @@ model Booking {
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
 
-  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  customer Customer? @relation(fields: [customerId], references: [id])
-  payment  Payment? @relation(fields: [paymentId], references: [id])
+  business      Business       @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  customer      Customer?      @relation(fields: [customerId], references: [id])
+  payment       Payment?       @relation(fields: [paymentId], references: [id])
   customerVisit CustomerVisit?
+  review        Review?
 
   @@index([businessId, startsAt])
   @@index([customerId])
@@ -686,4 +726,87 @@ model Payment {
 
   @@index([businessId, status])
   @@index([provider, externalId])
+}
+
+/// Kind of legal document a business must accept.
+enum LegalDocumentKind {
+  terms_of_service
+  privacy_policy
+  contract_template
+}
+
+/**
+ * A published, versioned legal document.
+ * Versioned rather than edited in place because acceptance has to point at the
+ * exact text the business agreed to. Editing a live document would silently
+ * rewrite what every prior acceptance means, which is the failure mode that
+ * makes an acceptance record worthless in a dispute.
+ */
+model LegalDocument {
+  id          String            @id @default(cuid())
+  kind        LegalDocumentKind
+  /// Human-facing version label, e.g. "1.0", "2026-07".
+  version     String
+  locale      String            @default("uz")
+  title       String
+  /// Full document body (markdown). Immutable once published.
+  body        String
+  publishedAt DateTime?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  acceptances LegalAcceptance[]
+  contracts   Contract[]
+
+  @@unique([kind, version, locale])
+  @@index([kind, publishedAt])
+}
+
+/**
+ * Records that a specific user accepted a specific document version on behalf
+ * of a business. IP and user agent are captured because an acceptance without
+ * provenance is difficult to rely on later.
+ */
+model LegalAcceptance {
+  id         String   @id @default(cuid())
+  businessId String
+  userId     String
+  documentId String
+  acceptedAt DateTime @default(now())
+  ipAddress  String?
+  userAgent  String?
+
+  business Business      @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  user     User          @relation(fields: [userId], references: [id])
+  document LegalDocument @relation(fields: [documentId], references: [id])
+
+  // One acceptance per business per document version; re-accepting the same
+  // version is a no-op rather than a duplicate row.
+  @@unique([businessId, documentId])
+  @@index([businessId, acceptedAt])
+  @@index([documentId])
+}
+
+/**
+ * A contract generated for a business at the moment it accepted the template.
+ * `renderedBody` is stored rather than re-rendered on download: regenerating
+ * from a template that may have changed since would hand the business a
+ * document they never agreed to.
+ */
+model Contract {
+  id           String   @id @default(cuid())
+  businessId   String
+  documentId   String
+  /// Human-facing contract number shown on the document.
+  contractNo   String   @unique
+  /// Frozen contract text as generated at acceptance time.
+  renderedBody String
+  /// Storage key if a PDF was rendered and uploaded; null while text-only.
+  storageKey   String?
+  generatedAt  DateTime @default(now())
+
+  business Business      @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  document LegalDocument @relation(fields: [documentId], references: [id])
+
+  @@index([businessId, generatedAt])
 }
