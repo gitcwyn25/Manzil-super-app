@@ -12,12 +12,17 @@ import {
 import type { ManzilRequest } from "../auth/auth.types";
 import { ManzilAuthGuard } from "../auth/manzil-auth.guard";
 import { RequireAuth } from "../auth/require-auth.decorator";
+import { CrmRepository } from "../crm/crm.repository";
+import { CustomersRepository, type CustomerSummary } from "../crm/customers.repository";
 import {
-  CrmRepository,
-  type AnnouncementInput,
-  type BusinessRegistrationInput,
-  type PackageInput
-} from "../crm/crm.repository";
+  AnnouncementDto,
+  AnnouncementUpdateDto,
+  BusinessRegistrationDto,
+  ChooseSubscriptionDto,
+  PackageDto,
+  PackageUpdateDto
+} from "../crm/crm.dto";
+import { ThrottleRegister, ThrottleWrite } from "../security/throttle.config";
 
 /**
  * Business CRM endpoints. Every route requires an authenticated user;
@@ -27,12 +32,16 @@ import {
 @UseGuards(ManzilAuthGuard)
 @RequireAuth()
 export class CrmController {
-  constructor(private readonly crm: CrmRepository) {}
+  constructor(
+    private readonly crm: CrmRepository,
+    private readonly customers: CustomersRepository
+  ) {}
 
   /* ---------- Registration ---------- */
 
   @Post("register")
-  async register(@Body() body: BusinessRegistrationInput, @Req() request: ManzilRequest) {
+  @ThrottleRegister()
+  async register(@Body() body: BusinessRegistrationDto, @Req() request: ManzilRequest) {
     return { data: await this.crm.registerBusiness(body, request.manzilActor!) };
   }
 
@@ -44,9 +53,10 @@ export class CrmController {
   }
 
   @Post("businesses/:slug/announcements")
+  @ThrottleWrite()
   async createAnnouncement(
     @Param("slug") slug: string,
-    @Body() body: AnnouncementInput,
+    @Body() body: AnnouncementDto,
     @Req() request: ManzilRequest
   ) {
     return { data: { announcement: await this.crm.createAnnouncement(slug, body, request.manzilActor!) } };
@@ -55,7 +65,7 @@ export class CrmController {
   @Patch("announcements/:id")
   async updateAnnouncement(
     @Param("id") id: string,
-    @Body() body: Partial<AnnouncementInput>,
+    @Body() body: AnnouncementUpdateDto,
     @Req() request: ManzilRequest
   ) {
     return { data: { announcement: await this.crm.updateAnnouncement(id, body, request.manzilActor!) } };
@@ -74,9 +84,10 @@ export class CrmController {
   }
 
   @Post("businesses/:slug/packages")
+  @ThrottleWrite()
   async createPackage(
     @Param("slug") slug: string,
-    @Body() body: PackageInput,
+    @Body() body: PackageDto,
     @Req() request: ManzilRequest
   ) {
     return { data: { package: await this.crm.createPackage(slug, body, request.manzilActor!) } };
@@ -85,7 +96,7 @@ export class CrmController {
   @Patch("packages/:id")
   async updatePackage(
     @Param("id") id: string,
-    @Body() body: Partial<PackageInput>,
+    @Body() body: PackageUpdateDto,
     @Req() request: ManzilRequest
   ) {
     return { data: { package: await this.crm.updatePackage(id, body, request.manzilActor!) } };
@@ -94,6 +105,13 @@ export class CrmController {
   @Delete("packages/:id")
   async deletePackage(@Param("id") id: string, @Req() request: ManzilRequest) {
     return { data: await this.crm.deletePackage(id, request.manzilActor!) };
+  }
+
+  /* ---------- Customers (M0: read-only) ---------- */
+
+  @Get("businesses/:slug/customers")
+  async listCustomers(@Param("slug") slug: string, @Req() request: ManzilRequest) {
+    return { data: { customers: await this.customers.listCustomers(slug, request.manzilActor!) } };
   }
 
   /* ---------- Statistics ---------- */
@@ -113,7 +131,7 @@ export class CrmController {
   @Post("businesses/:slug/subscription")
   async chooseSubscription(
     @Param("slug") slug: string,
-    @Body() body: { plan?: string },
+    @Body() body: ChooseSubscriptionDto,
     @Req() request: ManzilRequest
   ) {
     return {

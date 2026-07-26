@@ -16,6 +16,7 @@ import { PrismaService } from "../prisma.service";
 import { GeocodingService } from "./geocoding.service";
 import { AlertService } from "../alerts/alert.service";
 import type { AuthActor } from "../repositories/database.repository";
+import { requireOwnedBusiness as resolveOwnedBusiness } from "./business-ownership.util";
 
 export type BusinessRegistrationInput = {
   name: string;
@@ -182,24 +183,7 @@ export class CrmRepository {
   /* ------------------------------------------------------------------ */
 
   private async requireOwnedBusiness(slug: string, actor: AuthActor) {
-    const business = await this.prisma.business.findUnique({
-      where: { slug },
-      select: { id: true, slug: true, claimedByUserId: true, createdByUserId: true, status: true }
-    });
-
-    if (!business) {
-      throw new NotFoundException("Business not found");
-    }
-
-    const isOwner =
-      business.claimedByUserId === actor.userId ||
-      (business.status === "pending_claim" && business.createdByUserId === actor.userId);
-
-    if (actor.role !== "admin" && !isOwner) {
-      throw new ForbiddenException("Only the business owner or an admin can manage this business");
-    }
-
-    return business;
+    return resolveOwnedBusiness(this.prisma, slug, actor);
   }
 
   /* ------------------------------------------------------------------ */

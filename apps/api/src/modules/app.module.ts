@@ -1,4 +1,7 @@
 import { Module } from "@nestjs/common";
+import { APP_FILTER, APP_GUARD } from "@nestjs/core";
+import { SentryGlobalFilter, SentryModule } from "@sentry/nestjs/setup";
+import { ThrottlerModule, ThrottlerStorage } from "@nestjs/throttler";
 import { AdminController } from "./controllers/admin.controller";
 import { AuthController } from "./controllers/auth.controller";
 import { BusinessesController } from "./controllers/businesses.controller";
@@ -13,10 +16,11 @@ import { ReviewsController } from "./controllers/reviews.controller";
 import { SearchController } from "./controllers/search.controller";
 import { PrismaService } from "./prisma.service";
 import { DatabaseRepository } from "./repositories/database.repository";
-import { CacheService } from "./cache/cache.service";
+import { CacheModule } from "./cache/cache.module";
 import { ClerkAuthService } from "./auth/clerk-auth.service";
 import { ManzilAuthGuard } from "./auth/manzil-auth.guard";
 import { CrmRepository } from "./crm/crm.repository";
+import { CustomersRepository } from "./crm/customers.repository";
 import { GeocodingService } from "./crm/geocoding.service";
 import { R2PresignService } from "./media/r2-presign.service";
 import { ConsoleController } from "./console/console.controller";
@@ -27,8 +31,29 @@ import { AlertService } from "./alerts/alert.service";
 import { PlansController } from "./plans/plans.controller";
 import { PlansRepository } from "./plans/plans.repository";
 import { EntitlementGuard } from "./plans/entitlement.guard";
+import { AnalyticsController } from "./analytics/analytics.controller";
+import { AnalyticsRepository } from "./analytics/analytics.repository";
+import { AnalyticsService } from "./analytics/analytics.service";
+import { SecurityModule } from "./security/security.module";
+import { RedisThrottlerStorage } from "./security/throttler-redis.storage";
+import { ManzilThrottlerGuard } from "./security/manzil-throttler.guard";
+import { DEFAULT_THROTTLE } from "./security/throttle.config";
 
 @Module({
+  imports: [
+    SentryModule.forRoot(),
+    CacheModule,
+    // Storage is resolved async so it shares the CacheService Redis connection
+    // rather than opening a second one (or adding a datastore just for limits).
+    ThrottlerModule.forRootAsync({
+      imports: [SecurityModule],
+      inject: [RedisThrottlerStorage],
+      useFactory: (storage: ThrottlerStorage) => ({
+        throttlers: [{ name: "default", ...DEFAULT_THROTTLE }],
+        storage
+      })
+    })
+  ],
   controllers: [
     AdminController,
     AuthController,
@@ -43,13 +68,20 @@ import { EntitlementGuard } from "./plans/entitlement.guard";
     ReviewsController,
     SearchController,
     ConsoleController,
-    PlansController
+    PlansController,
+    AnalyticsController
   ],
   providers: [
+    // Reports unhandled exceptions to Sentry, then delegates to Nest's default
+    // formatting — HttpExceptions (401/403/429) are passed through unreported.
+    { provide: APP_FILTER, useClass: SentryGlobalFilter },
+    // Rate limiting is global: a route is protected unless it opts out, so a
+    // newly added endpoint is never silently unthrottled.
+    { provide: APP_GUARD, useClass: ManzilThrottlerGuard },
     PrismaService,
-    CacheService,
     DatabaseRepository,
     CrmRepository,
+    CustomersRepository,
     GeocodingService,
     ClerkAuthService,
     ManzilAuthGuard,
@@ -59,7 +91,9 @@ import { EntitlementGuard } from "./plans/entitlement.guard";
     PermissionGuard,
     AlertService,
     PlansRepository,
-    EntitlementGuard
+    EntitlementGuard,
+    AnalyticsService,
+    AnalyticsRepository
   ]
 })
 export class AppModule {}
