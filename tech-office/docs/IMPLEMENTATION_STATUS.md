@@ -65,6 +65,153 @@ User profile, concierge chat, business pricing, save/follow preferences (localSt
 
 ---
 
+---
+
+## Phase 2 — Security hardening, analytics, deployment reliability (2026-07-26)
+
+### Corrections to the plan's premises
+
+Four assumptions in the brief did not match the repository and changed what was built:
+
+1. **There is no OTP endpoint.** `PhoneVerification` exists in `schema.prisma` with
+   **zero code references** — no send, no verify, nowhere. The "single most exploitable
+   endpoint" is unimplemented, so rate limiting shipped against the routes that do
+   exist. `ThrottleOtpSend`/`ThrottleOtpVerify` tiers and a phone-number tracker are
+   defined and ready to attach when the endpoint lands.
+2. **`crm.controller.ts` was not a validation reference.** It had no runtime validation
+   at all. `class-validator`/`ValidationPipe`/`@nestjs/throttler` existed only in
+   `apps/backend`, which is **not in the workspace list** and is not deployed. Track 1.3
+   was therefore "add validation from scratch," not "audit existing DTOs."
+3. **Analytics data was not being collected.** `BusinessEvent`, `SearchQueryLog`,
+   `Booking`, and `Payment` had **zero writers**; only `BusinessVisit` and `Review` were
+   populated. Dashboards would have rendered empty at any traffic level, so
+   instrumentation shipped first.
+4. **Railway already gates deploys on a health check** (`railway.json` →
+   `healthcheckPath: /v1/health`); traffic only switches after a 200. The real gaps were
+   no post-deploy smoke test, no staging, and no rollback.
+
+### Bugs found and fixed along the way
+
+- **`deploy-api.yml` never deployed the API.** It ran `railway deploy`, which
+  *provisions a template* (a database, etc.); deploying your own code is `railway up`.
+  With no `--template` it also prompts interactively. Migrations were being applied to
+  production while the code never shipped.
+- **`db-migrate.yml` had never run.** Its path filter was `prisma/**`; the schema lives
+  at `packages/db/schema.prisma` and there is no root `prisma/` directory. It also ran
+  `migrate dev` (interactive, *authors* migrations) instead of `migrate deploy`.
+- **Presigned uploads signed only `host`.** Content-Type and Content-Length were
+  unsigned, so a client could PUT any file of any size regardless of server-side checks.
+- **The legacy `/v1/admin` surface wrote no audit rows** — including `approveClaim`,
+  which transfers business ownership *and* elevates a user to `business_owner`.
+  `/v1/console` was fully audited; the two surfaces disagreed.
+
+### Track 1 — Security
+
+- **Rate limiting** (`@nestjs/throttler` v6) registered as a global `APP_GUARD`, so a new
+  route is throttled unless it opts out. Storage is a custom Redis backend reusing the
+  **existing** `CacheService` connection (no new datastore) with an atomic Lua
+  check-increment-block; it degrades to per-instance in-memory limits rather than failing
+  open. Per-route tiers in `security/throttle.config.ts`. `/v1/health` is exempt so
+  Railway's own healthcheck cannot trip it.
+- **`trust proxy` set to 1 hop.** Without it every request behind Railway reports the
+  proxy's IP and the limiter buckets all traffic together; trusting the whole chain would
+  let a client spoof `X-Forwarded-For` for a fresh bucket per request.
+- **helmet** with an API-appropriate CSP; **CORS wildcard refuses to boot in production**.
+- **Validation**: `ValidationPipe` with `whitelist` + `forbidNonWhitelisted`, and DTOs
+  across CRM, businesses, auth, media, reviews, claims, admin, and console. Unknown
+  properties are now rejected, so `role`/`status` cannot be smuggled into a create.
+- **Uploads**: MIME allowlist (extension derived *from* the accepted type), size caps,
+  and both values **signed into the presigned URL** so R2 enforces them.
+- **CI**: `security.yml` (npm audit gating high/critical on prod deps, gitleaks over full
+  history via the official image — no licence key needed, CodeQL) + `dependabot.yml`.
+- **OWASP**: no `$queryRawUnsafe`/`$executeRawUnsafe` anywhere; the only raw SQL is a
+  parameterised `` $queryRaw`SELECT 1` ``. The one `dangerouslySetInnerHTML` is a static
+  literal. No UGC reaches raw HTML.
+
+### Track 2 — Analytics
+
+- `AnalyticsService` writes `BusinessEvent` and `SearchQueryLog` fire-and-forget, so
+  analytics can never fail or slow a user request. Search is logged **outside** the cached
+  loader, or only cache misses would be recorded. Visitors are a hash of IP+UA — unique
+  counts without storing who visited what.
+- `AnalyticsRepository`: bounded Postgres aggregations, 120s cache.
+- **Owner dashboard** (`/[locale]/dashboard/analytics`) — visits, funnel with conversion,
+  rating trend, bookings, revenue. Gated on `analytics.basic` via the existing
+  `EntitlementGuard`; a 403 renders the upgrade path, not an error.
+- **Platform dashboard** (`apps/admin/app/analytics`) — zero-result rate and **unmet
+  demand** (the queries that name what to seed next), growth, tier distribution. Served
+  from `/v1/console/analytics` so the admin surface keeps **one** auth model
+  (AdminUser + permission), not two.
+- Charts are dependency-free server-rendered SVG: no client JS, CSP-safe, native
+  `<title>` tooltips, and a table view behind every chart. The blue ordinal ramp was
+  validated against both surfaces (not chosen by eye).
+
+### Track 3 — Deployment reliability + PWA
+
+- `deploy-api.yml` rebuilt: **staging → smoke test → production → smoke test → automatic
+  rollback**. Rollback uses Railway's GraphQL `deploymentRollback` (the CLI has no
+  rollback subcommand; `redeploy` re-runs the broken deployment).
+- `smoke-test.mjs` verifies more than liveness: database reachable *through* the app,
+  public reads, security headers present, and protected routes still rejecting anonymous
+  callers.
+- **Sentry** on API (`@sentry/nestjs`, init before instrumented imports) and web
+  (Node/Edge/client). PII off, auth headers scrubbed, throttle rejections ignored, and
+  the Sentry origin added to the web CSP `connect-src` — otherwise reports are silently
+  blocked.
+- **PWA**: manifest, generated icon set (incl. a separate maskable asset), and a
+  hand-written service worker — network-first navigations with an offline fallback,
+  stale-while-revalidate for fingerprinted static assets, and **API responses never
+  cached** (a stale price or review is worse than an error).
+
+### Still open
+
+- Malware scanning on uploads is **not** implemented. Type and size are now enforced
+  end-to-end and `upload-policy.ts` ships magic-number verification for the post-upload
+  scan, but nothing calls it yet — photos still rely on `moderationStatus: pending`
+  gating. Wire this before Stage 7 legal-document upload.
+- `Booking`/`Payment` still have no writers, so those dashboard panels stay at zero until
+  booking and payments ship. The queries are correct and will populate on their own.
+- Staging deploy needs `STAGING_*` and `RAILWAY_*` secrets set before it can run.
+
+---
+
+## CRM M0 — Customer foundation (2026-07-26)
+
+Design: [docs/superpowers/specs/2026-07-26-crm-m0-customer-foundation-design.md](../../docs/superpowers/specs/2026-07-26-crm-m0-customer-foundation-design.md)
+Plan: [docs/superpowers/plans/2026-07-26-crm-m0-customer-foundation.md](../../docs/superpowers/plans/2026-07-26-crm-m0-customer-foundation.md)
+
+**Correction to the CRM brief's premise.** The brief framed M0 as greenfield ("There is no `Customer` entity"). In fact `Customer`, `CustomerVisit`, `Booking.customerId`, and a working backfill script already existed as uncommitted work — what was missing was applying it and exposing it. This milestone finished that rather than rebuilding it.
+
+### Migration history now exists
+
+The database had **no migration history at all** — it was built with `prisma db push`, so `_prisma_migrations` did not exist. That meant `prisma migrate deploy` (used by `deploy-api.yml` and `db-migrate.yml`) would have failed on its first real run, trying to `CREATE TABLE "Business"` over existing tables.
+
+Fixed by baselining: a generated `20260725235959_baseline` migration describing the pre-Customer schema was marked applied **without executing its SQL** (`prisma migrate resolve --applied`), then `20260726000000_add_customer_crm_m0` was deployed for real. `_prisma_migrations` now holds 2 finished rows and the CI/CD migration path works going forward.
+
+**Blocker found and fixed:** `packages/db/migrations/migration_lock.toml` (committed back in `27d008e`) contained **SQL rather than TOML** — leftover DDL from an abandoned early schema with a lowercase `users` table and uppercased enum values. Prisma reads that file for the provider name, found none, and failed with `P3019`. Replaced with the standard provider declaration.
+
+### Shipped
+
+- **Backfill bug fix** — `spendForBooking()` counted a refunded or failed payment's deposit as revenue, because it fell through to `depositAmount` whenever the payment wasn't `paid`. Now only falls back when there is no payment record at all.
+- **`GET /crm/businesses/:slug/customers`** — read-only customer list, `take: 500`, `Decimal` serialized as a string. Authorization reuses the existing ownership rule, extracted to `apps/api/src/modules/crm/business-ownership.util.ts` and shared with `CrmRepository` (all 11 existing call sites unchanged).
+- **`/[locale]/dashboard/customers`** — customer table in the owner dashboard, trilingual (uz/ru/en), reusing existing `.crm-table` / `.crm-cell-sub` styles (no new CSS).
+- **Architecture doc** — records why `CustomerVisit` is separate from `BusinessVisit` (anonymous hashed traffic vs. identified transactions).
+
+### Verified
+
+All four workspaces typecheck and build. Schema validates. Endpoint checked live across five auth paths: owner → 200, admin → 200, wrong user → 403, unknown slug → 404, anonymous → 401. Data preserved: 14 businesses / 6 users / 3 reviews; 2 finished migrations.
+
+**The database has zero bookings**, so the backfill was a verified no-op (0 customers created) and the dashboard renders its empty state. This is the real production state, not a gap in the work — the pipeline populates itself once bookings exist.
+
+### Not in this milestone
+
+- Editing customers (notes, tags, consent) — M1.
+- Segmentation (M2), loyalty (M3), campaigns (M4), legal consent gate (M5).
+- `BusinessStaff`-based authorization: the model exists but has **no** authorization wiring anywhere in the codebase. The CRM brief assumed it was already a working mechanism; it is not. Ownership checks remain `claimedByUserId`-based.
+- Deferred minors: two dead imports (`ForbiddenException` in `crm.repository.ts`, `type CustomerSummary` in `crm.controller.ts`), and `formatMoney` duplicated between the customers and analytics dashboard pages.
+
+---
+
 ## Last verified
 
 - `npm run build --workspace @manzil/shared`
