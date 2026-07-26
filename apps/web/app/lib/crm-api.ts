@@ -68,3 +68,46 @@ export function getStats(slug: string) {
 export function getSubscription(slug: string) {
   return crmGet<{ subscription: CrmSubscription }>(`/crm/businesses/${slug}/subscription`);
 }
+
+export type CustomerSummary = {
+  id: string;
+  phone: string;
+  name: string | null;
+  lastVisitAt: string | null;
+  visitCount: number;
+  totalSpend: string;
+  tags: string[];
+  consentMarketing: boolean;
+};
+
+export function getCustomers(slug: string) {
+  return crmGet<{ customers: CustomerSummary[] }>(`/crm/businesses/${slug}/customers`);
+}
+
+export type FunnelStage = {
+  type: "view" | "photo_view" | "directions" | "call" | "message";
+  count: number;
+  /** Null when there are no views yet — a percentage of zero is undefined, not 0%. */
+  conversionFromView: number | null;
+};
+
+export type BusinessAnalytics = {
+  windowDays: number;
+  visits: { total: number; unique: number; trend: Array<{ date: string; value: number }> };
+  funnel: FunnelStage[];
+  reviews: {
+    count: number;
+    averageRating: number | null;
+    trend: Array<{ date: string; value: number | null; count: number }>;
+  };
+  bookings: { total: number; byStatus: Record<string, number> };
+  revenue: { totalAmount: string; currency: string; paymentCount: number };
+};
+
+/**
+ * Returns null when the plan lacks the `analytics.basic` entitlement (the API
+ * answers 403) — the caller renders the upgrade prompt rather than an error.
+ */
+export function getBusinessAnalytics(slug: string, days = 30) {
+  return crmGet<BusinessAnalytics>(`/analytics/businesses/${slug}?days=${days}`);
+}

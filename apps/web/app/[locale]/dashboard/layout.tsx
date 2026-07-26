@@ -57,6 +57,8 @@ export default async function DashboardLayout({
     { key: "announcements", label: copy.menu.announcements, href: `${base}/announcements` },
     { key: "packages", label: copy.menu.packages, href: `${base}/packages` },
     { key: "reviews", label: copy.menu.reviews, href: `${base}/reviews` },
+    { key: "analytics", label: copy.menu.analytics, href: `${base}/analytics` },
+    { key: "customers", label: copy.menu.customers, href: `${base}/customers` },
     { key: "settings", label: copy.menu.settings, href: `${base}/settings` }
   ];
 
