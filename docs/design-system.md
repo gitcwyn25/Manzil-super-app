@@ -17,7 +17,7 @@ This replaces the previous editorial/heritage direction. It is written here so T
 | `--ceramic` | `#00706B` | Brand teal, brightened for screen. Primary actions, brand. |
 | `--signal` | `#4DE1C1` | Lit-sign aqua. **Live/active/now state only** — never decoration. |
 | `--brass` | `#C8A24C` | Metal trim. Ratings, one high-intent CTA per page. |
-| `--dust` | `#6B7C7A` | Secondary text. Must clear 4.5:1 on `--panel`. |
+| `--dust` | `#5C6C6A` | Secondary text. Must clear 4.5:1 on `--panel`. Darkened from `#6B7C7A`, which measured 3.93:1 on `--panel` and failed AA. |
 
 Two accents with non-overlapping jobs (`--signal` = state, `--brass` = value) is what keeps this off the "dark background, one acid accent" default. The primary surface is light concrete; `--void` appears in bands and the workspace rail, not as the page background.
 
