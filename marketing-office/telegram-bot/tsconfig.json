@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    // NodeNext, not Bundler: Prisma's generated client re-exports through
+    // `.prisma/client/default`, and Bundler resolution silently resolves those
+    // types to `any` — findMany with a `select` came back untyped, so nothing
+    // downstream was actually checked. This is also correct for an ESM package
+    // that imports with explicit .js extensions.
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "types": ["node"]
+  },
+  "include": ["src/**/*.ts"]
+}

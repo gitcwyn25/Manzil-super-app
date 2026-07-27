@@ -9,7 +9,8 @@
     "apps/api",
     "apps/web",
     "apps/admin",
-    "apps/mobile"
+    "apps/mobile",
+    "marketing-office/telegram-bot"
   ],
   "scripts": {
     "dev": "npm run dev --workspace @manzil/web",
