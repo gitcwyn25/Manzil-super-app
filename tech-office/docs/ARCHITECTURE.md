@@ -74,6 +74,12 @@ Clients (Web + Mobile) →  Backend API (NestJS) →  Postgres (system of record
 
 Full schema: see [packages/db/schema.prisma](../packages/db/schema.prisma)
 
+**Legal documents are versioned, never edited.** `LegalAcceptance` points at one exact `LegalDocument` row, so editing published text in place would retroactively change what every business already agreed to. `Contract.renderedBody` is likewise frozen at acceptance rather than re-rendered on download — regenerating from a template that has since changed would hand a business a document it never agreed to.
+
+**Marketing consent is checked at send time, never inherited.** `Customer.consentMarketing` defaults to false and is only set by an explicit act; `CampaignsService` re-reads it per send rather than caching it from campaign creation. Blocked sends are written to `CampaignSend` alongside successful ones, because a table containing only successes cannot demonstrate that a message was correctly withheld — which is the record that matters under Uzbekistan's personal data law. Opt-out wording, retention, and per-channel consent carry `TODO: LEGAL REVIEW` and are unverified.
+
+**No customer-messaging provider is configured.** `AlertService` posts operational alerts to a single admin webhook and cannot address individual customers. Campaign sends therefore record as `failed` with an explicit reason rather than `sent`; a row marked sent for a message that never left would be a lie in the one table meant to prove what happened.
+
 **`CustomerVisit` vs `BusinessVisit`:** these are deliberately separate models, not one folded into the other. `BusinessVisit` records *anonymous* traffic — a hashed IP+user-agent visitor key with no identity, used for public profile-view analytics. `CustomerVisit` records *identified* visits/transactions tied to a real `Customer` row, sourced from booking completions. Merging them would force an anonymous hash and a real identity into the same column on the same table — a modeling and privacy mismatch, not a simplification. `Customer` itself is scoped per-business (`@@unique([businessId, phone])`), not global, because a person is a customer of a specific business independently at each business they visit on the platform.
 
 ---

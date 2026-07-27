@@ -254,6 +254,50 @@ Two carried-forward items worth their own tasks: `apps/api` still has **no test 
 
 ---
 
+## Consolidated tracks 0–6 + CRM M2–M5 (2026-07-26 → 27)
+
+### Track 0 — the live review bug, and what it actually was
+
+The form showed "Sharhni yuborib bo'lmadi" **on submissions that succeeded**. The newest row in the reviews table had been submitted that day and saved fine, so auth, CORS, and `syncUser` were all working — none of the three hypothesised causes was right.
+
+The cause was `event.currentTarget.reset()` running after two `await`s. `currentTarget` is only valid while an event is dispatching and is null once the handler yields, so it threw a `TypeError` on the **success** path, which the bare `catch {}` reported as a failure. The element is now captured before the first await, and non-2xx responses surface the API's own `{ message }` (handling ValidationPipe's array form) instead of a generic retry prompt.
+
+### Bugs found that were not in any brief
+
+| Bug | Impact |
+|---|---|
+| `migration_lock.toml` contained SQL, not TOML | `P3019` blocked all migration work |
+| Admin "View" link dead, and passed a slug to an id-addressed route | Could never resolve |
+| `deploy-api.yml` ran `railway deploy` (provisions templates) | The API was never deployed |
+| `db-migrate.yml` path filter was `prisma/**` | Workflow had never run once |
+| Registration 500'd on acceptance | Prisma 5s transaction timeout |
+| A review displayed "18 helpful" with **zero** vote rows | Counter was decorative |
+| `getHomeFeed()` returned mock unconditionally, with zero callers | Homepage permanently fake |
+| `chooseSubscription` never invalidated the entitlement cache | Plan changes inert for 120s |
+
+### Tracks 1–6
+
+- **Track 1** — one consolidated migration: `featured`, `claimedAt`, `LegalDocument`/`LegalAcceptance`/`Contract`, `Review.bookingId`, `ReviewHelpfulVote`.
+- **Track 2** — `apps/admin/app/businesses/[id]` (new): contact editing, approve/reject, featured toggle, per-business photo moderation, legal record, activity. Plus `/legal` and `/categories`. Photo moderation is per-business, not a global queue — pending volume is low and judging a photo beside its listing gives the moderator context. Documented as a revisit point.
+- **Track 3** — terms acceptance with `@Equals(true)` (a boolean field would accept "no" as valid), version pinning against mid-session republishing, and a contract rendered once and frozen.
+- **Track 4** — landing sections from real data on `/discover`; "just joined" from `claimedAt`, featured editorial. Plus the Gurman AI hero.
+- **Track 5** — real helpful votes, verified-visit badge tied to a completed booking by the same reviewer, presign wired into the review form, and `apps/web/src` (18 shadowed files) removed.
+- **Track 6** — Jest (18 tests) where `apps/api` had no framework at all, and 14 Playwright specs. **The E2E job runs a real Postgres and a real API, not mock mode** — mock mode is simpler but would not have caught Track 0's bug, and a suite that cannot catch its own motivating bug is theatre.
+
+### CRM M2–M5
+
+Five pre-built segments rather than a query builder; "high value" is relative to each business's own average spend. Loyalty points on completed bookings, counting only settled payments. Trigger-based campaigns created **inactive** by default. Consent is re-read per send, never inferred, and **blocked sends are recorded** — a table of successes alone cannot show a message was correctly withheld.
+
+### Not done, and why
+
+- **Gurman AI backend** (pgvector, RAG, package maker, supervisor) — its own large project, correctly sequenced after CRM M0/M1 per its own dependency notes. Only the hero shipped.
+- **Gurman character art** — `apps/web/public/gurman/gurman-ai.png` does not exist. The hero renders a branded fallback until it is added; no code change needed.
+- **`shape-landing-hero.tsx` as written** — `apps/web` has no Tailwind directives and no shadcn `cn()`. The technique was ported into the existing design system; pasting the component would have rendered unstyled.
+- **Message delivery** — no SMS or Telegram customer-messaging provider is configured, and `AlertService` cannot address customers. Sends record as `failed`, never falsely as `sent`.
+- **`TODO: LEGAL REVIEW`** — opt-out wording, `CampaignSend` retention, and per-channel consent are unverified against Uzbek law. The code is fail-closed so an unreviewed deployment sends nothing.
+
+---
+
 ## Last verified
 
 - `npm run build --workspace @manzil/shared`
