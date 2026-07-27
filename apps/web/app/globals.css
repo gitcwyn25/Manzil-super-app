@@ -650,9 +650,6 @@ html.js .reveal:not(.is-shown) {
   padding: clamp(36px, 7vw, 76px) 20px;
 }
 
-h1,
-h2,
-h3,
 .section-kicker {
   font-family: var(--font-geist), Arial, sans-serif;
   letter-spacing: -0.015em;
@@ -1277,7 +1274,6 @@ textarea:focus {
   z-index: 2;
   padding: 6px 10px;
   border-radius: 999px;
-  font-family: var(--font-geist), Arial, sans-serif;
   font-size: 12px;
   font-weight: 800;
 }
@@ -1285,6 +1281,7 @@ textarea:focus {
 .status-chip {
   bottom: 12px;
   left: 12px;
+  font-family: var(--font-geist), Arial, sans-serif;
   background: linear-gradient(135deg, #ffc63d, var(--gold));
   color: var(--gold-dark);
   box-shadow: 0 6px 14px -4px rgb(254 179 0 / 0.55);
