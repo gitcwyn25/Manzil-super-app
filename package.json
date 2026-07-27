@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "@clerk/testing": "^2.2.13",
-    "@playwright/test": "^1.61.1",
+    "@playwright/test": "^1.62.0",
     "prisma": "6.19.3",
     "tsx": "latest",
     "typescript": "latest",

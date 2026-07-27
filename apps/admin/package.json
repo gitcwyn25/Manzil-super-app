@@ -18,11 +18,11 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@types/node": "latest",
-    "@types/react": "latest",
-    "@types/react-dom": "latest",
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.49",
+    "@types/node": "^26.1.1",
+    "@types/react": "*",
+    "@types/react-dom": "*",
+    "autoprefixer": "^10.5.4",
+    "postcss": "^8.5.23",
     "tailwindcss": "^3.4.17",
     "typescript": "^5"
   }
