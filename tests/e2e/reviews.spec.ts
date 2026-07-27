@@ -1,26 +1,36 @@
 import { expect, test } from "@playwright/test";
+import { E2E_BUSINESS_SLUG } from "./fixtures/seed";
 
 /**
  * Review submission (Track 0's regression test) and review trust signals
  * (Track 5).
  *
- * The bug this exists to catch: the form reported failure on submissions that
- * had in fact saved, because `event.currentTarget` was read after an `await`
- * and threw into a catch that showed a generic error. A test asserting only
- * "the request returned 2xx" would have passed while the user saw a failure —
- * so these assert on what the USER is told, not on the network call.
+ * These run **signed in**, against a seeded business, via a real Clerk session
+ * — see `global-setup.ts`. That matters: the bug this file exists to catch
+ * only occurs on a successful authenticated submission, so the previous
+ * skip-when-signed-out version could never have caught it.
+ *
+ * The bug: the form reported failure on submissions that had in fact saved,
+ * because `event.currentTarget` was read after an `await` and threw into a
+ * catch that showed a generic error. A test asserting only "the request
+ * returned 2xx" would have passed while the user saw a failure — so these
+ * assert on what the USER is told, not on the network call.
  */
-test.describe("review form", () => {
+test.describe("review form (authenticated)", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto(`/uz/businesses/${E2E_BUSINESS_SLUG}`);
+  });
+
+  test("the form renders for a signed-in user", async ({ page }) => {
+    // No conditional skip: if the form is missing, either the session broke or
+    // the page did, and both should fail loudly.
+    await expect(page.locator("form.review-form")).toBeVisible();
+  });
+
   test("rejects a too-short review before any request is made", async ({ page }) => {
-    const slug = await firstBusinessSlug(page);
-    test.skip(!slug, "no business available in this environment");
-
-    await page.goto(`/uz/businesses/${slug}`);
-
     const form = page.locator("form.review-form");
-    test.skip((await form.count()) === 0, "review form not rendered (likely signed out)");
-
     const textarea = form.locator("textarea[name='text']");
+
     await textarea.fill("qisqa");
 
     let requestMade = false;
@@ -31,59 +41,74 @@ test.describe("review form", () => {
     await form.locator("button[type='submit']").click();
 
     // The textarea carries minLength={20}, so the browser's own constraint
-    // validation blocks submission before the JS handler runs — the in-page
-    // message is never reached. Assert on the property that actually matters
-    // (nothing was sent) plus the native invalid state, rather than on a code
-    // path that correctly never executes.
+    // validation blocks submission before the JS handler runs. Assert on the
+    // property that matters (nothing was sent) plus the native invalid state,
+    // rather than on a code path that correctly never executes.
     expect(requestMade).toBe(false);
     await expect(textarea).toHaveJSProperty("validity.valid", false);
   });
 
-  test("never shows the generic failure message on a successful submission", async ({ page }) => {
-    // The exact regression: a save that succeeded must not be reported as a
-    // failure. Runs only when a session exists, since submitting needs auth.
-    const slug = await firstBusinessSlug(page);
-    test.skip(!slug, "no business available in this environment");
-
-    await page.goto(`/uz/businesses/${slug}`);
-
+  test("a successful submission is never reported as a failure", async ({ page }) => {
     const form = page.locator("form.review-form");
-    test.skip((await form.count()) === 0, "review form not rendered (likely signed out)");
 
     const submitted = page.waitForResponse(
       (response) => response.url().includes("/reviews") && response.request().method() === "POST",
-      { timeout: 15_000 }
-    ).catch(() => null);
-
-    await form.locator("textarea[name='text']").fill(
-      "Bu joy juda yoqdi, xizmat tez va narxlar hamyonbop edi."
+      { timeout: 20_000 }
     );
+
+    await form
+      .locator("textarea[name='text']")
+      .fill("Bu joy juda yoqdi, xizmat tez va narxlar hamyonbop edi.");
     await form.locator("button[type='submit']").click();
 
     const response = await submitted;
-    test.skip(!response, "submission did not reach the API (likely unauthenticated)");
+
+    // The regression itself. The review saved, so the user must not be told it
+    // failed — this is the exact assertion that would have caught the bug.
+    expect(response.ok()).toBe(true);
 
     const note = form.locator("p.form-note");
+    await expect(note).not.toContainText("Sharhni yuborib bo'lmadi");
+    await expect(note).toContainText("qabul qilindi");
+  });
 
-    if (response!.ok()) {
-      // The precise assertion: on success the user must NOT see the retry
-      // message that the currentTarget bug produced.
-      await expect(note).not.toContainText("Sharhni yuborib bo'lmadi");
-    } else {
-      // On failure the message must be the API's real reason, not the generic
-      // fallback — that was the second half of the Track 0 fix.
-      await expect(note).not.toHaveText("");
+  test("a rejected submission shows the API's real reason, not a generic retry", async ({
+    page
+  }) => {
+    // The second half of the Track 0 fix. Submitting again hits the unique
+    // (businessId, userId) constraint, so the API returns a specific message —
+    // which the form must surface instead of the generic fallback.
+    const form = page.locator("form.review-form");
+
+    const submitted = page.waitForResponse(
+      (response) => response.url().includes("/reviews") && response.request().method() === "POST",
+      { timeout: 20_000 }
+    );
+
+    await form
+      .locator("textarea[name='text']")
+      .fill("Ikkinchi marta yozilgan sharh, oldingisi allaqachon mavjud.");
+    await form.locator("button[type='submit']").click();
+
+    const response = await submitted;
+    const note = form.locator("p.form-note");
+
+    if (response.ok()) {
+      // No prior review existed for this user — still a valid outcome.
+      await expect(note).toContainText("qabul qilindi");
+      return;
     }
+
+    // Whatever the API said, the user must not see an empty note or the
+    // network-failure fallback for a response that did arrive.
+    await expect(note).not.toHaveText("");
+    await expect(note).not.toContainText("Internet aloqasini tekshirib");
   });
 
   test("photo input accepts only the allowed image types", async ({ page }) => {
-    const slug = await firstBusinessSlug(page);
-    test.skip(!slug, "no business available in this environment");
-
-    await page.goto(`/uz/businesses/${slug}`);
-
     const fileInput = page.locator("form.review-form input[type='file']");
-    test.skip((await fileInput.count()) === 0, "review form not rendered (likely signed out)");
+
+    await expect(fileInput).toBeVisible();
 
     const accept = await fileInput.getAttribute("accept");
     expect(accept).toContain("image/jpeg");
@@ -95,28 +120,19 @@ test.describe("review form", () => {
 
 test.describe("review trust signals", () => {
   test("a helpful count is never shown without a vote button backing it", async ({ page }) => {
-    const slug = await firstBusinessSlug(page);
-    test.skip(!slug, "no business available in this environment");
+    await page.goto(`/uz/businesses/${E2E_BUSINESS_SLUG}`);
 
-    await page.goto(`/uz/businesses/${slug}`);
+    // Excludes the empty-state card, which shares the `review-card` class but
+    // represents the absence of reviews rather than a review.
+    const reviews = page.locator("article.review-card:not(.review-card--empty)");
 
-    const reviews = page.locator("article.review-card");
-    const count = await reviews.count();
-    test.skip(count === 0, "no reviews in this environment");
+    // The submission spec runs first and leaves a review behind (the suite is
+    // single-worker, so that ordering holds). No review here means the
+    // submission or the cache invalidation broke.
+    await expect(reviews.first()).toBeVisible();
 
     // The old design displayed a bare number with nothing behind it. Every
     // count must now be attached to the control that produces it.
     await expect(reviews.first().locator(".helpful-button")).toBeVisible();
   });
 });
-
-/** Resolves a real business slug from the discover page, or null if none exist. */
-async function firstBusinessSlug(page: import("@playwright/test").Page): Promise<string | null> {
-  await page.goto("/uz/discover");
-
-  const link = page.locator("a[href*='/businesses/']").first();
-  if ((await link.count()) === 0) return null;
-
-  const href = await link.getAttribute("href");
-  return href?.split("/businesses/")[1]?.split(/[?#]/)[0] ?? null;
-}

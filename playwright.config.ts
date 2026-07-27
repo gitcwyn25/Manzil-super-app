@@ -1,4 +1,21 @@
 import { defineConfig, devices } from "@playwright/test";
+import dotenv from "dotenv";
+import path from "node:path";
+
+/**
+ * Clerk credentials and DATABASE_URL live in the repo's env files, but
+ * `globalSetup` runs outside Next.js and the Nest bootstrap, so nothing has
+ * loaded them yet. Later files do not override earlier ones, so the more
+ * specific app-level file wins.
+ */
+for (const file of ["apps/web/.env.local", ".env.local", ".env"]) {
+  dotenv.config({ path: path.join(__dirname, file) });
+}
+
+// @clerk/testing reads the unprefixed name; the app uses the NEXT_PUBLIC_ one.
+if (!process.env.CLERK_PUBLISHABLE_KEY && process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) {
+  process.env.CLERK_PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+}
 
 /**
  * End-to-end suite.
@@ -18,7 +35,11 @@ export default defineConfig({
   // Fail the run if a `.only` was committed — otherwise CI silently tests one spec.
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  // Always one worker. These specs share a single seeded business and a single
+  // signed-in user, so parallel workers race on the same rows — one spec's
+  // review submission landing after another spec has already read the page.
+  // Parallelism against shared database state buys speed and costs determinism.
+  workers: 1,
   reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : [["list"]],
 
   use: {
@@ -33,7 +54,25 @@ export default defineConfig({
 
   timeout: 60_000,
 
-  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
+  // Provisions a real Clerk session and seeds the fixtures the authenticated
+  // specs assert against. Skipped when SKIP_AUTH_SETUP is set, so the
+  // unauthenticated specs can still be run without Clerk credentials.
+  globalSetup: process.env.SKIP_AUTH_SETUP ? undefined : require.resolve("./tests/e2e/global-setup"),
+
+  projects: [
+    {
+      name: "chromium",
+      use: {
+        ...devices["Desktop Chrome"],
+        // Reuses the signed-in session captured in global setup. Without it
+        // every spec would have to sign in again, which is slow and makes each
+        // spec depend on the sign-in UI rather than on what it is testing.
+        ...(process.env.SKIP_AUTH_SETUP
+          ? {}
+          : { storageState: "tests/e2e/.auth/user.json" })
+      }
+    }
+  ],
 
   // Skipped when BASE_URL points elsewhere, so the same specs can be aimed at
   // a deployed environment without trying to boot a local server too.

@@ -2,8 +2,10 @@
 
 import { useAuth } from "@clerk/nextjs";
 import type { Locale } from "@manzil/shared";
+import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 import { API_BASE_URL } from "../lib/api-base-url";
+import { revalidateBusinessProfile } from "../lib/revalidate-actions";
 
 /**
  * Pulls a human-readable reason out of a failed API response.
@@ -82,11 +84,15 @@ async function uploadReviewPhoto(
 }
 
 export function ReviewForm({ businessSlug, locale }: { businessSlug: string; locale: Locale }) {
-  const { getToken, isSignedIn } = useAuth();
+  // `isLoaded` matters as much as `isSignedIn`: until Clerk hydrates,
+  // `isSignedIn` is false for everyone, so a signed-in user who submits during
+  // that window would be bounced to sign-in for no reason.
+  const { getToken, isSignedIn, isLoaded } = useAuth();
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [pendingPhoto, setPendingPhoto] = useState<File | null>(null);
+  const router = useRouter();
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -104,6 +110,14 @@ export function ReviewForm({ businessSlug, locale }: { businessSlug: string; loc
     if (text.length < 20) {
       setError(true);
       setMessage("Sharh kamida 20 ta belgidan iborat bo'lishi kerak.");
+      return;
+    }
+
+    if (!isLoaded) {
+      // Genuinely unknown yet — say so rather than redirecting someone who is
+      // in fact signed in.
+      setError(true);
+      setMessage("Bir soniya kuting…");
       return;
     }
 
@@ -166,10 +180,16 @@ export function ReviewForm({ businessSlug, locale }: { businessSlug: string; loc
       setMessage(
         pendingPhoto
           ? "Sharhingiz va rasmingiz qabul qilindi. Moderatsiyadan so'ng ko'rinadi."
-          : "Sharhingiz qabul qilindi. Sahifa yangilanishi bilan ko'rinadi."
+          : "Sharhingiz qabul qilindi."
       );
       setPendingPhoto(null);
       formElement.reset();
+
+      // Bust the 30s profile cache and re-render, so the review the user just
+      // wrote is actually on screen. Without this the success message is a
+      // promise the page does not keep for up to half a minute.
+      await revalidateBusinessProfile(locale, businessSlug);
+      router.refresh();
     } catch {
       // Only genuinely unexpected failures reach here now: the network never
       // completed, or the response was not JSON. A retry is sound advice for
@@ -230,7 +250,7 @@ export function ReviewForm({ businessSlug, locale }: { businessSlug: string; loc
         />
       </label>
 
-      <button className="primary-button" type="submit" disabled={submitting}>
+      <button className="primary-button" type="submit" disabled={submitting || !isLoaded}>
         {submitting ? "Yuborilmoqda..." : "Sharhni yuborish"}
       </button>
       <p className="form-note" style={{ color: error ? "var(--error)" : "var(--primary)" }} role="status">

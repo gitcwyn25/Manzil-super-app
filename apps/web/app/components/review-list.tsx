@@ -17,7 +17,10 @@ export function ReviewList({
   if (reviews.length === 0) {
     return (
       <div className="review-list">
-        <article className="review-card">
+        {/* Distinct modifier so the empty state is not mistaken for a review —
+            it shares the card styling but carries no review, no author, and no
+            helpful control. */}
+        <article className="review-card review-card--empty">
           <div className="review-avatar">M</div>
           <div>
             <strong>{copy.reviewsList.emptyTitle}</strong>

@@ -40,3 +40,6 @@ test-results/
 playwright-report/
 blob-report/
 .playwright/
+
+# Playwright auth state (contains a real session cookie)
+tests/e2e/.auth/
