@@ -1,10 +1,18 @@
-import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException
+} from "@nestjs/common";
 import type { CampaignChannel, CampaignTrigger } from "@prisma/client";
 import { PrismaService } from "../prisma.service";
+import { PlansRepository } from "../plans/plans.repository";
 import type { AuthActor } from "../repositories/database.repository";
 import { requireOwnedBusiness } from "./business-ownership.util";
 import { CampaignsService } from "./campaigns.service";
 import { SegmentsRepository, type SegmentKey } from "./segments.repository";
+
+const CAMPAIGNS_ENTITLEMENT = "crm.campaigns";
 
 /** Which segment each trigger targets. Fixed, so a trigger cannot be pointed at the wrong audience. */
 const TRIGGER_SEGMENT: Record<CampaignTrigger, SegmentKey> = {
@@ -19,8 +27,33 @@ export class CampaignsRepository {
   constructor(
     private readonly prisma: PrismaService,
     private readonly campaigns: CampaignsService,
-    private readonly segments: SegmentsRepository
+    private readonly segments: SegmentsRepository,
+    private readonly plans: PlansRepository
   ) {}
+
+  /**
+   * Asserts the business still holds the campaigns entitlement.
+   *
+   * Enforced here rather than with `@RequireEntitlement` on the campaign-id
+   * routes, because `EntitlementGuard` resolves the business from a `slug` or
+   * `businessId`/`id` param — on `/campaigns/:id/*` that `id` is a *campaign*
+   * id, so the lookup finds no business and the guard returns true, failing
+   * open. A decorator there would look like protection while providing none.
+   *
+   * Without this a business that downgrades from pro to free keeps the ability
+   * to activate and run campaigns it created while paying.
+   */
+  private async assertCampaignsEntitled(businessId: string) {
+    const entitlements = await this.plans.getEntitlements(businessId);
+
+    if (!entitlements.has(CAMPAIGNS_ENTITLEMENT)) {
+      throw new ForbiddenException({
+        message: `This feature requires a plan that includes '${CAMPAIGNS_ENTITLEMENT}'.`,
+        code: "UPGRADE_REQUIRED",
+        entitlement: CAMPAIGNS_ENTITLEMENT
+      });
+    }
+  }
 
   async listCampaigns(slug: string, actor: AuthActor) {
     const business = await requireOwnedBusiness(this.prisma, slug, actor);
@@ -101,7 +134,8 @@ export class CampaignsRepository {
 
     if (!campaign) throw new NotFoundException("Campaign not found");
 
-    await requireOwnedBusiness(this.prisma, campaign.business.slug, actor);
+    const business = await requireOwnedBusiness(this.prisma, campaign.business.slug, actor);
+    await this.assertCampaignsEntitled(business.id);
 
     const updated = await this.prisma.campaign.update({
       where: { id: campaignId },
@@ -129,6 +163,7 @@ export class CampaignsRepository {
     if (!campaign) throw new NotFoundException("Campaign not found");
 
     await requireOwnedBusiness(this.prisma, campaign.business.slug, actor);
+    await this.assertCampaignsEntitled(campaign.business.id);
 
     if (!campaign.isActive) {
       throw new BadRequestException("Activate the campaign before running it");
@@ -153,7 +188,8 @@ export class CampaignsRepository {
 
     if (!campaign) throw new NotFoundException("Campaign not found");
 
-    await requireOwnedBusiness(this.prisma, campaign.business.slug, actor);
+    const sendsBusiness = await requireOwnedBusiness(this.prisma, campaign.business.slug, actor);
+    await this.assertCampaignsEntitled(sendsBusiness.id);
 
     const sends = await this.prisma.campaignSend.findMany({
       where: { campaignId },
