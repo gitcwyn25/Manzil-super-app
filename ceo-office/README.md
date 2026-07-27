@@ -1,5 +1,9 @@
 # CEO Office
 
+> ⚖️ **Open blocker:** [Legal review required](LEGAL-REVIEW-REQUIRED.md) before CRM
+> campaigns may reach real customers. Needs Uzbek data-protection counsel, not
+> engineering. The system is fail-closed until it is resolved.
+
 Vision, strategy, capital, and company operating system. Everything here answers: *where is Manzil going, and are we on track?*
 
 ## Documents
