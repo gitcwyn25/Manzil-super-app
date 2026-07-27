@@ -1,30 +1,29 @@
 import type { Metadata, Viewport } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ServiceWorkerRegistration } from "./components/service-worker";
-import { Geist, Geist_Mono, Inter, Libre_Caslon_Display } from "next/font/google";
+import { Archivo, IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
 
-const geist = Geist({
+// Expanded grotesque: reads as station signage, not as a startup headline face.
+const display = Archivo({
   subsets: ["latin"],
-  variable: "--font-geist"
+  axes: ["wdth"],
+  variable: "--font-display"
 });
 
-// Editorial display: institutional high-contrast serif — the "monument/plaque"
-// voice for headlines, paired against geometric Geist on a contrast axis.
-const caslon = Libre_Caslon_Display({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-serif"
-});
-
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-geist-mono"
-});
-
-const inter = Inter({
+// Latin and Cyrillic drawn as one system. Manzil ships uz/ru/en, and a body face
+// without matched Cyrillic makes the Russian site look like a different product.
+const body = IBM_Plex_Sans({
   subsets: ["latin", "cyrillic"],
-  variable: "--font-inter"
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-body"
+});
+
+// Metrically matched to Plex Sans. Ratings, counts, currency, IDs.
+const data = IBM_Plex_Mono({
+  subsets: ["latin", "cyrillic"],
+  weight: ["400", "500"],
+  variable: "--font-data"
 });
 
 export const metadata: Metadata = {
@@ -49,7 +48,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0f5b3d",
+  themeColor: "#00706B",
   width: "device-width",
   initialScale: 1
 };
@@ -57,9 +56,11 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <ClerkProvider>
+      {/* lang is corrected per-locale by app/[locale]/layout.tsx, which sets
+          document.documentElement.lang — the root layout has no locale param. */}
       <html
         lang="uz"
-        className={`${geist.variable} ${geistMono.variable} ${inter.variable} ${caslon.variable}`}
+        className={`${display.variable} ${body.variable} ${data.variable}`}
         suppressHydrationWarning
       >
         <body suppressHydrationWarning>

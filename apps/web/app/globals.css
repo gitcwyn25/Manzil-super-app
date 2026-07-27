@@ -1,7 +1,10 @@
 /* ============================================================
-   Manzil Design System — "Modern Heritage"
-   Deep teal of Samarkand tilework + warm gold, engineered type,
-   paper-like surfaces, tonal elevation, and a motion layer.
+   Manzil Design System — "Kosmonavtlar"
+   See docs/design-system.md for the full rationale. Deep vault +
+   cool concrete surfaces, two non-overlapping accents (--signal for
+   state, --brass for value), Plex/Archivo type, a fast motion layer.
+   Some rules below (not yet ported by later tasks) still reference
+   the retained "Modern Heritage" aliases defined in :root.
    ============================================================ */
 
 :root {
@@ -18,38 +21,57 @@
   --bz-panel: #f4f8f7;
   --bz-surface: #ffffff;
 
-  /* Surfaces (tonal layers) */
-  --surface: #f9f9f7;
-  --surface-low: #f4f4f2;
+  /* ---- Kosmonavtlar palette. See docs/design-system.md.
+         Two accents with non-overlapping jobs: --signal is state (live/active/
+         now) and --brass is value (ratings, one CTA). Never swap them. ---- */
+  --void: #0a1a1e;
+  --panel: #f1f3f2;
+  --ceramic: #00706b;
+  --signal: #4de1c1;
+  --brass: #c8a24c;
+  --dust: #5c6c6a;
+
+  /* Derived surfaces */
+  --surface: var(--panel);
+  --surface-low: #e9ecea;
   --surface-card: #ffffff;
-  --surface-high: #e8e8e6;
-  --surface-dim: #dadad8;
-  --inverse-surface: #10201f;
+  --surface-high: #dfe3e1;
+  --inverse-surface: var(--void);
+  --text: #0d1a1c;
+  --muted: var(--dust);
+  --outline: #c2cbc9;
+  --line: rgb(13 26 28 / 0.12);
 
-  /* Ink */
-  --text: #1a1c1b;
-  --muted: #4b5654;
-  --outline: #bec9c8;
-  --outline-strong: #6e7979;
-
-  /* Brand */
-  --primary: #005454;
-  --primary-bright: #0f6e6e;
-  --primary-soft: #a1f0ef;
-  --primary-ghost: rgb(0 84 84 / 0.08);
-  --gold: #feb300;
-  --gold-soft: #ffdeac;
-  --gold-dark: #6a4800;
-  --terracotta: #a84305;
-  --terracotta-soft: #ffdbcd;
+  /* Brand aliases retained by name so existing rules keep resolving */
+  --primary: var(--ceramic);
+  --primary-bright: #0a8f88;
+  --primary-ghost: rgb(0 112 107 / 0.08);
+  --gold: var(--brass);
   --error: #ba1a1a;
   --success: #1b7f4e;
 
+  /* Legacy "Modern Heritage" aliases — still referenced by rules elsewhere in
+     this file (incl. .crm-review-avatar, .gold-button, .hero-pin-c, .pin.three,
+     .section-kicker.inverse, .afm-avatar.sm.alt) that later tasks have not yet
+     migrated to the Kosmonavtlar tokens above. Kept at their original values so
+     nothing goes unstyled in the interim; remove once those rules are ported. */
+  --primary-soft: #a1f0ef;
+  --gold-soft: #ffdeac;
+  --gold-dark: #6a4800;
+  --terracotta: #a84305;
+
+  /* Fonts — semantic names. Compatibility aliases below keep the existing
+     6.5k lines of rules working until they are renamed. */
+  --font-inter: var(--font-body);
+  --font-geist: var(--font-body);
+  --font-geist-mono: var(--font-data);
+  --font-serif: var(--font-display);
+
   /* Elevation */
-  --shadow: 0 24px 60px -18px rgb(3 40 40 / 0.22);
-  --soft-shadow: 0 4px 20px rgb(10 34 33 / 0.05);
-  --hover-shadow: 0 30px 70px -22px rgb(3 40 40 / 0.3);
-  --ring: 0 0 0 4px rgb(0 84 84 / 0.14);
+  --shadow: 0 24px 60px -18px rgb(10 26 30 / 0.22);
+  --soft-shadow: 0 4px 20px rgb(10 26 30 / 0.06);
+  --hover-shadow: 0 30px 70px -22px rgb(10 26 30 / 0.3);
+  --ring: 0 0 0 4px rgb(0 112 107 / 0.16);
 
   /* Shape */
   --radius-sm: 10px;
@@ -57,14 +79,18 @@
   --radius-lg: 24px;
   --radius-xl: 32px;
 
-  /* Motion — exponential ease-out, no overshoot/bounce (restrained, premium).
-     --ease-spring retuned from a springy overshoot to ease-out-quint: retains
-     a lively, decisive feel on hover/pop without the dated elastic bounce. */
+  /* Motion — consumer shell */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
   --speed-fast: 180ms;
   --speed-med: 360ms;
   --speed-slow: 700ms;
+
+  /* Motion — workspace shell. Deliberately ~2.5x faster; the density contrast
+     between shells is the design, not an oversight. */
+  --ws-speed: 140ms;
+  --ws-row: 34px;
+  --ws-line: rgb(13 26 28 / 0.08);
 }
 
 /* ---------- Base ---------- */
@@ -80,15 +106,30 @@ html {
 body {
   margin: 0;
   min-height: 100dvh;
-  background:
-    radial-gradient(1200px 500px at 85% -80px, rgb(161 240 239 / 0.16), transparent 60%),
-    radial-gradient(900px 420px at -10% 30%, rgb(254 179 0 / 0.05), transparent 55%),
-    var(--surface);
+  background: var(--panel);
   color: var(--text);
-  font-family: var(--font-inter), Arial, sans-serif;
+  font-family: var(--font-body), system-ui, sans-serif;
   line-height: 1.55;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Display face: expanded axis, tight tracking, caps at band scale only. */
+h1,
+h2,
+h3 {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-variation-settings: "wdth" 112;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+/* Numerals are data, not prose. */
+.rating-badge,
+.home-card__rating,
+.ws-num {
+  font-family: var(--font-data), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
 }
 
 ::selection {
