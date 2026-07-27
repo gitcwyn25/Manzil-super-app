@@ -161,6 +161,34 @@ secondary control.
 - `max_tokens` cap on the response.
 - Redis cache on `(normalized query, locale)` via the existing `CacheService`.
 
+### Tracker key — confirmed, with a known limitation
+
+`ManzilThrottlerGuard.getTracker()` keys on **client IP**, and deliberately so:
+the guard is registered globally and therefore runs *before* the
+controller-scoped `ManzilAuthGuard`, so no verified actor exists at that point.
+Keying on an unverified bearer token would be worse than useless — an attacker
+could rotate tokens for a fresh bucket per request.
+
+`ThrottleGurman` therefore buckets by IP. Two consequences to carry forward:
+
+- A genuine multi-turn conversation with follow-ups can reach 10 requests
+  without any abuse.
+- Tashkent mobile carriers NAT heavily, so one IP can represent many real users.
+  The effective per-person limit is therefore **stricter than 10**, by an unknown
+  factor.
+
+Shipping at 10/15min anyway: it is the conservative direction, and there is no
+usage data yet to justify a specific looser number. Guessing upward on a paid
+endpoint is the more expensive mistake.
+
+**Follow-up (post-launch, data-driven):** measure real anonymous session lengths
+and 429 rates on `/gurman/*`, then revisit the ceiling. If per-user limiting
+becomes necessary, note that it is not a config change — it requires a
+controller-scoped tracker running after authentication, following the
+`phoneTracker` + `@ThrottlerTracker` pattern already in
+`manzil-throttler.guard.ts`. Left open deliberately rather than closed on a
+guess.
+
 ## Error handling — fail-closed
 
 Matching the campaign sender's established behaviour: an unconfigured system
