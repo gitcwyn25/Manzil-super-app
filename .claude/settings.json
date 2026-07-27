@@ -1,4 +1,10 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(cd \"d:/Desktop/Manzil\" && tail -25 /tmp/prod.log)",
+      "Read(//tmp/**)"
+    ]
+  },
   "enabledPlugins": {
     "equity-research@claude-for-financial-services": true,
     "operations@claude-for-financial-services": true

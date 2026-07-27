@@ -27,7 +27,10 @@
     "prisma:generate": "npm run db:generate",
     "prisma:migrate": "npm run db:migrate",
     "seed:validate": "tsx tech-office/tools/validate-seed.ts data/tashkent-seed-template.csv",
-    "doctor": "npx react-doctor@latest"
+    "doctor": "npx react-doctor@latest",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:api": "npm run test --workspace @manzil/api"
   },
   "prisma": {
     "seed": "tsx packages/db/prisma/seed.ts"
@@ -36,7 +39,8 @@
     "@playwright/test": "^1.61.1",
     "prisma": "6.19.3",
     "tsx": "latest",
-    "typescript": "latest"
+    "typescript": "latest",
+    "wait-on": "^9.1.0"
   },
   "dependencies": {
     "@openrouter/sdk": "^0.13.20",

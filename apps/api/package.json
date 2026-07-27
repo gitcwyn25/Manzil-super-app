@@ -7,7 +7,9 @@
     "start:dev": "nest start --watch",
     "build": "nest build",
     "start": "node dist/main.js",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "@clerk/backend": "^3.8.4",
@@ -29,7 +31,11 @@
   "devDependencies": {
     "@nestjs/cli": "latest",
     "@nestjs/schematics": "latest",
+    "@nestjs/testing": "^11.1.28",
+    "@types/jest": "^29.5.14",
     "@types/node": "latest",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.4.12",
     "typescript": "latest"
   }
 }
