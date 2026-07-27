@@ -79,6 +79,46 @@ export class CustomersRepository {
   }
 
   /**
+   * Records or withdraws marketing consent.
+   *
+   * `consentAt` is stamped alongside the flag, because a consent record with no
+   * timestamp is difficult to rely on if it is ever questioned. Withdrawal
+   * clears the timestamp rather than keeping a stale one, so the pair can never
+   * read as "consented, at some point, maybe".
+   */
+  async setMarketingConsent(
+    slug: string,
+    customerId: string,
+    consentMarketing: boolean,
+    actor: AuthActor
+  ) {
+    const business = await requireOwnedBusiness(this.prisma, slug, actor);
+
+    const customer = await this.prisma.customer.findFirst({
+      where: { id: customerId, businessId: business.id },
+      select: { id: true }
+    });
+
+    if (!customer) {
+      throw new NotFoundException("Customer not found");
+    }
+
+    const updated = await this.prisma.customer.update({
+      where: { id: customer.id },
+      data: {
+        consentMarketing,
+        consentAt: consentMarketing ? new Date() : null
+      }
+    });
+
+    return {
+      id: updated.id,
+      consentMarketing: updated.consentMarketing,
+      consentAt: updated.consentAt?.toISOString() ?? null
+    };
+  }
+
+  /**
    * One customer's full profile for the owner dashboard.
    *
    * The customer is looked up by `id` **and** `businessId` together, so an id

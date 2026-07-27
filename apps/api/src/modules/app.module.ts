@@ -21,6 +21,10 @@ import { ClerkAuthService } from "./auth/clerk-auth.service";
 import { ManzilAuthGuard } from "./auth/manzil-auth.guard";
 import { CrmRepository } from "./crm/crm.repository";
 import { CustomersRepository } from "./crm/customers.repository";
+import { SegmentsRepository } from "./crm/segments.repository";
+import { LoyaltyService } from "./crm/loyalty.service";
+import { CampaignsService } from "./crm/campaigns.service";
+import { CampaignsRepository } from "./crm/campaigns.repository";
 import { GeocodingService } from "./crm/geocoding.service";
 import { R2PresignService } from "./media/r2-presign.service";
 import { ConsoleController } from "./console/console.controller";
@@ -90,6 +94,10 @@ import { DEFAULT_THROTTLE } from "./security/throttle.config";
     DatabaseRepository,
     CrmRepository,
     CustomersRepository,
+    SegmentsRepository,
+    LoyaltyService,
+    CampaignsService,
+    CampaignsRepository,
     GeocodingService,
     ClerkAuthService,
     ManzilAuthGuard,

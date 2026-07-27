@@ -17,6 +17,12 @@ import { RequireAuth } from "../auth/require-auth.decorator";
 import { CrmRepository } from "../crm/crm.repository";
 import { LegalService } from "../legal/legal.service";
 import { CustomersRepository } from "../crm/customers.repository";
+import { SegmentsRepository, type SegmentKey } from "../crm/segments.repository";
+import { CampaignsRepository } from "../crm/campaigns.repository";
+import { CreateCampaignDto, SetCampaignActiveDto } from "../crm/campaigns.dto";
+import { SetConsentDto } from "../crm/consent.dto";
+import { EntitlementGuard } from "../plans/entitlement.guard";
+import { RequireEntitlement } from "../plans/require-entitlement.decorator";
 import {
   AnnouncementDto,
   AnnouncementUpdateDto,
@@ -38,7 +44,9 @@ export class CrmController {
   constructor(
     private readonly crm: CrmRepository,
     private readonly customers: CustomersRepository,
-    private readonly legal: LegalService
+    private readonly legal: LegalService,
+    private readonly segments: SegmentsRepository,
+    private readonly campaigns: CampaignsRepository
   ) {}
 
   /* ---------- Registration ---------- */
@@ -145,6 +153,105 @@ export class CrmController {
     return {
       data: { customer: await this.customers.getCustomer(slug, customerId, request.manzilActor!) }
     };
+  }
+
+
+  /* ---------- Segments (M2) ---------- */
+
+  @Get("businesses/:slug/segments")
+  @UseGuards(ManzilAuthGuard, EntitlementGuard)
+  @RequireEntitlement("crm.segments")
+  async listSegments(@Param("slug") slug: string, @Req() request: ManzilRequest) {
+    return { data: await this.segments.listSegments(slug, request.manzilActor!) };
+  }
+
+  @Get("businesses/:slug/segments/:key")
+  @UseGuards(ManzilAuthGuard, EntitlementGuard)
+  @RequireEntitlement("crm.segments")
+  async segmentMembers(
+    @Param("slug") slug: string,
+    @Param("key") key: string,
+    @Req() request: ManzilRequest
+  ) {
+    return {
+      data: {
+        customers: await this.segments.getSegmentMembers(
+          slug,
+          key as SegmentKey,
+          request.manzilActor!
+        )
+      }
+    };
+  }
+
+  /* ---------- Marketing consent (M5) ---------- */
+
+  /**
+   * Records or withdraws a customer's marketing consent.
+   *
+   * Separate from the general customer edit surface on purpose: consent is the
+   * gate every campaign checks, so changing it is its own deliberate action
+   * with its own timestamp, never a side effect of editing a name.
+   */
+  @Post("businesses/:slug/customers/:customerId/consent")
+  @ThrottleWrite()
+  async setConsent(
+    @Param("slug") slug: string,
+    @Param("customerId") customerId: string,
+    @Body() body: SetConsentDto,
+    @Req() request: ManzilRequest
+  ) {
+    return {
+      data: await this.customers.setMarketingConsent(
+        slug,
+        customerId,
+        body.consentMarketing,
+        request.manzilActor!
+      )
+    };
+  }
+
+  /* ---------- Campaigns (M4) ---------- */
+
+  @Get("businesses/:slug/campaigns")
+  @UseGuards(ManzilAuthGuard, EntitlementGuard)
+  @RequireEntitlement("crm.campaigns")
+  async listCampaigns(@Param("slug") slug: string, @Req() request: ManzilRequest) {
+    return { data: { campaigns: await this.campaigns.listCampaigns(slug, request.manzilActor!) } };
+  }
+
+  @Post("businesses/:slug/campaigns")
+  @ThrottleWrite()
+  @UseGuards(ManzilAuthGuard, EntitlementGuard)
+  @RequireEntitlement("crm.campaigns")
+  async createCampaign(
+    @Param("slug") slug: string,
+    @Body() body: CreateCampaignDto,
+    @Req() request: ManzilRequest
+  ) {
+    return { data: await this.campaigns.createCampaign(slug, body, request.manzilActor!) };
+  }
+
+  @Patch("campaigns/:id/active")
+  async setCampaignActive(
+    @Param("id") id: string,
+    @Body() body: SetCampaignActiveDto,
+    @Req() request: ManzilRequest
+  ) {
+    return {
+      data: await this.campaigns.setCampaignActive(id, body.isActive, request.manzilActor!)
+    };
+  }
+
+  @Post("campaigns/:id/run")
+  @ThrottleWrite()
+  async runCampaign(@Param("id") id: string, @Req() request: ManzilRequest) {
+    return { data: await this.campaigns.runCampaign(id, request.manzilActor!) };
+  }
+
+  @Get("campaigns/:id/sends")
+  async campaignSends(@Param("id") id: string, @Req() request: ManzilRequest) {
+    return { data: { sends: await this.campaigns.getCampaignSends(id, request.manzilActor!) } };
   }
 
   /* ---------- Statistics ---------- */

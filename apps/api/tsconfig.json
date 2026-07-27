@@ -8,7 +8,7 @@
     "outDir": "dist",
     "rootDir": "src",
     "noEmit": false,
-    "types": ["node"],
+    "types": ["node", "jest"],
     "paths": {
       "@manzil/shared": ["../../packages/shared/src/index.ts"],
       "@manzil/shared/*": ["../../packages/shared/src/*"]

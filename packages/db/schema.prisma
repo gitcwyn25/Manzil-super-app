@@ -230,6 +230,7 @@ model Business {
   customerVisits   CustomerVisit[]
   legalAcceptances LegalAcceptance[]
   contracts        Contract[]
+  campaigns        Campaign[]
 
   @@index([categoryId])
   @@index([city, district])
@@ -397,13 +398,24 @@ model Customer {
   tags             String[]  @default([])
   notes            String?
   consentMarketing Boolean   @default(false)
+  /// When marketing consent was captured. Null while consentMarketing is
+  /// false — a consent record with no timestamp cannot be defended later.
+  consentAt        DateTime?
+  /// Birthday, for the birthday segment and campaign. Optional: most customers
+  /// arrive through a booking that never asks for one.
+  birthday         DateTime?
+  /// Telegram chat id, set only if the customer starts a chat with the bot.
+  /// Without it a Telegram campaign has no address to send to, which is why
+  /// channel eligibility is computed per customer rather than assumed.
+  telegramChatId   String?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
 
-  business Business        @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  user     User?           @relation(fields: [userId], references: [id])
-  bookings Booking[]
-  visits   CustomerVisit[]
+  business      Business        @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  user          User?           @relation(fields: [userId], references: [id])
+  bookings      Booking[]
+  visits        CustomerVisit[]
+  campaignSends CampaignSend[]
 
   @@unique([businessId, phone])
   @@index([businessId, lastVisitAt])
@@ -809,4 +821,84 @@ model Contract {
   document LegalDocument @relation(fields: [documentId], references: [id])
 
   @@index([businessId, generatedAt])
+}
+
+/// Lifecycle trigger that causes a campaign to fire.
+enum CampaignTrigger {
+  welcome /// first completed booking
+  win_back /// N days since last visit
+  birthday /// on/near the customer's birthday
+  review_request /// after a completed visit
+}
+
+enum CampaignChannel {
+  telegram
+  sms
+}
+
+enum CampaignSendStatus {
+  pending
+  sent
+  failed
+  /// Consent was absent or withdrawn at send time. A distinct status rather
+  /// than a failure, because it is the system working correctly.
+  blocked_no_consent
+  /// The customer had no address on the chosen channel.
+  blocked_no_channel
+}
+
+/**
+ * An automated, trigger-based campaign for one business.
+ * Triggers rather than manual blasts: the CRM brief's Square/Toast pattern, and
+ * the reason a small owner gets value without operating a marketing tool.
+ */
+model Campaign {
+  id         String          @id @default(cuid())
+  businessId String
+  name       String
+  trigger    CampaignTrigger
+  channel    CampaignChannel
+  /// Message body. {{name}} and {{business}} are substituted at send time.
+  template   String
+  /// Days since last visit, for win_back. Ignored by other triggers.
+  windowDays Int?
+  isActive   Boolean         @default(false)
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+
+  business Business       @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  sends    CampaignSend[]
+
+  @@index([businessId, isActive])
+  @@index([trigger])
+}
+
+/**
+ * One attempted send. Written for blocked attempts too, not just successful
+ * ones — the record that a message was *withheld* for lack of consent is the
+ * evidence that matters under a personal-data regime, and a table containing
+ * only successes cannot show it.
+ */
+model CampaignSend {
+  id            String             @id @default(cuid())
+  campaignId    String
+  customerId    String
+  status        CampaignSendStatus @default(pending)
+  channel       CampaignChannel
+  /// Rendered message as actually sent, frozen — the template may change later.
+  body          String?
+  error         String?
+  /// Consent flag as it stood at send time, captured rather than re-read later.
+  consentAtSend Boolean            @default(false)
+  createdAt     DateTime           @default(now())
+  sentAt        DateTime?
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  /// One send per campaign per customer: the guard against a win-back loop
+  /// re-messaging the same lapsed customer on every scheduler tick.
+  @@unique([campaignId, customerId])
+  @@index([campaignId, status])
+  @@index([customerId])
 }

@@ -545,6 +545,13 @@ export class CrmRepository {
       }
     });
 
+    // Entitlements are cached per business for 120s, so without this a plan
+    // change does not take effect until the entry expires: an upgrade leaves
+    // paid features locked, and a downgrade leaves them unlocked. Both are
+    // wrong, and the downgrade case means a business keeps paid features it is
+    // no longer paying for.
+    await this.cache.invalidate("plans");
+
     return subscription;
   }
 
