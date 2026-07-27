@@ -37,7 +37,7 @@
 | `apps/api/src/modules/gurman/gurman.service.ts` | Orchestration + cache + serve-path grounding. |
 | `apps/api/src/modules/gurman/gurman.dto.ts` | Input validation. |
 | `apps/api/src/modules/gurman/gurman.controller.ts` | `POST /gurman/chat`, `POST /gurman/package`. |
-| `apps/api/src/modules/gurman/gurman.module.ts` | Wiring + provider factory. |
+| `apps/api/src/modules/gurman/gurman.providers.ts` | Provider array (retriever + LLM factory), spread into `app.module.ts`. |
 | `apps/api/src/modules/security/throttle.config.ts` | *Modify:* add `ThrottleGurman`. |
 | `apps/web/app/components/concierge-chat.tsx` | *Modify:* async states + real API call. |
 
@@ -1431,7 +1431,7 @@ git commit -m "feat(gurman): service grounding cached and fresh responses identi
 **Files:**
 - Create: `apps/api/src/modules/gurman/gurman.dto.ts`
 - Create: `apps/api/src/modules/gurman/gurman.controller.ts`
-- Create: `apps/api/src/modules/gurman/gurman.module.ts`
+- Create: `apps/api/src/modules/gurman/gurman.providers.ts`
 - Create: `apps/api/src/modules/gurman/gurman.dto.spec.ts`
 - Modify: `apps/api/src/modules/security/throttle.config.ts`
 - Modify: `apps/api/src/modules/app.module.ts`
@@ -1439,7 +1439,7 @@ git commit -m "feat(gurman): service grounding cached and fresh responses identi
 
 **Interfaces:**
 - Consumes: `GurmanService` from `./gurman.service`; `CatalogRetriever` + `GURMAN_RETRIEVER` from `./gurman.retriever`; `AnthropicLlm`, `UnconfiguredLlm`, `GURMAN_LLM` from `./gurman.llm`.
-- Produces: `GurmanChatDto` (`message: string`, `locale: GurmanLocale`), `GurmanPackageDto` (`occasion: string`, `locale: GurmanLocale`), `GurmanController`, `GurmanModule`, `ThrottleGurman()`.
+- Produces: `GurmanChatDto` (`message: string`, `locale: GurmanLocale`), `GurmanPackageDto` (`occasion: string`, `locale: GurmanLocale`), `GurmanController`, `gurmanProviders: Provider[]`, `ThrottleGurman()`.
 
 - [ ] **Step 1: Add the throttle tier**
 
@@ -1587,53 +1587,74 @@ export class GurmanController {
 }
 ```
 
-- [ ] **Step 7: Write the module**
+- [ ] **Step 7: Write the provider array**
 
-Create `apps/api/src/modules/gurman/gurman.module.ts`:
+**Do not create a Nest module.** This codebase has only three modules — `app`,
+`cache`, and `security` — and registers every controller, service, and
+repository flat in `app.module.ts`. A `GurmanModule` would also have to provide
+`PrismaService`, which `app.module.ts` already provides; a module-scoped copy
+would open a **second Prisma connection pool**. Follow the existing pattern.
+
+Create `apps/api/src/modules/gurman/gurman.providers.ts`:
 
 ```ts
-import { Logger, Module } from "@nestjs/common";
-import { CacheModule } from "../cache/cache.module";
-import { PrismaService } from "../prisma.service";
-import { GurmanController } from "./gurman.controller";
+import { Logger, type Provider } from "@nestjs/common";
 import { AnthropicLlm, GURMAN_LLM, UnconfiguredLlm } from "./gurman.llm";
 import { CatalogRetriever, GURMAN_RETRIEVER } from "./gurman.retriever";
-import { GurmanService } from "./gurman.service";
 
-// `CacheModule` is `@Global()`, so `CacheService` injects without importing it.
-// Importing it here would be redundant, not harmful — but it would suggest the
-// module is not global and invite someone to copy that mistake.
-@Module({
-  controllers: [GurmanController],
-  providers: [
-    PrismaService,
-    GurmanService,
-    { provide: GURMAN_RETRIEVER, useClass: CatalogRetriever },
-    {
-      provide: GURMAN_LLM,
-      useFactory: () => {
-        const apiKey = process.env.ANTHROPIC_API_KEY;
+/**
+ * Gurman's DI wiring, kept beside the module's code rather than inline in
+ * `app.module.ts` so the LLM factory stays readable.
+ *
+ * `PrismaService` and `CacheService` are deliberately absent: the first is
+ * already provided by `app.module.ts` (providing it again would open a second
+ * connection pool) and the second comes from the `@Global()` `CacheModule`.
+ */
+export const gurmanProviders: Provider[] = [
+  { provide: GURMAN_RETRIEVER, useClass: CatalogRetriever },
+  {
+    provide: GURMAN_LLM,
+    useFactory: () => {
+      const apiKey = process.env.ANTHROPIC_API_KEY;
 
-        if (!apiKey) {
-          // Logged loudly at boot: without this, a missing key looks like a
-          // runtime outage later instead of a configuration gap now.
-          new Logger("GurmanModule").warn(
-            "ANTHROPIC_API_KEY not set — Gurman AI will return 503 AI_NOT_CONFIGURED"
-          );
-          return new UnconfiguredLlm();
-        }
-
-        return AnthropicLlm.fromApiKey(apiKey);
+      if (!apiKey) {
+        // Warned at boot: otherwise a missing key first shows up as a runtime
+        // 503 that reads like an outage rather than a configuration gap.
+        new Logger("Gurman").warn(
+          "ANTHROPIC_API_KEY not set — Gurman AI will return 503 AI_NOT_CONFIGURED"
+        );
+        return new UnconfiguredLlm();
       }
+
+      return AnthropicLlm.fromApiKey(apiKey);
     }
-  ]
-})
-export class GurmanModule {}
+  }
+];
 ```
 
-- [ ] **Step 8: Register the module**
+- [ ] **Step 8: Register in app.module.ts**
 
-In `apps/api/src/modules/app.module.ts`, add `import { GurmanModule } from "./gurman/gurman.module";` with the other module imports, and add `GurmanModule` to the `imports` array (after `CacheModule`).
+In `apps/api/src/modules/app.module.ts`:
+
+1. Add these imports alongside the existing ones:
+
+```ts
+import { GurmanController } from "./gurman/gurman.controller";
+import { GurmanService } from "./gurman/gurman.service";
+import { gurmanProviders } from "./gurman/gurman.providers";
+```
+
+2. Add `GurmanController` to the `controllers` array (after `HomeController`).
+
+3. Add to the `providers` array, after the existing `CampaignsRepository` entry:
+
+```ts
+    GurmanService,
+    ...gurmanProviders,
+```
+
+Do **not** add anything to the `imports` array — `CatalogRetriever` injects the
+already-provided `PrismaService`, and `CacheService` is global.
 
 - [ ] **Step 9: Document the variable**
 
