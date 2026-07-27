@@ -20,6 +20,9 @@ export function mainMenu(): InlineKeyboard {
     .text(buttons.status, "status")
     .text(buttons.about, "about")
     .row()
+    .text(buttons.link, "link")
+    .text(buttons.consent, "consent")
+    .row()
     .webApp(buttons.openApp, `${config.webUrl}/uz`);
 }
 
@@ -46,4 +49,37 @@ export function adminMenu(): InlineKeyboard {
     .text("⭐️ Sharhlar", "admin:reviews")
     .row()
     .webApp("🛠 Admin panel", `${config.webUrl}/uz/admin`);
+}
+
+/**
+ * Native contact-request keyboard.
+ *
+ * Telegram's own share-contact control, rather than asking the user to type a
+ * number: it proves the number belongs to the account, and the client fills it
+ * in so there is nothing to mistype.
+ */
+export function sharePhoneKeyboard() {
+  return {
+    keyboard: [[{ text: buttons.sharePhone, request_contact: true }]],
+    resize_keyboard: true,
+    one_time_keyboard: true
+  };
+}
+
+/** Per-business consent toggles. One row per customer record. */
+export function consentKeyboard(
+  rows: Array<{ id: string; businessName: string; consentMarketing: boolean }>
+): InlineKeyboard {
+  const keyboard = new InlineKeyboard();
+
+  for (const row of rows) {
+    keyboard
+      .text(
+        `${row.consentMarketing ? "🔕 Bekor qilish" : "🔔 Rozilik"} — ${row.businessName}`,
+        `consent:${row.consentMarketing ? "off" : "on"}:${row.id}`
+      )
+      .row();
+  }
+
+  return keyboard.text(buttons.back, "menu");
 }

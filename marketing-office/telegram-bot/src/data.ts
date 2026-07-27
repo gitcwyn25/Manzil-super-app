@@ -169,3 +169,120 @@ export async function findBusinessForStatus(query: string): Promise<BusinessSumm
 export async function disconnect(): Promise<void> {
   await prisma?.$disconnect();
 }
+
+/* ================= Telegram linking and consent ================= */
+
+export type LinkedCustomer = {
+  id: string;
+  businessName: string;
+  businessSlug: string;
+  consentMarketing: boolean;
+};
+
+/**
+ * Normalises an Uzbek phone number to +998XXXXXXXXX.
+ *
+ * Telegram returns numbers in inconsistent shapes ("998901234567",
+ * "+998 90 123 45 67"), while Customer.phone was canonicalised by the backfill.
+ * Comparing raw strings would silently fail to match the same person.
+ */
+export function canonicalPhone(input: string): string | null {
+  const digits = input.replace(/\D/g, "");
+  if (!digits) return null;
+
+  if (digits.length === 9) return `+998${digits}`;
+  if (digits.length === 12 && digits.startsWith("998")) return `+${digits}`;
+  if (digits.length >= 10 && digits.length <= 15) return `+${digits}`;
+
+  return null;
+}
+
+/**
+ * Links a verified phone number to every Customer record sharing it.
+ *
+ * `Customer` is per-business, so one person can hold several rows — the same
+ * human at different businesses. Linking sets the chat id on all of them,
+ * because it identifies the person, not the relationship.
+ *
+ * Consent is deliberately NOT set here. Sharing a phone to connect an account
+ * is not agreement to receive marketing, and treating it as such is exactly
+ * the inferred consent the campaign gate exists to prevent.
+ */
+export async function linkTelegramToCustomers(
+  phone: string,
+  telegramChatId: string
+): Promise<LinkedCustomer[] | null> {
+  const db = client();
+  if (!db) return null;
+
+  const canonical = canonicalPhone(phone);
+  if (!canonical) return [];
+
+  try {
+    await db.customer.updateMany({
+      where: { phone: canonical },
+      data: { telegramChatId }
+    });
+
+    const rows = await db.customer.findMany({
+      where: { phone: canonical },
+      include: { business: { select: { name: true, slug: true } } }
+    });
+
+    return rows.map((row) => ({
+      id: row.id,
+      businessName: row.business.name,
+      businessSlug: row.business.slug,
+      consentMarketing: row.consentMarketing
+    }));
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Records or withdraws marketing consent for one customer record.
+ *
+ * Per-business rather than blanket: consenting to hear from one salon is not
+ * consenting to hear from every business on the platform, and a single global
+ * switch would overstate what the person actually agreed to.
+ */
+export async function setCustomerConsent(
+  customerId: string,
+  consent: boolean
+): Promise<boolean> {
+  const db = client();
+  if (!db) return false;
+
+  try {
+    await db.customer.update({
+      where: { id: customerId },
+      data: { consentMarketing: consent, consentAt: consent ? new Date() : null }
+    });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/** Customer records already linked to this chat, for the consent screen. */
+export async function getLinkedCustomers(telegramChatId: string): Promise<LinkedCustomer[] | null> {
+  const db = client();
+  if (!db) return null;
+
+  try {
+    const rows = await db.customer.findMany({
+      where: { telegramChatId },
+      include: { business: { select: { name: true, slug: true } } }
+    });
+
+    return rows.map((row) => ({
+      id: row.id,
+      businessName: row.business.name,
+      businessSlug: row.business.slug,
+      consentMarketing: row.consentMarketing
+    }));
+  } catch {
+    return null;
+  }
+}

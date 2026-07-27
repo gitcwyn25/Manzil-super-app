@@ -4,8 +4,18 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { config, isAdmin } from "./config.js";
 import { buttons, copy } from "./copy.js";
-import { aboutMenu, adminMenu, backOnly, mainMenu } from "./keyboards.js";
 import {
+  aboutMenu,
+  adminMenu,
+  backOnly,
+  consentKeyboard,
+  mainMenu,
+  sharePhoneKeyboard
+} from "./keyboards.js";
+import {
+  getLinkedCustomers,
+  linkTelegramToCustomers,
+  setCustomerConsent,
   findBusinessForStatus,
   getPendingClaims,
   getPlatformStats,
@@ -242,6 +252,108 @@ export function createBot(): Bot {
         ].join("\n"),
         { parse_mode: "Markdown", reply_markup: adminMenu() }
       );
+    }
+  });
+
+
+  /* ---------------------------------------------------------------- */
+  /* Telegram linking + marketing consent                              */
+  /* ---------------------------------------------------------------- */
+
+  bot.callbackQuery("link", async (ctx) => {
+    await ctx.answerCallbackQuery();
+    await ctx.reply(copy.linkPrompt, {
+      parse_mode: "Markdown",
+      reply_markup: sharePhoneKeyboard()
+    });
+  });
+
+  bot.on("message:contact", async (ctx) => {
+    const contact = ctx.message.contact;
+
+    // Telegram lets a user forward somebody else's contact card. Without this
+    // check, anyone could attach their own chat id to another person's customer
+    // record and receive that person's messages.
+    if (contact.user_id !== ctx.from.id) {
+      await ctx.reply(copy.linkNotOwnContact, { reply_markup: { remove_keyboard: true } });
+      return;
+    }
+
+    const linked = await linkTelegramToCustomers(contact.phone_number, String(ctx.chat.id));
+
+    if (linked === null) {
+      await ctx.reply(copy.dbUnavailable, { reply_markup: { remove_keyboard: true } });
+      return;
+    }
+
+    if (linked.length === 0) {
+      await ctx.reply(copy.linkNoMatch, {
+        parse_mode: "Markdown",
+        reply_markup: { remove_keyboard: true }
+      });
+      await ctx.reply(copy.intro, { parse_mode: "Markdown", reply_markup: mainMenu() });
+      return;
+    }
+
+    await ctx.reply(`${copy.linkSuccess} (${linked.length})`, {
+      reply_markup: { remove_keyboard: true }
+    });
+
+    // Linking establishes identity; consent is asked separately and per
+    // business, because agreeing to hear from one salon is not agreeing to
+    // hear from every business on the platform.
+    await ctx.reply(copy.consentIntro, {
+      parse_mode: "Markdown",
+      reply_markup: consentKeyboard(linked)
+    });
+  });
+
+  bot.callbackQuery("consent", async (ctx) => {
+    await ctx.answerCallbackQuery();
+
+    const linked = await getLinkedCustomers(String(ctx.chat?.id));
+
+    if (linked === null) {
+      await ctx.reply(copy.dbUnavailable);
+      return;
+    }
+
+    if (linked.length === 0) {
+      await ctx.reply(copy.consentNone, { parse_mode: "Markdown", reply_markup: mainMenu() });
+      return;
+    }
+
+    await ctx.reply(copy.consentIntro, {
+      parse_mode: "Markdown",
+      reply_markup: consentKeyboard(linked)
+    });
+  });
+
+  bot.callbackQuery(/^consent:(on|off):/, async (ctx) => {
+    const [, mode, customerId] = ctx.callbackQuery.data.split(":");
+    const wantsConsent = mode === "on";
+
+    // Re-read the caller's own linked records and check membership, so a
+    // callback payload cannot be edited to toggle somebody else's consent.
+    const linked = await getLinkedCustomers(String(ctx.chat?.id));
+    const owned = linked?.some((row) => row.id === customerId) ?? false;
+
+    if (!owned) {
+      await ctx.answerCallbackQuery({ text: copy.consentFailed, show_alert: true });
+      return;
+    }
+
+    const saved = await setCustomerConsent(customerId, wantsConsent);
+
+    await ctx.answerCallbackQuery({
+      text: saved ? (wantsConsent ? copy.consentGranted : copy.consentRevoked) : copy.consentFailed
+    });
+
+    if (!saved) return;
+
+    const refreshed = await getLinkedCustomers(String(ctx.chat?.id));
+    if (refreshed && refreshed.length > 0) {
+      await ctx.editMessageReplyMarkup({ reply_markup: consentKeyboard(refreshed) });
     }
   });
 

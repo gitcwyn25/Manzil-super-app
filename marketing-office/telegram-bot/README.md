@@ -24,6 +24,26 @@ Anything typed without pressing a button is relayed too — someone typing at a 
 
 Every number is read live from the platform database. If the database is unreachable the bot **says so** rather than showing a plausible-looking figure.
 
+## Campaign delivery (CRM M4)
+
+This bot is the platform's **Telegram delivery channel**. Two separate things
+have to be true before a customer can receive a campaign:
+
+1. **Reachable** — `Customer.telegramChatId` is set. Only the 📱 opt-in sets it,
+   via Telegram's native contact-share, and only after checking the shared
+   contact belongs to the sender (Telegram allows forwarding someone else's
+   contact card, which would otherwise let anyone attach their chat to another
+   person's customer record).
+2. **Permitted** — `Customer.consentMarketing` is true, granted **per business**
+   on the 🔔 screen.
+
+These are deliberately separate acts. Sharing a phone to connect an account is
+not agreement to receive marketing, and consenting to hear from one salon is not
+consenting to hear from every business on the platform.
+
+Set `TELEGRAM_BOT_TOKEN` in the repo root `.env` so the API can send. Without it
+the API records sends as `failed` with an explicit reason rather than as `sent`.
+
 ## Setup
 
 ```bash
