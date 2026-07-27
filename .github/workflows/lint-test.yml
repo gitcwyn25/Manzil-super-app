@@ -78,6 +78,16 @@ jobs:
       NEXT_PUBLIC_API_URL: http://localhost:4000/v1
       NEXT_PUBLIC_USE_MOCK: "false"
       BASE_URL: http://localhost:3000
+      # Clerk **test**-instance keys. The authenticated specs provision a user
+      # via the Backend API and sign in for real, so a live-instance key must
+      # never be used here — the fixture refuses anything that is not sk_test_.
+      CLERK_SECRET_KEY: ${{ secrets.CLERK_TEST_SECRET_KEY }}
+      CLERK_PUBLISHABLE_KEY: ${{ secrets.CLERK_TEST_PUBLISHABLE_KEY }}
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.CLERK_TEST_PUBLISHABLE_KEY }}
+      # Without Clerk secrets the authenticated specs cannot run at all, so the
+      # job falls back to the unauthenticated subset rather than failing on
+      # every PR from a fork, which cannot read secrets.
+      SKIP_AUTH_SETUP: ${{ secrets.CLERK_TEST_SECRET_KEY == '' && '1' || '' }}
 
     steps:
       - uses: actions/checkout@v4
@@ -106,9 +116,10 @@ jobs:
           npm run build --workspace @manzil/api
           npm run build --workspace @manzil/web
 
-      # Dev headers are enabled only because CLERK_SECRET_KEY is unset here;
-      # ClerkAuthService refuses header auth whenever Clerk is configured, and
-      # refuses it outright in production.
+      # When Clerk test keys are present the API verifies real tokens, exactly
+      # as production does. Dev headers are the fallback only when they are not
+      # — ClerkAuthService refuses header auth whenever Clerk is configured,
+      # and refuses it outright in production.
       - name: Start API
         run: |
           MANZIL_DEV_AUTH=true NODE_ENV=development WEB_ORIGIN=http://localhost:3000 PORT=4000 \

@@ -16,6 +16,18 @@ import { E2E_BUSINESS_SLUG } from "./fixtures/seed";
  * returned 2xx" would have passed while the user saw a failure — so these
  * assert on what the USER is told, not on the network call.
  */
+/**
+ * Skipped only when auth setup was explicitly disabled (no Clerk secrets, e.g.
+ * a fork PR). This is deliberately NOT a content-based skip: the original
+ * version skipped when the form "wasn't rendered", which silently masked the
+ * exact breakage the suite exists to catch. Declaring auth unavailable is a
+ * decision; failing to find a form is a symptom.
+ */
+test.skip(
+  Boolean(process.env.SKIP_AUTH_SETUP),
+  "SKIP_AUTH_SETUP is set — no Clerk session available for authenticated specs"
+);
+
 test.describe("review form (authenticated)", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(`/uz/businesses/${E2E_BUSINESS_SLUG}`);
@@ -119,6 +131,12 @@ test.describe("review form (authenticated)", () => {
 });
 
 test.describe("review trust signals", () => {
+  // Depends on the authenticated submission spec having left a review behind.
+  test.skip(
+    Boolean(process.env.SKIP_AUTH_SETUP),
+    "SKIP_AUTH_SETUP is set — no review can be submitted to assert against"
+  );
+
   test("a helpful count is never shown without a vote button backing it", async ({ page }) => {
     await page.goto(`/uz/businesses/${E2E_BUSINESS_SLUG}`);
 

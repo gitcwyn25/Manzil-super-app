@@ -10,6 +10,18 @@ import { E2E_TERMS_VERSION } from "./fixtures/seed";
  * load. A pre-ticked or optional box would make every acceptance record
  * worthless.
  */
+/**
+ * Skipped only when auth setup was explicitly disabled (no Clerk secrets, e.g.
+ * a fork PR). This is deliberately NOT a content-based skip: the original
+ * version skipped when the form "wasn't rendered", which silently masked the
+ * exact breakage the suite exists to catch. Declaring auth unavailable is a
+ * decision; failing to find a form is a symptom.
+ */
+test.skip(
+  Boolean(process.env.SKIP_AUTH_SETUP),
+  "SKIP_AUTH_SETUP is set — no Clerk session available for authenticated specs"
+);
+
 test.describe("business registration terms (authenticated)", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/uz/business/register");
