@@ -1296,6 +1296,7 @@ textarea:focus {
   gap: 4px;
   background: rgb(255 255 255 / 0.94);
   color: var(--text);
+  -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
   box-shadow: var(--soft-shadow);
 }
@@ -6521,5 +6522,39 @@ textarea:focus {
   .gurman-hero * {
     animation: none !important;
     transition: none !important;
+  }
+}
+
+/* ---- Workspace switch: the visible seam between the two shells ---- */
+.header-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--text);
+  font-size: 0.86rem;
+  font-weight: 500;
+  transition: border-color var(--speed-fast) var(--ease-out),
+    background var(--speed-fast) var(--ease-out);
+}
+
+.header-switch:hover {
+  border-color: var(--ceramic);
+  background: var(--primary-ghost);
+}
+
+/* The aperture motif at its smallest: a ring that marks "another mode exists". */
+.header-switch__ring {
+  width: 9px;
+  height: 9px;
+  border: 2px solid var(--ceramic);
+  border-radius: 50%;
+}
+
+@media (max-width: 720px) {
+  .header-switch {
+    display: none;
   }
 }

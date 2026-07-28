@@ -6,10 +6,13 @@ import type { ReactNode } from "react";
 import { getBusinessCopy } from "../lib/business-copy";
 
 // Admin is intentionally absent here — its entry point lives in the footer.
+// Consumer navigation only. "Dashboard" is deliberately absent: a visitor with
+// no business has nothing there, and the workspace is reached through the
+// signed-in switch in the header instead.
 const links = [
   { key: "home" as const, href: (locale: Locale) => `/${locale}` },
-  { key: "forBusiness" as const, href: (locale: Locale) => `/${locale}/business` },
-  { key: "dashboard" as const, href: (locale: Locale) => `/${locale}/dashboard` }
+  { key: "discover" as const, href: (locale: Locale) => `/${locale}/discover` },
+  { key: "forBusiness" as const, href: (locale: Locale) => `/${locale}/business` }
 ];
 
 export function SiteNav({ locale }: { locale: Locale }) {
@@ -44,12 +47,10 @@ const mobileIcons: Record<string, ReactNode> = {
       <path d="M2.5 9 5 4h14l2.5 5M12 14v3" />
     </svg>
   ),
-  dashboard: (
+  discover: (
     <svg aria-hidden="true" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
-      <rect height="8" rx="1.5" width="8" x="3" y="3" />
-      <rect height="5" rx="1.5" width="8" x="3" y="15" />
-      <rect height="5" rx="1.5" width="8" x="13" y="3" />
-      <rect height="8" rx="1.5" width="8" x="13" y="12" />
+      <circle cx="11" cy="11" r="7" />
+      <path d="m20 20-3.5-3.5" />
     </svg>
   ),
   admin: (
@@ -66,8 +67,8 @@ export function MobileSiteNav({ locale }: { locale: Locale }) {
 
   const mobileLinks = [
     { key: "home" as const, href: `/${locale}`, label: copy.nav.home },
-    { key: "forBusiness" as const, href: `/${locale}/business`, label: copy.nav.forBusiness },
-    { key: "dashboard" as const, href: `/${locale}/dashboard`, label: copy.nav.dashboard }
+    { key: "discover" as const, href: `/${locale}/discover`, label: copy.nav.discover },
+    { key: "forBusiness" as const, href: `/${locale}/business`, label: copy.nav.forBusiness }
   ];
 
   return (

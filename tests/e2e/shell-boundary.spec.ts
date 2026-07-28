@@ -25,4 +25,11 @@ test.describe("shell boundary", () => {
     await expect(page.locator("nav.mobile-nav")).toHaveCount(0);
     await expect(page.locator("footer")).toHaveCount(0);
   });
+
+  test("the consumer nav offers no dashboard link", async ({ page }) => {
+    await page.goto("/en");
+    await expect(page.locator("nav.desktop-nav")).not.toContainText("Dashboard");
+    await expect(page.locator("nav.mobile-nav")).not.toContainText("Dashboard");
+    await expect(page.locator("nav.desktop-nav")).toContainText("Discover");
+  });
 });
