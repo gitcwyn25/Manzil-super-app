@@ -2734,10 +2734,19 @@ textarea:focus {
 }
 
 .bl-section-head h2,
-.bl-admin-band h2,
-.bl-app h2 {
+.bl-admin-band h2 {
   margin: 0;
   font-family: var(--font-geist), Arial, sans-serif;
+  font-size: clamp(30px, 4.4vw, 46px);
+  font-weight: 820;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+}
+
+.bl-app h2 {
+  margin: 0;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-variation-settings: "wdth" 112;
   font-size: clamp(30px, 4.4vw, 46px);
   font-weight: 820;
   line-height: 1.08;
@@ -2823,7 +2832,8 @@ textarea:focus {
   align-items: center;
   gap: 10px;
   margin: 0 0 8px;
-  font-family: var(--font-geist), Arial, sans-serif;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-variation-settings: "wdth" 112;
   font-size: 17px;
   font-weight: 800;
 }
@@ -2889,7 +2899,8 @@ textarea:focus {
 
 .bl-step h3 {
   margin: 0 0 8px;
-  font-family: var(--font-geist), Arial, sans-serif;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-variation-settings: "wdth" 112;
   font-size: 19px;
   font-weight: 800;
 }
@@ -3199,7 +3210,8 @@ textarea:focus {
 .bl-footer-col h4 {
   margin: 0 0 6px;
   color: rgb(238 244 243 / 0.5);
-  font-family: var(--font-geist), Arial, sans-serif;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-variation-settings: "wdth" 112;
   font-size: 12.5px;
   font-weight: 800;
   letter-spacing: 0.1em;
@@ -3947,7 +3959,8 @@ textarea:focus {
 
 .af-card-copy h3 {
   margin: 0 0 6px;
-  font-family: var(--font-geist), Arial, sans-serif;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-variation-settings: "wdth" 112;
   font-size: clamp(20px, 2.2vw, 25px);
   font-weight: 700;
   letter-spacing: -0.015em;
@@ -4359,7 +4372,8 @@ textarea:focus {
 .lp-footer-col h4 {
   margin: 0 0 6px;
   color: rgb(238 244 243 / 0.45);
-  font-family: var(--font-geist), Arial, sans-serif;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-variation-settings: "wdth" 112;
   font-size: 12px;
   font-weight: 750;
   letter-spacing: 0.12em;
@@ -4540,7 +4554,8 @@ textarea:focus {
 
 .bz-hero-copy h1 {
   margin: 0;
-  font-family: var(--font-geist), Arial, sans-serif;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-variation-settings: "wdth" 112;
   font-size: clamp(40px, 5.4vw, 66px);
   font-weight: 720;
   line-height: 1.04;
@@ -4655,7 +4670,8 @@ textarea:focus {
 
 .bz-feature-copy h2 {
   margin: 0;
-  font-family: var(--font-geist), Arial, sans-serif;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-variation-settings: "wdth" 112;
   font-size: clamp(28px, 3.4vw, 42px);
   font-weight: 720;
   line-height: 1.1;
@@ -4824,7 +4840,8 @@ textarea:focus {
 
 .bz-plan h3 {
   margin: 0;
-  font-family: var(--font-geist), Arial, sans-serif;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-variation-settings: "wdth" 112;
   font-size: 16px;
   font-weight: 650;
   color: var(--bz-muted);
@@ -4897,7 +4914,8 @@ textarea:focus {
 
 .bz-final-inner h2 {
   margin: 0;
-  font-family: var(--font-geist), Arial, sans-serif;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-variation-settings: "wdth" 112;
   font-size: clamp(28px, 3.6vw, 44px);
   font-weight: 730;
   letter-spacing: -0.03em;
@@ -6891,6 +6909,106 @@ html[data-shell="workspace"] [class*="reveal"] {
   }
 
   .home-card:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   High-traffic consumer interactions.
+   Transform/opacity only — these run on every card in a grid.
+   ============================================================ */
+
+/* ---- Search: the field itself signals focus, no layout shift ---- */
+.search-controls input[type="search"],
+.search-controls input[type="text"] {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  background: var(--surface-card);
+  transition: border-color var(--speed-fast) var(--ease-out),
+    box-shadow var(--speed-fast) var(--ease-out);
+}
+
+.search-controls input:focus-visible {
+  border-color: var(--ceramic);
+  box-shadow: var(--ring);
+  outline: none;
+}
+
+/* ---- Category chips: the selected one is filled, not merely outlined ---- */
+.search-controls a,
+.search-controls button {
+  border-radius: 999px;
+  transition: background var(--speed-fast) var(--ease-out),
+    color var(--speed-fast) var(--ease-out),
+    border-color var(--speed-fast) var(--ease-out);
+}
+
+.search-controls a.active,
+.search-controls button.active,
+.segmented-control button.active {
+  background: var(--ceramic);
+  border-color: var(--ceramic);
+  color: #fff;
+}
+
+/* ---- Business card: one lift, one photo scale, nothing else ---- */
+.business-card {
+  transition: transform var(--speed-med) var(--ease-out),
+    box-shadow var(--speed-med) var(--ease-out);
+  will-change: transform;
+}
+
+.business-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--hover-shadow);
+}
+
+.business-card .business-photo {
+  overflow: hidden;
+}
+
+.business-card .business-photo.photo-block {
+  transition: transform var(--speed-slow) var(--ease-out);
+}
+
+.business-card:hover .business-photo.photo-block {
+  transform: scale(1.04);
+}
+
+.business-card:focus-within {
+  box-shadow: var(--ring);
+}
+
+/* Rating is value: brass, tabular. */
+.business-card .rating-badge {
+  color: var(--brass);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Live is state: signal, and only here. */
+.live-badge.is-live::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 0 3px rgb(77 225 193 / 0.3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .business-card,
+  .business-card .business-photo.photo-block {
+    transition: none;
+  }
+
+  .business-card:hover {
+    transform: none;
+  }
+
+  .business-card:hover .business-photo.photo-block {
     transform: none;
   }
 }

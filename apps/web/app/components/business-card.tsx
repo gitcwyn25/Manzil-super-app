@@ -28,7 +28,7 @@ export function BusinessCard({
             {business.avgRating} ({business.reviewCount})
           </span>
           {business.liveStatus ? (
-            <span className="live-badge">
+            <span className="live-badge is-live">
               <LiveStatusPill compact locale={locale} status={business.liveStatus} />
             </span>
           ) : (
