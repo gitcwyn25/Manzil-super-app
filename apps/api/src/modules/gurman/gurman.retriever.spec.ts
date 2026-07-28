@@ -21,7 +21,7 @@ const row = {
   descriptionUz: "Sokin muhit",
   descriptionRu: null,
   descriptionEn: null,
-  category: { name: "Coffee" },
+  category: { nameUz: "Qahvaxona", nameRu: "Кофейня", nameEn: "Coffee" },
   reviews: [{ text: "Juda yaxshi" }]
 };
 
@@ -46,7 +46,10 @@ describe("CatalogRetriever", () => {
       en: null
     });
     expect(context.businesses[0].avgRating).toBe(4.5);
-    expect(context.businesses[0].categoryName).toBe("Coffee");
+    // Retrieved in the asking locale: handing the model a category name in
+    // another language invites it to translate, and a translated name no
+    // longer matches anything the user can filter by on the site.
+    expect(context.businesses[0].categoryName).toBe("Кофейня");
     expect(context.businesses[0].reviewSnippets).toEqual(["Juda yaxshi"]);
   });
 

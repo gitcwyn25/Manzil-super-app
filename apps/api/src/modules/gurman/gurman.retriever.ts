@@ -43,7 +43,7 @@ export interface GurmanRetriever {
 export class CatalogRetriever implements GurmanRetriever {
   constructor(private readonly prisma: PrismaService) {}
 
-  async retrieve(_query: string, _locale: GurmanLocale): Promise<RetrievedContext> {
+  async retrieve(_query: string, locale: GurmanLocale): Promise<RetrievedContext> {
     const rows = await this.prisma.business.findMany({
       where: VISIBLE_BUSINESS_WHERE,
       select: {
@@ -57,7 +57,8 @@ export class CatalogRetriever implements GurmanRetriever {
         descriptionUz: true,
         descriptionRu: true,
         descriptionEn: true,
-        category: { select: { name: true } },
+        // Category names are per-locale columns; there is no single `name`.
+        category: { select: { nameUz: true, nameRu: true, nameEn: true } },
         reviews: {
           where: { moderationStatus: "approved" },
           orderBy: { createdAt: "desc" },
@@ -68,7 +69,7 @@ export class CatalogRetriever implements GurmanRetriever {
       orderBy: [{ avgRating: "desc" }, { reviewCount: "desc" }]
     });
 
-    return { businesses: rows.map(toRetrievedBusiness) };
+    return { businesses: rows.map((row) => toRetrievedBusiness(row, locale)) };
   }
 
   /**
@@ -103,16 +104,34 @@ type PrismaBusinessRow = {
   descriptionUz: string;
   descriptionRu: string | null;
   descriptionEn: string | null;
-  category: { name: string } | null;
+  category: { nameUz: string; nameRu: string; nameEn: string } | null;
   reviews: Array<{ text: string | null }>;
 };
 
-function toRetrievedBusiness(row: PrismaBusinessRow): RetrievedBusiness {
+/**
+ * Category name in the asking locale, falling back to Uzbek.
+ *
+ * Gurman answers in the user's language, so handing the model a category name
+ * in a different one invites it to translate — and a translated category name
+ * no longer matches anything the user can filter by on the site.
+ */
+function categoryName(
+  category: PrismaBusinessRow["category"],
+  locale: GurmanLocale
+): string {
+  if (!category) {
+    return "";
+  }
+
+  return locale === "ru" ? category.nameRu : locale === "en" ? category.nameEn : category.nameUz;
+}
+
+function toRetrievedBusiness(row: PrismaBusinessRow, locale: GurmanLocale): RetrievedBusiness {
   return {
     id: row.id,
     slug: row.slug,
     name: row.name,
-    categoryName: row.category?.name ?? "",
+    categoryName: categoryName(row.category, locale),
     district: row.district,
     priceTier: row.priceTier,
     // Prisma returns Decimal; Number() here rather than in the prompt so the
