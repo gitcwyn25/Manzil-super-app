@@ -7049,3 +7049,112 @@ html[data-shell="workspace"] [class*="reveal"] {
 .admin-card h3.ws-num {
   font-size: 28px;
 }
+
+/* ---- Waitlist ---- */
+.wl-page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(24px, 6vw, 72px);
+  align-items: center;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: clamp(48px, 9vw, 112px) clamp(20px, 5vw, 40px);
+}
+
+.wl-copy h1 {
+  font-size: clamp(1.9rem, 4.4vw, 3rem);
+  margin: 0 0 14px;
+}
+
+.wl-lead {
+  max-width: 46ch;
+  color: var(--dust);
+  font-size: 1.05rem;
+}
+
+.wl-count {
+  display: inline-block;
+  margin: 18px 0 0;
+  color: var(--ceramic);
+  font-family: var(--font-data), ui-monospace, monospace;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+}
+
+.wl-form {
+  display: grid;
+  gap: 14px;
+  max-width: 420px;
+  margin-top: 26px;
+}
+
+.wl-field {
+  display: grid;
+  gap: 6px;
+}
+
+.wl-field > span {
+  color: var(--dust);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.wl-field input,
+.wl-field select {
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface-card);
+  transition: border-color var(--speed-fast) var(--ease-out);
+}
+
+.wl-field input:focus-visible,
+.wl-field select:focus-visible {
+  border-color: var(--ceramic);
+  box-shadow: var(--ring);
+  outline: none;
+}
+
+.wl-submit {
+  padding: 13px 22px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--ceramic);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--speed-fast) var(--ease-out);
+}
+
+.wl-submit:hover:not(:disabled) {
+  background: var(--primary-bright);
+}
+
+.wl-submit:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.wl-error {
+  margin: 0;
+  color: var(--error);
+  font-size: 0.86rem;
+}
+
+.wl-done h2 {
+  margin: 0 0 8px;
+}
+
+.wl-done p {
+  color: var(--dust);
+}
+
+@media (max-width: 860px) {
+  .wl-page {
+    grid-template-columns: 1fr;
+  }
+
+  .wl-aperture {
+    display: none;
+  }
+}
