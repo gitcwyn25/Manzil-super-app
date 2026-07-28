@@ -902,3 +902,31 @@ model CampaignSend {
   @@index([campaignId, status])
   @@index([customerId])
 }
+
+enum WaitlistTopic {
+  city
+  gurman
+  pro
+}
+
+model WaitlistSignup {
+  id           String        @id @default(cuid())
+  topic        WaitlistTopic
+  email        String
+  locale       String        @default("uz")
+  /// Only set for topic=city. The whole point of the city waitlist is knowing
+  /// which city to open next, so a signup without one carries no information.
+  city         String?
+  /// Only set for topic=pro, and only when the signup came from an owner who
+  /// already has a business.
+  businessName String?
+  /// Which page the signup came from, for attribution.
+  source       String?
+  createdAt    DateTime      @default(now())
+
+  /// One signup per email per topic. A person re-submitting the Gurman form
+  /// should not create a second queue entry and jump their own position.
+  @@unique([topic, email])
+  @@index([topic, createdAt])
+  @@index([topic, city])
+}
