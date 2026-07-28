@@ -2,8 +2,8 @@ import type { Locale } from "@manzil/shared";
 import { AudienceFeatures } from "../../components/audience-features";
 import { Aperture } from "../../components/motion/aperture";
 import { Reveal } from "../../components/motion/reveal";
+import { HeroBusinesses } from "../../components/hero-businesses";
 import { HomeSections } from "../../components/home-sections";
-import { ScenicBackdrop } from "../../components/scenic-hero";
 import { StoreBadges } from "../../components/store-badges";
 import { getHomeFeed } from "../../lib/api";
 import { getLandingCopy } from "../../lib/landing-copy";
@@ -18,6 +18,16 @@ export default async function LandingPage({
   const feed = await getHomeFeed(locale);
   const liveCount = feed.sections?.justJoined.length ?? 0;
 
+  // Featured first, then recent arrivals, deduplicated — the hero should lead
+  // with the editorially chosen places and fall back to real inventory rather
+  // than to an illustration.
+  const heroBusinesses = [
+    ...(feed.sections?.featured ?? []),
+    ...(feed.sections?.justJoined ?? [])
+  ]
+    .filter((card, i, all) => all.findIndex((other) => other.slug === card.slug) === i)
+    .slice(0, 6);
+
   return (
     <>
       {/* Shape reveal on load */}
@@ -28,7 +38,15 @@ export default async function LandingPage({
 
       {/* ============ HERO — full-bleed scenic landscape, serif headline ============ */}
       <section className="lp-hero">
-        <ScenicBackdrop />
+        <HeroBusinesses
+          businesses={heroBusinesses}
+          copy={{
+            regionLabel: copy.heroCarouselLabel,
+            goToLabel: copy.heroGoTo,
+            newLabel: copy.heroNew
+          }}
+          locale={locale}
+        />
         <div className="lp-hero-content">
           <h1 className="lp-title">
             <span className="lp-title-line">{copy.titleLine1}</span>

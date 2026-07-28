@@ -7158,3 +7158,145 @@ html[data-shell="workspace"] [class*="reveal"] {
     display: none;
   }
 }
+
+/* ============================================================
+   Hero business carousel — replaces the illustrated scenic
+   backdrop. Slides sit at z-index -1 inside .lp-hero (which is
+   position:relative + isolation:isolate), exactly where .scenic
+   used to, so the existing .lp-hero-content stacking is unchanged.
+   ============================================================ */
+
+.hb-root {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--void);
+}
+
+.hb-slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  opacity: 0;
+  transition: opacity 900ms var(--ease-out);
+  pointer-events: none;
+}
+
+.hb-slide.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Scrim: the headline sits over these slides, so every cover needs a
+   predictable dark floor underneath the type rather than whatever the
+   gradient happens to be at that point. */
+.hb-slide::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgb(10 26 30 / 0.55) 0%,
+    rgb(10 26 30 / 0.35) 40%,
+    rgb(10 26 30 / 0.78) 100%
+  );
+}
+
+/* Six stable covers, picked per business by slug hash. Real photography
+   replaces these once media upload ships. */
+.hb-cover-0 { background: linear-gradient(145deg, #0a1a1e, #00706b); }
+.hb-cover-1 { background: linear-gradient(145deg, #10242a, #0a8f88); }
+.hb-cover-2 { background: linear-gradient(145deg, #0a1a1e, #2a4a52); }
+.hb-cover-3 { background: linear-gradient(145deg, #14202a, #00706b 70%, #c8a24c); }
+.hb-cover-4 { background: linear-gradient(145deg, #0d2226, #4de1c1 140%); }
+.hb-cover-5 { background: linear-gradient(145deg, #101a22, #1d5c62); }
+
+.hb-slide__meta {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 4px;
+  max-width: min(90vw, 460px);
+  margin: 0 0 clamp(20px, 5vw, 44px) clamp(20px, 5vw, 56px);
+  text-align: left;
+  color: #fff;
+}
+
+.hb-slide__name {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-variation-settings: "wdth" 112;
+  font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+  line-height: 1.15;
+}
+
+.hb-slide__sub {
+  color: rgb(255 255 255 / 0.76);
+  font-size: 0.86rem;
+}
+
+.hb-slide__rating {
+  color: var(--brass);
+  font-family: var(--font-data), ui-monospace, monospace;
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.hb-dots {
+  position: absolute;
+  right: clamp(20px, 5vw, 56px);
+  bottom: clamp(20px, 5vw, 44px);
+  z-index: 2;
+  display: flex;
+  gap: 8px;
+}
+
+.hb-dot {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.38);
+  cursor: pointer;
+  transition: background var(--speed-fast) var(--ease-out), transform var(--speed-fast) var(--ease-out);
+}
+
+.hb-dot:hover {
+  background: rgb(255 255 255 / 0.7);
+}
+
+.hb-dot.is-active {
+  background: var(--signal);
+  transform: scale(1.35);
+}
+
+.hb-dot:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 3px;
+}
+
+.hb-root--empty {
+  background: linear-gradient(160deg, var(--void), #14343a);
+}
+
+/* The aperture already occupies the bottom-right on wide screens; move the
+   dots clear of it rather than stacking two controls in one corner. */
+@media (min-width: 861px) {
+  .hb-dots {
+    right: auto;
+    left: clamp(20px, 5vw, 56px);
+    bottom: clamp(12px, 2.4vw, 20px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hb-slide {
+    transition: none;
+  }
+
+  .hb-dot {
+    transition: none;
+  }
+}

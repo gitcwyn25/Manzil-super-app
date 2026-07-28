@@ -3,6 +3,9 @@ import type { AudienceContent } from "../components/audience-features";
 
 export type LandingCopy = {
   badge: string;
+  heroCarouselLabel: string;
+  heroGoTo: (index: number) => string;
+  heroNew: string;
   titleLine1: string;
   titleLine2: string;
   subtitle: string;
@@ -22,6 +25,9 @@ export type LandingCopy = {
 const landing: Record<string, LandingCopy> = {
   uz: {
     badge: "Toshkentda ishga tushdi",
+    heroCarouselLabel: "Manzildagi bizneslar",
+    heroGoTo: (index) => `${index}-biznesni ko'rsatish`,
+    heroNew: "Yangi",
     titleLine1: "Shahringizdagi eng yaxshi joylar.",
     titleLine2: "Bitta platformada.",
     subtitle: "Bizneslar va mijozlar uchun yagona platforma",
@@ -55,6 +61,9 @@ const landing: Record<string, LandingCopy> = {
   },
   ru: {
     badge: "Запущено в Ташкенте",
+    heroCarouselLabel: "Бизнесы на Manzil",
+    heroGoTo: (index) => `Показать бизнес ${index}`,
+    heroNew: "Новый",
     titleLine1: "Лучшие места вашего города.",
     titleLine2: "На одной платформе.",
     subtitle: "Единая платформа для бизнеса и клиентов",
@@ -88,6 +97,9 @@ const landing: Record<string, LandingCopy> = {
   },
   en: {
     badge: "Now live in Tashkent",
+    heroCarouselLabel: "Businesses on Manzil",
+    heroGoTo: (index) => `Show business ${index}`,
+    heroNew: "New",
     titleLine1: "The best places in your city.",
     titleLine2: "On one platform.",
     subtitle: "One platform for businesses and customers",
