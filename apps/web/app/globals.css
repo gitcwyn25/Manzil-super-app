@@ -5332,23 +5332,35 @@ textarea:focus {
 
 .crm-shell {
   display: grid;
-  grid-template-columns: 264px 1fr;
-  min-height: calc(100dvh - 76px);
+  /* 232px: the workspace rail is narrower than the old UxerFlow shell (264px) —
+     Task 5 tightens the density. */
+  grid-template-columns: 232px 1fr;
+  /* Task 3 removed the consumer header that used to sit above this shell, so
+     the old "- 76px" offset compensating for it no longer applies. */
+  min-height: 100dvh;
   background: #f6f7f8;
 }
 
-/* ---------- Sidebar ---------- */
+/* ---------- Sidebar ----------
+   Dark rail (var(--void)): this is the workspace's own identity, distinct
+   from the light UxerFlow content area next to it — see globals.css cascade
+   trace in task-4-6-report.md before touching colors here again. */
 
 .crm-sidebar {
   display: flex;
   flex-direction: column;
   gap: 18px;
-  padding: 22px 16px;
-  border-right: 1px solid #e8eaec;
-  background: #fff;
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  padding: 20px 14px;
+  border-right: 1px solid rgb(255 255 255 / 0.08);
+  background: var(--void);
+  color: #dfe7e5;
 }
 
 .crm-sidebar-brand .brand {
+  color: #fff;
   font-size: 20px;
 }
 
@@ -5382,6 +5394,10 @@ textarea:focus {
   white-space: nowrap;
   font-family: var(--font-geist), Arial, sans-serif;
   font-size: 14px;
+  /* The business card keeps its light (#fafbfb) background even inside the
+     new dark rail, so it needs its own dark ink — without this it inherits
+     .crm-sidebar's new light #dfe7e5 text color and disappears. */
+  color: var(--text);
 }
 
 .crm-sidebar-business em {
@@ -5411,13 +5427,13 @@ textarea:focus {
   display: flex;
   align-items: center;
   gap: 11px;
-  padding: 10px 12px;
-  border-radius: 10px;
-  color: #4b5162;
+  padding: 7px 10px;
+  border-radius: var(--radius-md);
+  color: #a9bab7;
   font-family: var(--font-geist), Arial, sans-serif;
-  font-size: 14px;
+  font-size: 0.88rem;
   font-weight: 600;
-  transition: background var(--speed-fast) ease, color var(--speed-fast) ease;
+  transition: background var(--ws-speed) linear, color var(--ws-speed) linear;
 }
 
 .crm-sidebar-nav a svg {
@@ -5426,13 +5442,13 @@ textarea:focus {
 }
 
 .crm-sidebar-nav a:hover {
-  background: #f2f3f5;
-  color: var(--bz-ink, #0e1220);
+  background: rgb(255 255 255 / 0.06);
+  color: #fff;
 }
 
 .crm-sidebar-nav a.active {
-  background: #f2f3f5;
-  color: var(--bz-ink, #0e1220);
+  background: rgb(0 112 107 / 0.4);
+  color: #fff;
 }
 
 .crm-sidebar-nav a.active::before {
@@ -5455,14 +5471,17 @@ textarea:focus {
 .crm-sidebar-public {
   padding: 10px 12px;
   border-radius: 10px;
-  color: #4b5162;
+  /* Was #4b5162 (dark slate) for the old light rail; on the new dark
+     .crm-sidebar background that would be near-invisible. */
+  color: #a9bab7;
   font-size: 13.5px;
   font-weight: 600;
-  transition: background var(--speed-fast) ease;
+  transition: background var(--speed-fast) ease, color var(--speed-fast) ease;
 }
 
 .crm-sidebar-public:hover {
-  background: #f2f3f5;
+  background: rgb(255 255 255 / 0.06);
+  color: #fff;
 }
 
 .crm-sidebar-upgrade {
@@ -5490,7 +5509,8 @@ textarea:focus {
   display: grid;
   gap: 18px;
   align-content: start;
-  padding: clamp(20px, 3vw, 34px);
+  min-width: 0;
+  padding: 24px 28px 64px;
   animation: none;
 }
 
@@ -6043,11 +6063,19 @@ textarea:focus {
   }
 
   .crm-sidebar {
+    /* The base rule now makes .crm-sidebar a sticky, full-height rail — on
+       narrow viewports it collapses back to a normal in-flow row instead. */
+    position: static;
+    height: auto;
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
     border-right: 0;
-    border-bottom: 1px solid #e8eaec;
+    border-bottom: 1px solid rgb(255 255 255 / 0.08);
+  }
+
+  .crm-main {
+    padding: 16px 14px 48px;
   }
 
   .crm-sidebar-nav {
@@ -6557,4 +6585,147 @@ textarea:focus {
   .header-switch {
     display: none;
   }
+}
+
+/* ============================================================
+   Workspace density layer.
+   Scoped to [data-shell="workspace"] so it can never leak onto
+   consumer pages. Same tokens as the site shell — the difference
+   is density and speed, not brand.
+
+   .crm-shell / .crm-sidebar / .crm-sidebar-nav a / .crm-main already carry
+   ~111 rules from the earlier UxerFlow-style CRM build (see the "BUSINESS
+   CRM" section above). Those rules were edited in place for this task rather
+   than overridden here, because several of them (.crm-sidebar-nav a,
+   .crm-sidebar-public, .crm-sidebar-business strong) sit at equal or higher
+   specificity than a same-named class added down here ever could, and a
+   bare `.crm-sidebar a` selector would in fact outrank single-class
+   selectors like .crm-sidebar-public and .crm-sidebar-upgrade, silently
+   breaking their colors. Only genuinely new, non-colliding selectors are
+   appended below. ============================================================ */
+
+[data-shell="workspace"] {
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  background: var(--surface-card);
+  font-size: 0.9rem;
+}
+
+/* Editorial display scale is wrong for a tool: cap it hard. h1/h2 keep the
+   display FONT (brand consistency) but drop the expanded width axis; h3/h4
+   hand everything small back to the body face. */
+[data-shell="workspace"] h1 {
+  font-size: 1.4rem;
+  font-variation-settings: "wdth" 100;
+  letter-spacing: -0.01em;
+}
+
+[data-shell="workspace"] h2 {
+  font-size: 1.1rem;
+  font-variation-settings: "wdth" 100;
+}
+
+[data-shell="workspace"] h3,
+[data-shell="workspace"] h4 {
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+/* Every figure in the workspace is scannable in a column. .crm-table td
+   already sets its own padding/border (no property overlap, so both rules
+   apply cumulatively); .crm-stat-value has no matching markup yet — kept
+   for forward compatibility with Task 9, currently a no-op. */
+[data-shell="workspace"] td,
+[data-shell="workspace"] .ws-num,
+[data-shell="workspace"] .crm-stat-value {
+  font-family: var(--font-data), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Scroll reveals are a marketing device. In a tool they delay the data.
+   No !important: html.js .reveal:not(.is-shown) (see "Reveal (scroll-
+   entrance) primitives" near the top of this file) sits at specificity
+   (0,3,1) — an attribute-scoped rule alone can't outrank that, so the
+   opacity override below repeats the same "html + 3 classes" weight
+   on purpose to tie it, and wins because it is later in the cascade.
+   The transform/transition override needs no such trick: adding the
+   always-true `html` ancestor gives it one more type-selector point than
+   every .reveal-*:not(.is-shown) variant, so it outranks them outright. */
+html[data-shell="workspace"] .reveal:not(.is-shown) {
+  opacity: 1;
+}
+
+html[data-shell="workspace"] [class*="reveal"] {
+  transform: none;
+  transition: none;
+}
+
+[data-shell="workspace"] * {
+  scroll-behavior: auto;
+}
+
+/* ---- Rows ---- */
+.ws-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.ws-table th {
+  padding: 0 12px;
+  height: 30px;
+  border-bottom: 1px solid var(--line);
+  color: var(--dust);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.ws-table td {
+  height: var(--ws-row);
+  padding: 0 12px;
+  border-bottom: 1px solid var(--ws-line);
+}
+
+.ws-table tbody tr {
+  transition: background var(--ws-speed) linear;
+}
+
+.ws-table tbody tr:hover {
+  background: var(--primary-ghost);
+}
+
+/* ---- Live state. --signal appears here and nowhere else in the workspace
+   density layer — the active-nav accent bar and the sidebar ring use
+   --primary / their own tokens instead, on purpose. ---- */
+.ws-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ceramic);
+  font-size: 0.78rem;
+}
+
+.ws-live::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 0 3px rgb(77 225 193 / 0.25);
+}
+
+/* The aperture, collapsed. Same ring as the header switch, now the workspace's
+   own identity mark — this is how the user knows they crossed the boundary.
+   Placed beside the business name in .crm-sidebar-business (see
+   crm-sidebar.tsx); that block already has its own flex/gap layout, so the
+   ring is added as a plain flex item rather than through a new wrapper. */
+.crm-sidebar__ring {
+  width: 26px;
+  height: 26px;
+  border: 2px solid var(--signal);
+  border-radius: 50%;
+  flex: none;
 }

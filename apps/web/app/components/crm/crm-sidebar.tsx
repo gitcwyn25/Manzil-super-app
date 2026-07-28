@@ -75,6 +75,7 @@ export function CrmSidebar({
       </div>
 
       <div className="crm-sidebar-business">
+        <span aria-hidden="true" className="crm-sidebar__ring" />
         <span className="crm-sidebar-avatar">{businessName.slice(0, 1).toUpperCase()}</span>
         <div>
           <strong>{businessName}</strong>
