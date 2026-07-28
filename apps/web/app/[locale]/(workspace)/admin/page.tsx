@@ -9,6 +9,7 @@ import {
   rejectReport,
   resolveReport
 } from "../../../lib/api";
+import { getCrmCopy } from "../../../lib/crm-copy";
 
 export const dynamic = "force-dynamic";
 
@@ -50,6 +51,7 @@ export default async function AdminPage({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
+  const copy = getCrmCopy(locale).admin;
 
   let overview: Awaited<ReturnType<typeof getAdminOverview>>;
   let claims: Awaited<ReturnType<typeof getAdminClaims>>;
@@ -66,12 +68,9 @@ export default async function AdminPage({
     return (
       <section className="dash-shell">
         <div className="dash-signin">
-          <h1>Access restricted</h1>
-          <p>
-            This console is available to administrator accounts only. Sign in
-            with an administrator account to continue.
-          </p>
-          <a className="bl-btn-primary" href={`/${locale}/sign-in`}>Sign in</a>
+          <h1>{copy.accessRestricted}</h1>
+          <p>{copy.accessRestrictedText}</p>
+          <a className="bl-btn-primary" href={`/${locale}/sign-in`}>{copy.signIn}</a>
         </div>
       </section>
     );
@@ -80,112 +79,132 @@ export default async function AdminPage({
   return (
     <section className="dash-shell">
       <div className="section-heading">
-        <p className="bl-kicker">Admin konsoli</p>
-        <h1>Platforma boshqaruv markazi</h1>
-        <p>
-          Claim navbati, kontent moderatsiyasi va ma&apos;lumotlar bazasi nazorati —
-          barchasi shu yerda.
-        </p>
+        <p className="bl-kicker">{copy.kicker}</p>
+        <h1>{copy.title}</h1>
+        <p>{copy.subtitle}</p>
       </div>
       <div className="admin-grid" style={{ marginTop: 28 }}>
         <article className="admin-card">
-          <h3>{overview.businessCount}</h3>
-          <p>Database listinglari</p>
+          <h3 className="ws-num">{overview.businessCount}</h3>
+          <p>{copy.statBusinesses}</p>
         </article>
         <article className="admin-card">
-          <h3>{overview.pendingClaimCount}</h3>
-          <p>Pending claimlar</p>
+          <h3 className="ws-num">{overview.pendingClaimCount}</h3>
+          <p>{copy.statPendingClaims}</p>
         </article>
         <article className="admin-card">
-          <h3>{overview.reviewCount}</h3>
-          <p>Sharhlar</p>
+          <h3 className="ws-num">{overview.reviewCount}</h3>
+          <p>{copy.statReviews}</p>
         </article>
         <article className="admin-card">
-          <h3>{overview.categoryCount}</h3>
-          <p>Kategoriyalar</p>
+          <h3 className="ws-num">{overview.categoryCount}</h3>
+          <p>{copy.statCategories}</p>
         </article>
         <article className="admin-card">
-          <h3>{overview.flaggedItemCount}</h3>
-          <p>Moderatsiya navbati</p>
+          <h3 className="ws-num">{overview.flaggedItemCount}</h3>
+          <p>{copy.statModerationQueue}</p>
         </article>
       </div>
 
       <div className="section-heading" style={{ marginTop: 40 }}>
-        <p className="section-kicker">Claim queue</p>
-        <h2>Pending business claims</h2>
-        <p>Adminlar claimlarni tekshiradi, tasdiqlaydi yoki rad etadi.</p>
+        <p className="section-kicker">{copy.claimsKicker}</p>
+        <h2>{copy.claimsTitle}</h2>
+        <p>{copy.claimsSubtitle}</p>
       </div>
 
-      <div className="admin-grid" style={{ marginTop: 20 }}>
-        {claims.map((claim) => (
-          <article className="admin-card" key={claim.id}>
-            <h3>{claim.business.name}</h3>
-            <p>{claim.business.address}</p>
-            <p>
-              {claim.requester.displayName}
-              {claim.requester.phone ? ` - ${claim.requester.phone}` : ""}
-            </p>
-            {claim.note ? <p>{claim.note}</p> : null}
-            <div className="button-row" style={{ marginTop: 16 }}>
-              <form action={approveClaimAction}>
-                <input name="id" type="hidden" value={claim.id} />
-                <button className="primary-button" type="submit">Approve</button>
-              </form>
-              <form action={rejectClaimAction}>
-                <input name="id" type="hidden" value={claim.id} />
-                <button className="secondary-button" type="submit">Reject</button>
-              </form>
-            </div>
-          </article>
-        ))}
-        {claims.length === 0 ? (
-          <article className="admin-card">
-            <h3>Queue empty</h3>
-            <p>Hozircha pending claimlar yo&apos;q.</p>
-          </article>
-        ) : null}
-      </div>
+      <table className="ws-table" style={{ marginTop: 20 }}>
+        <thead>
+          <tr>
+            <th>{copy.colBusiness}</th>
+            <th>{copy.colRequester}</th>
+            <th>{copy.colNote}</th>
+            <th>{copy.colActions}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {claims.map((claim) => (
+            <tr key={claim.id}>
+              <td>
+                <strong>{claim.business.name}</strong>
+                <p className="crm-cell-sub">{claim.business.address}</p>
+              </td>
+              <td>
+                {claim.requester.displayName}
+                {claim.requester.phone ? ` · ${claim.requester.phone}` : ""}
+              </td>
+              <td>{claim.note ?? "—"}</td>
+              <td>
+                <div className="button-row">
+                  <form action={approveClaimAction}>
+                    <input name="id" type="hidden" value={claim.id} />
+                    <button className="primary-button" type="submit">{copy.approve}</button>
+                  </form>
+                  <form action={rejectClaimAction}>
+                    <input name="id" type="hidden" value={claim.id} />
+                    <button className="secondary-button" type="submit">{copy.reject}</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          ))}
+          {claims.length === 0 ? (
+            <tr>
+              <td colSpan={4}>{copy.claimsEmpty}</td>
+            </tr>
+          ) : null}
+        </tbody>
+      </table>
 
       <div className="section-heading" style={{ marginTop: 40 }}>
-        <p className="section-kicker">Moderation queue</p>
-        <h2>Open reports</h2>
-        <p>Reported reviews and photos can be resolved or dismissed here.</p>
+        <p className="section-kicker">{copy.reportsKicker}</p>
+        <h2>{copy.reportsTitle}</h2>
+        <p>{copy.reportsSubtitle}</p>
       </div>
 
-      <div className="admin-grid" style={{ marginTop: 20 }}>
-        {reports.map((report) => (
-          <article className="admin-card" key={report.id}>
-            <h3>{report.targetType === "review" ? "Reported review" : "Reported photo"}</h3>
-            <p>{report.reason}</p>
-            <p>
-              Reporter: {report.reporter.displayName}
-              {report.reporter.email ? ` - ${report.reporter.email}` : ""}
-            </p>
-            {report.review ? (
-              <p>
-                {report.review.rating}★ - {report.review.text}
-              </p>
-            ) : null}
-            {report.photo ? <p>{report.photo.publicUrl ?? report.photo.storageKey}</p> : null}
-            <div className="button-row" style={{ marginTop: 16 }}>
-              <form action={resolveReportAction}>
-                <input name="id" type="hidden" value={report.id} />
-                <button className="primary-button" type="submit">Remove content</button>
-              </form>
-              <form action={rejectReportAction}>
-                <input name="id" type="hidden" value={report.id} />
-                <button className="secondary-button" type="submit">Dismiss report</button>
-              </form>
-            </div>
-          </article>
-        ))}
-        {reports.length === 0 ? (
-          <article className="admin-card">
-            <h3>Queue empty</h3>
-            <p>No open moderation reports.</p>
-          </article>
-        ) : null}
-      </div>
+      <table className="ws-table" style={{ marginTop: 20 }}>
+        <thead>
+          <tr>
+            <th>{copy.colType}</th>
+            <th>{copy.colReason}</th>
+            <th>{copy.colReporter}</th>
+            <th>{copy.colDetail}</th>
+            <th>{copy.colActions}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {reports.map((report) => (
+            <tr key={report.id}>
+              <td>{report.targetType === "review" ? copy.typeReview : copy.typePhoto}</td>
+              <td>{report.reason}</td>
+              <td>
+                {report.reporter.displayName}
+                {report.reporter.email ? ` · ${report.reporter.email}` : ""}
+              </td>
+              <td>
+                {report.review ? `${report.review.rating}★ — ${report.review.text}` : null}
+                {report.photo ? report.photo.publicUrl ?? report.photo.storageKey : null}
+              </td>
+              <td>
+                <div className="button-row">
+                  <form action={resolveReportAction}>
+                    <input name="id" type="hidden" value={report.id} />
+                    <button className="primary-button" type="submit">{copy.removeContent}</button>
+                  </form>
+                  <form action={rejectReportAction}>
+                    <input name="id" type="hidden" value={report.id} />
+                    <button className="secondary-button" type="submit">{copy.dismissReport}</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          ))}
+          {reports.length === 0 ? (
+            <tr>
+              <td colSpan={5}>{copy.reportsEmpty}</td>
+            </tr>
+          ) : null}
+        </tbody>
+      </table>
     </section>
   );
 }

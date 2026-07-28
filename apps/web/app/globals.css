@@ -7012,3 +7012,40 @@ html[data-shell="workspace"] [class*="reveal"] {
     transform: none;
   }
 }
+
+.ws-skeleton__bar {
+  display: block;
+  height: 10px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--surface-low), var(--surface-high), var(--surface-low));
+  background-size: 200% 100%;
+  animation: ws-shimmer 1.2s linear infinite;
+}
+
+@keyframes ws-shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ws-skeleton__bar {
+    animation: none;
+  }
+}
+
+/* ---- Task 9: workspace density pass — figures that live outside .ws-table ---- */
+
+/* The star glyphs stay decorative; the digit beside them is the scannable
+   value, so it drops the parent's letter-spacing and reads as data. */
+.crm-review-stars .ws-num {
+  margin-left: 6px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  letter-spacing: normal;
+}
+
+/* Admin KPI tiles: the count is the figure, the label under it is prose. */
+.admin-card h3.ws-num {
+  font-size: 28px;
+}

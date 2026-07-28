@@ -46,18 +46,24 @@ function formatDay(iso: string): string {
 export function StatTile({
   label,
   value,
-  hint
+  hint,
+  valueClassName
 }: {
   label: string;
   value: string;
   hint?: string;
+  valueClassName?: string;
 }) {
   return (
     <div className="mz-stat">
       <span className="mz-stat__label">{label}</span>
       {/* Proportional figures: tabular-nums makes a large standalone number
-          look loose, and is reserved for aligned columns. */}
-      <strong className="mz-stat__value">{value}</strong>
+          look loose, and is reserved for aligned columns. `valueClassName`
+          is opt-in so callers outside the workspace density layer are
+          unaffected — the tile itself stays proportional by default. */}
+      <strong className={valueClassName ? `mz-stat__value ${valueClassName}` : "mz-stat__value"}>
+        {value}
+      </strong>
       {hint ? <span className="mz-stat__hint">{hint}</span> : null}
     </div>
   );

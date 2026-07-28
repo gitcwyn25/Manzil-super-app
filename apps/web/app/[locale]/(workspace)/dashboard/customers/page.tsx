@@ -48,7 +48,7 @@ export default async function CustomersPage({
       {customers.length === 0 ? (
         <p className="crm-pending-note">{text.empty}</p>
       ) : (
-        <table className="crm-table">
+        <table className="ws-table">
           <thead>
             <tr>
               <th>{text.colName}</th>
@@ -70,13 +70,13 @@ export default async function CustomersPage({
                   </Link>
                   <p className="crm-cell-sub">{customer.phone}</p>
                 </td>
-                <td>
+                <td className="ws-num">
                   {customer.lastVisitAt
                     ? new Date(customer.lastVisitAt).toLocaleDateString(locale, { timeZone: "Asia/Tashkent" })
                     : text.never}
                 </td>
-                <td>{customer.visitCount}</td>
-                <td>{formatMoney(customer.totalSpend, locale)}</td>
+                <td className="ws-num">{customer.visitCount}</td>
+                <td className="ws-num">{formatMoney(customer.totalSpend, locale)}</td>
                 <td>{customer.tags.length > 0 ? customer.tags.join(", ") : "—"}</td>
                 <td>{customer.consentMarketing ? text.consentYes : text.consentNo}</td>
               </tr>

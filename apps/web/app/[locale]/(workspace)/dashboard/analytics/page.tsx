@@ -85,16 +85,18 @@ export default async function AnalyticsPage({
       </header>
 
       <StatRow>
-        <StatTile label={text.visits} value={String(analytics.visits.total)} />
-        <StatTile label={text.unique} value={String(analytics.visits.unique)} />
+        <StatTile label={text.visits} value={String(analytics.visits.total)} valueClassName="ws-num" />
+        <StatTile label={text.unique} value={String(analytics.visits.unique)} valueClassName="ws-num" />
         <StatTile
           label={text.rating}
           value={analytics.reviews.averageRating?.toFixed(2) ?? "—"}
           hint={`${analytics.reviews.count}`}
+          valueClassName="ws-num"
         />
         <StatTile
           label={text.revenue}
           value={formatMoney(analytics.revenue.totalAmount, analytics.revenue.currency, locale)}
+          valueClassName="ws-num"
         />
       </StatRow>
 

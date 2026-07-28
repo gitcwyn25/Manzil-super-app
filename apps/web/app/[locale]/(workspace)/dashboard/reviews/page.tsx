@@ -47,9 +47,12 @@ export default async function ReviewsPage({
               <span className="crm-review-avatar">{review.authorName.slice(0, 1).toUpperCase()}</span>
               <div>
                 <strong>{review.authorName}</strong>
-                <em>{dateFormat.format(new Date(review.createdAt))}</em>
+                <em className="ws-num">{dateFormat.format(new Date(review.createdAt))}</em>
               </div>
-              <span className="crm-review-stars">{"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}</span>
+              <span className="crm-review-stars">
+                {"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}
+                <span className="ws-num">{review.rating.toFixed(1)}</span>
+              </span>
             </header>
             <p>{review.text}</p>
 
