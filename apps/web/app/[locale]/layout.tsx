@@ -1,14 +1,16 @@
 import { isLocale, type Locale } from "@manzil/shared";
 import { notFound } from "next/navigation";
-import { Footer } from "../components/footer";
-import { Header } from "../components/header";
 import { LocaleProviders } from "../components/locale-providers";
-import { MobileNav } from "../components/mobile-nav";
 
 export function generateStaticParams() {
   return [{ locale: "uz" }, { locale: "ru" }, { locale: "en" }];
 }
 
+/**
+ * Locale gate only. Chrome belongs to the shell layouts: (site) renders the
+ * consumer header/nav/footer, (workspace) renders none of it. Putting chrome
+ * here is what previously gave business owners a consumer header on /dashboard.
+ */
 export default async function LocaleLayout({
   children,
   params
@@ -22,12 +24,5 @@ export default async function LocaleLayout({
     notFound();
   }
 
-  return (
-    <LocaleProviders locale={locale as Locale}>
-      <Header locale={locale as Locale} />
-      <main>{children}</main>
-      <MobileNav locale={locale as Locale} />
-      <Footer locale={locale as Locale} />
-    </LocaleProviders>
-  );
+  return <LocaleProviders locale={locale as Locale}>{children}</LocaleProviders>;
 }
