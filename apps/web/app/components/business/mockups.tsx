@@ -107,7 +107,7 @@ export function DashboardMock({ business = FALLBACK }: { business?: SampleBusine
           </div>
           <div className="mk-kpis">
             <div className="mk-kpi">
-              <span>Ko'rishlar</span>
+              <span>Ko&apos;rishlar</span>
               <strong>2 480</strong>
               <i className="up">+18%</i>
             </div>
@@ -124,7 +124,7 @@ export function DashboardMock({ business = FALLBACK }: { business?: SampleBusine
           </div>
           <div className="mk-panel">
             <div className="mk-panel-head">
-              <span>Haftalik ko'rishlar</span>
+              <span>Haftalik ko&apos;rishlar</span>
               <b className="up">▲ 24%</b>
             </div>
             <div className="mk-bars">
@@ -152,7 +152,7 @@ export function ReviewsMock({ business = FALLBACK }: { business?: SampleBusiness
               <strong>Aziza R.</strong>
               <span className="mk-stars">★★★★★</span>
             </div>
-            <p>Ajoyib joy, xizmat zo'r edi. Kofe hidi hali ham yodimda.</p>
+            <p>Ajoyib joy, xizmat zo&apos;r edi. Kofe hidi hali ham yodimda.</p>
             <div className="mk-owner-reply">
               <b>Sizning javobingiz</b>
               <p>Rahmat, Aziza! Sizni yana kutamiz.</p>
@@ -192,7 +192,7 @@ export function PromoMock() {
             <strong>Tushlik seti</strong>
             <small>Dush–Juma · 12:00–15:00</small>
             <div className="mk-promo-price">
-              <em>45 000</em> 36 000 so'm
+              <em>45 000</em> 36 000 so&apos;m
             </div>
           </div>
         </div>
@@ -205,7 +205,7 @@ export function PromoMock() {
             <span>Muddat</span>
             <span className="mk-input">7 kun</span>
           </label>
-          <span className="mk-publish">E'lon qilish</span>
+          <span className="mk-publish">E&apos;lon qilish</span>
         </div>
       </div>
     </div>
@@ -220,7 +220,7 @@ export function AnalyticsMock() {
       <div className="mk-analytics-body">
         <div className="mk-analytics-head">
           <span>
-            <small>Bu oy ko'rishlar</small>
+            <small>Bu oy ko&apos;rishlar</small>
             <strong>18 240</strong>
           </span>
           <b className="up">▲ 24%</b>

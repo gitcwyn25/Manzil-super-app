@@ -45,9 +45,12 @@ export function Reveal({
     const node = ref.current;
     if (!node) return;
 
+    // Deferred to a task rather than set synchronously: a synchronous setState
+    // inside an effect triggers a cascading render. The one-frame delay is
+    // invisible and this path only runs where IntersectionObserver is absent.
     if (typeof IntersectionObserver === "undefined") {
-      setShown(true);
-      return;
+      const immediate = window.setTimeout(() => setShown(true), 0);
+      return () => window.clearTimeout(immediate);
     }
 
     // Safety net: if the observer never fires (hidden tab, headless render,

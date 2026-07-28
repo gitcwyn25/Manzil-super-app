@@ -21,14 +21,12 @@ export function Aperture({
 }) {
   const [open, setOpen] = useState(false);
 
+  // Always defer the open state to the next frame rather than setting it
+  // synchronously here — a synchronous setState inside an effect triggers a
+  // cascading render. Reduced motion is handled in CSS (the ring's transition
+  // is disabled and it renders already-drawn), so this single path is correct
+  // for both preferences.
   useEffect(() => {
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    if (reduced) {
-      setOpen(true);
-      return;
-    }
-
     const id = window.requestAnimationFrame(() => setOpen(true));
     return () => window.cancelAnimationFrame(id);
   }, []);
