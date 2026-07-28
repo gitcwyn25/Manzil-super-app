@@ -1,8 +1,11 @@
 import type { Locale } from "@manzil/shared";
 import { AudienceFeatures } from "../../components/audience-features";
+import { Aperture } from "../../components/motion/aperture";
 import { Reveal } from "../../components/motion/reveal";
+import { HomeSections } from "../../components/home-sections";
 import { ScenicBackdrop } from "../../components/scenic-hero";
 import { StoreBadges } from "../../components/store-badges";
+import { getHomeFeed } from "../../lib/api";
 import { getLandingCopy } from "../../lib/landing-copy";
 
 export default async function LandingPage({
@@ -12,6 +15,8 @@ export default async function LandingPage({
 }) {
   const { locale } = await params;
   const copy = getLandingCopy(locale);
+  const feed = await getHomeFeed(locale);
+  const liveCount = feed.sections?.justJoined.length ?? 0;
 
   return (
     <>
@@ -25,20 +30,25 @@ export default async function LandingPage({
       <section className="lp-hero">
         <ScenicBackdrop />
         <div className="lp-hero-content">
-          <a className="lp-pill" href={`/${locale}/business/pricing`}>
-            <span className="lp-pill-dot" />
-            {copy.badge}
-            <svg aria-hidden="true" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="13" height="13"><path d="m9 6 6 6-6 6" /></svg>
-          </a>
           <h1 className="lp-title">
             <span className="lp-title-line">{copy.titleLine1}</span>
             <span className="lp-title-line delay">{copy.titleLine2}</span>
           </h1>
           <p className="lp-sub">{copy.subtitle}</p>
-          <a className="lp-cta" href={`/${locale}/dashboard`}>{copy.cta}</a>
+          <a className="lp-cta" href={`/${locale}/discover`}>{copy.cta}</a>
         </div>
-        <p className="lp-hero-footnote">{copy.heroFootnote}</p>
+        <div className="lp-hero-aperture">
+          <Aperture live={liveCount > 0} label={copy.badge} />
+        </div>
       </section>
+
+      {/* Businesses come before the marketing copy. A directory whose homepage
+          shows no businesses is asking visitors to take the directory on faith. */}
+      {feed.sections ? (
+        <section className="lp-band lp-band--businesses">
+          <HomeSections locale={locale} sections={feed.sections} />
+        </section>
+      ) : null}
 
       {/* ============ FEATURES — serif headline + audience toggle bento ============ */}
       <section className="lp-features" id="features">

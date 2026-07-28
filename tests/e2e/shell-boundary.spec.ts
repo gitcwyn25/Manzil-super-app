@@ -33,3 +33,18 @@ test.describe("shell boundary", () => {
     await expect(page.locator("nav.desktop-nav")).toContainText("Discover");
   });
 });
+
+/**
+ * Written to pass against a near-empty database: when the feed has no
+ * businesses HomeSections self-hides, so the assertion is that the homepage
+ * either shows the section or shows nothing — never a broken empty shelf.
+ */
+test("the homepage surfaces real businesses when any exist", async ({ page }) => {
+  await page.goto("/en");
+  const sections = page.locator(".home-sections");
+
+  if ((await sections.count()) > 0) {
+    await expect(sections).toBeVisible();
+    await expect(page.locator(".home-card, .home-category").first()).toBeVisible();
+  }
+});

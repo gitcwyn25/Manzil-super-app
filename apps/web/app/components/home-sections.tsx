@@ -65,16 +65,21 @@ function categoryName(
 function Card({ business, locale, text }: { business: HomeCard; locale: Locale; text: SectionCopy }) {
   return (
     <a className="home-card" href={`/${locale}/businesses/${business.slug}`}>
-      <span className="home-card__name">{business.name}</span>
-      <span className="home-card__meta">
-        {categoryName(business.category, locale)} · {business.district}
+      <span className="home-card__photo" aria-hidden="true">
+        <span className="home-card__initial">{business.name.charAt(0)}</span>
       </span>
-      <span className="home-card__rating">
-        {/* A brand-new business has no rating. Showing "0.0 ★" would read as a
-            bad rating rather than an absent one. */}
-        {business.reviewCount > 0
-          ? `${business.avgRating.toFixed(1)} ★ (${business.reviewCount})`
-          : text.noRating}
+      <span className="home-card__text">
+        <span className="home-card__name">{business.name}</span>
+        <span className="home-card__meta">
+          {categoryName(business.category, locale)} · {business.district}
+        </span>
+        <span className="home-card__rating">
+          {/* A brand-new business has no rating. Showing "0.0 ★" would read as a
+              bad rating rather than an absent one. */}
+          {business.reviewCount > 0
+            ? `${business.avgRating.toFixed(1)} ★ (${business.reviewCount})`
+            : text.noRating}
+        </span>
       </span>
     </a>
   );
