@@ -5,6 +5,7 @@ import { Reveal } from "../../components/motion/reveal";
 import { HeroBusinesses } from "../../components/hero-businesses";
 import { HomeSections } from "../../components/home-sections";
 import { StoreBadges } from "../../components/store-badges";
+import { getAudienceSamples } from "../../lib/audience-samples";
 import { getHomeFeed } from "../../lib/api";
 import { getLandingCopy } from "../../lib/landing-copy";
 
@@ -81,7 +82,7 @@ export default async function LandingPage({
           <p className="lp-features-sub">{copy.featuresSubtitle}</p>
         </Reveal>
         <Reveal delay={200} variant="fade-up">
-          <AudienceFeatures content={copy.audience} />
+          <AudienceFeatures content={copy.audience} samples={getAudienceSamples(locale)} />
         </Reveal>
       </section>
 

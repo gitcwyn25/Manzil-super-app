@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import type { AudienceSamples } from "../lib/audience-samples";
 
 export type AudienceCard = {
   title: string;
@@ -17,7 +18,13 @@ export type AudienceContent = {
 };
 
 /** ISO Meet-style bento: a pill toggle switches the audience, cards below. */
-export function AudienceFeatures({ content }: { content: AudienceContent }) {
+export function AudienceFeatures({
+  content,
+  samples
+}: {
+  content: AudienceContent;
+  samples: AudienceSamples;
+}) {
   const [audience, setAudience] = useState<"business" | "customer">("business");
   const cards = audience === "business" ? content.business : content.customer;
 
@@ -52,7 +59,7 @@ export function AudienceFeatures({ content }: { content: AudienceContent }) {
               <h3>{card.title}</h3>
               <p>{card.text}</p>
             </div>
-            <CardMock kind={card.mock} />
+            <CardMock kind={card.mock} samples={samples} />
           </article>
         ))}
       </div>
@@ -60,60 +67,109 @@ export function AudienceFeatures({ content }: { content: AudienceContent }) {
   );
 }
 
+/**
+ * Avatar built from an initial rather than a photo or an emoji.
+ *
+ * The brand voice rules out emoji, and a real photograph in a mockup implies a
+ * real person who has not consented to appear in marketing. An initial on a
+ * brand-tinted disc reads as a populated product without either problem.
+ */
+function Avatar({ initial, tone, size }: { initial: string; tone: 1 | 2 | 3 | 4; size?: "sm" }) {
+  return (
+    <span aria-hidden="true" className={`afm-av afm-av-${tone}${size === "sm" ? " sm" : ""}`}>
+      {initial}
+    </span>
+  );
+}
+
 /** Small self-contained UI mockups rendered in CSS — no images, no icons. */
-function CardMock({ kind }: { kind: AudienceCard["mock"] }) {
+function CardMock({ kind, samples }: { kind: AudienceCard["mock"]; samples: AudienceSamples }) {
   if (kind === "listing") {
+    const { listing } = samples;
     return (
       <div aria-hidden="true" className="afm afm-listing">
         <div className="afm-sheet">
-          <div className="afm-row"><span className="afm-dot" /><div><b>Business name</b><i>Category · District</i></div></div>
-          <div className="afm-line w70" />
-          <div className="afm-line w45" />
-          <div className="afm-chiprow"><span>Open</span><span>Verified</span></div>
+          <div className="afm-row">
+            <Avatar initial={listing.name.charAt(0)} tone={1} />
+            <div className="afm-rowtext">
+              <b>{listing.name}</b>
+              <i>{listing.meta}</i>
+            </div>
+          </div>
+          <dl className="afm-facts">
+            <div>
+              <dt>{listing.hours}</dt>
+            </div>
+            <div>
+              <dt>{listing.phone}</dt>
+            </div>
+          </dl>
+          <div className="afm-chiprow">
+            <span className="is-open">{listing.chipOpen}</span>
+            <span>{listing.chipVerified}</span>
+          </div>
         </div>
       </div>
     );
   }
 
   if (kind === "review") {
+    const { review } = samples;
     return (
       <div aria-hidden="true" className="afm afm-review">
         <div className="afm-sheet">
-          <div className="afm-stars">★★★★★</div>
-          <div className="afm-line w80" />
-          <div className="afm-line w60" />
-          <div className="afm-reply"><b>Owner reply</b><div className="afm-line w70" /></div>
+          <div className="afm-row tight">
+            <Avatar initial={review.initial} tone={2} size="sm" />
+            <div className="afm-rowtext">
+              <b>{review.author}</b>
+              <span className="afm-stars">★★★★★</span>
+            </div>
+          </div>
+          <p className="afm-quote">{review.text}</p>
+          <div className="afm-reply">
+            <b>{review.replyLabel}</b>
+            <p>{review.replyText}</p>
+          </div>
         </div>
       </div>
     );
   }
 
   if (kind === "inbox") {
+    const { inbox } = samples;
     return (
       <div aria-hidden="true" className="afm afm-inbox">
         <div className="afm-sheet">
-          <b className="afm-title">Announcements</b>
-          <div className="afm-msg"><span className="afm-dot gold" /><div className="afm-line w75" /></div>
-          <div className="afm-msg"><span className="afm-dot teal" /><div className="afm-line w55" /></div>
-          <div className="afm-msg"><span className="afm-dot terra" /><div className="afm-line w65" /></div>
+          <b className="afm-title">{inbox.title}</b>
+          {inbox.items.map((item) => (
+            <div className="afm-msg" key={item.label}>
+              <span className={`afm-dot ${item.tone}`} />
+              <span className="afm-msg-label">{item.label}</span>
+              <em>{item.meta}</em>
+            </div>
+          ))}
         </div>
       </div>
     );
   }
 
   if (kind === "stats") {
+    const { stats } = samples;
+    const heights = [34, 58, 42, 76, 64, 90, 70];
     return (
       <div aria-hidden="true" className="afm afm-stats">
         <div className="afm-sheet">
-          <b className="afm-title">This week</b>
+          <div className="afm-stats-head">
+            <b className="afm-title">{stats.title}</b>
+            <span className="afm-delta">{stats.delta}</span>
+          </div>
+          <strong className="afm-total">{stats.total}</strong>
           <div className="afm-bars">
-            <span style={{ height: "34%" }} />
-            <span style={{ height: "58%" }} />
-            <span style={{ height: "42%" }} />
-            <span style={{ height: "76%" }} />
-            <span style={{ height: "64%" }} />
-            <span style={{ height: "90%" }} />
-            <span style={{ height: "70%" }} />
+            {heights.map((height, i) => (
+              <span key={stats.days[i]} style={{ ["--h" as string]: `${height}%`, animationDelay: `${i * 60}ms` }}>
+                <i>{stats.days[i]}</i>
+              </span>
+            ))}
           </div>
         </div>
       </div>
@@ -121,46 +177,80 @@ function CardMock({ kind }: { kind: AudienceCard["mock"] }) {
   }
 
   if (kind === "profile") {
+    const { profile } = samples;
     return (
       <div aria-hidden="true" className="afm afm-profile">
         <div className="afm-sheet">
-          <div className="afm-avatar" />
-          <b className="afm-title center">Your name</b>
-          <div className="afm-counts"><span><b>128</b><i>Posts</i></span><span><b>2.4k</b><i>Followers</i></span><span><b>310</b><i>Following</i></span></div>
+          <Avatar initial={profile.initial} tone={3} />
+          <b className="afm-title center">{profile.name}</b>
+          <i className="afm-handle">{profile.handle}</i>
+          <div className="afm-counts">
+            {profile.counts.map((count) => (
+              <span key={count.label}>
+                <b>{count.value}</b>
+                <i>{count.label}</i>
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     );
   }
 
   if (kind === "story") {
+    const { story } = samples;
     return (
       <div aria-hidden="true" className="afm afm-story">
         <div className="afm-sheet">
-          <div className="afm-photo" />
-          <div className="afm-actions"><span /><span /><span /></div>
-          <div className="afm-line w70" />
+          <div className="afm-photo">
+            <span className="afm-photo-place">{story.place}</span>
+          </div>
+          <div className="afm-storyfoot">
+            <span className="afm-caption">{story.caption}</span>
+            <em className="afm-likes">♥ {story.likes}</em>
+          </div>
         </div>
       </div>
     );
   }
 
   if (kind === "search") {
+    const { search } = samples;
     return (
       <div aria-hidden="true" className="afm afm-search">
         <div className="afm-sheet">
-          <div className="afm-searchbar" />
-          <div className="afm-row"><span className="afm-thumb a" /><div><b>Coffee shop</b><i>★ 4.7 · 1.2 km</i></div></div>
-          <div className="afm-row"><span className="afm-thumb b" /><div><b>Restaurant</b><i>★ 4.8 · 2.0 km</i></div></div>
+          <div className="afm-searchbar">
+            <span className="afm-searchicon" />
+            <span className="afm-searchtext">{search.query}</span>
+          </div>
+          {search.results.map((result, i) => (
+            <div className="afm-row" key={result.name}>
+              <Avatar initial={result.initial} tone={i === 0 ? 1 : 4} size="sm" />
+              <div className="afm-rowtext">
+                <b>{result.name}</b>
+                <i>{result.meta}</i>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     );
   }
 
+  const { follow } = samples;
   return (
     <div aria-hidden="true" className="afm afm-follow">
       <div className="afm-sheet">
-        <div className="afm-row"><span className="afm-avatar sm" /><div><b>Friend</b><i>Followed you</i></div><em className="afm-btn">Follow</em></div>
-        <div className="afm-row"><span className="afm-avatar sm alt" /><div><b>Friend</b><i>Shared a story</i></div><em className="afm-btn ghost">View</em></div>
+        {follow.people.map((person, i) => (
+          <div className="afm-row" key={person.name}>
+            <Avatar initial={person.initial} tone={i === 0 ? 2 : 3} size="sm" />
+            <div className="afm-rowtext">
+              <b>{person.name}</b>
+              <i>{person.meta}</i>
+            </div>
+            <em className={person.ghost ? "afm-btn ghost" : "afm-btn"}>{person.action}</em>
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -52,7 +52,7 @@
 
   /* Legacy "Modern Heritage" aliases — still referenced by rules elsewhere in
      this file (incl. .crm-review-avatar, .gold-button, .hero-pin-c, .pin.three,
-     .section-kicker.inverse, .afm-avatar.sm.alt) that later tasks have not yet
+     .section-kicker.inverse) that later tasks have not yet
      migrated to the Kosmonavtlar tokens above. Kept at their original values so
      nothing goes unstyled in the interim; remove once those rules are ported. */
   --primary-soft: #a1f0ef;
@@ -3972,7 +3972,11 @@ textarea:focus {
   font-size: 15px;
 }
 
-/* ---------- Feature card mockups ---------- */
+/* ---------- Feature card mockups ----------
+   These read as screenshots of a populated product, not wireframes: real
+   sample names, review text and figures come from lib/audience-samples.ts.
+   Grey placeholder bars (.afm-line) and gradient blobs (.afm-thumb) were
+   removed with the markup that used them. */
 
 .afm {
   display: flex;
@@ -4002,143 +4006,283 @@ textarea:focus {
   padding: 8px 0;
 }
 
-.afm-row b {
-  display: block;
-  font-family: var(--font-geist), Arial, sans-serif;
-  font-size: 13.5px;
+.afm-row.tight {
+  padding: 0 0 6px;
 }
 
-.afm-row i {
+.afm-rowtext {
+  flex: 1;
+  min-width: 0;
+}
+
+.afm-rowtext b {
+  display: block;
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.afm-rowtext i {
+  display: block;
   color: var(--muted);
   font-size: 11.5px;
   font-style: normal;
 }
 
-.afm-row div {
-  flex: 1;
-}
-
-.afm-dot {
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, var(--primary), var(--primary-bright));
+/* ---- Initial avatars. Four brand tints so a list reads as several people
+        without photographs or emoji. ---- */
+.afm-av {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
   flex: 0 0 auto;
+  border-radius: 12px;
+  color: #fff;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: 15px;
+  font-variation-settings: "wdth" 112;
+  line-height: 1;
 }
 
-.afm-dot.gold { width: 10px; height: 10px; border-radius: 50%; background: var(--gold); }
-.afm-dot.teal { width: 10px; height: 10px; border-radius: 50%; background: var(--primary-bright); }
-.afm-dot.terra { width: 10px; height: 10px; border-radius: 50%; background: var(--terracotta); }
-
-.afm-line {
-  height: 9px;
-  margin: 7px 0;
-  border-radius: 999px;
-  background: #e8eae8;
+.afm-av.sm {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  font-size: 13px;
 }
 
-.afm-line.w45 { width: 45%; }
-.afm-line.w55 { width: 55%; }
-.afm-line.w60 { width: 60%; }
-.afm-line.w65 { width: 65%; }
-.afm-line.w70 { width: 70%; }
-.afm-line.w75 { width: 75%; }
-.afm-line.w80 { width: 80%; }
+.afm-av-1 { background: linear-gradient(140deg, #0a1a1e, var(--ceramic)); }
+.afm-av-2 { background: linear-gradient(140deg, #14343a, #0a8f88); }
+.afm-av-3 { background: linear-gradient(140deg, #1d5c62, #4de1c1); color: #06231f; }
+.afm-av-4 { background: linear-gradient(140deg, #6b4a12, var(--brass)); }
+
+/* ---- Listing ---- */
+.afm-facts {
+  margin: 10px 0 0;
+  display: grid;
+  gap: 4px;
+}
+
+.afm-facts div {
+  display: flex;
+}
+
+.afm-facts dt {
+  color: var(--muted);
+  font-size: 11.5px;
+}
 
 .afm-chiprow {
   display: flex;
   gap: 8px;
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 .afm-chiprow span {
   padding: 5px 12px;
   border-radius: 999px;
   background: #eef4f1;
-  color: var(--primary);
-  font-family: var(--font-geist), Arial, sans-serif;
+  color: var(--ceramic);
+  font-family: var(--font-body), system-ui, sans-serif;
   font-size: 11.5px;
-  font-weight: 700;
+  font-weight: 600;
 }
 
+/* Open is live state, so it carries the signal colour and nothing else does. */
+.afm-chiprow span.is-open {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.afm-chiprow span.is-open::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 0 3px rgb(77 225 193 / 0.3);
+}
+
+/* ---- Review ---- */
 .afm-stars {
-  color: var(--gold);
-  font-size: 15px;
-  letter-spacing: 3px;
+  color: var(--brass);
+  font-size: 13px;
+  letter-spacing: 2px;
+}
+
+.afm-quote {
+  margin: 2px 0 0;
+  color: var(--text);
+  font-size: 12.5px;
+  line-height: 1.5;
 }
 
 .afm-reply {
-  margin-top: 12px;
-  margin-left: 12px;
+  margin: 12px 0 0 12px;
   padding: 10px 12px;
-  border: 1px solid rgb(0 84 84 / 0.14);
+  border: 1px solid rgb(0 112 107 / 0.14);
   border-radius: 8px;
   background: #f2f7f6;
 }
 
 .afm-reply b {
-  font-family: var(--font-geist), Arial, sans-serif;
-  font-size: 11.5px;
-  color: var(--primary);
+  display: block;
+  margin-bottom: 3px;
+  color: var(--ceramic);
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
 }
 
+.afm-reply p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+/* ---- Shared title ---- */
 .afm-title {
   display: block;
   margin-bottom: 10px;
-  font-family: var(--font-geist), Arial, sans-serif;
+  font-family: var(--font-body), system-ui, sans-serif;
   font-size: 13px;
+  font-weight: 600;
 }
 
 .afm-title.center {
+  margin-bottom: 2px;
   text-align: center;
 }
 
+/* ---- Inbox ---- */
 .afm-msg {
   display: flex;
   align-items: center;
   gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid rgb(13 26 28 / 0.06);
+}
+
+.afm-msg:last-child {
+  border-bottom: 0;
+}
+
+.afm-msg-label {
+  flex: 1;
+  min-width: 0;
+  font-size: 12.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.afm-msg em {
+  color: var(--muted);
+  font-size: 11px;
+  font-style: normal;
+}
+
+.afm-dot {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+}
+
+.afm-dot.gold { background: var(--brass); }
+.afm-dot.teal { background: var(--ceramic); }
+.afm-dot.terra { background: #a84305; }
+
+/* ---- Stats ---- */
+.afm-stats-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 2px;
+}
+
+.afm-stats-head .afm-title {
+  margin-bottom: 0;
+}
+
+.afm-delta {
+  color: var(--ceramic);
+  font-family: var(--font-data), ui-monospace, monospace;
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.afm-total {
+  display: block;
+  margin-bottom: 10px;
+  font-family: var(--font-data), ui-monospace, monospace;
+  font-size: 22px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
 }
 
 .afm-bars {
   display: flex;
   gap: 8px;
   align-items: flex-end;
-  height: 110px;
+  height: 96px;
 }
 
 .afm-bars span {
+  position: relative;
   flex: 1;
+  height: var(--h);
   border-radius: 6px 6px 0 0;
-  background: linear-gradient(180deg, var(--primary-bright), var(--primary));
-  animation: bar-grow 900ms var(--ease-out) both;
+  background: linear-gradient(180deg, #0a8f88, var(--ceramic));
   transform-origin: bottom;
+  animation: afm-bar-grow 800ms var(--ease-out) both;
 }
 
-.afm-avatar {
-  width: 58px;
-  height: 58px;
+.afm-bars span:last-child {
+  background: linear-gradient(180deg, var(--signal), #0a8f88);
+}
+
+.afm-bars i {
+  position: absolute;
+  inset: auto 0 -16px;
+  color: var(--muted);
+  font-size: 9.5px;
+  font-style: normal;
+  text-align: center;
+}
+
+@keyframes afm-bar-grow {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+/* ---- Profile ---- */
+.afm-profile .afm-av {
+  width: 54px;
+  height: 54px;
   margin: 0 auto 10px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary-soft), #cffffe);
-  box-shadow: inset 0 0 0 2px rgb(0 84 84 / 0.15);
+  font-size: 20px;
 }
 
-.afm-avatar.sm {
-  width: 36px;
-  height: 36px;
-  margin: 0;
-  flex: 0 0 auto;
-}
-
-.afm-avatar.sm.alt {
-  background: linear-gradient(135deg, #ffe3c2, var(--gold-soft));
+.afm-handle {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--muted);
+  font-size: 11.5px;
+  font-style: normal;
+  text-align: center;
 }
 
 .afm-counts {
   display: flex;
   justify-content: center;
   gap: 22px;
-  margin-top: 8px;
 }
 
 .afm-counts span {
@@ -4147,73 +4291,116 @@ textarea:focus {
 }
 
 .afm-counts b {
-  font-family: var(--font-geist), Arial, sans-serif;
+  font-family: var(--font-data), ui-monospace, monospace;
   font-size: 14px;
+  font-variant-numeric: tabular-nums;
 }
 
 .afm-counts i {
   color: var(--muted);
-  font-size: 11px;
+  font-size: 10.5px;
   font-style: normal;
 }
 
+/* ---- Story ---- */
 .afm-photo {
-  height: 110px;
+  position: relative;
+  height: 118px;
   border-radius: 12px;
   background:
-    radial-gradient(circle at 30% 25%, rgb(254 179 0 / 0.55), transparent 42%),
-    linear-gradient(135deg, #0f6e6e, #a84305);
+    radial-gradient(circle at 28% 22%, rgb(200 162 76 / 0.6), transparent 45%),
+    linear-gradient(140deg, #0a1a1e 10%, #1d5c62 60%, #a84305 130%);
 }
 
-.afm-actions {
+.afm-photo-place {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: rgb(10 26 30 / 0.55);
+  color: #fff;
+  font-size: 10.5px;
+}
+
+.afm-storyfoot {
   display: flex;
-  gap: 12px;
-  margin: 12px 0 4px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
 }
 
-.afm-actions span {
-  width: 22px;
-  height: 22px;
-  border-radius: 7px;
-  background: #eef0ee;
+.afm-caption {
+  font-size: 12.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
+.afm-likes {
+  flex: 0 0 auto;
+  color: #a84305;
+  font-family: var(--font-data), ui-monospace, monospace;
+  font-size: 11.5px;
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Search ---- */
 .afm-searchbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   height: 36px;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
+  padding: 0 12px;
   border-radius: 999px;
   background: #f0f2f0;
 }
 
-.afm-thumb {
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
+.afm-searchicon {
+  width: 11px;
+  height: 11px;
   flex: 0 0 auto;
+  border: 1.6px solid var(--muted);
+  border-radius: 50%;
+  box-shadow: 3px 3px 0 -1px var(--muted);
 }
 
-.afm-thumb.a {
-  background: radial-gradient(circle at 70% 30%, rgb(255 255 255 / 0.5), transparent 40%), linear-gradient(135deg, #0f6e6e, #7e5700);
+.afm-searchtext {
+  color: var(--muted);
+  font-size: 12px;
 }
 
-.afm-thumb.b {
-  background: radial-gradient(circle at 30% 30%, rgb(254 179 0 / 0.6), transparent 40%), linear-gradient(135deg, #005454, #a84305);
-}
-
+/* ---- Follow ---- */
 .afm-btn {
+  flex: 0 0 auto;
   padding: 7px 14px;
   border-radius: 999px;
-  background: var(--text);
+  background: var(--ceramic);
   color: #fff;
-  font-family: var(--font-geist), Arial, sans-serif;
+  font-family: var(--font-body), system-ui, sans-serif;
   font-size: 11.5px;
-  font-weight: 700;
+  font-weight: 600;
   font-style: normal;
 }
 
 .afm-btn.ghost {
   background: #eef0ee;
   color: var(--text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .afm-sheet,
+  .af-card:hover .afm-sheet {
+    transition: none;
+    transform: translateY(6px);
+  }
+
+  .afm-bars span {
+    animation: none;
+  }
 }
 
 /* ---------- Download band ---------- */
