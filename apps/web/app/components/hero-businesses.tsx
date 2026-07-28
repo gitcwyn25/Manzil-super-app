@@ -33,8 +33,13 @@ function categoryName(card: HomeCard, locale: Locale): string {
 export type HeroBusinessesCopy = {
   /** Screen-reader name for the carousel region. */
   regionLabel: string;
-  /** Screen-reader label for a dot, e.g. (n) => `Show business ${n}`. */
-  goToLabel: (index: number) => string;
+  /**
+   * Screen-reader label for a dot, as a pattern containing {n}, e.g.
+   * "Show business {n}". Deliberately a string rather than a formatting
+   * function: this object is passed from a server component, and a function
+   * cannot cross that boundary.
+   */
+  goToLabel: string;
   newLabel: string;
 };
 
@@ -128,7 +133,7 @@ export function HeroBusinesses({
           {businesses.map((business, i) => (
             <button
               aria-current={i === index ? "true" : undefined}
-              aria-label={copy.goToLabel(i + 1)}
+              aria-label={copy.goToLabel.replace("{n}", String(i + 1))}
               className={i === index ? "hb-dot is-active" : "hb-dot"}
               key={business.slug}
               onClick={() => setIndex(i)}

@@ -4,7 +4,12 @@ import type { AudienceContent } from "../components/audience-features";
 export type LandingCopy = {
   badge: string;
   heroCarouselLabel: string;
-  heroGoTo: (index: number) => string;
+  /**
+   * Pattern with an {n} placeholder. Must stay a plain string — this value is
+   * handed to a client component, and a function would not serialize across
+   * the server/client boundary (it fails the production build, not dev).
+   */
+  heroGoTo: string;
   heroNew: string;
   titleLine1: string;
   titleLine2: string;
@@ -26,7 +31,7 @@ const landing: Record<string, LandingCopy> = {
   uz: {
     badge: "Toshkentda ishga tushdi",
     heroCarouselLabel: "Manzildagi bizneslar",
-    heroGoTo: (index) => `${index}-biznesni ko'rsatish`,
+    heroGoTo: "{n}-biznesni ko'rsatish",
     heroNew: "Yangi",
     titleLine1: "Shahringizdagi eng yaxshi joylar.",
     titleLine2: "Bitta platformada.",
@@ -62,7 +67,7 @@ const landing: Record<string, LandingCopy> = {
   ru: {
     badge: "Запущено в Ташкенте",
     heroCarouselLabel: "Бизнесы на Manzil",
-    heroGoTo: (index) => `Показать бизнес ${index}`,
+    heroGoTo: "Показать бизнес {n}",
     heroNew: "Новый",
     titleLine1: "Лучшие места вашего города.",
     titleLine2: "На одной платформе.",
@@ -98,7 +103,7 @@ const landing: Record<string, LandingCopy> = {
   en: {
     badge: "Now live in Tashkent",
     heroCarouselLabel: "Businesses on Manzil",
-    heroGoTo: (index) => `Show business ${index}`,
+    heroGoTo: "Show business {n}",
     heroNew: "New",
     titleLine1: "The best places in your city.",
     titleLine2: "On one platform.",
