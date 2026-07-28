@@ -40,6 +40,10 @@ export default async function BusinessPricingPage({
           </article>
         ))}
       </div>
+
+      <p className="bz-pricing-waitlist">
+        <a href={`/${locale}/waitlist/pro`}>Manzil Pro →</a>
+      </p>
     </section>
   );
 }

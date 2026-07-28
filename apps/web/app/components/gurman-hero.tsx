@@ -1,5 +1,6 @@
 "use client";
 
+import type { Locale } from "@manzil/shared";
 import { motion } from "framer-motion";
 import { useState } from "react";
 
@@ -76,6 +77,7 @@ export type GurmanHeroCopy = {
   cta: string;
   ctaHref: string;
   portraitAlt: string;
+  waitlistCta: string;
 };
 
 /**
@@ -86,7 +88,7 @@ export type GurmanHeroCopy = {
  * crawlers and for anyone with reduced-motion enabled (see the media query in
  * globals.css, which flattens these transitions).
  */
-export function GurmanHero({ copy }: { copy: GurmanHeroCopy }) {
+export function GurmanHero({ copy, locale }: { copy: GurmanHeroCopy; locale: Locale }) {
   const [portraitFailed, setPortraitFailed] = useState(false);
 
   return (
@@ -172,6 +174,10 @@ export function GurmanHero({ copy }: { copy: GurmanHeroCopy }) {
           >
             {copy.cta}
           </motion.a>
+
+          <a className="gurman-hero__secondary" href={`/${locale}/waitlist/gurman`}>
+            {copy.waitlistCta}
+          </a>
         </div>
 
         <motion.div

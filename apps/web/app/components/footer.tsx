@@ -26,6 +26,7 @@ export function Footer({ locale }: { locale: Locale }) {
           <h4>{copy.footer.product}</h4>
           <a href={`/${locale}/business`}>{copy.nav.forBusiness}</a>
           <a href={`/${locale}/dashboard`}>{copy.footer.dashboard}</a>
+          <a href={`/${locale}/waitlist/city`}>{copy.footer.otherCities}</a>
         </nav>
 
         <nav aria-label={copy.footer.apps} className="lp-footer-col">

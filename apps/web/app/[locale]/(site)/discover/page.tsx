@@ -25,7 +25,8 @@ function gurmanCopy(locale: Locale): GurmanHeroCopy {
         "Gurman AI haqiqiy sharhlar va biznes ma'lumotlari asosida sizga mos joyni tavsiya qiladi — o'ylab topilgan bahо emas, faqat real ma'lumot.",
       cta: "Gurman bilan suhbat",
       ctaHref: `/${locale}/concierge`,
-      portraitAlt: "Gurman AI — Manzil yordamchisi"
+      portraitAlt: "Gurman AI — Manzil yordamchisi",
+      waitlistCta: "Erta kirish uchun navbat"
     },
     ru: {
       badge: "Gurman AI",
@@ -35,7 +36,8 @@ function gurmanCopy(locale: Locale): GurmanHeroCopy {
         "Gurman AI подбирает места на основе реальных отзывов и данных бизнесов — никаких выдуманных оценок, только настоящая информация.",
       cta: "Спросить Gurman",
       ctaHref: `/${locale}/concierge`,
-      portraitAlt: "Gurman AI — помощник Manzil"
+      portraitAlt: "Gurman AI — помощник Manzil",
+      waitlistCta: "В очередь на ранний доступ"
     },
     en: {
       badge: "Gurman AI",
@@ -45,7 +47,8 @@ function gurmanCopy(locale: Locale): GurmanHeroCopy {
         "Gurman AI recommends places from real reviews and real business data — no invented scores, only what the data actually says.",
       cta: "Ask Gurman",
       ctaHref: `/${locale}/concierge`,
-      portraitAlt: "Gurman AI — the Manzil assistant"
+      portraitAlt: "Gurman AI — the Manzil assistant",
+      waitlistCta: "Join the early-access queue"
     }
   };
 
@@ -86,7 +89,7 @@ export default async function DiscoverPage({
       <Reveal delay={120} variant="fade-up">
         <SearchControls categories={categories} category={category} locale={locale} query={query} />
       </Reveal>
-      {isBrowsing ? <GurmanHero copy={gurmanCopy(locale)} /> : null}
+      {isBrowsing ? <GurmanHero copy={gurmanCopy(locale)} locale={locale} /> : null}
 
       {feed?.sections ? (
         <Reveal delay={160} variant="fade-up">

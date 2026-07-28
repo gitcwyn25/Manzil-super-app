@@ -106,7 +106,8 @@ const copy = {
       admin: "Admin konsoli",
       status: "API holati",
       apps: "Mobil ilovalar",
-      rights: "Barcha huquqlar himoyalangan."
+      rights: "Barcha huquqlar himoyalangan.",
+      otherCities: "Boshqa shaharlar"
     },
     dashboard: {
       title: "Biznes kabineti",
@@ -205,7 +206,8 @@ const copy = {
       admin: "Админ-консоль",
       status: "Статус API",
       apps: "Мобильные приложения",
-      rights: "Все права защищены."
+      rights: "Все права защищены.",
+      otherCities: "Другие города"
     },
     dashboard: {
       title: "Бизнес-кабинет",
@@ -304,7 +306,8 @@ const copy = {
       admin: "Admin console",
       status: "API status",
       apps: "Mobile apps",
-      rights: "All rights reserved."
+      rights: "All rights reserved.",
+      otherCities: "Other cities"
     },
     dashboard: {
       title: "Business dashboard",
