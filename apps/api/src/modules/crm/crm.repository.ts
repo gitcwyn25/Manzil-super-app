@@ -184,18 +184,36 @@ export class CrmRepository {
           priceTier: input.priceTier ?? "$$",
           lat: geo?.lat,
           lng: geo?.lng,
-          status: "pending_claim",
+          /**
+           * Self-registration claims the listing immediately.
+           *
+           * Every public surface — the home feed, category counts, search —
+           * filters on `status: "claimed"`, and `claimedAt` drives "Just
+           * joined". Registering as `pending_claim` therefore made a new
+           * business invisible everywhere until an admin approved it, and
+           * there is no admin queue being worked. Owners were paying for Pro
+           * on listings nobody could see.
+           *
+           * This is safe precisely because the owner *created* this record:
+           * there is no prior party to impersonate. Claiming an existing
+           * pre-seeded listing is the different, riskier case and still goes
+           * through admin review — that path is untouched.
+           */
+          status: "claimed",
+          claimedByUserId: actor.userId,
+          claimedAt: new Date(),
           createdByUserId: actor.userId
         }
       });
 
-      // The registrant's ownership request goes through the same admin claim
-      // queue as claims on existing listings.
+      // Recorded as an approved claim so the audit trail still shows who took
+      // ownership and how, even though self-registration needs no review.
       await tx.claim.create({
         data: {
           businessId: created.id,
           userId: actor.userId,
           verificationMethod: "registration",
+          status: "approved",
           note: input.taxId ? `STIR: ${input.taxId}` : undefined
         }
       });
