@@ -43,6 +43,12 @@ const sentry = sentryOrigin ?? "";
 const r2Origin = toOrigin(process.env.CLOUDFLARE_R2_PUBLIC_URL);
 const r2Images = r2Origin ?? "https://*.r2.dev https://*.r2.cloudflarestorage.com";
 
+// Supabase Storage is the media backend when R2 is not configured, and it
+// serves objects from the same origin as the database project. Included
+// unconditionally: whichever backend answers, its host must be allowed or the
+// uploaded cover is fetched and then blocked, which reads as a broken upload.
+const supabaseImages = supabaseOrigin ?? "https://*.supabase.co";
+
 const csp = [
   `default-src 'self'`,
   `base-uri 'self'`,
@@ -53,7 +59,7 @@ const csp = [
   // 'unsafe-inline' is required; dev additionally needs 'unsafe-eval' for HMR.
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} ${clerk} ${turnstile} ${vercel}`,
   `style-src 'self' 'unsafe-inline'`,
-  `img-src 'self' data: blob: https://img.clerk.com https://*.clerk.com ${r2Images}`,
+  `img-src 'self' data: blob: https://img.clerk.com https://*.clerk.com ${r2Images} ${supabaseImages}`,
   `font-src 'self' data:`,
   `connect-src 'self' ${apiOrigin} ${supabaseSources} ${clerk} https://clerk-telemetry.com ${vercel} ${sentry}${
     isDev ? " ws://localhost:* http://localhost:*" : ""
