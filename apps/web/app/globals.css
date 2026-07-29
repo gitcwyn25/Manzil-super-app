@@ -5976,6 +5976,10 @@ textarea:focus {
 .crm-chip-warn { background: #fff4d6; color: #8a6100; }
 .crm-chip-muted { background: #eef0f2; color: #6a6f7e; }
 .crm-chip-gold { margin-left: 8px; background: #fff1d6; color: #9a6b00; }
+/* Same red used by .crm-row-actions button.danger:hover, for canceled/no-show
+   booking statuses — a distinct hue from .crm-chip-warn's amber, since a
+   cancellation is a different kind of state than "still pending". */
+.crm-chip-danger { background: #fdecec; color: #b02222; }
 
 /* ---------- Tables ---------- */
 
@@ -6060,6 +6064,37 @@ textarea:focus {
   border-color: #d33;
   background: #fdf0f0;
   color: #b02222;
+}
+
+/* ---------- Status filter (bookings) ---------- */
+
+.crm-status-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 4px 0 18px;
+}
+
+.crm-status-filter a {
+  padding: 7px 14px;
+  border: 1px solid #e2e5e9;
+  border-radius: 999px;
+  color: #3d4354;
+  font-family: var(--font-geist), Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 650;
+  transition: border-color var(--ws-speed) linear, background var(--ws-speed) linear, color var(--ws-speed) linear;
+}
+
+.crm-status-filter a:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.crm-status-filter a.active {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: #fff;
 }
 
 /* ---------- Forms ---------- */
@@ -7678,6 +7713,43 @@ html[data-shell="workspace"] [class*="reveal"] {
 
 @media (prefers-reduced-motion: reduce) {
   .crm-plan-submit__spinner {
+    animation-duration: 2s;
+  }
+}
+
+/* Row-action submit: pending state (bookings' confirm/complete/cancel/
+   no-show buttons). Specificity (0,2,0) — one class plus the [aria-busy]
+   attribute selector — outranks `.crm-row-actions button` (0,1,1), so
+   `cursor: progress` wins there without `!important`. Uses `currentColor`
+   like .crm-plan-submit rather than the hardcoded white of .crm-submit: these
+   buttons sit on the plain white `.crm-row-actions` background, not a filled
+   one, so a white spinner would be invisible. Reuses the shared
+   @keyframes crm-submit-spin rather than redefining it. */
+.crm-row-submit[aria-busy="true"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: progress;
+  opacity: 0.75;
+}
+
+.crm-row-submit:disabled {
+  cursor: progress;
+}
+
+.crm-row-submit__spinner {
+  width: 11px;
+  height: 11px;
+  flex: none;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  opacity: 0.7;
+  animation: crm-submit-spin 700ms linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crm-row-submit__spinner {
     animation-duration: 2s;
   }
 }

@@ -54,6 +54,7 @@ export default async function DashboardLayout({
   const base = `/${locale}/dashboard`;
   const items = [
     { key: "overview", label: copy.menu.overview, href: base, exact: true },
+    { key: "bookings", label: copy.menu.bookings, href: `${base}/bookings` },
     { key: "announcements", label: copy.menu.announcements, href: `${base}/announcements` },
     { key: "packages", label: copy.menu.packages, href: `${base}/packages` },
     { key: "reviews", label: copy.menu.reviews, href: `${base}/reviews` },

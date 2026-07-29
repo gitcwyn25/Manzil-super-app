@@ -5,6 +5,7 @@ const copy = {
     menu: {
       section: "Asosiy menyu",
       overview: "Boshqaruv paneli",
+      bookings: "Bandlovlar",
       announcements: "E'lonlar",
       packages: "Xizmatlar va narxlar",
       reviews: "Sharhlar",
@@ -30,6 +31,47 @@ const copy = {
       published: "Chop etilgan e'lonlar",
       activePackages: "Faol xizmatlar",
       pendingNote: "Biznesingiz admin tasdig'ini kutmoqda. Tasdiqdan so'ng profil ochiq sahifada ko'rinadi."
+    },
+    bookings: {
+      title: "Bandlovlar",
+      subtitle: "Telefon orqali yoki kelib qabul qilingan bandlovlarni shu yerda yozib boring.",
+      newTitle: "Yangi bandlov",
+      customerPhone: "Mijoz telefoni",
+      serviceName: "Xizmat",
+      startsAt: "Boshlanish vaqti",
+      endsAt: "Tugash vaqti (ixtiyoriy)",
+      depositAmount: "Depozit, so'm (ixtiyoriy)",
+      submit: "Bandlovni qo'shish",
+      submitting: "Saqlanmoqda…",
+      upcoming: "Yaqinlashayotgan",
+      filterAll: "Barchasi",
+      table: {
+        customer: "Mijoz",
+        phone: "Telefon",
+        service: "Xizmat",
+        when: "Vaqti",
+        status: "Holat",
+        actions: "Amallar"
+      },
+      statuses: {
+        pending: "Kutilmoqda",
+        confirmed: "Tasdiqlangan",
+        canceled: "Bekor qilingan",
+        completed: "Bajarildi",
+        no_show: "Kelmadi"
+      },
+      confirm: "Tasdiqlash",
+      confirming: "Tasdiqlanmoqda…",
+      complete: "Bajarildi deb belgilash",
+      completing: "Belgilanmoqda…",
+      cancel: "Bekor qilish",
+      canceling: "Bekor qilinmoqda…",
+      noShow: "Kelmadi deb belgilash",
+      noShowing: "Belgilanmoqda…",
+      emptyTitle: "Hozircha bandlovlar yo'q",
+      emptyBody:
+        "Mijoz telefon qilib yoki do'konga kelib navbat olganda, shu yerga yozib qo'ying. Bandlov \"Bajarildi\" deb belgilanganda mijoz avtomatik ravishda Mijozlar ro'yxatiga qo'shiladi va keyin sharh qoldirsa \"tasdiqlangan tashrif\" belgisini oladi.",
+      noEndsAt: "—"
     },
     announcements: {
       title: "E'lonlar",
@@ -261,6 +303,7 @@ const copy = {
     menu: {
       section: "Основное меню",
       overview: "Панель управления",
+      bookings: "Брони",
       announcements: "Объявления",
       packages: "Услуги и цены",
       reviews: "Отзывы",
@@ -286,6 +329,47 @@ const copy = {
       published: "Опубликованные объявления",
       activePackages: "Активные услуги",
       pendingNote: "Бизнес ожидает подтверждения администратора. После проверки профиль станет публичным."
+    },
+    bookings: {
+      title: "Брони",
+      subtitle: "Записывайте сюда брони, принятые по телефону или лично.",
+      newTitle: "Новая бронь",
+      customerPhone: "Телефон клиента",
+      serviceName: "Услуга",
+      startsAt: "Время начала",
+      endsAt: "Время окончания (необязательно)",
+      depositAmount: "Депозит, сум (необязательно)",
+      submit: "Добавить бронь",
+      submitting: "Сохраняем…",
+      upcoming: "Предстоящие",
+      filterAll: "Все",
+      table: {
+        customer: "Клиент",
+        phone: "Телефон",
+        service: "Услуга",
+        when: "Время",
+        status: "Статус",
+        actions: "Действия"
+      },
+      statuses: {
+        pending: "Ожидает",
+        confirmed: "Подтверждена",
+        canceled: "Отменена",
+        completed: "Выполнена",
+        no_show: "Не пришёл"
+      },
+      confirm: "Подтвердить",
+      confirming: "Подтверждаем…",
+      complete: "Отметить выполненной",
+      completing: "Отмечаем…",
+      cancel: "Отменить",
+      canceling: "Отменяем…",
+      noShow: "Отметить неявку",
+      noShowing: "Отмечаем…",
+      emptyTitle: "Пока нет броней",
+      emptyBody:
+        "Записывайте сюда брони, когда клиент звонит или приходит лично. Когда бронь отмечена «Выполнена», клиент автоматически появляется в списке клиентов, а после отзыва получает отметку «подтверждённый визит».",
+      noEndsAt: "—"
     },
     announcements: {
       title: "Объявления",
@@ -517,6 +601,7 @@ const copy = {
     menu: {
       section: "Main menu",
       overview: "Dashboard",
+      bookings: "Bookings",
       announcements: "Announcements",
       packages: "Services & prices",
       reviews: "Reviews",
@@ -542,6 +627,47 @@ const copy = {
       published: "Published announcements",
       activePackages: "Active services",
       pendingNote: "Your business is awaiting admin approval. The profile becomes public after review."
+    },
+    bookings: {
+      title: "Bookings",
+      subtitle: "Record bookings taken by phone or walk-in right here.",
+      newTitle: "New booking",
+      customerPhone: "Customer phone",
+      serviceName: "Service",
+      startsAt: "Start time",
+      endsAt: "End time (optional)",
+      depositAmount: "Deposit, UZS (optional)",
+      submit: "Add booking",
+      submitting: "Saving…",
+      upcoming: "Upcoming",
+      filterAll: "All",
+      table: {
+        customer: "Customer",
+        phone: "Phone",
+        service: "Service",
+        when: "When",
+        status: "Status",
+        actions: "Actions"
+      },
+      statuses: {
+        pending: "Pending",
+        confirmed: "Confirmed",
+        canceled: "Canceled",
+        completed: "Completed",
+        no_show: "No-show"
+      },
+      confirm: "Confirm",
+      confirming: "Confirming…",
+      complete: "Mark completed",
+      completing: "Marking…",
+      cancel: "Cancel",
+      canceling: "Canceling…",
+      noShow: "Mark no-show",
+      noShowing: "Marking…",
+      emptyTitle: "No bookings yet",
+      emptyBody:
+        "Record a booking here whenever a customer calls or walks in. Once it's marked \"Completed\", the customer is added to your customer list automatically, and picks up a \"verified visit\" badge if they leave a review.",
+      noEndsAt: "—"
     },
     announcements: {
       title: "Announcements",

@@ -36,6 +36,26 @@ function text(formData: FormData, key: string): string | undefined {
   return trimmed.length > 0 ? trimmed : undefined;
 }
 
+/**
+ * Converts a `<input type="datetime-local">` value ("YYYY-MM-DDTHH:mm", no
+ * timezone) into an ISO-8601 string with an explicit offset.
+ *
+ * This runs on the server, which may not run in Tashkent's timezone (or even
+ * a consistent one across deployments) — `new Date("2026-08-01T09:00")` would
+ * silently parse "09:00" as the server's local time, not the business owner's,
+ * quietly shifting every booking by the server/Tashkent offset. Uzbekistan
+ * has used a fixed UTC+5 with no DST since 2024, so the offset can be
+ * appended directly rather than resolved dynamically.
+ */
+function tashkentIso(formData: FormData, key: string): string | undefined {
+  const raw = text(formData, key);
+  if (!raw) return undefined;
+  // The browser default step (whole minutes, no seconds) always yields
+  // "YYYY-MM-DDTHH:mm" — seconds are appended before the offset so the result
+  // is unambiguous ISO-8601 rather than relying on the runtime's parser.
+  return `${raw}:00+05:00`;
+}
+
 /* ---------- Registration + plan ---------- */
 
 export async function registerBusinessAction(formData: FormData) {
@@ -151,6 +171,26 @@ export async function togglePackageAction(formData: FormData) {
 export async function deletePackageAction(formData: FormData) {
   await crmSend(`/crm/packages/${text(formData, "id")}`, "DELETE");
   revalidatePath("/[locale]/dashboard/packages", "page");
+}
+
+/* ---------- Bookings ---------- */
+
+export async function createBookingAction(formData: FormData) {
+  await crmSend(`/crm/businesses/${text(formData, "business")}/bookings`, "POST", {
+    serviceName: text(formData, "serviceName"),
+    customerPhone: text(formData, "customerPhone"),
+    startsAt: tashkentIso(formData, "startsAt"),
+    endsAt: tashkentIso(formData, "endsAt"),
+    depositAmount: text(formData, "depositAmount") ? Number(text(formData, "depositAmount")) : undefined
+  });
+  revalidatePath("/[locale]/dashboard/bookings", "page");
+}
+
+export async function setBookingStatusAction(formData: FormData) {
+  await crmSend(`/crm/bookings/${text(formData, "id")}/status`, "PATCH", {
+    status: text(formData, "status")
+  });
+  revalidatePath("/[locale]/dashboard/bookings", "page");
 }
 
 /* ---------- Reviews ---------- */

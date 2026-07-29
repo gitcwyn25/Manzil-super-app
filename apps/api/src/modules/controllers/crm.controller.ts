@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards
 } from "@nestjs/common";
@@ -21,6 +22,8 @@ import { SegmentsRepository, type SegmentKey } from "../crm/segments.repository"
 import { CampaignsRepository } from "../crm/campaigns.repository";
 import { CreateCampaignDto, SetCampaignActiveDto } from "../crm/campaigns.dto";
 import { SetConsentDto } from "../crm/consent.dto";
+import { BookingsRepository } from "../crm/bookings.repository";
+import { CreateBookingDto, SetBookingStatusDto } from "../crm/bookings.dto";
 import { EntitlementGuard } from "../plans/entitlement.guard";
 import { RequireEntitlement } from "../plans/require-entitlement.decorator";
 import {
@@ -46,7 +49,8 @@ export class CrmController {
     private readonly customers: CustomersRepository,
     private readonly legal: LegalService,
     private readonly segments: SegmentsRepository,
-    private readonly campaigns: CampaignsRepository
+    private readonly campaigns: CampaignsRepository,
+    private readonly bookings: BookingsRepository
   ) {}
 
   /* ---------- Registration ---------- */
@@ -135,6 +139,55 @@ export class CrmController {
   @Delete("packages/:id")
   async deletePackage(@Param("id") id: string, @Req() request: ManzilRequest) {
     return { data: await this.crm.deletePackage(id, request.manzilActor!) };
+  }
+
+  /* ---------- Bookings ---------- */
+
+  @Get("businesses/:slug/bookings")
+  async listBookings(
+    @Param("slug") slug: string,
+    @Query("status") status: string | undefined,
+    @Query("from") from: string | undefined,
+    @Query("to") to: string | undefined,
+    @Query("take") take: string | undefined,
+    @Query("skip") skip: string | undefined,
+    @Req() request: ManzilRequest
+  ) {
+    return {
+      data: await this.bookings.listBookings(
+        slug,
+        {
+          status,
+          from,
+          to,
+          take: take !== undefined ? Number(take) : undefined,
+          skip: skip !== undefined ? Number(skip) : undefined
+        },
+        request.manzilActor!
+      )
+    };
+  }
+
+  @Post("businesses/:slug/bookings")
+  @ThrottleWrite()
+  async createBooking(
+    @Param("slug") slug: string,
+    @Body() body: CreateBookingDto,
+    @Req() request: ManzilRequest
+  ) {
+    return { data: { booking: await this.bookings.createBooking(slug, body, request.manzilActor!) } };
+  }
+
+  @Patch("bookings/:id/status")
+  @ThrottleWrite()
+  async setBookingStatus(
+    @Param("id") id: string,
+    @Body() body: SetBookingStatusDto,
+    @Req() request: ManzilRequest
+  ) {
+    return {
+      data: { booking: await this.bookings.setStatus(id, body.status, request.manzilActor!) }
+    };
   }
 
   /* ---------- Customers (M0: read-only) ---------- */

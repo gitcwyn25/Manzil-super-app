@@ -20,6 +20,13 @@ const icons: Record<string, ReactNode> = {
       <rect height="7" rx="1.5" width="7" x="13.5" y="13.5" />
     </svg>
   ),
+  bookings: (
+    <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" viewBox="0 0 24 24">
+      <rect height="16" rx="2" width="17" x="3.5" y="4.5" />
+      <path d="M3.5 9.5h17M8 3v3M16 3v3" />
+      <path d="M8 14h2M8 17.5h6" />
+    </svg>
+  ),
   announcements: (
     <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" viewBox="0 0 24 24">
       <path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1Z" />

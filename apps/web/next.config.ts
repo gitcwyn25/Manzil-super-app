@@ -34,6 +34,15 @@ const vercel = "https://vercel.live";
 const sentryOrigin = toOrigin(process.env.NEXT_PUBLIC_SENTRY_DSN);
 const sentry = sentryOrigin ?? "";
 
+// Cloudflare R2 serves uploaded business photos. Derived from the same env the
+// API signs uploads against, so the CSP cannot drift from where the bytes
+// actually live. Without this, an uploaded cover photo is fetched and then
+// blocked by img-src, which looks like a broken upload rather than a policy
+// problem. The wildcard fallback covers the default r2.dev domain when no
+// custom CDN domain is configured yet.
+const r2Origin = toOrigin(process.env.CLOUDFLARE_R2_PUBLIC_URL);
+const r2Images = r2Origin ?? "https://*.r2.dev https://*.r2.cloudflarestorage.com";
+
 const csp = [
   `default-src 'self'`,
   `base-uri 'self'`,
@@ -44,7 +53,7 @@ const csp = [
   // 'unsafe-inline' is required; dev additionally needs 'unsafe-eval' for HMR.
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} ${clerk} ${turnstile} ${vercel}`,
   `style-src 'self' 'unsafe-inline'`,
-  `img-src 'self' data: blob: https://img.clerk.com https://*.clerk.com`,
+  `img-src 'self' data: blob: https://img.clerk.com https://*.clerk.com ${r2Images}`,
   `font-src 'self' data:`,
   `connect-src 'self' ${apiOrigin} ${supabaseSources} ${clerk} https://clerk-telemetry.com ${vercel} ${sentry}${
     isDev ? " ws://localhost:* http://localhost:*" : ""

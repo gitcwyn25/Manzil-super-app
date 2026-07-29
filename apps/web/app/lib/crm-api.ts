@@ -150,6 +150,37 @@ export function getBusinessAnalytics(slug: string, days = 30) {
   return crmGet<BusinessAnalytics>(`/analytics/businesses/${slug}?days=${days}`);
 }
 
+export type BookingStatus = "pending" | "confirmed" | "canceled" | "completed" | "no_show";
+
+export type CrmBooking = {
+  id: string;
+  customerId: string | null;
+  customerName: string | null;
+  customerPhone: string;
+  serviceName: string;
+  startsAt: string;
+  endsAt: string | null;
+  status: BookingStatus;
+  depositAmount: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export function getBookings(
+  slug: string,
+  filters: { status?: BookingStatus; from?: string; to?: string } = {}
+) {
+  const params = new URLSearchParams();
+  if (filters.status) params.set("status", filters.status);
+  if (filters.from) params.set("from", filters.from);
+  if (filters.to) params.set("to", filters.to);
+  const query = params.toString();
+
+  return crmGet<{ bookings: CrmBooking[]; total: number }>(
+    `/crm/businesses/${slug}/bookings${query ? `?${query}` : ""}`
+  );
+}
+
 export type CrmPhoto = {
   id: string;
   publicUrl: string | null;

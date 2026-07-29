@@ -25,6 +25,7 @@ import { SegmentsRepository } from "./crm/segments.repository";
 import { LoyaltyService } from "./crm/loyalty.service";
 import { CampaignsService } from "./crm/campaigns.service";
 import { CampaignsRepository } from "./crm/campaigns.repository";
+import { BookingsRepository } from "./crm/bookings.repository";
 import { GeocodingService } from "./crm/geocoding.service";
 import { R2PresignService } from "./media/r2-presign.service";
 import { ConsoleController } from "./console/console.controller";
@@ -109,6 +110,7 @@ import { DEFAULT_THROTTLE } from "./security/throttle.config";
     LoyaltyService,
     CampaignsService,
     CampaignsRepository,
+    BookingsRepository,
     GeocodingService,
     ClerkAuthService,
     ManzilAuthGuard,
