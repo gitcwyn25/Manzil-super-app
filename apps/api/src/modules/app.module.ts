@@ -46,6 +46,8 @@ import { HomeController } from "./home/home.controller";
 import { HomeRepository } from "./home/home.repository";
 import { WaitlistController } from "./waitlist/waitlist.controller";
 import { WaitlistRepository } from "./waitlist/waitlist.repository";
+import { BillingController } from "./billing/billing.controller";
+import { StripeService } from "./billing/stripe.service";
 import { SecurityModule } from "./security/security.module";
 import { RedisThrottlerStorage } from "./security/throttler-redis.storage";
 import { ManzilThrottlerGuard } from "./security/manzil-throttler.guard";
@@ -84,7 +86,8 @@ import { DEFAULT_THROTTLE } from "./security/throttle.config";
     AnalyticsController,
     LegalController,
     HomeController,
-    WaitlistController
+    WaitlistController,
+    BillingController
   ],
   providers: [
     // Reports unhandled exceptions to Sentry, then delegates to Nest's default
@@ -117,7 +120,8 @@ import { DEFAULT_THROTTLE } from "./security/throttle.config";
     LegalService,
     ReviewTrustRepository,
     HomeRepository,
-    WaitlistRepository
+    WaitlistRepository,
+    StripeService
   ]
 })
 export class AppModule {}

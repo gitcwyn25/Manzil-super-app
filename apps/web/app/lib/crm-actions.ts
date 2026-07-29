@@ -77,8 +77,24 @@ export async function choosePlanAction(formData: FormData) {
     throw new Error("Business is required");
   }
 
-  await crmSend(`/crm/businesses/${slug}/subscription`, "POST", { plan });
-  redirect(`/${locale}/dashboard`);
+  if (plan === "free") {
+    await crmSend(`/crm/businesses/${slug}/subscription`, "POST", { plan });
+    redirect(`/${locale}/dashboard`);
+    return;
+  }
+
+  // Paid tiers never set the plan directly — the API creates a Stripe
+  // Checkout session and the subscription only activates once Stripe
+  // confirms payment via the webhook. The tier/price are re-resolved
+  // server-side from `businessSlug`; nothing here is trusted as-is.
+  const payload = await crmSend("/billing/checkout", "POST", {
+    businessSlug: slug,
+    tier: plan,
+    locale
+  });
+
+  const url = (payload as { data: { url: string } }).data.url;
+  redirect(url);
 }
 
 /* ---------- Announcements ---------- */

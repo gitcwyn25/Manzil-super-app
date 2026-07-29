@@ -127,7 +127,11 @@ const copy = {
       title: "Tarifni tanlang",
       subtitle: "Keyinroq istalgan vaqtda o'zgartirishingiz mumkin.",
       note: "Pullik tariflar uchun hisob-faktura yuboriladi. To'lov tasdiqlangach tarif faollashadi.",
-      choose: "Tanlash"
+      choose: "Tanlash",
+      choosing: "To'lovga yo'naltirilmoqda…",
+      checkoutFailedTitle: "To'lovni boshlab bo'lmadi",
+      checkoutFailedBody: "Hech qanday summa yechilmadi. Qaytadan urinib ko'ring yoki boshqa tarifni tanlang.",
+      retry: "Qaytadan urinish"
     },
     analytics: {
       title: "Tahlil",
@@ -368,7 +372,11 @@ const copy = {
       title: "Выберите тариф",
       subtitle: "Его можно изменить в любой момент.",
       note: "Для платных тарифов выставляется счёт. Тариф активируется после подтверждения оплаты.",
-      choose: "Выбрать"
+      choose: "Выбрать",
+      choosing: "Переходим к оплате…",
+      checkoutFailedTitle: "Не удалось начать оплату",
+      checkoutFailedBody: "Списания не произошло. Попробуйте ещё раз или выберите другой тариф.",
+      retry: "Повторить"
     },
     analytics: {
       title: "Аналитика",
@@ -609,7 +617,11 @@ const copy = {
       title: "Choose a plan",
       subtitle: "You can change it at any time.",
       note: "Paid plans are invoiced. The plan activates once payment is confirmed.",
-      choose: "Choose"
+      choose: "Choose",
+      choosing: "Redirecting to payment…",
+      checkoutFailedTitle: "Checkout didn't start",
+      checkoutFailedBody: "Nothing was charged. Try again, or choose a different plan.",
+      retry: "Try again"
     },
     analytics: {
       title: "Analytics",

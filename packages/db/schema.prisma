@@ -80,6 +80,7 @@ enum PaymentProvider {
   click
   uzcard
   card
+  stripe
 }
 
 enum PaymentStatus {
@@ -450,6 +451,11 @@ model BusinessSubscription {
   renewsAt          DateTime?
   provider          PaymentProvider?
   externalId        String?
+  /// Stripe customer and subscription ids, when provider = stripe. Kept as
+  /// distinct columns rather than reusing externalId because reconciling a
+  /// subscription needs both, and a webhook arrives keyed on either one.
+  stripeCustomerId     String?
+  stripeSubscriptionId String? @unique
   currentPeriodEnd  DateTime?
   cancelAtPeriodEnd Boolean            @default(false)
   createdAt         DateTime           @default(now())
@@ -600,6 +606,17 @@ model Plan {
   locationLimit Int      @default(1)
   sortOrder     Int      @default(0)
   isActive      Boolean  @default(true)
+  /// Price charged through Stripe, in USD cents.
+  ///
+  /// Held separately from priceMonthly rather than converted from it: the
+  /// Stripe account is US/USD and cannot charge UZS, and deriving the dollar
+  /// figure from an exchange rate would let the published price drift without
+  /// anyone deciding to change it. Null means the tier is not purchasable
+  /// through Stripe (the free tier).
+  priceMonthlyUsdCents Int?
+  /// Stripe Price id for priceMonthlyUsdCents. Set by the sync script; null
+  /// until the tier has been mirrored into Stripe.
+  stripePriceId String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 

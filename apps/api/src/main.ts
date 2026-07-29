@@ -16,7 +16,13 @@ import { AppModule } from "./modules/app.module";
 import { resolveCorsOrigins } from "./modules/security/cors.config";
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  // `rawBody: true` makes Nest additionally capture the unparsed request
+  // body into `req.rawBody` alongside the normal parsed `req.body`. The
+  // Stripe webhook needs this: signature verification hashes the exact bytes
+  // Stripe sent, and re-serialising the parsed JSON does not reproduce them
+  // byte-for-byte (key order, whitespace), which would make every signature
+  // check fail.
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, { rawBody: true });
   const logger = new Logger("Bootstrap");
 
   // Railway (and any reverse proxy) terminates TLS and forwards the real client

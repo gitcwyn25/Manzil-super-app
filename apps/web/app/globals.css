@@ -7541,3 +7541,40 @@ html[data-shell="workspace"] [class*="reveal"] {
     animation-duration: 2s;
   }
 }
+
+/* Plan submit: pending state.
+   Choosing pro/max round-trips to the API to create a Stripe Checkout
+   session before the browser redirects, which is the same "click did
+   nothing?" gap RegisterSubmit addresses above. This variant uses
+   `currentColor` for the spinner (rather than the hardcoded white above)
+   because it has to render legibly on both the filled `.bz-btn-primary`
+   button and the white `.bz-btn-ghost` one. */
+.crm-plan-submit[aria-busy="true"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  cursor: progress;
+  opacity: 0.75;
+}
+
+.crm-plan-submit:disabled {
+  cursor: progress;
+}
+
+.crm-plan-submit__spinner {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  opacity: 0.7;
+  animation: crm-submit-spin 700ms linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crm-plan-submit__spinner {
+    animation-duration: 2s;
+  }
+}

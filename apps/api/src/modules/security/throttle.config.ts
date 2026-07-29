@@ -59,4 +59,14 @@ export const ThrottleVisit = () =>
 export const ThrottleUpload = () =>
   Throttle({ default: { limit: 20, ttl: minutes(5), blockDuration: minutes(10) } });
 
+/**
+ * Stripe webhook delivery. Signature verification (not this limiter) is the
+ * actual security boundary, so this stays generous — Stripe retries a failed
+ * delivery on a backoff schedule for up to three days, and a tight limit here
+ * would make us drop legitimate retries during a burst (e.g. a batch of
+ * subscription renewals) rather than protect anything.
+ */
+export const ThrottleWebhook = () =>
+  Throttle({ default: { limit: 100, ttl: minutes(1), blockDuration: seconds(30) } });
+
 export { seconds, minutes, hours };

@@ -1,5 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import type { Locale } from "@manzil/shared";
+import { PlanSubmit } from "../../../../components/crm/plan-submit";
 import { getBusinessLandingCopy } from "../../../../lib/business-landing-copy";
 import { choosePlanAction } from "../../../../lib/crm-actions";
 import { getCrmCopy } from "../../../../lib/crm-copy";
@@ -72,9 +73,7 @@ export default async function PlanSelectionPage({
               <input name="locale" type="hidden" value={locale} />
               <input name="business" type="hidden" value={business} />
               <input name="plan" type="hidden" value={plan.key} />
-              <button className={plan.highlight ? "bz-btn-primary full" : "bz-btn-ghost full"} type="submit">
-                {copy.plans.choose}
-              </button>
+              <PlanSubmit highlight={plan.highlight} label={copy.plans.choose} pendingLabel={copy.plans.choosing} />
             </form>
           </article>
         ))}
