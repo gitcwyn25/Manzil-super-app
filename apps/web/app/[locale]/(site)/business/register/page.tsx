@@ -4,6 +4,7 @@ import { getCategories } from "../../../../lib/api";
 import { registerBusinessAction } from "../../../../lib/crm-actions";
 import { getRegistrationTerms } from "../../../../lib/legal-api";
 import { getCrmCopy } from "../../../../lib/crm-copy";
+import { RegisterSubmit } from "../../../../components/crm/register-submit";
 
 export const dynamic = "force-dynamic";
 
@@ -144,9 +145,7 @@ export default async function RegisterBusinessPage({
           </label>
         </fieldset>
 
-        <button className="bz-btn-primary crm-submit" type="submit">
-          {copy.register.submit}
-        </button>
+        <RegisterSubmit label={copy.register.submit} pendingLabel={copy.register.submitting} />
       </form>
     </section>
   );

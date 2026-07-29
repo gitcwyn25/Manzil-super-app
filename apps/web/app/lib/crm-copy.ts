@@ -115,6 +115,10 @@ const copy = {
       legalSection: "Yuridik ma'lumotlar (O'zbekiston)",
       legalHint: "STIR ixtiyoriy, lekin tasdiqlashni tezlashtiradi.",
       submit: "Ro'yxatdan o'tkazish",
+      submitting: "Yuborilmoqda…",
+      failedTitle: "Ro'yxatdan o'tkazib bo'lmadi",
+      failedBody: "Ma'lumotlar saqlanmadi. Qaytadan urinib ko'ring — takroriy biznes yaratilmaydi.",
+      retry: "Qaytadan urinish",
       signInFirst: "Avval tizimga kiring",
       signInText: "Biznesni ro'yxatdan o'tkazish uchun hisob talab qilinadi.",
       signIn: "Kirish"
@@ -352,6 +356,10 @@ const copy = {
       legalSection: "Юридические данные (Узбекистан)",
       legalHint: "ИНН необязателен, но ускоряет подтверждение.",
       submit: "Зарегистрировать",
+      submitting: "Отправляем…",
+      failedTitle: "Не удалось зарегистрировать",
+      failedBody: "Данные не сохранены. Попробуйте ещё раз — дубликат бизнеса не создастся.",
+      retry: "Повторить",
       signInFirst: "Сначала войдите",
       signInText: "Для регистрации бизнеса требуется аккаунт.",
       signIn: "Войти"
@@ -589,6 +597,10 @@ const copy = {
       legalSection: "Legal details (Uzbekistan)",
       legalHint: "Tax ID is optional but speeds up approval.",
       submit: "Register",
+      submitting: "Submitting…",
+      failedTitle: "Registration didn't go through",
+      failedBody: "Nothing was saved. Try again — this will not create a duplicate business.",
+      retry: "Try again",
       signInFirst: "Sign in first",
       signInText: "An account is required to register a business.",
       signIn: "Sign in"

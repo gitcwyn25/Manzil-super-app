@@ -109,6 +109,38 @@ export class CrmRepository {
       throw new BadRequestException("Unknown category");
     }
 
+    // Idempotency guard, before any slow work.
+    //
+    // uniqueSlug() always succeeds by suffixing, so a double submit used to
+    // create "caravan-coffee" AND "caravan-coffee-2" — two real businesses,
+    // two claims, two contracts. Registration is slow enough (a geocoding round
+    // trip plus a multi-statement transaction) that double submits are the
+    // normal case, not the edge case.
+    //
+    // Returning the existing row rather than throwing makes the second submit a
+    // no-op that lands the owner in the same place as the first, which is what
+    // they expected to happen anyway.
+    const existing = await this.prisma.business.findFirst({
+      where: {
+        createdByUserId: actor.userId,
+        name: { equals: name, mode: "insensitive" },
+        mergedIntoId: null
+      },
+      select: { id: true, slug: true, name: true, status: true, lat: true, lng: true }
+    });
+
+    if (existing) {
+      return {
+        id: existing.id,
+        slug: existing.slug,
+        name: existing.name,
+        status: existing.status,
+        geocoded: existing.lat !== null && existing.lng !== null,
+        lat: existing.lat ? Number(existing.lat) : null,
+        lng: existing.lng ? Number(existing.lng) : null
+      };
+    }
+
     const slug = await this.uniqueSlug(name);
     const geo = await this.geocoding.geocode(address, district, input.city ?? "Tashkent");
 

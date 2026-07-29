@@ -7505,3 +7505,39 @@ html[data-shell="workspace"] [class*="reveal"] {
     transition: none;
   }
 }
+
+/* Registration submit: pending state.
+   Registration geocodes over the network then runs a transaction, so the gap
+   between click and redirect is long enough that people click twice. The
+   button states that it is working and stops accepting further clicks. */
+.crm-submit[aria-busy="true"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  cursor: progress;
+  opacity: 0.75;
+}
+
+.crm-submit:disabled {
+  cursor: progress;
+}
+
+.crm-submit__spinner {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  border: 2px solid rgb(255 255 255 / 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: crm-submit-spin 700ms linear infinite;
+}
+
+@keyframes crm-submit-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crm-submit__spinner {
+    animation-duration: 2s;
+  }
+}
