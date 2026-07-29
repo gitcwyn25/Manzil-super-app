@@ -240,10 +240,14 @@ export class CrmRepository {
 
     await this.cache.invalidate("businesses", "admin");
 
+    // businessId is what lets the admin inbox deep-link into the company that
+    // needs attention. Without it the notification says something happened but
+    // not where, which is most of the value of having a queue.
     this.alerts.dispatch({
       kind: "business_awaiting_approval",
       title: `New business awaiting approval: ${business.name}`,
-      detail: `${business.district}, ${business.city}`
+      detail: `${business.district}, ${business.city}`,
+      businessId: business.id
     });
 
     return {

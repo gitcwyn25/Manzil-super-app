@@ -143,6 +143,123 @@ export class ConsoleCurationRepository {
   }
 
   /**
+   * Customers plus review authors for one business, merged into a single
+   * list keyed by `User.id`. A `Customer` row is only mergeable when it has a
+   * linked `userId` (a walk-in known solely by phone can't be tied to a
+   * review account); every `Review` always has one. A person present in both
+   * sources appears once, with `sources` showing which the row came from.
+   */
+  async getBusinessConsumers(businessId: string) {
+    const business = await this.prisma.business.findUnique({
+      where: { id: businessId },
+      select: { id: true }
+    });
+    if (!business) {
+      throw new NotFoundException("Business not found");
+    }
+
+    const [customers, reviews] = await Promise.all([
+      this.prisma.customer.findMany({
+        where: { businessId },
+        include: { user: { select: { id: true, displayName: true, email: true, phone: true } } },
+        orderBy: { lastVisitAt: "desc" }
+      }),
+      this.prisma.review.findMany({
+        where: { businessId },
+        include: { user: { select: { id: true, displayName: true, email: true, phone: true } } },
+        orderBy: { createdAt: "desc" }
+      })
+    ]);
+
+    type Source = "customer" | "reviewer";
+    type Merged = {
+      userId: string | null;
+      name: string | null;
+      email: string | null;
+      phone: string | null;
+      sources: Set<Source>;
+      customer: {
+        id: string;
+        visitCount: number;
+        totalSpend: number;
+        loyaltyPoints: number;
+        lastVisitAt: string | null;
+        tags: string[];
+      } | null;
+    };
+
+    const byKey = new Map<string, Merged>();
+
+    for (const c of customers) {
+      // No linked account: this walk-in can't be matched to a review author,
+      // so it gets its own key rather than being merged on phone alone — a
+      // typed-in phone number is not proof of owning that reviewer's account.
+      const key = c.userId ?? `customer:${c.id}`;
+      const entry: Merged = byKey.get(key) ?? {
+        userId: c.userId,
+        name: c.user?.displayName ?? c.name ?? null,
+        email: c.user?.email ?? null,
+        phone: c.user?.phone ?? c.phone,
+        sources: new Set<Source>(),
+        customer: null
+      };
+      entry.sources.add("customer");
+      entry.customer = {
+        id: c.id,
+        visitCount: c.visitCount,
+        totalSpend: Number(c.totalSpend),
+        loyaltyPoints: c.loyaltyPoints,
+        lastVisitAt: c.lastVisitAt?.toISOString() ?? null,
+        tags: c.tags
+      };
+      byKey.set(key, entry);
+    }
+
+    const reviewAgg = new Map<string, { count: number; totalRating: number; lastReviewAt: Date }>();
+
+    for (const r of reviews) {
+      const key = r.userId;
+      const entry: Merged = byKey.get(key) ?? {
+        userId: r.userId,
+        name: r.user.displayName,
+        email: r.user.email,
+        phone: r.user.phone,
+        sources: new Set<Source>(),
+        customer: null
+      };
+      entry.sources.add("reviewer");
+      byKey.set(key, entry);
+
+      const agg = reviewAgg.get(key) ?? { count: 0, totalRating: 0, lastReviewAt: r.createdAt };
+      agg.count += 1;
+      agg.totalRating += r.rating;
+      if (r.createdAt > agg.lastReviewAt) agg.lastReviewAt = r.createdAt;
+      reviewAgg.set(key, agg);
+    }
+
+    const consumers = [...byKey.entries()].map(([key, entry]) => {
+      const agg = reviewAgg.get(key);
+      return {
+        userId: entry.userId,
+        name: entry.name,
+        email: entry.email,
+        phone: entry.phone,
+        sources: [...entry.sources],
+        customer: entry.customer,
+        reviews: agg
+          ? {
+              count: agg.count,
+              avgRating: Math.round((agg.totalRating / agg.count) * 10) / 10,
+              lastReviewAt: agg.lastReviewAt.toISOString()
+            }
+          : null
+      };
+    });
+
+    return { consumers, totalCount: consumers.length };
+  }
+
+  /**
    * Sets the landing-page featured flag.
    *
    * Audited like any other business mutation — featuring is editorial placement

@@ -53,7 +53,9 @@ const PERMISSIONS: Array<[string, string, string]> = [
   ["legal.view", "legal", "View legal documents, acceptances, and generated contracts"],
   ["legal.publish", "legal", "Publish a new version of a legal document or contract template"],
   // catalogue
-  ["category.manage", "category", "Create and edit the category taxonomy shown on the landing page"]
+  ["category.manage", "category", "Create and edit the category taxonomy shown on the landing page"],
+  // notifications
+  ["notification.view", "notification", "View and acknowledge the admin notification inbox"]
 ];
 
 const ROLES: Array<{
@@ -80,7 +82,10 @@ const ROLES: Array<{
       "flag.view", "search.view", "audit.view",
       // Moderators curate the catalogue and read legal state, but publishing a
       // legal version stays with super_admin.
-      "category.manage", "legal.view"
+      "category.manage", "legal.view",
+      // Same operator who approves a pending business is exactly who should
+      // see the queue that tells them one is waiting.
+      "notification.view"
     ]
   },
   {

@@ -119,6 +119,13 @@ enum BusinessEventType {
   photo_view
 }
 
+enum AdminNotificationKind {
+  business_awaiting_approval
+  review_reported
+  photo_pending
+  contract_pending
+}
+
 model User {
   id           String     @id @default(cuid())
   clerkId      String?    @unique
@@ -232,6 +239,7 @@ model Business {
   legalAcceptances LegalAcceptance[]
   contracts        Contract[]
   campaigns        Campaign[]
+  adminNotifications AdminNotification[]
 
   @@index([categoryId])
   @@index([city, district])
@@ -578,6 +586,24 @@ model AuditLog {
   @@index([action])
   @@index([targetType, targetId])
   @@index([createdAt])
+}
+
+model AdminNotification {
+  id         String                @id @default(cuid())
+  kind       AdminNotificationKind
+  title      String
+  body       String?
+  /// Subject of the notification, so the inbox can deep-link into the company.
+  businessId String?
+  /// Set when acted on. Null means it still needs a human.
+  readAt     DateTime?
+  readBy     String?
+  createdAt  DateTime              @default(now())
+
+  business Business? @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@index([readAt, createdAt])
+  @@index([businessId])
 }
 
 model FeatureFlag {

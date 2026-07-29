@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Ip, Param, Patch, Post, Query, Req, UseGuards } from "@nestjs/common";
 import { ConsoleRepository } from "./console.repository";
 import { ConsoleCurationRepository } from "./console-curation.repository";
+import { ConsoleNotificationsRepository } from "./console-notifications.repository";
 import { AnalyticsRepository } from "../analytics/analytics.repository";
 import { parseWindow } from "../analytics/analytics.controller";
 import { PermissionGuard, type ConsoleRequest } from "./permission.guard";
@@ -30,7 +31,8 @@ export class ConsoleController {
   constructor(
     private readonly repo: ConsoleRepository,
     private readonly analytics: AnalyticsRepository,
-    private readonly curation: ConsoleCurationRepository
+    private readonly curation: ConsoleCurationRepository,
+    private readonly notificationsRepo: ConsoleNotificationsRepository
   ) {}
 
   private ctx(request: ConsoleRequest, ip: string) {
@@ -85,6 +87,13 @@ export class ConsoleController {
   @RequirePermission("business.view")
   async businessDetail(@Param("id") id: string) {
     return { data: await this.curation.getBusinessDetail(id) };
+  }
+
+  /** Customers plus review authors for one business, deduplicated by account. */
+  @Get("businesses/:id/consumers")
+  @RequirePermission("business.view")
+  async businessConsumers(@Param("id") id: string) {
+    return { data: await this.curation.getBusinessConsumers(id) };
   }
 
   @Post("businesses/:id/feature")
@@ -282,5 +291,34 @@ export class ConsoleController {
     @Query("targetType") targetType?: string
   ) {
     return { data: { entries: await this.repo.listAudit({ actorId, action, targetType }) } };
+  }
+
+  /* ---------- notifications ---------- */
+
+  @Get("notifications")
+  @RequirePermission("notification.view")
+  async notifications(@Query("unread") unread?: string, @Query("limit") limit?: string) {
+    const parsedLimit = limit !== undefined ? Number(limit) : undefined;
+    return {
+      data: await this.notificationsRepo.list({
+        unread: unread === "true",
+        limit: parsedLimit
+      })
+    };
+  }
+
+  // NOTE: this literal route MUST be declared before "notifications/:id/read"
+  // — Nest matches routes in declaration order, and the dynamic segment would
+  // otherwise swallow "read-all" as an :id.
+  @Post("notifications/read-all")
+  @RequirePermission("notification.view")
+  async markAllNotificationsRead(@Req() r: ConsoleRequest, @Ip() ip: string) {
+    return { data: await this.notificationsRepo.markAllRead(this.ctx(r, ip)) };
+  }
+
+  @Post("notifications/:id/read")
+  @RequirePermission("notification.view")
+  async markNotificationRead(@Param("id") id: string, @Req() r: ConsoleRequest, @Ip() ip: string) {
+    return { data: await this.notificationsRepo.markRead(id, this.ctx(r, ip)) };
   }
 }

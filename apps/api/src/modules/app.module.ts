@@ -33,6 +33,7 @@ import { MEDIA_STORAGE_PROVIDER } from "./media/media-storage.provider";
 import { ConsoleController } from "./console/console.controller";
 import { ConsoleRepository } from "./console/console.repository";
 import { ConsoleCurationRepository } from "./console/console-curation.repository";
+import { ConsoleNotificationsRepository } from "./console/console-notifications.repository";
 import { AdminAuthService } from "./console/admin-auth.service";
 import { PermissionGuard } from "./console/permission.guard";
 import { AlertService } from "./alerts/alert.service";
@@ -121,6 +122,7 @@ import { DEFAULT_THROTTLE } from "./security/throttle.config";
     MEDIA_STORAGE_PROVIDER,
     ConsoleRepository,
     ConsoleCurationRepository,
+    ConsoleNotificationsRepository,
     AdminAuthService,
     PermissionGuard,
     AlertService,
