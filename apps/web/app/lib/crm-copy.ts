@@ -1,4 +1,4 @@
-import type { Locale } from "@manzil/shared";
+ import type { Locale } from "@manzil/shared";
 
 const copy = {
   uz: {

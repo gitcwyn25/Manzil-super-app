@@ -13,7 +13,7 @@ import { QualityScoreCard } from "../../../../components/quality-score-card";
 import { ReviewForm } from "../../../../components/review-form";
 import { ReviewList } from "../../../../components/review-list";
 import { formatCount } from "../../../../lib/locale-text";
-import { getBusiness } from "../../../../lib/api";
+import { getBusiness, getBusinessPhotos } from "../../../../lib/api";
 
 export async function generateMetadata({
   params
@@ -47,16 +47,32 @@ export default async function BusinessProfilePage({
   }
 
   const { business, reviews } = profile;
+  const photos = await getBusinessPhotos(slug);
 
   return (
     <>
       <VisitPing slug={business.slug} />
       <section className="section-block profile-section">
         <Reveal variant="slide-right">
+          {/* Real uploaded photos when the owner has any; the generated
+              gradients stay as the fallback so a business with no photography
+              still reads as a finished page rather than an empty frame. */}
           <div className="profile-media">
-            <div className={`profile-main-photo photo-block photo-${business.photo}`} />
-            <div className="profile-side-photo photo-block photo-somsa" />
-            <div className="profile-side-photo photo-block photo-coffee" />
+            {photos[0] ? (
+              <img alt={business.name} className="profile-main-photo" loading="eager" src={photos[0]} />
+            ) : (
+              <div className={`profile-main-photo photo-block photo-${business.photo}`} />
+            )}
+            {photos[1] ? (
+              <img alt="" className="profile-side-photo" loading="lazy" src={photos[1]} />
+            ) : (
+              <div className="profile-side-photo photo-block photo-somsa" />
+            )}
+            {photos[2] ? (
+              <img alt="" className="profile-side-photo" loading="lazy" src={photos[2]} />
+            ) : (
+              <div className="profile-side-photo photo-block photo-coffee" />
+            )}
           </div>
         </Reveal>
         <div className="profile-copy">

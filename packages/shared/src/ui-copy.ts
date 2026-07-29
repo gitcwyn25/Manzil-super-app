@@ -166,7 +166,9 @@ export function getUiCopy(locale: Locale) {
       reviewsTitle: localize(L("Foydalanuvchilar fikri", "Мнение пользователей", "What users say"), locale),
       writeKicker: localize(L("Sharh yozish", "Написать отзыв", "Write a review"), locale),
       writeTitle: localize(L("Tajriba bilan bo'lishing", "Поделитесь опытом", "Share your experience"), locale),
-      writeBody: localize(L("Keyingi bosqichda auth ulanganda sharhlar saqlanadi.", "Отзывы сохранятся после подключения auth.", "Reviews save once auth is connected."), locale),
+      writeBody: localize(L("Sharh yozish uchun tizimga kiring. Har bir biznesga bitta sharh qoldirish mumkin.", "Войдите, чтобы оставить отзыв. Один отзыв на каждый бизнес.", "Sign in to leave a review. One review per business."), locale),
+      writeSignIn: localize(L("Sharh yozish uchun avval tizimga kiring.", "Сначала войдите, чтобы оставить отзыв.", "Sign in first to leave a review."), locale),
+      writeWait: localize(L("Bir soniya kuting…", "Секунду…", "One moment…"), locale),
       claimKicker: localize(L("Claim flow", "Заявка", "Claim"), locale),
       claimTitle: localize(L("Bu sizning biznesingizmi?", "Это ваш бизнес?", "Is this your business?"), locale),
       claimBody: localize(

@@ -2,6 +2,7 @@
 
 import { useAuth } from "@clerk/nextjs";
 import type { Locale } from "@manzil/shared";
+import { getUiCopy } from "@manzil/shared";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 import { API_BASE_URL } from "../lib/api-base-url";
@@ -88,6 +89,7 @@ export function ReviewForm({ businessSlug, locale }: { businessSlug: string; loc
   // `isSignedIn` is false for everyone, so a signed-in user who submits during
   // that window would be bounced to sign-in for no reason.
   const { getToken, isSignedIn, isLoaded } = useAuth();
+  const copy = getUiCopy(locale);
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -117,14 +119,17 @@ export function ReviewForm({ businessSlug, locale }: { businessSlug: string; loc
       // Genuinely unknown yet — say so rather than redirecting someone who is
       // in fact signed in.
       setError(true);
-      setMessage("Bir soniya kuting…");
+      setMessage(copy.business.writeWait);
       return;
     }
 
     if (!isSignedIn) {
       setError(true);
-      setMessage("Sharh yozish uchun avval tizimga kiring.");
-      window.location.href = `/${locale}/sign-in`;
+      setMessage(copy.business.writeSignIn);
+      // Carry the current page so sign-in returns here rather than dumping the
+      // user on the homepage with their half-written review lost.
+      const back = encodeURIComponent(`/${locale}/businesses/${businessSlug}`);
+      window.location.href = `/${locale}/sign-in?redirect_url=${back}`;
       return;
     }
 

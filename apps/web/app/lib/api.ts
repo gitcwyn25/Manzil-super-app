@@ -27,7 +27,37 @@ const useMockData = process.env.NEXT_PUBLIC_USE_MOCK !== "false";
  * gradient fallback is the correct rendering either way, so a media outage
  * should not take the businesses list down with it.
  */
-async function fetchBusinessCovers(slugs: string[]): Promise<Record<string, string>> {
+/**
+ * Approved photos for a business profile gallery.
+ *
+ * Public and approved-only — the owner-facing endpoint returns pending photos
+ * too, which must never reach a visitor. Returns an empty list on any failure
+ * so the profile falls back to its gradient tiles rather than erroring.
+ */
+export async function getBusinessPhotos(slug: string): Promise<string[]> {
+  if (useMockData) {
+    return [];
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/media/businesses/${slug}/photos`, {
+      next: { revalidate: 30 }
+    });
+
+    if (!response.ok) {
+      return [];
+    }
+
+    const payload = await response.json();
+    const photos = (payload?.data?.photos ?? []) as Array<{ publicUrl: string | null }>;
+    return photos.map((photo) => photo.publicUrl).filter((url): url is string => Boolean(url));
+  } catch {
+    return [];
+  }
+}
+
+async function fetchBusinessCovers(
+slugs: string[]): Promise<Record<string, string>> {
   const uniqueSlugs = [...new Set(slugs.filter(Boolean))];
 
   if (uniqueSlugs.length === 0) {

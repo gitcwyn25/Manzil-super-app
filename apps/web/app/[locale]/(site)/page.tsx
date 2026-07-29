@@ -37,17 +37,12 @@ export default async function LandingPage({
         <span className="page-reveal-panel second" />
       </div>
 
-      {/* ============ HERO — full-bleed scenic landscape, serif headline ============ */}
-      <section className="lp-hero">
-        <HeroBusinesses
-          businesses={heroBusinesses}
-          copy={{
-            regionLabel: copy.heroCarouselLabel,
-            goToLabel: copy.heroGoTo,
-            newLabel: copy.heroNew
-          }}
-          locale={locale}
-        />
+      {/* ============ HERO — the platform's own statement, on its own ground.
+           A business photograph behind this headline read as that business's
+           advertisement rather than Manzil's promise, and put marketing type
+           over a photo nobody chose for legibility. The businesses get their
+           own section below, where a photo means what it says. ============ */}
+      <section className="lp-hero lp-hero--plain">
         <div className="lp-hero-content">
           <h1 className="lp-title">
             <span className="lp-title-line">{copy.titleLine1}</span>
@@ -60,6 +55,22 @@ export default async function LandingPage({
           <Aperture live={liveCount > 0} label={copy.badge} />
         </div>
       </section>
+
+      {/* The showcase, standing on its own so a business photo is unmistakably
+          the business's, not a backdrop for someone else's headline. */}
+      {heroBusinesses.length > 0 ? (
+        <section className="lp-showcase">
+          <HeroBusinesses
+            businesses={heroBusinesses}
+            copy={{
+              regionLabel: copy.heroCarouselLabel,
+              goToLabel: copy.heroGoTo,
+              newLabel: copy.heroNew
+            }}
+            locale={locale}
+          />
+        </section>
+      ) : null}
 
       {/* Businesses come before the marketing copy. A directory whose homepage
           shows no businesses is asking visitors to take the directory on faith. */}

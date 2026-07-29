@@ -7793,3 +7793,68 @@ html[data-shell="workspace"] [class*="reveal"] {
     opacity: 0.6;
   }
 }
+
+/* ---- Hero without a photographic backdrop ----
+   The business carousel used to sit behind this headline. It made marketing
+   type sit on a photograph chosen for a business listing, not for legibility,
+   and it read as that business advertising rather than Manzil speaking. The
+   headline now stands on the brand's own ground and the businesses get
+   .lp-showcase below. */
+.lp-hero--plain {
+  min-height: auto;
+  padding: clamp(120px, 16vw, 190px) 20px clamp(64px, 9vw, 110px);
+  background:
+    radial-gradient(120% 90% at 50% -20%, rgb(0 112 107 / 0.10), transparent 60%),
+    var(--panel);
+  color: var(--text);
+}
+
+.lp-hero--plain .lp-title {
+  color: var(--text);
+}
+
+.lp-hero--plain .lp-sub {
+  color: var(--muted);
+}
+
+/* ---- Business showcase: the carousel, given its own ground ---- */
+.lp-showcase {
+  position: relative;
+  height: clamp(320px, 46vw, 520px);
+  overflow: hidden;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+/* The carousel positions itself absolutely against its container, which was
+   .lp-hero before. .lp-showcase is the positioned ancestor now. */
+.lp-showcase .hb-root {
+  z-index: 0;
+}
+
+/* No headline sits over these slides any more, so the heavy legibility scrim
+   is no longer earning its place — lighten it so the photograph reads. */
+.lp-showcase .hb-slide::after {
+  background: linear-gradient(
+    180deg,
+    rgb(10 26 30 / 0.10) 0%,
+    rgb(10 26 30 / 0.05) 45%,
+    rgb(10 26 30 / 0.62) 100%
+  );
+}
+
+.lp-showcase .hb-slide__name {
+  font-size: clamp(1.3rem, 2.8vw, 2rem);
+}
+
+/* Uploaded profile photos share the gradient tiles' geometry.
+   The grid uses fixed 180px rows, so an <img> without object-fit stretches to
+   the cell and distorts whatever the owner uploaded. */
+img.profile-main-photo,
+img.profile-side-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  background: var(--surface-low);
+}

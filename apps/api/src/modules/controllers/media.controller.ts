@@ -240,4 +240,36 @@ export class MediaController {
 
     return { data: { covers } };
   }
+
+  /**
+   * Public gallery for a business profile page.
+   *
+   * Distinct from `GET photos`, which is owner-only and returns pending and
+   * rejected photos too so an owner can see what they uploaded. This returns
+   * approved photos only: a pending photo has not been vetted, and showing one
+   * publicly would make the moderation status meaningless.
+   *
+   * Cover first, then newest, so the gallery's lead image matches the one the
+   * cards and carousel already show for this business.
+   */
+  @Get("businesses/:slug/photos")
+  async getPublicBusinessPhotos(@Param("slug") slug: string) {
+    const business = await this.prisma.business.findFirst({
+      where: { OR: [{ id: slug }, { slug }], mergedIntoId: null },
+      select: { id: true }
+    });
+
+    if (!business) {
+      throw new NotFoundException("Business not found");
+    }
+
+    const photos = await this.prisma.photo.findMany({
+      where: { businessId: business.id, moderationStatus: "approved", publicUrl: { not: null } },
+      orderBy: [{ isCover: "desc" }, { createdAt: "desc" }],
+      take: 12,
+      select: { id: true, publicUrl: true, isCover: true }
+    });
+
+    return { data: { photos } };
+  }
 }
