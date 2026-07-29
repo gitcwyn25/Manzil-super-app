@@ -34,6 +34,18 @@ export function Footer({ locale }: { locale: Locale }) {
           <a href={`/${locale}#download`}>{landing.ios}</a>
           <a href={`/${locale}#download`}>{landing.android}</a>
         </nav>
+
+        {/* Owners here reach us on Telegram, not email — the bot is listed as a
+            peer of the phone numbers rather than tucked under "apps". */}
+        <nav aria-label={copy.footer.contact} className="lp-footer-col">
+          <h4>{copy.footer.contact}</h4>
+          <a href="tel:+998885861124">+998 88 586 11 24</a>
+          <a href="tel:+998914971207">+998 91 497 12 07</a>
+          <a href="https://t.me/manzilbiz_bot" rel="noopener noreferrer" target="_blank">
+            @manzilbiz_bot
+          </a>
+          <a href="mailto:tursunovsunnatilla223@gmail.com">tursunovsunnatilla223@gmail.com</a>
+        </nav>
       </div>
 
       <div className="lp-footer-base">

@@ -107,7 +107,9 @@ const copy = {
       status: "API holati",
       apps: "Mobil ilovalar",
       rights: "Barcha huquqlar himoyalangan.",
-      otherCities: "Boshqa shaharlar"
+      otherCities: "Boshqa shaharlar",
+      contact: "Bog'lanish",
+      telegram: "Telegram bot"
     },
     dashboard: {
       title: "Biznes kabineti",
@@ -207,7 +209,9 @@ const copy = {
       status: "Статус API",
       apps: "Мобильные приложения",
       rights: "Все права защищены.",
-      otherCities: "Другие города"
+      otherCities: "Другие города",
+      contact: "Связаться",
+      telegram: "Telegram-бот"
     },
     dashboard: {
       title: "Бизнес-кабинет",
@@ -307,7 +311,9 @@ const copy = {
       status: "API status",
       apps: "Mobile apps",
       rights: "All rights reserved.",
-      otherCities: "Other cities"
+      otherCities: "Other cities",
+      contact: "Contact",
+      telegram: "Telegram bot"
     },
     dashboard: {
       title: "Business dashboard",

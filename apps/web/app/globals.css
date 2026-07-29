@@ -4525,11 +4525,25 @@ textarea:focus {
 
 .lp-footer-inner {
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1.5fr;
+  /* Brand column plus three nav columns (product, apps, contact). Widened from
+     three tracks when the contact column was added; a fourth child against a
+     three-track grid wraps to a second row and reads as a mistake. */
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
   gap: 40px;
   max-width: 1200px;
   margin: 0 auto;
   padding: clamp(52px, 7vw, 80px) 20px 44px;
+}
+
+@media (max-width: 880px) {
+  .lp-footer-inner {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px 24px;
+  }
+
+  .lp-footer-brand {
+    grid-column: 1 / -1;
+  }
 }
 
 .lp-footer-brand {
@@ -4568,8 +4582,12 @@ textarea:focus {
 }
 
 .lp-footer-col a {
+  max-width: 100%;
   color: rgb(238 244 243 / 0.7);
   font-size: 14.5px;
+  /* The contact email is long enough to overrun a 1fr track at every
+     breakpoint; break it rather than letting it push the grid wider. */
+  overflow-wrap: anywhere;
   transition: color var(--speed-fast) ease;
 }
 
