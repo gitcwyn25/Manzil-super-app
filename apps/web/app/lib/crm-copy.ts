@@ -133,6 +133,17 @@ const copy = {
       checkoutFailedBody: "Hech qanday summa yechilmadi. Qaytadan urinib ko'ring yoki boshqa tarifni tanlang.",
       retry: "Qaytadan urinish"
     },
+    photos: {
+      title: "Biznesingiz rasmlari",
+      subtitle: "O'zingiz yuklagan rasmlar darhol ko'rinadi va asosiy rasm sifatida tanlanishi mumkin.",
+      uploadLabel: "Rasm yuklash",
+      makeCover: "Asosiy rasm qilish",
+      isCoverLabel: "Asosiy rasm",
+      pendingLabel: "Ko'rib chiqilmoqda",
+      empty: "Hozircha rasm yo'q.",
+      skip: "Hozircha o'tkazib yuborish",
+      continueCta: "Boshqaruv paneliga o'tish"
+    },
     analytics: {
       title: "Tahlil",
       subtitle: "Mijozlar sizni qanday topayotgani va nima qilayotgani.",
@@ -378,6 +389,17 @@ const copy = {
       checkoutFailedBody: "Списания не произошло. Попробуйте ещё раз или выберите другой тариф.",
       retry: "Повторить"
     },
+    photos: {
+      title: "Фотографии бизнеса",
+      subtitle: "Загруженные вами фото видны сразу и могут быть выбраны как обложка.",
+      uploadLabel: "Загрузить фото",
+      makeCover: "Сделать обложкой",
+      isCoverLabel: "Обложка",
+      pendingLabel: "На проверке",
+      empty: "Фотографий пока нет.",
+      skip: "Пропустить пока что",
+      continueCta: "Перейти в панель управления"
+    },
     analytics: {
       title: "Аналитика",
       subtitle: "Как клиенты находят вас и что делают дальше.",
@@ -622,6 +644,17 @@ const copy = {
       checkoutFailedTitle: "Checkout didn't start",
       checkoutFailedBody: "Nothing was charged. Try again, or choose a different plan.",
       retry: "Try again"
+    },
+    photos: {
+      title: "Your business photos",
+      subtitle: "Photos you upload appear immediately and can be chosen as the cover.",
+      uploadLabel: "Upload a photo",
+      makeCover: "Make cover",
+      isCoverLabel: "Cover photo",
+      pendingLabel: "Under review",
+      empty: "No photos yet.",
+      skip: "Skip for now",
+      continueCta: "Go to dashboard"
     },
     analytics: {
       title: "Analytics",

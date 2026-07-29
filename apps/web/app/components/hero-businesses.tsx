@@ -114,6 +114,14 @@ export function HeroBusinesses({
           key={business.slug}
           tabIndex={i === index ? undefined : -1}
         >
+          {business.coverPhotoUrl ? (
+            <img
+              alt=""
+              className="hb-slide__cover-img"
+              loading="lazy"
+              src={business.coverPhotoUrl}
+            />
+          ) : null}
           <span className="hb-slide__meta">
             <span className="hb-slide__name">{business.name}</span>
             <span className="hb-slide__sub">

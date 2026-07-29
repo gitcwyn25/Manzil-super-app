@@ -7,7 +7,12 @@ import { API_BASE_URL } from "../lib/api-base-url";
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/avif"];
 const MAX_BYTES = 8 * 1024 * 1024;
 
-export type UploadedPhoto = { photoId: string; publicUrl: string | null };
+export type UploadedPhoto = {
+  photoId: string;
+  publicUrl: string | null;
+  moderationStatus: "pending" | "approved";
+  isCover: boolean;
+};
 
 type PresignResponse = {
   data: {
@@ -15,6 +20,8 @@ type PresignResponse = {
     uploadUrl: string;
     requiredHeaders: Record<string, string>;
     publicUrl: string | null;
+    moderationStatus: "pending" | "approved";
+    isCover: boolean;
   };
 };
 
@@ -102,7 +109,12 @@ export function PhotoUpload({
         return;
       }
 
-      const photo = { photoId: data.photoId, publicUrl: data.publicUrl };
+      const photo: UploadedPhoto = {
+        photoId: data.photoId,
+        publicUrl: data.publicUrl,
+        moderationStatus: data.moderationStatus,
+        isCover: data.isCover
+      };
       setUploaded((current) => [...current, photo]);
       onUploaded?.(photo);
     } catch {

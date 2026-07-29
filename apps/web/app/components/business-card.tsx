@@ -20,6 +20,14 @@ export function BusinessCard({
     <article className={compact ? "business-card compact" : "business-card"}>
       <a href={`/${locale}/businesses/${business.slug}`} aria-label={`${business.name} profilini ochish`}>
         <div className={`business-photo photo-block photo-${business.photo}`}>
+          {business.coverPhotoUrl ? (
+            <img
+              alt=""
+              className="business-photo__cover"
+              loading="lazy"
+              src={business.coverPhotoUrl}
+            />
+          ) : null}
           <span className="save-action-wrap">
             <SaveBusinessButton businessSlug={business.slug} locale={locale} />
           </span>

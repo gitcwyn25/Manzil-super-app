@@ -66,7 +66,11 @@ function Card({ business, locale, text }: { business: HomeCard; locale: Locale; 
   return (
     <a className="home-card" href={`/${locale}/businesses/${business.slug}`}>
       <span className="home-card__photo" aria-hidden="true">
-        <span className="home-card__initial">{business.name.charAt(0)}</span>
+        {business.coverPhotoUrl ? (
+          <img alt="" className="home-card__cover-img" loading="lazy" src={business.coverPhotoUrl} />
+        ) : (
+          <span className="home-card__initial">{business.name.charAt(0)}</span>
+        )}
       </span>
       <span className="home-card__text">
         <span className="home-card__name">{business.name}</span>

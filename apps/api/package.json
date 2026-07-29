@@ -13,6 +13,7 @@
     "sync:stripe-plans": "tsx scripts/sync-stripe-plans.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.115.0",
     "@clerk/backend": "^3.8.4",
     "@manzil/shared": "file:../../packages/shared",
     "@nestjs/common": "latest",

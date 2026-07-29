@@ -1,7 +1,8 @@
 import type { Locale } from "@manzil/shared";
+import { BusinessPhotoManager } from "../../../../components/business-photo-manager";
 import { getMyBusinesses } from "../../../../lib/api";
 import { updateBusinessAction } from "../../../../lib/crm-actions";
-import { getSubscription } from "../../../../lib/crm-api";
+import { getBusinessPhotos, getSubscription } from "../../../../lib/crm-api";
 import { getBusinessAcceptances, getBusinessContract } from "../../../../lib/legal-api";
 import { getCrmCopy } from "../../../../lib/crm-copy";
 
@@ -25,9 +26,10 @@ export default async function SettingsPage({
 
   // Both return null when absent (no contract generated, or the endpoint
   // failed) — the section renders its own empty state rather than erroring.
-  const [contract, acceptances] = await Promise.all([
+  const [contract, acceptances, photosData] = await Promise.all([
     getBusinessContract(business.slug),
-    getBusinessAcceptances(business.slug)
+    getBusinessAcceptances(business.slug),
+    getBusinessPhotos(business.slug)
   ]);
   const dateFormat = new Intl.DateTimeFormat(locale === "en" ? "en-GB" : locale, { dateStyle: "medium" });
 
@@ -123,6 +125,23 @@ export default async function SettingsPage({
             <button className="bz-btn-primary" type="submit">{copy.settings.save}</button>
           </div>
         </form>
+      </section>
+
+      <section className="crm-panel">
+        <h2>{copy.photos.title}</h2>
+        <p className="crm-hint">{copy.photos.subtitle}</p>
+        <BusinessPhotoManager
+          businessSlug={business.slug}
+          copy={copy.photos}
+          initialPhotos={
+            photosData?.photos.map((photo) => ({
+              id: photo.id,
+              publicUrl: photo.publicUrl,
+              moderationStatus: photo.moderationStatus,
+              isCover: photo.isCover
+            })) ?? []
+          }
+        />
       </section>
 
       <section className="crm-panel">

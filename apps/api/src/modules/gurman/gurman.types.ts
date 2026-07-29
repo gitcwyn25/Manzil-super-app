@@ -58,6 +58,19 @@ export type GurmanChatResult = {
   suggestions: GroundedSuggestion[];
 };
 
+/**
+ * The `POST /gurman/ask` response shape. `available` is the honest signal
+ * the web layer renders on: `false` means Gurman has nothing real to say
+ * right now (no API key configured, or the model/upstream failed) — `text`
+ * is empty and `businesses` is always `[]` in that case. It is never used as
+ * a place to smuggle a canned fallback answer.
+ */
+export type GurmanAskResult = {
+  text: string;
+  businesses: GroundedSuggestion[];
+  available: boolean;
+};
+
 export type GurmanPackageResult = {
   title: string;
   reply: string;

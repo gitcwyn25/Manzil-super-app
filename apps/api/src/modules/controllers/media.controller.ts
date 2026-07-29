@@ -1,13 +1,27 @@
-import { BadRequestException, Body, Controller, Post, Req, UseGuards } from "@nestjs/common";
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  ForbiddenException,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+  Query,
+  Req,
+  UseGuards
+} from "@nestjs/common";
 import { randomUUID } from "node:crypto";
 import type { ManzilRequest } from "../auth/auth.types";
 import { ManzilAuthGuard } from "../auth/manzil-auth.guard";
 import { RequireAuth } from "../auth/require-auth.decorator";
+import { isBusinessOwner } from "../media/business-ownership";
+import { getBusinessCoversBySlug } from "../media/business-cover";
 import { R2PresignService } from "../media/r2-presign.service";
 import { PresignUploadDto } from "../media/presign-upload.dto";
 import { extensionForType, type AllowedImageType } from "../media/upload-policy";
 import { PrismaService } from "../prisma.service";
-import { ThrottleUpload } from "../security/throttle.config";
+import { ThrottleUpload, ThrottleWrite } from "../security/throttle.config";
 
 @Controller("media")
 export class MediaController {
@@ -22,6 +36,7 @@ export class MediaController {
   @RequireAuth()
   async createPresignedUpload(@Body() body: PresignUploadDto, @Req() request: ManzilRequest) {
     const { ownerType, ownerId, contentType, contentLength } = body;
+    const actor = request.manzilActor!;
 
     // Type and size are already validated by PresignUploadDto; the extension is
     // derived from the accepted MIME type so it can never disagree with it.
@@ -31,15 +46,21 @@ export class MediaController {
     let businessId: string | undefined;
     let reviewId: string | undefined;
 
+    // Server-side claim only — never a client-supplied flag. Resolved from the
+    // same row the existence check already reads, so this is the one place a
+    // Photo is created and the one place that decides its trust level.
+    let isOwnerUpload = false;
+
     if (ownerType === "business") {
       const business = await this.prisma.business.findFirst({
         where: { OR: [{ id: ownerId }, { slug: ownerId }] },
-        select: { id: true }
+        select: { id: true, status: true, claimedByUserId: true, createdByUserId: true }
       });
       if (!business) {
         throw new BadRequestException("Target business not found");
       }
       businessId = business.id;
+      isOwnerUpload = isBusinessOwner(business, actor.userId);
     } else {
       const review = await this.prisma.review.findUnique({
         where: { id: ownerId },
@@ -58,14 +79,40 @@ export class MediaController {
       contentLength
     });
 
-    const photo = await this.prisma.photo.create({
-      data: {
-        storageKey,
-        publicUrl,
-        moderationStatus: "pending",
-        businessId,
-        reviewId
+    // Owner photos of their own (claimed, or still-pending-claim self
+    // registered) business auto-approve — there is no moderation queue yet,
+    // and a stranger uploading to someone else's business is a different risk
+    // from an owner photographing their own. Review photos always stay
+    // pending regardless of who uploaded them.
+    const moderationStatus: "pending" | "approved" =
+      businessId && isOwnerUpload ? "approved" : "pending";
+
+    // The cover check and the create happen together: there is no partial
+    // unique index on (businessId, isCover) — Postgres would treat every
+    // `false` as distinct — so "first approved upload becomes cover" is an
+    // application-level invariant, and this transaction is what keeps the
+    // read-then-write from racing a concurrent upload to the same business.
+    const photo = await this.prisma.$transaction(async (tx) => {
+      let isCover = false;
+
+      if (businessId && moderationStatus === "approved") {
+        const existingCover = await tx.photo.findFirst({
+          where: { businessId, isCover: true },
+          select: { id: true }
+        });
+        isCover = !existingCover;
       }
+
+      return tx.photo.create({
+        data: {
+          storageKey,
+          publicUrl,
+          moderationStatus,
+          businessId,
+          reviewId,
+          isCover
+        }
+      });
     });
 
     return {
@@ -76,8 +123,120 @@ export class MediaController {
         requiredHeaders,
         storageKey,
         publicUrl,
-        moderationStatus: photo.moderationStatus
+        moderationStatus: photo.moderationStatus,
+        isCover: photo.isCover
       }
     };
+  }
+
+  /**
+   * Sets a photo as its business's cover, clearing whichever photo held that
+   * spot before — in one transaction, since that pair is the only thing
+   * standing in for a unique index here (see the schema comment on
+   * `Photo.isCover`).
+   */
+  @Post("photos/:id/cover")
+  @ThrottleWrite()
+  @UseGuards(ManzilAuthGuard)
+  @RequireAuth()
+  async setCoverPhoto(@Param("id") id: string, @Req() request: ManzilRequest) {
+    const actor = request.manzilActor!;
+
+    const photo = await this.prisma.photo.findUnique({
+      where: { id },
+      select: { id: true, businessId: true, moderationStatus: true }
+    });
+
+    if (!photo || !photo.businessId) {
+      throw new NotFoundException("Photo not found");
+    }
+
+    const business = await this.prisma.business.findUnique({
+      where: { id: photo.businessId },
+      select: { claimedByUserId: true, createdByUserId: true, status: true }
+    });
+
+    if (!business || !isBusinessOwner(business, actor.userId)) {
+      throw new ForbiddenException("Only the business owner can set the cover photo");
+    }
+
+    // A pending or rejected photo isn't served anywhere yet, so letting it
+    // become "the cover" would just silently blank the business's photo
+    // until it clears review.
+    if (photo.moderationStatus !== "approved") {
+      throw new BadRequestException("Only an approved photo can be set as the cover");
+    }
+
+    const businessId = photo.businessId;
+
+    await this.prisma.$transaction([
+      this.prisma.photo.updateMany({
+        where: { businessId, isCover: true, id: { not: id } },
+        data: { isCover: false }
+      }),
+      this.prisma.photo.update({
+        where: { id },
+        data: { isCover: true }
+      })
+    ]);
+
+    return { data: { photoId: id, isCover: true } };
+  }
+
+  /**
+   * Lists a business's own photos for its owner — the register/photos step
+   * and dashboard/settings' photo manager both read this to render existing
+   * thumbnails and offer "make cover" on the approved ones.
+   */
+  @Get("photos")
+  @UseGuards(ManzilAuthGuard)
+  @RequireAuth()
+  async listBusinessPhotos(
+    @Query("business") businessIdOrSlug: string | undefined,
+    @Req() request: ManzilRequest
+  ) {
+    const actor = request.manzilActor!;
+
+    if (!businessIdOrSlug) {
+      throw new BadRequestException("business is required");
+    }
+
+    const business = await this.prisma.business.findFirst({
+      where: { OR: [{ id: businessIdOrSlug }, { slug: businessIdOrSlug }] },
+      select: { id: true, status: true, claimedByUserId: true, createdByUserId: true }
+    });
+
+    if (!business) {
+      throw new NotFoundException("Business not found");
+    }
+
+    if (!isBusinessOwner(business, actor.userId)) {
+      throw new ForbiddenException("Only the business owner can view its photos");
+    }
+
+    const photos = await this.prisma.photo.findMany({
+      where: { businessId: business.id },
+      orderBy: [{ isCover: "desc" }, { createdAt: "desc" }],
+      select: { id: true, publicUrl: true, moderationStatus: true, isCover: true, createdAt: true }
+    });
+
+    return { data: { photos } };
+  }
+
+  /**
+   * Public batch lookup for cards and carousels: given a set of business
+   * slugs, returns the approved cover URL for each one that has one. Absent
+   * entries mean "no cover yet" — callers fall back to their gradient.
+   */
+  @Get("business-covers")
+  async getBusinessCovers(@Query("slugs") slugsParam?: string) {
+    const slugs = (slugsParam ?? "")
+      .split(",")
+      .map((slug) => slug.trim())
+      .filter(Boolean);
+
+    const covers = await getBusinessCoversBySlug(this.prisma, slugs);
+
+    return { data: { covers } };
   }
 }

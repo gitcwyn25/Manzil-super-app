@@ -79,7 +79,9 @@ export async function choosePlanAction(formData: FormData) {
 
   if (plan === "free") {
     await crmSend(`/crm/businesses/${slug}/subscription`, "POST", { plan });
-    redirect(`/${locale}/dashboard`);
+    // Photos are an optional step after the business exists and a plan is
+    // chosen, before the dashboard — never in front of the monetisation step.
+    redirect(`/${locale}/business/register/photos?business=${slug}`);
     return;
   }
 

@@ -48,6 +48,10 @@ import { WaitlistController } from "./waitlist/waitlist.controller";
 import { WaitlistRepository } from "./waitlist/waitlist.repository";
 import { BillingController } from "./billing/billing.controller";
 import { StripeService } from "./billing/stripe.service";
+import { GurmanController } from "./gurman/gurman.controller";
+import { GurmanService } from "./gurman/gurman.service";
+import { CatalogRetriever, GURMAN_RETRIEVER } from "./gurman/gurman.retriever";
+import { AnthropicLlm, GURMAN_LLM } from "./gurman/gurman.llm";
 import { SecurityModule } from "./security/security.module";
 import { RedisThrottlerStorage } from "./security/throttler-redis.storage";
 import { ManzilThrottlerGuard } from "./security/manzil-throttler.guard";
@@ -87,7 +91,8 @@ import { DEFAULT_THROTTLE } from "./security/throttle.config";
     LegalController,
     HomeController,
     WaitlistController,
-    BillingController
+    BillingController,
+    GurmanController
   ],
   providers: [
     // Reports unhandled exceptions to Sentry, then delegates to Nest's default
@@ -121,7 +126,12 @@ import { DEFAULT_THROTTLE } from "./security/throttle.config";
     ReviewTrustRepository,
     HomeRepository,
     WaitlistRepository,
-    StripeService
+    StripeService,
+    // Interface + token pair (not a concrete class) so a future VectorRetriever
+    // can replace CatalogRetriever without touching GurmanService.
+    { provide: GURMAN_RETRIEVER, useClass: CatalogRetriever },
+    { provide: GURMAN_LLM, useClass: AnthropicLlm },
+    GurmanService
   ]
 })
 export class AppModule {}

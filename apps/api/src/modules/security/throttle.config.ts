@@ -69,4 +69,22 @@ export const ThrottleUpload = () =>
 export const ThrottleWebhook = () =>
   Throttle({ default: { limit: 100, ttl: minutes(1), blockDuration: seconds(30) } });
 
+/**
+ * Gurman AI (`POST /gurman/ask`). Tight because every request bills a paid
+ * LLM call, and the route is public — `/concierge` has no auth wall, so this
+ * is the primary cost ceiling rather than a secondary control.
+ *
+ * `ManzilThrottlerGuard` keys on client IP: it is registered globally and
+ * runs *before* the controller-scoped `ManzilAuthGuard`, so no verified actor
+ * exists at that point. Keying on an unverified bearer token would be worse
+ * than useless — an attacker could rotate tokens for a fresh bucket per
+ * request. One consequence worth carrying forward: Uzbek mobile carriers NAT
+ * heavily, so one IP can represent many real users, and the effective
+ * per-person limit is stricter than 10 by an unknown factor. Shipping at
+ * 10/15min anyway — it is the conservative direction, and there is no usage
+ * data yet to justify a looser number.
+ */
+export const ThrottleGurman = () =>
+  Throttle({ default: { limit: 10, ttl: minutes(15), blockDuration: minutes(30) } });
+
 export { seconds, minutes, hours };

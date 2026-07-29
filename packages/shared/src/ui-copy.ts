@@ -115,9 +115,9 @@ export function getUiCopy(locale: Locale) {
       title: localize(L("Tabiiy tilda so'rang", "Спросите естественно", "Ask naturally"), locale),
       subtitle: localize(
         L(
-          "\"5 soat ishlaydigan sokin kafe\" yoki \"4 kishi uchun 300,000 so'm\" — mock AI hozir javob beradi.",
-          "\"Тихое кафе на 5 часов\" или \"300 000 сум на 4 человека\" — mock AI ответит сейчас.",
-          "\"Quiet café for 5 hours\" or \"300,000 UZS for 4 people\" — mock AI responds now."
+          "\"5 soat ishlaydigan sokin kafe\" yoki \"4 kishi uchun 300,000 so'm\" deb so'rang — Gurman AI Manzil katalogidan mos joy taklif qiladi.",
+          "Спросите, например, «тихое кафе на 5 часов» или «300 000 сум на 4 человека» — Gurman AI подберёт места из каталога Manzil.",
+          "Ask things like \"quiet café for 5 hours\" or \"300,000 UZS for 4 people\" — Gurman AI will suggest real places from Manzil's catalog."
         ),
         locale
       ),
@@ -133,7 +133,16 @@ export function getUiCopy(locale: Locale) {
         L("Masalan: ish uchun sokin kafe", "Например: тихое кафе для работы", "e.g. quiet café for work"),
         locale
       ),
-      send: localize(L("Yuborish", "Отправить", "Send"), locale)
+      send: localize(L("Yuborish", "Отправить", "Send"), locale),
+      thinking: localize(L("O'ylayapman...", "Думаю...", "Thinking..."), locale),
+      unavailable: localize(
+        L(
+          "Gurman AI hozircha javob bera olmayapti. Birozdan so'ng qayta urinib ko'ring.",
+          "Gurman AI сейчас не может ответить. Попробуйте ещё раз чуть позже.",
+          "Gurman AI can't answer right now. Please try again in a little while."
+        ),
+        locale
+      )
     },
     pricing: {
       kicker: localize(L("Biznes egalari", "Для бизнеса", "Business owners"), locale),

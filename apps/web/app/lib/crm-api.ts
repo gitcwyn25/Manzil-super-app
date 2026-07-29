@@ -149,3 +149,16 @@ export type BusinessAnalytics = {
 export function getBusinessAnalytics(slug: string, days = 30) {
   return crmGet<BusinessAnalytics>(`/analytics/businesses/${slug}?days=${days}`);
 }
+
+export type CrmPhoto = {
+  id: string;
+  publicUrl: string | null;
+  moderationStatus: "pending" | "approved" | "rejected";
+  isCover: boolean;
+  createdAt: string;
+};
+
+/** Owner-only: the business's own photos, for the register/photos step and the settings photo manager. */
+export function getBusinessPhotos(slug: string) {
+  return crmGet<{ photos: CrmPhoto[] }>(`/media/photos?business=${slug}`);
+}

@@ -20,6 +20,44 @@ import { API_BASE_URL } from "./api-base-url";
 
 const useMockData = process.env.NEXT_PUBLIC_USE_MOCK !== "false";
 
+/**
+ * Batched cover-photo lookup, keyed by slug — every list/detail response
+ * already has a slug on hand, so nothing else needs to change to join this
+ * in. A failed or empty lookup resolves to `{}` rather than throwing: the
+ * gradient fallback is the correct rendering either way, so a media outage
+ * should not take the businesses list down with it.
+ */
+async function fetchBusinessCovers(slugs: string[]): Promise<Record<string, string>> {
+  const uniqueSlugs = [...new Set(slugs.filter(Boolean))];
+
+  if (uniqueSlugs.length === 0) {
+    return {};
+  }
+
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/media/business-covers?slugs=${encodeURIComponent(uniqueSlugs.join(","))}`,
+      { next: { revalidate: 30 } }
+    );
+
+    if (!response.ok) {
+      return {};
+    }
+
+    const payload = await response.json();
+    return (payload?.data?.covers as Record<string, string> | undefined) ?? {};
+  } catch {
+    return {};
+  }
+}
+
+function withCovers<T extends { slug: string; coverPhotoUrl?: string | null }>(
+  items: T[],
+  covers: Record<string, string>
+): T[] {
+  return items.map((item) => (covers[item.slug] ? { ...item, coverPhotoUrl: covers[item.slug] } : item));
+}
+
 export async function getCategories(): Promise<Category[]> {
   if (useMockData) {
     return mockApi.getCategories();
@@ -45,7 +83,9 @@ export async function getBusinesses(): Promise<BusinessPlatform[]> {
     next: { revalidate: 30 }
   });
   const payload = await response.json();
-  return payload.data.businesses;
+  const businesses = payload.data.businesses as BusinessPlatform[];
+  const covers = await fetchBusinessCovers(businesses.map((business) => business.slug));
+  return withCovers(businesses, covers);
 }
 
 export async function searchBusinesses(query = "", category = "all"): Promise<{
@@ -66,7 +106,9 @@ export async function searchBusinesses(query = "", category = "all"): Promise<{
     next: { revalidate: 30 }
   });
   const payload = await response.json();
-  return payload.data;
+  const data = payload.data as { businesses: BusinessPlatform[]; categories: Category[] };
+  const covers = await fetchBusinessCovers(data.businesses.map((business) => business.slug));
+  return { ...data, businesses: withCovers(data.businesses, covers) };
 }
 
 export async function getBusiness(slug: string): Promise<{ business: BusinessPlatform; reviews: Review[] }> {
@@ -80,7 +122,15 @@ export async function getBusiness(slug: string): Promise<{ business: BusinessPla
     next: { revalidate: 30 }
   });
   const payload = await response.json();
-  return payload.data;
+  const data = payload.data as { business: BusinessPlatform; reviews: Review[] };
+
+  if (data.business) {
+    const covers = await fetchBusinessCovers([data.business.slug]);
+    const [business] = withCovers([data.business], covers);
+    data.business = business;
+  }
+
+  return data;
 }
 
 export type HomeCard = {
@@ -94,6 +144,8 @@ export type HomeCard = {
   claimedAt: string | null;
   featured: boolean;
   category: { slug: string; nameUz: string; nameRu: string; nameEn: string };
+  /** Approved cover photo URL, joined in client-side. Absent means no cover yet. */
+  coverPhotoUrl?: string | null;
 };
 
 export type HomeSections = {
@@ -138,7 +190,20 @@ export async function getHomeFeed(locale = "uz") {
     }
 
     const payload = await response.json();
-    return { ...mock, sections: payload.data as HomeSections };
+    const sections = payload.data as HomeSections;
+    const covers = await fetchBusinessCovers([
+      ...sections.featured.map((card) => card.slug),
+      ...sections.justJoined.map((card) => card.slug)
+    ]);
+
+    return {
+      ...mock,
+      sections: {
+        ...sections,
+        featured: withCovers(sections.featured, covers),
+        justJoined: withCovers(sections.justJoined, covers)
+      }
+    };
   } catch {
     return { ...mock, sections: null as HomeSections | null };
   }

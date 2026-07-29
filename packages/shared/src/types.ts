@@ -31,6 +31,8 @@ export type Business = {
   avgRating: number;
   reviewCount: number;
   photo: string;
+  /** Approved cover photo URL, when the business has uploaded one. Absent (not empty-string) means "no cover yet" — consumers keep their gradient fallback rather than rendering a broken image. */
+  coverPhotoUrl?: string | null;
   tags: string[];
   foundingBusiness?: boolean;
 };

@@ -307,6 +307,12 @@ model Photo {
   storageKey       String
   publicUrl        String?
   moderationStatus ModerationStatus @default(pending)
+  /// Whether this is the business's cover photo. No unique constraint on
+  /// (businessId, isCover) — Postgres treats every `false` as distinct under a
+  /// plain unique index, and a partial unique index isn't expressible in
+  /// Prisma schema language — so single-cover is enforced by the repository
+  /// inside a transaction: clear the current cover, then set the new one.
+  isCover          Boolean          @default(false)
   createdAt        DateTime         @default(now())
 
   business Business? @relation(fields: [businessId], references: [id], onDelete: Cascade)
@@ -316,6 +322,7 @@ model Photo {
   @@index([businessId])
   @@index([reviewId])
   @@index([moderationStatus])
+  @@index([businessId, isCover])
 }
 
 model Claim {

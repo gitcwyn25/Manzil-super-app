@@ -1,7 +1,7 @@
 import type { Locale } from "@manzil/shared";
 import { getUiCopy } from "@manzil/shared";
 import { ConciergeChat } from "../../../components/concierge-chat";
-import { getBusinesses, getConciergePrompts } from "../../../lib/api";
+import { getConciergePrompts } from "../../../lib/api";
 
 export default async function ConciergePage({
   params
@@ -10,7 +10,10 @@ export default async function ConciergePage({
 }) {
   const { locale } = await params;
   const copy = getUiCopy(locale);
-  const [businesses, prompts] = await Promise.all([getBusinesses(), getConciergePrompts()]);
+  // The business list used to be fetched here so the client could resolve a
+  // slug to a name. Gurman now returns grounded names with each suggestion,
+  // so shipping the whole catalog to the browser is no longer needed.
+  const prompts = await getConciergePrompts();
 
   return (
     <section className="section-block container concierge-page">
@@ -19,7 +22,7 @@ export default async function ConciergePage({
         <h1>{copy.concierge.title}</h1>
         <p>{copy.concierge.subtitle}</p>
       </div>
-      <ConciergeChat businesses={businesses} locale={locale} prompts={prompts} />
+      <ConciergeChat locale={locale} prompts={prompts} />
     </section>
   );
 }
