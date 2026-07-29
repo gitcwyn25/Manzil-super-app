@@ -4,6 +4,7 @@ import {
   Controller,
   ForbiddenException,
   Get,
+  Inject,
   NotFoundException,
   Param,
   Post,
@@ -17,7 +18,7 @@ import { ManzilAuthGuard } from "../auth/manzil-auth.guard";
 import { RequireAuth } from "../auth/require-auth.decorator";
 import { isBusinessOwner } from "../media/business-ownership";
 import { getBusinessCoversBySlug } from "../media/business-cover";
-import { R2PresignService } from "../media/r2-presign.service";
+import { MEDIA_STORAGE, type MediaStorage } from "../media/media-storage";
 import { PresignUploadDto } from "../media/presign-upload.dto";
 import { extensionForType, type AllowedImageType } from "../media/upload-policy";
 import { PrismaService } from "../prisma.service";
@@ -26,7 +27,7 @@ import { ThrottleUpload, ThrottleWrite } from "../security/throttle.config";
 @Controller("media")
 export class MediaController {
   constructor(
-    private readonly presign: R2PresignService,
+    @Inject(MEDIA_STORAGE) private readonly presign: MediaStorage,
     private readonly prisma: PrismaService
   ) {}
 
@@ -74,7 +75,7 @@ export class MediaController {
 
     // Never trust the client-supplied file name for the storage path.
     const storageKey = `${ownerType}/${businessId ?? reviewId}/${randomUUID()}.${extension}`;
-    const { uploadUrl, publicUrl, requiredHeaders } = this.presign.presignUpload(storageKey, {
+    const { uploadUrl, publicUrl, requiredHeaders } = await this.presign.presignUpload(storageKey, {
       contentType,
       contentLength
     });

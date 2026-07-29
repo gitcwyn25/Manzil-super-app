@@ -1,5 +1,6 @@
 import { Injectable, ServiceUnavailableException } from "@nestjs/common";
 import { createHash, createHmac } from "node:crypto";
+import type { MediaStorage, PresignedUpload, PresignUploadOptions } from "./media-storage";
 
 /**
  * Generates AWS SigV4 presigned PUT URLs for Cloudflare R2 (S3-compatible)
@@ -9,14 +10,14 @@ import { createHash, createHmac } from "node:crypto";
  * CLOUDFLARE_R2_SECRET_ACCESS_KEY, CLOUDFLARE_R2_BUCKET.
  */
 @Injectable()
-export class R2PresignService {
+export class R2PresignService implements MediaStorage {
   private readonly accountId = process.env.CLOUDFLARE_R2_ACCOUNT_ID;
   private readonly accessKeyId = process.env.CLOUDFLARE_R2_ACCESS_KEY_ID;
   private readonly secretAccessKey = process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY;
   private readonly bucket = process.env.CLOUDFLARE_R2_BUCKET;
   private readonly publicBaseUrl = process.env.CLOUDFLARE_R2_PUBLIC_URL; // optional CDN domain
 
-  isConfigured(): boolean {
+  get isConfigured(): boolean {
     return Boolean(this.accountId && this.accessKeyId && this.secretAccessKey && this.bucket);
   }
 
@@ -29,14 +30,15 @@ export class R2PresignService {
    * server-side MIME/size checks would be decorative. Signing these headers
    * makes R2 itself reject any upload whose type or length differs from what
    * was authorised.
+   *
+   * Async only to satisfy the shared `MediaStorage` interface (Supabase's
+   * equivalent call is genuinely async) — everything here is synchronous
+   * node:crypto.
    */
-  presignUpload(
-    storageKey: string,
-    options: { contentType: string; contentLength: number; expiresSeconds?: number }
-  ): { uploadUrl: string; publicUrl: string | null; requiredHeaders: Record<string, string> } {
-    if (!this.isConfigured()) {
+  async presignUpload(storageKey: string, options: PresignUploadOptions): Promise<PresignedUpload> {
+    if (!this.isConfigured) {
       throw new ServiceUnavailableException(
-        "Media storage is not configured. Set CLOUDFLARE_R2_* environment variables."
+        "Media storage is not configured. Set either CLOUDFLARE_R2_* or SUPABASE_* environment variables."
       );
     }
 

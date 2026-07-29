@@ -33,8 +33,10 @@ const USD_CENTS_BY_TIER: Record<"pro" | "max", number> = {
 };
 
 async function main() {
-  if (!process.env.STRIPE_SECRET_KEY) {
-    throw new Error("STRIPE_SECRET_KEY is not set — check the root .env before running this script.");
+  if (!process.env.STRIPE_RESTRICTED_KEY && !process.env.STRIPE_SECRET_KEY) {
+    throw new Error(
+      "No Stripe API key set — set STRIPE_RESTRICTED_KEY (preferred) or STRIPE_SECRET_KEY in the root .env before running this script."
+    );
   }
 
   const prisma = new PrismaService();

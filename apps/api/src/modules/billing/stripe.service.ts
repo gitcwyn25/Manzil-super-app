@@ -40,11 +40,17 @@ export class StripeService {
 
   private get stripe(): Stripe {
     if (!this.stripeClient) {
-      const secretKey = process.env.STRIPE_SECRET_KEY;
-      if (!secretKey) {
-        throw new Error("STRIPE_SECRET_KEY is not configured — Stripe billing is unavailable");
+      // A restricted key is preferred when present: it carries only the scopes
+      // billing actually needs, so a leaked key cannot issue refunds or read
+      // the whole account the way a full secret key can. The secret key stays
+      // as the fallback so nothing breaks where only it is configured.
+      const apiKey = process.env.STRIPE_RESTRICTED_KEY || process.env.STRIPE_SECRET_KEY;
+      if (!apiKey) {
+        throw new Error(
+          "No Stripe API key configured — set STRIPE_RESTRICTED_KEY (preferred) or STRIPE_SECRET_KEY"
+        );
       }
-      this.stripeClient = new Stripe(secretKey);
+      this.stripeClient = new Stripe(apiKey);
     }
     return this.stripeClient;
   }
