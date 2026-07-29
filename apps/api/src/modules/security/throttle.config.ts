@@ -87,4 +87,15 @@ export const ThrottleWebhook = () =>
 export const ThrottleGurman = () =>
   Throttle({ default: { limit: 10, ttl: minutes(15), blockDuration: minutes(30) } });
 
+/**
+ * Admin console credential login (`POST /console/auth/login`). The one
+ * unauthenticated, credential-guessing endpoint in the app — every other
+ * admin route requires an already-established identity. Far stricter than
+ * `ThrottleWrite`: 5 attempts per 15 minutes with a 1-hour block, comparable
+ * to `ThrottleOtpVerify`, because a weak limit here is a brute-forceable
+ * password oracle straight into the admin console.
+ */
+export const ThrottleAdminLogin = () =>
+  Throttle({ default: { limit: 5, ttl: minutes(15), blockDuration: hours(1) } });
+
 export { seconds, minutes, hours };

@@ -31,6 +31,7 @@ import { R2PresignService } from "./media/r2-presign.service";
 import { SupabaseStorageService } from "./media/supabase-storage.service";
 import { MEDIA_STORAGE_PROVIDER } from "./media/media-storage.provider";
 import { ConsoleController } from "./console/console.controller";
+import { ConsoleAuthController } from "./console/console-auth.controller";
 import { ConsoleRepository } from "./console/console.repository";
 import { ConsoleCurationRepository } from "./console/console-curation.repository";
 import { ConsoleNotificationsRepository } from "./console/console-notifications.repository";
@@ -90,6 +91,7 @@ import { DEFAULT_THROTTLE } from "./security/throttle.config";
     ReviewsController,
     SearchController,
     ConsoleController,
+    ConsoleAuthController,
     PlansController,
     AnalyticsController,
     LegalController,

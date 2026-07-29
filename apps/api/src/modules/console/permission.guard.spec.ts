@@ -2,6 +2,11 @@ import { ExecutionContext, ForbiddenException, UnauthorizedException } from "@ne
 import { Reflector } from "@nestjs/core";
 import { PermissionGuard } from "./permission.guard";
 import { REQUIRE_PERMISSION_KEY } from "./require-permission.decorator";
+import { ADMIN_SESSION_COOKIE_NAME, signAdminSession } from "./admin-session.util";
+
+// Fabricated placeholder, used only in-memory for this test run — not the
+// real ADMIN_SESSION_SECRET.
+const TEST_SECRET = "unit-test-only-session-secret-not-real";
 
 /**
  * Exercises the guard directly rather than through HTTP, mirroring how the
@@ -65,6 +70,75 @@ describe("PermissionGuard — @RequirePermission(\"notification.view\")", () => 
 
     await expect(guard.canActivate(makeContext(request))).resolves.toBe(true);
     expect(request.adminUser).toBeDefined();
+  });
+});
+
+describe("PermissionGuard — session cookie path", () => {
+  const originalSecret = process.env.ADMIN_SESSION_SECRET;
+
+  afterEach(() => {
+    if (originalSecret === undefined) {
+      delete process.env.ADMIN_SESSION_SECRET;
+    } else {
+      process.env.ADMIN_SESSION_SECRET = originalSecret;
+    }
+  });
+
+  beforeEach(() => {
+    process.env.ADMIN_SESSION_SECRET = TEST_SECRET;
+  });
+
+  it("resolves the admin from a valid session cookie without ever calling the Clerk actor resolver", async () => {
+    const { value } = signAdminSession("admin_1");
+    const reflector = { getAllAndOverride: jest.fn().mockReturnValue([]) } as unknown as Reflector;
+    const clerkAuth = { resolveActorFromRequest: jest.fn() };
+    const adminAuth = {
+      resolveAdmin: jest
+        .fn()
+        .mockResolvedValue({ id: "admin_1", email: "a@x.com", name: "Admin", permissions: new Set(), roles: [] })
+    };
+    const guard = new PermissionGuard(reflector, clerkAuth as never, adminAuth as never);
+    const request: Record<string, unknown> = { headers: { cookie: `${ADMIN_SESSION_COOKIE_NAME}=${value}` } };
+
+    await expect(guard.canActivate(makeContext(request))).resolves.toBe(true);
+    expect(adminAuth.resolveAdmin).toHaveBeenCalledWith({ sessionAdminId: "admin_1", actor: undefined });
+    expect(clerkAuth.resolveActorFromRequest).not.toHaveBeenCalled();
+    expect(request.adminUser).toBeDefined();
+  });
+
+  it("falls back to the Clerk actor when the session cookie signature is tampered", async () => {
+    const { value } = signAdminSession("admin_1");
+    const [payload] = value.split(".");
+    const tampered = `${payload}.${"0".repeat(64)}`;
+
+    const reflector = { getAllAndOverride: jest.fn().mockReturnValue([]) } as unknown as Reflector;
+    const clerkAuth = { resolveActorFromRequest: jest.fn().mockResolvedValue({ userId: "user_1" }) };
+    const adminAuth = {
+      resolveAdmin: jest
+        .fn()
+        .mockResolvedValue({ id: "admin_2", email: "b@x.com", name: "Admin B", permissions: new Set(), roles: [] })
+    };
+    const guard = new PermissionGuard(reflector, clerkAuth as never, adminAuth as never);
+    const request: Record<string, unknown> = { headers: { cookie: `${ADMIN_SESSION_COOKIE_NAME}=${tampered}` } };
+
+    await expect(guard.canActivate(makeContext(request))).resolves.toBe(true);
+    expect(clerkAuth.resolveActorFromRequest).toHaveBeenCalled();
+    expect(adminAuth.resolveAdmin).toHaveBeenCalledWith({ sessionAdminId: undefined, actor: { userId: "user_1" } });
+  });
+
+  it("401s when the session cookie is tampered and there is no Clerk actor either", async () => {
+    const { value } = signAdminSession("admin_1");
+    const [payload] = value.split(".");
+    const tampered = `${payload}.${"0".repeat(64)}`;
+
+    const reflector = { getAllAndOverride: jest.fn().mockReturnValue([]) } as unknown as Reflector;
+    const clerkAuth = { resolveActorFromRequest: jest.fn().mockResolvedValue(null) };
+    const adminAuth = { resolveAdmin: jest.fn() };
+    const guard = new PermissionGuard(reflector, clerkAuth as never, adminAuth as never);
+    const request: Record<string, unknown> = { headers: { cookie: `${ADMIN_SESSION_COOKIE_NAME}=${tampered}` } };
+
+    await expect(guard.canActivate(makeContext(request))).rejects.toBeInstanceOf(UnauthorizedException);
+    expect(adminAuth.resolveAdmin).not.toHaveBeenCalled();
   });
 });
 

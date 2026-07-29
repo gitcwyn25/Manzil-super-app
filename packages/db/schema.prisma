@@ -504,10 +504,20 @@ model Report {
 
 model AdminUser {
   id          String    @id @default(cuid())
-  clerkId     String    @unique
+  /// Clerk subject id. Optional because a credential-only admin (username +
+  /// password, see `username`/`passwordHash`) has no Clerk identity at all —
+  /// not every admin operator is provisioned through Clerk.
+  clerkId     String?   @unique
   userId      String?   @unique
   email       String    @unique
   name        String
+  /// Login handle for the credential-based admin console sign-in, separate
+  /// from Clerk. Optional: Clerk-only admins never set one.
+  username     String?   @unique
+  /// `scryptSalt:scryptHash`, both hex. Never the plaintext password — see
+  /// AdminAuthService/console auth for hashing and comparison. Optional:
+  /// Clerk-only admins never set one.
+  passwordHash String?
   isActive    Boolean   @default(true)
   lastLoginAt DateTime?
   createdAt   DateTime  @default(now())
