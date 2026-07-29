@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Geist', sans-serif;
+  overflow-x: hidden;
+  background: #fff;
+}
