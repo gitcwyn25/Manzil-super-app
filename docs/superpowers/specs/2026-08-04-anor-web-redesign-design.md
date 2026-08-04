@@ -91,8 +91,9 @@ No tracked all-caps eyebrows above sections; no gradient-clip headline text; no 
 
 ### Discover `/discover` — flagship, app-like
 
-- Sticky filter bar: category chips, district, **open-now toggle**, sort; URL-driven state.
-- Rich result cards: photo (arch-top), live open/closed pill (existing `live-status-pill` logic restyled Leaf), mono rating, price band, distance when geolocation granted.
+- Sticky filter bar: category chips, district, sort; URL-driven state.
+- Rich result cards: photo (arch-top), mono rating, price band, distance when geolocation granted.
+- **Open-now filter and live status pill are CUT from v1.** `LiveStatus` is hardcoded mock data in `packages/shared/src/platform-data.ts`; the API exposes no `liveStatus` field and `business.hours` is a free-form string, so the toggle would filter on nothing in production. `live-status-pill.tsx` is left untouched and unstyled by this redesign. Revisit once the API exposes structured hours.
 - Desktop layout reserves a right rail sized for a future map pane. v1 ships the rail as a district-navigator panel — no fake map, no new map dependency; a Mapbox pane can drop in later without relayout.
 - Skeleton loading states; designed empty state (no results).
 
@@ -130,9 +131,32 @@ Where copy is rewritten (hero, how-it-works, feature rows, pricing one-liners): 
 - Visual verification: Chrome DevTools screenshots at 390 / 768 / 1440 per page before a page is called done.
 - Lighthouse accessibility ≥ 95 on home, discover, and business detail.
 
+## 6a. Accepted cross-shell bleed
+
+The dashboard and admin console are out of scope for *deliberate redesign*, but three changes reach them unavoidably and are **accepted**:
+
+1. **Fonts.** Declared once app-wide in `app/layout.tsx:8-27`. Swapping Archivo/IBM Plex Sans for Unbounded/Golos Text re-fonts every shell.
+2. **Bootstrap reboot.** Imported from the root layout, it normalizes typography, box-sizing, margins and form controls on all routes.
+3. **Shared class families and components.** `crm-*`, `bz-btn-*`, `empty-state`, and `BusinessPhotoManager`/`PhotoUpload` are used by both in-scope funnel pages and out-of-scope dashboard pages (`dashboard/layout.tsx:30-45`, `dashboard/settings/page.tsx`). Their rules must be left byte-identical during funnel conversion, never restyled in place.
+
+Mitigation: the dashboard is added to the visual regression check (screenshots at 390/768/1440 for `/dashboard`, `/dashboard/settings`, `/dashboard/bookings`) so the reboot/type diff is reviewed rather than discovered. `globals.css` therefore **cannot be deleted** — the end state is a trimmed workspace-only stylesheet, plus the existing `app/components/charts/charts.css` (workspace-only, 33 hardcoded hex colors).
+
+## 6b. Additional required work surfaced by code audit
+
+- **PWA/brand colour drift.** Three uncoordinated sources must move to Anor together: `app/layout.tsx:51` viewport `themeColor` (`#00706B`), `app/manifest.ts:24` `theme_color` (`#0f5b3d`), and `public/icons/*.png` (drawn in the old green). Otherwise installed-app users get a green title bar against a red-on-white site.
+- **Offline page.** `app/offline/page.tsx` is inline-styled with a hardcoded `#52514e`, sits outside every route group, and is precached by the service worker. Update its colours inline — do **not** convert it to Bootstrap classes, since its CSS is not guaranteed cached.
+- **Service worker.** `public/sw.js` caches HTML navigations network-first and precaches `/offline`. Bump `VERSION` (line 21) at cutover and again after the final `globals.css` trim, or returning users get stale markup referencing retired classes.
+- **No-JS render gate.** `html.js .reveal:not(.is-shown)` (`globals.css:325`, paired with the inline script at `app/layout.tsx:69-71`) is what makes reveal content visible without JS. Re-implement this in the Sass layer *before* removing any reveal CSS — the spec requires full render without JS.
+- **Inline styles referencing retired tokens.** `review-form.tsx:261` and `claim-form.tsx:92` use `var(--error)` / `var(--primary)`, defined only in `globals.css:46,50`. Re-declare both in the Sass layer.
+- **`<html lang>` bug.** The root layout hard-codes `lang="uz"` for all locales; `app/[locale]/layout.tsx` does not correct it despite a comment claiming otherwise. Must be fixed to clear the Lighthouse ≥95 accessibility gate.
+- **Bootstrap JS.** Offcanvas, modal, carousel and accordion need behaviour. Decision: import Bootstrap's own JS via dynamic `import("bootstrap/js/dist/*")` inside `"use client"` components — no `react-bootstrap` dependency, and the bundled path satisfies the existing `script-src 'self'` CSP.
+- **Verification data.** With `NEXT_PUBLIC_USE_MOCK` unset, `getHomeFeed` returns `sections: null` (`app/lib/api.ts:206-211`), so home sections and the discover feed render empty. All visual verification must run against mock mode or a seeded API, or it silently misses the content being redesigned.
+- **e2e specs are welded to legacy classes and copy.** `discover.spec.ts` (`.gurman-hero`, `.home-sections`, `.home-card__rating`), `reviews.spec.ts` (`form.review-form`), `registration.spec.ts` (`details.crm-terms-doc`), `waitlist.spec.ts` (`.wl-submit`), `shell-boundary.spec.ts` (`nav.desktop-nav`, `[data-shell]`). Each page's conversion must update its spec in the same commit, preserving behavioural invariants (native `minLength=20`, unchecked `acceptedTerms`, pinned `acceptedTermsVersion`, file-accept whitelist, `data-shell` attributes).
+- **`GurmanHero` is shared.** Rendered by both home and `discover/page.tsx:89`; `discover.spec.ts` asserts on its classes. It is not an orphan and cannot be replaced freely.
+
 ## 7. Out of scope
 
-- `(workspace)` dashboard shell and admin console styling.
+- `(workspace)` dashboard and admin console *redesign* (they still receive the reboot/font bleed described in §6a).
 - Logo/wordmark changes.
 - Real map integration on discover (rail is reserved for it).
 - Native apps (Android app has its own design system).
