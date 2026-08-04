@@ -311,51 +311,12 @@ main {
 }
 
 /* ---------- Reveal (scroll-entrance) primitives ---------- */
-
-.reveal {
-  transition-property: opacity, transform, filter;
-  transition-timing-function: var(--ease-out);
-  transition-duration: var(--speed-slow);
-  will-change: opacity, transform;
-}
-
-/* Reveal start-states apply ONLY when JS is present (html.js), so content is
-   always visible for no-JS, crawlers, and headless renders — motion is pure
-   enhancement, never a visibility gate. */
-html.js .reveal:not(.is-shown) {
-  opacity: 0;
-}
-
-.reveal-fade-up:not(.is-shown) {
-  transform: translateY(30px);
-}
-
-.reveal-fade-in:not(.is-shown) {
-  transform: none;
-}
-
-.reveal-scale-in:not(.is-shown) {
-  transform: scale(0.94);
-}
-
-.reveal-slide-left:not(.is-shown) {
-  transform: translateX(44px);
-}
-
-.reveal-slide-right:not(.is-shown) {
-  transform: translateX(-44px);
-}
-
-.reveal-blur-up:not(.is-shown) {
-  transform: translateY(26px);
-  filter: blur(10px);
-}
-
-.reveal.is-shown {
-  opacity: 1;
-  transform: none;
-  filter: none;
-}
+/* Scroll reveals are now driven by Framer Motion (components/motion/reveal.tsx):
+   it inlines the hidden start-state and animates opacity/transform per frame.
+   The old `.reveal` CSS transition + start-states were removed so they don't
+   compound with the JS-driven animation. The `.reveal` class survives only as a
+   layout hook (below) so a staggered wrapper never collapses a grid cell, and
+   the `<noscript>` net in layout.tsx keeps the no-JS path visible. */
 
 /* Reveal wrappers must not break grid card sizing */
 .business-grid > .reveal,

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
+import { MotionProvider } from "./components/motion/motion-provider";
 import { ServiceWorkerRegistration } from "./components/service-worker";
 import { Archivo, IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
@@ -69,7 +70,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <script
             dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }}
           />
-          {children}
+          {/* Safety net for the JS-disabled path: Framer Motion inlines the
+              hidden start-state (opacity:0) during SSR, so without this a
+              no-JS visitor or a non-executing crawler would see blank reveals.
+              `!important` beats the inline style; only rendered when JS is off. */}
+          <noscript>
+            <style>{"[data-reveal]{opacity:1 !important;transform:none !important;filter:none !important}"}</style>
+          </noscript>
+          <MotionProvider>{children}</MotionProvider>
           <ServiceWorkerRegistration />
         </body>
       </html>

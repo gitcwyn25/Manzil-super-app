@@ -1,94 +1,77 @@
 "use client";
 
+import { Children, isValidElement, type CSSProperties, type ReactNode } from "react";
+import { motion } from "framer-motion";
 import {
-  Children,
-  cloneElement,
-  isValidElement,
-  useEffect,
-  useRef,
-  useState,
-  type CSSProperties,
-  type ReactNode
-} from "react";
-
-type RevealVariant = "fade-up" | "fade-in" | "scale-in" | "slide-left" | "slide-right" | "blur-up";
+  DUR,
+  REVEAL_VIEWPORT,
+  revealVariants,
+  staggerVariants,
+  type RevealVariant
+} from "./presets";
 
 /**
- * Scroll-triggered entrance animation wrapper.
- * SSR-safe: content is rendered immediately and only animated once the
- * IntersectionObserver confirms visibility. Respects prefers-reduced-motion
- * via the `.reveal` CSS rules in globals.css.
+ * Scroll-triggered entrance animations, driven by Framer Motion.
+ *
+ * The public API (variant / delay / duration / as / className / once) is kept
+ * identical to the previous CSS-class implementation so every existing call
+ * site upgrades to Framer Motion without a code change.
+ *
+ * Progressive enhancement is preserved two ways:
+ *   1. `data-reveal` — a `<noscript>` rule in the root layout forces these
+ *      elements visible (`opacity:1 !important`) when JS is disabled, so
+ *      crawlers and no-JS users never see a blank section.
+ *   2. Reduced motion — `<MotionConfig reducedMotion="user">` (motion-provider)
+ *      collapses transforms to a plain crossfade.
  */
+
+// Framer Motion element per supported tag. Kept explicit (not `motion(Tag)`) so
+// the bundle only pulls the handful of DOM elements actually used.
+const MOTION_TAG = {
+  div: motion.div,
+  section: motion.section,
+  span: motion.span,
+  li: motion.li,
+  article: motion.article,
+  ul: motion.ul,
+  p: motion.p
+} as const;
+
+type RevealTag = keyof typeof MOTION_TAG;
+
 export function Reveal({
   children,
   variant = "fade-up",
   delay = 0,
   duration = 700,
-  as: Tag = "div",
+  as = "div",
   className,
   once = true,
-  style
+  style,
+  amount
 }: {
   children: ReactNode;
   variant?: RevealVariant;
   delay?: number;
   duration?: number;
-  as?: "div" | "section" | "span" | "li" | "article";
+  as?: RevealTag;
   className?: string;
   once?: boolean;
   style?: CSSProperties;
+  amount?: number;
 }) {
-  const ref = useRef<HTMLElement | null>(null);
-  const [shown, setShown] = useState(false);
-
-  useEffect(() => {
-    const node = ref.current;
-    if (!node) return;
-
-    // Deferred to a task rather than set synchronously: a synchronous setState
-    // inside an effect triggers a cascading render. The one-frame delay is
-    // invisible and this path only runs where IntersectionObserver is absent.
-    if (typeof IntersectionObserver === "undefined") {
-      const immediate = window.setTimeout(() => setShown(true), 0);
-      return () => window.clearTimeout(immediate);
-    }
-
-    // Safety net: if the observer never fires (hidden tab, headless render,
-    // odd layout), reveal anyway so the section is never left blank.
-    const fallback = window.setTimeout(() => setShown(true), 700);
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            window.clearTimeout(fallback);
-            setShown(true);
-            if (once) observer.disconnect();
-          } else if (!once) {
-            setShown(false);
-          }
-        }
-      },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
-    );
-
-    observer.observe(node);
-    return () => {
-      window.clearTimeout(fallback);
-      observer.disconnect();
-    };
-  }, [once]);
+  const Tag = MOTION_TAG[as] ?? motion.div;
+  const variants = revealVariants(variant, duration / 1000, delay / 1000);
 
   return (
     <Tag
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ref={ref as any}
-      className={`reveal reveal-${variant}${shown ? " is-shown" : ""}${className ? ` ${className}` : ""}`}
-      style={{
-        ...style,
-        transitionDelay: `${delay}ms`,
-        transitionDuration: `${duration}ms`
-      }}
+      className={className}
+      data-reveal=""
+      style={style}
+      variants={variants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ ...REVEAL_VIEWPORT, once, ...(amount != null ? { amount } : {}) }}
     >
       {children}
     </Tag>
@@ -96,7 +79,11 @@ export function Reveal({
 }
 
 /**
- * Staggers Reveal animations across its direct children.
+ * Staggers a scroll reveal across direct children. The parent orchestrates;
+ * each child animates in sequence via `staggerChildren`.
+ *
+ * Total stagger time is capped so a long list never crawls in: past ~14 items
+ * the per-item step is compressed to keep the whole sequence under ~1.1s.
  */
 export function RevealStagger({
   children,
@@ -104,32 +91,50 @@ export function RevealStagger({
   step = 90,
   start = 0,
   className,
-  as = "div"
+  as = "div",
+  once = true
 }: {
   children: ReactNode;
   variant?: RevealVariant;
   step?: number;
   start?: number;
   className?: string;
-  as?: "div" | "section" | "span";
+  as?: "div" | "section" | "span" | "ul";
+  once?: boolean;
 }) {
   const items = Children.toArray(children);
-  const Tag = as;
+  const Tag = MOTION_TAG[as] ?? motion.div;
+
+  // Cap the cumulative stagger: many items should not add up to a slow reveal.
+  const cappedStep = items.length > 12 ? Math.max(35, Math.round(1000 / items.length)) : step;
+  const { container, item } = staggerVariants(variant, cappedStep / 1000, start / 1000, DUR.med);
 
   return (
-    <Tag className={className}>
+    <Tag
+      className={className}
+      data-reveal=""
+      variants={container}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ ...REVEAL_VIEWPORT, once, amount: 0.12 }}
+    >
       {items.map((child, index) => (
-        <Reveal delay={start + index * step} key={isValidElement(child) && child.key != null ? child.key : index} variant={variant}>
+        <motion.div
+          className="reveal"
+          data-reveal=""
+          key={isValidElement(child) && child.key != null ? child.key : index}
+          variants={item}
+        >
           {child}
-        </Reveal>
+        </motion.div>
       ))}
     </Tag>
   );
 }
 
 /**
- * Adds `is-shown` to a single child element instead of wrapping it —
- * useful when an extra div would break a CSS grid.
+ * Reveals a single child without adding a visible wrapper in the layout flow.
+ * Retained for API compatibility; renders the child inside an inline reveal.
  */
 export function RevealInline({
   children,
@@ -138,38 +143,9 @@ export function RevealInline({
   children: ReactNode;
   delay?: number;
 }) {
-  const ref = useRef<HTMLSpanElement | null>(null);
-  const [shown, setShown] = useState(false);
-
-  useEffect(() => {
-    const node = ref.current?.parentElement;
-    if (!node || typeof IntersectionObserver === "undefined") {
-      setShown(true);
-      return;
-    }
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          setShown(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.08 }
-    );
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-
-  const child = Children.only(children);
-  if (!isValidElement<{ className?: string; style?: CSSProperties }>(child)) return <>{children}</>;
-
   return (
-    <>
-      <span aria-hidden="true" hidden ref={ref} />
-      {cloneElement(child, {
-        className: `${child.props.className ?? ""} reveal reveal-fade-up${shown ? " is-shown" : ""}`.trim(),
-        style: { ...child.props.style, transitionDelay: `${delay}ms` }
-      })}
-    </>
+    <Reveal as="span" delay={delay} variant="fade-up">
+      {children}
+    </Reveal>
   );
 }
