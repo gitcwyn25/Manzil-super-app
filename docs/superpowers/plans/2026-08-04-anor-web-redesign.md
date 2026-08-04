@@ -281,6 +281,8 @@ import "./globals.css";
 import "./styles/anor.scss";
 ```
 
+**Note (amended):** since commit `e4d814a`, `app/layout.tsx` also wraps children in `<MotionProvider>` and carries a `<noscript>` style block for `[data-reveal]` elements. Preserve both exactly — only the font declarations and the stylesheet import change in this task.
+
 - [ ] **Step 7: Create the temporary probe page `apps/web/app/[locale]/(site)/_probe/page.tsx`**
 
 ```tsx
@@ -431,19 +433,21 @@ git commit -m "fix(web): per-locale html lang, Anor PWA colours, sw version bump
 
 ---
 
-### Task 3: No-JS reveal gate and legacy token bridge
+### Task 3: Legacy token bridge and no-JS regression guard
+
+**AMENDED 2026-08-05:** commit `e4d814a` migrated reveals from the CSS `.reveal`/`.is-shown` system to Framer Motion (`app/components/motion/presets.ts` + `motion-provider.tsx`; `data-reveal` attribute + a `<noscript>` rule in `app/layout.tsx` keeps content visible without JS). The old plan step "port the `html.js .reveal` gate into Sass" is obsolete — the gate no longer exists in `globals.css`. What remains: the token bridge, and an e2e guard that the `<noscript>` mechanism actually delivers the spec's "renders fully without JS" requirement.
 
 **Files:**
 - Modify: `apps/web/app/styles/anor.scss`
 - Test: `tests/e2e/no-js.spec.ts` (create)
 
 **Interfaces:**
-- Produces: `.reveal` / `.is-shown` behaviour in the Sass layer, and `--error` / `--primary` custom properties. Both MUST exist before any page conversion removes reveal rules from `globals.css`.
-- Consumes: Task 1 tokens.
+- Produces: `--error` / `--primary` custom properties in the Anor layer. MUST exist before any page conversion deletes the `:root` token block from `globals.css`.
+- Consumes: Task 1 tokens; the `data-reveal` convention from commit `e4d814a`.
 
-**Why this task exists:** `html.js .reveal:not(.is-shown)` at `globals.css:325` — paired with the inline `js`-class script at `app/layout.tsx:69-71` — is what makes reveal content visible when JS is off. `review-form.tsx:261` and `claim-form.tsx:92` read `var(--error)` and `var(--primary)`, defined only at `globals.css:46,50`. Both must live in the Sass layer before `globals.css` loses them.
+**Why this task exists:** `review-form.tsx:261` and `claim-form.tsx:92` read `var(--error)` and `var(--primary)` from inline styles, defined only at `globals.css:46,50`. And the spec requires every section to render fully without JS — with Framer Motion inlining `opacity:0` at SSR, the `<noscript>` override in `app/layout.tsx` is the only thing standing between a no-JS visitor and blank sections, so it needs a regression test.
 
-- [ ] **Step 1: Write the failing test `tests/e2e/no-js.spec.ts`**
+- [ ] **Step 1: Write the test `tests/e2e/no-js.spec.ts`**
 
 ```ts
 import { expect, test } from "@playwright/test";
@@ -453,22 +457,24 @@ test.use({ javaScriptEnabled: false });
 test("home content is visible without JavaScript", async ({ page }) => {
   await page.goto("/uz");
   await expect(page.locator("h1").first()).toBeVisible();
-  const hidden = await page.locator(".reveal:not(.is-shown)").evaluateAll(
+  // Framer Motion SSRs reveals with inline opacity:0; the <noscript> rule in
+  // app/layout.tsx must force them visible when JS never runs.
+  const hidden = await page.locator("[data-reveal]").evaluateAll(
     (els) => els.filter((el) => getComputedStyle(el).opacity === "0").length,
   );
   expect(hidden).toBe(0);
 });
 ```
 
-- [ ] **Step 2: Run it to establish the baseline**
+- [ ] **Step 2: Run it — it must pass on the current tree**
 
 ```bash
 SKIP_AUTH_SETUP=1 npx playwright test tests/e2e/no-js.spec.ts
 ```
 
-Expected: PASS today (the `globals.css` gate still works). This test is the regression guard — it must keep passing through every later task. Record that it passed.
+Expected: PASS (the `<noscript>` rule from `e4d814a` already covers it). This test is the regression guard — it must keep passing through every later task. If it FAILS here, the noscript mechanism is broken and must be fixed before any page converts.
 
-- [ ] **Step 3: Port the gate and the legacy tokens into `apps/web/app/styles/anor.scss`**
+- [ ] **Step 3: Bridge the legacy tokens into `apps/web/app/styles/anor.scss`**
 
 Append:
 
@@ -479,43 +485,15 @@ Append:
   --error:   #ba1a1a;
   --primary: #{$anor-red};
 }
-
-// The no-JS render guarantee. The inline script in app/layout.tsx adds `js` to
-// documentElement; without JS the class never lands, so reveal content is
-// simply visible. Motion is choreography on top of an already-rendered page,
-// never a visibility gate.
-html.js .reveal:not(.is-shown) {
-  opacity: 0;
-  transform: translateY(1rem);
-}
-
-.reveal {
-  transition:
-    opacity var(--anor-reveal-speed, 420ms) cubic-bezier(.16, 1, .3, 1),
-    transform var(--anor-reveal-speed, 420ms) cubic-bezier(.16, 1, .3, 1);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html.js .reveal:not(.is-shown) { opacity: 1; transform: none; }
-  .reveal { transition: none; }
-}
 ```
 
-- [ ] **Step 4: Verify the gate still holds from the new layer**
-
-Temporarily comment out `globals.css:325` (`html.js .reveal:not(.is-shown)`) and re-run:
+- [ ] **Step 4: Verify and commit**
 
 ```bash
+npm run typecheck --workspace @manzil/web
 SKIP_AUTH_SETUP=1 npx playwright test tests/e2e/no-js.spec.ts
-```
-
-Expected: PASS. Then restore the commented line — it stays until the pages that use it are converted.
-
-- [ ] **Step 5: Commit**
-
-```bash
 git add apps/web/app/styles/anor.scss tests/e2e/no-js.spec.ts
-git commit -m "feat(web): port no-JS reveal gate and legacy tokens to the Anor layer"
+git commit -m "feat(web): legacy token bridge and no-JS reveal regression guard"
 ```
 
 ---
