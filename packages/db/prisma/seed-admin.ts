@@ -55,7 +55,11 @@ const PERMISSIONS: Array<[string, string, string]> = [
   // catalogue
   ["category.manage", "category", "Create and edit the category taxonomy shown on the landing page"],
   // notifications
-  ["notification.view", "notification", "View and acknowledge the admin notification inbox"]
+  ["notification.view", "notification", "View and acknowledge the admin notification inbox"],
+  // supabase browser — read-only table/storage viewer. Deliberately granted
+  // only to super_admin (via its "*" wildcard below): no other role lists
+  // it, and it is not added to moderator/support/analyst.
+  ["supabase.view", "supabase", "Browse read-only database tables and storage usage"]
 ];
 
 const ROLES: Array<{

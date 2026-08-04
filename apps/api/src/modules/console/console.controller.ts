@@ -2,6 +2,7 @@ import { Body, Controller, Get, Ip, Param, Patch, Post, Query, Req, UseGuards } 
 import { ConsoleRepository } from "./console.repository";
 import { ConsoleCurationRepository } from "./console-curation.repository";
 import { ConsoleNotificationsRepository } from "./console-notifications.repository";
+import { ConsoleSupabaseRepository } from "./console-supabase.repository";
 import { AnalyticsRepository } from "../analytics/analytics.repository";
 import { parseWindow } from "../analytics/analytics.controller";
 import { PermissionGuard, type ConsoleRequest } from "./permission.guard";
@@ -32,7 +33,8 @@ export class ConsoleController {
     private readonly repo: ConsoleRepository,
     private readonly analytics: AnalyticsRepository,
     private readonly curation: ConsoleCurationRepository,
-    private readonly notificationsRepo: ConsoleNotificationsRepository
+    private readonly notificationsRepo: ConsoleNotificationsRepository,
+    private readonly supabaseRepo: ConsoleSupabaseRepository
   ) {}
 
   private ctx(request: ConsoleRequest, ip: string) {
@@ -320,5 +322,37 @@ export class ConsoleController {
   @RequirePermission("notification.view")
   async markNotificationRead(@Param("id") id: string, @Req() r: ConsoleRequest, @Ip() ip: string) {
     return { data: await this.notificationsRepo.markRead(id, this.ctx(r, ip)) };
+  }
+
+  /* ---------- read-only Supabase browser ----------
+   * Every handler below is read-only: no endpoint accepts a SQL string, and
+   * `:table` is checked against a hardcoded allowlist before it ever reaches
+   * Prisma (see ConsoleSupabaseRepository). Every call is audited — browsing
+   * production data, including other people's PII, is an auditable act. */
+
+  @Get("supabase/overview")
+  @RequirePermission("supabase.view")
+  async supabaseOverview(@Req() r: ConsoleRequest, @Ip() ip: string) {
+    return { data: await this.supabaseRepo.overview(this.ctx(r, ip)) };
+  }
+
+  @Get("supabase/storage")
+  @RequirePermission("supabase.view")
+  async supabaseStorage(@Req() r: ConsoleRequest, @Ip() ip: string) {
+    return { data: await this.supabaseRepo.storageOverview(this.ctx(r, ip)) };
+  }
+
+  @Get("supabase/tables/:table")
+  @RequirePermission("supabase.view")
+  async supabaseTable(
+    @Param("table") table: string,
+    @Query("limit") limit: string | undefined,
+    @Query("offset") offset: string | undefined,
+    @Req() r: ConsoleRequest,
+    @Ip() ip: string
+  ) {
+    return {
+      data: await this.supabaseRepo.tableRows(table, Number(limit ?? 50), Number(offset ?? 0), this.ctx(r, ip))
+    };
   }
 }

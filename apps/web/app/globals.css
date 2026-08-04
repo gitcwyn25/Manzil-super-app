@@ -5723,6 +5723,20 @@ textarea:focus {
   color: #fff;
 }
 
+/* The admin console's logout control is a <button type="submit"> (it posts a
+   server action, not a link), reusing .crm-sidebar-public's look rather than
+   a parallel style. The element selector lifts specificity to (0,1,1),
+   still same-file/adjacent to the (0,1,0) base rule above so source order
+   isn't load-bearing, and only resets what a <button> needs that an <a>
+   never had: native chrome, full-width hit target, left-aligned text. */
+button.crm-sidebar-public {
+  width: 100%;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+}
+
 .crm-sidebar-upgrade {
   display: block;
   padding: 13px 14px;
@@ -6841,49 +6855,18 @@ textarea:focus {
   transform: translateY(-1px);
 }
 
-.gurman-hero__portrait {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-}
-
-.gurman-hero__img {
-  width: clamp(180px, 22vw, 300px);
-  height: auto;
-  filter: drop-shadow(0 24px 48px rgba(0, 0, 0, 0.45));
-}
-
-.gurman-hero__fallback {
-  display: grid;
-  place-items: center;
-  width: clamp(140px, 16vw, 200px);
-  aspect-ratio: 3 / 4;
-  border: 1px dashed rgba(197, 160, 89, 0.45);
-  border-radius: 14px;
-  background: rgba(197, 160, 89, 0.08);
-  color: #c5a059;
-  font-family: var(--font-serif), Georgia, serif;
-  font-size: 56px;
-}
-
 @media (max-width: 760px) {
   .gurman-hero {
     padding: 40px 20px;
   }
 
   .gurman-hero__inner {
-    /* Portrait first would push the copy below the fold on a phone, so the
-       character moves under the message rather than above it. */
     grid-template-columns: 1fr;
     text-align: center;
   }
 
   .gurman-hero__sub {
     margin-inline: auto;
-  }
-
-  .gurman-hero__img {
-    width: clamp(150px, 45vw, 220px);
   }
 }
 
@@ -7379,6 +7362,39 @@ html[data-shell="workspace"] [class*="reveal"] {
 /* Admin KPI tiles: the count is the figure, the label under it is prose. */
 .admin-card h3.ws-num {
   font-size: 28px;
+}
+
+/* ---- Admin console (companies/notifications build). Tabs reuse
+   .crm-status-filter, empty states reuse .empty-state, forms reuse
+   .crm-form*, the photo queue reuses .photo-manager__*, and status/read
+   badges reuse .crm-chip* — none of those are repeated here. Only the two
+   genuinely new bits: the companies-list search+filter toolbar, and sizing
+   the reject-reason field to fit inline in a dense .ws-table row. ---- */
+
+.admin-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 4px 0 18px;
+}
+
+.admin-toolbar form {
+  display: flex;
+}
+
+.admin-toolbar input[type="search"] {
+  min-width: 220px;
+}
+
+/* Specificity (0,2,1) beats the bare `input` rule (0,0,1) at line ~958, and
+   this is the only place a text input sits inside .crm-row-actions, so the
+   override cannot leak onto any other input. */
+.crm-row-actions input[type="text"] {
+  width: 150px;
+  min-height: 30px;
+  padding: 0 10px;
+  font-size: 12.5px;
 }
 
 /* ---- Waitlist ---- */

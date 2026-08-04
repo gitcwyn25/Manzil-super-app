@@ -2,6 +2,31 @@ import { Injectable, Logger, ServiceUnavailableException } from "@nestjs/common"
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { MediaStorage, PresignedUpload, PresignUploadOptions } from "./media-storage";
 
+export type BucketStat = {
+  name: string;
+  public: boolean;
+  objectCount: number;
+  totalBytes: number;
+  /** True if the walk stopped early against `MAX_OBJECTS_PER_BUCKET` or
+   * `MAX_LIST_CALLS_PER_BUCKET` — the counts above are a lower bound, not a
+   * miscount, for a bucket this large. */
+  truncated: boolean;
+};
+
+export type StorageOverview = {
+  /** False when neither SUPABASE_URL nor SUPABASE_SERVICE_ROLE_KEY is set —
+   * the admin console renders "not configured" rather than an error. */
+  configured: boolean;
+  buckets: BucketStat[];
+};
+
+// Safety caps on the recursive bucket walk below — this is an occasional
+// admin-console read, not a background job, so it must not turn into an
+// unbounded crawl against a bucket with hundreds of thousands of objects.
+const MAX_OBJECTS_PER_BUCKET = 5000;
+const MAX_LIST_CALLS_PER_BUCKET = 200;
+const LIST_PAGE_SIZE = 1000;
+
 /**
  * Presigns direct-to-Supabase-Storage uploads with the service-role key.
  *
@@ -75,5 +100,91 @@ export class SupabaseStorageService implements MediaStorage {
         "Content-Type": contentType
       }
     };
+  }
+
+  /**
+   * Every bucket in the project, with an object count and total byte size
+   * for each — for the admin console's read-only storage summary. Never
+   * returns object contents or download URLs, only counts.
+   *
+   * Walks each bucket's folder tree via `storage.from(bucket).list()`:
+   * Supabase Storage represents a folder as an entry with `id: null` and no
+   * `metadata`, so those get queued as a deeper prefix while everything else
+   * is counted as a file. Bounded by `MAX_OBJECTS_PER_BUCKET` and
+   * `MAX_LIST_CALLS_PER_BUCKET` so one very large bucket can't turn an
+   * admin-console page load into an unbounded crawl.
+   */
+  async getStorageOverview(): Promise<StorageOverview> {
+    if (!this.isConfigured) {
+      return { configured: false, buckets: [] };
+    }
+
+    const { data: buckets, error } = await this.supabase.storage.listBuckets();
+    if (error || !buckets) {
+      this.logger.error(`Supabase listBuckets failed: ${error?.message}`);
+      return { configured: true, buckets: [] };
+    }
+
+    const stats = await Promise.all(
+      buckets.map(async (bucket) => {
+        const { objectCount, totalBytes, truncated } = await this.countBucketObjects(bucket.name);
+        return { name: bucket.name, public: bucket.public, objectCount, totalBytes, truncated };
+      })
+    );
+
+    return { configured: true, buckets: stats };
+  }
+
+  private async countBucketObjects(
+    bucketName: string
+  ): Promise<{ objectCount: number; totalBytes: number; truncated: boolean }> {
+    let objectCount = 0;
+    let totalBytes = 0;
+    let listCalls = 0;
+    let truncated = false;
+    const prefixQueue: string[] = [""];
+
+    while (prefixQueue.length > 0) {
+      if (listCalls >= MAX_LIST_CALLS_PER_BUCKET || objectCount >= MAX_OBJECTS_PER_BUCKET) {
+        truncated = true;
+        break;
+      }
+
+      const prefix = prefixQueue.shift()!;
+      listCalls += 1;
+
+      const { data: entries, error } = await this.supabase.storage
+        .from(bucketName)
+        .list(prefix, { limit: LIST_PAGE_SIZE });
+
+      if (error || !entries) {
+        this.logger.warn(`Supabase list failed for bucket '${bucketName}' prefix '${prefix}': ${error?.message}`);
+        continue;
+      }
+
+      if (entries.length === LIST_PAGE_SIZE) {
+        // A folder with more entries than one page holds — the count below
+        // will undercount this folder specifically.
+        truncated = true;
+      }
+
+      for (const entry of entries) {
+        // A folder placeholder: no id, no metadata. A real object has both.
+        if (entry.id === null && !entry.metadata) {
+          prefixQueue.push(prefix ? `${prefix}/${entry.name}` : entry.name);
+          continue;
+        }
+
+        objectCount += 1;
+        totalBytes += entry.metadata?.size ?? 0;
+
+        if (objectCount >= MAX_OBJECTS_PER_BUCKET) {
+          truncated = true;
+          break;
+        }
+      }
+    }
+
+    return { objectCount, totalBytes, truncated };
   }
 }

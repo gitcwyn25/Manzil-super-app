@@ -35,6 +35,7 @@ import { ConsoleAuthController } from "./console/console-auth.controller";
 import { ConsoleRepository } from "./console/console.repository";
 import { ConsoleCurationRepository } from "./console/console-curation.repository";
 import { ConsoleNotificationsRepository } from "./console/console-notifications.repository";
+import { ConsoleSupabaseRepository } from "./console/console-supabase.repository";
 import { AdminAuthService } from "./console/admin-auth.service";
 import { PermissionGuard } from "./console/permission.guard";
 import { AlertService } from "./alerts/alert.service";
@@ -125,6 +126,7 @@ import { DEFAULT_THROTTLE } from "./security/throttle.config";
     ConsoleRepository,
     ConsoleCurationRepository,
     ConsoleNotificationsRepository,
+    ConsoleSupabaseRepository,
     AdminAuthService,
     PermissionGuard,
     AlertService,

@@ -127,21 +127,14 @@ describe("AdminAuthService.resolveAdmin", () => {
     expect(prisma.adminUser.findFirst).toHaveBeenCalledTimes(1);
   });
 
-  it("still resolves via the existing Clerk actor path when there is no session id", async () => {
-    const row = makeAdminRow({ clerkId: "clerk_abc" });
+  it("does NOT resolve via a Clerk actor — credential login is the only door", async () => {
     const prisma = makePrisma();
-    prisma.adminUser.findFirst.mockResolvedValueOnce(row);
     const service = makeService(prisma);
 
     const resolved = await service.resolveAdmin({ actor: { userId: "user_1", role: "admin", clerkId: "clerk_abc" } });
 
-    expect(resolved).not.toBeNull();
-    expect(resolved?.id).toBe("admin_1");
-    expect(prisma.adminUser.findFirst).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: { isActive: true, OR: [{ clerkId: { in: ["clerk_abc", "user_1"] } }, { userId: { in: ["clerk_abc", "user_1"] } }] }
-      })
-    );
+    expect(resolved).toBeNull();
+    expect(prisma.adminUser.findFirst).not.toHaveBeenCalled();
   });
 
   it("returns null when neither a session id nor an actor is provided", async () => {

@@ -2,16 +2,6 @@
 
 import type { Locale } from "@manzil/shared";
 import { motion } from "framer-motion";
-import { useState } from "react";
-
-/**
- * Path the Gurman AI character illustration is expected at.
- *
- * The component renders a branded monogram fallback when the file is absent, so
- * the hero never ships a broken image box — drop the PNG here and it appears
- * with no code change.
- */
-const GURMAN_PORTRAIT = "/gurman/gurman-ai.png";
 
 /**
  * One drifting shape in the hero backdrop.
@@ -76,7 +66,6 @@ export type GurmanHeroCopy = {
   subtitle: string;
   cta: string;
   ctaHref: string;
-  portraitAlt: string;
   waitlistCta: string;
 };
 
@@ -89,8 +78,6 @@ export type GurmanHeroCopy = {
  * globals.css, which flattens these transitions).
  */
 export function GurmanHero({ copy, locale }: { copy: GurmanHeroCopy; locale: Locale }) {
-  const [portraitFailed, setPortraitFailed] = useState(false);
-
   return (
     <section className="gurman-hero">
       <div className="gurman-hero__wash" />
@@ -180,29 +167,6 @@ export function GurmanHero({ copy, locale }: { copy: GurmanHeroCopy; locale: Loc
           </a>
         </div>
 
-        <motion.div
-          animate={{ opacity: 1, y: 0 }}
-          className="gurman-hero__portrait"
-          initial={{ opacity: 0, y: 30 }}
-          transition={{ duration: 1.1, delay: 0.5, ease: [0.25, 0.4, 0.25, 1] }}
-        >
-          {portraitFailed ? (
-            /* Branded fallback rather than a broken image: the character art is
-               an optional asset, and a missing file must not leave a torn hero. */
-            <div className="gurman-hero__fallback" role="img" aria-label={copy.portraitAlt}>
-              <span>G</span>
-            </div>
-          ) : (
-            <motion.img
-              alt={copy.portraitAlt}
-              animate={{ y: [0, -10, 0] }}
-              className="gurman-hero__img"
-              onError={() => setPortraitFailed(true)}
-              src={GURMAN_PORTRAIT}
-              transition={{ duration: 6, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-            />
-          )}
-        </motion.div>
       </div>
     </section>
   );
