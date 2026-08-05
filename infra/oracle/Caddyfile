@@ -1,5 +1,0 @@
-# TLS is automatic (Let's Encrypt HTTP-01) once the DuckDNS A-record points here.
-{$API_DOMAIN} {
-	encode gzip
-	reverse_proxy api:4000
-}
