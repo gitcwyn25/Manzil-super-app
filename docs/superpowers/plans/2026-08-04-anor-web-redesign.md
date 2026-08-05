@@ -1,5 +1,7 @@
 # Anor Web Redesign Implementation Plan
 
+> **⛔ SUPERSEDED 2026-08-05** by [`2026-08-05-vibrant-marketplace-adoption.md`](2026-08-05-vibrant-marketplace-adoption.md) (user decision: Stitch "Vibrant Marketplace" design replaces the Anor identity, the sirly.uz home, and the Groupon discover). Do NOT implement tasks from this file. The Bootstrap/Sass foundation, brand-surface sync, and chrome component structure from Tasks 1/2/4 survive and are re-skinned by the new plan; everything visual here is dead.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Rebuild the public `(site)` surfaces of `apps/web` on a deeply re-themed Bootstrap 5 foundation in the new "Anor" visual identity, replacing the bespoke Kosmonavtlar CSS page by page.
