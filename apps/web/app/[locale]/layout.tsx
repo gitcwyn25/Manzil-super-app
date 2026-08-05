@@ -1,5 +1,6 @@
 import { isLocale, type Locale } from "@manzil/shared";
 import { notFound } from "next/navigation";
+import { LocaleLangSync } from "../components/locale-lang-sync";
 import { LocaleProviders } from "../components/locale-providers";
 
 export function generateStaticParams() {
@@ -34,6 +35,10 @@ export default async function LocaleLayout({
           __html: `document.documentElement.lang=${JSON.stringify(locale)}`
         }}
       />
+      {/* Covers client-side (soft) navigations: the script above only runs on
+          fresh parse, so a locale switch via router.push needs this to keep
+          <html lang> correct without a full reload. */}
+      <LocaleLangSync locale={locale as Locale} />
       <LocaleProviders locale={locale as Locale}>{children}</LocaleProviders>
     </>
   );
