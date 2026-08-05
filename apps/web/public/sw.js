@@ -18,7 +18,7 @@
  *                 review as if it were live is worse than showing an error.
  */
 
-const VERSION = "v2-anor";
+const VERSION = "v3-vibrant";
 const PAGE_CACHE = `manzil-pages-${VERSION}`;
 const ASSET_CACHE = `manzil-assets-${VERSION}`;
 const OFFLINE_URL = "/offline";

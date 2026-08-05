@@ -2,33 +2,28 @@ import type { Metadata, Viewport } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { MotionProvider } from "./components/motion/motion-provider";
 import { ServiceWorkerRegistration } from "./components/service-worker";
-import { Unbounded, Golos_Text, IBM_Plex_Mono } from "next/font/google";
+import { Golos_Text, Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
-import "./styles/anor.scss";
+import "./styles/vibrant.scss";
 
-// Architectural display face: wide, geometric. Reads as station signage, not
-// as a startup headline face.
-const display = Unbounded({
-  subsets: ["latin", "latin-ext", "cyrillic"],
-  weight: ["500", "600"],
-  variable: "--font-display",
-  display: "swap"
+// One grotesque across all levels (DESIGN.md). Weights map to the type ramp:
+// 400 body, 500 label-sm, 600 headline-md/labels/buttons, 700 headline-lg,
+// 800 display-lg. latin-ext covers Uzbek-Latin's okina and diacritics.
+const sans = Hanken_Grotesk({
+  subsets: ["latin", "latin-ext"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-sans",
+  display: "swap",
+  fallback: ["system-ui", "Segoe UI", "Roboto", "sans-serif"]
 });
 
-// Latin and Cyrillic drawn as one system. Manzil ships uz/ru/en, and a body face
-// without matched Cyrillic makes the Russian site look like a different product.
-const body = Golos_Text({
-  subsets: ["latin", "latin-ext", "cyrillic"],
+// Hanken Grotesk ships no Cyrillic cut, and Manzil is trilingual (uz/ru/en):
+// Golos Text rides second in the stack as the designed Cyrillic companion so
+// Russian never falls back to system-ui (decision D4).
+const golos = Golos_Text({
+  subsets: ["cyrillic", "latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-body",
-  display: "swap"
-});
-
-// Metrically matched to Golos Text. Ratings, counts, currency, IDs.
-const data = IBM_Plex_Mono({
-  subsets: ["latin", "cyrillic"],
-  weight: ["400", "500"],
-  variable: "--font-data",
   display: "swap"
 });
 
@@ -54,7 +49,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#a8352a",
+  themeColor: "#0058bc",
   width: "device-width",
   initialScale: 1
 };
@@ -66,7 +61,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           document.documentElement.lang — the root layout has no locale param. */}
       <html
         lang="uz"
-        className={`${display.variable} ${body.variable} ${data.variable}`}
+        className={`${sans.variable} ${golos.variable}`}
         suppressHydrationWarning
       >
         <body suppressHydrationWarning>

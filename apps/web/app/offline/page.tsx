@@ -25,19 +25,19 @@ export default function OfflinePage() {
         gap: "0.75rem",
         padding: "2rem",
         textAlign: "center",
-        backgroundColor: "#f8f7f5"
+        backgroundColor: "#f8f9ff"
       }}
     >
       <h1 style={{ fontSize: "1.5rem", fontWeight: 600 }}>Internet aloqasi yo&apos;q</h1>
-      <p style={{ maxWidth: "42ch", color: "#6e624f" }}>
+      <p style={{ maxWidth: "42ch", color: "#414755" }}>
         Siz oflaynsiz. Avval ochilgan sahifalar hali ham mavjud — aloqa tiklangach sahifani
         yangilang.
       </p>
-      <p style={{ maxWidth: "42ch", color: "#6e624f" }}>
+      <p style={{ maxWidth: "42ch", color: "#414755" }}>
         Нет подключения к интернету. Ранее открытые страницы по-прежнему доступны — обновите
         страницу, когда связь восстановится.
       </p>
-      <p style={{ maxWidth: "42ch", color: "#6e624f" }}>
+      <p style={{ maxWidth: "42ch", color: "#414755" }}>
         You are offline. Pages you already opened are still available — reload once your
         connection is back.
       </p>

@@ -1,38 +1,46 @@
-// Site-wide chrome: header nav, mobile offcanvas, footer. Approved visual
-// reference: .superpowers/sdd/2026-08-04-anor-web-redesign/task-5-reference.html
-// (the nav/footer markup there — colors, logo mark, pill shape, footer
-// gradient — is the source of truth this file reproduces).
+// Site-wide chrome: header nav, mobile offcanvas, footer, re-skinned in the
+// Vibrant Marketplace identity. Visual truth: the Stitch screen PNGs under
+// ceo-office/stitch_local_deal_marketplace/ (sticky blurred light header,
+// primary-blue wordmark, active link = primary text + 2px primary underline,
+// LIGHT footer per decision D1 — surface-container-lowest with an
+// outline-variant top border, keeping the existing 4-column anatomy).
 //
-// These are neutral white/ink SURFACE colors, distinct from `_tokens.scss`'s
-// warm Anor palette ($anor-red/$anor-leaf/...) used by page content. They are
-// intentionally not Bootstrap theme variables or `_tokens.scss` entries —
-// that file is "Bootstrap variable overrides only, no rules" — so they live
-// here, next to the only rules that use them. The green gradient BANDS seen
-// on the home page are a separate, home-only concern and do not reuse these.
-$chrome-deep:           #04483f;
-$chrome-mid:             #0a6b5e;
-$chrome-lime:             #a1dd41;
-$chrome-nav-text:         #3d4744;
-$chrome-nav-line:         #eef1f0;
-$chrome-footer-top:       #15201c;
-$chrome-footer-bottom:    #0b0f0e;
-$chrome-footer-text:      #cfd8d4;
-$chrome-footer-link:      #aab6b1;
-$chrome-footer-legal:     #8a948f;
-$chrome-footer-border:    #24302b;
+// Every selector in this file is load-bearing (e2e specs select on the chrome
+// class names and the offcanvas id) — colors and effects only change here,
+// never selectors. Palette comes from _tokens.scss's $vm-* / Bootstrap vars;
+// the old sirly.uz-derived $chrome-* green palette is deleted.
 
 // ---------------------------------------------------------------------------
 // Nav
 // ---------------------------------------------------------------------------
 
 .site-nav {
-  background: rgba(255, 255, 255, .92);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid $chrome-nav-line;
+  background: rgba($vm-surface, .85);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid $border-color;
   // z-index comes from Bootstrap's `.sticky-top` utility (1020) applied in
   // the markup — below the offcanvas (1045) and its backdrop (1040), so the
   // mobile panel always layers above the nav correctly.
+}
+
+// Progressive enhancement (Chromium-line browsers): solidify to 95% and gain
+// the L1 shadow once the page scrolls past the header. Scroll-linked state,
+// not a timed animation, so it needs no reduced-motion branch; browsers
+// without scroll timelines simply keep the resting recipe above.
+@supports (animation-timeline: scroll()) {
+  .site-nav {
+    animation: vm-nav-elevate linear both;
+    animation-timeline: scroll();
+    animation-range: 0 20px;
+  }
+
+  @keyframes vm-nav-elevate {
+    to {
+      background: rgba($vm-surface, .95);
+      box-shadow: $box-shadow-sm;
+    }
+  }
 }
 
 .site-nav__row {
@@ -47,34 +55,35 @@ $chrome-footer-border:    #24302b;
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  color: $chrome-deep;
+  color: $primary;
   font-weight: 800;
   font-size: 1.15rem;
   text-decoration: none;
   white-space: nowrap;
 }
 
-// The approved mark: a rounded deep-green square with a lime arch cutout.
+// The brand mark, re-tinted: a rounded primary-blue square with a white arch
+// cutout (same geometry the PWA icons carry).
 .site-nav__logo {
   position: relative;
   flex: none;
   width: 34px;
   height: 34px;
   border-radius: 10px;
-  background: $chrome-deep;
+  background: $primary;
 
   &::after {
     content: "";
     position: absolute;
     inset: 9px 9px 0;
-    background: $chrome-lime;
+    background: #fff;
     border-radius: 999px 999px 0 0;
   }
 }
 
 // Overrides globals.css's legacy `.desktop-nav`/`.desktop-nav a` rules (same
 // selector specificity, but this partial loads later in the cascade — the
-// same pattern anor.scss's "unconverted-page bridge" documents at length).
+// same pattern vibrant.scss's "unconverted-page bridge" documents at length).
 // Responsive show/hide is handled separately by the `!important` Bootstrap
 // utility classes in the markup, not by anything here.
 nav.desktop-nav {
@@ -91,20 +100,26 @@ nav.desktop-nav a {
   position: static;
   padding: 0;
   border-radius: 0;
+  border-bottom: 2px solid transparent;
   background: none;
-  color: $chrome-nav-text;
+  color: $body-secondary-color;
   font-size: .95rem;
   font-weight: 500;
-  transition: color .15s ease;
+  transition: color .15s ease, border-color .15s ease;
 
   &::after {
     content: none;
   }
 
-  &:hover,
+  &:hover {
+    background: none;
+    color: $primary;
+  }
+
   &.active {
     background: none;
-    color: $chrome-deep;
+    color: $primary;
+    border-bottom-color: $primary;
   }
 }
 
@@ -115,25 +130,64 @@ nav.desktop-nav a {
   flex: none;
 }
 
-// header-auth.tsx's sign-in link ("Kirish") — restyled here rather than in
-// that file, which is out of scope for this task.
+// The lg+ header search pill (header.tsx renders it once, on every site
+// page): a plain GET form submitting to /{locale}/discover?q= — no JS.
+// `display` comes from the `d-none d-lg-flex` utilities in the markup.
+.site-nav__search {
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid $border-color;
+  border-radius: 50rem;
+  background: $vm-surface-container-low;
+  color: $vm-outline;
+  transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+
+  &:focus-within {
+    border-color: $primary;
+    background: $vm-surface-container-lowest;
+    box-shadow: $input-focus-box-shadow;
+  }
+
+  svg {
+    flex: none;
+  }
+}
+
+.site-nav__search-input {
+  width: 170px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: $body-color;
+  font-size: .9rem;
+  outline: none;
+
+  &::placeholder {
+    color: $vm-outline;
+  }
+}
+
+// header-auth.tsx's sign-in link — restyled here rather than in that file:
+// the ghost half of the mocks' Sign In / Get Started pair.
 .header-signin {
   padding: 0;
   border-radius: 0;
   background: none;
-  color: $chrome-nav-text;
+  color: $primary;
   font-size: .95rem;
-  font-weight: 500;
+  font-weight: 600;
   transition: color .15s ease;
 
   &:hover {
     background: none;
-    color: $chrome-deep;
+    color: shade-color($primary, 20%);
   }
 }
 
-// The approved pill: deep-green fill, white text, fully rounded, #0a6b5e on
-// hover. Shared by the header CTA, the footer brand, and the mobile panel CTA.
+// The solid pill CTA: primary blue with the subtle primary-container
+// gradient, white text, fully rounded. Shared by the header CTA and the
+// mobile panel CTA.
 .site-nav__pill {
   display: inline-flex;
   align-items: center;
@@ -142,16 +196,17 @@ nav.desktop-nav a {
   border: 0;
   border-radius: 50rem;
   padding: 10px 24px;
-  background: $chrome-deep;
+  background: $primary linear-gradient(180deg, $vm-primary-container, $primary);
   color: #fff;
   font-weight: 600;
   font-size: .95rem;
   text-decoration: none;
-  transition: background .15s ease;
+  transition: background .15s ease, box-shadow .15s ease;
 
   &:hover {
-    background: $chrome-mid;
+    background: shade-color($primary, 8%) linear-gradient(180deg, $primary, shade-color($primary, 10%));
     color: #fff;
+    box-shadow: $box-shadow-sm;
   }
 }
 
@@ -170,11 +225,11 @@ nav.desktop-nav a {
   border: 0;
   border-radius: 10px;
   background: transparent;
-  color: $chrome-deep;
+  color: $body-color;
   transition: background .15s ease;
 
   &:hover {
-    background: rgba($chrome-deep, .08);
+    background: rgba($primary, .08);
   }
 }
 
@@ -183,8 +238,8 @@ nav.desktop-nav a {
 // a class, so that component stays exactly as specified.
 #mobile-nav-panel.offcanvas {
   width: min(320px, 86vw);
-  background: #fff;
-  color: $chrome-nav-text;
+  background: $vm-surface-container-lowest;
+  color: $body-secondary-color;
 }
 
 // globals.css has three separate `.mobile-nav` rules left over from the old
@@ -223,7 +278,7 @@ nav.mobile-nav a {
   border-radius: 10px;
   background: none;
   box-shadow: none;
-  color: $chrome-nav-text;
+  color: $body-secondary-color;
   text-align: left;
   font-family: inherit;
   font-size: 1rem;
@@ -243,8 +298,8 @@ nav.mobile-nav a {
 
   &:hover,
   &.active {
-    background: rgba($chrome-deep, .08);
-    color: $chrome-deep;
+    background: rgba($primary, .08);
+    color: $primary;
     box-shadow: none;
   }
 }
@@ -258,10 +313,10 @@ nav.mobile-nav a {
 .site-nav__lang .lang-button {
   padding: 8px 10px;
   border-radius: 999px;
-  color: $chrome-nav-text;
+  color: $body-secondary-color;
 
   &:hover {
-    background: rgba($chrome-deep, .08);
+    background: rgba($primary, .08);
   }
 }
 
@@ -270,26 +325,28 @@ nav.mobile-nav a {
 }
 
 .site-nav__lang .lang-dropdown {
-  border-color: $chrome-nav-line;
-  background: #fff;
+  border-color: $border-color;
+  background: $vm-surface-container-lowest;
 }
 
 .site-nav__lang .lang-dropdown button:hover {
-  background: rgba($chrome-deep, .06);
+  background: rgba($primary, .06);
 }
 
 .site-nav__lang .lang-dropdown button.active {
-  color: $chrome-deep;
+  color: $primary;
 }
 
 // ---------------------------------------------------------------------------
-// Footer
+// Footer — LIGHT per decision D1: white ground, outline-variant top border,
+// existing 4-column anatomy, dynamic © year, quiet admin entry.
 // ---------------------------------------------------------------------------
 
 .site-footer {
   padding-block: 56px 32px;
-  background: linear-gradient(#{$chrome-footer-top}, #{$chrome-footer-bottom});
-  color: $chrome-footer-text;
+  background: $vm-surface-container-lowest;
+  border-top: 1px solid $border-color;
+  color: $body-secondary-color;
 }
 
 .site-footer a {
@@ -301,19 +358,19 @@ nav.mobile-nav a {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  color: #fff;
+  color: $body-color;
 }
 
 .site-footer__tagline {
   margin-top: 14px;
   max-width: 26em;
-  color: $chrome-footer-link;
+  color: $body-secondary-color;
   font-size: .92rem;
 }
 
 .site-footer__heading {
   margin-bottom: 12px;
-  color: rgba(255, 255, 255, .55);
+  color: $vm-outline;
   font-size: .78rem;
   font-weight: 700;
   letter-spacing: .1em;
@@ -325,7 +382,7 @@ nav.mobile-nav a {
 }
 
 .site-footer__links a {
-  color: $chrome-footer-link;
+  color: $body-secondary-color;
   font-size: .92rem;
   // The contact email is long enough to overrun a narrow column at some
   // breakpoints — break it rather than letting it push the grid wider.
@@ -333,7 +390,7 @@ nav.mobile-nav a {
   transition: color .15s ease;
 
   &:hover {
-    color: $chrome-lime;
+    color: $primary;
   }
 }
 
@@ -344,17 +401,17 @@ nav.mobile-nav a {
   gap: 10px;
   margin-top: 40px;
   padding-top: 22px;
-  border-top: 1px solid $chrome-footer-border;
-  color: $chrome-footer-legal;
+  border-top: 1px solid $border-color;
+  color: $vm-outline;
   font-size: .85rem;
 }
 
 .site-footer__admin {
-  color: rgba(255, 255, 255, .28);
+  color: rgba($vm-on-surface, .28);
   font-size: .8rem;
   transition: color .15s ease;
 
   &:hover {
-    color: rgba(255, 255, 255, .6);
+    color: rgba($vm-on-surface, .6);
   }
 }

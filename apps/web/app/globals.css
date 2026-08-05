@@ -114,12 +114,13 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Display face: expanded axis, tight tracking, caps at band scale only. */
+/* Display face: tight tracking, caps at band scale only. (The Unbounded
+   "wdth" 112 axis is gone — the Vibrant Marketplace stack has no wdth axis
+   and --font-display now aliases to the sans stack.) */
 h1,
 h2,
 h3 {
   font-family: var(--font-display), system-ui, sans-serif;
-  font-variation-settings: "wdth" 112;
   letter-spacing: -0.02em;
   text-wrap: balance;
 }

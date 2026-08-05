@@ -1,0 +1,328 @@
+@import "bootstrap";
+
+// Vibrant Marketplace entry stylesheet (supersedes anor.scss). Emits the
+// --vm-* custom properties, legacy font-variable aliases, the label/display
+// utilities, the shared elevation recipes, and — verbatim in structure — the
+// two load-bearing blocks inherited from anor.scss: the unconverted-page
+// bridge and the .h1-.h6 @extend correction (both documented below).
+
+// --- Custom properties -----------------------------------------------------
+// Font aliases: next/font declares --font-sans (Hanken Grotesk) and
+// --font-body (Golos Text, the Cyrillic companion) on <html>. The legacy
+// variable names survive as aliases to the same stack so the 6.5k-line
+// globals.css (and its second-order aliases) keeps resolving during
+// page-by-page conversion. IBM Plex Mono is dropped: --font-data now points
+// at the sans stack too.
+:root {
+  --font-display: var(--font-sans), var(--font-body);
+  --font-data: var(--font-sans), var(--font-body);
+
+  --vm-surface: #{$vm-surface};
+  --vm-surface-dim: #{$vm-surface-dim};
+  --vm-surface-bright: #{$vm-surface-bright};
+  --vm-surface-container-lowest: #{$vm-surface-container-lowest};
+  --vm-surface-container-low: #{$vm-surface-container-low};
+  --vm-surface-container: #{$vm-surface-container};
+  --vm-surface-container-high: #{$vm-surface-container-high};
+  --vm-surface-container-highest: #{$vm-surface-container-highest};
+  --vm-surface-variant: #{$vm-surface-variant};
+  --vm-surface-tint: #{$vm-surface-tint};
+  --vm-on-surface: #{$vm-on-surface};
+  --vm-on-surface-variant: #{$vm-on-surface-variant};
+  --vm-inverse-surface: #{$vm-inverse-surface};
+  --vm-inverse-on-surface: #{$vm-inverse-on-surface};
+  --vm-inverse-primary: #{$vm-inverse-primary};
+  --vm-outline: #{$vm-outline};
+  --vm-outline-variant: #{$vm-outline-variant};
+  --vm-primary-container: #{$vm-primary-container};
+  --vm-on-primary-container: #{$vm-on-primary-container};
+  --vm-on-primary-fixed: #{$vm-on-primary-fixed};
+  --vm-secondary-container: #{$vm-secondary-container};
+  --vm-on-secondary-container: #{$vm-on-secondary-container};
+  --vm-on-secondary-fixed: #{$vm-on-secondary-fixed};
+  --vm-tertiary-container: #{$vm-tertiary-container};
+  --vm-on-tertiary-container: #{$vm-on-tertiary-container};
+  --vm-on-tertiary-fixed: #{$vm-on-tertiary-fixed};
+
+  --vm-radius-md: .75rem;
+  --vm-margin-mobile: 1rem;
+  --vm-margin-desktop: 2rem;
+  --vm-stack-lg: 2rem;
+  --vm-blur-header: 12px;
+}
+
+// --- Type utilities (DESIGN.md label-md / label-sm metadata styles) --------
+.label-md {
+  font-size: .875rem;
+  font-weight: 600;
+  line-height: calc(20 / 14);
+  letter-spacing: .01em;
+}
+
+.label-sm {
+  font-size: .75rem;
+  font-weight: 500;
+  line-height: calc(16 / 12);
+  letter-spacing: .02em;
+}
+
+// Display headlines carry DESIGN.md's -0.02em tracking (Bootstrap has no
+// letter-spacing variable for the display scale).
+.display-1,
+.display-2,
+.display-3,
+.display-4,
+.display-5,
+.display-6 {
+  letter-spacing: -.02em;
+}
+
+// body-lg is 18/28.
+.lead {
+  line-height: calc(28 / 18);
+}
+
+// --- Elevation recipes -----------------------------------------------------
+// L1 -> L2 on hover with a small lift; reduced motion short-circuits to the
+// resting state (no transform, no transition) while keeping focus/hover
+// affordance via the shadow alone.
+.card-interactive {
+  transition: box-shadow .3s ease, transform .3s ease;
+
+  &:hover {
+    box-shadow: var(--bs-box-shadow);
+    transform: translateY(-2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-interactive {
+    transition: none;
+
+    &:hover {
+      transform: none;
+    }
+  }
+}
+
+// Primary action buttons: subtle vertical gradient of the primary blue
+// (primary-container -> primary), darkening on hover.
+.btn-primary {
+  background-image: linear-gradient(180deg, var(--vm-primary-container), #{$primary});
+
+  &:hover,
+  &:focus-visible {
+    background-image: linear-gradient(180deg, #{$primary}, #{shade-color($primary, 10%)});
+  }
+
+  &:active {
+    background-image: none;
+  }
+}
+
+// Secondary buttons are ghost-style per DESIGN.md: transparent fill,
+// 1.5px border. (No solid green fills — green is reserved for savings.)
+.btn-secondary {
+  --bs-btn-color: #{$primary};
+  --bs-btn-bg: transparent;
+  --bs-btn-border-color: #{$vm-outline-variant};
+  --bs-btn-hover-color: #{$primary};
+  --bs-btn-hover-bg: #{rgba($primary, .06)};
+  --bs-btn-hover-border-color: #{$primary};
+  --bs-btn-active-color: #{$primary};
+  --bs-btn-active-bg: #{rgba($primary, .1)};
+  --bs-btn-active-border-color: #{$primary};
+  --bs-btn-disabled-color: #{$vm-outline};
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: #{$vm-outline-variant};
+
+  border-width: 1.5px;
+}
+
+// DESIGN.md margins: 16px mobile comes free from $grid-gutter-width; 32px on
+// desktop needs a rule (no Bootstrap variable expresses breakpoint-dependent
+// container padding).
+@include media-breakpoint-up(lg) {
+  .container,
+  .container-xxl {
+    padding-inline: 2rem;
+  }
+}
+
+// Site-wide chrome (header nav, mobile offcanvas, footer). Kept in its own
+// partial rather than inlined here since it is a large, self-contained block —
+// see _chrome.scss's header comment.
+@import "chrome";
+
+// --- Unconverted-page bridge -----------------------------------------------
+// Bootstrap's reboot/type/containers modules (imported above) define `body`,
+// `a`, `.container`, and `h1`-`h6` with the SAME specificity as globals.css's
+// own bare-element rules for those selectors. Because this entry loads after
+// globals.css, Bootstrap wins those ties on every page that hasn't been
+// converted to the Vibrant Marketplace system yet — repainting the whole
+// canvas in the VM palette instead of Kosmonavtlar's (body color/background),
+// turning plain links blue/underlined, and shrinking/reweighting bare
+// headings (Bootstrap's %heading reset touches margin, font-weight,
+// line-height and, for h1/h2, font-size; h3-h6 have no globals.css opinion at
+// all and fall back to Bootstrap's sizes instead of the browser's UA
+// defaults). Restating the pre-Bootstrap declarations here, after the
+// Bootstrap import, wins the same specificity tie back for unconverted pages
+// while leaving every more-specific globals.css selector (e.g.
+// `.business-body h3`, `.feed-hero-copy h1`, `[data-shell="workspace"] h1`)
+// unaffected either way. Confirmed empirically with Playwright against
+// /uz/discover: without the `body` line, a bare <a> inherited the entry
+// palette's ink instead of the site's real --text (#0d1a1c) because `body`
+// itself had flipped. (The old bridge's `.container { max-width: 1200px }`
+// rule is intentionally NOT carried: the VM container geometry — xxl 1280px,
+// 16px/32px padding — replaces it per the foundation token mapping.)
+// See apps/web/app/globals.css lines ~106-115, ~161-164, ~176-180, ~118-125,
+// ~619-635, ~1710 for the source of truth these mirror.
+//
+// IMPORTANT — Sass @extend interaction: Bootstrap's `.h1`-`.h6` utility
+// classes are defined as `.h3 { @extend h3; }` (bootstrap/scss/_type.scss).
+// Sass's `@extend` rewrites EVERY ruleset in this compiled stylesheet whose
+// selector text matches `h3` — including the bare `h3 { ... }` rule below,
+// wherever it's written, however it's wrapped (`:is(h3)` and interpolated
+// `#{"h3"}` were both tried and BOTH still got `.h3` spliced in — Sass
+// resolves those before running extend). So every bare heading rule below
+// unavoidably ends up applying to `.h1`-`.h6` too. Rather than fight that,
+// the `.h1`-`.h6` block at the end of this file corrects for it: since it
+// targets a plain class selector (not `h1`-`h6`), it is never itself an
+// extend target, so it stays exactly as written and — positioned after the
+// bare-heading rules — wins the same-specificity (0,1,0) cascade tie for
+// any element actually carrying a `.h1`-`.h6` class, restoring Bootstrap's
+// real utility-class geometry via Bootstrap's own variables/mixins so it
+// can never drift out of sync with Bootstrap's config. Verified empirically
+// with Playwright: an injected `<div class="h3">` gets Bootstrap's real
+// utility geometry, not this file's UA-default bridge values.
+
+body {
+  color: var(--text);
+  background: var(--panel);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+// (The Unbounded-specific `font-variation-settings: "wdth" 112` line is gone:
+// Hanken Grotesk has no wdth axis. --font-display aliases to the sans stack.)
+h1,
+h2,
+h3 {
+  font-family: var(--font-display), system-ui, sans-serif;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+h1,
+h2 {
+  margin: 0;
+  line-height: 1.04;
+}
+
+h1 {
+  max-width: 760px;
+  font-size: clamp(44px, 7vw, 82px);
+  font-weight: 800;
+}
+
+h2 {
+  font-size: clamp(32px, 5vw, 54px);
+  font-weight: 750;
+}
+
+// Mirrors globals.css's own mobile override (max-width: 680px), which would
+// otherwise lose its cascade tie to Bootstrap's unconditional h1 rule.
+@media (max-width: 680px) {
+  h1 {
+    font-size: 42px;
+  }
+}
+
+// h3-h6: globals.css never bare-styles their size/weight/margin (only the
+// shared h1,h2,h3 font-family/letter-spacing/text-wrap rule above touches
+// h3, and only for those three properties). Before Bootstrap, a bare <h3>
+// like the one in discover/page.tsx's `.empty-state` (globals.css styles
+// `.empty-state` itself but never `.empty-state h3`) rendered with the
+// browser's UA-default heading geometry. Restating the UA defaults here
+// (font-size in em, bold, `margin: <x>em 0`, per the HTML spec's
+// user-agent stylesheet) restores exactly what an unconverted page looked
+// like pre-Bootstrap.
+h3 {
+  margin-block: 1em;
+  font-size: 1.17em;
+  font-weight: 700;
+}
+
+h4 {
+  margin-block: 1.33em;
+  font-size: 1em;
+  font-weight: 700;
+}
+
+h5 {
+  margin-block: 1.67em;
+  font-size: .83em;
+  font-weight: 700;
+}
+
+h6 {
+  margin-block: 2.33em;
+  font-size: .67em;
+  font-weight: 700;
+}
+
+// Converted-page contract restoration: undoes the Sass-@extend side effect
+// documented above for anything that actually carries a `.h1`-`.h6` class
+// (Bootstrap's own utility, or a future VM display class built the same
+// way). Built from Bootstrap's own variables/mixins (not hardcoded numbers)
+// so it can never drift from what `_tokens.scss` configures.
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  margin-top: 0;
+  margin-bottom: $headings-margin-bottom;
+  font-family: $headings-font-family;
+  font-weight: $headings-font-weight;
+  line-height: $headings-line-height;
+  font-variation-settings: normal;
+  letter-spacing: normal;
+  text-wrap: wrap;
+  color: inherit;
+}
+
+// headline-lg carries -0.01em tracking; headline-md drops to 600 weight
+// (applied on the utility classes, never the bare elements, so the
+// unconverted-page bridge above stays untouched).
+.h1 {
+  max-width: none;
+  letter-spacing: -.01em;
+  @include font-size($h1-font-size);
+}
+
+.h2 {
+  letter-spacing: -.01em;
+  @include font-size($h2-font-size);
+}
+
+.h3 {
+  font-weight: 600;
+  @include font-size($h3-font-size);
+}
+
+.h4 {
+  @include font-size($h4-font-size);
+}
+
+.h5 {
+  @include font-size($h5-font-size);
+}
+
+.h6 {
+  @include font-size($h6-font-size);
+}

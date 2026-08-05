@@ -1,52 +1,186 @@
-// Anor design tokens. Bootstrap variable overrides ONLY — no rules in this file.
-// Every value here is load-bearing brand; see docs/superpowers/specs/2026-08-04-anor-web-redesign-design.md
+// Vibrant Marketplace design tokens. Bootstrap variable overrides ONLY — no
+// rules in this file. The token mapping is normative:
+// .superpowers/sdd/2026-08-05-vibrant-marketplace/review-foundation.json,
+// amended by the critic conflicts and the locked decision log (D1 light
+// footer, D2 12px cards / 8px inputs / 24px modals, D4 Hanken+Golos stack) in
+// docs/superpowers/plans/2026-08-05-vibrant-marketplace-adoption.md.
 
-$anor-ground:  #f8f7f5;
-$anor-card:    #ffffff;
-$anor-ink:     #231f1a;
-$anor-red:     #a8352a;
-$anor-leaf:    #1f5b43;
-$anor-saffron: #e0a63a;
-$anor-clay:    #6e624f;
+// --- Vibrant Marketplace palette (Material role names from DESIGN.md) ------
+// Kept as Sass variables so _chrome.scss and vibrant.scss can consume them;
+// the CSS custom-property (--vm-*) mirrors are emitted by vibrant.scss.
+$vm-surface:                    #f8f9ff;
+$vm-surface-dim:                #cbdbf5;
+$vm-surface-bright:             #f8f9ff;
+$vm-surface-container-lowest:   #ffffff;
+$vm-surface-container-low:      #eff4ff;
+$vm-surface-container:          #e5eeff;
+$vm-surface-container-high:     #dce9ff;
+$vm-surface-container-highest:  #d3e4fe;
+$vm-surface-variant:            #d3e4fe;
+$vm-on-surface:                 #0b1c30;
+$vm-on-surface-variant:         #414755;
+$vm-inverse-surface:            #213145; // available, unused for the footer per D1
+$vm-inverse-on-surface:         #eaf1ff;
+$vm-outline:                    #717786;
+$vm-outline-variant:            #c1c6d7;
+$vm-surface-tint:               #005bc1;
 
-// --- Bootstrap theme map ---
-$primary:   $anor-red;
-$secondary: $anor-leaf;
-$success:   $anor-leaf;
-$warning:   $anor-saffron;
-$danger:    $anor-red;
-$dark:      $anor-ink;
-$light:     $anor-ground;
+$vm-primary:                    #0058bc;
+$vm-primary-container:          #0070eb;
+$vm-on-primary-container:       #fefcff;
+$vm-inverse-primary:            #adc6ff;
+$vm-primary-fixed:              #d8e2ff;
+$vm-primary-fixed-dim:          #adc6ff;
+$vm-on-primary-fixed:           #001a41;
+$vm-on-primary-fixed-variant:   #004493;
 
-$body-bg:               $anor-ground;
-$body-color:            $anor-ink;
-$body-secondary-color:  $anor-clay;
+$vm-secondary:                  #006c49;
+$vm-secondary-container:        #6cf8bb;
+$vm-on-secondary-container:     #00714d;
+$vm-secondary-fixed:            #6ffbbe;
+$vm-secondary-fixed-dim:        #4edea3;
+$vm-on-secondary-fixed:         #002113;
+$vm-on-secondary-fixed-variant: #005236;
 
-// Type. Variable names match the existing ones so globals.css keeps resolving
-// during page-by-page coexistence.
-$font-family-sans-serif: var(--font-body), system-ui, sans-serif;
-$font-family-monospace:  var(--font-data), ui-monospace, monospace;
-$headings-font-family:   var(--font-display), system-ui, sans-serif;
-$headings-font-weight:   600;
-$headings-line-height:   1.1;
-$body-line-height:       1.55;
+$vm-tertiary:                   #994100;
+$vm-tertiary-container:         #c05400;
+$vm-on-tertiary-container:      #fffbff;
+$vm-tertiary-fixed:             #ffdbca;
+$vm-tertiary-fixed-dim:         #ffb690;
+$vm-on-tertiary-fixed:          #341100;
+$vm-on-tertiary-fixed-variant:  #783200;
 
-// Shape: squarer than Bootstrap's default; Anor is architectural, not bubbly.
-$border-radius-sm: .25rem;
-$border-radius:    .375rem;
-$border-radius-lg: .5rem;
-$border-radius-xl: .75rem;
+$vm-error:                      #ba1a1a; // same hex as legacy --error; keeps review-form.tsx inline color exact
+$vm-error-container:            #ffdad6;
+$vm-on-error-container:         #93000a;
 
-$border-color: rgba($anor-ink, .12);
+// --- Bootstrap theme map ---------------------------------------------------
+// $secondary and $success are BOTH the savings green: DESIGN.md reserves green
+// for Savings/Confirmed (Bootstrap's success semantics), and .btn-secondary is
+// restyled as the ghost 1.5px-border button in vibrant.scss so it never
+// renders a solid green fill.
+$primary:   $vm-primary;
+$secondary: $vm-secondary;
+$success:   $vm-secondary;
+$warning:   $vm-tertiary; // urgency / limited-time role (burnt orange)
+$danger:    $vm-error;
+$dark:      $vm-on-surface;
+$light:     $vm-surface;
 
-// Elevation: warm-tinted, never neutral grey.
-$box-shadow-sm: 0 1px 2px rgba($anor-ink, .06);
-$box-shadow:    0 .5rem 1.5rem rgba($anor-ink, .08);
-$box-shadow-lg: 0 1.5rem 3rem rgba($anor-ink, .12);
+$body-bg:              $vm-surface;
+$body-color:           $vm-on-surface;
+$body-secondary-color: $vm-on-surface-variant;
 
-$link-color:            $anor-red;
-$link-hover-color:      shade-color($anor-red, 20%);
-$focus-ring-color:      rgba($anor-red, .35);
-$focus-ring-width:      .25rem;
+// Material "fixed" tints -> Bootstrap "subtle" slots (.bg-*-subtle, alerts,
+// badge tints come for free).
+$primary-bg-subtle:     $vm-primary-fixed;
+$primary-border-subtle: $vm-primary-fixed-dim;
+$primary-text-emphasis: $vm-on-primary-fixed-variant;
+$success-bg-subtle:     $vm-secondary-fixed;
+$success-border-subtle: $vm-secondary-fixed-dim;
+$success-text-emphasis: $vm-on-secondary-fixed-variant;
+$warning-bg-subtle:     $vm-tertiary-fixed;
+$warning-border-subtle: $vm-tertiary-fixed-dim;
+$warning-text-emphasis: $vm-on-tertiary-fixed-variant;
+$danger-bg-subtle:      $vm-error-container;
+$danger-text-emphasis:  $vm-on-error-container;
+
+// Component surfaces sit on white (surface-container-lowest).
+$card-bg:          $vm-surface-container-lowest;
+$dropdown-bg:      $vm-surface-container-lowest;
+$modal-content-bg: $vm-surface-container-lowest;
+$offcanvas-bg:     $vm-surface-container-lowest;
+$accordion-bg:     $vm-surface-container-lowest;
+$progress-bg:      $vm-surface-variant;
+
+// Borders, focus, inputs.
+$border-color:             $vm-outline-variant;
+$input-border-color:       $vm-outline-variant;
+$input-placeholder-color:  $vm-outline;
+$focus-ring-color:         rgba($vm-primary, .25);
+$input-focus-border-color: $vm-primary;
+$input-focus-box-shadow:   0 0 0 .25rem rgba(0, 88, 188, .15); // DESIGN.md "soft glow"
+
+// --- Type ------------------------------------------------------------------
+// One grotesque across all levels (D4): Hanken Grotesk (latin, --font-sans)
+// with Golos Text (cyrillic companion, --font-body) riding second so ru and
+// Cyrillic-script Uzbek render in a designed face, not system-ui. The legacy
+// variable names (--font-display/--font-data) are aliased to this same stack
+// in vibrant.scss so no consumer breaks. Monospace reverts to Bootstrap's
+// native stack (IBM Plex Mono is dropped).
+$font-family-sans-serif: var(--font-sans), var(--font-body), system-ui, -apple-system, "Segoe UI", sans-serif;
+$headings-font-family:   null; // the separate display-face concept dies; headings inherit
+
+$headings-font-weight: 700;    // headline-lg
+$headings-line-height: 1.25;
+$h1-font-size: 3rem;           // mirrors display-lg for marketing h1
+$h2-font-size: 2rem;           // headline-lg 32/40
+$h3-font-size: 1.5rem;         // headline-md 24/32
+$h4-font-size: 1.25rem;
+$h5-font-size: 1.125rem;
+$h6-font-size: 1rem;
+
+$display-font-weight: 800;     // display-lg 48/56 800
+$display-line-height: calc(56 / 48);
+$display-font-sizes: (
+  1: 3rem,
+  2: 2.5rem,
+  3: 2.25rem,
+  4: 2rem,
+  5: 1.75rem,
+  6: 1.5rem
+);
+
+$font-size-base:   1rem;       // body-md 16/24
+$line-height-base: 1.5;        // replaces Anor's 1.55
+$font-size-sm:     .875rem;    // label-md base size
+$lead-font-size:   1.125rem;   // body-lg 18/28 (line-height set in vibrant.scss)
+$lead-font-weight: 400;
+$btn-font-weight:  600;
+$nav-link-font-weight: 600;
+$badge-font-size:  .75rem;     // label-sm
+$badge-font-weight: 500;
+
+// --- Shape (D2: cards 12px, inputs/buttons 8px, modals 24px) ---------------
+$border-radius-sm:   .25rem;
+$border-radius:      .5rem;   // inputs & buttons inherit 8px from here
+$border-radius-lg:   1rem;
+$border-radius-xl:   1.5rem;
+$border-radius-pill: 50rem;
+
+$card-border-radius:          .75rem;           // 12px, pinned to the rendered PNGs
+$modal-content-border-radius: $border-radius-xl; // 24px
+
+// --- Spacing & layout ------------------------------------------------------
+$spacer: 1rem;
+// Step 6 (2rem) is DESIGN.md's stack-lg; steps 0-5 are Bootstrap's defaults,
+// restated because overriding the map replaces it wholesale.
+$spacers: (
+  0: 0,
+  1: $spacer * .25,
+  2: $spacer * .5,
+  3: $spacer,
+  4: $spacer * 1.5,
+  5: $spacer * 3,
+  6: 2rem
+);
+
+$grid-gutter-width: 1rem; // DESIGN.md gutter 16px; $container-padding-x follows
+
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1280px // DESIGN.md max content width
+);
+
+// --- Elevation (Soft Tactility: L1 cards, L2 hover, L3 overlays) -----------
+$box-shadow-sm: 0 4px 12px rgba(0, 0, 0, .04);
+$box-shadow:    0 8px 20px rgba(0, 0, 0, .08);
+$box-shadow-lg: 0 24px 56px -12px rgba(0, 91, 193, .16), 0 8px 20px rgba(0, 0, 0, .08); // primary-tinted (surface-tint)
+
+$card-box-shadow: $box-shadow-sm;               // every .card is L1 by default
+$modal-content-box-shadow-sm-up: $box-shadow-lg; // modals live at L3
 
 $enable-negative-margins: true;

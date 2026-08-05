@@ -6,13 +6,15 @@ import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { getBusinessCopy } from "../lib/business-copy";
 
-// Admin is intentionally absent here — its entry point lives in the footer.
-// Consumer navigation only. "Dashboard" is deliberately absent: a visitor with
-// no business has nothing there, and the workspace is reached through the
-// signed-in switch in the header instead.
+// The canonical D5 link set: Discover · Concierge · Events(→/occasions) ·
+// For Business. Home rides on the brand wordmark. Admin is intentionally
+// absent here — its entry point lives in the footer. "Dashboard" is
+// deliberately absent: a visitor with no business has nothing there, and the
+// workspace is reached through the signed-in switch in the header instead.
 const links = [
-  { key: "home" as const, href: (locale: Locale) => `/${locale}` },
   { key: "discover" as const, href: (locale: Locale) => `/${locale}/discover` },
+  { key: "concierge" as const, href: (locale: Locale) => `/${locale}/concierge` },
+  { key: "events" as const, href: (locale: Locale) => `/${locale}/occasions` },
   { key: "forBusiness" as const, href: (locale: Locale) => `/${locale}/business` }
 ];
 
@@ -28,7 +30,7 @@ export function SiteNav({ locale }: { locale: Locale }) {
     <nav className="desktop-nav d-none d-lg-flex" aria-label="Asosiy navigatsiya">
       {links.map((link) => {
         const href = link.href(locale);
-        const active = pathname === href || (link.key === "home" && pathname === `/${locale}`);
+        const active = pathname === href || pathname.startsWith(`${href}/`);
         return (
           <Link className={active ? "active" : undefined} href={href} key={link.key}>
             {copy.nav[link.key]}
@@ -58,6 +60,18 @@ const mobileIcons: Record<string, ReactNode> = {
       <path d="m20 20-3.5-3.5" />
     </svg>
   ),
+  concierge: (
+    <svg aria-hidden="true" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+      <path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H12l-4.5 4v-4h-1A2.5 2.5 0 0 1 4 13.5v-7Z" />
+      <path d="M9 9.5h.01M15 9.5h.01M9.5 12.5c.7.7 1.6 1 2.5 1s1.8-.3 2.5-1" />
+    </svg>
+  ),
+  events: (
+    <svg aria-hidden="true" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+      <rect x="4" y="5" width="16" height="16" rx="2" />
+      <path d="M8 3v4M16 3v4M4 10.5h16" />
+    </svg>
+  ),
   admin: (
     <svg aria-hidden="true" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
       <path d="M12 2 4 5.5v5.6c0 4.9 3.4 9.5 8 10.9 4.6-1.4 8-6 8-10.9V5.5L12 2Z" />
@@ -76,6 +90,8 @@ export function MobileSiteNav({ locale }: { locale: Locale }) {
   const mobileLinks = [
     { key: "home" as const, href: `/${locale}`, label: copy.nav.home },
     { key: "discover" as const, href: `/${locale}/discover`, label: copy.nav.discover },
+    { key: "concierge" as const, href: `/${locale}/concierge`, label: copy.nav.concierge },
+    { key: "events" as const, href: `/${locale}/occasions`, label: copy.nav.events },
     { key: "forBusiness" as const, href: `/${locale}/business`, label: copy.nav.forBusiness }
   ];
 
