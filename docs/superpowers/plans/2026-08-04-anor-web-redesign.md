@@ -673,6 +673,7 @@ git commit -m "feat(web): rebuild site chrome on Bootstrap in the Anor identity"
 - Modify: `apps/web/app/components/audience-features.tsx`
 - Modify: `apps/web/app/components/store-badges.tsx` (add an `onDark` variant: transparent, white border/text)
 - Create: `apps/web/app/styles/_home-sirly.scss` (imported from `anor.scss` after the existing partials)
+- Create: `apps/web/app/components/home-motion.tsx` (client-only anime.js primitives — see the animation step)
 - Test: `tests/e2e/discover.spec.ts` (assertions on `.home-sections`, `.home-card__rating`, `.home-category.is-empty`)
 
 **Interfaces:**
@@ -817,7 +818,82 @@ Device frame (`.sh-phone`), fake status bar with "9:41", a disabled search input
 
 `home-sections.tsx` renders bands 2-5 (why / explainer / steps / stats) from `LandingCopy` + the feed counts; `audience-features.tsx` renders band 6 (B2B pitch) — delete the pastel bento entirely. `store-badges.tsx` gains the `onDark` prop (transparent, `border border-white`, white text, rounded pill).
 
-- [ ] **Step 6: Run the affected specs**
+- [ ] **Step 6: Animate the home page with anime.js (`home-motion.tsx`)**
+
+**AMENDED 2026-08-05 (user decision):** home-page animations use **anime.js v4** (`animejs@^4.5.0`, already installed in `@manzil/web`, commit `28de3bd`) — NOT Framer Motion. Framer Motion's `Reveal` stays for the rest of the site; do not import `Reveal`/`RevealStagger` on the home page. anime.js v4 API (NOT the v3 `anime({...})` default export — v4 is named exports):
+
+```tsx
+"use client";
+
+import { useEffect, useRef, type ReactNode } from "react";
+import { animate, onScroll, stagger, utils } from "animejs";
+
+const REDUCED = () =>
+  typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/** Count-up for the stats band: 0 → value when the band scrolls into view. */
+export function CountUp({ value, className }: { value: number; className?: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (REDUCED()) { el.textContent = String(value); return; }
+    const counter = { n: 0 };
+    const anim = animate(counter, {
+      n: value,
+      duration: 1400,
+      ease: "outQuart",
+      autoplay: onScroll({ target: el, enter: "bottom top+=85%", once: true }),
+      onUpdate: () => { el.textContent = String(Math.round(counter.n)); },
+    });
+    return () => anim.revert();
+  }, [value]);
+  return <span ref={ref} className={className}>0</span>;
+}
+
+/** Scroll-triggered rise-in for band content; direct children stagger. */
+export function ScrollIn({ children, className }: { children: ReactNode; className?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || REDUCED()) return;
+    const targets = el.children.length > 1 ? [...el.children] : [el];
+    utils.set(targets, { opacity: 0, translateY: 28 });
+    const anim = animate(targets, {
+      opacity: 1,
+      translateY: 0,
+      duration: 700,
+      delay: stagger(90),
+      ease: "outQuart",
+      autoplay: onScroll({ target: el, enter: "bottom top+=88%", once: true }),
+    });
+    return () => anim.revert();
+  }, []);
+  return <div ref={ref} className={className} data-reveal="">{children}</div>;
+}
+
+/** Endless gentle float for the hero phone mockup. */
+export function FloatLoop({ children, className }: { children: ReactNode; className?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || REDUCED()) return;
+    const anim = animate(el, {
+      translateY: [-8, 8],
+      duration: 3200,
+      ease: "inOutSine",
+      alternate: true,
+      loop: true,
+    });
+    return () => anim.revert();
+  }, []);
+  return <div ref={ref} className={className}>{children}</div>;
+}
+```
+
+Usage: stats band numbers become `<CountUp value={counts.businesses} className="sh-stat display-4" />` etc.; wrap each band's inner container in `<ScrollIn>`; wrap the phone mockup in `<FloatLoop>`. Rules: initial hidden state is set from JS only (`utils.set` inside the effect), NEVER in CSS/SSR markup — the server-rendered page must be fully visible without JS (this is what keeps the Task 3 no-JS guard green; the `data-reveal` attribute on `ScrollIn` keeps the noscript override applicable as belt-and-braces). `prefers-reduced-motion` short-circuits to the final state. Keep all three primitives in the one `home-motion.tsx` file.
+
+- [ ] **Step 7: Run the affected specs**
 
 ```bash
 SKIP_AUTH_SETUP=1 npx playwright test tests/e2e/discover.spec.ts tests/e2e/no-js.spec.ts tests/e2e/shell-boundary.spec.ts
@@ -825,15 +901,15 @@ SKIP_AUTH_SETUP=1 npx playwright test tests/e2e/discover.spec.ts tests/e2e/no-js
 
 Expected: PASS after the sanctioned spec update from the Interfaces note (category-rail assertions → offer-band CTA). Never delete an assertion without a replacement; explain the move in the commit body.
 
-- [ ] **Step 7: Verify visually, all locales and widths**
+- [ ] **Step 8: Verify visually, all locales and widths**
 
-Screenshot `/uz`, `/ru`, `/en` at 390, 768, 1440. Check: no horizontal overflow at 390 (the rotated phone mockup is the likely offender — clamp with `overflow-hidden` on the hero, not the page); lime only ever on green; Russian strings (longest) don't clip the 96px offer line — let it wrap, don't shrink-to-fit; the green skin appears on NO other route (spot-check `/uz/discover`).
+Screenshot `/uz`, `/ru`, `/en` at 390, 768, 1440. Check: no horizontal overflow at 390 (the rotated phone mockup is the likely offender — clamp with `overflow-hidden` on the hero, not the page); lime only ever on green; Russian strings (longest) don't clip the 96px offer line — let it wrap, don't shrink-to-fit; the green skin appears on NO other route (spot-check `/uz/discover`). Also verify with JS disabled that every band's content is fully visible (anime.js sets hidden states from JS only, so no-JS must render everything).
 
-- [ ] **Step 8: Commit**
+- [ ] **Step 9: Commit**
 
 ```bash
-git add apps/web/app/\[locale\]/\(site\)/page.tsx apps/web/app/lib/landing-copy.ts apps/web/app/components/hero-businesses.tsx apps/web/app/components/home-sections.tsx apps/web/app/components/audience-features.tsx apps/web/app/components/store-badges.tsx apps/web/app/styles/_home-sirly.scss apps/web/app/styles/anor.scss tests/e2e/discover.spec.ts
-git commit -m "feat(web): rebuild home as a sirly.uz look-alike (scoped green skin)"
+git add apps/web/app/\[locale\]/\(site\)/page.tsx apps/web/app/lib/landing-copy.ts apps/web/app/components/hero-businesses.tsx apps/web/app/components/home-sections.tsx apps/web/app/components/audience-features.tsx apps/web/app/components/store-badges.tsx apps/web/app/components/home-motion.tsx apps/web/app/styles/_home-sirly.scss apps/web/app/styles/anor.scss tests/e2e/discover.spec.ts
+git commit -m "feat(web): rebuild home as a sirly.uz look-alike (scoped green skin, anime.js motion)"
 ```
 
 ---
