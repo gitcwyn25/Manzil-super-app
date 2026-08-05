@@ -8,17 +8,16 @@
 > 3. ⏳ `design-foundation-v1.0` tagged
 > 4. ⏳ Web launch gate passes (Genesis Record published)
 >
-> **Governance blockers surfaced per this prompt's own STOP rule — resolved by
-> standing defaults, overridable by the user:**
-> - **Target platform:** WOW Flow screens (splash, OTP, permissions, safe areas) are
->   mobile-app screens. The mobile stack decision is parked at "keep Kotlin/Compose"
->   (vision doc adoption note). Default target: **the existing Kotlin/Compose app**.
-> - **Sequencing:** the authorized build order (doc 14) puts ① WOW wireframes and
->   ② hi-fi + ③ mobile design-system implementation BEFORE production UI, and the
->   obsidian/gold mobile tokens do not exist in code yet ("use only approved design
->   tokens" is unsatisfiable today). Default chain: web launch → WOW Flow wireframes
->   (approval artifact) → Compose token foundation (`design-foundation-mobile-v1.0`)
->   → THEN this prompt executes.
+> **Governance blockers — RESOLVED (user/CTO decisions, 2026-08-05):**
+> - **Target platform: React Native + Expo (ADR-004).** Kotlin/Compose app frozen as
+>   reference implementation.
+> - **Sequencing (authorized chain, no shortcuts):** web launch → Genesis Record →
+>   review → WOW Flow wireframes → review → mobile design foundation →
+>   `design-foundation-mobile-v1.0` tag → this prompt, SPLIT into three:
+>   - **02A** — Splash · Welcome · navigation shell → DONE → review
+>   - **02B** — Authentication · OTP → DONE → review
+>   - **02C** — Interests · AI Introduction · Profile · Home Arrival → DONE → review
+>   Each sub-prompt inherits every rule below; each ends in review before the next.
 
 ---
 

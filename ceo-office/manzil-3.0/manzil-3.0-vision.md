@@ -5,11 +5,10 @@
 > Marketplace" design (user-approved, in flight). Two conflicts this doc raises are
 > resolved as follows unless the user overrides:
 >
-> 1. **Mobile stack** — doc proposes React Native/Expo; the existing consumer app is
->    Kotlin/Compose (22 tasks, 155 green tests, 4.4MB R8 APK, shipped 2026-08-04).
->    Decision: keep Kotlin/Compose and adopt 3.0 UX concepts natively (Reanimated-class
->    motion is achievable in Compose). An Expo rewrite is a user-level decision with
->    real cost — parked, not adopted.
+> 1. **Mobile stack** — ~~parked at "keep Kotlin/Compose"~~ **RESOLVED 2026-08-05 by
+>    explicit user/CTO decision: React Native + Expo (see `docs/adr/ADR-004`).** The
+>    Kotlin/Compose app (22 tasks, 155 green tests, shipped 2026-08-04) is frozen as
+>    a reference implementation; its API contract tests and UX learnings carry over.
 > 2. **Visual identity** — doc proposes dark-first Obsidian `#0C0D0F` / Gold `#C9A84C` /
 >    Cream `#F5F0E6`; the approved web design is light Electric Blue (Vibrant
 >    Marketplace). Decision: web ships Vibrant Marketplace now; all styling lands in

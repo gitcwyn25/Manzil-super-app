@@ -50,7 +50,7 @@ Natural, non-intrusive hooks for reminders, updates, and post-event engagement. 
 - **AI audit shape:** every Gurman action logs `{principal: gurman-ai, action, resource, result, userApproval}` — the RBAC-principal choice (ADR-001) exists to make this trivial and to future-proof more autonomous capabilities.
 - **Supporting metrics** under CE/MAU: **TTFCE** (time to first completed experience), **PCR** (plan completion rate), **RAR** (recommendation acceptance rate) — they explain *why* the north star moves.
 - **Workspace Timeline is a domain model, not a UI feature.** It has become the object the product revolves around; model it as its own entity with its own lifecycle.
-- **Queued ADR-004 (write when Workspace implementation begins):** how timelines are recorded — full event sourcing vs append-only activity log. Immutable events (Workspace Created → Venue Added → Budget Updated → Guest Invited → Booking Confirmed → …) make history, collaboration, notifications, undo, and analytics cheap later. Decision deferred to implementation start, deliberately.
+- **Queued ADR-005 (write when Workspace implementation begins; renumbered — ADR-004 became the mobile-platform decision):** how timelines are recorded — full event sourcing vs append-only activity log. Immutable events (Workspace Created → Venue Added → Budget Updated → Guest Invited → Booking Confirmed → …) make history, collaboration, notifications, undo, and analytics cheap later. Decision deferred to implementation start, deliberately.
 - **Scope discipline:** critical path is Foundation → component kit → web launch → WOW Flow → Workspace prototype/validation → Tool Orchestrator capabilities for it. Everything else justifies its place on that path before getting engineering attention.
 - **Review mode from here:** tangible artifacts only — screenshots, interactive prototypes, build logs, user feedback, implementation decisions.
 
@@ -72,6 +72,13 @@ Natural, non-intrusive hooks for reminders, updates, and post-event engagement. 
 
 - **Nothing bypasses review — not even the founders.** Any change to a frozen foundation component or product principle goes through: proposal → review → ADR (if it meets the ADR bar) → version bump → merge. Consistency survives growth beyond one or two people.
 - Strategy phase formally closed. Review cycles from here: screenshot review, UX critique, performance review, architecture review, API review, user-testing analysis, sprint prioritization — always referencing product principles and metrics, never personal preference.
+
+## v1.5 amendment (2026-08-05)
+
+- **UI Isolation Rule (immutable):** *no screen may define its own visual values.* Every visual property originates from the design system — `tokens.spacing.lg`, never `padding: 17`; `tokens.colors.gold.primary`, never `"#D4AF37"`. Applies to web (already enforced via Sass tokens) and mobile (from `design-foundation-mobile-v1.0` onward).
+- **Mobile platform decided:** React Native + Expo (ADR-004). Kotlin/Compose app frozen as reference implementation.
+- **Authorized execution chain (no shortcuts):** web launch → Genesis Record → review → WOW Flow wireframes → review → mobile design foundation → tag `design-foundation-mobile-v1.0` → Prompt 02A (splash/welcome/nav shell) → review → 02B (auth/OTP) → review → 02C (interests/AI intro/profile/home arrival) → review → Epic 2.
+- **Mobile design foundation scope:** typography, color tokens, elevation, motion, iconography, spacing, grid, radius, shadows, theme, component primitives — nothing else. No screens, no navigation, no AI. Once tagged, never modified casually.
 
 ## After the web build is green
 
