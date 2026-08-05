@@ -68,6 +68,11 @@ Natural, non-intrusive hooks for reminders, updates, and post-event engagement. 
 - **Evidence entry #1 = the Genesis Record** (full format in `docs/evidence/README.md`).
 - **Operating rhythm from here:** Build → Review → Refine → Ship.
 
+## v1.4 amendment (2026-08-05, final)
+
+- **Nothing bypasses review — not even the founders.** Any change to a frozen foundation component or product principle goes through: proposal → review → ADR (if it meets the ADR bar) → version bump → merge. Consistency survives growth beyond one or two people.
+- Strategy phase formally closed. Review cycles from here: screenshot review, UX critique, performance review, architecture review, API review, user-testing analysis, sprint prioritization — always referencing product principles and metrics, never personal preference.
+
 ## After the web build is green
 
 Shift entirely to **Epic 1: WOW Flow** — treat that flow as if it were the entire product. Every animation, transition, copy choice, AI interaction, and loading state polished until exceptional. Install → first meaningful planned experience with confidence and near-zero friction = the core of Manzil validated.

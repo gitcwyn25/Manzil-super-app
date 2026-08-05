@@ -135,6 +135,19 @@ Success is not time-in-app. Success is how quickly users accomplish meaningful r
 
 - **Operational principle added:** **"Every AI action should be reversible whenever practical."** Cancel suggestions, edit plans, undo removals, restore deleted items, re-run recommendations. People trust AI more when they know they remain in control.
 
+## Appendix C (v1.3, 2026-08-05) — Canonical Product Identity
+
+The converged identity of Manzil, in six lines:
+
+- **Three modes:** Discover · Plan · Experience
+- **One AI:** Gurman
+- **One persistent object:** the Workspace Timeline
+- **One promise:** confidence, not information
+- **One hero use case:** plan and book a birthday in under three minutes
+- **One north star:** Completed Experiences per MAU
+
+**Validation milestone:** a real user completes the birthday planning flow, books the experience successfully, and says *"that was easier than I expected."* Everything after that is optimization, expansion, and scale.
+
 ## What Comes Next (document order)
 
 1. ✅ Product Bible (this document)
