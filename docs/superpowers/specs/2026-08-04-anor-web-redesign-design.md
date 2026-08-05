@@ -160,3 +160,9 @@ Mitigation: the dashboard is added to the visual regression check (screenshots a
 - Logo/wordmark changes.
 - Real map integration on discover (rail is reserved for it).
 - Native apps (Android app has its own design system).
+
+---
+
+## Amendment — 2026-08-05: sirly.uz look-alike home (user decision)
+
+The home page `/` is redesigned as a full visual look-alike of https://sirly.uz/ — its exact section shape AND visual dress (deep-green `#04483F`→`#0a6b5e` gradient bands, lime `#A1DD41` accents, pill buttons, 120px wave dividers, floating phone mockup hero, alternating white/green band rhythm, FAQ accordion, oversized offer band). All other routes keep the Anor palette defined above. The two-world split (green home, Anor elsewhere) was offered explicitly and chosen by the user. The green skin is scoped under a `.sh` wrapper on the home page only. Plan Task 5 carries the measured reference constants and full band mapping.

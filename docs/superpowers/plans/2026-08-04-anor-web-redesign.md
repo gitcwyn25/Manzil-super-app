@@ -651,116 +651,189 @@ git commit -m "feat(web): rebuild site chrome on Bootstrap in the Anor identity"
 
 ---
 
-### Task 5: Home page
+### Task 5: Home page — sirly.uz look-alike
+
+**AMENDED 2026-08-05 (user decision):** the home page is a full visual look-alike of https://sirly.uz/ — its exact section shape AND its visual dress (deep-green gradients, lime accents, pill buttons, wave dividers, floating phone mockup). All OTHER pages keep the Anor palette; this two-world split is deliberate and user-approved. The green skin is therefore SCOPED to the home page via a `.sh` wrapper class — it must not leak into shared chrome or other routes.
+
+**Reference constants (measured from sirly.uz in a real browser on 2026-08-05):**
+- Deep green `#04483F`, mid green `#0a6b5e`; band background: `linear-gradient(135deg, #04483F, #0a6b5e, #04483F)`.
+- Lime accent `#A1DD41` — used for highlighted headline phrases, stat numbers (weight 900), and inline text highlights on green. Never used on white backgrounds for text (fails contrast); on white, use deep green.
+- H1/H2 on bands: 60px bold (Bootstrap `display-*` classes with the Unbounded display font); the oversized offer headline is 96px weight 900 (`display-1`).
+- Buttons: fully-rounded pills (`border-radius: 50rem`), deep-green fill with white text on light, lime fill `#A1DD41` with deep-green text on green bands.
+- Store badges: transparent with 1px white border, rounded, white text, on the green hero.
+- Wave dividers: full-width SVG, `viewBox="0 0 1440 120"`, height ~120px, filling with the color of the adjacent band (white wave over green band edge and vice versa).
+- FAQ: Bootstrap accordion restyled — 12px radius items, white cards on a white→gray-50 gradient section.
+- Band rhythm: alternating white / green-gradient full-bleed sections, `py-16/py-24`-scale padding (use Bootstrap `py-5` + a `.sh-band` padding rule).
 
 **Files:**
 - Modify: `apps/web/app/[locale]/(site)/page.tsx`
 - Modify: `apps/web/app/lib/landing-copy.ts`
-- Modify: `apps/web/app/components/hero-businesses.tsx`
+- Rewrite: `apps/web/app/components/hero-businesses.tsx` → becomes the phone-mockup hero component (keep the filename; it still renders the hero businesses — now inside a phone frame)
 - Modify: `apps/web/app/components/home-sections.tsx`
 - Modify: `apps/web/app/components/audience-features.tsx`
-- Modify: `apps/web/app/components/store-badges.tsx`
+- Modify: `apps/web/app/components/store-badges.tsx` (add an `onDark` variant: transparent, white border/text)
+- Create: `apps/web/app/styles/_home-sirly.scss` (imported from `anor.scss` after the existing partials)
 - Test: `tests/e2e/discover.spec.ts` (assertions on `.home-sections`, `.home-card__rating`, `.home-category.is-empty`)
 
 **Interfaces:**
-- Consumes: chrome from Task 4; `getHomeFeed(locale)` from `app/lib/api.ts` — data fetching is unchanged, only markup and copy change.
-- Produces: `getLandingCopy(locale): LandingCopy` extended with the new section keys below. Task 6 reuses `LandingCopy` for the `/business` page.
-- **Preserves (asserted by e2e):** `.home-sections`, `.home-card`, `.home-category`, `.home-category.is-empty` (its `href` must match `/business\/register/`), `.home-card__rating` (text must never match `/^0\.0\s*★/`).
+- Consumes: chrome from Task 4 (nav + footer stay site-wide Anor chrome — the sirly skin begins below the nav and ends above the footer); `getHomeFeed(locale)` from `app/lib/api.ts` — data fetching is unchanged.
+- Produces: `getLandingCopy(locale): LandingCopy` extended with the section keys below. Task 6 reuses `LandingCopy` for `/business`.
+- **Preserves (asserted by e2e):** `.home-sections` (now wraps the band sequence), `.home-card` and `.home-card__rating` (now on the business cards INSIDE the phone mockup; rating text must never match `/^0\.0\s*★/` — keep the reviewCount guard). `.home-category` / `.home-category.is-empty`: the category rail is CUT from the home page in this design; update `tests/e2e/discover.spec.ts` in the same commit — move/keep the `is-empty → /business/register` href assertion onto the offer-band CTA (`.sh-offer .btn`), and state the reason in the commit body. Never delete an assertion without a replacement.
 
-**Section order (replaces the current five blocks):**
-1. Hero — split: Unbounded headline, one owner-value subline, primary `Boshlash` CTA, quiet text link to the app section. Right: arch-cropped photo collage. Inline mono proof line (businesses · reviews · districts) — inline text, NOT a metric band.
-2. How it works — three numbered editorial rows for owners: claim → verify → manage. Replaces "Biz asosini qurdik", which reads as an empty-launch admission.
-3. Product proof — the four features as alternating media rows with product screenshots in device frames. The pastel bento grid, including the off-brand violet card, is removed.
-4. Pricing teaser — Free / Pro / Max, three cards, honest one-liners, link to full pricing.
-5. App moment — one decisive band, arch-masked photo plus store badges. Appears nowhere else in the page set.
+**Section order — mirror sirly.uz exactly, Manzil content in each slot (all copy trilingual, uz source of truth; keep Manzil's plain official voice — no emoji, no ":)", no invented claims):**
+1. **Hero** — green gradient band. Left: H1 with ONE phrase highlighted in lime (uz: headline about finding the city's best places, the highlighted phrase being the value hook), subline with 1-2 lime-highlighted key words, two store badges (`onDark` variant). Right: floating phone mockup — rounded device frame, notch + "9:41" status bar, a search input mock, then 2-3 REAL business cards from `getHomeFeed` (photo, name, mono rating, district) with `.home-card` / `.home-card__rating` classes. White wave divider at the bottom edge.
+2. **White band — "Nega aynan Manzil?"** — lead paragraph + three benefits (verified reviews, real business data, free for users). Deep-green headline accents.
+3. **Green band — explainer** — what Manzil is (the city's businesses, one platform); photo right, wave top and bottom.
+4. **White band — "Qanday ishlaydi? " + 3 steps** — numbered circles (deep-green circle, white numeral): for owners: claim → verify → manage (the spec's how-it-works content in sirly's step form).
+5. **Green band — platform stats** — three oversized lime numbers, weight 900 (businesses · reviews · districts) with white labels, from the same platform data the current page uses. This replaces sirly's ecology stats slot.
+6. **White band — "Biznesingiz bormi? Manzil'ga qo'shiling!"** — owner pitch: product screenshot + short feature list + deep-green pill CTA to `/business`.
+7. **Green band — oversized offer** — `display-1` (96px-scale) weight-900 white/lime headline for the honest Manzil equivalent of sirly's "0% komissiya": the Free plan ("BEPUL BOSHLANG" family), lime pill CTA to `/{locale}/business/register` carrying class `sh-offer`-scoped `.btn` (see preserved-assertions note).
+8. **FAQ accordion** — Bootstrap accordion, 12px radius, 5-6 real questions (what is Manzil, how do reviews work, how to claim a business, is it free, which cities) on white→gray gradient.
+9. **Footer** — the shared Task 4 footer, unchanged.
 
-- [ ] **Step 1: Add the new copy keys to `apps/web/app/lib/landing-copy.ts`**
+- [ ] **Step 1: Create `apps/web/app/styles/_home-sirly.scss` and import it from `anor.scss`**
 
-Follow the file's existing pattern exactly: explicit exported type first, then `const landing: Record<string, LandingCopy>`, then the getter with `?? landing.uz`. All values must be plain serializable strings — placeholders like `{count}`, never functions (the file documents this at lines 7-12).
+Scoped skin — nothing outside `.sh` may change appearance:
+
+```scss
+// sirly.uz look-alike skin, scoped to the home page (user decision 2026-08-05).
+// Constants measured from the reference site; do not reuse outside .sh.
+.sh {
+  --sh-deep: #04483f;
+  --sh-mid: #0a6b5e;
+  --sh-lime: #a1dd41;
+
+  .sh-band {
+    background: linear-gradient(135deg, var(--sh-deep), var(--sh-mid), var(--sh-deep));
+    color: #fff;
+    padding-block: 6rem;
+  }
+  .sh-band--light { background: #fff; color: var(--bs-body-color); padding-block: 6rem; }
+  .sh-accent { color: var(--sh-lime); }
+  .sh-band--light .sh-accent { color: var(--sh-deep); }
+
+  .sh-pill {
+    border-radius: 50rem;
+    font-weight: 500;
+    padding: 0.625rem 1.5rem;
+  }
+  .sh-band .btn-primary {
+    @extend .sh-pill;
+    background: var(--sh-lime); border-color: var(--sh-lime); color: var(--sh-deep);
+  }
+  .sh-band--light .btn-primary,
+  .sh-faq ~ * .btn-primary {
+    @extend .sh-pill;
+    background: var(--sh-deep); border-color: var(--sh-deep); color: #fff;
+  }
+
+  .sh-wave { display: block; width: 100%; height: 120px; }
+
+  .sh-stat { color: var(--sh-lime); font-weight: 900; }
+
+  .sh-phone {
+    border-radius: 2.5rem; background: #fff; border: 10px solid #101314;
+    box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.5);
+    transform: rotate(-2deg);
+  }
+
+  .sh-step-num {
+    width: 2.5rem; height: 2.5rem; border-radius: 50%;
+    background: var(--sh-deep); color: #fff;
+    display: inline-flex; align-items: center; justify-content: center; font-weight: 700;
+  }
+
+  .accordion-item { border-radius: 12px; overflow: hidden; }
+}
+```
+
+- [ ] **Step 2: Extend `apps/web/app/lib/landing-copy.ts`**
+
+Follow the file's existing pattern exactly (exported type, `Record<string, LandingCopy>`, getter with `?? landing.uz`; plain serializable strings only). New keys:
 
 ```ts
 export type LandingCopy = {
   // ...existing keys retained...
-  heroSubline: string;
-  heroProof: string;          // e.g. "{businesses} ta biznes · {reviews} ta sharh · {districts} ta tuman"
-  heroAppLink: string;
+  heroTitlePre: string;      // text before the lime phrase
+  heroTitleAccent: string;   // the lime-highlighted phrase
+  heroTitlePost: string;     // text after (may be empty)
+  heroSubline: string;       // 1-2 sentence subline; markers not needed — accent words split out:
+  heroSublineAccents: string[]; // words within heroSubline to wrap in .sh-accent
+  whyTitle: string;
+  whyLead: string;
+  whyPoints: { title: string; body: string }[];   // exactly 3
+  explainerTitle: string;
+  explainerBody: string;
   howTitle: string;
-  howSteps: { title: string; body: string }[];
-  proofTitle: string;
-  pricingTeaserTitle: string;
-  pricingTeaser: { plan: string; line: string }[];
-  pricingTeaserCta: string;
-  appTitle: string;
-  appBody: string;
+  howSteps: { title: string; body: string }[];    // exactly 3
+  statsTitle: string;
+  statLabels: { businesses: string; reviews: string; districts: string };
+  b2bTitle: string;
+  b2bBody: string;
+  b2bCta: string;
+  offerKicker: string;
+  offerTitle: string;        // the oversized line
+  offerCta: string;
+  faqTitle: string;
+  faqItems: { q: string; a: string }[];           // 5-6
 };
 ```
 
-Write all three locales. Uzbek is the source of truth; keep the voice plain and official — no emoji, no invented marketing phrases.
+All three locales, uz first and authoritative.
 
-- [ ] **Step 2: Rebuild the page body in `apps/web/app/[locale]/(site)/page.tsx`**
+- [ ] **Step 3: Rebuild `page.tsx` as the band sequence**
 
-Keep the single `getHomeFeed(locale)` call unchanged. Example of the hero and the how-it-works rows:
+Wrap everything in `<div className="sh home-sections">`. Bands as `<section>` elements alternating `sh-band--light` / `sh-band`, wave SVGs between them (inline JSX, `viewBox="0 0 1440 120"`, `preserveAspectRatio="none"`, a single soft path, `fill` = the adjacent band's color, `aria-hidden`). Hero example:
 
 ```tsx
-<section className="container py-5">
-  <div className="row align-items-center g-5">
-    <div className="col-12 col-lg-6">
-      <h1 className="display-4 mb-3">{copy.titleLine1}<br />{copy.titleLine2}</h1>
-      <p className="lead text-body-secondary mb-4">{copy.heroSubline}</p>
-      <div className="d-flex flex-wrap align-items-center gap-3">
-        <Link className="btn btn-primary btn-lg" href={`/${locale}/business/register`}>{copy.ctaPrimary}</Link>
-        <a className="link-secondary small" href="#app">{copy.heroAppLink}</a>
+<section className="sh-band position-relative overflow-hidden pb-0">
+  <div className="container">
+    <div className="row align-items-center g-5 pb-5">
+      <div className="col-12 col-lg-6">
+        <h1 className="display-3 fw-bold">
+          {copy.heroTitlePre} <span className="sh-accent">{copy.heroTitleAccent}</span> {copy.heroTitlePost}
+        </h1>
+        <p className="lead mt-3 mb-4">{renderWithAccents(copy.heroSubline, copy.heroSublineAccents)}</p>
+        <StoreBadges onDark />
       </div>
-      <p className="anor-num small text-body-secondary mt-4 mb-0">{copy.heroProof}</p>
-    </div>
-    <div className="col-12 col-lg-6">
-      <div className="anor-arch ratio ratio-4x3">
-        <Image src={heroPhoto} alt="" fill sizes="(max-width: 992px) 100vw, 50vw" priority />
+      <div className="col-12 col-lg-6">
+        <HeroBusinesses items={feed.featured} locale={locale} />  {/* the phone mockup */}
       </div>
     </div>
   </div>
-</section>
-
-<section className="container py-5">
-  <div className="anor-rule mb-4"><span className="anor-rule__node" /></div>
-  <h2 className="h1 mb-4">{copy.howTitle}</h2>
-  <ol className="list-unstyled row g-4 mb-0">
-    {copy.howSteps.map((step, i) => (
-      <li className="col-12 col-md-4" key={step.title}>
-        <p className="anor-num h4 mb-2" style={{ color: "var(--anor-red)" }}>{String(i + 1).padStart(2, "0")}</p>
-        <h3 className="h5">{step.title}</h3>
-        <p className="text-body-secondary mb-0">{step.body}</p>
-      </li>
-    ))}
-  </ol>
+  <svg className="sh-wave" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 60 C360 120 720 0 1080 40 C1260 60 1380 80 1440 70 L1440 120 L0 120 Z" fill="#fff" />
+  </svg>
 </section>
 ```
 
-- [ ] **Step 3: Convert `home-sections.tsx` and the card, preserving asserted classes**
+`renderWithAccents` is a small local helper that splits the subline on each accent phrase and wraps matches in `<span className="sh-accent">`; keep it in `page.tsx`.
 
-Rebuild the interior with Bootstrap card/grid classes while keeping `home-sections`, `home-card`, `home-category`, `home-category is-empty`, and `home-card__rating` on the same elements as today. The empty-category link must still point at `/business/register`. The rating must never render `0.0 ★` — keep the existing guard that omits the rating when `reviewCount` is 0.
+- [ ] **Step 4: Rewrite `hero-businesses.tsx` as the phone mockup**
 
-- [ ] **Step 4: Replace the bento with alternating media rows**
+Device frame (`.sh-phone`), fake status bar with "9:41", a disabled search input mock, then map the top 2-3 feed businesses to compact cards keeping the class contract: `home-card` on the card, `home-card__rating` on the mono rating, and the existing reviewCount guard (omit rating entirely when 0). Photos via existing image URL fields with `<Image>`. No new data fetching.
 
-Rewrite `audience-features.tsx` as alternating `row` blocks (`flex-row-reverse` on odd indices) with a screenshot on one side and heading plus body on the other. Delete the pastel background cards, including the violet one — it is off-palette and is exactly the "identical card grid" the ban-list forbids. Keep the `animationDelay` / `--h` inline styles only if the new markup still animates; otherwise remove them.
+- [ ] **Step 5: Repurpose `home-sections.tsx` and `audience-features.tsx`**
 
-- [ ] **Step 5: Run the affected specs**
+`home-sections.tsx` renders bands 2-5 (why / explainer / steps / stats) from `LandingCopy` + the feed counts; `audience-features.tsx` renders band 6 (B2B pitch) — delete the pastel bento entirely. `store-badges.tsx` gains the `onDark` prop (transparent, `border border-white`, white text, rounded pill).
+
+- [ ] **Step 6: Run the affected specs**
 
 ```bash
 SKIP_AUTH_SETUP=1 npx playwright test tests/e2e/discover.spec.ts tests/e2e/no-js.spec.ts tests/e2e/shell-boundary.spec.ts
 ```
 
-Expected: PASS. If a selector genuinely no longer makes sense in the new markup, update the spec in this same commit and state why in the commit body — never delete an assertion to make it green.
+Expected: PASS after the sanctioned spec update from the Interfaces note (category-rail assertions → offer-band CTA). Never delete an assertion without a replacement; explain the move in the commit body.
 
-- [ ] **Step 6: Verify visually and check the longest locale**
+- [ ] **Step 7: Verify visually, all locales and widths**
 
-Screenshot `/uz`, `/ru`, `/en` at 390, 768, 1440. Confirm no horizontal overflow at 390, headings do not clip, and the app-download moment appears exactly once.
+Screenshot `/uz`, `/ru`, `/en` at 390, 768, 1440. Check: no horizontal overflow at 390 (the rotated phone mockup is the likely offender — clamp with `overflow-hidden` on the hero, not the page); lime only ever on green; Russian strings (longest) don't clip the 96px offer line — let it wrap, don't shrink-to-fit; the green skin appears on NO other route (spot-check `/uz/discover`).
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 8: Commit**
 
 ```bash
-git add apps/web/app/\[locale\]/\(site\)/page.tsx apps/web/app/lib/landing-copy.ts apps/web/app/components/hero-businesses.tsx apps/web/app/components/home-sections.tsx apps/web/app/components/audience-features.tsx apps/web/app/components/store-badges.tsx tests/e2e/discover.spec.ts
-git commit -m "feat(web): rebuild the home page in the Anor identity"
+git add apps/web/app/\[locale\]/\(site\)/page.tsx apps/web/app/lib/landing-copy.ts apps/web/app/components/hero-businesses.tsx apps/web/app/components/home-sections.tsx apps/web/app/components/audience-features.tsx apps/web/app/components/store-badges.tsx apps/web/app/styles/_home-sirly.scss apps/web/app/styles/anor.scss tests/e2e/discover.spec.ts
+git commit -m "feat(web): rebuild home as a sirly.uz look-alike (scoped green skin)"
 ```
 
 ---
