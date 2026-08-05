@@ -80,6 +80,14 @@ Natural, non-intrusive hooks for reminders, updates, and post-event engagement. 
 - **Authorized execution chain (no shortcuts):** web launch → Genesis Record → review → WOW Flow wireframes → review → mobile design foundation → tag `design-foundation-mobile-v1.0` → Prompt 02A (splash/welcome/nav shell) → review → 02B (auth/OTP) → review → 02C (interests/AI intro/profile/home arrival) → review → Epic 2.
 - **Mobile design foundation scope:** typography, color tokens, elevation, motion, iconography, spacing, grid, radius, shadows, theme, component primitives — nothing else. No screens, no navigation, no AI. Once tagged, never modified casually.
 
+## v1.6 amendment (2026-08-05 — final governance addition before sustained development)
+
+- **Engineering Budget per sprint**, declared before work begins: objective · success metric · max new components · max new public APIs · max new dependencies · max ADRs · expected duration · rollback plan (revert to previous tag). Constraining change keeps the architecture from expanding unintentionally. (Example — Sprint 02A: fidelity ≥95% to approved wireframes, ≤3 new components, 0 new APIs, 0 new deps, 0 ADRs, ~2 days, rollback to prior tag.)
+- **Definition of Ready (counterpart to DoD)** — a sprint/prompt starts only when ALL hold: governance dependencies satisfied · required ADRs accepted · wireframes approved · design tokens available · APIs defined or intentionally mocked · acceptance criteria written · reviewer assigned. Any missing → the sprint does not begin.
+- **Definition of Success (beyond DONE)** — post-release outcome criteria per epic. WOW Flow: user reaches First Home Arrival without errors · time-to-First-Home-Arrival within target · accessibility passes · no critical crashes · no governance violations · positive qualitative feedback from initial testers. Connects engineering output to product outcomes.
+- **Operating cadence (until launch):** plan (objective, DoR, budget) → build → verify (typecheck, lint, tests, build) → review against the six principles → capture evidence → merge → measure against product metrics → repeat.
+- Governance is now CLOSED to new principles; future decisions earn their place through implementation evidence.
+
 ## After the web build is green
 
 Shift entirely to **Epic 1: WOW Flow** — treat that flow as if it were the entire product. Every animation, transition, copy choice, AI interaction, and loading state polished until exceptional. Install → first meaningful planned experience with confidence and near-zero friction = the core of Manzil validated.
