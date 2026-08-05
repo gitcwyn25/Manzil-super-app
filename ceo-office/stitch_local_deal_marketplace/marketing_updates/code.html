@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Manzil Business - Discounts &amp; Updates</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-container": "#0070eb",
+                    "on-secondary-fixed": "#002113",
+                    "error": "#ba1a1a",
+                    "on-background": "#0b1c30",
+                    "surface-dim": "#cbdbf5",
+                    "inverse-primary": "#adc6ff",
+                    "tertiary-container": "#c05400",
+                    "error-container": "#ffdad6",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-tint": "#005bc1",
+                    "background": "#f8f9ff",
+                    "surface-variant": "#d3e4fe",
+                    "surface-bright": "#f8f9ff",
+                    "secondary-fixed-dim": "#4edea3",
+                    "outline": "#717786",
+                    "primary": "#0058bc",
+                    "tertiary-fixed": "#ffdbca",
+                    "surface-container": "#e5eeff",
+                    "secondary": "#006c49",
+                    "primary-fixed-dim": "#adc6ff",
+                    "inverse-on-surface": "#eaf1ff",
+                    "on-secondary": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "secondary-container": "#6cf8bb",
+                    "on-primary-fixed-variant": "#004493",
+                    "tertiary": "#994100",
+                    "surface-container-highest": "#d3e4fe",
+                    "on-tertiary-fixed-variant": "#783200",
+                    "on-tertiary-container": "#fffbff",
+                    "inverse-surface": "#213145",
+                    "surface-container-low": "#eff4ff",
+                    "primary-fixed": "#d8e2ff",
+                    "surface": "#f8f9ff",
+                    "on-surface-variant": "#414755",
+                    "on-error": "#ffffff",
+                    "on-surface": "#0b1c30",
+                    "on-primary-container": "#fefcff",
+                    "on-secondary-fixed-variant": "#005236",
+                    "on-primary-fixed": "#001a41",
+                    "on-secondary-container": "#00714d",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-high": "#dce9ff",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed": "#341100",
+                    "outline-variant": "#c1c6d7",
+                    "secondary-fixed": "#6ffbbe",
+                    "tertiary-fixed-dim": "#ffb690"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-lg": "32px",
+                    "stack-sm": "8px",
+                    "gutter": "16px",
+                    "base-unit": "4px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "32px",
+                    "stack-md": "16px"
+            },
+            "fontFamily": {
+                    "body-lg": [
+                            "Hanken Grotesk"
+                    ],
+                    "label-sm": [
+                            "Hanken Grotesk"
+                    ],
+                    "body-md": [
+                            "Hanken Grotesk"
+                    ],
+                    "headline-lg-mobile": [
+                            "Hanken Grotesk"
+                    ],
+                    "display-lg": [
+                            "Hanken Grotesk"
+                    ],
+                    "headline-lg": [
+                            "Hanken Grotesk"
+                    ],
+                    "headline-md": [
+                            "Hanken Grotesk"
+                    ],
+                    "label-md": [
+                            "Hanken Grotesk"
+                    ]
+            },
+            "fontSize": {
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.02em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-lg-mobile": [
+                            "28px",
+                            {
+                                    "lineHeight": "36px",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "display-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "56px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "800"
+                            }
+                    ],
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "label-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "letterSpacing": "0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ]
+            }
+          },
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* Custom Scrollbar for side nav */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.1); 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.2); 
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex antialiased">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen w-64 flex flex-col py-stack-lg border-r border-outline-variant/20 bg-surface-container-low dark:bg-inverse-surface shadow-md z-40 hidden md:flex">
+<!-- Header -->
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary text-on-primary flex items-center justify-center font-bold font-headline-md text-headline-md">
+                    M
+                </div>
+<div>
+<h1 class="font-headline-md text-headline-md font-extrabold text-primary dark:text-inverse-primary tracking-tight">Manzil Business</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Partner Portal</p>
+</div>
+</div>
+</div>
+<!-- Navigation -->
+<nav class="flex-1 px-4 space-y-2 overflow-y-auto">
+<a class="flex items-center gap-stack-md text-on-surface-variant dark:text-surface-variant px-4 py-3 hover:bg-surface-container-high dark:hover:bg-surface-variant transition-all rounded-lg scale-95 active:scale-100 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Overview
+            </a>
+<a class="flex items-center gap-stack-md text-on-surface-variant dark:text-surface-variant px-4 py-3 hover:bg-surface-container-high dark:hover:bg-surface-variant transition-all rounded-lg scale-95 active:scale-100 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+                Services
+            </a>
+<a class="flex items-center gap-stack-md text-on-surface-variant dark:text-surface-variant px-4 py-3 hover:bg-surface-container-high dark:hover:bg-surface-variant transition-all rounded-lg scale-95 active:scale-100 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+                Bookings
+            </a>
+<a class="flex items-center gap-stack-md text-on-surface-variant dark:text-surface-variant px-4 py-3 hover:bg-surface-container-high dark:hover:bg-surface-variant transition-all rounded-lg scale-95 active:scale-100 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+                Finance
+            </a>
+<a class="flex items-center gap-stack-md bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-lg px-4 py-3 scale-95 active:scale-100 transition-transform font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="sell" data-weight="fill" style="font-variation-settings: 'FILL' 1;">sell</span>
+                Discounts
+            </a>
+</nav>
+<!-- Footer Actions -->
+<div class="px-4 mt-auto space-y-2 pt-4 border-t border-outline-variant/20">
+<button class="w-full bg-primary-container text-on-primary-container font-label-md text-label-md py-3 rounded-lg flex items-center justify-center gap-2 hover:opacity-90 transition-opacity shadow-sm mb-4">
+                Upgrade Plan
+            </button>
+<a class="flex items-center gap-stack-md text-on-surface-variant dark:text-surface-variant px-4 py-3 hover:bg-surface-container-high dark:hover:bg-surface-variant transition-all rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Settings
+            </a>
+<a class="flex items-center gap-stack-md text-on-surface-variant dark:text-surface-variant px-4 py-3 hover:bg-surface-container-high dark:hover:bg-surface-variant transition-all rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+                Help
+            </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 bg-background min-h-screen pb-24 md:pb-8">
+<!-- Mobile Top Nav Placeholder (If needed, typically hidden when SideNav is primary, but good for context) -->
+<div class="md:hidden bg-surface shadow-sm sticky top-0 z-30 px-margin-mobile py-4 flex items-center justify-between">
+<div class="font-headline-md text-headline-md font-extrabold text-primary">Manzil Business</div>
+<button class="text-on-surface">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+<div class="max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop py-stack-lg">
+<header class="mb-stack-lg">
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background mb-2">Marketing &amp; Updates</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Engage your audience with new deals and business announcements.</p>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column: Actions (Create Discount & Post Update) -->
+<div class="lg:col-span-5 space-y-gutter">
+<!-- Create Discount Card -->
+<div class="bg-surface rounded-xl shadow-sm border border-outline-variant/30 p-6 relative overflow-hidden group">
+<!-- Decorative bg -->
+<div class="absolute -top-10 -right-10 w-32 h-32 bg-secondary-container/20 rounded-full blur-xl group-hover:scale-150 transition-transform duration-700 pointer-events-none"></div>
+<div class="flex items-center gap-3 mb-6 relative z-10">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">percent</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Create Discount</h3>
+</div>
+<form class="space-y-4 relative z-10">
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-1">Select Service</label>
+<select class="w-full rounded-lg border-outline-variant bg-surface text-on-surface focus:border-primary focus:ring-primary shadow-sm">
+<option>Full House Deep Clean</option>
+<option>Standard Maintenance</option>
+<option>Premium Detailing</option>
+</select>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-1">Percentage Off</label>
+<div class="relative">
+<input class="w-full rounded-lg border-outline-variant bg-surface text-on-surface focus:border-primary focus:ring-primary shadow-sm pl-4 pr-10" max="100" min="1" placeholder="20" type="number"/>
+<span class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant font-label-md">%</span>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-1">Duration (Days)</label>
+<input class="w-full rounded-lg border-outline-variant bg-surface text-on-surface focus:border-primary focus:ring-primary shadow-sm" min="1" placeholder="7" type="number"/>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-3 rounded-lg shadow-sm hover:shadow-md hover:bg-surface-tint transition-all active:scale-[0.98]" type="button">
+                                Generate Discount Code
+                            </button>
+</form>
+</div>
+<!-- Post an Update Card -->
+<div class="bg-surface rounded-xl shadow-sm border border-outline-variant/30 p-6 relative overflow-hidden group">
+<div class="absolute -bottom-10 -left-10 w-32 h-32 bg-primary-container/20 rounded-full blur-xl group-hover:scale-150 transition-transform duration-700 pointer-events-none"></div>
+<div class="flex items-center gap-3 mb-6 relative z-10">
+<div class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">campaign</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Post an Update</h3>
+</div>
+<div class="relative z-10">
+<textarea class="w-full rounded-lg border-outline-variant bg-surface text-on-surface focus:border-primary focus:ring-primary shadow-sm resize-none mb-4 p-3 font-body-md" placeholder="What's new with your business? Share updates, new equipment, or special announcements..." rows="4"></textarea>
+<div class="flex items-center justify-between">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-2 rounded-full hover:bg-surface-container" type="button">
+<span class="material-symbols-outlined">image</span>
+</button>
+<button class="bg-surface-container-high text-on-surface font-label-md text-label-md py-2 px-6 rounded-lg hover:bg-primary hover:text-on-primary transition-colors shadow-sm" type="button">
+                                    Publish Post
+                                </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: History & Metrics -->
+<div class="lg:col-span-7 space-y-gutter">
+<!-- Active Discounts Overview -->
+<div class="bg-surface rounded-xl shadow-sm border border-outline-variant/30 p-6">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-md text-headline-md text-on-surface">Active Campaigns</h3>
+<button class="text-primary font-label-sm text-label-sm hover:underline">View All</button>
+</div>
+<div class="space-y-4">
+<!-- Deal Item 1 -->
+<div class="flex items-center justify-between p-4 rounded-lg bg-surface-container-lowest border border-outline-variant/20 hover:shadow-sm transition-shadow">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-tertiary-container/10 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined">cleaning_services</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">Spring Cleaning Special</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">20% Off • Expires in 3 days</p>
+</div>
+</div>
+<div class="text-right">
+<div class="font-label-md text-label-md text-secondary">42 Redeemed</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">Code: SPRING20</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Updates History -->
+<div class="bg-surface rounded-xl shadow-sm border border-outline-variant/30 p-6">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-6">Recent Updates</h3>
+<div class="space-y-6">
+<!-- Post 1 -->
+<div class="relative pl-6 border-l-2 border-surface-container-high pb-6">
+<div class="absolute w-3 h-3 bg-primary rounded-full -left-[7px] top-1 ring-4 ring-surface"></div>
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Posted 2 days ago</span>
+<span class="bg-surface-container px-2 py-1 rounded text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Announcement</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface mb-4">We've just upgraded all our equipment to eco-friendly, low-noise variants! Better for the environment and better for your home. Book your next service to see the difference.</p>
+<!-- Image Placeholder -->
+<div class="w-full h-40 rounded-lg overflow-hidden mb-4 relative">
+<img class="w-full h-full object-cover" data-alt="A modern commercial cleaning machine sitting in a bright, sunlit room with hardwood floors. The lighting is soft and natural, creating a clean, eco-friendly aesthetic. The machine is sleek and professional, blending high-tech design with a trustworthy appearance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuClyVp5AuJgo6vR3u0Vh-3qWmxxr5sDy33TXT8ogwQ4mTVAqu0R--8fu1ml9AGnwJ_0NlqdWKN34wCTPka4W3_HIL2vzh73Vet1-UTA2eYdAzvBxQmB5UsAto7EjCQBMYJoFddztr3zbB5aMIa7pPYu8kt6tHb4noPSKAJ670tLPb_6uJQT-qkF4sEDx0XryzXE0o4Suzk6BLP5LYy-a0Hsm1_xfY9Z46lJ89Fvt6spMqGDtSDTKDsM"/>
+</div>
+<div class="flex gap-4 text-on-surface-variant font-label-sm text-label-sm">
+<div class="flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">visibility</span> 1.2k Views</div>
+<div class="flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">favorite</span> 84 Likes</div>
+</div>
+</div>
+<!-- Post 2 -->
+<div class="relative pl-6 border-l-2 border-surface-container-high">
+<div class="absolute w-3 h-3 bg-outline rounded-full -left-[7px] top-1 ring-4 ring-surface"></div>
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Posted 1 week ago</span>
+<span class="bg-surface-container px-2 py-1 rounded text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Update</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface mb-4">Expanding our service area to cover the North District! We're excited to bring our premium services to more homes starting next month.</p>
+<div class="flex gap-4 text-on-surface-variant font-label-sm text-label-sm">
+<div class="flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">visibility</span> 3.4k Views</div>
+<div class="flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">favorite</span> 210 Likes</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-background dark:bg-background" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Manzil for Business - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#0070eb",
+                        "on-secondary-fixed": "#002113",
+                        "error": "#ba1a1a",
+                        "on-background": "#0b1c30",
+                        "surface-dim": "#cbdbf5",
+                        "inverse-primary": "#adc6ff",
+                        "tertiary-container": "#c05400",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-tint": "#005bc1",
+                        "background": "#f8f9ff",
+                        "surface-variant": "#d3e4fe",
+                        "surface-bright": "#f8f9ff",
+                        "secondary-fixed-dim": "#4edea3",
+                        "outline": "#717786",
+                        "primary": "#0058bc",
+                        "tertiary-fixed": "#ffdbca",
+                        "surface-container": "#e5eeff",
+                        "secondary": "#006c49",
+                        "primary-fixed-dim": "#adc6ff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-secondary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#6cf8bb",
+                        "on-primary-fixed-variant": "#004493",
+                        "tertiary": "#994100",
+                        "surface-container-highest": "#d3e4fe",
+                        "on-tertiary-fixed-variant": "#783200",
+                        "on-tertiary-container": "#fffbff",
+                        "inverse-surface": "#213145",
+                        "surface-container-low": "#eff4ff",
+                        "primary-fixed": "#d8e2ff",
+                        "surface": "#f8f9ff",
+                        "on-surface-variant": "#414755",
+                        "on-error": "#ffffff",
+                        "on-surface": "#0b1c30",
+                        "on-primary-container": "#fefcff",
+                        "on-secondary-fixed-variant": "#005236",
+                        "on-primary-fixed": "#001a41",
+                        "on-secondary-container": "#00714d",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#dce9ff",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#341100",
+                        "outline-variant": "#c1c6d7",
+                        "secondary-fixed": "#6ffbbe",
+                        "tertiary-fixed-dim": "#ffb690"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "32px",
+                        "stack-sm": "8px",
+                        "gutter": "16px",
+                        "base-unit": "4px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "32px",
+                        "stack-md": "16px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "label-md": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined[style*="font-variation-settings: 'FILL' 1"] {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="h-full bg-background text-on-background font-body-md">
+<!-- Mobile Top Navigation (md:hidden) -->
+<header class="md:hidden bg-surface shadow-sm fixed top-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16">
+<div class="font-headline-md text-headline-md font-bold text-primary">
+            Manzil for Business
+        </div>
+<div class="flex gap-stack-sm items-center">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</header>
+<div class="flex h-screen pt-16 md:pt-0">
+<!-- SideNavBar (hidden md:flex) -->
+<nav class="hidden md:flex bg-surface-container-low shadow-md fixed left-0 top-0 h-screen w-64 flex-col py-stack-lg border-r border-outline-variant/20 z-40">
+<div class="px-margin-desktop mb-stack-lg flex flex-col items-center">
+<img class="w-16 h-16 rounded-lg mb-stack-sm shadow-sm object-cover" data-alt="A clean, modern corporate logo icon featuring a stylized house or arch motif, primarily in a deep primary blue color, set against a pristine white background. The design is minimal and trustworthy, suitable for a business management dashboard." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCieMZ2QrPAQHOHgdSgptsM7QK176OnyXyxzoCan9veZsj_ytczJL5pNACiTAF7SLmZKKzTccX99aPb3ymxLFYsGK3gT4havFtLWmxfU0SsCIo1wm_91RDe8MaZyxaXo-bhtxtEIinWpT7ZVONzXtXfLfRBLOwTlmNrbIiRqFRFsUROj3lzLmRCpKdCKfY7DPy74Q0kg3bFaGwRNUCFZtLLbO6iPX_wjVRj7XMQv3UqIpZFiN6YTxIm"/>
+<h1 class="font-headline-md text-headline-md font-extrabold text-primary text-center">Manzil Business</h1>
+<p class="font-label-md text-label-md text-on-surface-variant text-center">Partner Portal</p>
+</div>
+<div class="flex-1 flex flex-col gap-base-unit px-margin-desktop overflow-y-auto">
+<a class="flex items-center gap-stack-md bg-primary-container text-on-primary-container rounded-lg px-4 py-3 scale-95 active:scale-100 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</a>
+<a class="flex items-center gap-stack-md text-on-surface-variant px-4 py-3 hover:bg-surface-container-high transition-all scale-95 active:scale-100 rounded-lg" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-md text-label-md">Services</span>
+</a>
+<a class="flex items-center gap-stack-md text-on-surface-variant px-4 py-3 hover:bg-surface-container-high transition-all scale-95 active:scale-100 rounded-lg" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-label-md text-label-md">Bookings</span>
+</a>
+<a class="flex items-center gap-stack-md text-on-surface-variant px-4 py-3 hover:bg-surface-container-high transition-all scale-95 active:scale-100 rounded-lg" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-md text-label-md">Finance</span>
+</a>
+<a class="flex items-center gap-stack-md text-on-surface-variant px-4 py-3 hover:bg-surface-container-high transition-all scale-95 active:scale-100 rounded-lg" href="#">
+<span class="material-symbols-outlined">sell</span>
+<span class="font-label-md text-label-md">Discounts</span>
+</a>
+</div>
+<div class="px-margin-desktop mt-auto pt-stack-md border-t border-outline-variant/20 flex flex-col gap-base-unit">
+<button class="w-full py-2 mb-stack-sm bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:bg-primary/90 transition-colors shadow-sm">
+                    Upgrade Plan
+                </button>
+<a class="flex items-center gap-stack-md text-on-surface-variant px-4 py-3 hover:bg-surface-container-high transition-all scale-95 active:scale-100 rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<a class="flex items-center gap-stack-md text-on-surface-variant px-4 py-3 hover:bg-surface-container-high transition-all scale-95 active:scale-100 rounded-lg" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-md text-label-md">Help</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 p-margin-mobile md:p-margin-desktop overflow-y-auto bg-surface-bright">
+<header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-stack-lg gap-stack-md">
+<div>
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background">Dashboard Overview</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Welcome back, here's what's happening today.</p>
+</div>
+<div class="hidden md:flex items-center gap-stack-md">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors bg-surface-container rounded-full">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<img class="w-10 h-10 rounded-full border-2 border-primary object-cover" data-alt="A professional headshot of a business owner, smiling slightly, set against a blurred, bright office background to convey reliability and approachability in a modern business context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKN5Z3ObBccSza9n4CWJUTeUgUBgf8k93jYsraYueBryTET_dZ5Ss3FR0Jw31xSLLduNGPZStmPbzgMlPTIa-S8MF6Pr1GbVJoiLRTuUWri9NMlKRU-I043mbqZ5sBzDdERoiPt95a1G94ClDnY0pftTbNw0isiGH-AXZnraA9VjVc9RTZwAJEvh1yWxfXwsfFhUFhPxBBxlHyq5WhrEMyJgGz7PKuDva1msroXwaNTrhBza-yLVDT"/>
+</div>
+</header>
+<!-- Key Metrics (Bento Grid Style) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter mb-stack-lg">
+<!-- Total Bookings -->
+<div class="bg-surface rounded-xl p-gutter shadow-[0_4px_12px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition-shadow flex flex-col justify-between border border-outline-variant/10">
+<div class="flex justify-between items-start mb-stack-sm">
+<div class="p-2 bg-primary-container/10 rounded-lg text-primary">
+<span class="material-symbols-outlined">calendar_today</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary bg-secondary-container/20 px-2 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> +12%
+                        </span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-1">Total Bookings</p>
+<p class="font-headline-lg text-headline-lg text-on-surface font-bold">142</p>
+</div>
+</div>
+<!-- Revenue -->
+<div class="bg-surface rounded-xl p-gutter shadow-[0_4px_12px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition-shadow flex flex-col justify-between border border-outline-variant/10">
+<div class="flex justify-between items-start mb-stack-sm">
+<div class="p-2 bg-primary-container/10 rounded-lg text-primary">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary bg-secondary-container/20 px-2 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> +8%
+                        </span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-1">Revenue</p>
+<p class="font-headline-lg text-headline-lg text-on-surface font-bold">$12,450</p>
+</div>
+</div>
+<!-- Customer Satisfaction -->
+<div class="bg-surface rounded-xl p-gutter shadow-[0_4px_12px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition-shadow flex flex-col justify-between border border-outline-variant/10">
+<div class="flex justify-between items-start mb-stack-sm">
+<div class="p-2 bg-secondary-container/30 rounded-lg text-secondary">
+<span class="material-symbols-outlined">sentiment_satisfied</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container px-2 py-1 rounded-full flex items-center gap-1">
+                            Steady
+                        </span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-1">Customer Sat.</p>
+<div class="flex items-end gap-2">
+<p class="font-headline-lg text-headline-lg text-on-surface font-bold">4.8</p>
+<span class="font-label-md text-label-md text-on-surface-variant mb-1">/ 5.0</span>
+</div>
+</div>
+</div>
+<!-- Active Discounts -->
+<div class="bg-surface rounded-xl p-gutter shadow-[0_4px_12px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition-shadow flex flex-col justify-between border border-outline-variant/10">
+<div class="flex justify-between items-start mb-stack-sm">
+<div class="p-2 bg-tertiary-container/10 rounded-lg text-tertiary-container">
+<span class="material-symbols-outlined">sell</span>
+</div>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-1">Active Discounts</p>
+<p class="font-headline-lg text-headline-lg text-on-surface font-bold">3</p>
+</div>
+</div>
+</div>
+<!-- Main Data Area (Charts & Tables) -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Business Health Chart Placeholder -->
+<div class="lg:col-span-2 bg-surface rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.04)] p-gutter border border-outline-variant/10 flex flex-col h-full min-h-[300px]">
+<div class="flex justify-between items-center mb-stack-md">
+<h3 class="font-headline-md text-headline-md text-on-surface">Business Health</h3>
+<div class="flex gap-2">
+<button class="px-3 py-1 text-label-sm font-label-sm rounded-full bg-surface-container text-on-surface">Week</button>
+<button class="px-3 py-1 text-label-sm font-label-sm rounded-full bg-primary-container text-on-primary-container">Month</button>
+</div>
+</div>
+<div class="flex-1 relative w-full rounded-lg overflow-hidden flex items-center justify-center bg-surface-container-lowest">
+<div class="bg-cover bg-center w-full h-full absolute inset-0 opacity-80" data-alt="A clean, abstract line graph illustration set against a light background, featuring two smooth intersecting lines representing revenue and costs. One line is a vibrant primary blue, the other a muted grey. The style is modern, data-driven, and minimalist, suitable for a dashboard placeholder chart." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBUSFdDj9mRbTbe2mHejSQ06R6bcI2PcOnuvJYPuHG0iAL-q3xKpndg7WMNUFS5XT1jgPcxAziC72c9j1Oa3DLMPOBAIJiTnEi5QCUbJydgB7FrDKV8GHPQpbXFKc8arX3ZEn5DME-GGpsLcPFCf2YNMFXEMxEz5lCXuVkK7r3fQ78W2wM1-Gs2m_XDHwRJm4cUQqQ2lFUf7b5lKXCU_k2MUPvhnfNGsyOtbOZEeO2dGInHgTTXIl-I')"></div>
+<div class="relative z-10 bg-surface/80 backdrop-blur-sm px-4 py-2 rounded-lg shadow-sm border border-outline-variant/20">
+<span class="font-label-md text-label-md text-on-surface">Interactive Chart Component</span>
+</div>
+</div>
+</div>
+<!-- Recent Bookings Table List -->
+<div class="lg:col-span-1 bg-surface rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.04)] p-gutter border border-outline-variant/10 flex flex-col h-full">
+<div class="flex justify-between items-center mb-stack-md">
+<h3 class="font-headline-md text-headline-md text-on-surface">Recent Bookings</h3>
+<button class="text-primary hover:text-primary/80 font-label-md text-label-md transition-colors">View All</button>
+</div>
+<div class="flex-1 flex flex-col gap-3">
+<!-- Booking Item -->
+<div class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-container-low transition-colors border border-transparent hover:border-outline-variant/20">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container/20 flex items-center justify-center text-primary font-bold">
+                                    JS
+                                </div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">John Smith</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Deep Cleaning Service</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-label-md text-label-md text-on-surface">$120</p>
+<span class="font-label-sm text-label-sm text-secondary bg-secondary-container/20 px-2 py-0.5 rounded-full">Confirmed</span>
+</div>
+</div>
+<!-- Booking Item -->
+<div class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-container-low transition-colors border border-transparent hover:border-outline-variant/20">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-tertiary-container/20 flex items-center justify-center text-tertiary-container font-bold">
+                                    AD
+                                </div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Alice Doe</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Plumbing Consultation</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-label-md text-label-md text-on-surface">$85</p>
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container px-2 py-0.5 rounded-full">Pending</span>
+</div>
+</div>
+<!-- Booking Item -->
+<div class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-container-low transition-colors border border-transparent hover:border-outline-variant/20">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container/20 flex items-center justify-center text-primary font-bold">
+                                    RJ
+                                </div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Robert Jones</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Weekly Maintenance</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-label-md text-label-md text-on-surface">$200</p>
+<span class="font-label-sm text-label-sm text-secondary bg-secondary-container/20 px-2 py-0.5 rounded-full">Confirmed</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

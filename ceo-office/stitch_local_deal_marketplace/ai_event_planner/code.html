@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Manzil AI Event Planner</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed": "#002113",
+                        "surface-bright": "#f8f9ff",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "background": "#f8f9ff",
+                        "on-tertiary-fixed-variant": "#783200",
+                        "primary-fixed-dim": "#adc6ff",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed": "#ffdbca",
+                        "error-container": "#ffdad6",
+                        "surface-dim": "#cbdbf5",
+                        "tertiary": "#994100",
+                        "on-background": "#0b1c30",
+                        "on-primary": "#ffffff",
+                        "secondary": "#006c49",
+                        "on-tertiary-container": "#fffbff",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#005236",
+                        "secondary-container": "#6cf8bb",
+                        "surface-tint": "#005bc1",
+                        "on-primary-fixed": "#001a41",
+                        "on-surface-variant": "#414755",
+                        "surface": "#f8f9ff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "primary": "#0058bc",
+                        "on-secondary-container": "#00714d",
+                        "secondary-fixed": "#6ffbbe",
+                        "surface-variant": "#d3e4fe",
+                        "on-surface": "#0b1c30",
+                        "on-error": "#ffffff",
+                        "primary-fixed": "#d8e2ff",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#213145",
+                        "surface-container": "#e5eeff",
+                        "primary-container": "#0070eb",
+                        "on-tertiary-fixed": "#341100",
+                        "tertiary-container": "#c05400",
+                        "inverse-primary": "#adc6ff",
+                        "error": "#ba1a1a",
+                        "outline": "#717786",
+                        "on-primary-fixed-variant": "#004493",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-primary-container": "#fefcff",
+                        "surface-container-high": "#dce9ff",
+                        "tertiary-fixed-dim": "#ffb690",
+                        "outline-variant": "#c1c6d7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "base-unit": "4px",
+                        "stack-lg": "32px",
+                        "margin-desktop": "32px",
+                        "gutter": "16px",
+                        "stack-sm": "8px",
+                        "stack-md": "16px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"],
+                        "label-md": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        .chat-bubble-enter {
+            animation: slideUpFade 0.4s ease-out forwards;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        @keyframes slideUpFade {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .package-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .package-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -8px rgba(0, 88, 188, 0.15);
+        }
+        
+        /* Hide scrollbar for neatness but allow scroll */
+        .hide-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scroll {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+<!-- TopNavBar Shared Component -->
+<header class="bg-surface/80 dark:bg-on-background/80 backdrop-blur-md border-b border-outline-variant dark:border-outline/20 shadow-sm dark:shadow-none docked full-width top-0 sticky z-50">
+<div class="max-w-7xl mx-auto px-margin-desktop flex justify-between items-center h-20 w-full">
+<div class="text-headline-md font-headline-md font-extrabold text-primary dark:text-primary-fixed-dim tracking-tight">Manzil</div>
+<nav class="hidden md:flex gap-gutter items-center h-full">
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors hover:bg-surface-container-low dark:hover:bg-surface-dim/10 transition-all duration-200 px-4 py-2 rounded-md h-full flex items-center" href="#">
+<span class="text-label-md font-label-md">Discover</span>
+</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors hover:bg-surface-container-low dark:hover:bg-surface-dim/10 transition-all duration-200 px-4 py-2 rounded-md h-full flex items-center" href="#">
+<span class="text-label-md font-label-md">Categories</span>
+</a>
+<!-- Active State -->
+<a class="text-primary dark:text-primary-fixed-dim border-b-2 border-primary dark:border-primary-fixed-dim pb-1 font-bold flex-col hover:bg-surface-container-low dark:hover:bg-surface-dim/10 transition-all duration-200 px-4 h-full flex items-center justify-center scale-[0.98] transition-transform" href="#">
+<span class="text-label-md font-label-md">AI Planner</span>
+</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors hover:bg-surface-container-low dark:hover:bg-surface-dim/10 transition-all duration-200 px-4 py-2 rounded-md h-full flex items-center" href="#">
+<span class="text-label-md font-label-md">Reviews</span>
+</a>
+</nav>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center bg-surface-container rounded-full px-4 py-2 focus-within:ring-2 ring-primary transition-all">
+<span class="material-symbols-outlined text-on-surface-variant mr-2" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md font-body-md text-on-surface p-0 w-32 placeholder-on-surface-variant/70" placeholder="Search..." type="text"/>
+</div>
+<button class="bg-primary text-on-primary text-label-md font-label-md px-6 py-2.5 rounded-full hover:bg-primary-container transition-colors shadow-sm">
+                    Sign In
+                </button>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col md:flex-row w-full max-w-7xl mx-auto md:px-margin-desktop md:py-stack-lg gap-stack-lg relative overflow-hidden">
+<!-- Left: Conversational Interface -->
+<section class="flex-1 flex flex-col bg-surface-container-lowest md:rounded-xl shadow-sm border border-outline-variant/30 overflow-hidden h-[calc(100vh-140px)] md:h-[800px] z-10 relative">
+<!-- AI Header -->
+<div class="p-4 border-b border-outline-variant/20 bg-surface-bright flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined icon-fill" data-icon="robot_2">robot_2</span>
+</div>
+<div>
+<h2 class="text-label-md font-label-md text-on-surface">Manzil Concierge</h2>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Always online</p>
+</div>
+</div>
+<!-- Chat Scroll Area -->
+<div class="flex-1 overflow-y-auto p-margin-mobile hide-scroll flex flex-col gap-stack-md bg-surface-container-lowest" id="chatArea">
+<!-- System Greeting -->
+<div class="flex gap-3 max-w-[85%] chat-bubble-enter" style="animation-delay: 0.1s;">
+<div class="w-8 h-8 rounded-full bg-primary/10 flex-shrink-0 flex items-center justify-center text-primary mt-1">
+<span class="material-symbols-outlined text-sm icon-fill" data-icon="robot_2">robot_2</span>
+</div>
+<div class="bg-surface-container text-on-surface p-4 rounded-2xl rounded-tl-sm text-body-md font-body-md shadow-sm">
+                        Hello! I'm your Manzil AI Planner. Ready to craft the perfect experience? Let's start with what you're planning. Is it a Date Night, Birthday, Corporate Event, or something else?
+                    </div>
+</div>
+<!-- User Input 1 -->
+<div class="flex gap-3 max-w-[85%] self-end flex-row-reverse chat-bubble-enter" style="animation-delay: 0.5s;">
+<div class="w-8 h-8 rounded-full bg-tertiary-container flex-shrink-0 flex items-center justify-center text-on-tertiary-container mt-1">
+<span class="material-symbols-outlined text-sm icon-fill" data-icon="person">person</span>
+</div>
+<div class="bg-primary text-on-primary p-4 rounded-2xl rounded-tr-sm text-body-md font-body-md shadow-sm">
+                        Planning a Date Night for this Friday. Budget is around $300.
+                    </div>
+</div>
+<!-- System Response with Packages -->
+<div class="flex gap-3 max-w-[95%] chat-bubble-enter" style="animation-delay: 1s;">
+<div class="w-8 h-8 rounded-full bg-primary/10 flex-shrink-0 flex items-center justify-center text-primary mt-1">
+<span class="material-symbols-outlined text-sm icon-fill" data-icon="robot_2">robot_2</span>
+</div>
+<div class="flex flex-col gap-3 w-full">
+<div class="bg-surface-container text-on-surface p-4 rounded-2xl rounded-tl-sm text-body-md font-body-md shadow-sm inline-block self-start">
+                            Excellent choice. A $300 budget for this Friday gives us some fantastic high-end options. Here are two curated "All-in-One" packages I've assembled based on top-rated local venues and services:
+                        </div>
+<!-- AI Package Suggestion Carousel (Inline) -->
+<div class="flex gap-4 overflow-x-auto pb-4 hide-scroll w-full snap-x">
+<!-- Package 1: The Romantic Evening (Mini Card) -->
+<div class="min-w-[280px] w-[280px] bg-surface-container-lowest border border-outline-variant/40 rounded-xl overflow-hidden shadow-sm flex flex-col cursor-pointer hover:border-primary transition-colors snap-center ring-2 ring-primary ring-offset-1">
+<div class="h-24 bg-surface-variant relative overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="An intimate, softly lit Italian restaurant interior setting for a romantic date night, featuring a small table with a red checkered cloth, flickering candle light, and a blurred background of a cozy, high-end dining establishment. Modern, crisp photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqR0paE5bAGvutKTzpZEDq-996vXiy0EFa8kEj1fVA5wbOW3hrGnraqOH0Ezam8A8YdOU47uXraTVRTYN8XY-gnq0Q3Dmb54OapPa2t4tZHnxJNQhX2N0x3MwswpsDXBiYMpBUvoUsaX0z9W1N7ifSXZG9x-DJ02L2ngSdol0jadsI9Jr176cmv74h7kmW80fcO4pFoZeMuRqY4SD299jmo8RlLC6S9rZmdE27DWJ7nAd7qKp0ioQi"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-2 left-3 text-on-primary">
+<h4 class="text-label-md font-label-md font-bold">The Romantic Evening</h4>
+<p class="text-label-sm font-label-sm opacity-90">$280 Total</p>
+</div>
+</div>
+<div class="p-3 text-label-sm font-label-sm text-on-surface-variant space-y-2">
+<div class="flex justify-between items-center"><span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]" data-icon="content_cut">content_cut</span> Barber</span> <span>$40</span></div>
+<div class="flex justify-between items-center"><span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]" data-icon="local_florist">local_florist</span> Flowers</span> <span>$50</span></div>
+<div class="flex justify-between items-center"><span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]" data-icon="restaurant">restaurant</span> Dinner</span> <span>$150</span></div>
+<div class="flex justify-between items-center"><span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]" data-icon="local_taxi">local_taxi</span> Transport</span> <span>$40</span></div>
+</div>
+</div>
+<!-- Package 2: The Action Date (Mini Card) -->
+<div class="min-w-[280px] w-[280px] bg-surface-container-lowest border border-outline-variant/40 rounded-xl overflow-hidden shadow-sm flex flex-col cursor-pointer hover:border-primary transition-colors snap-center opacity-70 hover:opacity-100">
+<div class="h-24 bg-surface-variant relative overflow-hidden">
+<img class="w-full h-full object-cover grayscale" data-alt="A vibrant indoor go-karting track seen from the perspective of an arcade or entertainment center lounge area, bright neon lights, modern recreational vibe, energetic and fun atmosphere. High resolution modern aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjFMI2X4iKS1R5esb2kQ9e-29gzxJ8zYgtVP_Tw6prv2B5Ubb-KMXuN2vZp68wNPvZC7Oaky8iUwkLA-UQMvS7s9ESqW0efgnekmfReCbFUXOnK30dgHPWCduiRn4-mdgTnXofm-f_F_PBTRjT8v9ke5Ro3HimsmCLJ3_F7VZvmAVMrI6ST-4M4ul00sO9Vb9dRRtvRk1w3j_HF2KRZUOem4m98yfPdACK-juYfJxkiJJNqbJulSrV"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-2 left-3 text-on-primary">
+<h4 class="text-label-md font-label-md font-bold">The Active Evening</h4>
+<p class="text-label-sm font-label-sm opacity-90">$240 Total</p>
+</div>
+</div>
+<div class="p-3 text-label-sm font-label-sm text-on-surface-variant space-y-2">
+<div class="flex justify-between items-center"><span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]" data-icon="sports_esports">sports_esports</span> Arcade/Karting</span> <span>$90</span></div>
+<div class="flex justify-between items-center"><span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]" data-icon="local_pizza">local_pizza</span> Casual Dining</span> <span>$110</span></div>
+<div class="flex justify-between items-center"><span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]" data-icon="local_taxi">local_taxi</span> Transport</span> <span>$40</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- User Input 2 -->
+<div class="flex gap-3 max-w-[85%] self-end flex-row-reverse chat-bubble-enter" style="animation-delay: 1.5s;">
+<div class="w-8 h-8 rounded-full bg-tertiary-container flex-shrink-0 flex items-center justify-center text-on-tertiary-container mt-1">
+<span class="material-symbols-outlined text-sm icon-fill" data-icon="person">person</span>
+</div>
+<div class="bg-primary text-on-primary p-4 rounded-2xl rounded-tr-sm text-body-md font-body-md shadow-sm">
+                        "The Romantic Evening" looks perfect. Let's see the details.
+                    </div>
+</div>
+<!-- Typing indicator -->
+<div class="flex gap-3 max-w-[85%] chat-bubble-enter" id="typingIndicator" style="animation-delay: 2s;">
+<div class="w-8 h-8 rounded-full bg-primary/10 flex-shrink-0 flex items-center justify-center text-primary mt-1">
+<span class="material-symbols-outlined text-sm icon-fill" data-icon="robot_2">robot_2</span>
+</div>
+<div class="bg-surface-container text-on-surface p-4 rounded-2xl rounded-tl-sm text-body-md font-body-md shadow-sm flex items-center gap-1 w-20">
+<div class="w-2 h-2 bg-on-surface-variant rounded-full animate-bounce" style="animation-delay: 0ms"></div>
+<div class="w-2 h-2 bg-on-surface-variant rounded-full animate-bounce" style="animation-delay: 150ms"></div>
+<div class="w-2 h-2 bg-on-surface-variant rounded-full animate-bounce" style="animation-delay: 300ms"></div>
+</div>
+</div>
+</div>
+<!-- Input Area -->
+<div class="p-4 bg-surface-bright border-t border-outline-variant/20 z-20">
+<div class="flex items-center gap-2 bg-surface-container-lowest border border-outline-variant rounded-full px-4 py-2 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all shadow-sm">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1">
+<span class="material-symbols-outlined" data-icon="mic">mic</span>
+</button>
+<input class="flex-1 bg-transparent border-none focus:ring-0 text-body-md font-body-md text-on-surface placeholder-on-surface-variant/70" placeholder="Type to tweak the plan..." type="text"/>
+<button class="bg-primary text-on-primary rounded-full w-8 h-8 flex items-center justify-center hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="send">send</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Right: Detailed Package Breakdown (Bento Grid Style) -->
+<section class="flex-1 lg:flex-[1.2] flex flex-col gap-stack-md pb-stack-lg z-10 animate-[slideUpFade_0.6s_ease-out_2s_forwards] opacity-0 translate-y-4">
+<div class="flex justify-between items-end mb-2">
+<div>
+<span class="inline-block bg-primary/10 text-primary px-3 py-1 rounded-full text-label-sm font-label-sm mb-2 font-bold tracking-wide">AI SELECTED PACKAGE</span>
+<h1 class="text-headline-lg font-headline-lg text-on-surface">The Romantic Evening</h1>
+<p class="text-body-md font-body-md text-on-surface-variant">Friday, Oct 27 • 4 Stops • Seamless Transitions</p>
+</div>
+<div class="text-right">
+<div class="text-headline-md font-headline-md text-primary font-bold">$280</div>
+<div class="text-label-sm font-label-sm text-secondary flex items-center justify-end gap-1"><span class="material-symbols-outlined text-[14px]" data-icon="verified">verified</span> Under Budget</div>
+</div>
+</div>
+<!-- Bento Grid Breakdown -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-gutter">
+<!-- Stop 1: Barber -->
+<div class="package-card bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-4 shadow-[0_4px_12px_rgba(0,0,0,0.04)] relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl text-primary" data-icon="content_cut">content_cut</span>
+</div>
+<div class="flex items-start justify-between mb-4 relative z-10">
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-on-surface-variant">
+<span class="w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center text-on-surface font-bold text-xs">1</span>
+                            4:30 PM • Preparation
+                        </div>
+<div class="text-label-md font-label-md font-bold text-on-surface">$40</div>
+</div>
+<div class="relative z-10">
+<h3 class="text-body-lg font-body-lg font-semibold text-on-surface">Gentleman's Grooming Lounge</h3>
+<div class="flex items-center gap-1 text-label-sm font-label-sm mt-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[14px] text-tertiary-container icon-fill" data-icon="star">star</span> 4.9 (120 reviews)
+                        </div>
+<p class="text-label-sm font-label-sm text-on-surface-variant mt-3 line-clamp-2">Executive haircut and beard trim. Arrive sharp, leave sharper.</p>
+</div>
+</div>
+<!-- Stop 2: Flowers -->
+<div class="package-card bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-4 shadow-[0_4px_12px_rgba(0,0,0,0.04)] relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl text-secondary" data-icon="local_florist">local_florist</span>
+</div>
+<div class="flex items-start justify-between mb-4 relative z-10">
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-on-surface-variant">
+<span class="w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center text-on-surface font-bold text-xs">2</span>
+                            5:45 PM • Pickup
+                        </div>
+<div class="text-label-md font-label-md font-bold text-on-surface">$50</div>
+</div>
+<div class="relative z-10">
+<h3 class="text-body-lg font-body-lg font-semibold text-on-surface">Bloom &amp; Petal</h3>
+<div class="flex items-center gap-1 text-label-sm font-label-sm mt-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[14px] text-tertiary-container icon-fill" data-icon="star">star</span> 4.8 (85 reviews)
+                        </div>
+<p class="text-label-sm font-label-sm text-on-surface-variant mt-3 line-clamp-2">Pre-ordered 'Romantic Red' bouquet of a dozen premium roses ready for pickup.</p>
+</div>
+</div>
+<!-- Stop 3: Dinner (Spans 2 columns on small screens, 1 on larger if we wanted, but keeping 2 col grid) -->
+<div class="package-card sm:col-span-2 bg-surface-container-lowest border border-outline-variant/30 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.04)] relative overflow-hidden group flex flex-col md:flex-row">
+<div class="md:w-1/3 h-40 md:h-auto relative">
+<img class="w-full h-full object-cover" data-alt="A plate of exquisite artisan pasta beautifully plated on a dark ceramic dish, sitting on a fine dining table. Warm atmospheric lighting highlighting the textures of the food. High end culinary photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOQibEwhKiBgssL-4Nf6CUMuqY-2AmZmrwnY8QGS5iB9sG1Ew-sTQj57EVt9qaRe4YvKyqn6B6BIrioImGMjp1XLImCPZnLJkvjuqi1JlmLtQASG7kBF0ybRiVFeptluCcxBzot2L73u6WUdrukGuHlSKKRLqQQ84cZ_FodXnLc5vGyNCM1vDxT48lG54YnccbAsteuLtwX6bnEevxRcWp9hDQenKIy5CZ46KF_nUuTr-Aq-dDCrmO"/>
+<div class="absolute top-2 left-2 bg-secondary/90 text-on-secondary px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm">Reservation Confirmed</div>
+</div>
+<div class="p-4 md:w-2/3 flex flex-col justify-between">
+<div>
+<div class="flex items-start justify-between mb-2">
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-on-surface-variant">
+<span class="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs">3</span>
+                                    7:00 PM • The Main Event
+                                </div>
+<div class="text-label-md font-label-md font-bold text-on-surface">$150</div>
+</div>
+<h3 class="text-headline-md font-headline-md font-semibold text-on-surface">La Trattoria Bella</h3>
+<div class="flex items-center gap-1 text-label-sm font-label-sm mt-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[14px] text-tertiary-container icon-fill" data-icon="star">star</span> 4.95 (450 reviews) • Fine Dining
+                            </div>
+<p class="text-label-sm font-label-sm text-on-surface-variant mt-2">Corner booth reserved. Budget includes estimated cost for two appetizers, two mains, and a mid-tier bottle of wine.</p>
+</div>
+<div class="mt-4 flex gap-2">
+<span class="bg-surface-container px-2 py-1 rounded-md text-[11px] text-on-surface-variant font-medium">Candlelit</span>
+<span class="bg-surface-container px-2 py-1 rounded-md text-[11px] text-on-surface-variant font-medium">Quiet Ambience</span>
+</div>
+</div>
+</div>
+<!-- Stop 4: Transport -->
+<div class="package-card sm:col-span-2 bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-4 shadow-[0_4px_12px_rgba(0,0,0,0.04)] relative overflow-hidden group flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-variant flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-2xl" data-icon="local_taxi">local_taxi</span>
+</div>
+<div>
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-on-surface-variant mb-1">
+<span class="w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center text-on-surface font-bold text-xs">4</span>
+                                Seamless Transit
+                            </div>
+<h3 class="text-body-md font-body-md font-semibold text-on-surface">Private Executive Car</h3>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Scheduled pickups between stops.</p>
+</div>
+</div>
+<div class="text-label-md font-label-md font-bold text-on-surface">$40</div>
+</div>
+</div>
+<!-- Action Area -->
+<div class="mt-4 bg-surface-container-low rounded-xl p-6 border border-outline-variant/20 flex flex-col sm:flex-row items-center justify-between gap-4">
+<div>
+<h4 class="text-body-md font-body-md font-bold text-on-surface">Ready to book?</h4>
+<p class="text-label-sm font-label-sm text-on-surface-variant mt-1">One tap secures reservations and scheduled services.</p>
+</div>
+<button class="w-full sm:w-auto bg-primary text-on-primary px-8 py-3 rounded-full text-label-md font-label-md font-bold hover:bg-primary-container transition-all shadow-[0_4px_12px_rgba(0,88,188,0.3)] hover:shadow-[0_6px_16px_rgba(0,88,188,0.4)] flex items-center justify-center gap-2 transform hover:-translate-y-0.5">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span>
+                    Book Complete Package
+                </button>
+</div>
+</section>
+<!-- Optional Decorative Background Elements (Kept extremely subtle to maintain corporate look) -->
+<div class="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] -z-10 pointer-events-none"></div>
+</main>
+<!-- Footer Shared Component -->
+<footer class="bg-surface-container-lowest dark:bg-on-background border-t border-outline-variant dark:border-outline/10 full-width bottom-0 mt-auto">
+<div class="max-w-7xl mx-auto px-margin-desktop py-stack-lg flex flex-col md:flex-row justify-between items-center gap-stack-md w-full">
+<div class="text-headline-sm font-headline-md font-bold text-on-surface dark:text-surface-bright">
+                Manzil
+            </div>
+<div class="text-body-md font-body-md text-on-surface-variant">
+                © 2024 Manzil. Local Discovery Redefined.
+            </div>
+<nav class="flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-2">
+<a class="text-label-sm font-label-sm text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors hover:underline transition-all" href="#">About Us</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors hover:underline transition-all" href="#">Partner with Manzil</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors hover:underline transition-all" href="#">Privacy Policy</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors hover:underline transition-all" href="#">Terms of Service</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors hover:underline transition-all" href="#">Help Center</a>
+</nav>
+</div>
+</footer>
+<script>
+        // Simple script to hide the typing indicator after the 'animation' sequence finishes
+        setTimeout(() => {
+            const indicator = document.getElementById('typingIndicator');
+            if(indicator) {
+                indicator.style.opacity = '0';
+                setTimeout(() => indicator.style.display = 'none', 300);
+            }
+            // Auto scroll to bottom of chat
+            const chatArea = document.getElementById('chatArea');
+            if(chatArea) {
+                chatArea.scrollTop = chatArea.scrollHeight;
+            }
+        }, 3500);
+    </script>
+</body></html>

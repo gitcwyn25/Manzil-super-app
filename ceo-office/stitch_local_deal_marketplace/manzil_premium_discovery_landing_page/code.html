@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Manzil | Local Discovery, Orchestrated by AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .soft-shadow {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+        
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .fluid-bg-green {
+            background: linear-gradient(135deg, #002113 0%, #006c49 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .wave-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+        }
+        
+        .wave-bottom svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 60px;
+        }
+        
+        .wave-bottom .shape-fill {
+            fill: #f8f9ff;
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-variant": "#d3e4fe",
+                    "primary-container": "#0070eb",
+                    "tertiary-fixed": "#ffdbca",
+                    "on-error-container": "#93000a",
+                    "outline": "#717786",
+                    "secondary": "#006c49",
+                    "secondary-container": "#6cf8bb",
+                    "inverse-surface": "#213145",
+                    "outline-variant": "#c1c6d7",
+                    "on-tertiary": "#ffffff",
+                    "tertiary": "#994100",
+                    "background": "#f8f9ff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed": "#001a41",
+                    "on-primary-container": "#fefcff",
+                    "primary-fixed": "#d8e2ff",
+                    "inverse-primary": "#adc6ff",
+                    "on-tertiary-fixed": "#341100",
+                    "surface-container-highest": "#d3e4fe",
+                    "surface": "#f8f9ff",
+                    "surface-container": "#e5eeff",
+                    "on-secondary-fixed-variant": "#005236",
+                    "primary": "#0058bc",
+                    "surface-bright": "#f8f9ff",
+                    "secondary-fixed-dim": "#4edea3",
+                    "tertiary-container": "#c05400",
+                    "on-secondary-container": "#00714d",
+                    "on-background": "#0b1c30",
+                    "secondary-fixed": "#6ffbbe",
+                    "on-tertiary-fixed-variant": "#783200",
+                    "on-surface": "#0b1c30",
+                    "on-surface-variant": "#414755",
+                    "on-error": "#ffffff",
+                    "surface-container-high": "#dce9ff",
+                    "on-secondary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "error-container": "#ffdad6",
+                    "surface-dim": "#cbdbf5",
+                    "surface-container-low": "#eff4ff",
+                    "inverse-on-surface": "#eaf1ff",
+                    "on-secondary-fixed": "#002113",
+                    "surface-tint": "#005bc1",
+                    "on-tertiary-container": "#fffbff",
+                    "tertiary-fixed-dim": "#ffb690",
+                    "primary-fixed-dim": "#adc6ff",
+                    "on-primary-fixed-variant": "#004493"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px",
+                    "2xl": "1rem",
+                    "3xl": "1.5rem",
+            },
+            "spacing": {
+                    "stack-lg": "32px",
+                    "stack-sm": "8px",
+                    "stack-md": "16px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "32px",
+                    "gutter": "16px",
+                    "base-unit": "4px"
+            },
+            "fontFamily": {
+                    "body-md": [
+                            "Hanken Grotesk"
+                    ],
+                    "label-md": [
+                            "Hanken Grotesk"
+                    ],
+                    "headline-lg-mobile": [
+                            "Hanken Grotesk"
+                    ],
+                    "headline-md": [
+                            "Hanken Grotesk"
+                    ],
+                    "display-lg": [
+                            "Hanken Grotesk"
+                    ],
+                    "label-sm": [
+                            "Hanken Grotesk"
+                    ],
+                    "headline-lg": [
+                            "Hanken Grotesk"
+                    ],
+                    "body-lg": [
+                            "Hanken Grotesk"
+                    ]
+            },
+            "fontSize": {
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "letterSpacing": "0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-lg-mobile": [
+                            "28px",
+                            {
+                                    "lineHeight": "36px",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "display-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "56px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "800"
+                            }
+                    ],
+                    "label-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.02em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+</head>
+<body class="bg-background text-on-background antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-xl shadow-sm dark:shadow-none transition-all duration-300" id="main-nav">
+<div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-stack-md max-w-[1280px] mx-auto">
+<!-- Brand -->
+<a class="text-headline-md font-headline-md font-bold text-primary dark:text-primary-fixed tracking-tight flex items-center gap-2" href="#">
+<span class="material-symbols-outlined text-3xl" data-weight="fill" style="font-variation-settings: 'FILL' 1;">explore</span>
+                Manzil
+            </a>
+<!-- Desktop Nav Links -->
+<nav class="hidden md:flex items-center gap-stack-lg">
+<a class="font-body-md text-body-md text-primary dark:text-primary-fixed border-b-2 border-primary dark:border-primary-fixed pb-1" href="#">Discover</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors" href="#">Businesses</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors" href="#">Concierge</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors" href="#">Events</a>
+</nav>
+<!-- Actions -->
+<div class="hidden md:flex items-center gap-stack-md">
+<button class="font-label-md text-label-md text-primary hover:bg-surface-container-low px-4 py-2 rounded-lg transition-all active:scale-95 duration-200 ease-in-out">Sign In</button>
+<button class="font-label-md text-label-md bg-primary text-on-primary hover:bg-surface-tint px-6 py-2 rounded-lg shadow-sm transition-all active:scale-95 duration-200 ease-in-out flex items-center gap-2">
+                    Get Started
+                </button>
+</div>
+<!-- Mobile Menu Toggle -->
+<button aria-label="Menu" class="md:hidden text-on-surface p-2">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</header>
+<main class="pt-20">
+<!-- Hero Section -->
+<section class="relative min-h-[90vh] flex items-center fluid-bg-green text-on-secondary pt-10 pb-20 overflow-hidden">
+<!-- 3D Background Element -->
+<div class="absolute inset-0 opacity-40 mix-blend-screen pointer-events-none">
+<!-- STITCH_THREEJS_START:ANIMATION_15 class="absolute inset-0 w-full h-full" -->
+<div class="absolute inset-0 w-full h-full" style="display:block;">
+<script src="https://ajax.googleapis.com/ajax/libs/threejs/r125/three.min.js"></script>
+<div id="threejs-container-ANIMATION_15" style="width:100%;height:100%"></div>
+<script>
+(function() {
+  const container = document.getElementById('threejs-container-ANIMATION_15');
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  // Three.js Scene: Floating 3D "Manzil" Nodes and Fluid Waves
+// Inspired by Sirly.uz aesthetic: deep greens, fluid motion, and glassmorphism.
+
+const width = container.clientWidth || window.innerWidth;
+const height = container.clientHeight || window.innerHeight;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+
+renderer.setSize(width, height);
+renderer.setPixelRatio(window.devicePixelRatio);
+container.appendChild(renderer.domElement);
+
+// Lighting
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+scene.add(ambientLight);
+
+const pointLight = new THREE.PointLight(0x007aff, 1);
+pointLight.position.set(5, 5, 5);
+scene.add(pointLight);
+
+// Group for floating elements
+const group = new THREE.Group();
+scene.add(group);
+
+// Create "Experience Nodes" (Glassy spheres)
+const geometry = new THREE.SphereGeometry(0.5, 32, 32);
+const material = new THREE.MeshPhongMaterial({
+    color: 0x007aff,
+    emissive: 0x001a33,
+    specular: 0xffffff,
+    shininess: 100,
+    transparent: true,
+    opacity: 0.8
+});
+
+for (let i = 0; i < 15; i++) {
+    const node = new THREE.Mesh(geometry, material);
+    node.position.set(
+        (Math.random() - 0.5) * 10,
+        (Math.random() - 0.5) * 10,
+        (Math.random() - 0.5) * 5
+    );
+    node.userData = {
+        speed: Math.random() * 0.01 + 0.005,
+        offset: Math.random() * Math.PI * 2
+    };
+    group.add(node);
+}
+
+camera.position.z = 8;
+
+// Mouse Tracking
+let mouseX = 0;
+let mouseY = 0;
+window.addEventListener('mousemove', (e) => {
+    mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+    mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+});
+
+function animate() {
+    requestAnimationFrame(animate);
+
+    const time = Date.now() * 0.001;
+
+    group.children.forEach((node) => {
+        node.position.y += Math.sin(time + node.userData.offset) * node.userData.speed;
+        node.position.x += Math.cos(time + node.userData.offset) * node.userData.speed;
+    });
+
+    group.rotation.y += (mouseX * 0.5 - group.rotation.y) * 0.05;
+    group.rotation.x += (mouseY * 0.5 - group.rotation.x) * 0.05;
+
+    renderer.render(scene, camera);
+}
+
+window.addEventListener('resize', () => {
+    const w = container.clientWidth || window.innerWidth;
+    const h = container.clientHeight || window.innerHeight;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+});
+
+animate();
+})();
+</script>
+</div>
+<!-- STITCH_THREEJS_END:ANIMATION_15 -->
+</div>
+<div class="container mx-auto px-margin-mobile md:px-margin-desktop max-w-[1280px] relative z-10">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-stack-lg items-center">
+<div class="max-w-2xl">
+<span class="inline-block px-4 py-1.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm mb-6 flex items-center gap-2 w-fit">
+<span class="material-symbols-outlined text-[16px]">auto_awesome</span>
+                            Meet Your Local Concierge
+                        </span>
+<h1 class="font-display-lg text-display-lg mb-6 leading-tight">
+                            Local Discovery,<br/>
+<span class="text-secondary-container">Orchestrated by AI.</span>
+</h1>
+<p class="font-body-lg text-body-lg mb-8 text-surface-container opacity-90 max-w-lg">
+                            Manzil transforms how you explore your city. From finding the perfect barber to planning a full evening itinerary, our AI concierge handles the details so you can enjoy the experience.
+                        </p>
+<div class="flex flex-wrap gap-4">
+<button class="font-label-md text-label-md bg-secondary-container text-on-secondary-container hover:bg-secondary-fixed px-8 py-4 rounded-xl shadow-lg transition-all active:scale-95 hover-lift flex items-center gap-2">
+<span class="material-symbols-outlined">search</span>
+                                Explore Now
+                            </button>
+<button class="font-label-md text-label-md bg-transparent border-2 border-surface-container text-on-secondary hover:bg-white/10 px-8 py-4 rounded-xl transition-all active:scale-95 flex items-center gap-2">
+<span class="material-symbols-outlined">play_circle</span>
+                                See How it Works
+                            </button>
+</div>
+</div>
+<!-- Hero Mockup/Visual -->
+<div class="relative hidden lg:block h-[600px] w-full">
+<div class="absolute right-0 top-1/2 -translate-y-1/2 w-full max-w-md">
+<!-- Floating App Preview -->
+<div class="glass-card rounded-[2rem] p-4 shadow-2xl relative z-20 border border-white/20 transform rotate-[-2deg] hover:rotate-0 transition-transform duration-500 bg-surface text-on-surface">
+<div class="flex items-center justify-between mb-4 pb-4 border-b border-surface-variant">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined text-[20px]">robot</span>
+</div>
+<div>
+<div class="font-label-md text-label-md">Manzil Concierge</div>
+<div class="text-label-sm text-outline">Planning your evening...</div>
+</div>
+</div>
+</div>
+<div class="space-y-4">
+<div class="bg-surface-container-low p-3 rounded-xl rounded-tl-none inline-block max-w-[85%] font-body-md text-body-md text-on-surface">
+                                        I've found a highly-rated Italian spot for dinner, followed by a local jazz lounge just a 5-minute walk away. Shall I book it?
+                                    </div>
+<div class="flex justify-end">
+<div class="bg-primary text-on-primary p-3 rounded-xl rounded-tr-none inline-block max-w-[85%] font-body-md text-body-md">
+                                            Yes, that sounds perfect. Book it for 7 PM.
+                                        </div>
+</div>
+</div>
+</div>
+<!-- Decorative elements behind mockup -->
+<div class="absolute -top-10 -right-10 w-32 h-32 bg-secondary-container rounded-full blur-3xl opacity-50 z-0"></div>
+<div class="absolute -bottom-10 -left-10 w-40 h-40 bg-primary rounded-full blur-3xl opacity-30 z-0"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="wave-bottom">
+<svg data-name="Layer 1" preserveaspectratio="none" viewbox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg">
+<path class="shape-fill" d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.08,130.83,111.47,195.46,92.83C242.49,79.29,286.32,63.15,321.39,56.44Z"></path>
+</svg>
+</div>
+</section>
+<!-- Section 1: The AI Concierge -->
+<section class="py-20 bg-background relative">
+<div class="container mx-auto px-margin-mobile md:px-margin-desktop max-w-[1280px]">
+<div class="text-center mb-16">
+<h2 class="font-headline-lg text-headline-lg md:font-display-lg md:text-display-lg mb-4 text-on-surface">The AI Concierge</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">
+                        Powered by advanced MCP plugins, our AI agents don't just find places—they orchestrate seamless end-to-end experiences tailored to your preferences.
+                    </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-stack-lg">
+<!-- Feature 1 -->
+<div class="bg-surface-container-lowest rounded-3xl p-8 soft-shadow hover-lift border border-surface-container group">
+<div class="w-14 h-14 rounded-2xl bg-primary-container/10 flex items-center justify-center mb-6 group-hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary transition-colors text-3xl">calendar_month</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-3 text-on-surface">Smart Itineraries</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                            Tell us what kind of day you want. The AI instantly generates optimized routes, coordinating timings between venues.
+                        </p>
+</div>
+<!-- Feature 2 -->
+<div class="bg-surface-container-lowest rounded-3xl p-8 soft-shadow hover-lift border border-surface-container group">
+<div class="w-14 h-14 rounded-2xl bg-secondary/10 flex items-center justify-center mb-6 group-hover:bg-secondary transition-colors">
+<span class="material-symbols-outlined text-secondary group-hover:text-on-secondary transition-colors text-3xl">verified</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-3 text-on-surface">Real-Time Booking</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                            No more calling around. The concierge interfaces directly with business scheduling systems to secure your spot.
+                        </p>
+</div>
+<!-- Feature 3 -->
+<div class="bg-surface-container-lowest rounded-3xl p-8 soft-shadow hover-lift border border-surface-container group">
+<div class="w-14 h-14 rounded-2xl bg-tertiary/10 flex items-center justify-center mb-6 group-hover:bg-tertiary transition-colors">
+<span class="material-symbols-outlined text-tertiary group-hover:text-on-tertiary transition-colors text-3xl">tune</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-3 text-on-surface">Hyper-Personalized</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                            It learns your tastes over time. Love quiet coffee shops but hate crowded patios? Your recommendations reflect that.
+                        </p>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 2: Experience the Best (Grid) -->
+<section class="py-20 bg-surface-container-low">
+<div class="container mx-auto px-margin-mobile md:px-margin-desktop max-w-[1280px]">
+<div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+<div>
+<h2 class="font-headline-lg text-headline-lg md:font-display-lg md:text-display-lg mb-2 text-on-surface">Experience the Best</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Curated local favorites, verified by the community.</p>
+</div>
+<button class="font-label-md text-label-md text-primary hover:bg-surface-container-high px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
+                        View All Categories
+                        <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<!-- Bento Grid Layout for Businesses -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-stack-md auto-rows-[300px]">
+<!-- Large Feature Card -->
+<div class="lg:col-span-2 rounded-3xl overflow-hidden relative group hover-lift cursor-pointer soft-shadow">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A brightly lit, modern artisanal coffee shop with a clean, light-mode aesthetic, featuring light oak wood counters, white walls, and lush green plants. Soft natural daylight streams through large windows, highlighting a barista pouring latte art. The mood is calm, inviting, and premium." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD02w8cFhjX9b7VD0cy3VF1c4gbkicNU_c2VOvaXYv9ksk-yHmaQrZlmvcIhyiNmzH1qQ_8knCuPDM4WABsq4dC7msNmilpyrSuFYHhHOQF_ZFL70cq3XiCcgZ6rGHeCERHHrNX6DU4pIqYTQDHecj1A9s4cBhpsvPUYJg99SF6lUOcc-VdbC8O_4U2pf0pJofQ3hIqMMSeM0se2b3fTuimcRfDmf_eaXAFxU6A5w_dWOcZ-0y5kZ7c')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+<div class="absolute top-4 right-4 bg-secondary-container/90 backdrop-blur text-on-secondary-container px-3 py-1 rounded-full font-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">local_fire_department</span>
+                            Trending
+                        </div>
+<div class="absolute bottom-0 left-0 w-full p-6 text-white">
+<div class="flex items-center gap-2 mb-2">
+<span class="bg-white/20 backdrop-blur px-2 py-1 rounded text-xs font-semibold">Cafe &amp; Roastery</span>
+<span class="flex items-center text-sm"><span class="material-symbols-outlined text-[16px] text-yellow-400 mr-1" data-weight="fill">star</span> 4.9 (128)</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-1">Lumina Coffee House</h3>
+<p class="font-body-md text-body-md opacity-90 line-clamp-1">Award-winning pour-overs and fresh pastries in a minimalist setting.</p>
+</div>
+</div>
+<!-- Standard Card 1 -->
+<div class="rounded-3xl overflow-hidden relative group hover-lift cursor-pointer soft-shadow bg-surface-container-lowest">
+<div class="h-48 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A high-end, modern barber shop interior with a clean, bright aesthetic. Featuring crisp white tiles, matte black fixtures, and a plush leather barber chair. Strategic warm spotlighting creates an atmosphere of focused professionalism and luxury grooming." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDfLf5Zt-H9kSWABJtIwNGf7wg9ILHwefJd_HgnpRclePLQeePTc0RQxJwCP3VcplImZw-q1ay3aW39ftvMm8acRMMRf6h12I3Q1fyIyNHpYvEcxRqlxFlOcuKLUUklLPKHscbDuDDVnwFuldJ9CUjJWd0bZuq4D1CKpePKikilWt1X8zoe_FjTF8FPIxkBGRGSPUvxYQ7GFivOBPa23k4ZlwS9ZpRqyMSvvGDkL8nmP5EzIZ3J5TeF')"></div>
+<div class="p-5">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-lg font-bold text-on-surface">The Sharp Edge</h3>
+<div class="bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded text-xs font-semibold">Barber</div>
+</div>
+<div class="flex items-center gap-1 mb-3 text-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-yellow-500" data-weight="fill">star</span>
+<span class="font-semibold text-on-surface">4.8</span>
+<span class="opacity-70">(94 reviews)</span>
+</div>
+<p class="font-body-md text-sm text-on-surface-variant line-clamp-2">Precision cuts and classic hot towel shaves.</p>
+</div>
+</div>
+<!-- Standard Card 2 -->
+<div class="rounded-3xl overflow-hidden relative group hover-lift cursor-pointer soft-shadow bg-surface-container-lowest">
+<div class="h-48 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A beautifully arranged selection of fresh, vibrant flowers in a modern, light-filled florist studio. Crisp white countertops and soft diffused daylight enhance the vivid colors of the blooms. The aesthetic is fresh, clean, and high-quality." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDtO9S0FF3_mJLfCBoxagKsvQtxRl7vMOjYBtTa0f_X-c7OJBFtzh8z1BR5uHySlQ6_yOTxnXn79Ix__9UJg-P4fMrPhLmVHXAbKRG0wt_oNndVSuJ7cJXybKRmklshoNuG6qngxVEwPKqG5P1ICko9KfS7BgFJA6y4UIE2CHSOtIoTPpwJYzYomqKjlV4pEqjd_LOr7FZLA1dpJlRFh5jtTvyQdztT9b5Cc1ysRaY7qc866aokyeZG')"></div>
+<div class="absolute top-4 right-4 bg-tertiary-fixed text-on-tertiary-fixed px-3 py-1 rounded-full font-label-sm text-xs shadow-sm">
+                            Expiring Soon: 15% Off
+                        </div>
+<div class="p-5">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-lg font-bold text-on-surface">Petal &amp; Stem</h3>
+<div class="bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded text-xs font-semibold">Florist</div>
+</div>
+<div class="flex items-center gap-1 mb-3 text-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-yellow-500" data-weight="fill">star</span>
+<span class="font-semibold text-on-surface">5.0</span>
+<span class="opacity-70">(42 reviews)</span>
+</div>
+<p class="font-body-md text-sm text-on-surface-variant line-clamp-2">Bespoke floral arrangements for any occasion.</p>
+</div>
+</div>
+<!-- Double Wide Info Card -->
+<div class="md:col-span-2 rounded-3xl overflow-hidden relative group soft-shadow bg-primary-container text-on-primary-container flex items-center">
+<!-- Decorative fluid background -->
+<div class="absolute inset-0 opacity-20 pointer-events-none" style="background: radial-gradient(circle at 80% 20%, rgba(255,255,255,0.4) 0%, transparent 50%);"></div>
+<div class="p-8 relative z-10 w-full flex flex-col sm:flex-row items-center justify-between gap-6">
+<div class="max-w-md">
+<h3 class="font-headline-lg text-2xl mb-2 font-bold">Own a local business?</h3>
+<p class="font-body-md text-primary-fixed mb-6">Join Manzil to get discovered by users actively looking for your services. Zero upfront fees.</p>
+<button class="bg-white text-primary font-label-md px-6 py-3 rounded-xl hover:bg-surface-variant transition-colors shadow-md">Partner With Us</button>
+</div>
+<div class="hidden sm:block">
+<span class="material-symbols-outlined text-[100px] opacity-80">storefront</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer Component -->
+<footer class="bg-surface-container-lowest dark:bg-inverse-surface w-full rounded-t-xl shadow-lg dark:shadow-none mt-20">
+<div class="flex flex-col md:flex-row justify-between items-center px-margin-desktop py-stack-lg gap-gutter max-w-[1280px] mx-auto">
+<!-- Brand & Copyright -->
+<div class="flex flex-col items-center md:items-start gap-4">
+<a class="text-headline-md font-headline-md font-extrabold text-on-surface dark:text-inverse-on-surface flex items-center gap-2" href="#">
+<span class="material-symbols-outlined text-3xl" data-weight="fill" style="font-variation-settings: 'FILL' 1;">explore</span>
+                    Manzil
+                </a>
+<p class="font-label-md text-label-md text-primary dark:text-primary-fixed-dim text-center md:text-left">
+                    © 2024 Manzil Local Discovery. Empowering community connections through AI.
+                </p>
+</div>
+<!-- Footer Links -->
+<nav class="flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-3">
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant hover:text-on-surface hover:opacity-80 transition-opacity focus:ring-2 focus:ring-primary rounded" href="#">Privacy Policy</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant hover:text-on-surface hover:opacity-80 transition-opacity focus:ring-2 focus:ring-primary rounded" href="#">Terms of Service</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant hover:text-on-surface hover:opacity-80 transition-opacity focus:ring-2 focus:ring-primary rounded" href="#">Partner with Us</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant hover:text-on-surface hover:opacity-80 transition-opacity focus:ring-2 focus:ring-primary rounded" href="#">Help Center</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant hover:text-on-surface hover:opacity-80 transition-opacity focus:ring-2 focus:ring-primary rounded" href="#">Contact</a>
+</nav>
+</div>
+</footer>
+<!-- Simple Scroll Effect Script -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.getElementById('main-nav');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 20) {
+                    header.classList.add('shadow-md');
+                    header.classList.replace('bg-surface/80', 'bg-surface/95');
+                } else {
+                    header.classList.remove('shadow-md');
+                    header.classList.replace('bg-surface/95', 'bg-surface/80');
+                }
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,43 @@
+# MCP Plugin Specification: Manzil AI Event Planner
+
+## Overview
+This specification defines the Model Context Protocol (MCP) plugin that allows AI agents (Claude, ChatGPT) to interact with the Manzil platform to plan, bundle, and book end-to-end local experiences.
+
+## Tools
+
+### 1. `search_local_services`
+**Description**: Search for local businesses by category, budget, and rating.
+**Parameters**:
+- `category` (string): e.g., "Restaurant", "Barber", "Florist", "Transport".
+- `budget_range` (string): e.g., "$, $$, $$$".
+- `location` (string): User's target area.
+- `min_rating` (number): Minimum star rating (1-5).
+
+### 2. `create_event_package`
+**Description**: Bundles multiple services into a single, cohesive itinerary.
+**Parameters**:
+- `event_type` (string): e.g., "Birthday", "Date Night", "Cinema Outing".
+- `service_ids` (array of strings): List of business IDs to include in the package.
+- `total_budget` (number): Maximum price for the entire bundle.
+- `date_time` (string): Scheduled start time for the first service.
+
+### 3. `check_package_availability`
+**Description**: Verifies if all businesses in a bundle have open slots for the requested times.
+**Parameters**:
+- `package_id` (string): The ID of the proposed bundle.
+- `itinerary_steps` (array): List of specific time slots for each business.
+
+### 4. `book_complete_itinerary`
+**Description**: Finalizes booking for all services in the package in a single transaction.
+**Parameters**:
+- `package_id` (string): The ID of the confirmed bundle.
+- `user_contact` (object): Name, email, and phone for reservations.
+
+## Capabilities
+- **End-to-End Orchestration**: Agents can transition from discovery to booking without manual user intervention.
+- **Budget Optimization**: The AI can swap individual components of a package to stay within the user's defined financial limit.
+- **Contextual Recommendations**: Uses Manzil's community reviews and "Experience Feed" to rank options.
+
+## Deployment
+- **Claude**: Install via the MCP Config as a custom tool definition.
+- **ChatGPT**: Deploy as a Custom GPT Action with OAuth2 authentication.

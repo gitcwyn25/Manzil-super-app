@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Manzil - Discover Categories</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed": "#002113",
+                        "surface-bright": "#f8f9ff",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "background": "#f8f9ff",
+                        "on-tertiary-fixed-variant": "#783200",
+                        "primary-fixed-dim": "#adc6ff",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed": "#ffdbca",
+                        "error-container": "#ffdad6",
+                        "surface-dim": "#cbdbf5",
+                        "tertiary": "#994100",
+                        "on-background": "#0b1c30",
+                        "on-primary": "#ffffff",
+                        "secondary": "#006c49",
+                        "on-tertiary-container": "#fffbff",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#005236",
+                        "secondary-container": "#6cf8bb",
+                        "surface-tint": "#005bc1",
+                        "on-primary-fixed": "#001a41",
+                        "on-surface-variant": "#414755",
+                        "surface": "#f8f9ff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "primary": "#0058bc",
+                        "on-secondary-container": "#00714d",
+                        "secondary-fixed": "#6ffbbe",
+                        "surface-variant": "#d3e4fe",
+                        "on-surface": "#0b1c30",
+                        "on-error": "#ffffff",
+                        "primary-fixed": "#d8e2ff",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#213145",
+                        "surface-container": "#e5eeff",
+                        "primary-container": "#0070eb",
+                        "on-tertiary-fixed": "#341100",
+                        "tertiary-container": "#c05400",
+                        "inverse-primary": "#adc6ff",
+                        "error": "#ba1a1a",
+                        "outline": "#717786",
+                        "on-primary-fixed-variant": "#004493",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-primary-container": "#fefcff",
+                        "surface-container-high": "#dce9ff",
+                        "tertiary-fixed-dim": "#ffb690",
+                        "outline-variant": "#c1c6d7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "base-unit": "4px",
+                        "stack-lg": "32px",
+                        "margin-desktop": "32px",
+                        "gutter": "16px",
+                        "stack-sm": "8px",
+                        "stack-md": "16px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"],
+                        "label-md": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Hanken Grotesk', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col antialiased">
+<!-- TopNavBar from JSON -->
+<nav class="bg-surface/80 dark:bg-on-background/80 backdrop-blur-md full-width top-0 sticky z-50 border-b border-outline-variant dark:border-outline/20 shadow-sm dark:shadow-none transition-all duration-300">
+<div class="max-w-7xl mx-auto px-margin-desktop flex justify-between items-center h-20 w-full">
+<div class="flex items-center gap-stack-lg">
+<a class="text-headline-md font-headline-md font-extrabold text-primary dark:text-primary-fixed-dim tracking-tight" href="#">Manzil</a>
+<div class="hidden md:flex space-x-stack-md ml-stack-lg">
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors text-label-md font-label-md px-2 py-1 rounded-md hover:bg-surface-container-low dark:hover:bg-surface-dim/10 transition-all duration-200" href="#">Discover</a>
+<a class="text-primary dark:text-primary-fixed-dim border-b-2 border-primary dark:border-primary-fixed-dim pb-1 font-bold text-label-md font-label-md px-2 py-1" href="#">Categories</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors text-label-md font-label-md px-2 py-1 rounded-md hover:bg-surface-container-low dark:hover:bg-surface-dim/10 transition-all duration-200" href="#">AI Planner</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors text-label-md font-label-md px-2 py-1 rounded-md hover:bg-surface-container-low dark:hover:bg-surface-dim/10 transition-all duration-200" href="#">Reviews</a>
+</div>
+</div>
+<div class="flex items-center gap-stack-md">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-full text-body-md font-body-md focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-all w-64" placeholder="Search..." type="text"/>
+</div>
+<button class="bg-primary text-on-primary px-4 py-2 rounded-lg text-label-md font-label-md font-semibold hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-sm hover:shadow-md active:scale-[0.98] transition-transform">Sign In</button>
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-stack-lg flex flex-col md:flex-row gap-stack-lg">
+<!-- Sidebar Filters -->
+<aside class="w-full md:w-64 flex-shrink-0">
+<div class="bg-surface-container-lowest rounded-xl p-stack-md border border-outline-variant shadow-sm sticky top-28">
+<h2 class="text-headline-md font-headline-md mb-stack-md text-on-surface">Filters</h2>
+<!-- Category Filter (Current Selection) -->
+<div class="mb-stack-lg">
+<h3 class="text-label-md font-label-md text-on-surface-variant mb-stack-sm uppercase tracking-wider">Category</h3>
+<button class="flex items-center justify-between w-full p-2 bg-primary-container/10 rounded-lg text-primary text-body-md font-body-md font-medium border border-primary/20 hover:bg-primary-container/20 transition-colors">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">restaurant</span>
+                            Restaurants
+                        </div>
+<span class="material-symbols-outlined text-[20px]">expand_more</span>
+</button>
+</div>
+<!-- Budget Filter -->
+<div class="mb-stack-lg">
+<h3 class="text-label-md font-label-md text-on-surface-variant mb-stack-sm uppercase tracking-wider">Price Range</h3>
+<div class="flex gap-2">
+<button class="flex-1 py-1 rounded-md border border-outline-variant text-body-md font-body-md hover:bg-surface-container-low transition-colors">$</button>
+<button class="flex-1 py-1 rounded-md bg-primary text-on-primary text-body-md font-body-md shadow-sm">$$</button>
+<button class="flex-1 py-1 rounded-md border border-outline-variant text-body-md font-body-md hover:bg-surface-container-low transition-colors">$$$</button>
+<button class="flex-1 py-1 rounded-md border border-outline-variant text-body-md font-body-md hover:bg-surface-container-low transition-colors">$$$$</button>
+</div>
+</div>
+<!-- Rating Filter -->
+<div class="mb-stack-lg">
+<h3 class="text-label-md font-label-md text-on-surface-variant mb-stack-sm uppercase tracking-wider">Minimum Rating</h3>
+<div class="space-y-2">
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="text-primary focus:ring-primary rounded-full border-outline-variant" name="rating" type="radio"/>
+<div class="flex items-center text-secondary">
+<span class="material-symbols-outlined" data-weight="fill">star</span>
+<span class="material-symbols-outlined" data-weight="fill">star</span>
+<span class="material-symbols-outlined" data-weight="fill">star</span>
+<span class="material-symbols-outlined" data-weight="fill">star</span>
+<span class="material-symbols-outlined">star</span>
+</div>
+<span class="text-body-md font-body-md text-on-surface-variant group-hover:text-on-surface">&amp; Up</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input checked="" class="text-primary focus:ring-primary rounded-full border-outline-variant" name="rating" type="radio"/>
+<div class="flex items-center text-secondary">
+<span class="material-symbols-outlined" data-weight="fill">star</span>
+<span class="material-symbols-outlined" data-weight="fill">star</span>
+<span class="material-symbols-outlined" data-weight="fill">star</span>
+<span class="material-symbols-outlined">star</span>
+<span class="material-symbols-outlined">star</span>
+</div>
+<span class="text-body-md font-body-md text-on-surface-variant group-hover:text-on-surface">&amp; Up</span>
+</label>
+</div>
+</div>
+<button class="w-full py-2 bg-surface-container-highest text-on-surface rounded-lg text-label-md font-label-md font-semibold hover:bg-surface-dim transition-colors mt-stack-md">Apply Filters</button>
+</div>
+</aside>
+<!-- Grid Results -->
+<div class="flex-grow">
+<div class="mb-stack-md flex justify-between items-end">
+<div>
+<h1 class="text-headline-lg md:text-display-lg font-display-lg text-on-surface">Top Restaurants</h1>
+<p class="text-body-lg font-body-lg text-on-surface-variant mt-1">Discover 142 curated dining experiences.</p>
+</div>
+<div class="hidden sm:flex items-center gap-2">
+<span class="text-label-md font-label-md text-on-surface-variant">Sort by:</span>
+<select class="bg-transparent border-none text-primary font-label-md text-label-md focus:ring-0 cursor-pointer">
+<option>Recommended</option>
+<option>Highest Rated</option>
+<option>Distance</option>
+</select>
+</div>
+</div>
+<!-- Bento/Grid Layout for Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-stack-md">
+<!-- Card 1 (Featured) -->
+<div class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 border border-outline-variant flex flex-col sm:flex-row group relative cursor-pointer">
+<div class="sm:w-1/2 relative h-48 sm:h-auto overflow-hidden">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="A brightly lit modern restaurant interior featuring light wood tables, white marble countertops, and large floor-to-ceiling windows letting in natural sunlight. The atmosphere is upscale yet approachable, with subtle green plants providing a fresh organic contrast to the pristine white and warm wood tones. Professional food photography aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuASs_S2JeZhqdL76XtCPiDATbdgjf2X0XxbcqpXO6ninX_4IN9IcvhZ4csdsQTEQ31hQUrvQjuOydDP8jNjUAxejrfpNwRvySgBv3m2rpdxu94aD5jCjeeFKjejf-6xo3aNsEq9M9Pze9w757bNZ11zpl7E_pxCsKB836rFnSU5yh2-X3fnu9p1cknXNnL-h58c2BN3dcNrhpoBiIWGq8RI0y9TxMM_NqVDXHEdu1a507EcbP0AbtN_')"></div>
+<div class="absolute top-4 right-4 bg-secondary/90 text-on-primary px-3 py-1 rounded-full text-label-sm font-label-sm shadow-md backdrop-blur-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">local_fire_department</span>
+                            Hot Deal
+                        </div>
+</div>
+<div class="p-5 flex flex-col justify-between sm:w-1/2">
+<div>
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-headline-md font-headline-md text-on-surface group-hover:text-primary transition-colors">Lumina Brasserie</h3>
+<div class="flex items-center gap-1 bg-secondary-container/30 px-2 py-1 rounded-md">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-weight="fill">star</span>
+<span class="text-label-md font-label-md font-bold text-on-surface">4.9</span>
+</div>
+</div>
+<p class="text-body-md font-body-md text-on-surface-variant line-clamp-2 mb-4">A modern take on classic French cuisine, emphasizing locally sourced ingredients and a vibrant, airy atmosphere.</p>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="bg-surface-container-low text-on-surface-variant px-2 py-1 rounded text-label-sm font-label-sm border border-outline-variant/30">French</span>
+<span class="bg-surface-container-low text-on-surface-variant px-2 py-1 rounded text-label-sm font-label-sm border border-outline-variant/30">$$</span>
+<span class="bg-surface-container-low text-on-surface-variant px-2 py-1 rounded text-label-sm font-label-sm border border-outline-variant/30">0.8 mi</span>
+</div>
+</div>
+<div class="flex items-center gap-3 pt-4 border-t border-outline-variant/50">
+<div class="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="Close up portrait of a smiling young woman with warm lighting, serving as a user avatar profile picture in a modern digital interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCby4R-ZwnWyamPbv_jUCLsacydzrYoHo9L_wFoxuinJBxq93Kw7WZAKxYbdydMoE0IRdIp2Ban65mrraB11NYfHPfHy3qkhObAVS9GZdTSgB2RimNRN0Jr_AfoulrzfeU1ZRGCnU5LQxZQy6zaDFanUMu0gG1t3ORNI2k33I0QYLLbSwXRHnrQ0LONIW9Nl-ix2clmZhX3_fTzzMnwWk4o6LcQ-updEnhtXyQ3-502ZuR3DMxdISWt"/>
+</div>
+<div>
+<p class="text-label-sm font-label-sm text-on-surface-variant italic">"The duck confit was absolutely transcendent. A must-visit!"</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition-all duration-300 border border-outline-variant group cursor-pointer relative">
+<div class="relative h-48 overflow-hidden">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="A vibrant, bustling artisanal pizza kitchen with a large wood-fired oven glowing warmly in the background. Fresh pizzas with blistered crusts are visible on wooden peels. The aesthetic highlights warm tertiary orange tones against sleek dark industrial surfaces." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCTz109DYM5JpHi95U9qL6LrjllrnniLbUR3dsHDrzTV9xOdgOCQhfgpGIYOuWlgsbzXPAsRNBUWUDsn5NeigZcRmecakCBXiruiCEIv1Y2hq4pp-U3I4A6o-w4ku0WNGihPc1Cii4MF019N88CWp2qxTnVipwiOQK0SJq_TNu1eVvLydhCob5zyIqCZM8TIdQvkkeq8exFkzn8vATyJ8vOLlizKhouAh8dgre_Y3zgbvKvXOzxi5w7')"></div>
+<div class="absolute bottom-3 left-3 bg-background/90 px-2 py-1 rounded text-label-sm font-label-sm font-bold text-primary border border-outline-variant shadow-sm backdrop-blur-md">
+                            $$
+                        </div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-1">
+<h3 class="text-body-lg font-headline-md font-bold text-on-surface group-hover:text-primary transition-colors">Fornello Artisan Pizza</h3>
+</div>
+<div class="flex items-center gap-1 mb-3">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-weight="fill">star</span>
+<span class="text-label-md font-label-md font-bold text-on-surface">4.7</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant ml-1">(312 reviews)</span>
+</div>
+<p class="text-label-sm font-label-sm text-on-surface-variant italic line-clamp-2 border-l-2 border-tertiary-fixed-dim pl-2">"Best Neapolitan style crust outside of Italy, incredibly fast service."</p>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition-all duration-300 border border-outline-variant group cursor-pointer relative">
+<div class="relative h-48 overflow-hidden">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="A beautifully plated sushi platter on a dark slate stone surface. The sushi features vibrant pink salmon and bright white rice, contrasting sharply against the dark background. Ambient soft lighting creates a premium, high-end dining mood." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCKuBvhlPaZlb_vId49B5unnnXUFyUQd_NcTyVAtN4ffjVfewWWiXbe9F8Gdwdz_nCprkgU_PdB-xM-8Z4Xf-Vms8WoP4QXpSXPZ_iY7-JFhj73QCKkS3J5ljgn5BnScwxT_9jY5TiRJ7Cbz7KwLyJE1e-t5kfUxnUlbtlgYpuoXWQfQ5gC4BmsoI_zgchPbPkOI6UDFnKB3nUcvCpzke6eF9GsbLvNHWrP3k_tq52gPQfuDM3hr43U')"></div>
+<div class="absolute bottom-3 left-3 bg-background/90 px-2 py-1 rounded text-label-sm font-label-sm font-bold text-primary border border-outline-variant shadow-sm backdrop-blur-md">
+                            $$$
+                        </div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-1">
+<h3 class="text-body-lg font-headline-md font-bold text-on-surface group-hover:text-primary transition-colors">Osoi Sushi Bar</h3>
+</div>
+<div class="flex items-center gap-1 mb-3">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-weight="fill">star</span>
+<span class="text-label-md font-label-md font-bold text-on-surface">4.8</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant ml-1">(189 reviews)</span>
+</div>
+<p class="text-label-sm font-label-sm text-on-surface-variant italic line-clamp-2 border-l-2 border-tertiary-fixed-dim pl-2">"The omakase experience is unmatched. Fresh, delicate, perfect."</p>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition-all duration-300 border border-outline-variant group cursor-pointer relative">
+<div class="relative h-48 overflow-hidden">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="A cozy, rustic cafe setting with a steaming cup of latte art coffee on a wooden table. In the background, out of focus, are fresh pastries on a counter. Natural warm morning light filters through a window, creating an inviting and relaxing mood." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB-kuNw3EmO6KIya-fVbP_43Kk8kDVBNE-LgYChnLHZOcR00nG2gCWNX8tbEKwqsNKLKdLgYEq1E-g8CcGDPsnQNre6sv8bzPWNyXQzVcLjdWHm38U1XQFY7lvlmCXN0wBQvKTmXTPI9mB2tDEG1zdzn4TfwKGrmTZIrN7q5rJlEbH-MpApd_hNJyjaOsows0AlbFprrbwHYM6PW6R2ZtHAzxkcWB7se0GldC_6SAUmRTPkb4z05r9u')"></div>
+<div class="absolute bottom-3 left-3 bg-background/90 px-2 py-1 rounded text-label-sm font-label-sm font-bold text-primary border border-outline-variant shadow-sm backdrop-blur-md">
+                            $
+                        </div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-1">
+<h3 class="text-body-lg font-headline-md font-bold text-on-surface group-hover:text-primary transition-colors">Morning Grind Roasters</h3>
+</div>
+<div class="flex items-center gap-1 mb-3">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-weight="fill">star</span>
+<span class="text-label-md font-label-md font-bold text-on-surface">4.6</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant ml-1">(420 reviews)</span>
+</div>
+<p class="text-label-sm font-label-sm text-on-surface-variant italic line-clamp-2 border-l-2 border-tertiary-fixed-dim pl-2">"Great wifi, amazing pour-overs, and the almond croissants are to die for."</p>
+</div>
+</div>
+<!-- Load More Button -->
+<div class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-3 flex justify-center mt-stack-md">
+<button class="bg-surface-container-low text-primary border border-primary/20 px-6 py-3 rounded-lg text-label-md font-label-md font-semibold hover:bg-primary hover:text-on-primary transition-colors shadow-sm w-full md:w-auto">
+                        Load More Restaurants
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer from JSON -->
+<footer class="bg-surface-container-lowest dark:bg-on-background border-t border-outline-variant dark:border-outline/10 full-width bottom-0 mt-auto">
+<div class="max-w-7xl mx-auto px-margin-desktop py-stack-lg flex flex-col md:flex-row justify-between items-center gap-stack-md w-full">
+<div class="text-headline-sm font-headline-md font-bold text-on-surface dark:text-surface-bright">Manzil</div>
+<div class="flex flex-wrap justify-center gap-stack-md">
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors text-label-sm font-label-sm hover:underline transition-all" href="#">About Us</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors text-label-sm font-label-sm hover:underline transition-all" href="#">Partner with Manzil</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors text-label-sm font-label-sm hover:underline transition-all" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors text-label-sm font-label-sm hover:underline transition-all" href="#">Terms of Service</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors text-label-sm font-label-sm hover:underline transition-all" href="#">Help Center</a>
+</div>
+<div class="text-body-md font-body-md text-primary dark:text-primary-fixed-dim">
+                © 2024 Manzil. Local Discovery Redefined.
+            </div>
+</div>
+</footer>
+</body></html>

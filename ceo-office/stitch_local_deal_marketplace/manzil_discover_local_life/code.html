@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Manzil - Let AI Plan Your Perfect Day</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed": "#002113",
+                        "surface-bright": "#f8f9ff",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "background": "#f8f9ff",
+                        "on-tertiary-fixed-variant": "#783200",
+                        "primary-fixed-dim": "#adc6ff",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed": "#ffdbca",
+                        "error-container": "#ffdad6",
+                        "surface-dim": "#cbdbf5",
+                        "tertiary": "#994100",
+                        "on-background": "#0b1c30",
+                        "on-primary": "#ffffff",
+                        "secondary": "#006c49",
+                        "on-tertiary-container": "#fffbff",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#005236",
+                        "secondary-container": "#6cf8bb",
+                        "surface-tint": "#005bc1",
+                        "on-primary-fixed": "#001a41",
+                        "on-surface-variant": "#414755",
+                        "surface": "#f8f9ff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "primary": "#0058bc",
+                        "on-secondary-container": "#00714d",
+                        "secondary-fixed": "#6ffbbe",
+                        "surface-variant": "#d3e4fe",
+                        "on-surface": "#0b1c30",
+                        "on-error": "#ffffff",
+                        "primary-fixed": "#d8e2ff",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#213145",
+                        "surface-container": "#e5eeff",
+                        "primary-container": "#0070eb",
+                        "on-tertiary-fixed": "#341100",
+                        "tertiary-container": "#c05400",
+                        "inverse-primary": "#adc6ff",
+                        "error": "#ba1a1a",
+                        "outline": "#717786",
+                        "on-primary-fixed-variant": "#004493",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-primary-container": "#fefcff",
+                        "surface-container-high": "#dce9ff",
+                        "tertiary-fixed-dim": "#ffb690",
+                        "outline-variant": "#c1c6d7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "base-unit": "4px",
+                        "stack-lg": "32px",
+                        "margin-desktop": "32px",
+                        "gutter": "16px",
+                        "stack-sm": "8px",
+                        "stack-md": "16px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"],
+                        "label-md": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Hanken Grotesk', sans-serif; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col antialiased">
+<!-- TopNavBar (Shared Component) -->
+<header class="bg-surface/80 dark:bg-on-background/80 backdrop-blur-md full-width top-0 sticky z-50 border-b border-outline-variant dark:border-outline/20 shadow-sm dark:shadow-none transition-transform">
+<div class="max-w-7xl mx-auto px-margin-desktop flex justify-between items-center h-20 w-full">
+<div class="flex items-center gap-stack-lg">
+<a class="text-headline-md font-headline-md font-extrabold text-primary dark:text-primary-fixed-dim tracking-tight" href="#">Manzil</a>
+<nav class="hidden md:flex gap-stack-lg">
+<a class="text-primary dark:text-primary-fixed-dim border-b-2 border-primary dark:border-primary-fixed-dim pb-1 font-bold text-label-md font-label-md" href="#">Discover</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors text-label-md font-label-md hover:bg-surface-container-low dark:hover:bg-surface-dim/10 transition-all duration-200 px-2 py-1 rounded-DEFAULT" href="#">Categories</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors text-label-md font-label-md hover:bg-surface-container-low dark:hover:bg-surface-dim/10 transition-all duration-200 px-2 py-1 rounded-DEFAULT" href="#">AI Planner</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary transition-colors text-label-md font-label-md hover:bg-surface-container-low dark:hover:bg-surface-dim/10 transition-all duration-200 px-2 py-1 rounded-DEFAULT" href="#">Reviews</a>
+</nav>
+</div>
+<div class="flex items-center gap-stack-md">
+<div class="hidden md:flex relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-full text-body-md font-body-md focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none w-64 transition-all" placeholder="Search experiences..." type="text"/>
+</div>
+<button class="bg-primary text-on-primary px-4 py-2 rounded-lg text-label-md font-label-md shadow-sm hover:bg-primary-container hover:text-on-primary-container transition-colors font-semibold">Sign In</button>
+</div>
+</div>
+</header>
+<main class="flex-grow">
+<!-- Hero Section -->
+<section class="relative pt-stack-lg pb-24 md:pt-24 md:pb-32 px-margin-mobile md:px-margin-desktop overflow-hidden">
+<div class="absolute inset-0 z-0">
+<div class="bg-cover bg-center w-full h-full opacity-20" data-alt="A vibrant, high-energy scene of friends laughing at an upscale modern outdoor cafe during golden hour. The lighting is bright and warm, casting soft shadows, representing an ideal light-mode aesthetic. The composition emphasizes social connection and premium leisure activities, with subtle primary blue brand color accents subtly woven into the scene's background elements." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBhUlaFk13NjIvoUwYiJ-4JM9JYvhvTbzLzWZfOHNp8iBLzEVcvekZkz6Fyl8rvHkipHq3Kk8G8_wVtfXhbBEWfu1baxYMYyOC8B12-D5I3so9b189aw2nHMjfLFSh3ljxRE0vfRzv5lTiV45Wb9ycAluLTRH7Zm7FMlKLXGMu8i6IUBMKLtlWA2J5HKb6-fHCEktda_2GJxhT9AQc0TYBkQS1UfJvrrLzkMR_nM3vaJDV_f4qlMX-F')"></div>
+<div class="absolute inset-0 bg-gradient-to-b from-surface via-surface/80 to-background"></div>
+</div>
+<div class="max-w-7xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-stack-lg items-center">
+<div class="flex flex-col gap-stack-md">
+<div class="inline-flex items-center gap-2 bg-surface-container-highest text-primary px-3 py-1.5 rounded-full text-label-sm font-label-sm w-fit shadow-sm">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                        Introducing Manzil AI
+                    </div>
+<h1 class="text-display-lg font-display-lg text-on-background">
+                        Let AI Plan Your <span class="text-primary relative inline-block">Perfect Day.<svg class="absolute w-full h-3 -bottom-1 left-0 text-secondary-container" preserveaspectratio="none" viewbox="0 0 100 10"><path d="M0 5 Q 50 10 100 5" fill="none" stroke="currentColor" stroke-width="4"></path></svg></span>
+</h1>
+<p class="text-body-lg font-body-lg text-on-surface-variant max-w-xl">
+                        Skip the endless searching. Tell us what you're craving, and our intelligent planner curates hyper-local dining, events, and services into a seamless itinerary.
+                    </p>
+<!-- AI Search Bar / Planner Input -->
+<div class="mt-stack-sm bg-surface rounded-xl p-2 shadow-[0_8px_20px_rgba(0,88,188,0.08)] border border-outline-variant/30 flex flex-col sm:flex-row gap-2 max-w-2xl focus-within:shadow-[0_12px_24px_rgba(0,88,188,0.12)] focus-within:border-primary/40 transition-all duration-300">
+<div class="flex-grow flex items-center bg-surface-container-low rounded-lg px-4 py-3">
+<span class="material-symbols-outlined text-primary mr-3">chat_spark</span>
+<input class="bg-transparent border-none outline-none w-full text-body-md font-body-md placeholder-outline p-0 focus:ring-0" placeholder="e.g. 'A relaxing spa afternoon followed by vegan sushi'" type="text"/>
+</div>
+<button class="bg-primary text-on-primary rounded-lg px-6 py-3 font-label-md text-label-md font-semibold hover:bg-primary-container shadow-sm flex items-center justify-center gap-2 whitespace-nowrap transition-colors">
+                            Plan My Day
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+<div class="flex gap-4 text-label-sm font-label-sm text-on-surface-variant mt-2">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs text-secondary">check_circle</span> Instant Itineraries</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs text-secondary">check_circle</span> Verified Local Spots</span>
+</div>
+</div>
+<div class="hidden lg:block relative h-[500px]">
+<!-- Abstract representation of an itinerary using a Bento layout -->
+<div class="absolute inset-0 grid grid-cols-2 grid-rows-3 gap-4 p-4 transform rotate-2">
+<div class="row-span-2 col-span-1 rounded-xl overflow-hidden shadow-[0_8px_20px_rgba(0,0,0,0.08)] border border-outline-variant/20 relative group">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A beautifully plated artisanal breakfast dish at a modern, bright cafe. The lighting is soft and inviting, highlighting fresh ingredients. The composition is close-up, emphasizing quality and taste, fitting a modern light-mode lifestyle platform aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVriqelTlDSQ2Wz-TyVrJ1idCCbL0zMqRmQgny-w-G3L7ZKiERCARH05_b_XA3vV7TQARS6xbcUhR-o6MxdPYQ_RT7bIULJ8pPmdX0Kacp7jx82ckLSN18Fb88e4dw-yZRcjVLx7uESS9IF7g7mb2ocDQVAxm96vRhwxsMJtJJree2C_cNa7tLWGpVTQuS_qthcJuETQJzT7SCK6bHvnCkhlAafoc40e8ARcFC1WnFuiyhlzFWBpCq"/>
+<div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/70 to-transparent text-white">
+<p class="text-label-sm font-label-sm opacity-80">10:00 AM</p>
+<p class="font-headline-md text-sm font-bold">Artisan Brunch</p>
+</div>
+</div>
+<div class="row-span-1 col-span-1 rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.08)] border border-outline-variant/20 relative group bg-surface-container-low flex flex-col justify-center items-center p-4">
+<span class="material-symbols-outlined text-primary text-4xl mb-2" style="font-variation-settings: 'FILL' 1;">directions_walk</span>
+<p class="text-label-sm font-label-sm text-on-surface-variant text-center">15 min scenic walk</p>
+</div>
+<div class="row-span-2 col-span-1 rounded-xl overflow-hidden shadow-[0_8px_20px_rgba(0,0,0,0.08)] border border-outline-variant/20 relative group">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A serene, minimalist spa interior featuring light wood textures, white towels, and soft natural lighting. A small indoor plant adds a touch of green. The mood is calm and restorative, aligning with a premium wellness brand aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7OcdsLV32hvba9rPfzaVNUDQ_tCNLAVbeJ-QPkOimA_DoA_7zyYgbe4GFVeCIz4egVLIanS9eQZNcS6OfqGNaIFoV7eneO0UkLgWLSSP4fF2TLdReJ4LjoKVxR2uNKvPrpBA_aLfL3gfFgsCp3kotbmR3WRRmmyGQO4uB7l9RSZ_bE1I1bVJeh47j95CxRbM0TBDpnBSHz1wZm7qQCR4tFmzDRR-3mcvyxefUiOxdUypmCQS4ZjJy"/>
+<div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/70 to-transparent text-white">
+<p class="text-label-sm font-label-sm opacity-80">12:30 PM</p>
+<p class="font-headline-md text-sm font-bold">Zen Spa Session</p>
+</div>
+</div>
+<div class="row-span-1 col-span-1 rounded-xl shadow-sm border border-primary/20 bg-primary-container/10 flex items-center justify-center p-4">
+<div class="text-center">
+<p class="text-headline-md font-headline-md text-primary font-bold">AI Matched</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">98% relevance to you</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Categories Section (Bento Grid Style) -->
+<section class="py-stack-lg px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto">
+<div class="flex justify-between items-end mb-stack-md">
+<div>
+<h2 class="text-headline-lg font-headline-lg text-on-background">Explore by Category</h2>
+<p class="text-body-md font-body-md text-on-surface-variant mt-1">Discover top-rated local experiences.</p>
+</div>
+<a class="hidden sm:flex text-primary text-label-md font-label-md items-center gap-1 hover:underline" href="#">View All <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4 h-auto md:h-[400px]">
+<!-- Dining (Large) -->
+<a class="md:col-span-2 md:row-span-2 rounded-xl overflow-hidden relative group block shadow-[0_4px_12px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition-all" href="#">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A top-down view of a modern dining table filled with beautifully plated gourmet dishes, including a colorful salad and grilled entrees. The setting is bright and upscale, suitable for a light-mode lifestyle app promoting premium dining experiences." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOyceg9n8an17bzOVjpy2Vrl0DyHif6zn-SY3f86CSbxRKSA2ODVVWF2Po8vcJWBy7hGtkl83wuspQT0ozS7UZ0-XlA_PJryj6eA3g8c3AacMtcXwdvJ2Lo57n9Fd6pwK0RjDrfAjRJdOIMM5wkZ-4iXLnfFzoY5zMX4ihKO9QXRgY8wqiMZCDmQaWdRipyAuEZqwRLeBlkxgtqJ_0YkSHbSgmm5FrJKOiDWpGMAM9magesiKmX7v7"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-background/80 via-on-background/20 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-6 w-full">
+<div class="flex items-center justify-between">
+<div>
+<h3 class="text-headline-md font-headline-md text-white font-bold mb-1">Dining &amp; Nightlife</h3>
+<p class="text-body-md font-body-md text-white/80">From street food to Michelin stars.</p>
+</div>
+<div class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-300">
+<span class="material-symbols-outlined">arrow_forward</span>
+</div>
+</div>
+</div>
+</a>
+<!-- Wellness -->
+<a class="md:col-span-1 md:row-span-1 rounded-xl overflow-hidden relative group block shadow-[0_4px_12px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition-all bg-surface-container-low" href="#">
+<div class="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-surface/80 backdrop-blur flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-sm">spa</span>
+</div>
+<img class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" data-alt="A bright, airy yoga studio with wooden floors and large windows letting in natural sunlight. Several yoga mats are neatly arranged. The scene is calm, clean, and embodies a modern wellness aesthetic suitable for a light-mode interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDuMpnFIarYKwo1wTnLc2QY4XgTqwTpxeoJj-GZg0SFt6qJHkZVUe-ax16rrGwQ8q8nodcnowsjiZob7BeLpI5AQhgFxb7J9RgcTPRk2bshWG3B1-wivnQbk9LaoYtPhlqWQGJ6cjK9LlErFnT5AWtuplD1ZpkR6HSky-WOYQsJp7GV2Fe_PAr0Y8DLriR8vqqK_Rc2vjoGBQJ6e1rWFj84wzI1FlcFRGDy8hOCbzH8l-Jq0uYLBqc"/>
+<div class="absolute bottom-0 left-0 p-4 w-full bg-gradient-to-t from-on-background/70 to-transparent">
+<h3 class="text-label-md font-label-md text-white font-bold">Wellness &amp; Spa</h3>
+</div>
+</a>
+<!-- Entertainment -->
+<a class="md:col-span-1 md:row-span-1 rounded-xl overflow-hidden relative group block shadow-[0_4px_12px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition-all bg-surface-container-low" href="#">
+<div class="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-surface/80 backdrop-blur flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-sm">local_activity</span>
+</div>
+<img class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" data-alt="A lively concert crowd in an intimate modern venue. The stage lights are vibrant but not overwhelming, creating an energetic and exciting atmosphere that fits a premium local entertainment discovery platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrgWeBjZ6hAOC9SvpRbubMG8xH6b3pK4tJEl_92bF61e0WniY6-zWlKR3HReOQKY0qvyX7DEyjr0uR6Lx7uQD7ObCD3V1rYJwE5mFazYY1_smj_Xw61M41HPRIIf9s0hCKFSaAWOqxcB5Dp_wpvEQvzruTeJEfncOx46JZOVNhGVgvt5QFmaF0MSK8fUPXyRuzpV2jBFXJ3zIBS_4gY1DziMKnhumOGzwlU-mX_TvVSv0g7p3o48zK"/>
+<div class="absolute bottom-0 left-0 p-4 w-full bg-gradient-to-t from-on-background/70 to-transparent">
+<h3 class="text-label-md font-label-md text-white font-bold">Entertainment</h3>
+</div>
+</a>
+<!-- Services -->
+<a class="md:col-span-2 md:row-span-1 rounded-xl overflow-hidden relative group block shadow-[0_4px_12px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition-all bg-surface-container-low border border-outline-variant/30 flex items-center" href="#">
+<div class="w-1/2 h-full relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A sharply dressed professional barber meticulously working in a modern, brightly lit barbershop. The aesthetic is clean, upscale, and trustworthy, representing reliable local professional services." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQe6VNqUA3GT4U2XAITwj-EobLmkPbyAyjLN8CVv1raMaVpbPeJNB3FypvSqpiNqATURq5R1KRvQCuA2l3R1LX2_Yc0HxoxvFVqSDi2EUrH6SLpljkzeRoV5_SEbAJiGl6ljMpYUBgPXnQ6mulXhOJdmJ_qGKNSGsI45mn-6V2VUPW7L0lOiD-Ms5CjxeIUaQpKp2WluESnwUB6FAR4mWiUSjeHJx_PnbwYXQZA9sIQsIYuXa_kmxg"/>
+</div>
+<div class="w-1/2 p-6 flex flex-col justify-center">
+<div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-2">
+<span class="material-symbols-outlined text-sm">home_repair_service</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface font-bold mb-1">Local Services</h3>
+<p class="text-body-md font-body-md text-on-surface-variant text-sm line-clamp-2">Trusted professionals for every need.</p>
+</div>
+</a>
+</div>
+<a class="sm:hidden flex justify-center text-primary text-label-md font-label-md items-center gap-1 mt-stack-md w-full border border-primary/20 py-3 rounded-lg" href="#">View All Categories</a>
+</section>
+<!-- Trending Experiences (Master Cards) -->
+<section class="py-stack-lg px-margin-mobile md:px-margin-desktop bg-surface-container-lowest max-w-7xl mx-auto rounded-3xl mb-stack-lg">
+<h2 class="text-headline-lg font-headline-lg text-on-background mb-stack-md">Trending Near You</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-stack-md">
+<!-- Deal Card 1 -->
+<div class="bg-surface rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition-shadow duration-300 border border-outline-variant/20 flex flex-col group cursor-pointer">
+<div class="relative h-48 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A beautifully crafted matcha latte with latte art, sitting on a light wooden table next to a minimalist ceramic plate with a pastry. Natural morning light creates a clean, inviting look fitting a modern cafe aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8vFjv4o8W4ngkb8Du8CSQHDu642D9fQCRdUwXJhKq2a-A_PZr1aawUE--CAEaQSD3RJguHMxWt0rd5caUhdiIt44HZ3WNDsT3bczNLOiL2iv81dTxzoQpkzRG0p2rKMdX54g8HLHWdyoE98WeJ1kLmWCjwCG9zNc-MrmN5DtN_bDlTEdojiq_NVPLg_cQ7APHhYRWaCFQFdOFOKJWtny2BY7MOeP1kez91wplU8nqDsyvR27UmSDS"/>
+<!-- Savings Badge -->
+<div class="absolute top-3 right-3 bg-secondary text-on-secondary px-2 py-1 rounded-md text-label-sm font-label-sm font-bold shadow-sm">
+                            20% OFF
+                        </div>
+<div class="absolute top-3 left-3 bg-surface/90 backdrop-blur text-on-surface px-2 py-1 rounded-md text-label-sm font-label-sm flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-xs text-tertiary-container" style="font-variation-settings: 'FILL' 1;">star</span> 4.9
+                        </div>
+</div>
+<div class="p-4 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-1">
+<h3 class="text-headline-md font-headline-md text-base text-on-surface font-bold line-clamp-1">The Matcha Lounge</h3>
+</div>
+<p class="text-body-md font-body-md text-sm text-on-surface-variant mb-3 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">location_on</span> Downtown • Cafe
+                        </p>
+<div class="mt-auto pt-3 border-t border-outline-variant/30 flex justify-between items-center">
+<div>
+<span class="text-label-sm font-label-sm text-outline line-through">$15.00</span>
+<span class="text-headline-md font-headline-md text-lg text-primary font-bold ml-1">$12.00</span>
+</div>
+<button class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Deal Card 2 -->
+<div class="bg-surface rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition-shadow duration-300 border border-outline-variant/20 flex flex-col group cursor-pointer">
+<div class="relative h-48 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A modern indoor rock climbing facility with brightly colored holds on a clean white wall. The lighting is bright and industrial-chic. A climber is visible in the background. The aesthetic is active and modern." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2KuD9i6xZ8P86LaOY66SBKye1C8-_jNG4HuK_nNxDSqbvnTz-CofFDZRVpwFvEi3zfOwhshQjQfjjWjEUh_D9Mq8hc50fvaVNNCFC0W7Gzf8fYQi4L5_NWJTz6GE11TNUYkZ3Y-YvlsdBjL2PomQ7ywgWI4LC35RMu4Q4R_OWi02kB8fsbb6vOTICsjAc2PkSUZ02jTc2FJxN_Z6OFQRHuoOGAfuHLfXTL_URz8RplZHy4prMFjMx"/>
+<div class="absolute top-3 left-3 bg-surface/90 backdrop-blur text-on-surface px-2 py-1 rounded-md text-label-sm font-label-sm flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-xs text-tertiary-container" style="font-variation-settings: 'FILL' 1;">star</span> 4.7
+                        </div>
+<!-- Category Chip -->
+<div class="absolute bottom-3 left-3 bg-tertiary-container/10 text-tertiary-container border border-tertiary-container/20 px-2 py-0.5 rounded text-xs font-semibold backdrop-blur">
+                            Trending
+                        </div>
+</div>
+<div class="p-4 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-1">
+<h3 class="text-headline-md font-headline-md text-base text-on-surface font-bold line-clamp-1">Vertical Ascent Gym</h3>
+</div>
+<p class="text-body-md font-body-md text-sm text-on-surface-variant mb-3 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">location_on</span> Westside • Activity
+                        </p>
+<div class="mt-auto pt-3 border-t border-outline-variant/30 flex justify-between items-center">
+<div>
+<span class="text-label-sm font-label-sm text-on-surface-variant text-xs uppercase tracking-wider block">Day Pass</span>
+<span class="text-headline-md font-headline-md text-lg text-on-surface font-bold">$25.00</span>
+</div>
+<button class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Deal Card 3 -->
+<div class="bg-surface rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] transition-shadow duration-300 border border-outline-variant/20 flex flex-col group cursor-pointer hidden md:flex">
+<div class="relative h-48 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A sleek, dimly lit modern sushi bar counter. A chef's hands are carefully preparing a piece of nigiri. The lighting focuses softly on the pristine fish, creating a premium, high-end dining atmosphere suitable for an exclusive experience listing." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAwxKerLRlFIAoYITvEQEdApYKp9PAmh_z67Z9uaAFLvKFVqmSzaNCu9Y-1gn8PasLqJGO8YI5F81meoZALWdsYpLMBbR3InX7h8zx9MO9RIXm1GCnNrUOC5kQbhsRY_Chbviv6WF9kZ_CXtJ_8OrDlTtL46VU9ZKJIPlCWtUT7CptohiyLswg9w-C5C1Ot3gEHML4_TOY_EK5gq8qSIYqA-FES4qCXxuRH63zb-WQKBLus8I-KYPa"/>
+<div class="absolute top-3 right-3 bg-secondary text-on-secondary px-2 py-1 rounded-md text-label-sm font-label-sm font-bold shadow-sm">
+                            Exclusive
+                        </div>
+<div class="absolute top-3 left-3 bg-surface/90 backdrop-blur text-on-surface px-2 py-1 rounded-md text-label-sm font-label-sm flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-xs text-tertiary-container" style="font-variation-settings: 'FILL' 1;">star</span> 5.0
+                        </div>
+</div>
+<div class="p-4 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-1">
+<h3 class="text-headline-md font-headline-md text-base text-on-surface font-bold line-clamp-1">Omakase at Kiro</h3>
+</div>
+<p class="text-body-md font-body-md text-sm text-on-surface-variant mb-3 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">location_on</span> Midtown • Fine Dining
+                        </p>
+<div class="mt-auto pt-3 border-t border-outline-variant/30 flex justify-between items-center">
+<div>
+<span class="text-label-sm font-label-sm text-on-surface-variant text-xs uppercase tracking-wider block">Tasting Menu</span>
+<span class="text-headline-md font-headline-md text-lg text-on-surface font-bold">$120.00</span>
+</div>
+<button class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer (Shared Component) -->
+<footer class="bg-surface-container-lowest dark:bg-on-background border-t border-outline-variant dark:border-outline/10 full-width bottom-0">
+<div class="max-w-7xl mx-auto px-margin-desktop py-stack-lg flex flex-col md:flex-row justify-between items-center gap-stack-md w-full">
+<div class="text-headline-sm font-headline-md font-bold text-on-surface dark:text-surface-bright">
+                Manzil
+            </div>
+<nav class="flex flex-wrap justify-center gap-x-6 gap-y-2">
+<a class="text-body-md font-body-md text-on-surface-variant dark:text-outline-variant hover:text-primary hover:underline transition-all duration-200" href="#">About Us</a>
+<a class="text-body-md font-body-md text-on-surface-variant dark:text-outline-variant hover:text-primary hover:underline transition-all duration-200" href="#">Partner with Manzil</a>
+<a class="text-body-md font-body-md text-on-surface-variant dark:text-outline-variant hover:text-primary hover:underline transition-all duration-200" href="#">Privacy Policy</a>
+<a class="text-body-md font-body-md text-on-surface-variant dark:text-outline-variant hover:text-primary hover:underline transition-all duration-200" href="#">Terms of Service</a>
+<a class="text-body-md font-body-md text-on-surface-variant dark:text-outline-variant hover:text-primary hover:underline transition-all duration-200" href="#">Help Center</a>
+</nav>
+<div class="text-label-sm font-label-sm text-on-surface-variant dark:text-outline-variant">
+                © 2024 Manzil. Local Discovery Redefined.
+            </div>
+</div>
+</footer>
+</body></html>

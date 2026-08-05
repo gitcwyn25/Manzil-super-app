@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Manzil for Business - Registration</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary-container": "#0070eb",
+                      "on-secondary-fixed": "#002113",
+                      "error": "#ba1a1a",
+                      "on-background": "#0b1c30",
+                      "surface-dim": "#cbdbf5",
+                      "inverse-primary": "#adc6ff",
+                      "tertiary-container": "#c05400",
+                      "error-container": "#ffdad6",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-tint": "#005bc1",
+                      "background": "#f8f9ff",
+                      "surface-variant": "#d3e4fe",
+                      "surface-bright": "#f8f9ff",
+                      "secondary-fixed-dim": "#4edea3",
+                      "outline": "#717786",
+                      "primary": "#0058bc",
+                      "tertiary-fixed": "#ffdbca",
+                      "surface-container": "#e5eeff",
+                      "secondary": "#006c49",
+                      "primary-fixed-dim": "#adc6ff",
+                      "inverse-on-surface": "#eaf1ff",
+                      "on-secondary": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "secondary-container": "#6cf8bb",
+                      "on-primary-fixed-variant": "#004493",
+                      "tertiary": "#994100",
+                      "surface-container-highest": "#d3e4fe",
+                      "on-tertiary-fixed-variant": "#783200",
+                      "on-tertiary-container": "#fffbff",
+                      "inverse-surface": "#213145",
+                      "surface-container-low": "#eff4ff",
+                      "primary-fixed": "#d8e2ff",
+                      "surface": "#f8f9ff",
+                      "on-surface-variant": "#414755",
+                      "on-error": "#ffffff",
+                      "on-surface": "#0b1c30",
+                      "on-primary-container": "#fefcff",
+                      "on-secondary-fixed-variant": "#005236",
+                      "on-primary-fixed": "#001a41",
+                      "on-secondary-container": "#00714d",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-high": "#dce9ff",
+                      "on-error-container": "#93000a",
+                      "on-tertiary-fixed": "#341100",
+                      "outline-variant": "#c1c6d7",
+                      "secondary-fixed": "#6ffbbe",
+                      "tertiary-fixed-dim": "#ffb690"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-lg": "32px",
+                      "stack-sm": "8px",
+                      "gutter": "16px",
+                      "base-unit": "4px",
+                      "margin-mobile": "16px",
+                      "margin-desktop": "32px",
+                      "stack-md": "16px"
+              },
+              "fontFamily": {
+                      "body-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "label-sm": [
+                              "Hanken Grotesk"
+                      ],
+                      "body-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-lg-mobile": [
+                              "Hanken Grotesk"
+                      ],
+                      "display-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "label-md": [
+                              "Hanken Grotesk"
+                      ]
+              },
+              "fontSize": {
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "800"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24
+        }
+        .filled-icon {
+             font-variation-settings: 'FILL' 1;
+        }
+      </style>
+</head>
+<body class="bg-background min-h-screen font-body-md text-on-background flex flex-col antialiased">
+<!-- TopNavBar: Suppressed because this is a transactional linear flow (Registration) -->
+<main class="flex-grow flex w-full">
+<!-- Split Screen Layout -->
+<div class="flex flex-col md:flex-row w-full min-h-screen">
+<!-- Left Side: Image / Brand Panel (Hidden on very small screens, shown as block on medium+) -->
+<div class="hidden md:flex md:w-1/2 bg-surface-container-low relative overflow-hidden flex-col justify-between">
+<!-- Background Image -->
+<div class="absolute inset-0 z-0">
+<div class="w-full h-full bg-cover bg-center" data-alt="A high-quality, professional photograph of a smiling local business owner standing proudly behind the counter of a modern, brightly lit cafe or boutique. The lighting is natural and inviting, emphasizing a trustworthy and efficient vibe. The scene uses modern corporate aesthetics with clean lines, soft focus in the background, and vibrant blue and green accents subtly integrated into the environment. The overall mood is proactive, reliable, and optimistic, perfectly suited for a high-energy local commerce platform." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBIHNG-934SsQ_7vYCVYL4W7y5GHAraDgN5QDQOlhC2NN_Egoqqssrtabp9DCBClaZxXmbY28hBSXsWvpPEw38kuB8uQ33RV3qOglhXvP8z-5_-XfT4lPcVK5lHIPSgO5I0AgCiJrE64AwqijNnnHcWMuCFM0VP8F4EBIqyu0ifBsIeSMM_5AiWBrTGRnr15W0Je9PLMIhCjZo2qSSWFh52-9ENzdeY9GfQmw0iMjtY3YvHpXgFaTRT')"></div>
+<!-- Overlay to ensure text readability if needed -->
+<div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/80 via-inverse-surface/40 to-transparent"></div>
+</div>
+<!-- Brand Layer over image -->
+<div class="relative z-10 p-margin-desktop text-on-primary">
+<h1 class="font-headline-lg text-headline-lg font-bold tracking-tight text-white drop-shadow-md">Manzil for Business</h1>
+</div>
+<div class="relative z-10 p-margin-desktop mb-margin-desktop">
+<p class="font-headline-md text-headline-md text-white drop-shadow-md font-medium mb-stack-sm">
+                        Empower your local business.
+                    </p>
+<p class="font-body-lg text-body-lg text-white/90 drop-shadow-sm max-w-md">
+                        Join the high-energy platform that connects professional reliability with the excitement of discovery.
+                    </p>
+</div>
+</div>
+<!-- Right Side: Form Panel -->
+<div class="w-full md:w-1/2 flex items-center justify-center p-margin-mobile md:p-margin-desktop bg-surface z-10 shadow-[-10px_0_30px_rgba(0,0,0,0.05)]">
+<div class="w-full max-w-md space-y-stack-lg">
+<!-- Mobile Header (Only visible on mobile) -->
+<div class="md:hidden text-center mb-stack-lg">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary font-bold mb-stack-sm">Manzil for Business</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Partner Portal Registration</p>
+</div>
+<!-- Form Header -->
+<div class="space-y-stack-sm text-center md:text-left">
+<h2 class="font-display-lg text-display-lg text-on-surface">Get Started</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Create your account to manage deals and bookings.</p>
+</div>
+<!-- Registration Form -->
+<form action="#" class="space-y-stack-md" method="POST">
+<!-- Business Name -->
+<div class="space-y-base-unit">
+<label class="font-label-md text-label-md text-on-surface block" for="businessName">Business Name</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline">storefront</span>
+</div>
+<input class="pl-10 w-full rounded-lg border-outline-variant bg-surface-container-lowest py-3 text-on-surface font-body-md text-body-md focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all shadow-sm" id="businessName" name="businessName" placeholder="e.g. The Corner Cafe" required="" type="text"/>
+</div>
+</div>
+<!-- Category Selection -->
+<div class="space-y-base-unit">
+<label class="font-label-md text-label-md text-on-surface block" for="category">Business Category</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline">category</span>
+</div>
+<select class="pl-10 w-full rounded-lg border-outline-variant bg-surface-container-lowest py-3 text-on-surface font-body-md text-body-md focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all shadow-sm appearance-none" id="category" name="category" required="">
+<option disabled="" selected="" value="">Select a category</option>
+<option value="retail">Retail</option>
+<option value="food">Food &amp; Beverage</option>
+<option value="services">Professional Services</option>
+<option value="health">Health &amp; Wellness</option>
+</select>
+<div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Email -->
+<div class="space-y-base-unit">
+<label class="font-label-md text-label-md text-on-surface block" for="email">Email Address</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline">mail</span>
+</div>
+<input class="pl-10 w-full rounded-lg border-outline-variant bg-surface-container-lowest py-3 text-on-surface font-body-md text-body-md focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all shadow-sm" id="email" name="email" placeholder="owner@business.com" required="" type="email"/>
+</div>
+</div>
+<!-- Password -->
+<div class="space-y-base-unit">
+<label class="font-label-md text-label-md text-on-surface block" for="password">Password</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline">lock</span>
+</div>
+<input class="pl-10 w-full rounded-lg border-outline-variant bg-surface-container-lowest py-3 text-on-surface font-body-md text-body-md focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all shadow-sm" id="password" name="password" placeholder="••••••••" required="" type="password"/>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Must be at least 8 characters.</p>
+</div>
+<!-- Submit Button -->
+<div class="pt-stack-sm">
+<button class="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-on-primary bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all font-label-md text-label-md hover:shadow-md hover:-translate-y-0.5 active:translate-y-0" type="submit">
+                                Register Your Business
+                                <span class="material-symbols-outlined ml-2 text-[20px]">arrow_forward</span>
+</button>
+</div>
+</form>
+<!-- Switch to Login -->
+<div class="text-center font-body-md text-body-md pt-stack-md border-t border-outline-variant/30">
+<p class="text-on-surface-variant">
+                            Already have an account? 
+                            <a class="font-label-md text-label-md text-primary hover:text-primary-container hover:underline transition-colors ml-1" href="#">Log In</a>
+</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer: Suppressed as this is a focused transactional screen -->
+</body></html>
