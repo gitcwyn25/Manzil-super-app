@@ -1118,7 +1118,21 @@ git commit -m "feat(web): rebuild registration on Bootstrap forms"
 
 ---
 
-### Task 9: Discover
+### Task 9: Discover — Groupon look-alike
+
+**AMENDED 2026-08-05 (user decision):** the Discover page is a full look-alike of groupon.com's shape, per the user-approved preview. **NORMATIVE REFERENCE:** `.superpowers/sdd/2026-08-04-anor-web-redesign/task-9-reference.html` — where it and the prose below disagree, the reference wins. Execution order: Task 9 runs right after Task 5 (home), before Tasks 3/6/7/8.
+
+Key mappings (all already in the product's data model):
+- Header search bar (rounded, 📍 Toshkent location chip, green submit) + horizontal category nav: implemented INSIDE the discover page as a sticky block under the global Task 4 chrome — do NOT modify the shared nav for this.
+- Promo tiles row: the top 3 community lists (`/lists` data) as gradient banner tiles.
+- Deal cards: photo top with badge overlay (−N% from an ACTIVE discount announcement; "YANGI" for businesses created recently; "MASHHUR" for top-rated), ♥ save button (existing saved-businesses feature; Clerk-gated like elsewhere), small `category · district` line, bold name, address + distance (when geolocation granted), green stars + mono rating + review count, then either strikethrough old→new price (discount announcements carrying prices) or `$` price-tier + "Hozir ochiq" where structured hours allow — otherwise omit the open pill (the LiveStatus mock remains CUT per the original Task 9 note).
+- "Trend joylar" horizontal scroll row + "Barcha joylar" grid with district/sort selects; "Barchasini ko'rish ›" links.
+- Colors: white ground, deep green `#04483f`/mid `#0a6b5e` for stars/prices/CTAs, lime `#A1DD41` badges — the chrome family, NOT anor-red (user direction: match Groupon's green-on-white feel with Manzil's own greens).
+- **Data caveat (implementer must verify first):** check whether the businesses list DTO from `@manzil/shared` exposes active discount announcements. If not: ship cards without the strikethrough price row (badge-only where derivable), record the API gap in the ledger as a follow-up — do not block on API changes and do not invent discount data.
+
+The original Task 9 prose below remains for its non-visual requirements (URL-driven state, skeletons, designed empty state, e2e class contracts) and is superseded on visuals by the reference.
+
+### Task 9 (original): Discover
 
 **Files:**
 - Modify: `apps/web/app/[locale]/(site)/discover/page.tsx`
