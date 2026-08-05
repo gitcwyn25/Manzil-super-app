@@ -63,6 +63,12 @@
   aspect-ratio: 4 / 3;
 }
 
+// Site-wide chrome (header nav, mobile offcanvas, footer). Kept in its own
+// partial rather than inlined here since it is a large, self-contained block
+// with its own local color variables — see _chrome.scss's header comment for
+// why those colors are not in _tokens.scss.
+@import "chrome";
+
 // --- Unconverted-page bridge -----------------------------------------------
 // Bootstrap's reboot/type/containers modules (imported above) define `body`,
 // `a`, `.container`, and `h1`-`h6` with the SAME specificity as globals.css's

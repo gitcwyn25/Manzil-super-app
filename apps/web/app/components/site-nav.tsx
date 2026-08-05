@@ -1,6 +1,7 @@
 "use client";
 
 import type { Locale } from "@manzil/shared";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { getBusinessCopy } from "../lib/business-copy";
@@ -15,19 +16,23 @@ const links = [
   { key: "forBusiness" as const, href: (locale: Locale) => `/${locale}/business` }
 ];
 
+// `d-none d-lg-flex` is a Bootstrap `!important` utility, so the responsive
+// show/hide split can never lose a cascade tie to globals.css's older
+// same-specificity `.desktop-nav` rules — see _chrome.scss for the rest of
+// this element's restyle.
 export function SiteNav({ locale }: { locale: Locale }) {
   const pathname = usePathname();
   const copy = getBusinessCopy(locale);
 
   return (
-    <nav className="desktop-nav" aria-label="Asosiy navigatsiya">
+    <nav className="desktop-nav d-none d-lg-flex" aria-label="Asosiy navigatsiya">
       {links.map((link) => {
         const href = link.href(locale);
         const active = pathname === href || (link.key === "home" && pathname === `/${locale}`);
         return (
-          <a className={active ? "active" : undefined} href={href} key={link.key}>
+          <Link className={active ? "active" : undefined} href={href} key={link.key}>
             {copy.nav[link.key]}
-          </a>
+          </Link>
         );
       })}
     </nav>
@@ -61,6 +66,9 @@ const mobileIcons: Record<string, ReactNode> = {
   )
 };
 
+// `nav.mobile-nav` is the element the shell-boundary e2e suite selects on.
+// It lives inside the offcanvas panel rendered by mobile-nav.tsx, so it stays
+// in the DOM (open or closed) whenever the site shell is mounted.
 export function MobileSiteNav({ locale }: { locale: Locale }) {
   const pathname = usePathname();
   const copy = getBusinessCopy(locale);
@@ -74,14 +82,14 @@ export function MobileSiteNav({ locale }: { locale: Locale }) {
   return (
     <nav className="mobile-nav" aria-label="Mobil navigatsiya">
       {mobileLinks.map((link) => (
-        <a
+        <Link
           className={pathname === link.href || (link.key === "home" && pathname === `/${locale}`) ? "active" : undefined}
           href={link.href}
           key={link.key}
         >
           {mobileIcons[link.key]}
           {link.label}
-        </a>
+        </Link>
       ))}
     </nav>
   );

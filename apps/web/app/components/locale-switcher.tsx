@@ -50,7 +50,12 @@ export function LocaleSwitcher({ locale }: { locale: Locale }) {
   }
 
   return (
-    <div className="lang-menu" ref={rootRef}>
+    // `lang-menu`/`lang-button`/`lang-dropdown`/`lang-code` are preserved —
+    // only restyled (see _chrome.scss) — because tests/e2e/locale-lang.spec.ts
+    // asserts this control's accessible name and roles, not its classes.
+    // `site-nav__lang` scopes the fresh chrome-specific rules without
+    // touching those names/roles.
+    <div className="lang-menu site-nav__lang" ref={rootRef}>
       <button
         aria-expanded={open ? "true" : "false"}
         aria-haspopup="menu"
@@ -59,7 +64,7 @@ export function LocaleSwitcher({ locale }: { locale: Locale }) {
         onClick={() => setOpen((value) => !value)}
         type="button"
       >
-        <svg aria-hidden="true" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7" viewBox="0 0 24 24" width="19" height="19">
+        <svg aria-hidden="true" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7" viewBox="0 0 24 24" width="18" height="18">
           <circle cx="12" cy="12" r="9" />
           <path d="M3.5 12h17M12 3a14.5 14.5 0 0 1 0 18M12 3a14.5 14.5 0 0 0 0 18" />
         </svg>
