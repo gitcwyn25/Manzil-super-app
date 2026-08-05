@@ -1,5 +1,14 @@
 # Launch Gate Review Checklist
 
+## Four review dimensions (every artifact, post-Genesis)
+
+1. **Correctness** — does it work reliably?
+2. **Consistency** — does it follow the frozen design and product principles?
+3. **Simplicity** — is it the least complex solution that satisfies the requirement?
+4. **Evidence** — is there measurable justification for keeping or changing it?
+
+The question is never "is this a good idea?" — it is "does the evidence support keeping this implementation?" Principles stay fixed; implementation evolves on evidence.
+
 ## Standing evaluation lens (all future artifacts)
 
 Every proposed change is evaluated against six questions; if it improves none of
