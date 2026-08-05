@@ -13,4 +13,5 @@ First entry lands with the Vibrant Marketplace web launch gate, formatted as the
 **Genesis Record**: release name · date · git commit + tag · build ID · design
 system version · Product Bible version · ADR count · platform · environment ·
 build status · typecheck · lint · tests · bundle size · performance snapshot ·
-accessibility summary · known limitations · next milestone.
+accessibility summary · known limitations · next milestone ·
+**architecture drift** (count of governance exceptions accepted this release — target 0; a rising count is accumulating technical debt made visible).
