@@ -131,6 +131,10 @@ Success is not time-in-app. Success is how quickly users accomplish meaningful r
 - **Core principle added:** **"Manzil sells confidence, not information."** Users don't want 300 results; they want confidence the chosen option is right for their budget, occasion, and preferences. Influences recommendations, ranking, booking, reviews, profiles, and the Smart Plan Workspace.
 - **V1 Hero Use Case:** "Plan and book a birthday in under 3 minutes." (See [14-execution-review.md](14-execution-review.md).)
 
+## Appendix B (v1.2, 2026-08-05)
+
+- **Operational principle added:** **"Every AI action should be reversible whenever practical."** Cancel suggestions, edit plans, undo removals, restore deleted items, re-run recommendations. People trust AI more when they know they remain in control.
+
 ## What Comes Next (document order)
 
 1. ✅ Product Bible (this document)
