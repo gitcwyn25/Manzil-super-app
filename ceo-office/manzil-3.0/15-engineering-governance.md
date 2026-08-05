@@ -54,6 +54,14 @@ Natural, non-intrusive hooks for reminders, updates, and post-event engagement. 
 - **Scope discipline:** critical path is Foundation → component kit → web launch → WOW Flow → Workspace prototype/validation → Tool Orchestrator capabilities for it. Everything else justifies its place on that path before getting engineering attention.
 - **Review mode from here:** tangible artifacts only — screenshots, interactive prototypes, build logs, user feedback, implementation decisions.
 
+## v1.2 amendments (2026-08-05, adopted — final pre-implementation set)
+
+- **The repository is the product.** Source-of-truth hierarchy: Product Bible → ADRs → source code → running product. Code and docs must never silently drift — update one or the other, deliberately.
+- **Main stays deployable.** Every commit to `main` is deployable; incomplete features hide behind routing, flags, permissions, or UI guards. No long-lived branches accumulating weeks of work.
+- **Evidence discipline.** `docs/evidence/` captures each milestone: screenshot, build number, commit SHA, performance snapshot, user feedback, decision made, follow-ups. The record of *why* the product evolved — feeds investor updates, retros, onboarding.
+- **Foundation freeze.** When the Foundation layer lands, it is FROZEN as a versioned dependency (git tag `design-foundation-v1.0`). It evolves only through intentional versions (v1.1, v1.2…), never ad hoc per-screen tweaks. Screens adapt to the Foundation, not vice versa.
+- **Advisor role shift:** from planner to design/architecture reviewer — reviewing screenshots, wireframes, mobile architecture, APIs, AI flows, edge cases, performance, accessibility; challenging assumptions with user-testing evidence.
+
 ## After the web build is green
 
 Shift entirely to **Epic 1: WOW Flow** — treat that flow as if it were the entire product. Every animation, transition, copy choice, AI interaction, and loading state polished until exceptional. Install → first meaningful planned experience with confidence and near-zero friction = the core of Manzil validated.
