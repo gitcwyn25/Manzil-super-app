@@ -24,5 +24,17 @@ export default async function LocaleLayout({
     notFound();
   }
 
-  return <LocaleProviders locale={locale as Locale}>{children}</LocaleProviders>;
+  return (
+    <>
+      {/* The root layout renders <html lang="uz"> before the locale is known;
+          correct it here so /ru and /en are announced correctly to assistive
+          tech and to Lighthouse. */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `document.documentElement.lang=${JSON.stringify(locale)}`
+        }}
+      />
+      <LocaleProviders locale={locale as Locale}>{children}</LocaleProviders>
+    </>
+  );
 }

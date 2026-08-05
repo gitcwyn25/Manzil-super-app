@@ -20,8 +20,8 @@ export default function manifest(): MetadataRoute.Manifest {
     scope: "/",
     display: "standalone",
     orientation: "portrait",
-    background_color: "#ffffff",
-    theme_color: "#0f5b3d",
+    background_color: "#f8f7f5",
+    theme_color: "#a8352a",
     // The app is Uzbek-first; ru/en are available via the locale switcher.
     lang: "uz",
     dir: "ltr",
