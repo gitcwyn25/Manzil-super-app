@@ -9,4 +9,8 @@ updates, retrospectives, and onboarding.
 Format: `YYYY-MM-DD-<milestone-slug>/` (assets + `NOTES.md`) or a single
 `YYYY-MM-DD-<milestone-slug>.md` for text-only milestones.
 
-First entry lands with the Vibrant Marketplace web launch gate.
+First entry lands with the Vibrant Marketplace web launch gate, formatted as the
+**Genesis Record**: release name · date · git commit + tag · build ID · design
+system version · Product Bible version · ADR count · platform · environment ·
+build status · typecheck · lint · tests · bundle size · performance snapshot ·
+accessibility summary · known limitations · next milestone.

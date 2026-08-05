@@ -62,6 +62,12 @@ Natural, non-intrusive hooks for reminders, updates, and post-event engagement. 
 - **Foundation freeze.** When the Foundation layer lands, it is FROZEN as a versioned dependency (git tag `design-foundation-v1.0`). It evolves only through intentional versions (v1.1, v1.2…), never ad hoc per-screen tweaks. Screens adapt to the Foundation, not vice versa.
 - **Advisor role shift:** from planner to design/architecture reviewer — reviewing screenshots, wireframes, mobile architecture, APIs, AI flows, edge cases, performance, accessibility; challenging assumptions with user-testing evidence.
 
+## v1.3 amendment (2026-08-05)
+
+- **The boy-scout rule, made immutable:** *every merged feature must leave the codebase better than it found it* — delete obsolete code, improve documentation, simplify a component, add a missing test, remove duplication. Small improvements compound over hundreds of merges.
+- **Evidence entry #1 = the Genesis Record** (full format in `docs/evidence/README.md`).
+- **Operating rhythm from here:** Build → Review → Refine → Ship.
+
 ## After the web build is green
 
 Shift entirely to **Epic 1: WOW Flow** — treat that flow as if it were the entire product. Every animation, transition, copy choice, AI interaction, and loading state polished until exceptional. Install → first meaningful planned experience with confidence and near-zero friction = the core of Manzil validated.
