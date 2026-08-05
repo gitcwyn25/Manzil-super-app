@@ -2,29 +2,34 @@ import type { Metadata, Viewport } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { MotionProvider } from "./components/motion/motion-provider";
 import { ServiceWorkerRegistration } from "./components/service-worker";
-import { Archivo, IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
+import { Unbounded, Golos_Text, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
+import "./styles/anor.scss";
 
-// Expanded grotesque: reads as station signage, not as a startup headline face.
-const display = Archivo({
-  subsets: ["latin"],
-  axes: ["wdth"],
-  variable: "--font-display"
+// Architectural display face: wide, geometric. Reads as station signage, not
+// as a startup headline face.
+const display = Unbounded({
+  subsets: ["latin", "latin-ext", "cyrillic"],
+  weight: ["500", "600"],
+  variable: "--font-display",
+  display: "swap"
 });
 
 // Latin and Cyrillic drawn as one system. Manzil ships uz/ru/en, and a body face
 // without matched Cyrillic makes the Russian site look like a different product.
-const body = IBM_Plex_Sans({
-  subsets: ["latin", "cyrillic"],
+const body = Golos_Text({
+  subsets: ["latin", "latin-ext", "cyrillic"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-body"
+  variable: "--font-body",
+  display: "swap"
 });
 
-// Metrically matched to Plex Sans. Ratings, counts, currency, IDs.
+// Metrically matched to Golos Text. Ratings, counts, currency, IDs.
 const data = IBM_Plex_Mono({
   subsets: ["latin", "cyrillic"],
   weight: ["400", "500"],
-  variable: "--font-data"
+  variable: "--font-data",
+  display: "swap"
 });
 
 export const metadata: Metadata = {

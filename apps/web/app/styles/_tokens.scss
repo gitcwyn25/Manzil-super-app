@@ -1,0 +1,52 @@
+// Anor design tokens. Bootstrap variable overrides ONLY — no rules in this file.
+// Every value here is load-bearing brand; see docs/superpowers/specs/2026-08-04-anor-web-redesign-design.md
+
+$anor-ground:  #f8f7f5;
+$anor-card:    #ffffff;
+$anor-ink:     #231f1a;
+$anor-red:     #a8352a;
+$anor-leaf:    #1f5b43;
+$anor-saffron: #e0a63a;
+$anor-clay:    #6e624f;
+
+// --- Bootstrap theme map ---
+$primary:   $anor-red;
+$secondary: $anor-leaf;
+$success:   $anor-leaf;
+$warning:   $anor-saffron;
+$danger:    $anor-red;
+$dark:      $anor-ink;
+$light:     $anor-ground;
+
+$body-bg:               $anor-ground;
+$body-color:            $anor-ink;
+$body-secondary-color:  $anor-clay;
+
+// Type. Variable names match the existing ones so globals.css keeps resolving
+// during page-by-page coexistence.
+$font-family-sans-serif: var(--font-body), system-ui, sans-serif;
+$font-family-monospace:  var(--font-data), ui-monospace, monospace;
+$headings-font-family:   var(--font-display), system-ui, sans-serif;
+$headings-font-weight:   600;
+$headings-line-height:   1.1;
+$body-line-height:       1.55;
+
+// Shape: squarer than Bootstrap's default; Anor is architectural, not bubbly.
+$border-radius-sm: .25rem;
+$border-radius:    .375rem;
+$border-radius-lg: .5rem;
+$border-radius-xl: .75rem;
+
+$border-color: rgba($anor-ink, .12);
+
+// Elevation: warm-tinted, never neutral grey.
+$box-shadow-sm: 0 1px 2px rgba($anor-ink, .06);
+$box-shadow:    0 .5rem 1.5rem rgba($anor-ink, .08);
+$box-shadow-lg: 0 1.5rem 3rem rgba($anor-ink, .12);
+
+$link-color:            $anor-red;
+$link-hover-color:      shade-color($anor-red, 20%);
+$focus-ring-color:      rgba($anor-red, .35);
+$focus-ring-width:      .25rem;
+
+$enable-negative-margins: true;

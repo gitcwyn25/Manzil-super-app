@@ -1,0 +1,64 @@
+@import "bootstrap";
+
+// Anor custom properties, readable from TSX inline styles and legacy rules.
+:root {
+  --anor-ground:  #{$anor-ground};
+  --anor-card:    #{$anor-card};
+  --anor-ink:     #{$anor-ink};
+  --anor-red:     #{$anor-red};
+  --anor-leaf:    #{$anor-leaf};
+  --anor-saffron: #{$anor-saffron};
+  --anor-clay:    #{$anor-clay};
+}
+
+// Numerals are data, not prose.
+.anor-num {
+  font-family: var(--font-data), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+// Signature: the anor rule — a thin red line with a diamond node. The one
+// section-divider device in the system.
+.anor-rule {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  color: $anor-red;
+
+  &::before,
+  &::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: currentcolor;
+    opacity: .4;
+  }
+
+  &__node {
+    width: .5rem;
+    height: .5rem;
+    background: currentcolor;
+    transform: rotate(45deg);
+  }
+}
+
+// Signature: arch-cropped photography. The Samarkand arch survives as a photo
+// mask, never as a sticker.
+.anor-arch {
+  border-radius: 50% 50% #{$border-radius} #{$border-radius} / 32% 32% #{$border-radius} #{$border-radius};
+  overflow: hidden;
+
+  img { width: 100%; height: 100%; object-fit: cover; }
+}
+
+// Dignified at low content: a business with no photo gets a leaf tile with its
+// initial, not a broken frame.
+.anor-nophoto {
+  display: grid;
+  place-items: center;
+  background: $anor-leaf;
+  color: #fff;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  aspect-ratio: 4 / 3;
+}
