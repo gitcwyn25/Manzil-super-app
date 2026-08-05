@@ -2,7 +2,7 @@
   "name": "@manzil/telegram-bot",
   "private": true,
   "version": "0.1.0",
-  "description": "Manzil Business Telegram bot \u2014 the direct channel between businesses and the Manzil team.",
+  "description": "Manzil Business Telegram bot — the direct channel between businesses and the Manzil team.",
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
@@ -15,8 +15,8 @@
     "grammy": "^1.30.0"
   },
   "devDependencies": {
-    "@types/node": "latest",
-    "tsx": "latest",
-    "typescript": "latest"
+    "@types/node": "^26.1.2",
+    "tsx": "*",
+    "typescript": "*"
   }
 }
