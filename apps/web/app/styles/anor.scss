@@ -62,3 +62,75 @@
   font-size: clamp(1.5rem, 4vw, 2.5rem);
   aspect-ratio: 4 / 3;
 }
+
+// --- Unconverted-page bridge -----------------------------------------------
+// Bootstrap's reboot/type/containers modules (imported above) define `body`,
+// `a`, `.container`, and `h1`-`h3` with the SAME specificity as globals.css's
+// own bare-element rules for those selectors. Because anor.scss loads after
+// globals.css, Bootstrap wins those ties on every page that hasn't been
+// converted to the Anor system yet — repainting the whole canvas in the Anor
+// palette instead of Kosmonavtlar's (body color/background), turning plain
+// links red/underlined, collapsing .container to Bootstrap's gutter/
+// breakpoint geometry, and shrinking/reweighting bare h1/h2 (Bootstrap's
+// %heading reset touches margin, font-weight, line-height and, for h1/h2,
+// font-size). Restating globals.css's exact declarations here, after the
+// Bootstrap import, wins the same specificity tie back for unconverted pages
+// while leaving every more-specific globals.css selector (e.g.
+// `.business-body h3`, `.feed-hero-copy h1`, `[data-shell="workspace"] h1`)
+// and every Bootstrap utility/component class (`.btn`, `.link-secondary`,
+// etc., which are more specific than a bare element selector) unaffected
+// either way. Confirmed empirically with Playwright against /uz/discover:
+// without this block a bare <a> inherited anor-ink (#231f1a) instead of the
+// site's real --text (#0d1a1c) because `body` itself had already flipped.
+// See apps/web/app/globals.css lines ~106-115, ~161-164, ~176-180, ~118-125,
+// ~619-635, ~1710 for the source of truth these mirror.
+
+body {
+  color: var(--text);
+  background: var(--panel);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.container {
+  max-width: 1200px;
+  padding-inline: 20px;
+  margin-inline: auto;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-variation-settings: "wdth" 112;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+h1,
+h2 {
+  margin: 0;
+  line-height: 1.04;
+}
+
+h1 {
+  max-width: 760px;
+  font-size: clamp(44px, 7vw, 82px);
+  font-weight: 800;
+}
+
+h2 {
+  font-size: clamp(32px, 5vw, 54px);
+  font-weight: 750;
+}
+
+// Mirrors globals.css's own mobile override (max-width: 680px), which would
+// otherwise lose its cascade tie to Bootstrap's unconditional h1 rule.
+@media (max-width: 680px) {
+  h1 {
+    font-size: 42px;
+  }
+}
