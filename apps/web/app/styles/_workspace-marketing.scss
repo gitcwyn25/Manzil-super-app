@@ -1,0 +1,437 @@
+// Marketing & updates (task D4): the announcements screen — two action cards
+// (create discount, post an update) on the left, the discount-campaigns list
+// and the updates timeline on the right.
+// Visual truth: marketing_updates/screen.png reconciled with the api-map —
+// CrmAnnouncement has NO redemption counts, NO discount codes, and NO per-post
+// views/likes or media, so campaign rows show status + expiry facts, timeline
+// posts show text only, and the composer has no image-attach button (nothing
+// fabricated, D7). Selector namespace is ws-mkt-* / ws-camp-* / ws-tl-*.
+//
+// Motion: workspace budget only — 140ms micro-interactions (the mock's 700ms
+// blob growth is shortened to fit D14), shadow-only card hovers, no entrance
+// animations; reduced motion short-circuits everything at the end of the file.
+
+// Matches _workspace.scss's budget; !default keeps whichever loads first.
+$ws-motion: .14s ease !default;
+
+.ws-mkt {
+  display: grid;
+  gap: 1.25rem;
+  align-content: start;
+}
+
+// ---------------------------------------------------------------------------
+// Bento: single column on mobile; 5/7 split at lg+ (per the mock's 12-col grid)
+// ---------------------------------------------------------------------------
+
+.ws-mkt-grid {
+  display: grid;
+  gap: 1rem;
+  align-items: start;
+}
+
+@include media-breakpoint-up(lg) {
+  .ws-mkt-grid {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  }
+}
+
+.ws-mkt-col {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+  min-width: 0;
+}
+
+// ---------------------------------------------------------------------------
+// Action cards (left column): corner-anchored blurred blob that grows on hover
+// ---------------------------------------------------------------------------
+
+.ws-mkt-action {
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow $ws-motion;
+
+  &:hover {
+    box-shadow: $box-shadow;
+  }
+
+  // Decorative corner blob. Positioned, so it would paint above in-flow
+  // content — the card body below is positioned too (later in the DOM) to
+  // stay on top of it.
+  &::before {
+    content: "";
+    position: absolute;
+    width: 8rem;
+    height: 8rem;
+    border-radius: 50%;
+    filter: blur(24px);
+    pointer-events: none;
+    transition: transform $ws-motion;
+  }
+
+  &:hover::before {
+    transform: scale(1.5);
+  }
+}
+
+.ws-mkt-action--discount::before {
+  top: -2.5rem;
+  right: -2.5rem;
+  background: rgba($vm-secondary-container, .3);
+}
+
+.ws-mkt-action--update::before {
+  bottom: -2.5rem;
+  left: -2.5rem;
+  background: rgba($vm-primary-container, .14);
+}
+
+.ws-mkt-action__body {
+  position: relative; // paints above the ::before blob
+  display: grid;
+  gap: 1.25rem;
+  padding: 1.5rem;
+}
+
+.ws-mkt-head {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+
+// Card/panel titles: (0,2,0) outranks the density layer's
+// [data-shell="workspace"] h2 (0,1,1) cap.
+.ws-main .ws-mkt-title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -.01em;
+}
+
+// ---------------------------------------------------------------------------
+// Forms (IconField/IconSelect recipe carries the control styling; this is
+// only layout + labels)
+// ---------------------------------------------------------------------------
+
+.ws-mkt-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.ws-mkt-field {
+  display: grid;
+  gap: .375rem;
+}
+
+.ws-mkt-field__label {
+  color: $vm-on-surface-variant;
+  font-size: .8125rem;
+  font-weight: 600;
+}
+
+.ws-mkt-form__row {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@include media-breakpoint-up(sm) {
+  .ws-mkt-form__row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+// Primary submit full-width (per the mock), quiet draft affordance under it
+// (carried over from the old form — draft-save must not be lost).
+.ws-mkt-form__actions {
+  display: grid;
+  gap: .5rem;
+  justify-items: end;
+
+  .btn-primary {
+    justify-self: stretch;
+  }
+}
+
+.ws-mkt-textarea {
+  resize: none;
+}
+
+// Composer footer — a <div>, never <footer> (shell-boundary contract).
+.ws-mkt-composer-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+}
+
+// "Publish Post": rests on surface-container-high, flips to solid primary.
+.ws-mkt-publish {
+  padding: .5rem 1.5rem;
+  border: 0;
+  border-radius: $border-radius;
+  background: $vm-surface-container-high;
+  color: $vm-on-surface;
+  font-size: .875rem;
+  font-weight: 600;
+  transition: background-color $ws-motion, color $ws-motion, transform $ws-motion;
+
+  &:hover {
+    background: $primary;
+    color: #fff;
+  }
+
+  &:focus-visible {
+    outline: 0;
+    box-shadow: 0 0 0 .25rem $focus-ring-color;
+  }
+
+  &:active {
+    transform: scale(.98);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Right-column panels
+// ---------------------------------------------------------------------------
+
+.ws-mkt-panel {
+  transition: box-shadow $ws-motion;
+
+  &:hover {
+    box-shadow: $box-shadow;
+  }
+}
+
+.ws-mkt-panel__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.5rem;
+}
+
+.ws-mkt-empty {
+  margin: 0;
+  padding: 1.5rem 1rem;
+  color: $vm-on-surface-variant;
+  font-size: .875rem;
+  text-align: center;
+}
+
+// Quiet row/post management actions (fold-in of the old table's
+// publish/archive/delete — the Stitch layout has no slot for them).
+.ws-mkt-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .25rem .75rem;
+}
+
+.ws-mkt-act {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: $vm-on-surface-variant;
+  font-size: .75rem;
+  font-weight: 600;
+  transition: color $ws-motion;
+
+  &:hover {
+    color: $primary;
+  }
+
+  &:focus-visible {
+    outline: 0;
+    border-radius: $border-radius-sm;
+    box-shadow: 0 0 0 .25rem $focus-ring-color;
+  }
+}
+
+.ws-mkt-act--danger:hover {
+  color: $vm-error;
+}
+
+// ---------------------------------------------------------------------------
+// Discount-campaign rows
+// ---------------------------------------------------------------------------
+
+.ws-camp-list {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ws-camp {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .75rem 1rem;
+  padding: 1rem;
+  border: 1px solid rgba($vm-outline-variant, .35);
+  border-radius: $border-radius;
+  background: $vm-surface-container-lowest;
+  transition: box-shadow $ws-motion;
+
+  &:hover {
+    box-shadow: $box-shadow-sm;
+  }
+}
+
+.ws-camp__main {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.ws-camp__text {
+  display: grid;
+  gap: .125rem;
+  min-width: 0;
+}
+
+// (0,2,0) outranks the density layer's [data-shell="workspace"] h3 cap.
+.ws-main .ws-camp__title {
+  margin: 0;
+  color: $vm-on-surface;
+  font-family: inherit;
+  font-size: .875rem;
+  font-weight: 600;
+  letter-spacing: normal;
+  overflow-wrap: anywhere;
+}
+
+.ws-camp__meta {
+  color: $vm-on-surface-variant;
+  font-size: .75rem;
+}
+
+.ws-camp__end {
+  display: grid;
+  gap: .375rem;
+  justify-items: end;
+  margin-left: auto;
+  text-align: right;
+}
+
+// Draft campaigns: dashed border, like the services screen's draft cards.
+.ws-camp--draft {
+  border-style: dashed;
+  border-color: rgba($vm-outline-variant, .8);
+}
+
+// Expired/archived campaigns: text block dims, controls stay full strength.
+.ws-camp--done {
+  .ws-camp__title,
+  .ws-camp__meta,
+  .vm-icon-tile {
+    opacity: .6;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Updates timeline: 2px rail + ringed dot (ring matches the white card
+// surface so it never shows as a halo)
+// ---------------------------------------------------------------------------
+
+.ws-tl {
+  display: grid;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ws-tl-item {
+  position: relative;
+  padding-left: 1.5rem;
+  border-left: 2px solid $vm-surface-container-high;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 4px;
+    left: -7px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: $vm-outline;
+    box-shadow: 0 0 0 4px $vm-surface-container-lowest;
+  }
+}
+
+.ws-tl-item--new::before {
+  background: $vm-primary-container;
+}
+
+.ws-tl-item__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .375rem .5rem;
+}
+
+.ws-tl-item__time {
+  color: $vm-on-surface-variant;
+  font-size: .75rem;
+}
+
+.ws-tl-item__chips {
+  display: flex;
+  align-items: center;
+  gap: .375rem;
+}
+
+// Legacy stand-alone titles only (composer-derived titles are a prefix of
+// the body and are not repeated).
+.ws-tl-item__title {
+  display: block;
+  margin-top: .75rem;
+  color: $vm-on-surface;
+  font-size: .875rem;
+  font-weight: 700;
+
+  + .ws-tl-item__body {
+    margin-top: .25rem;
+  }
+}
+
+.ws-tl-item__body {
+  margin: .75rem 0 0;
+  color: $vm-on-surface;
+  font-size: .875rem;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+  white-space: pre-line; // owners write multi-paragraph posts in one field
+}
+
+.ws-tl-item__foot {
+  margin-top: .75rem;
+}
+
+// ---------------------------------------------------------------------------
+// Reduced motion: transitions land on their final state instantly
+// ---------------------------------------------------------------------------
+
+@media (prefers-reduced-motion: reduce) {
+  .ws-mkt-action,
+  .ws-mkt-action::before,
+  .ws-mkt-publish,
+  .ws-mkt-panel,
+  .ws-mkt-act,
+  .ws-camp {
+    transition: none;
+  }
+
+  .ws-mkt-action:hover::before {
+    transform: none;
+  }
+
+  .ws-mkt-publish:active {
+    transform: none;
+  }
+}

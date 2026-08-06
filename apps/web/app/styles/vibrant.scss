@@ -198,6 +198,10 @@
 // bento, service-card grid — ws-svc-* selectors, same 140ms budget.
 @import "workspace-services";
 
+// Marketing & updates (task D4): discount/composer action cards, campaign
+// rows, updates timeline — ws-mkt-*/ws-camp-*/ws-tl-* selectors, same budget.
+@import "workspace-marketing";
+
 // --- Unconverted-page bridge -----------------------------------------------
 // Bootstrap's reboot/type/containers modules (imported above) define `body`,
 // `a`, `.container`, and `h1`-`h6` with the SAME specificity as globals.css's

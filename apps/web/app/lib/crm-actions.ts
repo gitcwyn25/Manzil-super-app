@@ -124,15 +124,43 @@ export async function choosePlanAction(formData: FormData) {
 export async function createAnnouncementAction(formData: FormData) {
   const slug = text(formData, "business");
   const kind = text(formData, "kind") ?? "news";
+  const body = text(formData, "body");
+  const discountPercent =
+    kind === "discount" ? Number(text(formData, "discountPercent") ?? 0) : undefined;
+
+  // The update composer has no title field (per the approved screen): the
+  // title is derived from the owner's own text — whitespace collapsed, cut to
+  // the API's 200-char cap. Forms that do send a title pass through untouched.
+  const title = text(formData, "title") ?? body?.replace(/\s+/g, " ").slice(0, 200);
+
+  // The discount form likewise has no body field; the API requires one, so it
+  // is assembled from the discount's real facts (service name + percentage) —
+  // never invented copy. It is storage only: campaign rows render title,
+  // percent, dates, and status, not the body.
+  const resolvedBody =
+    body ?? (kind === "discount" && title ? `${title} — ${discountPercent ?? 0}%` : undefined);
+
+  // Discounts are entered as a duration in days; the API takes dates. The
+  // window is computed against Uzbekistan's fixed UTC+5 (see tashkentIso), not
+  // the server's zone, so "today" is the owner's today.
+  let startsAt = text(formData, "startsAt");
+  let endsAt = text(formData, "endsAt");
+  const durationDays = Number(text(formData, "durationDays") ?? Number.NaN);
+  if (!startsAt && !endsAt && Number.isInteger(durationDays) && durationDays > 0) {
+    const DAY_MS = 86_400_000;
+    const tashkentNow = Date.now() + 5 * 3_600_000;
+    startsAt = new Date(tashkentNow).toISOString().slice(0, 10);
+    endsAt = new Date(tashkentNow + durationDays * DAY_MS).toISOString().slice(0, 10);
+  }
 
   await crmSend(`/crm/businesses/${slug}/announcements`, "POST", {
     kind,
-    title: text(formData, "title"),
-    body: text(formData, "body"),
+    title,
+    body: resolvedBody,
     status: text(formData, "status") ?? "published",
-    discountPercent: kind === "discount" ? Number(text(formData, "discountPercent") ?? 0) : undefined,
-    startsAt: text(formData, "startsAt"),
-    endsAt: text(formData, "endsAt")
+    discountPercent,
+    startsAt,
+    endsAt
   });
 
   revalidatePath("/[locale]/dashboard/announcements", "page");
