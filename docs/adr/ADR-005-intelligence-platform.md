@@ -88,3 +88,36 @@ Cross-cutting, per the doc-23 amendment (permanent principles):
 - One intelligence, two voices: owner-facing analytics contracts are
   projections of the same surface consumer recommendations use — a separate
   analytics AI is architecturally excluded.
+
+## Amendment: contracts patch A–G (2026-08-06, post-CTO-review)
+
+Applied on top of the accepted architecture, contracts only:
+
+- **A — CapabilityRegistry** (L6 boundary; deliberate: capabilities compose
+  tools, permissions, flags, and memory across the whole stack, and placing
+  them lower would invert the import direction): every AI capability is
+  data — `{id, name, description, requiredTools, requiredKnowledge,
+  requiredPermissions, requiredBusinessData, requiredCustomerData,
+  requiredMemory, requiredFeatureFlags, status}` — seeded with eight typed
+  entries (PlanBirthday, FindCoffee, ReplaceRestaurant, BookHotel,
+  BuildWorkspace, RecommendGifts, GenerateItinerary, CompareBusinesses),
+  all `planned`.
+- **B — IntentRegistry** (L5): `Intent.kind` now comes from an open
+  registry (ten seed intents); the IntentAnalyzer classifies into whatever
+  the registry declares and owns no intent list.
+- **C — ToolManifest**: the Tool Orchestrator contract is manifest-based —
+  tools self-describe permissions, entities, timeout, retry, cost, and
+  availability; feasibility is checkable at plan time.
+- **D — domain-language.ts** (core): the single typed vocabulary — 21
+  concepts, one canonical term/type each (reservation ≠ booking, mission ≠
+  mission_context ≠ plan spelled out), plus canonical id aliases.
+- **E — AI error taxonomy** (core): ten typed failure causes replace
+  free-form error strings; jobs and metrics now carry
+  `IntelligenceErrorKind`, and `retryable` is a mandatory judgment.
+- **F — cost contracts** (core): `InferenceBudget` (tokens, latency, cost,
+  cache eligibility, priority) required on every reasoning `*Request`
+  contract.
+- **G — ContextWindowManager** (L6, interface only): priority-ordered,
+  budget-aware context assembly (Workspace → Memory → Knowledge → Business
+  → History → Conversation → Summaries → LLM) with explicit, auditable
+  truncation.

@@ -9,7 +9,13 @@
  * sum, learned model — slots in behind the same shape. No scoring math lives
  * in Epic 03.
  */
-import type { Confidence, EntityId, IsoDateTime, NonEmptyArray } from "../core";
+import type {
+  Confidence,
+  EntityId,
+  InferenceBudget,
+  IsoDateTime,
+  NonEmptyArray
+} from "../core";
 import type { BusinessHealth } from "../business-intelligence";
 import type { TrustScore } from "../trust-engine";
 import type { ReasonCode } from "../explanation-engine";
@@ -49,6 +55,8 @@ export interface RankingRequest {
   /** Mission/experience the ranking serves; lets audit trails tie rankings to plans. */
   readonly missionExperienceId: EntityId | null;
   readonly candidates: readonly RankingCandidate[];
+  /** Cost envelope of this request (patch F). */
+  readonly budget: InferenceBudget;
 }
 
 /**

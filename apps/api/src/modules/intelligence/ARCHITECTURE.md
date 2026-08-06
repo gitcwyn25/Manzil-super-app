@@ -37,7 +37,10 @@ intelligence/
 ├── index.ts                      barrel in import-direction order
 ├── core/                         L0 — vocabulary + infrastructure contracts
 │   ├── core.primitives.ts        ids, confidence, money, time, facts, ExperienceType, MemoryTier
+│   ├── domain-language.ts        THE vocabulary: 21 concepts, canonical id aliases (patch D)
 │   ├── context/                  AI decision context ids (doc 23 §9)
+│   ├── errors/                   ten-cause AI failure taxonomy (patch E)
+│   ├── cost/                     InferenceBudget on every reasoning request (patch F)
 │   ├── events/                   DomainEvent envelope, catalog, publisher/subscriber
 │   ├── jobs/                     AI Job catalog + JobExecutor (doc 23 §5)
 │   ├── event-store/              replayable append-only log contract (doc 23 §6)
@@ -54,9 +57,27 @@ intelligence/
 ├── decision-engine/              L5 — PolicyEngine: centralized business policy
 ├── explanation-engine/           L5 — reason codes, Explanation, RecommendationTrace
 ├── ranking-engine/               L5 — 8 signals in, explained order out
-├── reasoning-engine/             L5 — 10 service interfaces + decision artifacts
-└── orchestrator-contracts/       L6 boundary — tokens, tool contract, sealed LLM envelope
+├── reasoning-engine/             L5 — 10 service interfaces + intent registry (patch B)
+└── orchestrator-contracts/       L6 boundary — tokens, tool manifests (patch C),
+                                  capability registry + 8 seeds (patch A),
+                                  context window manager (patch G), sealed LLM envelope
 ```
+
+Patch A–G (post-approval, 2026-08-06) added: capability registry (L6 —
+capabilities compose tools/permissions/flags/memory across the stack, which
+is the boundary's job; lower layers name capabilities via `CapabilityId` in
+core/domain-language), intent registry (L5 — `Intent.kind` is registry data,
+never an enum), manifest-based tools, the domain language, the error
+taxonomy (jobs and metrics now carry `IntelligenceErrorKind`, not strings),
+`InferenceBudget` on every `*Request` contract (IntentAnalysisInput,
+RankingRequest, ReplacementRequest), and the ContextWindowManager with the
+binding assembly priority Workspace → Memory → Knowledge → Business →
+History → Conversation → Summaries → LLM.
+
+Current surface: **59 TS files · 163 interfaces · 78 type aliases · 33
+exported consts (21 injection tokens; typed constants include
+`RETRIEVAL_PRIORITY`, `CONTEXT_ASSEMBLY_PRIORITY`, `DOMAIN_LANGUAGE`,
+`INTENT_CATALOG`, `CAPABILITY_CATALOG`).**
 
 ## Dependency graph
 

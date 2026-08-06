@@ -9,6 +9,7 @@
  * request/result types, so an unaudited invocation cannot be expressed.
  */
 import type { EntityId, IsoDateTime } from "../core";
+import type { ToolId, ToolManifest } from "./tool.manifest";
 
 /** Who is acting. The AI is a first-class, least-privilege RBAC principal (ADR-001). */
 export type ToolPrincipal = "gurman-ai" | "user" | "system";
@@ -16,7 +17,9 @@ export type ToolPrincipal = "gurman-ai" | "user" | "system";
 /** One requested action against a platform tool. */
 export interface ToolInvocationRequest {
   readonly principal: ToolPrincipal;
-  /** Namespaced tool action, e.g. `booking.create`, `notification.schedule`. */
+  /** The tool being invoked; its manifest declares permissions, timeout, retry, cost. */
+  readonly toolId: ToolId;
+  /** Namespaced operation within the tool, e.g. `booking.create`, `notification.schedule`. */
   readonly action: string;
   /** The entity acted upon, when one exists. */
   readonly resource: EntityId | null;
@@ -36,7 +39,14 @@ export interface ToolInvocationResult {
   readonly completedAt: IsoDateTime;
 }
 
-/** The orchestrator as the reasoning layer will inject it. */
+/**
+ * The orchestrator as the reasoning layer will inject it. Manifest-based
+ * (patch C): tools are discovered and feasibility-checked through their
+ * manifests before anything is invoked — a capability whose required tools
+ * are `unavailable` degrades at plan time, not mid-booking.
+ */
 export interface ToolOrchestratorContract {
   invoke(request: ToolInvocationRequest): Promise<ToolInvocationResult>;
+  manifest(toolId: ToolId): Promise<ToolManifest | null>;
+  manifests(): Promise<readonly ToolManifest[]>;
 }

@@ -14,6 +14,7 @@ import type {
   EntityId,
   ExperienceType,
   GeoPoint,
+  InferenceBudget,
   IntelligenceLocale,
   IsoDate,
   IsoDateTime,
@@ -24,22 +25,11 @@ import type {
 import type { Explanation, RecommendationTrace } from "../explanation-engine";
 import type { RankingSignals } from "../ranking-engine";
 import type { MemoryBundle } from "../memory-engine";
-
-/** What the user is trying to accomplish — intent over category (AI Bible v1.1). */
-export type IntentKind =
-  | "discover"
-  | "plan_experience"
-  | "book"
-  | "reschedule"
-  | "cancel"
-  | "replace"
-  | "optimize_plan"
-  | "concierge_question"
-  | "compare";
+import type { ClarificationField, IntentKey } from "./intent.registry";
 
 /** A missing essential the AI may ask for — as few as possible (AI Bible clarification rules). */
 export interface ClarificationNeed {
-  readonly field: "budget" | "date" | "guest_count" | "location" | "experience_type" | "time";
+  readonly field: ClarificationField;
   /** Why memory could not answer it (retrieve before asking — AI Bible v1.1). */
   readonly whyUnknown: "not_in_memory" | "conflicting_memory" | "expired" | "user_never_stated";
 }
@@ -48,17 +38,24 @@ export interface ClarificationNeed {
  * The single utterance being analyzed, with the memory that must be
  * consulted first. The text is consumed at this boundary and never stored —
  * only the structured `Intent` survives (memory is never raw chat).
+ * Carries an `InferenceBudget` (patch F): every reasoning request declares
+ * its cost envelope.
  */
 export interface IntentAnalysisInput {
   readonly customerId: EntityId;
   readonly utterance: string;
   readonly locale: IntelligenceLocale;
   readonly memory: MemoryBundle;
+  readonly budget: InferenceBudget;
 }
 
-/** The structured reading of what the user wants. */
+/**
+ * The structured reading of what the user wants. `kind` comes from the
+ * intent registry (patch B) — intent over category everywhere (AI Bible
+ * v1.1), and intents are registry data, never a hardcoded enum.
+ */
 export interface Intent {
-  readonly kind: IntentKind;
+  readonly kind: IntentKey;
   readonly experienceType: ExperienceType | null;
   readonly targetDate: IsoDate | null;
   readonly guestCount: number | null;
@@ -144,6 +141,8 @@ export interface ReplacementRequest {
   readonly replaceBusinessId: EntityId;
   /** Constraints the replacement must preserve; defaults to all satisfied ones. */
   readonly preserveConstraints: readonly Constraint[];
+  /** Cost envelope of this request (patch F). */
+  readonly budget: InferenceBudget;
 }
 
 /** One replacement option with its constraint diff — "keeps every requirement and adds outdoor seating". */

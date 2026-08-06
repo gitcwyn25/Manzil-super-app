@@ -81,8 +81,17 @@ export const INTELLIGENCE_AVAILABILITY_PLANNER = "INTELLIGENCE_AVAILABILITY_PLAN
 /** Layer 5 — `ConflictDetector` (reasoning-engine). */
 export const INTELLIGENCE_CONFLICT_DETECTOR = "INTELLIGENCE_CONFLICT_DETECTOR";
 
+/** Layer 5 — `IntentRegistry` (reasoning-engine); intents are data, never enums. */
+export const INTELLIGENCE_INTENT_REGISTRY = "INTELLIGENCE_INTENT_REGISTRY";
+
 /** Boundary — future `ToolOrchestratorContract` (ADR-001 seed: `/v1/gurman/ask`). */
 export const INTELLIGENCE_TOOL_ORCHESTRATOR = "INTELLIGENCE_TOOL_ORCHESTRATOR";
+
+/** Boundary — `CapabilityRegistry`; every AI capability is data (patch A). */
+export const INTELLIGENCE_CAPABILITY_REGISTRY = "INTELLIGENCE_CAPABILITY_REGISTRY";
+
+/** Boundary — future `ContextWindowManager`; budget-aware context assembly (patch G). */
+export const INTELLIGENCE_CONTEXT_WINDOW_MANAGER = "INTELLIGENCE_CONTEXT_WINDOW_MANAGER";
 
 /** Layer 6 — future `ConversationRenderer`; the only token an LLM adapter may bind. */
 export const INTELLIGENCE_CONVERSATION_RENDERER = "INTELLIGENCE_CONVERSATION_RENDERER";

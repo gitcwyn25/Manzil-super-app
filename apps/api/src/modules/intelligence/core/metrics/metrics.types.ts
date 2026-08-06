@@ -7,6 +7,7 @@
  * its required dimensions cannot be expressed.
  */
 import type { EntityId, IsoDateTime } from "../core.primitives";
+import type { IntelligenceErrorKind } from "../errors";
 import type { IntelligenceJobName } from "../jobs";
 
 /** What "freshness" is measured of (doc 23 §8: summary/memory/knowledge/recommendation). */
@@ -24,8 +25,8 @@ export type IntelligenceMetric =
   | {
       readonly kind: "failure";
       readonly operation: string;
-      /** Structured error class, never message text. */
-      readonly errorKind: string;
+      /** Typed failure cause (core/errors taxonomy), never message text. */
+      readonly errorKind: IntelligenceErrorKind;
       readonly at: IsoDateTime;
     }
   | {

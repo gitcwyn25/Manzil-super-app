@@ -12,6 +12,7 @@
  * must tolerate redelivery.
  */
 import type { EntityId, IsoDateTime } from "../core.primitives";
+import type { IntelligenceErrorKind } from "../errors";
 
 /**
  * The typed job catalog. An open registry (declaration merging) like the
@@ -75,8 +76,8 @@ export interface JobStatus {
   readonly jobId: EntityId;
   readonly state: JobState;
   readonly attempts: number;
-  /** Structured error class (`timeout`, `dependency_unavailable`) — never a stack trace. */
-  readonly lastErrorKind: string | null;
+  /** Typed failure cause (core/errors taxonomy) — never a stack trace or prose. */
+  readonly lastErrorKind: IntelligenceErrorKind | null;
   readonly updatedAt: IsoDateTime;
 }
 

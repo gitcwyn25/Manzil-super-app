@@ -31,6 +31,8 @@ import type {
  * Turns one utterance plus memory into a structured `Intent` — the only
  * place raw user text enters the reasoning layer, and the first step of
  * every conversation (AI Bible v1.1: Intent → Constraints → Plan → Action).
+ * Knows no intents of its own: it classifies into whatever the
+ * `IntentRegistry` declares (patch B).
  */
 export interface IntentAnalyzer {
   analyze(input: IntentAnalysisInput): Promise<Intent>;
