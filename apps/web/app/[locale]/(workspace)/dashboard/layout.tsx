@@ -52,6 +52,8 @@ export default async function DashboardLayout({
   const planLabel = `${copy.menu.plan}: ${plan.charAt(0).toUpperCase()}${plan.slice(1)}`;
 
   const base = `/${locale}/dashboard`;
+  // The real 8-route list (never the mock's Finance/Discounts inventions).
+  // Settings moves to the rail's pinned bottom block per the Stitch anatomy.
   const items = [
     { key: "overview", label: copy.menu.overview, href: base, exact: true },
     { key: "bookings", label: copy.menu.bookings, href: `${base}/bookings` },
@@ -59,23 +61,27 @@ export default async function DashboardLayout({
     { key: "packages", label: copy.menu.packages, href: `${base}/packages` },
     { key: "reviews", label: copy.menu.reviews, href: `${base}/reviews` },
     { key: "analytics", label: copy.menu.analytics, href: `${base}/analytics` },
-    { key: "customers", label: copy.menu.customers, href: `${base}/customers` },
+    { key: "customers", label: copy.menu.customers, href: `${base}/customers` }
+  ];
+  const bottomItems = [
     { key: "settings", label: copy.menu.settings, href: `${base}/settings` }
   ];
 
   return (
-    <div className="crm-shell">
+    <div className="ws-shell">
       <CrmSidebar
+        bottomItems={bottomItems}
         businessName={business.name}
         businessSlug={business.slug}
         items={items}
         locale={locale as Locale}
+        menuLabel={copy.menu.mobileMenu}
+        partnerPortalLabel={copy.menu.partnerPortal}
         planLabel={planLabel}
-        sectionLabel={copy.menu.section}
         upgradeLabel={copy.menu.upgrade}
         viewPublicLabel={copy.menu.viewPublic}
       />
-      <main className="crm-main">{children}</main>
+      <main className="crm-main ws-main">{children}</main>
     </div>
   );
 }

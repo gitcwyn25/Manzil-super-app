@@ -160,6 +160,11 @@
 // restatements win the cascade ties they are designed to win.
 @import "vm-kit";
 
+// Workspace shell (task D1): the /dashboard chrome — 256px light rail, mobile
+// top bar + drawer — on new ws-* selectors (shell-boundary contract: no
+// consumer nav.mobile-nav, no <footer> under data-shell="workspace").
+@import "workspace";
+
 // --- Unconverted-page bridge -----------------------------------------------
 // Bootstrap's reboot/type/containers modules (imported above) define `body`,
 // `a`, `.container`, and `h1`-`h6` with the SAME specificity as globals.css's

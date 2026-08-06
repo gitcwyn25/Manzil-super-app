@@ -2,7 +2,9 @@
 
 import type { Locale } from "@manzil/shared";
 import { usePathname } from "next/navigation";
-import type { ReactNode } from "react";
+import { useCallback } from "react";
+import { BootstrapOffcanvas } from "../bootstrap-offcanvas";
+import { Icon, type IconName } from "../vm/icons";
 
 type MenuItem = {
   key: string;
@@ -11,54 +13,40 @@ type MenuItem = {
   exact?: boolean;
 };
 
-const icons: Record<string, ReactNode> = {
-  overview: (
-    <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" viewBox="0 0 24 24">
-      <rect height="7" rx="1.5" width="7" x="3.5" y="3.5" />
-      <rect height="7" rx="1.5" width="7" x="13.5" y="3.5" />
-      <rect height="7" rx="1.5" width="7" x="3.5" y="13.5" />
-      <rect height="7" rx="1.5" width="7" x="13.5" y="13.5" />
-    </svg>
-  ),
-  bookings: (
-    <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" viewBox="0 0 24 24">
-      <rect height="16" rx="2" width="17" x="3.5" y="4.5" />
-      <path d="M3.5 9.5h17M8 3v3M16 3v3" />
-      <path d="M8 14h2M8 17.5h6" />
-    </svg>
-  ),
-  announcements: (
-    <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" viewBox="0 0 24 24">
-      <path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1Z" />
-      <path d="M15 9.5a4 4 0 0 1 0 5M18 7a8 8 0 0 1 0 10" />
-    </svg>
-  ),
-  packages: (
-    <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" viewBox="0 0 24 24">
-      <path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z" />
-      <path d="M4 7.5 12 12l8-4.5M12 12v9" />
-    </svg>
-  ),
-  reviews: (
-    <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" viewBox="0 0 24 24">
-      <path d="m12 3.5 2.5 5.2 5.7.7-4.2 4 1.1 5.6-5.1-2.8-5.1 2.8 1.1-5.6-4.2-4 5.7-.7L12 3.5Z" />
-    </svg>
-  ),
-  settings: (
-    <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="3.2" />
-      <path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.5-2.3 1a7 7 0 0 0-2-1.2L14.2 3h-4l-.4 2.6a7 7 0 0 0-2 1.2l-2.3-1-2 3.5 2 1.5a7 7 0 0 0 0 2.4l-2 1.5 2 3.5 2.3-1a7 7 0 0 0 2 1.2l.4 2.6h4l.4-2.6a7 7 0 0 0 2-1.2l2.3 1 2-3.5-2-1.5c.06-.4.1-.8.1-1.2Z" />
-    </svg>
-  )
+// Keep in sync with the hamburger's `data-bs-target` below — the trigger and
+// the panel share no React state, exactly like header.tsx / mobile-nav.tsx:
+// Bootstrap's own data-api (wired up by BootstrapOffcanvas's dynamic import)
+// drives open/close.
+const DRAWER_ID = "ws-nav-drawer";
+
+// The real 8-route workspace list mapped onto the shared inline-SVG icon set
+// (D12) — no Material Symbols, no icon font.
+const ITEM_ICONS: Record<string, IconName> = {
+  overview: "grid",
+  bookings: "calendar",
+  announcements: "campaign",
+  packages: "tag",
+  reviews: "star",
+  analytics: "chart",
+  customers: "users",
+  settings: "settings"
 };
 
+/**
+ * Workspace chrome for /dashboard: the 256px light rail (desktop) plus the
+ * mobile top bar + drawer. Per tests/e2e/shell-boundary.spec.ts the mobile
+ * chrome is workspace-own — it never uses the consumer nav.mobile-nav class,
+ * and the rail's pinned bottom block is a <div>, never a <footer>.
+ */
 export function CrmSidebar({
   locale,
   businessName,
   businessSlug,
   planLabel,
-  sectionLabel,
+  partnerPortalLabel,
+  menuLabel,
   items,
+  bottomItems,
   viewPublicLabel,
   upgradeLabel
 }: {
@@ -66,51 +54,93 @@ export function CrmSidebar({
   businessName: string;
   businessSlug: string;
   planLabel: string;
-  sectionLabel: string;
+  partnerPortalLabel: string;
+  menuLabel: string;
   items: MenuItem[];
+  bottomItems: MenuItem[];
   viewPublicLabel: string;
   upgradeLabel: string;
 }) {
   const pathname = usePathname();
+  // Bootstrap's data-api owns the drawer state; React never tracks it.
+  const onClose = useCallback(() => {}, []);
+
+  const upgradeHref = `/${locale}/business/plans?business=${businessSlug}`;
+  const publicHref = `/${locale}/businesses/${businessSlug}`;
+
+  const renderLink = (item: MenuItem) => {
+    const active = item.exact ? pathname === item.href : pathname.startsWith(item.href);
+    return (
+      <a className={active ? "ws-nav-link active" : "ws-nav-link"} href={item.href} key={item.key}>
+        <Icon name={ITEM_ICONS[item.key] ?? "grid"} size={20} />
+        {item.label}
+      </a>
+    );
+  };
+
+  const publicLink = (
+    <a className="ws-nav-link" href={publicHref}>
+      <Icon name="storefront" size={20} />
+      {viewPublicLabel}
+    </a>
+  );
 
   return (
-    <aside className="crm-sidebar">
-      <div className="crm-sidebar-brand">
-        <a className="brand" href={`/${locale}`}>
-          Manzil<span aria-hidden="true" className="brand-dot" />
+    <>
+      {/* Mobile top bar (<md): brand + hamburger opening the drawer. */}
+      <header className="ws-topbar">
+        <a className="ws-topbar__brand" href={`/${locale}/dashboard`}>
+          <span aria-hidden="true" className="ws-topbar__logo" />
+          <span>{businessName}</span>
         </a>
-      </div>
+        <button
+          aria-controls={DRAWER_ID}
+          aria-label={menuLabel}
+          className="ws-topbar__toggle"
+          data-bs-target={`#${DRAWER_ID}`}
+          data-bs-toggle="offcanvas"
+          type="button"
+        >
+          <svg aria-hidden="true" fill="none" height="22" stroke="currentColor" strokeLinecap="round" strokeWidth="2" viewBox="0 0 24 24" width="22">
+            <path d="M4 7h16M4 12h16M4 17h16" />
+          </svg>
+        </button>
+      </header>
 
-      <div className="crm-sidebar-business">
-        <span aria-hidden="true" className="crm-sidebar__ring" />
-        <span className="crm-sidebar-avatar">{businessName.slice(0, 1).toUpperCase()}</span>
-        <div>
-          <strong>{businessName}</strong>
-          <em>{planLabel}</em>
+      {/* Desktop rail (≥md). */}
+      <aside className="ws-rail">
+        <div className="ws-rail__brand">
+          <a aria-label="Manzil" className="ws-rail__tile" href={`/${locale}`}>
+            <span aria-hidden="true" className="ws-rail__logo" />
+          </a>
+          <strong className="ws-rail__name">{businessName}</strong>
+          <span className="ws-rail__tagline">{partnerPortalLabel}</span>
+          <span className="ws-rail__plan">{planLabel}</span>
         </div>
-      </div>
 
-      <p className="crm-sidebar-section">{sectionLabel}</p>
-      <nav className="crm-sidebar-nav">
-        {items.map((item) => {
-          const active = item.exact ? pathname === item.href : pathname.startsWith(item.href);
-          return (
-            <a className={active ? "active" : undefined} href={item.href} key={item.key}>
-              {icons[item.key]}
-              {item.label}
-            </a>
-          );
-        })}
-      </nav>
+        <nav className="ws-rail__nav">{items.map(renderLink)}</nav>
 
-      <div className="crm-sidebar-foot">
-        <a className="crm-sidebar-public" href={`/${locale}/businesses/${businessSlug}`}>
-          {viewPublicLabel}
-        </a>
-        <a className="crm-sidebar-upgrade" href={`/${locale}/business/plans?business=${businessSlug}`}>
+        {/* Pinned bottom block — a <div>, never a <footer>. */}
+        <div className="ws-rail__foot">
+          <a className="btn btn-primary ws-upgrade" href={upgradeHref}>
+            {upgradeLabel}
+          </a>
+          {bottomItems.map(renderLink)}
+          {publicLink}
+        </div>
+      </aside>
+
+      {/* The drawer: always in the DOM, shown/hidden by Bootstrap. */}
+      <BootstrapOffcanvas id={DRAWER_ID} onClose={onClose} open={false} title={businessName}>
+        <nav className="ws-drawer__nav">
+          {items.map(renderLink)}
+          {bottomItems.map(renderLink)}
+          {publicLink}
+        </nav>
+        <a className="btn btn-primary ws-upgrade ws-drawer__upgrade" href={upgradeHref}>
           {upgradeLabel}
         </a>
-      </div>
-    </aside>
+      </BootstrapOffcanvas>
+    </>
   );
 }

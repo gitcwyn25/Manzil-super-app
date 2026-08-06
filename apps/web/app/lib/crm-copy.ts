@@ -14,7 +14,9 @@ const copy = {
       settings: "Sozlamalar",
       plan: "Tarif",
       upgrade: "Tarifni oshirish",
-      viewPublic: "Ochiq sahifani ko'rish"
+      viewPublic: "Ochiq sahifani ko'rish",
+      partnerPortal: "Hamkorlar portali",
+      mobileMenu: "Menyu"
     },
     overview: {
       title: "Boshqaruv paneli",
@@ -575,7 +577,9 @@ const copy = {
       settings: "Настройки",
       plan: "Тариф",
       upgrade: "Повысить тариф",
-      viewPublic: "Открытая страница"
+      viewPublic: "Открытая страница",
+      partnerPortal: "Портал партнёров",
+      mobileMenu: "Меню"
     },
     overview: {
       title: "Панель управления",
@@ -1136,7 +1140,9 @@ const copy = {
       settings: "Settings",
       plan: "Plan",
       upgrade: "Upgrade plan",
-      viewPublic: "View public page"
+      viewPublic: "View public page",
+      partnerPortal: "Partner Portal",
+      mobileMenu: "Menu"
     },
     overview: {
       title: "Dashboard",
