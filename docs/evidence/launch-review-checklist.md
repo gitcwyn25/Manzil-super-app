@@ -31,9 +31,15 @@ No duplicated components · no new styling values · no token violations · no n
 
 **Post-launch flagship KPI (Discover):** Discovery-to-Planning Conversion = users opening Concierge ÷ users viewing Discover — measures whether exploration transitions to planning; stronger than page views.
 
-## 0.5 Cross-screen language audit (before the launch gate, after all tracks land)
+## 0.5 Integration sweep — five passes (after all tracks land, before the launch gate)
 
-The same concept carries the same name everywhere, in all three locales: **Plan vs Workspace · Experience vs Event · Business vs Place · Booking vs Reservation · Favorite vs Saved**. One canonical term per concept per locale, enforced across landing-copy, crm-copy, and shared ui-copy. Vocabulary consistency is product identity; parallel tracks make this the most likely silent regression.
+Coding risk falls as tracks complete; **integration risk rises**. The sweep verifies the system, not the screens:
+
+1. **Visual consistency** — typography, spacing rhythm, color roles, elevation, motion timing.
+2. **Component consistency** — duplicates, prop consistency, token usage, icon usage.
+3. **Product language** — cross-screen AND cross-locale terminology (each locale keeps its own canonical glossary: one approved term per concept per language — Plan vs Workspace · Experience vs Event · Business vs Place · Booking vs Reservation · Favorite vs Saved — enforced across landing-copy, crm-copy, shared ui-copy); CTA consistency; empty-state voice.
+4. **Interaction** — navigation flow, loading states, error handling, accessibility, focus order.
+5. **Product philosophy** (the pass most teams skip) — per screen: does it increase confidence? reduce cognitive load? guide rather than overwhelm? keep Gurman helpful, not dominant? clearly answer "what can I do next?"
 
 ## 1. Build health
 
