@@ -1,140 +1,170 @@
 import type { Locale } from "@manzil/shared";
-import type { AudienceContent } from "../components/audience-features";
+import type { BentoCopy } from "../components/home/bento-business-grid";
+import type { FeatureTrioCopy } from "../components/home/feature-trio";
+import type { HeroConciergeCopy } from "../components/home/hero-concierge";
 
+/**
+ * Landing (home) copy — Vibrant Marketplace (task A2). uz is authoritative;
+ * ru/en are faithful translations. Copy stance per D8: aspirational energy,
+ * honest claims — Gurman AI recommends from real reviews and real catalog
+ * data; no bookings, no invented venues, no fee claims.
+ *
+ * `cta`, `ios` and `android` are consumed by the site chrome (header,
+ * mobile-nav, footer) and survive the home rebuild unchanged. The retired
+ * AudienceFeatures / StoreBadges / hero-carousel fields left with their
+ * sections (D9).
+ */
 export type LandingCopy = {
-  badge: string;
-  heroCarouselLabel: string;
-  /**
-   * Pattern with an {n} placeholder. Must stay a plain string — this value is
-   * handed to a client component, and a function would not serialize across
-   * the server/client boundary (it fails the production build, not dev).
-   */
-  heroGoTo: string;
-  heroNew: string;
-  titleLine1: string;
-  titleLine2: string;
-  subtitle: string;
+  /** Header + mobile-nav pill CTA (chrome). */
   cta: string;
-  heroFootnote: string;
-  featuresTitle1: string;
-  featuresTitle2: string;
-  featuresSubtitle: string;
-  audience: AudienceContent;
-  downloadTitle: string;
-  downloadText: string;
+  /** Footer app-link labels (chrome). */
   ios: string;
   android: string;
-  comingSoon: string;
+  hero: HeroConciergeCopy;
+  features: FeatureTrioCopy;
+  bento: BentoCopy;
 };
 
 const landing: Record<string, LandingCopy> = {
   uz: {
-    badge: "Toshkentda ishga tushdi",
-    heroCarouselLabel: "Manzildagi bizneslar",
-    heroGoTo: "{n}-biznesni ko'rsatish",
-    heroNew: "Yangi",
-    titleLine1: "Shahringizdagi eng yaxshi joylar.",
-    titleLine2: "Bitta platformada.",
-    subtitle: "Bizneslar va mijozlar uchun yagona platforma",
     cta: "Boshlash",
-    heroFootnote: "Restoranlar · Kafelar · Go'zallik · Xizmatlar",
-    featuresTitle1: "Biz asosini qurdik,",
-    featuresTitle2: "endi navbat sizda",
-    featuresSubtitle:
-      "Biznes yuritasizmi yoki yangi joylar izlaysizmi — hammasi shu yerda.",
-    audience: {
-      toggleBusiness: "Biznes uchun",
-      toggleCustomer: "Mijozlar uchun",
-      business: [
-        { title: "Listing boshqaruvi", text: "Ma'lumotlar, narxlar va ish vaqtini yangilang.", tone: "gray", mock: "listing" },
-        { title: "Sharhlarga javob", text: "Har bir mijozga rasmiy javob qaytaring.", tone: "purple", mock: "review" },
-        { title: "E'lonlar va aksiyalar", text: "Yangiliklar, paketlar va chegirmalarni e'lon qiling.", tone: "mint", mock: "inbox" },
-        { title: "Statistika", text: "Ko'rishlar va obunachilar dinamikasi.", tone: "plain", mock: "stats" }
-      ],
-      customer: [
-        { title: "Shaxsiy profil", text: "Faoliyatingiz va obunalaringiz bir joyda.", tone: "gray", mock: "profile" },
-        { title: "Hikoyalar", text: "Suratlar bilan bo'lishing, izoh va layklar oling.", tone: "purple", mock: "story" },
-        { title: "Qidiruv", text: "Yaqin-atrofdagi eng yaxshi joylarni toping.", tone: "mint", mock: "search" },
-        { title: "Do'stlar", text: "Tanishlaringizni kuzating va ulashing.", tone: "plain", mock: "follow" }
-      ]
-    },
-    downloadTitle: "Ilovani yuklab oling",
-    downloadText: "Mijozlar uchun iOS va Android ilovalari.",
     ios: "App Store",
     android: "Google Play",
-    comingSoon: "Tez kunda"
+    hero: {
+      badge: "Gurman AI bilan tanishing",
+      title1: "Shahringizni kashf eting,",
+      title2: "Gurman AI bilan.",
+      subtitle:
+        "Manzil — Toshkentdagi haqiqiy joylar katalogi. Gurman AI haqiqiy sharhlar va biznes ma'lumotlari asosida sizga mos joylarni tavsiya qiladi.",
+      explore: "Joylarni ko'rish",
+      how: "Gurman AI'ni sinab ko'rish",
+      chatName: "Gurman AI",
+      chatStatus: "Tavsiya tayyorlamoqda…",
+      chatAi: "Salom! Qanday joy izlayapsiz? Haqiqiy sharhlar asosida tavsiya beraman.",
+      chatUser: "Shanba oqshomi uchun tinch kafe kerak."
+    },
+    features: {
+      title: "AI konsyerj",
+      subtitle:
+        "Gurman AI Manzil katalogidagi haqiqiy joylar va sharhlar bilan ishlaydi — qidiruvdan tanlovgacha yo'l ko'rsatadi.",
+      items: [
+        {
+          title: "Aqlli rejalar",
+          text: "Qanday kun istayotganingizni yozing — Gurman AI katalogdagi bir-biriga mos joylarni taklif qiladi."
+        },
+        {
+          title: "Jonli kashfiyot",
+          text: "Tavsiyalar haqiqiy sharhlar va joriy katalogga tayanadi — yangi joylar qo'shilishi bilan paydo bo'ladi."
+        },
+        {
+          title: "Shaxsiy yondashuv",
+          text: "Suhbatda aytganlaringizga qarab tavsiyalar moslashadi — tinch kafe yoki gavjum restoran, tanlov sizniki."
+        }
+      ]
+    },
+    bento: {
+      title: "Eng yaxshi joylar",
+      subtitle: "Manzildagi haqiqiy joylar — mehmonlarning haqiqiy sharhlari bilan.",
+      viewAll: "Barcha turkumlarni ko'rish",
+      featuredBadge: "Tanlangan",
+      partnerTitle: "Biznesingiz bormi?",
+      partnerText:
+        "Manzilga qo'shiling — xizmatlaringizni izlayotgan mijozlar sizni topishsin.",
+      partnerCta: "Hamkor bo'lish"
+    }
   },
   ru: {
-    badge: "Запущено в Ташкенте",
-    heroCarouselLabel: "Бизнесы на Manzil",
-    heroGoTo: "Показать бизнес {n}",
-    heroNew: "Новый",
-    titleLine1: "Лучшие места вашего города.",
-    titleLine2: "На одной платформе.",
-    subtitle: "Единая платформа для бизнеса и клиентов",
     cta: "Начать",
-    heroFootnote: "Рестораны · Кафе · Красота · Услуги",
-    featuresTitle1: "Мы построили основу,",
-    featuresTitle2: "теперь дело за вами",
-    featuresSubtitle:
-      "Ведёте бизнес или ищете новые места — всё находится здесь.",
-    audience: {
-      toggleBusiness: "Для бизнеса",
-      toggleCustomer: "Для клиентов",
-      business: [
-        { title: "Управление листингом", text: "Обновляйте данные, цены и часы работы.", tone: "gray", mock: "listing" },
-        { title: "Ответы на отзывы", text: "Официально отвечайте каждому клиенту.", tone: "purple", mock: "review" },
-        { title: "Объявления и акции", text: "Публикуйте новости, пакеты и скидки.", tone: "mint", mock: "inbox" },
-        { title: "Статистика", text: "Динамика просмотров и подписчиков.", tone: "plain", mock: "stats" }
-      ],
-      customer: [
-        { title: "Личный профиль", text: "Ваша активность и подписки в одном месте.", tone: "gray", mock: "profile" },
-        { title: "Истории", text: "Делитесь фото, получайте комментарии и лайки.", tone: "purple", mock: "story" },
-        { title: "Поиск", text: "Находите лучшие места рядом с вами.", tone: "mint", mock: "search" },
-        { title: "Друзья", text: "Подписывайтесь на знакомых и делитесь.", tone: "plain", mock: "follow" }
-      ]
-    },
-    downloadTitle: "Скачайте приложение",
-    downloadText: "Приложения для iOS и Android — для клиентов.",
     ios: "App Store",
     android: "Google Play",
-    comingSoon: "Скоро"
+    hero: {
+      badge: "Познакомьтесь с Gurman AI",
+      title1: "Откройте свой город,",
+      title2: "вместе с Gurman AI.",
+      subtitle:
+        "Manzil — каталог реальных мест Ташкента. Gurman AI рекомендует подходящие вам места на основе настоящих отзывов и данных бизнесов.",
+      explore: "Смотреть места",
+      how: "Попробовать Gurman AI",
+      chatName: "Gurman AI",
+      chatStatus: "Готовит рекомендацию…",
+      chatAi: "Здравствуйте! Какое место вы ищете? Порекомендую на основе настоящих отзывов.",
+      chatUser: "Нужно тихое кафе на субботний вечер."
+    },
+    features: {
+      title: "AI-консьерж",
+      subtitle:
+        "Gurman AI работает с реальными местами и отзывами каталога Manzil — ведёт вас от поиска до выбора.",
+      items: [
+        {
+          title: "Умные планы",
+          text: "Опишите, какой день вы хотите — Gurman AI предложит подходящие друг к другу места из каталога."
+        },
+        {
+          title: "Живые открытия",
+          text: "Рекомендации опираются на настоящие отзывы и актуальный каталог — новые места появляются сразу после добавления."
+        },
+        {
+          title: "Персональный подход",
+          text: "Рекомендации подстраиваются под то, что вы говорите в диалоге — тихое кафе или оживлённый ресторан, выбор за вами."
+        }
+      ]
+    },
+    bento: {
+      title: "Лучшие места",
+      subtitle: "Реальные места на Manzil — с настоящими отзывами гостей.",
+      viewAll: "Все категории",
+      featuredBadge: "Избранное",
+      partnerTitle: "У вас свой бизнес?",
+      partnerText:
+        "Присоединяйтесь к Manzil — пусть вас находят клиенты, которые ищут ваши услуги.",
+      partnerCta: "Стать партнёром"
+    }
   },
   en: {
-    badge: "Now live in Tashkent",
-    heroCarouselLabel: "Businesses on Manzil",
-    heroGoTo: "Show business {n}",
-    heroNew: "New",
-    titleLine1: "The best places in your city.",
-    titleLine2: "On one platform.",
-    subtitle: "One platform for businesses and customers",
     cta: "Get started",
-    heroFootnote: "Restaurants · Cafes · Beauty · Services",
-    featuresTitle1: "We built the foundation,",
-    featuresTitle2: "the rest is yours",
-    featuresSubtitle:
-      "Whether you run a business or discover new places — everything is here.",
-    audience: {
-      toggleBusiness: "For business",
-      toggleCustomer: "For customers",
-      business: [
-        { title: "Listing management", text: "Update details, prices, and opening hours.", tone: "gray", mock: "listing" },
-        { title: "Review replies", text: "Respond to every customer officially.", tone: "purple", mock: "review" },
-        { title: "Announcements", text: "Publish news, packages, and discounts.", tone: "mint", mock: "inbox" },
-        { title: "Analytics", text: "Views and follower trends over time.", tone: "plain", mock: "stats" }
-      ],
-      customer: [
-        { title: "Your profile", text: "Your activity and follows in one place.", tone: "gray", mock: "profile" },
-        { title: "Stories", text: "Share photos, get comments and likes.", tone: "purple", mock: "story" },
-        { title: "Search", text: "Find the best places near you.", tone: "mint", mock: "search" },
-        { title: "Friends", text: "Follow people you know and share.", tone: "plain", mock: "follow" }
-      ]
-    },
-    downloadTitle: "Download the app",
-    downloadText: "iOS and Android apps for customers.",
     ios: "App Store",
     android: "Google Play",
-    comingSoon: "Coming soon"
+    hero: {
+      badge: "Meet Gurman AI",
+      title1: "Discover your city,",
+      title2: "with Gurman AI.",
+      subtitle:
+        "Manzil is a catalog of real places in Tashkent. Gurman AI recommends places that fit you, based on real reviews and real business data.",
+      explore: "Explore places",
+      how: "Try Gurman AI",
+      chatName: "Gurman AI",
+      chatStatus: "Preparing a recommendation…",
+      chatAi: "Hi! What kind of place are you looking for? I recommend from real reviews.",
+      chatUser: "A quiet café for Saturday evening."
+    },
+    features: {
+      title: "The AI concierge",
+      subtitle:
+        "Gurman AI works with the real places and reviews in the Manzil catalog — guiding you from search to choice.",
+      items: [
+        {
+          title: "Smart itineraries",
+          text: "Describe the day you want — Gurman AI suggests catalog places that fit together."
+        },
+        {
+          title: "Real-time discovery",
+          text: "Recommendations draw on real reviews and the live catalog — new places show up as they join."
+        },
+        {
+          title: "Personalized",
+          text: "Suggestions adapt to what you say in the conversation — a quiet café or a lively restaurant, your call."
+        }
+      ]
+    },
+    bento: {
+      title: "Experience the best",
+      subtitle: "Real places on Manzil, with real reviews from guests.",
+      viewAll: "View all categories",
+      featuredBadge: "Featured",
+      partnerTitle: "Own a local business?",
+      partnerText: "Join Manzil and get found by customers who are looking for your services.",
+      partnerCta: "Partner with us"
+    }
   }
 };
 

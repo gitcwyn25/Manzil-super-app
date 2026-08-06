@@ -69,7 +69,7 @@ const COPY: Record<string, SectionCopy> = {
   }
 };
 
-function categoryName(
+export function categoryName(
   category: { nameUz: string; nameRu: string; nameEn: string },
   locale: Locale
 ): string {
@@ -98,8 +98,11 @@ const CATEGORY_ICONS: Record<string, IconName> = {
  * are e2e welds — RatingLine renders the localized "New" chip at
  * reviewCount 0, never "0.0 ★". The mock's fabricated price footers
  * ($12.00, "20% OFF", "Day Pass") are cut: no deals entity exists.
+ *
+ * Exported so the home bento (task A2) composes the exact same card instead
+ * of forking it — the A1→A2 chain shares this treatment by contract.
  */
-function Card({
+export function HomeBusinessCard({
   business,
   locale,
   featuredLabel
@@ -278,7 +281,7 @@ export function HomeSections({
               <SectionHeader subtitle={text.featuredSub} title={text.featured} />
               <div className="home-cards">
                 {sections.featured.map((business) => (
-                  <Card
+                  <HomeBusinessCard
                     business={business}
                     featuredLabel={text.featuredBadge}
                     key={business.slug}
@@ -294,7 +297,7 @@ export function HomeSections({
               <SectionHeader subtitle={text.justJoinedSub} title={text.justJoined} />
               <div className="home-cards">
                 {sections.justJoined.map((business) => (
-                  <Card
+                  <HomeBusinessCard
                     business={business}
                     featuredLabel={text.featuredBadge}
                     key={business.slug}

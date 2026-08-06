@@ -165,6 +165,11 @@
 // vm-kit so its .home-card/.home-category/.gurman-hero restatements win.
 @import "discover";
 
+// Home (task A2): green concierge hero, AI feature trio, bento business grid.
+// Loads after discover so .home-card.home-featured outranks the shared
+// Master Card recipe where the featured slot's anatomy differs.
+@import "home";
+
 // Business details /businesses/[slug] (task B): hero photo mosaic, experience
 // feed restyle of the welded review-card/review-form family, action/info rail,
 // claim CTA band.
