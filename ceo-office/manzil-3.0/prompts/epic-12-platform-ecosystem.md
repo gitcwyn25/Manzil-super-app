@@ -35,9 +35,6 @@ External platforms integrate with Manzil **without modifying the core platform**
 
 ---
 
-## Remaining ladder (architecture ends at 14)
+## Remaining ladder
 
-- **Epic 13 — Business OS:** full CRM, ERP-lite, marketing automation, loyalty, analytics, campaigns, AI Copilot for businesses (executes docs 17-19: Organization → Brand → Locations, Build/Operate/Grow, roles/permissions, unified inbox, marketing hub).
-- **Epic 14 — Autonomous Marketplace:** demand forecasting, dynamic recommendations, AI-assisted negotiations, business optimization, marketplace health, fraud detection.
-
-Beyond 14 the work is product capability on a mature platform, not foundational architecture.
+Superseded by [EPIC-LADDER.md](EPIC-LADDER.md) — the canonical numbering (13 Marketplace OS · 14 Experience Commerce · 15 Business OS · 16 Autonomous Marketplace). The earlier stub in this file listing 13 = Business OS is retired.
