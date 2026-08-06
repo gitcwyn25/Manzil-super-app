@@ -15,3 +15,13 @@ Strengths confirmed: simple linear flow, Sign In/Register merging at OTP, permis
 6. **NEW SCREEN (scope now 12):** after Profile, before Home — a ~2-second completion celebration: "✓ You're ready. Let's plan your first experience." Psychologically marks the end of onboarding. Assigned to sub-flow 02C. **Understated by requirement (2026-08-06): no confetti, no fireworks, no gamification — the target emotion is confidence, not excitement for its own sake.**
 
 Amendments are refinements, not blockers; incorporate in wireframes v1.1 before high-fidelity design begins.
+
+## Product decisions (v1.2, 2026-08-06 — resolve the three open ASSUMPTIONs; hi-fi has zero ambiguity)
+
+1. **Guest mode — APPROVED.** Guest lands on HOME-001. Allowed: browse Discover, search, view business profiles, watch stories/videos, view events, read reviews. Restricted: Gurman planning, Smart Plan Workspace, bookings, favorites, reviews, story posting, profile. On restricted attempt: "Create a free account to save plans, book businesses, and let Gurman help organize your experience." Never force registration immediately — let users experience the product first.
+2. **Camera permission — REMOVED from WOW Flow.** Onboarding permissions: Location · Notifications · Gallery · Microphone (optional, only if voice is introduced early). Camera is requested in context on first camera-dependent action (story post, live media upload, QR/menu scan). Principle: request permissions in context.
+3. **Interests vs. AI Personalization — responsibilities SPLIT.**
+   - **AUTH-015 Interests = immediate planning intent** ("What are you planning today?" — Birthday, Weekend, Haircut, Dinner, Coffee, Travel, Wedding, Family). Feeds the FIRST home experience → Workspace → bookings (current session).
+   - **AUTH-016 AI Personalization = long-term preference profile** (preferred budget, favorite cuisines, travel distance, indoor/outdoor, luxury/casual, family-friendly, pet-friendly, accessibility). Feeds future recommendations and Gurman context (persistent memory). Must NOT duplicate the immediate intent question.
+
+**Hi-fi design CLEARED to begin** once the web launch reaches the Genesis Record. No further product clarification expected before visual design; subsequent changes require implementation evidence or user testing.
