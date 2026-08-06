@@ -36,10 +36,10 @@ export default function RegisterError({
   }, [error]);
 
   return (
-    <section className="crm-auth-panel">
-      <h1>{copy.register.failedTitle}</h1>
+    <section className="vm-auth-panel">
+      <h1 className="vm-auth-panel__title">{copy.register.failedTitle}</h1>
       <p>{copy.register.failedBody}</p>
-      <button className="bz-btn-primary" onClick={reset} type="button">
+      <button className="btn btn-primary vm-cta" onClick={reset} type="button">
         {copy.register.retry}
       </button>
     </section>

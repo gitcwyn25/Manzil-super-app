@@ -5,9 +5,20 @@ import { registerBusinessAction } from "../../../../lib/crm-actions";
 import { getRegistrationTerms } from "../../../../lib/legal-api";
 import { getCrmCopy } from "../../../../lib/crm-copy";
 import { RegisterSubmit } from "../../../../components/crm/register-submit";
+import { IconField, IconSelect } from "../../../../components/vm/icon-field";
+import { PrimaryCta } from "../../../../components/vm/primary-cta";
+import { BrandPanel, SplitAuthShell } from "../../../../components/vm/split-auth-shell";
 
 export const dynamic = "force-dynamic";
 
+/**
+ * Business registration in the Vibrant Marketplace split-auth composition:
+ * sticky brand panel left (hidden below md), the real Clerk-gated, 13-field
+ * onboarding form right. The mock's 4-field account form is a visual
+ * reference only — every posted field, the terms consent block, and the
+ * registration.spec.ts selectors (input names, details.crm-terms-doc,
+ * .crm-terms-body, single button[type='submit']) are preserved verbatim.
+ */
 export default async function RegisterBusinessPage({
   params
 }: {
@@ -17,13 +28,35 @@ export default async function RegisterBusinessPage({
   const copy = getCrmCopy(locale);
   const { userId } = await auth();
 
+  const panel = (
+    <BrandPanel
+      tagline={copy.register.brandSubline}
+      title={copy.register.brandTagline}
+      wordmark={copy.register.brandWordmark}
+    />
+  );
+
   if (!userId) {
     return (
-      <section className="crm-auth-panel">
-        <h1>{copy.register.signInFirst}</h1>
-        <p>{copy.register.signInText}</p>
-        <a className="bz-btn-primary" href={`/${locale}/sign-in`}>{copy.register.signIn}</a>
-      </section>
+      <SplitAuthShell panel={panel}>
+        <div className="vm-auth-flow">
+          <div className="vm-auth-kicker d-md-none">
+            <p className="vm-auth-kicker__brand">{copy.register.brandWordmark}</p>
+            <p className="vm-auth-kicker__sub">{copy.register.mobileKicker}</p>
+          </div>
+          <header className="vm-auth-head">
+            <h1 className="vm-auth-head__title">{copy.register.signInFirst}</h1>
+            <p className="vm-auth-head__subtitle">{copy.register.signInText}</p>
+          </header>
+          <PrimaryCta className="vm-auth-submit" href={`/${locale}/sign-in`}>
+            {copy.register.signIn}
+          </PrimaryCta>
+          <p className="vm-auth-switch">
+            <span>{copy.register.signUpPrompt}</span>
+            <a href={`/${locale}/sign-up`}>{copy.register.signUpCta}</a>
+          </p>
+        </div>
+      </SplitAuthShell>
     );
   }
 
@@ -31,122 +64,140 @@ export default async function RegisterBusinessPage({
   const { terms } = await getRegistrationTerms(locale);
 
   return (
-    <section className="crm-register">
-      <header className="crm-register-head">
-        <h1>{copy.register.title}</h1>
-        <p>{copy.register.subtitle}</p>
-      </header>
+    <SplitAuthShell panel={panel}>
+      <div className="vm-auth-flow">
+        <div className="vm-auth-kicker d-md-none">
+          <p className="vm-auth-kicker__brand">{copy.register.brandWordmark}</p>
+          <p className="vm-auth-kicker__sub">{copy.register.mobileKicker}</p>
+        </div>
 
-      <form action={registerBusinessAction} className="crm-form">
-        <input name="locale" type="hidden" value={locale} />
+        <header className="vm-auth-head">
+          <h1 className="vm-auth-head__title">{copy.register.title}</h1>
+          <p className="vm-auth-head__subtitle">{copy.register.subtitle}</p>
+        </header>
 
-        <fieldset>
-          <legend>{copy.register.basics}</legend>
-          <div className="crm-form-grid">
-            <label>
-              <span>{copy.settings.name} *</span>
-              <input maxLength={120} minLength={2} name="name" required type="text" />
+        <form action={registerBusinessAction} className="vm-auth-form">
+          <input name="locale" type="hidden" value={locale} />
+
+          <fieldset>
+            <legend>{copy.register.basics}</legend>
+            <label className="vm-field">
+              <span className="vm-field__label">{copy.settings.name} *</span>
+              <IconField
+                icon="storefront"
+                maxLength={120}
+                minLength={2}
+                name="name"
+                placeholder={copy.register.namePlaceholder}
+                required
+                type="text"
+              />
             </label>
-            <label>
-              <span>{copy.register.category} *</span>
-              <select defaultValue="" name="categorySlug" required>
-                <option disabled value="" />
+            <label className="vm-field">
+              <span className="vm-field__label">{copy.register.category} *</span>
+              <IconSelect defaultValue="" icon="grid" name="categorySlug" required>
+                <option disabled value="">
+                  {copy.register.categoryPlaceholder}
+                </option>
                 {categories.map((category) => (
                   <option key={category.slug} value={category.slug}>
                     {category.name[locale] ?? category.name.uz}
                   </option>
                 ))}
-              </select>
+              </IconSelect>
             </label>
-            <label className="span2">
-              <span>{copy.settings.description} *</span>
-              <textarea minLength={10} name="description" required rows={3} />
+            <label className="vm-field">
+              <span className="vm-field__label">{copy.settings.description} *</span>
+              <textarea className="form-control" minLength={10} name="description" required rows={3} />
             </label>
-            <label>
-              <span>{copy.settings.address} *</span>
-              <input name="address" required type="text" />
+            <label className="vm-field">
+              <span className="vm-field__label">{copy.settings.address} *</span>
+              <IconField icon="location" name="address" required type="text" />
             </label>
-            <label>
-              <span>{copy.settings.district} *</span>
-              <input name="district" required type="text" />
+            <label className="vm-field">
+              <span className="vm-field__label">{copy.settings.district} *</span>
+              <IconField icon="location" name="district" required type="text" />
             </label>
-          </div>
-        </fieldset>
+          </fieldset>
 
-        <fieldset>
-          <legend>{copy.register.contactSection}</legend>
-          <div className="crm-form-grid">
-            <label>
-              <span>{copy.settings.phone}</span>
-              <input name="phone" placeholder="+998" type="tel" />
+          <fieldset>
+            <legend>{copy.register.contactSection}</legend>
+            <label className="vm-field">
+              <span className="vm-field__label">{copy.settings.phone}</span>
+              <IconField icon="call" name="phone" placeholder="+998" type="tel" />
             </label>
-            <label>
-              <span>{copy.settings.email}</span>
-              <input name="email" type="email" />
+            <label className="vm-field">
+              <span className="vm-field__label">{copy.settings.email}</span>
+              <IconField icon="mail" name="email" type="email" />
             </label>
-            <label>
-              <span>{copy.settings.website}</span>
-              <input name="website" placeholder="https://" type="url" />
+            <label className="vm-field">
+              <span className="vm-field__label">{copy.settings.website}</span>
+              <IconField icon="globe" name="website" placeholder="https://" type="url" />
             </label>
-            <label>
-              <span>{copy.settings.instagram}</span>
-              <input name="instagram" type="text" />
+            <label className="vm-field">
+              <span className="vm-field__label">{copy.settings.instagram}</span>
+              <IconField icon="image" name="instagram" type="text" />
             </label>
-            <label>
-              <span>{copy.settings.telegram}</span>
-              <input name="telegram" type="text" />
+            <label className="vm-field">
+              <span className="vm-field__label">{copy.settings.telegram}</span>
+              <IconField icon="send" name="telegram" type="text" />
             </label>
-          </div>
-        </fieldset>
+          </fieldset>
 
-        <fieldset>
-          <legend>{copy.register.legalSection}</legend>
-          <p className="crm-hint">{copy.register.legalHint}</p>
-          <div className="crm-form-grid">
-            <label>
-              <span>{copy.settings.legalName}</span>
-              <input name="legalName" type="text" />
+          <fieldset>
+            <legend>{copy.register.legalSection}</legend>
+            <p className="vm-field__hint">{copy.register.legalHint}</p>
+            <label className="vm-field">
+              <span className="vm-field__label">{copy.settings.legalName}</span>
+              <IconField icon="verified" name="legalName" type="text" />
             </label>
-            <label>
-              <span>{copy.settings.taxId}</span>
-              <input inputMode="numeric" maxLength={9} name="taxId" pattern="\d{9}" type="text" />
+            <label className="vm-field">
+              <span className="vm-field__label">{copy.settings.taxId}</span>
+              <IconField
+                icon="percent"
+                inputMode="numeric"
+                maxLength={9}
+                name="taxId"
+                pattern="\d{9}"
+                type="text"
+              />
             </label>
-          </div>
-        </fieldset>
+          </fieldset>
 
-        <fieldset>
-          <legend>{copy.terms.section}</legend>
-          <p className="crm-hint">{copy.terms.hint}</p>
+          <fieldset>
+            <legend>{copy.terms.section}</legend>
+            <p className="vm-field__hint">{copy.terms.hint}</p>
 
-          {terms ? (
-            <>
-              {/* Pinned to the version rendered here. If the terms are
-                  republished while this page sits open, the API rejects the
-                  submission rather than recording acceptance of text the user
-                  never saw. */}
-              <input name="acceptedTermsVersion" type="hidden" value={terms.version} />
+            {terms ? (
+              <>
+                {/* Pinned to the version rendered here. If the terms are
+                    republished while this page sits open, the API rejects the
+                    submission rather than recording acceptance of text the user
+                    never saw. */}
+                <input name="acceptedTermsVersion" type="hidden" value={terms.version} />
 
-              <details className="crm-terms-doc">
-                <summary>
-                  {copy.terms.read} — {terms.title} ({copy.terms.version} {terms.version})
-                </summary>
-                <div className="crm-terms-body">{terms.body}</div>
-              </details>
-            </>
-          ) : (
-            <p className="crm-hint">{copy.terms.unavailable}</p>
-          )}
+                <details className="crm-terms-doc">
+                  <summary>
+                    {copy.terms.read} — {terms.title} ({copy.terms.version} {terms.version})
+                  </summary>
+                  <div className="crm-terms-body">{terms.body}</div>
+                </details>
+              </>
+            ) : (
+              <p className="vm-field__hint">{copy.terms.unavailable}</p>
+            )}
 
-          {/* Required and unchecked by default: consent has to be a deliberate
-              act, so it is never pre-ticked. */}
-          <label className="crm-consent">
-            <input name="acceptedTerms" required type="checkbox" />
-            <span>{copy.terms.checkbox}</span>
-          </label>
-        </fieldset>
+            {/* Required and unchecked by default: consent has to be a deliberate
+                act, so it is never pre-ticked. */}
+            <label className="crm-consent">
+              <input name="acceptedTerms" required type="checkbox" />
+              <span>{copy.terms.checkbox}</span>
+            </label>
+          </fieldset>
 
-        <RegisterSubmit label={copy.register.submit} pendingLabel={copy.register.submitting} />
-      </form>
-    </section>
+          <RegisterSubmit label={copy.register.submit} pendingLabel={copy.register.submitting} />
+        </form>
+      </div>
+    </SplitAuthShell>
   );
 }

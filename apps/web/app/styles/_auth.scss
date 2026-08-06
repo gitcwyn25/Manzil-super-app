@@ -1,0 +1,239 @@
+// Vibrant Marketplace auth + registration surfaces (task C):
+// /business/register, /sign-in, /sign-up composed in the SplitAuthShell kit
+// (_vm-kit.scss). Loads from vibrant.scss AFTER globals.css, so restating a
+// globals.css selector at equal specificity deliberately wins the cascade —
+// that is how the e2e-locked terms/consent markup (details.crm-terms-doc,
+// .crm-terms-body, .crm-consent > input[name='acceptedTerms']) is re-skinned
+// without renaming a single load-bearing class.
+
+// The form column separates from the photo panel with a soft left-edge
+// shadow (spec: -10px 0 30px rgba(0,0,0,.05)); only meaningful at md+ where
+// the panel is visible.
+@include media-breakpoint-up(md) {
+  .vm-auth-shell__content {
+    box-shadow: -10px 0 30px rgba(0, 0, 0, .05);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Right-column composition: 32px vertical rhythm between blocks
+// ---------------------------------------------------------------------------
+
+.vm-auth-flow {
+  display: grid;
+  gap: 2rem;
+}
+
+// Mobile-only brand header (the photo panel is hidden below md).
+.vm-auth-kicker {
+  display: grid;
+  gap: .25rem;
+  text-align: center;
+}
+
+.vm-auth-kicker__brand {
+  margin: 0;
+  color: $primary;
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -.01em;
+}
+
+.vm-auth-kicker__sub {
+  margin: 0;
+  color: $vm-on-surface-variant;
+}
+
+.vm-auth-head {
+  display: grid;
+  gap: .5rem;
+  text-align: center;
+
+  @include media-breakpoint-up(md) {
+    text-align: left;
+  }
+}
+
+// Class specificity (0,1,0) outranks the bare-h1 bridge in vibrant.scss, so
+// the display scale is restated here in full (size, weight, width).
+.vm-auth-head__title {
+  margin: 0;
+  max-width: none;
+  font-size: clamp(2rem, 4.5vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: -.02em;
+  line-height: 1.15;
+}
+
+.vm-auth-head__subtitle {
+  margin: 0;
+  color: $vm-on-surface-variant;
+  font-size: 1.125rem;
+  line-height: calc(28 / 18);
+}
+
+// ---------------------------------------------------------------------------
+// Form: single column, quiet fieldset sections, IconField recipe
+// ---------------------------------------------------------------------------
+
+.vm-auth-form {
+  display: grid;
+  gap: 2rem;
+}
+
+.vm-auth-form fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+// Bootstrap's reboot floats legends full-width; keep that behavior and only
+// restyle the type: quiet uppercase section labels (the mock has no sections
+// at all — the real 13-field form needs them, styled to stay out of the way).
+.vm-auth-form legend {
+  margin-bottom: .25rem;
+  color: $vm-on-surface-variant;
+  font-size: .8125rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+// Field group: label-md label 4px above the control.
+.vm-field {
+  display: grid;
+  gap: .25rem;
+  margin: 0;
+}
+
+.vm-field__label {
+  color: $vm-on-surface;
+  font-size: .875rem;
+  font-weight: 600;
+  letter-spacing: .01em;
+  line-height: calc(20 / 14);
+}
+
+.vm-field__hint {
+  margin: 0;
+  color: $vm-on-surface-variant;
+  font-size: .75rem;
+  line-height: calc(16 / 12);
+}
+
+// ---------------------------------------------------------------------------
+// Terms + consent (e2e-locked markup, restyled)
+// ---------------------------------------------------------------------------
+
+.vm-auth-form .crm-terms-doc {
+  margin: 0;
+  padding: .75rem 1rem;
+  border: 1px solid $vm-outline-variant;
+  border-radius: $border-radius;
+  background: $vm-surface-container-lowest;
+  box-shadow: $box-shadow-sm;
+}
+
+.vm-auth-form .crm-terms-doc summary {
+  color: $vm-on-surface;
+  font-size: .875rem;
+  font-weight: 600;
+}
+
+.vm-auth-form .crm-terms-body {
+  color: $vm-on-surface-variant;
+}
+
+.vm-auth-form .crm-consent {
+  margin-top: 0;
+  color: $vm-on-surface;
+  font-size: .875rem;
+}
+
+.vm-auth-form .crm-consent input[type="checkbox"] {
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-top: .125rem;
+  accent-color: $primary;
+}
+
+// ---------------------------------------------------------------------------
+// Submit + switch row
+// ---------------------------------------------------------------------------
+
+.vm-auth-submit {
+  width: 100%;
+  padding-block: .75rem;
+}
+
+.vm-auth-switch {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: .375rem;
+  margin: 0;
+  padding-top: 1rem;
+  border-top: 1px solid rgba($vm-outline-variant, .5);
+  color: $vm-on-surface-variant;
+  font-size: .9375rem;
+  text-align: center;
+}
+
+.vm-auth-switch a {
+  color: $primary;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color .2s ease;
+
+  &:hover {
+    color: $vm-primary-container;
+    text-decoration: underline;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Clerk widget slot (/sign-in, /sign-up)
+// ---------------------------------------------------------------------------
+
+.vm-auth-clerk {
+  display: grid;
+  justify-items: center;
+}
+
+// ---------------------------------------------------------------------------
+// Standalone centered panel (register error boundary — renders outside the
+// split shell because error.tsx replaces the whole page).
+// ---------------------------------------------------------------------------
+
+.vm-auth-panel {
+  display: grid;
+  justify-items: center;
+  gap: .75rem;
+  max-width: 30rem;
+  margin-inline: auto;
+  padding: clamp(4rem, 10vw, 7rem) 1rem;
+  text-align: center;
+}
+
+.vm-auth-panel__title {
+  margin: 0;
+  max-width: none;
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: 800;
+  letter-spacing: -.02em;
+}
+
+.vm-auth-panel p {
+  margin: 0;
+  color: $vm-on-surface-variant;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vm-auth-switch a {
+    transition: none;
+  }
+}

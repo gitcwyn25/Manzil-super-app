@@ -1,6 +1,7 @@
 "use client";
 
 import { useFormStatus } from "react-dom";
+import { Icon } from "../vm/icons";
 
 /**
  * Submit button for the business registration form.
@@ -12,6 +13,10 @@ import { useFormStatus } from "react-dom";
  *
  * Must live inside the <form> element: useFormStatus reports the status of the
  * nearest ancestor form, and returns pending:false anywhere else.
+ *
+ * Styled as the Vibrant Marketplace PrimaryCta recipe (btn-primary gradient +
+ * .vm-cta tactility, full-width via .vm-auth-submit) while keeping the
+ * .crm-submit pending-state classes that globals.css styles.
  */
 export function RegisterSubmit({ label, pendingLabel }: { label: string; pendingLabel: string }) {
   const { pending } = useFormStatus();
@@ -19,7 +24,7 @@ export function RegisterSubmit({ label, pendingLabel }: { label: string; pending
   return (
     <button
       aria-busy={pending}
-      className="bz-btn-primary crm-submit"
+      className="btn btn-primary vm-cta vm-auth-submit crm-submit"
       disabled={pending}
       type="submit"
     >
@@ -29,7 +34,10 @@ export function RegisterSubmit({ label, pendingLabel }: { label: string; pending
           {pendingLabel}
         </>
       ) : (
-        label
+        <>
+          {label}
+          <Icon name="arrow_forward" size={18} />
+        </>
       )}
     </button>
   );

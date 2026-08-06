@@ -165,7 +165,16 @@ const copy = {
       retry: "Qaytadan urinish",
       signInFirst: "Avval tizimga kiring",
       signInText: "Biznesni ro'yxatdan o'tkazish uchun hisob talab qilinadi.",
-      signIn: "Kirish"
+      signIn: "Kirish",
+      brandWordmark: "Manzil — biznes uchun",
+      brandTagline: "Mahalliy biznesingizni rivojlantiring.",
+      brandSubline:
+        "Manzil'da profil oching — mijozlar sizni topadi, sharh qoldiradi va siz bilan bog'lanadi.",
+      mobileKicker: "Hamkorlar portalida ro'yxatdan o'tish",
+      namePlaceholder: "Masalan: Chinor Kafe",
+      categoryPlaceholder: "Kategoriyani tanlang",
+      signUpPrompt: "Hisobingiz yo'qmi?",
+      signUpCta: "Ro'yxatdan o'tish"
     },
     plans: {
       title: "Tarifni tanlang",
@@ -728,7 +737,16 @@ const copy = {
       retry: "Повторить",
       signInFirst: "Сначала войдите",
       signInText: "Для регистрации бизнеса требуется аккаунт.",
-      signIn: "Войти"
+      signIn: "Войти",
+      brandWordmark: "Manzil для бизнеса",
+      brandTagline: "Развивайте свой локальный бизнес.",
+      brandSubline:
+        "Создайте профиль в Manzil — клиенты найдут вас, оставят отзывы и свяжутся с вами.",
+      mobileKicker: "Регистрация в портале для партнёров",
+      namePlaceholder: "Например: Chinor Kafe",
+      categoryPlaceholder: "Выберите категорию",
+      signUpPrompt: "Ещё нет аккаунта?",
+      signUpCta: "Зарегистрироваться"
     },
     plans: {
       title: "Выберите тариф",
@@ -1291,7 +1309,16 @@ const copy = {
       retry: "Try again",
       signInFirst: "Sign in first",
       signInText: "An account is required to register a business.",
-      signIn: "Sign in"
+      signIn: "Sign in",
+      brandWordmark: "Manzil for Business",
+      brandTagline: "Empower your local business.",
+      brandSubline:
+        "Create your Manzil profile — customers find you, leave reviews, and get in touch.",
+      mobileKicker: "Partner portal registration",
+      namePlaceholder: "e.g. Chinor Cafe",
+      categoryPlaceholder: "Select a category",
+      signUpPrompt: "No account yet?",
+      signUpCta: "Sign up"
     },
     plans: {
       title: "Choose a plan",
