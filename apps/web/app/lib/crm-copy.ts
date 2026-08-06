@@ -158,7 +158,8 @@ const copy = {
       replyPlaceholder: "Rasmiy javob matni",
       send: "Yuborish",
       replied: "Javob berilgan",
-      exportCsv: "CSV yuklab olish"
+      exportCsv: "CSV yuklab olish",
+      helpfulLabel: "foydali"
     },
     settings: {
       title: "Sozlamalar",
@@ -271,6 +272,8 @@ const copy = {
       colConsent: "Marketingga rozilik",
       consentYes: "Ha",
       consentNo: "Yo'q",
+      consentPillYes: "Rozilik bor",
+      consentPillNo: "Rozilik yo'q",
       never: "Hech qachon"
     },
     customerDetail: {
@@ -769,7 +772,8 @@ const copy = {
       replyPlaceholder: "Текст официального ответа",
       send: "Отправить",
       replied: "Ответ отправлен",
-      exportCsv: "Скачать CSV"
+      exportCsv: "Скачать CSV",
+      helpfulLabel: "полезно"
     },
     settings: {
       title: "Настройки",
@@ -882,6 +886,8 @@ const copy = {
       colConsent: "Согласие на маркетинг",
       consentYes: "Да",
       consentNo: "Нет",
+      consentPillYes: "Согласие есть",
+      consentPillNo: "Согласия нет",
       never: "Никогда"
     },
     customerDetail: {
@@ -1380,7 +1386,8 @@ const copy = {
       replyPlaceholder: "Official reply text",
       send: "Send",
       replied: "Replied",
-      exportCsv: "Download CSV"
+      exportCsv: "Download CSV",
+      helpfulLabel: "helpful"
     },
     settings: {
       title: "Settings",
@@ -1493,6 +1500,8 @@ const copy = {
       colConsent: "Marketing consent",
       consentYes: "Yes",
       consentNo: "No",
+      consentPillYes: "Consent given",
+      consentPillNo: "No consent",
       never: "Never"
     },
     customerDetail: {

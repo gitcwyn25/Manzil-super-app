@@ -12,6 +12,7 @@ export type IconName =
   | "alert_circle"
   | "arrow_back"
   | "arrow_forward"
+  | "banknote"
   | "bell"
   | "bookmark"
   | "calendar"
@@ -78,6 +79,14 @@ const PATHS: Record<IconName, ReactNode> = {
     <>
       <path d="M5 12h14" />
       <path d="m12 5 7 7-7 7" />
+    </>
+  ),
+  banknote: (
+    <>
+      <rect height="12" rx="2" width="20" x="2" y="6" />
+      <circle cx="12" cy="12" r="2" />
+      <path d="M6 12h.01" />
+      <path d="M18 12h.01" />
     </>
   ),
   bell: (

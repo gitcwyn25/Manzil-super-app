@@ -208,6 +208,12 @@
 // untouched.
 @import "site-sweep";
 
+// Workspace sweep (task D5): bookings, analytics (+ relocated overview
+// panels), reviews, customers (+ detail), settings — composes the overview
+// partial's ws-* primitives; loads after site-sweep because it reuses its
+// vm-primary-cta-paint / vm-ghost-paint mixins for the welded legacy buttons.
+@import "workspace-sweep";
+
 // --- Unconverted-page bridge -----------------------------------------------
 // Bootstrap's reboot/type/containers modules (imported above) define `body`,
 // `a`, `.container`, and `h1`-`h6` with the SAME specificity as globals.css's

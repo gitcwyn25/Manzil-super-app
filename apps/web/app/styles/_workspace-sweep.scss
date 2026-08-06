@@ -1,0 +1,649 @@
+// Workspace sweep (task D5): bookings, analytics (+ the rating-distribution
+// and profile-completeness panels relocated from the overview), reviews,
+// customers (+ detail), settings. Everything composes the overview partial's
+// panel/booking/fact primitives (.ws-panel, .ws-booking, .ws-fact — top-level
+// classes owned by _workspace-overview.scss) and the vm kit
+// (PageHeaderCard, IconField, StatusPill, InitialsAvatar, StatCard).
+//
+// Motion: workspace budget only — 140ms micro-interactions, shadow-only card
+// hovers, no entrance animations; reduced motion short-circuits at the end.
+// Shell contract: no <footer>, no consumer classes — every selector here is
+// ws-* (plus scoped repaints of the welded legacy .bz-btn-*/.crm-row-submit
+// button classes whose markup must not change).
+
+// Matches _workspace.scss's budget; !default keeps whichever loads first.
+$ws-motion: .14s ease !default;
+
+// Shared page frame (grid stack, same rhythm as .ws-overview/.ws-services).
+.ws-page {
+  display: grid;
+  gap: 1.25rem;
+  align-content: start;
+}
+
+// ---------------------------------------------------------------------------
+// Legacy welded buttons inside swept pages: BookingSubmit's .bz-btn-primary
+// and ExportReviewsButton's .bz-btn-ghost keep their class names (client
+// components with spinner welds) but take the VM paint. Scoped to .ws-page so
+// the admin console and auth panels are untouched.
+// ---------------------------------------------------------------------------
+
+.ws-page .bz-btn-primary {
+  @include vm-primary-cta-paint;
+
+  padding: .5rem 1.25rem;
+  font-size: .875rem;
+  font-weight: 600;
+  // Workspace budget: no hover lift, 140ms shadow/color only.
+  transition: background-color $ws-motion, box-shadow $ws-motion, transform $ws-motion;
+
+  &:hover,
+  &:focus-visible {
+    transform: none;
+  }
+
+  &:active {
+    transform: scale(.98);
+  }
+}
+
+.ws-page .bz-btn-ghost {
+  @include vm-ghost-paint;
+
+  padding: .4375rem 1rem;
+  border-radius: $border-radius;
+  color: $primary;
+  font-size: .8125rem;
+  font-weight: 600;
+  transition: background-color $ws-motion, border-color $ws-motion, color $ws-motion;
+
+  &:disabled {
+    opacity: .5;
+  }
+}
+
+// The kit CTA's consumer transition is 200ms; the workspace budget is 140ms.
+// (Also declared by the services partial for its own scope — restated here so
+// sweep pages don't depend on that file's presence.)
+.ws-page .vm-cta {
+  transition-duration: .14s;
+
+  &:hover,
+  &:focus-visible {
+    transform: none;
+  }
+
+  &:active {
+    transform: scale(.98);
+  }
+}
+
+// Upcoming-count badge in the bookings header — repaint of the legacy
+// .ws-live (globals.css colors it with the dead Kosmonavtlar --ceramic /
+// --signal tokens, which are not remapped under the workspace shell).
+.ws-page .ws-live {
+  color: $vm-on-surface-variant;
+  font-size: .8125rem;
+  font-weight: 600;
+
+  &::before {
+    background: $vm-secondary-container;
+    box-shadow: 0 0 0 3px rgba($vm-secondary-container, .3);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Status filter chips (bookings)
+// ---------------------------------------------------------------------------
+
+.ws-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .375rem;
+}
+
+.ws-filter__chip {
+  padding: .3125rem .875rem;
+  border-radius: $border-radius-pill;
+  background: $vm-surface-container;
+  color: $vm-on-surface-variant;
+  font-size: .8125rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color $ws-motion, color $ws-motion;
+
+  &:hover {
+    background: $vm-surface-container-high;
+    color: $vm-on-surface;
+  }
+
+  &:focus-visible {
+    outline: 0;
+    box-shadow: 0 0 0 .25rem $focus-ring-color;
+  }
+
+  // Declared after :hover so the active fill wins the tie on hover.
+  &.active {
+    background: $vm-primary-container;
+    color: #fff;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Panel accessories
+// ---------------------------------------------------------------------------
+
+// IconTile + title cluster inside a .ws-panel__head.
+.ws-panel-title-row {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+
+.ws-empty {
+  text-align: center;
+}
+
+.ws-empty__body {
+  margin: 0;
+  color: $vm-on-surface-variant;
+  font-size: .875rem;
+}
+
+.ws-subhead {
+  margin: .5rem 0 0;
+  font-size: .8125rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+
+// The overview's .ws-facts__body carries its own card padding; inside a
+// .ws-panel__body the panel already pads, so the flush variant zeroes it.
+.ws-facts__body--flush {
+  padding: 0;
+}
+
+// ---------------------------------------------------------------------------
+// Forms (IconField/IconSelect carry the control styling; this is layout +
+// labels — same recipe as the marketing composer, shared by bookings/settings)
+// ---------------------------------------------------------------------------
+
+.ws-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.ws-form__grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@include media-breakpoint-up(md) {
+  .ws-form__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ws-field--span2 {
+    grid-column: span 2;
+  }
+}
+
+.ws-field {
+  display: grid;
+  gap: .375rem;
+  align-content: start;
+}
+
+.ws-field__label {
+  color: $vm-on-surface-variant;
+  font-size: .8125rem;
+  font-weight: 600;
+}
+
+.ws-form__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+// ---------------------------------------------------------------------------
+// Booking rows — full-list extensions of the overview's .ws-booking
+// ---------------------------------------------------------------------------
+
+.ws-booking__meta {
+  overflow: hidden;
+  color: $vm-on-surface-variant;
+  font-size: .75rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ws-booking__profile-link {
+  text-decoration: none;
+  transition: color $ws-motion;
+
+  &:hover {
+    color: $primary;
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 0;
+    border-radius: $border-radius-sm;
+    box-shadow: 0 0 0 .25rem $focus-ring-color;
+  }
+}
+
+// Status-transition forms: a full-width quiet action row under the booking's
+// main line (flex-wrap pushes it below avatar/text/end clusters).
+.ws-booking {
+  flex-wrap: wrap;
+}
+
+.ws-booking__actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .25rem .75rem;
+  width: 100%;
+  padding-left: 3.25rem; // aligns under the text column (40px avatar + gap)
+}
+
+// The welded BookingSubmit row buttons (.crm-row-submit) restyled as quiet
+// text actions, matching the marketing rows' manage links.
+.ws-booking__actions .crm-row-submit {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: $vm-on-surface-variant;
+  font-family: inherit;
+  font-size: .75rem;
+  font-weight: 600;
+  transition: color $ws-motion;
+
+  &:hover {
+    color: $primary;
+  }
+
+  &:focus-visible {
+    outline: 0;
+    border-radius: $border-radius-sm;
+    box-shadow: 0 0 0 .25rem $focus-ring-color;
+  }
+
+  &.danger:hover {
+    color: $vm-error;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Customer rows (directory) — riding the .ws-booking row recipe
+// ---------------------------------------------------------------------------
+
+.ws-cust__facts {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .75rem 1.5rem;
+  margin-left: auto;
+  justify-content: flex-end;
+}
+
+.ws-cust__fact {
+  display: grid;
+  gap: .125rem;
+  justify-items: end;
+  text-align: right;
+
+  em {
+    color: $vm-on-surface-variant;
+    font-size: .6875rem;
+    font-style: normal;
+    font-weight: 500;
+  }
+
+  b {
+    color: $vm-on-surface;
+    font-size: .8125rem;
+    font-weight: 700;
+  }
+}
+
+@include media-breakpoint-down(md) {
+  .ws-cust__facts {
+    width: 100%;
+    padding-left: 3.25rem;
+    justify-content: flex-start;
+  }
+
+  .ws-cust__fact {
+    justify-items: start;
+    text-align: left;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Two-column panel grid (analytics pairs, customer-detail panels)
+// ---------------------------------------------------------------------------
+
+.ws-grid-2 {
+  display: grid;
+  gap: 1rem;
+  align-items: stretch;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@include media-breakpoint-up(lg) {
+  .ws-grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Bar rows (funnel, booking statuses, rating distribution)
+// ---------------------------------------------------------------------------
+
+.ws-bars {
+  display: grid;
+  gap: .625rem;
+}
+
+.ws-bars__row {
+  display: grid;
+  align-items: center;
+  gap: .75rem;
+  grid-template-columns: minmax(6rem, auto) minmax(0, 1fr) auto;
+  font-size: .8125rem;
+}
+
+.ws-bars__label {
+  display: grid;
+  gap: .125rem;
+  color: $vm-on-surface-variant;
+}
+
+// "5 ★" labels: numeral + the canonical tertiary-orange star (D3).
+.ws-bars__label--star {
+  display: inline-flex;
+  align-items: center;
+  gap: .25rem;
+
+  svg {
+    color: $vm-tertiary-container;
+  }
+}
+
+.ws-bars__note {
+  color: $vm-outline;
+  font-size: .6875rem;
+  font-style: normal;
+}
+
+.ws-bars__value {
+  color: $vm-on-surface;
+  font-weight: 700;
+}
+
+// Track + fill, shared with the completeness meter.
+.ws-track {
+  display: block;
+  height: .5rem;
+  overflow: hidden;
+  border-radius: $border-radius-pill;
+  background: $vm-surface-container;
+
+  i {
+    display: block;
+    height: 100%;
+    border-radius: $border-radius-pill;
+    background: $primary;
+  }
+}
+
+.ws-track--lg {
+  height: .625rem;
+}
+
+// Rating distribution fills take the rating accent, not the primary blue.
+.ws-bars--rating .ws-track i {
+  background: $vm-tertiary-container;
+}
+
+// ---------------------------------------------------------------------------
+// Profile completeness (relocated from the overview)
+// ---------------------------------------------------------------------------
+
+.ws-completeness {
+  display: grid;
+  gap: .625rem;
+}
+
+.ws-completeness__value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.ws-completeness__hint {
+  margin: 0;
+  color: $vm-on-surface-variant;
+  font-size: .8125rem;
+}
+
+// Entitlement-locked analytics state (free plan 403 → upgrade path).
+.ws-locked {
+  align-items: center;
+  gap: .75rem;
+  padding: 2rem 1.5rem;
+  text-align: center;
+
+  .btn {
+    margin-top: .25rem;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Review tiles — the business-details review-card treatment in workspace
+// density (quiet surface tile, 140ms hover, orange stars via .biz-stars)
+// ---------------------------------------------------------------------------
+
+.ws-rev-list {
+  display: grid;
+  gap: .75rem;
+}
+
+.ws-rev {
+  padding: 1rem;
+  border-radius: $border-radius;
+  background: rgba($vm-surface-container-low, .5);
+  transition: background-color $ws-motion;
+
+  &:hover {
+    background: $vm-surface-container-low;
+  }
+}
+
+.ws-rev__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.ws-rev__who {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  min-width: 0;
+}
+
+.ws-rev__name {
+  display: block;
+  font-size: .875rem;
+  font-weight: 600;
+}
+
+.ws-rev__meta {
+  display: block;
+  margin: .125rem 0 0;
+  color: $vm-on-surface-variant;
+  font-size: .75rem;
+}
+
+.ws-rev__text {
+  margin: .75rem 0 0;
+  color: $vm-on-surface-variant;
+  font-size: .875rem;
+}
+
+// Read-only helpful tally — a fact, not a control (voting is consumer-side).
+.ws-rev__helpful {
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  margin-top: .75rem;
+  color: $vm-on-surface-variant;
+  font-size: .75rem;
+  font-weight: 600;
+}
+
+.ws-rev__reply {
+  margin: .75rem 0 0;
+  padding: .75rem 1rem;
+  border: 1px solid rgba($primary, .15);
+  border-radius: $border-radius-sm;
+  background: rgba($primary, .05);
+
+  strong {
+    display: block;
+    font-size: .75rem;
+    letter-spacing: .02em;
+  }
+
+  p {
+    margin: .25rem 0 0;
+    color: $vm-on-surface-variant;
+    font-size: .875rem;
+  }
+}
+
+.ws-rev__form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-top: .75rem;
+}
+
+.ws-rev__form-field {
+  flex: 1 1 16rem;
+}
+
+// Compact variant for the customer-detail reviews panel.
+.ws-rev--mini {
+  display: grid;
+  gap: .375rem;
+
+  .ws-rev__text {
+    margin: 0;
+  }
+
+  .ws-rev__meta {
+    margin: 0;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Mini list rows (customer-detail bookings/visits, settings acceptances)
+// ---------------------------------------------------------------------------
+
+.ws-mini-list {
+  display: grid;
+  gap: .5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ws-mini-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .375rem .75rem;
+  padding: .5rem .75rem;
+  border-radius: .625rem;
+  background: rgba($vm-surface-container-low, .5);
+}
+
+.ws-mini-row__text {
+  display: grid;
+  gap: .125rem;
+  min-width: 0;
+}
+
+.ws-mini-row__title {
+  color: $vm-on-surface;
+  font-size: .8125rem;
+  font-weight: 600;
+}
+
+.ws-mini-row__meta {
+  color: $vm-on-surface-variant;
+  font-size: .75rem;
+}
+
+// ---------------------------------------------------------------------------
+// Settings: subscription summary + customer-detail header bits
+// ---------------------------------------------------------------------------
+
+.ws-sub-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem 2.5rem;
+}
+
+.ws-fact-caption {
+  color: $vm-on-surface-variant;
+  font-size: .75rem;
+  font-weight: 500;
+}
+
+.ws-sub-plan {
+  font-size: 1.125rem;
+  font-weight: 800;
+  letter-spacing: .02em;
+}
+
+.ws-detail-name {
+  display: inline-flex;
+  align-items: center;
+  gap: .75rem;
+}
+
+.ws-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+}
+
+// ---------------------------------------------------------------------------
+// Reduced motion: transitions land on their final state instantly
+// ---------------------------------------------------------------------------
+
+@media (prefers-reduced-motion: reduce) {
+  .ws-page .bz-btn-primary,
+  .ws-page .bz-btn-ghost,
+  .ws-page .vm-cta,
+  .ws-filter__chip,
+  .ws-booking__profile-link,
+  .ws-booking__actions .crm-row-submit,
+  .ws-rev {
+    transition: none;
+  }
+
+  .ws-page .bz-btn-primary:active,
+  .ws-page .vm-cta:active {
+    transform: none;
+  }
+}

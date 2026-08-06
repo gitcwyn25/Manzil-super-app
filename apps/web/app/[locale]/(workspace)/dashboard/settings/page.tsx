@@ -1,5 +1,9 @@
 import type { Locale } from "@manzil/shared";
+import Link from "next/link";
 import { BusinessPhotoManager } from "../../../../components/business-photo-manager";
+import { IconField } from "../../../../components/vm/icon-field";
+import { PageHeaderCard } from "../../../../components/vm/page-header-card";
+import { StatusPill } from "../../../../components/vm/status-pill";
 import { getMyBusinesses } from "../../../../lib/api";
 import { updateBusinessAction } from "../../../../lib/crm-actions";
 import { getBusinessPhotos, getSubscription } from "../../../../lib/crm-api";
@@ -8,6 +12,13 @@ import { getCrmCopy } from "../../../../lib/crm-copy";
 
 export const dynamic = "force-dynamic";
 
+/**
+ * Settings (Vibrant Marketplace, task D5): PageHeaderCard + the IconField
+ * recipe applied to the existing profile form. Zero behavior change — every
+ * input keeps its name, type, defaultValue and validation attributes, the
+ * photo manager and legal sections keep their markup (incl. the
+ * .crm-terms-doc/.crm-contract-body classes the contract viewer styles).
+ */
 export default async function SettingsPage({
   params
 }: {
@@ -34,163 +45,196 @@ export default async function SettingsPage({
   const dateFormat = new Intl.DateTimeFormat(locale === "en" ? "en-GB" : locale, { dateStyle: "medium" });
 
   return (
-    <>
-      <header className="crm-page-head">
-        <div>
-          <h1>{copy.settings.title}</h1>
-          <p>{copy.settings.subtitle}</p>
-        </div>
-      </header>
+    <div className="ws-page">
+      <PageHeaderCard subtitle={copy.settings.subtitle} title={copy.settings.title} />
 
-      <section className="crm-panel">
-        <h2>{copy.settings.subscription}</h2>
-        <div className="crm-sub-row">
-          <div>
-            <span className="crm-cell-sub">{copy.settings.plan}</span>
-            <strong className="crm-sub-plan">{(subscription?.plan ?? "free").toUpperCase()}</strong>
+      <section className="card ws-panel">
+        <div className="card-body ws-panel__body">
+          <div className="ws-panel__head">
+            <h2 className="ws-panel__title">{copy.settings.subscription}</h2>
+            <Link
+              className="btn btn-secondary btn-sm"
+              href={`/${locale}/business/plans?business=${business.slug}`}
+            >
+              {copy.menu.upgrade}
+            </Link>
           </div>
-          <div>
-            <span className="crm-cell-sub">{copy.settings.status}</span>
-            <span className={`crm-chip crm-chip-${subscription?.status === "active" ? "ok" : "warn"}`}>
-              {copy.settings.subStatuses[subscription?.status ?? "active"]}
-            </span>
+          <div className="ws-sub-row">
+            <div className="ws-fact">
+              <span className="ws-fact-caption">{copy.settings.plan}</span>
+              <strong className="ws-sub-plan">{(subscription?.plan ?? "free").toUpperCase()}</strong>
+            </div>
+            <div className="ws-fact">
+              <span className="ws-fact-caption">{copy.settings.status}</span>
+              <StatusPill variant={subscription?.status === "active" ? "success" : "pending"}>
+                {copy.settings.subStatuses[subscription?.status ?? "active"]}
+              </StatusPill>
+            </div>
+            {subscription?.renewsAt ? (
+              <div className="ws-fact">
+                <span className="ws-fact-caption">{copy.settings.renews}</span>
+                <strong className="ws-num">{dateFormat.format(new Date(subscription.renewsAt))}</strong>
+              </div>
+            ) : null}
           </div>
-          {subscription?.renewsAt ? (
+        </div>
+      </section>
+
+      <section className="card ws-panel">
+        <div className="card-body ws-panel__body">
+          <div className="ws-panel__head">
+            <h2 className="ws-panel__title">{copy.settings.profile}</h2>
+          </div>
+          <form action={updateBusinessAction} className="ws-form">
+            <input name="business" type="hidden" value={business.slug} />
+            <div className="ws-form__grid">
+              <label className="ws-field">
+                <span className="ws-field__label">{copy.settings.name}</span>
+                <IconField defaultValue={business.name} icon="storefront" name="name" type="text" />
+              </label>
+              <label className="ws-field">
+                <span className="ws-field__label">{copy.settings.phone}</span>
+                <IconField defaultValue={business.phone ?? ""} icon="call" name="phone" type="tel" />
+              </label>
+              <label className="ws-field">
+                <span className="ws-field__label">{copy.settings.address}</span>
+                <IconField defaultValue={business.address} icon="location" name="address" type="text" />
+              </label>
+              <label className="ws-field">
+                <span className="ws-field__label">{copy.settings.district}</span>
+                <IconField defaultValue={business.district} icon="location" name="district" type="text" />
+              </label>
+              <label className="ws-field">
+                <span className="ws-field__label">{copy.settings.email}</span>
+                <IconField defaultValue={extra.email ?? ""} icon="mail" name="email" type="email" />
+              </label>
+              <label className="ws-field">
+                <span className="ws-field__label">{copy.settings.website}</span>
+                <IconField defaultValue={extra.website ?? ""} icon="globe" name="website" type="url" />
+              </label>
+              <label className="ws-field">
+                <span className="ws-field__label">{copy.settings.instagram}</span>
+                <IconField defaultValue={extra.instagram ?? ""} icon="share" name="instagram" type="text" />
+              </label>
+              <label className="ws-field">
+                <span className="ws-field__label">{copy.settings.telegram}</span>
+                <IconField defaultValue={extra.telegram ?? ""} icon="send" name="telegram" type="text" />
+              </label>
+              <label className="ws-field">
+                <span className="ws-field__label">{copy.settings.hours}</span>
+                <IconField defaultValue={business.hours ?? ""} icon="schedule" name="hours" type="text" />
+              </label>
+              <label className="ws-field ws-field--span2">
+                <span className="ws-field__label">{copy.settings.description}</span>
+                <textarea
+                  className="form-control"
+                  defaultValue={business.description?.uz ?? ""}
+                  name="description"
+                  rows={3}
+                />
+              </label>
+              <label className="ws-field">
+                <span className="ws-field__label">{copy.settings.legalName}</span>
+                <IconField defaultValue={extra.legalName ?? ""} icon="verified" name="legalName" type="text" />
+              </label>
+              <label className="ws-field">
+                <span className="ws-field__label">{copy.settings.taxId}</span>
+                <IconField
+                  defaultValue={extra.taxId ?? ""}
+                  icon="tag"
+                  inputMode="numeric"
+                  maxLength={9}
+                  name="taxId"
+                  pattern="\d{9}"
+                  type="text"
+                />
+              </label>
+            </div>
+            <div className="ws-form__actions">
+              <button className="btn btn-primary vm-cta" type="submit">
+                {copy.settings.save}
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section className="card ws-panel">
+        <div className="card-body ws-panel__body">
+          <div className="ws-panel__head">
             <div>
-              <span className="crm-cell-sub">{copy.settings.renews}</span>
-              <strong>{dateFormat.format(new Date(subscription.renewsAt))}</strong>
+              <h2 className="ws-panel__title">{copy.photos.title}</h2>
+              <span className="ws-panel__hint">{copy.photos.subtitle}</span>
+            </div>
+          </div>
+          <BusinessPhotoManager
+            businessSlug={business.slug}
+            copy={copy.photos}
+            initialPhotos={
+              photosData?.photos.map((photo) => ({
+                id: photo.id,
+                publicUrl: photo.publicUrl,
+                moderationStatus: photo.moderationStatus,
+                isCover: photo.isCover
+              })) ?? []
+            }
+          />
+        </div>
+      </section>
+
+      <section className="card ws-panel">
+        <div className="card-body ws-panel__body">
+          <div className="ws-panel__head">
+            <h2 className="ws-panel__title">{copy.terms.contractTitle}</h2>
+          </div>
+
+          {contract ? (
+            <>
+              <dl className="ws-facts__body ws-facts__body--flush">
+                <div className="ws-fact">
+                  <dt>{copy.terms.contractNo}</dt>
+                  <dd className="ws-num">{contract.contract.contractNo}</dd>
+                </div>
+                <div className="ws-fact">
+                  <dt>{copy.terms.version}</dt>
+                  <dd className="ws-num">{contract.contract.templateVersion}</dd>
+                </div>
+              </dl>
+
+              {/* The stored, frozen text — not a re-render of the current
+                  template, which may have changed since this was agreed. */}
+              <details className="crm-terms-doc">
+                <summary>{copy.terms.download}</summary>
+                <pre className="crm-contract-body">{contract.contract.body}</pre>
+              </details>
+            </>
+          ) : (
+            <p className="ws-empty__body">{copy.terms.noContract}</p>
+          )}
+
+          {acceptances && acceptances.acceptances.length > 0 ? (
+            <div>
+              <h3 className="ws-subhead">{copy.terms.accepted}</h3>
+              <ul className="ws-mini-list">
+                {acceptances.acceptances.map((document) => (
+                  <li className="ws-mini-row" key={document.id}>
+                    <div className="ws-mini-row__text">
+                      <span className="ws-mini-row__title">
+                        {document.kind.replace(/_/g, " ")} · {copy.terms.version} {document.version}
+                      </span>
+                    </div>
+                    <span className="ws-mini-row__meta ws-num">
+                      {new Date(document.acceptedAt).toLocaleDateString(locale, {
+                        timeZone: "Asia/Tashkent"
+                      })}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </div>
           ) : null}
-          <a className="bz-btn-ghost" href={`/${locale}/business/plans?business=${business.slug}`}>
-            {copy.menu.upgrade}
-          </a>
         </div>
       </section>
-
-      <section className="crm-panel">
-        <h2>{copy.settings.profile}</h2>
-        <form action={updateBusinessAction} className="crm-form compact">
-          <input name="business" type="hidden" value={business.slug} />
-          <div className="crm-form-grid">
-            <label>
-              <span>{copy.settings.name}</span>
-              <input defaultValue={business.name} name="name" type="text" />
-            </label>
-            <label>
-              <span>{copy.settings.phone}</span>
-              <input defaultValue={business.phone ?? ""} name="phone" type="tel" />
-            </label>
-            <label>
-              <span>{copy.settings.address}</span>
-              <input defaultValue={business.address} name="address" type="text" />
-            </label>
-            <label>
-              <span>{copy.settings.district}</span>
-              <input defaultValue={business.district} name="district" type="text" />
-            </label>
-            <label>
-              <span>{copy.settings.email}</span>
-              <input defaultValue={extra.email ?? ""} name="email" type="email" />
-            </label>
-            <label>
-              <span>{copy.settings.website}</span>
-              <input defaultValue={extra.website ?? ""} name="website" type="url" />
-            </label>
-            <label>
-              <span>{copy.settings.instagram}</span>
-              <input defaultValue={extra.instagram ?? ""} name="instagram" type="text" />
-            </label>
-            <label>
-              <span>{copy.settings.telegram}</span>
-              <input defaultValue={extra.telegram ?? ""} name="telegram" type="text" />
-            </label>
-            <label>
-              <span>{copy.settings.hours}</span>
-              <input defaultValue={business.hours ?? ""} name="hours" type="text" />
-            </label>
-            <label className="span2">
-              <span>{copy.settings.description}</span>
-              <textarea defaultValue={business.description?.uz ?? ""} name="description" rows={3} />
-            </label>
-            <label>
-              <span>{copy.settings.legalName}</span>
-              <input defaultValue={extra.legalName ?? ""} name="legalName" type="text" />
-            </label>
-            <label>
-              <span>{copy.settings.taxId}</span>
-              <input defaultValue={extra.taxId ?? ""} inputMode="numeric" maxLength={9} name="taxId" pattern="\d{9}" type="text" />
-            </label>
-          </div>
-          <div className="crm-form-actions">
-            <button className="bz-btn-primary" type="submit">{copy.settings.save}</button>
-          </div>
-        </form>
-      </section>
-
-      <section className="crm-panel">
-        <h2>{copy.photos.title}</h2>
-        <p className="crm-hint">{copy.photos.subtitle}</p>
-        <BusinessPhotoManager
-          businessSlug={business.slug}
-          copy={copy.photos}
-          initialPhotos={
-            photosData?.photos.map((photo) => ({
-              id: photo.id,
-              publicUrl: photo.publicUrl,
-              moderationStatus: photo.moderationStatus,
-              isCover: photo.isCover
-            })) ?? []
-          }
-        />
-      </section>
-
-      <section className="crm-panel">
-        <h2>{copy.terms.contractTitle}</h2>
-
-        {contract ? (
-          <>
-            <dl className="crm-mini-facts">
-              <div>
-                <dt>{copy.terms.contractNo}</dt>
-                <dd>{contract.contract.contractNo}</dd>
-              </div>
-              <div>
-                <dt>{copy.terms.version}</dt>
-                <dd>{contract.contract.templateVersion}</dd>
-              </div>
-            </dl>
-
-            {/* The stored, frozen text — not a re-render of the current
-                template, which may have changed since this was agreed. */}
-            <details className="crm-terms-doc">
-              <summary>{copy.terms.download}</summary>
-              <pre className="crm-contract-body">{contract.contract.body}</pre>
-            </details>
-          </>
-        ) : (
-          <p className="crm-hint">{copy.terms.noContract}</p>
-        )}
-
-        {acceptances && acceptances.acceptances.length > 0 ? (
-          <>
-            <h3 className="crm-subhead">{copy.terms.accepted}</h3>
-            <ul className="crm-mini-facts">
-              {acceptances.acceptances.map((document) => (
-                <li key={document.id}>
-                  <span>
-                    {document.kind.replace(/_/g, " ")} · {copy.terms.version} {document.version}
-                  </span>{" "}
-                  <span className="crm-cell-sub">
-                    {new Date(document.acceptedAt).toLocaleDateString(locale, {
-                      timeZone: "Asia/Tashkent"
-                    })}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </>
-        ) : null}
-      </section>
-    </>
+    </div>
   );
 }
