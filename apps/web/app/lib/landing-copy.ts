@@ -113,7 +113,7 @@ const landing: Record<string, LandingCopy> = {
       title: "Лучшие места",
       subtitle: "Реальные места на Manzil — с настоящими отзывами гостей.",
       viewAll: "Все категории",
-      featuredBadge: "Избранное",
+      featuredBadge: "Выбор Manzil",
       partnerTitle: "У вас свой бизнес?",
       partnerText:
         "Присоединяйтесь к Manzil — пусть вас находят клиенты, которые ищут ваши услуги.",
