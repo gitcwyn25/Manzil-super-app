@@ -27,7 +27,9 @@ principles — no untethered subjective asks ("prettier", "trendier", "more glas
 
 ## 0. Track micro-review (each parallel track's commit, before integration proceeds)
 
-No duplicated components · no new styling values · no token violations · no navigation drift · no literal strings · no new icon sources (vm/icons.tsx or nothing). **Protect the Kit:** screens adapt to the Kit, never vice versa; a missing primitive is added to the Kit intentionally after review, not forked inside a screen.
+No duplicated components · no new styling values · no token violations · no navigation drift · no literal strings · no new icon sources (vm/icons.tsx or nothing). **Protect the Kit:** screens adapt to the Kit, never vice versa; a missing primitive is added to the Kit intentionally after review, not forked inside a screen. Heuristic: if two screens independently need the same visual treatment, it belongs in the design system.
+
+**Post-launch flagship KPI (Discover):** Discovery-to-Planning Conversion = users opening Concierge ÷ users viewing Discover — measures whether exploration transitions to planning; stronger than page views.
 
 ## 1. Build health
 
