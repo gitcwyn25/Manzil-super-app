@@ -272,6 +272,20 @@ process. Epic 03.5 implements the in-process bus behind these contracts.
 ## What is deliberately absent
 
 No LLM SDKs, embeddings, vector stores, RAG, prompts, chat, or streaming
-(Epic 04+). No algorithm implementations, migrations, or Prisma changes.
+(Epic 07+). No algorithm implementations, migrations, or Prisma changes.
 When implementations arrive, they bind the existing tokens in
 `IntelligenceModule` — consumers never change.
+
+## Implemented since (epic log)
+
+**Epic 04 — `knowledge-graph/`** (2026-08-07). The first sub-module with
+implementations: projection repository, entity/relationship/traversal
+services, validation, caching, and the two graph jobs. It reads Layer 1
+(Prisma) directly, which is the allowed direction, and adds eight edge kinds
+to `RelationshipKindRegistry` by declaration merging rather than editing the
+frozen file. Nothing is instantiated by this module: the wiring is an exported
+`KNOWLEDGE_GRAPH_PROVIDERS` array a consumer spreads into AppModule, so
+`IntelligenceModule` stays provider-empty and safe to import. Explicit and
+inferred edges have a `GraphRelationship` model declared but **not applied**
+(gated on the M1 drift reconciliation); until then the layer runs in
+projection-only mode. See `knowledge-graph/KNOWLEDGE-GRAPH.md`.

@@ -990,3 +990,60 @@ model WaitlistSignup {
   @@index([topic, createdAt])
   @@index([topic, city])
 }
+
+/// ⚠️ GATED ON M1 — DECLARED BUT **NOT APPLIED**. ⚠️
+///
+/// Storage for the knowledge-graph edges no projection can derive: explicit
+/// declarations ("this venue substitutes for that one") and inferred ones
+/// ("these providers share customers"). Everything the relational schema
+/// already proves is projected on read instead — see
+/// `apps/api/src/modules/intelligence/knowledge-graph/KNOWLEDGE-GRAPH.md`.
+///
+/// The migration for this model lives in `packages/db/migrations-gated-m1/`,
+/// deliberately OUTSIDE the directory `prisma migrate deploy` reads, because
+/// M1 (platform hygiene) must first reconcile the existing schema/migration
+/// drift — five table families here exist in no migration and production was
+/// `db push`-ed. Stacking a new migration on that history deepens the exact
+/// problem M1 exists to fix.
+///
+/// Until then the API runs in projection-only mode and refuses to write here:
+/// the store is selected only when `KNOWLEDGE_GRAPH_EDGE_STORE=prisma`, so a
+/// `prisma generate` (which mints the delegate on every image build) cannot
+/// switch it on by accident.
+///
+/// Deliberately generic: one table for every edge kind, because the kind
+/// vocabulary is an open registry in code (`RelationshipKindRegistry`) and a
+/// table per kind would make every new kind a migration.
+model GraphRelationship {
+  id String @id @default(cuid())
+
+  /// Registry kind name (`substitutes_for`, `recommended_with`, …). Text, not
+  /// an enum: the vocabulary extends by declaration merging in TypeScript,
+  /// and an enum would force a migration for every extension.
+  kind   String
+  /// Prefixed graph ids (`business:clx…`), not raw row ids — the graph names
+  /// nodes no table owns (a neighborhood is a city/district pair).
+  fromId String
+  toId   String
+
+  /// Kind-specific payload, typed by the registry on the way in and out.
+  attributes Json @default("{}")
+
+  /// `explicit` (declared by a human) or `inferred` (derived by a job).
+  /// Projected edges are never stored; they are recomputed from live rows.
+  origin     String
+  /// `KnowledgeSource` (core/core.primitives): merchant_input, platform_inference…
+  source     String
+  /// [0, 1]. The migration adds a CHECK constraint the schema cannot express.
+  confidence Float
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  /// One statement per (kind, from, to) — the uniqueness that makes writing
+  /// an edge twice idempotent, in Postgres as well as in memory.
+  @@unique([kind, fromId, toId])
+  @@index([fromId])
+  @@index([toId])
+  @@index([kind])
+}
