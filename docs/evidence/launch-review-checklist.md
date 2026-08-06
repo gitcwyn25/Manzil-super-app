@@ -31,6 +31,10 @@ No duplicated components · no new styling values · no token violations · no n
 
 **Post-launch flagship KPI (Discover):** Discovery-to-Planning Conversion = users opening Concierge ÷ users viewing Discover — measures whether exploration transitions to planning; stronger than page views.
 
+## 0.5 Cross-screen language audit (before the launch gate, after all tracks land)
+
+The same concept carries the same name everywhere, in all three locales: **Plan vs Workspace · Experience vs Event · Business vs Place · Booking vs Reservation · Favorite vs Saved**. One canonical term per concept per locale, enforced across landing-copy, crm-copy, and shared ui-copy. Vocabulary consistency is product identity; parallel tracks make this the most likely silent regression.
+
 ## 1. Build health
 
 Production build succeeds · typecheck zero errors · lint zero errors (or explicitly accepted warnings) · no unexpected console errors at startup.
