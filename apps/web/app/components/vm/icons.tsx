@@ -17,12 +17,14 @@ export type IconName =
   | "calendar"
   | "call"
   | "campaign"
+  | "car"
   | "chart"
   | "check"
   | "check_circle"
   | "chevron_down"
   | "chevron_right"
   | "close"
+  | "coffee"
   | "globe"
   | "grid"
   | "help_circle"
@@ -35,6 +37,7 @@ export type IconName =
   | "plus"
   | "robot"
   | "schedule"
+  | "scissors"
   | "search"
   | "send"
   | "settings"
@@ -44,11 +47,14 @@ export type IconName =
   | "star_filled"
   | "storefront"
   | "tag"
+  | "thumbs_up"
   | "trending_up"
   | "tune"
   | "user"
   | "users"
-  | "verified";
+  | "utensils"
+  | "verified"
+  | "wrench";
 
 const STAR_PATH =
   "m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21.02 7 14.14 2 9.27l6.91-1.01L12 2z";
@@ -97,6 +103,14 @@ const PATHS: Record<IconName, ReactNode> = {
       <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6" />
     </>
   ),
+  car: (
+    <>
+      <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2" />
+      <circle cx="7" cy="17" r="2" />
+      <path d="M9 17h6" />
+      <circle cx="17" cy="17" r="2" />
+    </>
+  ),
   chart: (
     <>
       <path d="M18 20V10" />
@@ -117,6 +131,15 @@ const PATHS: Record<IconName, ReactNode> = {
     <>
       <path d="M18 6 6 18" />
       <path d="m6 6 12 12" />
+    </>
+  ),
+  coffee: (
+    <>
+      <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
+      <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
+      <path d="M6 1v3" />
+      <path d="M10 1v3" />
+      <path d="M14 1v3" />
     </>
   ),
   globe: (
@@ -201,6 +224,15 @@ const PATHS: Record<IconName, ReactNode> = {
       <path d="M12 6v6l4 2" />
     </>
   ),
+  scissors: (
+    <>
+      <circle cx="6" cy="6" r="3" />
+      <circle cx="6" cy="18" r="3" />
+      <path d="M20 4 8.12 15.88" />
+      <path d="M14.47 14.48 20 20" />
+      <path d="M8.12 8.12 12 12" />
+    </>
+  ),
   search: (
     <>
       <circle cx="11" cy="11" r="7" />
@@ -250,6 +282,12 @@ const PATHS: Record<IconName, ReactNode> = {
       <path d="M7 7h.01" />
     </>
   ),
+  thumbs_up: (
+    <>
+      <path d="M7 10v12" />
+      <path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88z" />
+    </>
+  ),
   trending_up: (
     <>
       <path d="m23 6-9.5 9.5-5-5L1 18" />
@@ -283,10 +321,22 @@ const PATHS: Record<IconName, ReactNode> = {
       <path d="M16 3.13a4 4 0 0 1 0 7.75" />
     </>
   ),
+  utensils: (
+    <>
+      <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" />
+      <path d="M7 2v20" />
+      <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7" />
+    </>
+  ),
   verified: (
     <>
       <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
       <path d="m9 12 2 2 4-4" />
+    </>
+  ),
+  wrench: (
+    <>
+      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
     </>
   )
 };

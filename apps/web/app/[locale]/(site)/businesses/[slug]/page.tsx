@@ -4,16 +4,25 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { AiSummaryBlock } from "../../../../components/ai-summary-block";
 import { BadgeRow } from "../../../../components/badge-chip";
+import {
+  SaveBusinessGhostButton,
+  ShareBusinessButton
+} from "../../../../components/business-action-buttons";
+import { BusinessHeroGallery } from "../../../../components/business-hero-gallery";
 import { ClaimForm } from "../../../../components/claim-form";
-import { SaveBusinessButton } from "../../../../components/follow-actions";
-import { LiveStatusDetails } from "../../../../components/live-status-pill";
 import { VisitPing } from "../../../../components/crm/visit-ping";
+import { LiveStatusDetails } from "../../../../components/live-status-pill";
 import { Reveal } from "../../../../components/motion/reveal";
 import { QualityScoreCard } from "../../../../components/quality-score-card";
 import { ReviewForm } from "../../../../components/review-form";
 import { ReviewList } from "../../../../components/review-list";
-import { formatCount } from "../../../../lib/locale-text";
-import { getBusiness, getBusinessPhotos } from "../../../../lib/api";
+import { CategoryChip, TagChip } from "../../../../components/vm/chips";
+import { Icon } from "../../../../components/vm/icons";
+import { PrimaryCta } from "../../../../components/vm/primary-cta";
+import { RatingLine } from "../../../../components/vm/rating-line";
+import { getBusiness, getBusinessPhotos, getCategories } from "../../../../lib/api";
+import { formatReviewCount } from "../../../../lib/format";
+import { formatCount, pickLocalized } from "../../../../lib/locale-text";
 
 export async function generateMetadata({
   params
@@ -47,127 +56,234 @@ export default async function BusinessProfilePage({
   }
 
   const { business, reviews } = profile;
-  const photos = await getBusinessPhotos(slug);
+  const [photos, categories] = await Promise.all([
+    getBusinessPhotos(slug),
+    getCategories().catch(() => [])
+  ]);
+
+  const category = categories.find((item) => item.slug === business.categorySlug);
+
+  // External navigation is not CSP-constrained (only embedded resources are),
+  // so directions can hand off to the user's map app. Coordinates when the
+  // API has them, the postal address otherwise.
+  const directionsHref =
+    business.lat != null && business.lng != null
+      ? `https://www.google.com/maps/dir/?api=1&destination=${business.lat},${business.lng}`
+      : `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+          `${business.address}, ${business.district}, ${business.city}`
+        )}`;
 
   return (
     <>
       <VisitPing slug={business.slug} />
-      <section className="section-block profile-section">
-        <Reveal variant="slide-right">
-          {/* Real uploaded photos when the owner has any; the generated
-              gradients stay as the fallback so a business with no photography
-              still reads as a finished page rather than an empty frame. */}
-          <div className="profile-media">
-            {photos[0] ? (
-              <img alt={business.name} className="profile-main-photo" loading="eager" src={photos[0]} />
-            ) : (
-              <div className={`profile-main-photo photo-block photo-${business.photo}`} />
-            )}
-            {photos[1] ? (
-              <img alt="" className="profile-side-photo" loading="lazy" src={photos[1]} />
-            ) : (
-              <div className="profile-side-photo photo-block photo-somsa" />
-            )}
-            {photos[2] ? (
-              <img alt="" className="profile-side-photo" loading="lazy" src={photos[2]} />
-            ) : (
-              <div className="profile-side-photo photo-block photo-coffee" />
-            )}
-          </div>
-        </Reveal>
-        <div className="profile-copy">
-          <p className="section-kicker">{copy.business.profileKicker}</p>
-          <h1>{business.name}</h1>
-          <div className="rating-line">
-            <span className="star-gold" aria-hidden="true">★</span>
-            <strong>{business.avgRating}</strong>
-            <span>{business.reviewCount} {copy.business.reviews}</span>
-            <span>{business.status === "claimed" ? copy.business.verified : copy.business.unclaimed}</span>
-            <SaveBusinessButton businessSlug={business.slug} locale={locale} />
-          </div>
-          <BadgeRow badges={business.badges} locale={locale} />
-          <p>{business.description[locale] ?? business.description.uz}</p>
-          {business.liveStatus ? <LiveStatusDetails locale={locale} status={business.liveStatus} /> : null}
-          {business.socialProof ? (
-            <div className="social-proof-row">
-              <span>{business.socialProof.friendsVisited} {copy.business.friendsVisited}</span>
-              <span>{formatCount(business.socialProof.bookmarkedCount)} {copy.business.bookmarks}</span>
-              {business.socialProof.orderedToday ? (
-                <span>{business.socialProof.orderedToday} {copy.business.ordersToday}</span>
-              ) : null}
-            </div>
-          ) : null}
-          <div className="tag-row">
-            {business.tags.map((tag) => <span key={tag}>{tag}</span>)}
-          </div>
-          <dl className="profile-facts">
-            <div>
-              <dt>{copy.business.addressLabel}</dt>
-              <dd>{business.address}</dd>
-            </div>
-            <div>
-              <dt>{copy.business.phoneLabel}</dt>
-              <dd>{business.phone}</dd>
-            </div>
-            <div>
-              <dt>{copy.business.hoursLabel}</dt>
-              <dd>{business.hours}</dd>
-            </div>
-          </dl>
-        </div>
-      </section>
-
-      {business.insight ? (
-        <section className="section-block">
-          <Reveal variant="fade-up">
-            <AiSummaryBlock insight={business.insight} locale={locale} />
-          </Reveal>
-        </section>
-      ) : null}
-
-      {business.qualityScore ? (
-        <section className="section-block">
-          <Reveal variant="fade-up">
-            <QualityScoreCard locale={locale} score={business.qualityScore} />
-          </Reveal>
-        </section>
-      ) : null}
-
-      <section className="section-block reviews-section">
+      <div className="container-xxl biz-page">
         <Reveal variant="fade-up">
-          <div className="section-heading">
-            <p className="section-kicker">{copy.business.reviewsKicker}</p>
-            <h2>{copy.business.reviewsTitle}</h2>
-          </div>
+          <BusinessHeroGallery
+            countLabel={photos.length > 0 ? copy.business.photoCount(photos.length) : null}
+            initial={business.name.charAt(0).toUpperCase()}
+            name={business.name}
+            photos={photos}
+          />
         </Reveal>
-        <Reveal delay={140} variant="fade-up">
-          <ReviewList locale={locale} reviews={reviews} />
-        </Reveal>
-      </section>
 
-      <section className="section-block review-form-section">
-        <Reveal variant="slide-right">
-          <div>
-            <p className="section-kicker">{copy.business.writeKicker}</p>
-            <h2>{copy.business.writeTitle}</h2>
-            <p>{copy.business.writeBody}</p>
-          </div>
-        </Reveal>
-        <Reveal delay={140} variant="slide-left">
-          <ReviewForm businessSlug={business.slug} locale={locale} />
-        </Reveal>
-      </section>
+        <div className="biz-layout">
+          <div className="biz-main">
+            <Reveal variant="fade-up">
+              <header className="biz-head">
+                <div className="biz-head__chips">
+                  {category ? (
+                    <CategoryChip href={`/${locale}/discover?category=${business.categorySlug}`}>
+                      {pickLocalized(category.name, locale)}
+                    </CategoryChip>
+                  ) : null}
+                  {business.tags.map((tag) => (
+                    <TagChip key={tag}>{tag}</TagChip>
+                  ))}
+                </div>
+                <h1 className="display-1 biz-head__title">{business.name}</h1>
+                <div className="biz-head__meta">
+                  <span className="biz-head__meta-item">
+                    <RatingLine
+                      avgRating={business.avgRating}
+                      locale={locale}
+                      reviewCount={business.reviewCount}
+                    />
+                  </span>
+                  <span className="biz-head__meta-item">
+                    <span className="vm-price-tier">{business.priceTier}</span>
+                  </span>
+                  <span className="biz-head__meta-item">
+                    <Icon name="location" size={16} />
+                    {business.district}
+                  </span>
+                  {/* hours is a free-form string; the optional live label is the
+                      only "current" signal — open/closed is never computed. */}
+                  <span className="biz-head__meta-item">
+                    <Icon name="schedule" size={16} />
+                    {business.liveStatus ? pickLocalized(business.liveStatus.label, locale) : business.hours}
+                  </span>
+                  {business.status === "claimed" ? (
+                    <span className="biz-head__meta-item biz-head__verified">
+                      <Icon name="verified" size={16} />
+                      {copy.business.verified}
+                    </span>
+                  ) : null}
+                </div>
+                <p className="biz-head__desc">
+                  {business.description[locale] ?? business.description.uz}
+                </p>
+                {business.socialProof ? (
+                  <div className="biz-head__proof">
+                    <span>
+                      {business.socialProof.friendsVisited} {copy.business.friendsVisited}
+                    </span>
+                    <span>
+                      {formatCount(business.socialProof.bookmarkedCount)} {copy.business.bookmarks}
+                    </span>
+                    {business.socialProof.orderedToday ? (
+                      <span>
+                        {business.socialProof.orderedToday} {copy.business.ordersToday}
+                      </span>
+                    ) : null}
+                  </div>
+                ) : null}
+              </header>
+            </Reveal>
 
-      <Reveal variant="fade-up">
-        <section className="container business-cta">
-          <div>
-            <p className="section-kicker inverse">{copy.business.claimKicker}</p>
-            <h2>{copy.business.claimTitle}</h2>
-            <p>{copy.business.claimBody}</p>
+            {business.insight ? (
+              <Reveal variant="fade-up">
+                <AiSummaryBlock insight={business.insight} locale={locale} />
+              </Reveal>
+            ) : null}
+
+            {business.qualityScore ? (
+              <Reveal variant="fade-up">
+                <QualityScoreCard locale={locale} score={business.qualityScore} />
+              </Reveal>
+            ) : null}
+
+            <Reveal variant="fade-up">
+              <section aria-labelledby="experience-feed-title" className="biz-card biz-feed">
+                <header className="biz-card__head">
+                  <h2 className="h3 biz-card__title" id="experience-feed-title">
+                    {copy.business.experienceFeed}
+                  </h2>
+                  {reviews.length > 0 ? (
+                    <span className="biz-card__hint">{formatReviewCount(reviews.length, locale)}</span>
+                  ) : null}
+                </header>
+                <ReviewList locale={locale} reviews={reviews} />
+              </section>
+            </Reveal>
+
+            <Reveal variant="fade-up">
+              <section className="biz-card biz-write">
+                <header className="biz-card__head">
+                  <div>
+                    <h2 className="h3 biz-card__title">{copy.business.writeTitle}</h2>
+                    <p className="biz-card__sub">{copy.business.writeBody}</p>
+                  </div>
+                </header>
+                <ReviewForm businessSlug={business.slug} locale={locale} />
+              </section>
+            </Reveal>
           </div>
-          <ClaimForm businessName={business.name} businessSlug={business.slug} locale={locale} />
-        </section>
-      </Reveal>
+
+          <aside className="biz-rail">
+            <Reveal variant="fade-up">
+              <section className="biz-card biz-action">
+                {/* Honest AI CTA (D8): routes to the Gurman AI concierge chat —
+                    no packages, no booking promises. */}
+                <PrimaryCta className="biz-action__cta" href={`/${locale}/concierge`}>
+                  <Icon name="sparkles" size={18} />
+                  {copy.business.askGurman}
+                </PrimaryCta>
+                <div className="biz-action__buttons">
+                  <SaveBusinessGhostButton businessSlug={business.slug} locale={locale} />
+                  <ShareBusinessButton locale={locale} name={business.name} />
+                </div>
+                <div className="biz-address">
+                  <Icon className="biz-address__icon" name="location" size={20} />
+                  <div>
+                    <p className="biz-address__line">{business.address}</p>
+                    <p className="biz-address__line biz-address__line--muted">
+                      {business.district}, {copy.brand.city}
+                    </p>
+                    <a
+                      className="biz-address__directions"
+                      href={directionsHref}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      {copy.business.getDirections}
+                      <Icon name="arrow_forward" size={14} />
+                    </a>
+                  </div>
+                </div>
+                {/* Styled placeholder: CSP blocks external tile servers, so no
+                    fake map imagery — directions above are the real affordance. */}
+                <div aria-hidden="true" className="biz-map">
+                  <Icon name="location" size={28} />
+                  <span className="biz-map__label">{business.district}</span>
+                </div>
+              </section>
+            </Reveal>
+
+            <Reveal delay={90} variant="fade-up">
+              <section className="biz-card biz-info">
+                <header className="biz-card__head">
+                  <h2 className="h3 biz-card__title">{copy.business.infoTitle}</h2>
+                </header>
+                <div className="biz-info__rows">
+                  <div className="biz-info__row">
+                    <Icon className="biz-info__icon" name="schedule" size={18} />
+                    <div>
+                      <span className="visually-hidden">{copy.business.hoursLabel}</span>
+                      <p className="biz-info__value">{business.hours}</p>
+                      {business.liveStatus ? (
+                        <LiveStatusDetails locale={locale} status={business.liveStatus} />
+                      ) : null}
+                    </div>
+                  </div>
+                  {business.phone ? (
+                    <div className="biz-info__row">
+                      <Icon className="biz-info__icon" name="call" size={18} />
+                      <div>
+                        <span className="visually-hidden">{copy.business.phoneLabel}</span>
+                        <a className="biz-info__link" href={`tel:${business.phone}`}>
+                          {business.phone}
+                        </a>
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              </section>
+            </Reveal>
+
+            {business.badges?.length ? (
+              <Reveal delay={140} variant="fade-up">
+                <section className="biz-card biz-highlights">
+                  <header className="biz-card__head">
+                    <h2 className="h3 biz-card__title">{copy.business.highlightsTitle}</h2>
+                  </header>
+                  <BadgeRow badges={business.badges} limit={12} locale={locale} />
+                </section>
+              </Reveal>
+            ) : null}
+          </aside>
+        </div>
+
+        <Reveal variant="fade-up">
+          <section className="biz-claim">
+            <div>
+              <p className="biz-claim__kicker">{copy.business.claimKicker}</p>
+              <h2 className="h2 biz-claim__title">{copy.business.claimTitle}</h2>
+              <p className="biz-claim__body">{copy.business.claimBody}</p>
+            </div>
+            <ClaimForm businessName={business.name} businessSlug={business.slug} locale={locale} />
+          </section>
+        </Reveal>
+      </div>
     </>
   );
 }

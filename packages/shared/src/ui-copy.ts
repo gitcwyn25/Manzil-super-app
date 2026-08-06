@@ -234,6 +234,21 @@ export function getUiCopy(locale: Locale) {
       addressLabel: localize(L("Manzil", "Адрес", "Address"), locale),
       phoneLabel: localize(L("Telefon", "Телефон", "Phone"), locale),
       hoursLabel: localize(L("Ish vaqti", "Часы работы", "Hours"), locale),
+      experienceFeed: localize(L("Tajriba lentasi", "Лента впечатлений", "Experience Feed"), locale),
+      photoCount: (count: number) =>
+        localize(
+          L(`${count} ta rasm`, `${count} фото`, count === 1 ? "1 photo" : `${count} photos`),
+          locale
+        ),
+      askGurman: localize(
+        L("Bu joy haqida Gurman AI'dan so'rang", "Спросите Gurman AI об этом месте", "Ask Gurman AI about this place"),
+        locale
+      ),
+      share: localize(L("Ulashish", "Поделиться", "Share"), locale),
+      shareCopied: localize(L("Havola nusxalandi", "Ссылка скопирована", "Link copied"), locale),
+      getDirections: localize(L("Yo'nalish olish", "Проложить маршрут", "Get directions"), locale),
+      infoTitle: localize(L("Biznes ma'lumotlari", "Информация о бизнесе", "Business info"), locale),
+      highlightsTitle: localize(L("Imkoniyatlar", "Особенности", "Highlights"), locale),
       qualityMetrics: {
         reviewQuality: localize(L("Sharh sifati", "Качество отзывов", "Review quality"), locale),
         freshness: localize(L("Yangiligi", "Актуальность", "Freshness"), locale),
@@ -264,7 +279,8 @@ export function getUiCopy(locale: Locale) {
         locale
       ),
       businessReply: localize(L("Biznes javobi", "Ответ бизнеса", "Business reply"), locale),
-      helpful: localize(L("foydali", "полезно", "helpful"), locale)
+      helpful: localize(L("foydali", "полезно", "helpful"), locale),
+      verifiedVisit: localize(L("Tasdiqlangan tashrif", "Подтверждённый визит", "Verified visit"), locale)
     },
     mobile: {
       homeTitle: localize(L("Bugun nima qilamiz?", "Что делаем сегодня?", "What are we doing today?"), locale),

@@ -160,6 +160,16 @@
 // restatements win the cascade ties they are designed to win.
 @import "vm-kit";
 
+// Business details /businesses/[slug] (task B): hero photo mosaic, experience
+// feed restyle of the welded review-card/review-form family, action/info rail,
+// claim CTA band.
+@import "business-profile";
+
+// Auth + registration surfaces (task C): SplitAuthShell compositions for
+// /business/register, /sign-in, /sign-up, including the restyle of the
+// e2e-locked terms/consent markup.
+@import "auth";
+
 // Concierge chat (task E): the .concierge-* re-skin — two-column layout, chat
 // bubbles, typing dots, IconField input bar — plus the grounded package-panel
 // placeholder (the mock's priced itinerary is deferred per D8).

@@ -3,6 +3,7 @@
 import { useAuth } from "@clerk/nextjs";
 import { useState } from "react";
 import { API_BASE_URL } from "../lib/api-base-url";
+import { Icon } from "./vm/icons";
 
 /**
  * Helpful vote toggle.
@@ -72,7 +73,7 @@ export function HelpfulButton({
       title={isSignedIn ? undefined : "Ovoz berish uchun tizimga kiring"}
       type="button"
     >
-      <span aria-hidden="true">👍</span> {count} {label}
+      <Icon name="thumbs_up" size={14} /> {count} {label}
     </button>
   );
 }

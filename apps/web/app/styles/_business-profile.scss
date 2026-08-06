@@ -1,0 +1,833 @@
+// Business details /businesses/[slug] — Vibrant Marketplace re-skin (task B).
+// Hero photo mosaic, two-column body (experience feed left, action/info rail
+// right), claim CTA band. Loads from vibrant.scss AFTER globals.css, so the
+// scoped restatements of legacy selectors (.review-card, .review-form,
+// .helpful-button, .claim-form, .ai-summary-block…) win their cascade ties by
+// specificity/order without touching the load-bearing class names
+// (reviews.spec.ts welds: article.review-card, .review-card--empty,
+// .helpful-button, form.review-form).
+
+// Legacy components on this page (ReviewForm, ClaimForm, quality bars) color
+// themselves with the Kosmonavtlar custom properties, including inline
+// `style={{ color: var(--primary) }}` on p.form-note that no stylesheet can
+// override. Re-pointing the variables inside the page subtree re-tints all of
+// it to VM blue with zero component edits.
+.biz-page {
+  --primary: #{$primary};
+  --ring: #{$input-focus-box-shadow};
+
+  display: grid;
+  gap: 2rem;
+  padding-block: 1.5rem 4rem;
+}
+
+// ---------------------------------------------------------------------------
+// Hero mosaic — 1 large tile + 2x2, 400px mobile (main tile only) / 500px md+
+// ---------------------------------------------------------------------------
+
+.biz-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  height: 25rem;
+  gap: .5rem;
+  border-radius: $card-border-radius;
+  overflow: hidden;
+}
+
+.biz-hero__tile {
+  position: relative;
+  display: none;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.biz-hero__tile--main {
+  display: block;
+}
+
+@include media-breakpoint-up(md) {
+  .biz-hero {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    height: 31.25rem;
+  }
+
+  .biz-hero__tile {
+    display: block;
+  }
+
+  .biz-hero__tile--main {
+    grid-column: 1 / span 2;
+    grid-row: 1 / span 2;
+  }
+}
+
+.biz-hero__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .5s ease;
+}
+
+.biz-hero__tile:hover .biz-hero__img {
+  transform: scale(1.05);
+}
+
+// Gradient fallback tiles — the established pattern for businesses without
+// photography, re-tinted to the VM palette.
+.biz-hero__fallback {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.biz-hero__fallback--a {
+  background: linear-gradient(135deg, $vm-surface-container-high, $primary-bg-subtle);
+}
+
+.biz-hero__fallback--b {
+  background: linear-gradient(135deg, $primary-bg-subtle, rgba($vm-secondary-container, .45));
+}
+
+.biz-hero__fallback--c {
+  background: linear-gradient(135deg, $vm-surface-container, rgba($vm-tertiary-fixed, .7));
+}
+
+.biz-hero__fallback--d {
+  background: linear-gradient(135deg, rgba($vm-secondary-container, .35), $vm-surface-container-high);
+}
+
+.biz-hero__initial {
+  color: $primary;
+  font-size: 3rem;
+  font-weight: 800;
+}
+
+.biz-hero__scrim {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 40%;
+  background: linear-gradient(180deg, transparent, rgba($vm-on-surface, .55));
+  pointer-events: none;
+}
+
+.biz-hero__count {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  padding: .375rem .75rem;
+  border-radius: $border-radius-pill;
+  background: rgba(#fff, .9);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  box-shadow: $box-shadow-sm;
+  color: $vm-on-surface;
+  font-size: .75rem;
+  font-weight: 600;
+}
+
+// ---------------------------------------------------------------------------
+// Two-column body
+// ---------------------------------------------------------------------------
+
+.biz-layout {
+  display: grid;
+  gap: 2rem;
+  align-items: start;
+}
+
+.biz-main {
+  display: grid;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+.biz-rail {
+  display: grid;
+  gap: 1.5rem;
+  align-content: start;
+  min-width: 0;
+}
+
+@include media-breakpoint-up(lg) {
+  .biz-layout {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  }
+
+  .biz-rail {
+    position: sticky;
+    top: 5.5rem;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// White L1 card shell shared by every section on this page
+// ---------------------------------------------------------------------------
+
+.biz-card {
+  padding: 1.25rem;
+  border: 1px solid rgba($vm-outline-variant, .5);
+  border-radius: $card-border-radius;
+  background: $vm-surface-container-lowest;
+  box-shadow: $box-shadow-sm;
+}
+
+.biz-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: .75rem;
+  border-bottom: 1px solid rgba($vm-outline-variant, .5);
+}
+
+.biz-card__title {
+  margin: 0;
+}
+
+.biz-card__sub {
+  margin: .25rem 0 0;
+  color: $vm-on-surface-variant;
+  font-size: .875rem;
+}
+
+.biz-card__hint {
+  color: $vm-on-surface-variant;
+  font-size: .875rem;
+  white-space: nowrap;
+}
+
+// ---------------------------------------------------------------------------
+// Header info (chips, H1, meta row)
+// ---------------------------------------------------------------------------
+
+.biz-head {
+  display: grid;
+  gap: .75rem;
+}
+
+.biz-head__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+.biz-head__title {
+  max-width: none;
+  margin: 0;
+}
+
+.biz-head__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem 1rem;
+  color: $vm-on-surface-variant;
+}
+
+.biz-head__meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  font-size: .9375rem;
+}
+
+.biz-head__meta-item + .biz-head__meta-item::before {
+  content: "•";
+  margin-right: .375rem;
+  color: $vm-outline-variant;
+}
+
+.biz-head__verified {
+  color: $vm-on-secondary-fixed-variant;
+  font-weight: 600;
+}
+
+.biz-head__desc {
+  max-width: 65ch;
+  margin: 0;
+  color: $vm-on-surface-variant;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+.biz-head__proof {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1rem;
+  color: $vm-on-surface-variant;
+  font-size: .875rem;
+}
+
+// ---------------------------------------------------------------------------
+// Experience Feed — restyle of the welded review-card family
+// ---------------------------------------------------------------------------
+
+.biz-feed .review-list {
+  gap: 1rem;
+}
+
+.biz-feed .review-card {
+  display: block;
+  padding: 1rem;
+  border: 0;
+  border-radius: $border-radius;
+  background: rgba($vm-surface-container-low, .5);
+  box-shadow: none;
+  transition: background-color .2s ease;
+}
+
+.biz-feed .review-card:hover {
+  background: $vm-surface-container-low;
+  box-shadow: none;
+  transform: none;
+}
+
+.biz-feed .review-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.biz-feed .review-card__who {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  min-width: 0;
+}
+
+.biz-feed .review-card__name {
+  display: block;
+  font-size: .875rem;
+  font-weight: 600;
+}
+
+.biz-feed .review-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .375rem;
+  margin: .125rem 0 0;
+  color: $vm-on-surface-variant;
+  font-size: .75rem;
+}
+
+.biz-feed .review-card__text {
+  margin: .75rem 0 0;
+  color: $vm-on-surface-variant;
+}
+
+.biz-stars {
+  display: inline-flex;
+  flex: none;
+  gap: .125rem;
+  color: $vm-tertiary-container;
+}
+
+.biz-stars__empty {
+  color: $vm-outline-variant;
+}
+
+.biz-feed .verified-visit {
+  display: inline-flex;
+  align-items: center;
+  gap: .25rem;
+  margin-left: 0;
+  padding: .125rem .5rem;
+  border-radius: $border-radius-pill;
+  background: rgba($vm-secondary, .12);
+  color: $vm-on-secondary-fixed-variant;
+  font-size: .6875rem;
+  font-weight: 600;
+}
+
+.biz-feed .owner-reply {
+  margin: .75rem 0 0;
+  padding: .75rem 1rem;
+  border: 1px solid rgba($primary, .15);
+  border-radius: $border-radius-sm;
+  background: rgba($primary, .05);
+}
+
+.biz-feed .owner-reply strong {
+  margin-bottom: .125rem;
+  font-size: .75rem;
+  letter-spacing: .02em;
+}
+
+.biz-feed .owner-reply p {
+  margin: .25rem 0 0;
+  color: $vm-on-surface-variant;
+}
+
+.biz-feed .helpful-button {
+  gap: .375rem;
+  margin-top: .75rem;
+  padding: .3125rem .75rem;
+  border: 1px solid $vm-outline-variant;
+  border-radius: $border-radius-pill;
+  background: transparent;
+  color: $vm-on-surface-variant;
+  font-family: inherit;
+  font-size: .75rem;
+  font-weight: 600;
+}
+
+.biz-feed .helpful-button:hover:not(:disabled) {
+  border-color: $primary;
+  color: $primary;
+}
+
+.biz-feed .helpful-button.is-voted {
+  border-color: $primary;
+  background: rgba($primary, .08);
+  color: $primary;
+}
+
+// ---------------------------------------------------------------------------
+// Review form card — form.review-form weld restyled, semantics untouched
+// ---------------------------------------------------------------------------
+
+.biz-write .review-form {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.biz-write .review-form label span {
+  margin-bottom: .375rem;
+  color: $vm-on-surface-variant;
+  font-family: inherit;
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+  text-transform: none;
+}
+
+.biz-write .review-form input,
+.biz-write .review-form select,
+.biz-write .review-form textarea {
+  border: 1px solid $vm-outline-variant;
+  border-radius: $border-radius;
+  background: $vm-surface-container-lowest;
+  color: $vm-on-surface;
+}
+
+// The submit keeps its legacy .primary-button class; only the paint changes.
+.biz-write .primary-button {
+  min-height: 2.75rem;
+  padding: .625rem 1.25rem;
+  border-radius: $border-radius;
+  background: linear-gradient(180deg, $vm-primary-container, $primary);
+  box-shadow: $box-shadow-sm;
+  color: #fff;
+  font-family: inherit;
+  font-weight: 600;
+}
+
+.biz-write .primary-button::before {
+  content: none;
+}
+
+.biz-write .primary-button:hover {
+  transform: translateY(-2px);
+  box-shadow: $box-shadow;
+}
+
+.biz-write .form-note {
+  font-family: inherit;
+  font-weight: 600;
+}
+
+// ---------------------------------------------------------------------------
+// Action card (rail): AI CTA, save/share, address, map placeholder
+// ---------------------------------------------------------------------------
+
+.biz-action {
+  position: relative;
+  overflow: hidden;
+}
+
+// Decorative quarter-circle behind the CTA, per the mock.
+.biz-action::before {
+  content: "";
+  position: absolute;
+  top: -4rem;
+  right: -4rem;
+  width: 8rem;
+  height: 8rem;
+  border-radius: 50%;
+  background: rgba($primary, .05);
+  pointer-events: none;
+}
+
+.biz-action__cta {
+  width: 100%;
+}
+
+.biz-action__buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .5rem;
+  margin-top: .75rem;
+}
+
+.biz-ghost-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  padding: .5rem .75rem;
+  border: 1px solid $vm-outline-variant;
+  border-radius: $border-radius;
+  background: transparent;
+  color: $vm-on-surface;
+  cursor: pointer;
+  font-size: .875rem;
+  font-weight: 600;
+  transition: background-color .2s ease, border-color .2s ease, color .2s ease;
+}
+
+.biz-ghost-btn:hover {
+  border-color: $primary;
+  background: $vm-surface-container-low;
+}
+
+.biz-ghost-btn[aria-pressed="true"] {
+  border-color: $primary;
+  background: rgba($primary, .06);
+  color: $primary;
+}
+
+.biz-address {
+  display: flex;
+  gap: .75rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba($vm-outline-variant, .5);
+}
+
+.biz-address__icon {
+  flex: none;
+  margin-top: .125rem;
+  color: $primary;
+}
+
+.biz-address__line {
+  margin: 0;
+  font-size: .9375rem;
+}
+
+.biz-address__line--muted {
+  color: $vm-on-surface-variant;
+}
+
+.biz-address__directions {
+  display: inline-flex;
+  align-items: center;
+  gap: .25rem;
+  margin-top: .375rem;
+  color: $primary;
+  font-size: .75rem;
+  font-weight: 600;
+}
+
+.biz-address__directions:hover {
+  text-decoration: underline;
+}
+
+// Styled placeholder, not a fake map: CSP blocks external tile imagery.
+.biz-map {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: .375rem;
+  height: 8rem;
+  margin-top: 1rem;
+  border: 1px solid rgba($vm-outline-variant, .5);
+  border-radius: $border-radius;
+  background:
+    radial-gradient(circle at 75% 20%, rgba($primary, .08), transparent 45%),
+    linear-gradient(135deg, $vm-surface-container-low, $vm-surface-container-high);
+  color: $primary;
+}
+
+.biz-map__label {
+  color: $vm-on-surface-variant;
+  font-size: .75rem;
+  font-weight: 600;
+}
+
+// ---------------------------------------------------------------------------
+// Business info card
+// ---------------------------------------------------------------------------
+
+.biz-info__rows {
+  display: grid;
+  gap: .75rem;
+}
+
+.biz-info__row {
+  display: flex;
+  gap: .75rem;
+}
+
+.biz-info__icon {
+  flex: none;
+  margin-top: .125rem;
+  color: $vm-outline;
+}
+
+.biz-info__value {
+  margin: 0;
+  color: $vm-on-surface;
+  font-weight: 500;
+}
+
+.biz-info__link {
+  color: $primary;
+  font-weight: 600;
+}
+
+.biz-info__link:hover {
+  text-decoration: underline;
+}
+
+// LiveStatusDetails re-tinted to the VM palette in workspace-free density.
+.biz-info .live-status-grid {
+  gap: .375rem;
+  margin-top: .5rem;
+}
+
+.biz-info .live-status-pill {
+  padding: .25rem .625rem;
+  font-family: inherit;
+  font-size: .75rem;
+}
+
+.biz-info .live-quiet {
+  background: rgba($vm-secondary, .12);
+  color: $vm-on-secondary-fixed-variant;
+}
+
+.biz-info .live-moderate {
+  background: $warning-bg-subtle;
+  color: $warning-text-emphasis;
+}
+
+.biz-info .live-busy {
+  background: rgba($vm-tertiary, .14);
+  color: $vm-on-tertiary-fixed-variant;
+}
+
+.biz-info .live-unknown {
+  background: $vm-surface-container-low;
+  color: $vm-on-surface-variant;
+}
+
+.biz-info .live-detail,
+.biz-info .live-meta {
+  font-size: .75rem;
+}
+
+// ---------------------------------------------------------------------------
+// Highlights card — BadgeRow pills in the VM chip recipe
+// ---------------------------------------------------------------------------
+
+.biz-highlights .badge-row {
+  margin: 0;
+}
+
+.biz-highlights .badge-chip {
+  padding: .375rem .75rem;
+  border: 1px solid rgba($vm-outline-variant, .6);
+  background: $vm-surface-container-low;
+  color: $vm-on-surface;
+  font-family: inherit;
+  font-size: .75rem;
+  font-weight: 500;
+}
+
+.biz-highlights .badge-chip:hover {
+  background: $vm-surface-container-lowest;
+  box-shadow: $box-shadow-sm;
+  transform: none;
+}
+
+// ---------------------------------------------------------------------------
+// AI summary + quality score — re-carded as VM white L1 panels
+// ---------------------------------------------------------------------------
+
+.biz-main .ai-summary-block,
+.biz-main .quality-score-card {
+  padding: 1.25rem;
+  border: 1px solid rgba($vm-outline-variant, .5);
+  border-radius: $card-border-radius;
+  background: $vm-surface-container-lowest;
+  box-shadow: $box-shadow-sm;
+}
+
+.biz-main .ai-summary-block::before {
+  background: linear-gradient(90deg, $primary, $vm-primary-container, $vm-secondary-container);
+  animation: none;
+}
+
+.biz-main .ai-summary-text {
+  font-size: 1rem;
+}
+
+.biz-main .section-kicker {
+  color: $primary;
+  font-family: inherit;
+}
+
+.biz-main .section-kicker::before {
+  background: $vm-outline-variant;
+}
+
+.biz-main .quality-overall {
+  font-family: inherit;
+}
+
+.biz-main .quality-bar-track {
+  background: $vm-surface-container;
+}
+
+.biz-main .quality-bar-fill {
+  background: linear-gradient(90deg, $primary, $vm-primary-container);
+}
+
+.biz-main .social-proof-row span {
+  color: $vm-on-surface-variant;
+}
+
+// ---------------------------------------------------------------------------
+// Claim CTA band — primary-blue gradient (blue-first off-home per D6)
+// ---------------------------------------------------------------------------
+
+.biz-claim {
+  // ClaimForm colors its note/labels with the legacy variables; on the blue
+  // band they must resolve to light ink.
+  --primary: #fff;
+  --error: #{$vm-error-container};
+
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  align-items: center;
+  padding: 2rem;
+  border-radius: $border-radius-lg;
+  background: linear-gradient(135deg, $vm-on-primary-fixed, $primary 55%, $vm-primary-container);
+  box-shadow: $box-shadow-lg;
+  color: #fff;
+}
+
+@include media-breakpoint-up(lg) {
+  .biz-claim {
+    grid-template-columns: 1fr 26rem;
+    padding: 3rem;
+  }
+}
+
+.biz-claim__kicker {
+  margin: 0 0 .5rem;
+  color: rgba(#fff, .7);
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.biz-claim__title {
+  margin: 0 0 .5rem;
+  color: #fff;
+}
+
+.biz-claim__body {
+  margin: 0;
+  color: rgba(#fff, .8);
+}
+
+.biz-claim .claim-form {
+  padding: 1.25rem;
+  border: 1px solid rgba(#fff, .2);
+  border-radius: $card-border-radius;
+  background: rgba(#fff, .1);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.biz-claim .claim-form label span {
+  margin-bottom: .375rem;
+  color: rgba(#fff, .85);
+  font-family: inherit;
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+  text-transform: none;
+}
+
+.biz-claim .claim-form input {
+  border: 1px solid rgba(#fff, .3);
+  border-radius: $border-radius;
+}
+
+// The claim submit keeps its legacy .gold-button class; gold dies with Anor —
+// white-on-blue is the VM treatment for a CTA sitting on the primary band.
+.biz-claim .gold-button {
+  min-height: 2.75rem;
+  padding: .625rem 1.25rem;
+  border-radius: $border-radius;
+  background: #fff;
+  box-shadow: $box-shadow-sm;
+  color: $primary;
+  font-family: inherit;
+  font-weight: 700;
+}
+
+.biz-claim .gold-button::before {
+  content: none;
+}
+
+.biz-claim .gold-button:hover {
+  transform: translateY(-2px);
+  box-shadow: $box-shadow;
+}
+
+// ---------------------------------------------------------------------------
+// Reduced motion: everything lands on its final state instantly.
+// ---------------------------------------------------------------------------
+
+@media (prefers-reduced-motion: reduce) {
+  .biz-hero__img,
+  .biz-ghost-btn,
+  .biz-feed .review-card,
+  .biz-feed .helpful-button,
+  .biz-write .primary-button,
+  .biz-claim .gold-button {
+    transition: none;
+  }
+
+  .biz-hero__tile:hover .biz-hero__img,
+  .biz-write .primary-button:hover,
+  .biz-claim .gold-button:hover,
+  .biz-highlights .badge-chip:hover {
+    transform: none;
+  }
+
+  .biz-page .live-dot,
+  .biz-main .quality-bar-fill {
+    animation: none;
+  }
+}
