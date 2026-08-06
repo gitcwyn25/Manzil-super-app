@@ -29,9 +29,9 @@ You are continuing implementation of the Manzil application. The repository has 
 
 Implement the complete **WOW Flow UI** for first-time users. UI layer and navigation flow only: no backend integration, no business logic, no booking, no AI execution. Production-ready UI with mocked state where required.
 
-### Screens (production quality)
+### Screens (production quality — v1.1 order per wireframe review, `design/flows/wow-flow/REVIEW-v1.md`)
 
-1. Splash · 2. Welcome · 3. Sign In · 4. Register · 5. OTP Verification · 6. Permissions Introduction · 7. Interest Selection · 8. AI Introduction · 9. AI Personalization · 10. Profile Completion · 11. First Home Arrival (UI only)
+1. Splash · 2. Welcome · 3. Sign In · 4. Register · 5. OTP Verification · 6. Permissions Introduction (value copy per review §3) · 7. Interest Selection (intent framing per review §2) · 8. AI Introduction (promise copy per review §4) · 9. Profile Completion · 10. AI Personalization (AFTER profile per review §1) · 11. Ready Celebration (~2s, NEW per review §6) · 12. First Home Arrival (non-empty per review §5)
 
 ### Requirements (every screen)
 
