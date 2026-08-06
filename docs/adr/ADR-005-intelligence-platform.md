@@ -5,8 +5,11 @@
 > Renumbering note: governance v1.1 had queued "ADR-005" for the
 > Workspace-timeline recording decision (event sourcing vs append-only log).
 > That decision keeps its trigger (write when Workspace implementation
-> begins) and becomes **ADR-006**. This ADR takes the 005 slot because the
-> intelligence architecture landed first.
+> begins) and becomes **ADR-010** — ADR-006–009 are reserved for the epic
+> ladder (006 Retrieval First, 007 Deterministic Reasoning, 008 LLM as
+> Replaceable Interface, 009 Evidence-Driven Intelligence; see governance
+> v1.1 queue note). This ADR takes the 005 slot because the intelligence
+> architecture landed first.
 
 ## Context
 
@@ -83,7 +86,7 @@ Cross-cutting, per the doc-23 amendment (permanent principles):
 - Engines implement existing interfaces and bind existing tokens; consumers
   (including the Gurman seed's eventual migration) never change signatures.
 - The event-sourcing decision for Workspace timelines is deferred to
-  ADR-006, unchanged in trigger; the event-store contract here keeps full
+  ADR-010, unchanged in trigger; the event-store contract here keeps full
   replay possible either way.
 - One intelligence, two voices: owner-facing analytics contracts are
   projections of the same surface consumer recommendations use — a separate
