@@ -9,6 +9,13 @@ updates, retrospectives, and onboarding.
 Format: `YYYY-MM-DD-<milestone-slug>/` (assets + `NOTES.md`) or a single
 `YYYY-MM-DD-<milestone-slug>.md` for text-only milestones.
 
+Genesis Records are versioned (v1.0, v1.1, v2.0…) with a STABLE template so
+trends stay comparable across releases. The template changes only when: (1) a
+production incident revealed missing evidence, (2) a retrospective identified a
+recurring blind spot, or (3) a new governance principle was formally adopted
+through ADR + review. Genesis Records record what actually shipped, never what
+was planned.
+
 First entry lands with the Vibrant Marketplace web launch gate, formatted as the
 **Genesis Record**: release name · date · git commit + tag · build ID · design
 system version · Product Bible version · ADR count · platform · environment ·

@@ -1,6 +1,12 @@
-# Genesis Record — Vibrant Marketplace Web Launch (v1.0 of the organization)
+# Genesis Record v1.0 — Vibrant Marketplace Web Launch (v1.0 of the organization)
+
+> **This document records what actually shipped, not what was planned.**
 
 **Status: IN PREPARATION — fields fill as gates execute. Nothing below is final until the deploy verifies live.**
+
+## Organization Identity (founding principles)
+
+Manzil sells confidence, not information. · Every screen leads somewhere. · **Discover. Plan. Experience.** · The Workspace is the center. · Evidence over opinion.
 
 ## Release
 
@@ -16,6 +22,49 @@
 | ADR count | 4 accepted (001 Tool Orchestrator · 002 Bootstrap-not-Tailwind · 003 Hanken+Golos · 004 RN/Expo mobile), 1 queued (005 event sourcing) |
 | Platform | Web — Next.js 16, Bootstrap 5.3 Sass, apps/web |
 | Environment | Vercel production (manzil-business.vercel.app) ← Railway API /v1 |
+
+## Engineering Fingerprint
+
+| Field | Value |
+|---|---|
+| Repository state at release commit | (fill: clean/dirty) |
+| Outstanding staged changes | (fill) |
+| TODOs accepted into release | (fill: count) |
+| Unreleased commits on main | (fill: 0 expected) |
+
+## Dependency Snapshot (major runtime)
+
+| Dependency | Version |
+|---|---|
+| Next.js | (fill from lockfile) |
+| React | (fill) |
+| Bootstrap | 5.3.x |
+| Node (build) | (fill) |
+| Railway API | /v1 (health-verified) |
+| Database schema | (fill: migration state) |
+| Expo | reference only — mobile track not yet started (ADR-004) |
+
+## Product Capability Matrix
+
+| Capability | Status |
+|---|---|
+| Discover | (fill) |
+| Home | (fill) |
+| Business profiles + reviews | (fill) |
+| Registration + auth | (fill) |
+| Workspace (merchant dashboard) | (fill) |
+| Gurman planning (chat) | Partial — grounded recommendations; package panel deferred |
+| Bookings | Deferred — no booking engine (ADR-001 consequence) |
+| Payments | Deferred |
+| Package builder | Deferred (behind Gurman package API) |
+| Voice | Deferred (mobile 3.0) |
+| Stories / social | Deferred (mobile 3.0) |
+
+## Risk Register (handoff into Milestone 1)
+
+1. Sparse production dataset (2 businesses, 0 featured) — degradation states are the launch-day UI.
+2. Booking orchestration not implemented — every "book" promise in copy must stay honest until the Tool Orchestrator's booking tool exists.
+3. Tool Orchestrator awaiting backend expansion — Gurman capabilities gated on `/v1/gurman/*` growth.
 
 ## Gates
 
@@ -36,6 +85,7 @@
 |---|---|
 | Architecture drift | Detected: 1 (Discover category gradients minted in-screen) · Merged: 0 · Resolved before launch: 1 (`b18467b`, promoted to token layer) |
 | Component reuse ratio | (fill: kit usages ÷ new component definitions across screen tracks) |
+| Design-system adoption | (fill: components using Kit ÷ total UI components) |
 | Onboarding complexity baseline (mobile WOW, from wireframes v1.2) | Screens: 12 · Permissions: 3 (+1 optional) · Target completion < 90s · taps/decisions measured at hi-fi |
 | Discovery → Planning conversion | Instrumentation status: (fill — event taxonomy defined, wiring TBD) |
 
@@ -60,7 +110,7 @@
 | Vercel env | ✅ Verified 2026-08-06: NEXT_PUBLIC_API_URL=railway/v1 · NEXT_PUBLIC_USE_MOCK=false |
 | Screenshot set | (fill: paths) |
 
-## Fleet ledger (implementation commits, all micro-reviewed)
+## Implementation Ledger (commits, all micro-reviewed)
 
 | Task | Commit | Review |
 |---|---|---|
