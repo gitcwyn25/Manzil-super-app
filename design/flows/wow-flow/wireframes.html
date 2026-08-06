@@ -1,4 +1,4 @@
-<title>WOW Flow — Lo-Fi Wireframes v1.0</title>
+<title>WOW Flow — Lo-Fi Wireframes v1.1</title>
 <style>
 /* ============ tokens ============ */
 :root{
@@ -57,6 +57,10 @@ h1,h2,h3{margin:0; text-wrap:balance}
 .doc-meta b{color:var(--ink); font-weight:650}
 .legend{display:flex; flex-wrap:wrap; gap:10px 22px; margin-top:18px; font-size:13px; color:var(--muted)}
 .legend-item{display:flex; align-items:center; gap:8px}
+.rev-box{border:1px solid var(--line); background:var(--surface); border-radius:12px;
+  padding:16px 20px; margin-top:20px; font-size:13px}
+.rev-box h3{font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin-bottom:8px}
+.rev-box ul{margin:0; padding-left:18px; line-height:1.7}
 
 /* sub-flow badges */
 .badge{display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:.06em;
@@ -68,6 +72,10 @@ h1,h2,h3{margin:0; text-wrap:balance}
 /* assumption tag */
 .assume{display:inline-block; font-size:10px; font-weight:700; letter-spacing:.08em;
   text-transform:uppercase; border:1.5px dashed var(--muted); color:var(--muted);
+  border-radius:4px; padding:1px 6px; margin-right:6px; vertical-align:1px}
+/* review-change tag */
+.revtag{display:inline-block; font-size:10px; font-weight:700; letter-spacing:.08em;
+  text-transform:uppercase; border:1.5px solid var(--ink); color:var(--ink);
   border-radius:4px; padding:1px 6px; margin-right:6px; vertical-align:1px}
 
 /* ============ flow map ============ */
@@ -170,6 +178,7 @@ h1,h2,h3{margin:0; text-wrap:balance}
 .otp i.fill{border-color:var(--wf-ink)}
 .check{width:34px; height:34px; margin:2px auto 0; border:1.5px solid var(--wf-ink);
   border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px}
+.check-lg{width:64px; height:64px; border-width:2px; font-size:26px; margin:0 auto}
 
 /* permission rows */
 .benefit{display:flex; gap:10px; align-items:flex-start}
@@ -177,17 +186,12 @@ h1,h2,h3{margin:0; text-wrap:balance}
 .benefit b{font-size:10.5px; display:block}
 .benefit span{font-size:9px; color:var(--wf-muted); line-height:1.35; display:block}
 
-/* interests */
-.igrid{display:grid; grid-template-columns:1fr 1fr; gap:7px; overflow:hidden; flex:1;
-  align-content:start;
-  -webkit-mask-image:linear-gradient(#000 78%, transparent); mask-image:linear-gradient(#000 78%, transparent)}
-.icard{border-radius:10px; background:var(--wf-box); position:relative; padding:6px 8px;
-  display:flex; align-items:flex-end; font-size:9.5px; font-weight:650}
-.icard.sel{outline:2px solid var(--wf-ink); outline-offset:-2px}
-.icard.sel::after{content:"✓"; position:absolute; top:5px; right:6px; width:13px; height:13px;
-  border-radius:50%; background:var(--wf-ink); color:var(--paper); font-size:8px;
-  display:flex; align-items:center; justify-content:center}
-.h56{height:56px}.h72{height:72px}.h64{height:64px}
+/* planning-intent options (interests) */
+.optrow{display:flex; align-items:center; gap:9px; border:1.5px solid var(--wf-line);
+  border-radius:10px; padding:7px 10px; font-size:11px; font-weight:600}
+.optrow .radio{width:14px; height:14px; border:1.5px solid var(--wf-muted); border-radius:50%; flex:none}
+.optrow.sel{border-color:var(--wf-ink)}
+.optrow.sel .radio{border-color:var(--wf-ink); background:var(--wf-ink); box-shadow:inset 0 0 0 2.5px var(--paper)}
 
 /* ai conversation */
 .bubble{background:var(--wf-box); border-radius:12px 12px 12px 4px; padding:9px 11px;
@@ -249,14 +253,25 @@ footer{border-top:1px solid var(--line); margin-top:44px; padding-top:20px;
 <!-- ================= HEADER ================= -->
 <header class="doc-head">
   <p class="eyebrow">Manzil 3.0 · Design repository · design/flows/wow-flow</p>
-  <h1>WOW Flow — Lo-Fi Wireframes v1.0</h1>
-  <p class="doc-meta"><b>Epic 1</b> · <b>11 screens</b> · status: <b>awaiting review</b> · grayscale structure only — no brand color, no visual design. Sources: FLOW&nbsp;001 (12-user-flows-vol1-auth), UX Blueprint (10), Screen Bible (07), Design System (05) + Master Design Prompt, Implementation Prompt 02.</p>
+  <h1>WOW Flow — Lo-Fi Wireframes v1.1</h1>
+  <p class="doc-meta"><b>Epic 1</b> · <b>12 screens</b> · status: <b>v1.1 (review amendments applied)</b> · v1.0 verdict (REVIEW-v1.md, 2026-08-06): approve with minor changes — ready for hi-fi. Grayscale structure only — no brand color, no visual design. Sources: FLOW&nbsp;001 (12-user-flows-vol1-auth), UX Blueprint (10), Screen Bible (07), Design System (05) + Master Design Prompt, Implementation Prompt 02, REVIEW-v1.md.</p>
   <div class="legend">
     <span class="legend-item"><span class="badge b-a">02A</span> Splash · Welcome · navigation shell (screens 01–02)</span>
     <span class="legend-item"><span class="badge b-b">02B</span> Authentication · OTP (screens 03–05)</span>
-    <span class="legend-item"><span class="badge b-c">02C</span> Interests · AI introduction · Profile · Home arrival (screens 06–11)</span>
+    <span class="legend-item"><span class="badge b-c">02C</span> Interests · AI introduction · Profile · Home arrival (screens 06–12)</span>
   </div>
-  <p class="doc-meta" style="margin-top:10px; font-size:12.5px"><span class="assume">Assumption</span>The 02A/02B/02C split in Prompt 02 does not name Permissions introduction or AI personalization; both are assigned to 02C as the post-auth onboarding stretch.</p>
+  <p class="doc-meta" style="margin-top:10px; font-size:12.5px"><span class="assume">Assumption</span>The 02A/02B/02C split in Prompt 02 does not name Permissions introduction, AI personalization, or the new Ready screen; all are assigned to 02C as the post-auth onboarding stretch.</p>
+  <div class="rev-box">
+    <h3>v1.1 — review amendments applied (REVIEW-v1.md, 2026-08-06)</h3>
+    <ul>
+      <li><b>Reorder:</b> AI introduction → Complete profile → AI personalization, so Gurman knows name, city, and language before asking preferences.</li>
+      <li><b>Interests reframed:</b> planning-intent question (“Help Gurman understand you”) with option rows — no Pinterest-style category grid.</li>
+      <li><b>Permissions:</b> every row now leads with value (“Location — to recommend nearby experiences”).</li>
+      <li><b>AI introduction:</b> promise-led opening (“Tell me what you’re planning. I’ll handle the rest.”) — no AI self-explanation.</li>
+      <li><b>New screen:</b> Ready — a two-second, deliberately understated completion moment marking the end of onboarding, before Home (no confetti, no gamification — confidence, not excitement).</li>
+      <li><b>First home arrival:</b> must answer “What can I do?” immediately — every widget carries guidance even with zero data.</li>
+    </ul>
+  </div>
 </header>
 
 <!-- ================= FLOW MAP ================= -->
@@ -281,19 +296,21 @@ footer{border-top:1px solid var(--line); margin-top:44px; padding-top:20px;
     <span class="fm-arrow">→</span>
     <a class="fm-node" href="#s08"><span class="fm-id">AI-001</span><span class="fm-name">AI intro</span></a>
     <span class="fm-arrow">→</span>
-    <a class="fm-node" href="#s09"><span class="fm-id">AUTH-016</span><span class="fm-name">AI personalization</span></a>
+    <a class="fm-node" href="#s09"><span class="fm-id">AUTH-017</span><span class="fm-name">Profile</span></a>
     <span class="fm-arrow">→</span>
-    <a class="fm-node" href="#s10"><span class="fm-id">AUTH-017</span><span class="fm-name">Profile</span></a>
+    <a class="fm-node" href="#s10"><span class="fm-id">AUTH-016</span><span class="fm-name">AI personalization</span></a>
     <span class="fm-arrow">→</span>
-    <a class="fm-node" href="#s11"><span class="fm-id">HOME-001</span><span class="fm-name">First home arrival</span></a>
+    <a class="fm-node" href="#s11"><span class="fm-id">AUTH-018*</span><span class="fm-name">Ready</span></a>
+    <span class="fm-arrow">→</span>
+    <a class="fm-node" href="#s12"><span class="fm-id">HOME-001</span><span class="fm-name">First home arrival</span></a>
   </div>
-  <p class="fm-legend">New users: Welcome → Sign in (account choice) → Register → OTP. Returning users: Sign in → provider auth or OTP directly. Both paths merge at OTP → Permissions.</p>
+  <p class="fm-legend">New users: Welcome → Sign in (account choice) → Register → OTP. Returning users: Sign in → provider auth or OTP directly. Both paths merge at OTP → Permissions. Profile now precedes AI personalization (review 2026-08-06). *AUTH-018 is a proposed ID — see Ready screen notes.</p>
 </nav>
 
 <!-- ================= 01 SPLASH ================= -->
 <section class="screen-sec" id="s01">
   <div class="sec-head">
-    <span class="sec-num">01 / 11</span>
+    <span class="sec-num">01 / 12</span>
     <span class="sec-id">AUTH-001</span>
     <span class="badge b-a">02A</span>
     <h2>Splash</h2>
@@ -314,7 +331,7 @@ footer{border-top:1px solid var(--line); margin-top:44px; padding-top:20px;
     <div class="spec"><dl>
       <dt>Purpose</dt><dd>Instantly communicate premium quality while the app boots. Duration 1.8–2.5&nbsp;s, never longer.</dd>
       <dt>Entry</dt><dd>Cold app launch (first install and every launch).</dd>
-      <dt>Exit</dt><dd>Auto-advance → Welcome (AUTH-002). Edge exits: maintenance screen, force-update screen (SYS scope, not in these 11), offline → continue anyway.</dd>
+      <dt>Exit</dt><dd>Auto-advance → Welcome (AUTH-002). Edge exits: maintenance screen, force-update screen (SYS scope, not in these 12), offline → continue anyway.</dd>
       <dt>Components</dt><dd><span class="comp">BrandMark</span> <span class="comp">SplashCaption</span></dd>
       <dt>Primary action</dt><dd>None — system screen, auto-advance only. FLOW 001 permits no interaction here.</dd>
       <dt>Motion</dt><dd>Sequence within the 1.8–2.5&nbsp;s envelope: black background → gold compass line appears → compass draws itself → particles form logo → MANZIL fades in → “Gurman AI” caption → fade to Welcome. <em>Reduced motion: skip the animation entirely, immediate fade (documented in FLOW 001).</em></dd>
@@ -332,7 +349,7 @@ footer{border-top:1px solid var(--line); margin-top:44px; padding-top:20px;
 <!-- ================= 02 WELCOME ================= -->
 <section class="screen-sec" id="s02">
   <div class="sec-head">
-    <span class="sec-num">02 / 11</span>
+    <span class="sec-num">02 / 12</span>
     <span class="sec-id">AUTH-002</span>
     <span class="badge b-a">02A</span>
     <h2>Welcome</h2>
@@ -373,7 +390,7 @@ footer{border-top:1px solid var(--line); margin-top:44px; padding-top:20px;
 <!-- ================= 03 SIGN IN ================= -->
 <section class="screen-sec" id="s03">
   <div class="sec-head">
-    <span class="sec-num">03 / 11</span>
+    <span class="sec-num">03 / 12</span>
     <span class="sec-id">AUTH-006</span>
     <span class="badge b-b">02B</span>
     <h2>Sign in — account choice</h2>
@@ -416,7 +433,7 @@ footer{border-top:1px solid var(--line); margin-top:44px; padding-top:20px;
 <!-- ================= 04 REGISTER ================= -->
 <section class="screen-sec" id="s04">
   <div class="sec-head">
-    <span class="sec-num">04 / 11</span>
+    <span class="sec-num">04 / 12</span>
     <span class="sec-id">AUTH-007</span>
     <span class="badge b-b">02B</span>
     <h2>Register</h2>
@@ -434,7 +451,7 @@ footer{border-top:1px solid var(--line); margin-top:44px; padding-top:20px;
         <div class="spacer"></div>
         <div class="wf-btn">Continue</div>
       </div></div>
-      <p class="phone-note">FLOW 001 registration chain: Name → Phone/Email → Verification → Password (if needed) → Done. Create-password (AUTH-013) is outside this 11-screen scope and only occurs “if needed”.</p>
+      <p class="phone-note">FLOW 001 registration chain: Name → Phone/Email → Verification → Password (if needed) → Done. Create-password (AUTH-013) is outside this 12-screen scope and only occurs “if needed”.</p>
     </div>
     <div class="spec"><dl>
       <dt>Purpose</dt><dd>Minimal-field registration — no 12-field forms.</dd>
@@ -446,7 +463,7 @@ footer{border-top:1px solid var(--line); margin-top:44px; padding-top:20px;
       <dt>States</dt><dd>Inline validation errors per field. Loading — button loading state on submit. Offline — submit disabled with message and retry.</dd>
       <dt>Accessibility</dt><dd>Real floating labels (not placeholder-only); errors linked to fields for screen readers; correct keyboard type per field; large touch targets.</dd>
       <dt>Analytics</dt><dd><code>Registration Started</code> (see AUTH-006 trigger note) · <code>Registration Completed</code> fires later, after verification succeeds.</dd>
-      <dt>Notes</dt><dd><span class="assume">Assumption</span>Single combined “Phone or email” field chosen as the simplest structure; corpus does not specify a toggle or separate phone/email screens (AUTH-008/009 exist in the Screen Bible but are outside this 11-screen scope).</dd>
+      <dt>Notes</dt><dd><span class="assume">Assumption</span>Single combined “Phone or email” field chosen as the simplest structure; corpus does not specify a toggle or separate phone/email screens (AUTH-008/009 exist in the Screen Bible but are outside this scope).</dd>
     </dl></div>
   </div>
   <div class="pn">
@@ -458,7 +475,7 @@ footer{border-top:1px solid var(--line); margin-top:44px; padding-top:20px;
 <!-- ================= 05 OTP ================= -->
 <section class="screen-sec" id="s05">
   <div class="sec-head">
-    <span class="sec-num">05 / 11</span>
+    <span class="sec-num">05 / 12</span>
     <span class="sec-id">AUTH-010</span>
     <span class="badge b-b">02B</span>
     <h2>OTP verification</h2>
@@ -503,7 +520,7 @@ footer{border-top:1px solid var(--line); margin-top:44px; padding-top:20px;
 <!-- ================= 06 PERMISSIONS ================= -->
 <section class="screen-sec" id="s06">
   <div class="sec-head">
-    <span class="sec-num">06 / 11</span>
+    <span class="sec-num">06 / 12</span>
     <span class="sec-id">AUTH-014</span>
     <span class="badge b-c">02C</span>
     <h2>Permissions introduction</h2>
@@ -514,29 +531,29 @@ footer{border-top:1px solid var(--line); margin-top:44px; padding-top:20px;
         <div class="sb"><span>9:41</span><span>▂▄▆ ● ▮</span></div>
         <div class="wf-dots"><i class="on"></i><i></i><i></i><i></i></div>
         <div class="wf-h2">Permissions, only when useful <span class="ph">[proposed]</span></div>
-        <div class="wf-body">Manzil asks in context — each request explains its benefit first.</div>
-        <div class="benefit"><span class="ic"></span><span><b>Location</b><span>Asked when you search nearby</span></span></div>
-        <div class="benefit"><span class="ic"></span><span><b>Camera</b><span>Asked when you create a story or scan</span></span></div>
-        <div class="benefit"><span class="ic"></span><span><b>Microphone</b><span>Asked when you start voice mode</span></span></div>
-        <div class="benefit"><span class="ic"></span><span><b>Gallery</b><span>Asked when you upload photos</span></span></div>
-        <div class="benefit"><span class="ic"></span><span><b>Notifications</b><span>Asked after your first booking, or when you opt into reminders</span></span></div>
+        <div class="wf-body">Manzil asks in context — each request explains its value first.</div>
+        <div class="benefit"><span class="ic"></span><span><b>Location</b><span>To recommend nearby experiences.</span></span></div>
+        <div class="benefit"><span class="ic"></span><span><b>Gallery</b><span>To upload memories.</span></span></div>
+        <div class="benefit"><span class="ic"></span><span><b>Notifications</b><span>To remind you about bookings.</span></span></div>
+        <div class="benefit"><span class="ic"></span><span><b>Microphone</b><span>Talk naturally with Gurman.</span></span></div>
+        <div class="benefit"><span class="ic"></span><span><b>Camera</b><span>To share stories as you experience them. <span class="ph">[proposed]</span></span></span></div>
         <div class="spacer"></div>
         <div class="wf-note">No OS permission dialogs on this screen — introduction only</div>
         <div class="wf-btn">Continue</div>
       </div></div>
-      <p class="phone-note">Benefit copy is a direct restatement of FLOW 001’s permissions strategy (“ask in context, never up-front; always explain the benefit”).</p>
+      <p class="phone-note"><span class="revtag">Review</span>Value-first copy verbatim from review feedback 2026-08-06 (“Confidence comes from explaining value”). Contextual-ask timing per FLOW 001 stays in effect — this screen only sets the expectation.</p>
     </div>
     <div class="spec"><dl>
-      <dt>Purpose</dt><dd>Set the expectation that permissions are requested in context with a stated benefit — builds trust before anything is asked.</dd>
+      <dt>Purpose</dt><dd>Set the expectation that permissions are requested in context with a stated value — builds trust before anything is asked.</dd>
       <dt>Entry</dt><dd>OTP success (or provider auth success from AUTH-006).</dd>
-      <dt>Exit</dt><dd>“Continue” → Interest selection (AUTH-015).</dd>
+      <dt>Exit</dt><dd>“Continue” → Interests (AUTH-015).</dd>
       <dt>Components</dt><dd><span class="comp">OnboardingProgress</span> <span class="comp">BenefitRow</span> ×5 <span class="comp">PrimaryButton</span></dd>
       <dt>Primary action</dt><dd>“Continue”.</dd>
       <dt>Motion</dt><dd>Benefit rows stagger in top-to-bottom; progress indicator transition on entry. <em>Reduced motion: rows appear together with a plain fade.</em></dd>
       <dt>States</dt><dd>Static informational screen — works offline; no loading or error state.</dd>
       <dt>Accessibility</dt><dd>Rows exposed as a list; icons decorative with text labels carrying meaning; no OS dialogs to trap focus; single obvious next step.</dd>
       <dt>Analytics</dt><dd><em>No dedicated event in the FLOW 001 list</em> — screen sits between <code>Verification Completed</code> and <code>Interest Selected</code>.</dd>
-      <dt>Notes</dt><dd><span class="assume">Assumption</span>Screen is purely informational (zero OS prompts) — derived from “ask in context, never up-front”. <span class="assume">Assumption</span>Onboarding progress shown as 4 steps across 02C (permissions → interests → AI conversation → profile); AI intro and AI personalization share step 3.</dd>
+      <dt>Notes</dt><dd><span class="assume">Assumption</span>Screen is purely informational (zero OS prompts) — derived from “ask in context, never up-front”. <span class="assume">Assumption</span>Camera row kept per FLOW 001 with matching value-first copy; the review’s four-row list omitted it — confirm whether to drop. <span class="assume">Assumption</span>Onboarding progress shown as 4 steps (permissions → interests → profile → personalization); AI introduction and Ready carry no step indicator.</dd>
     </dl></div>
   </div>
   <div class="pn">
@@ -548,49 +565,42 @@ footer{border-top:1px solid var(--line); margin-top:44px; padding-top:20px;
 <!-- ================= 07 INTERESTS ================= -->
 <section class="screen-sec" id="s07">
   <div class="sec-head">
-    <span class="sec-num">07 / 11</span>
+    <span class="sec-num">07 / 12</span>
     <span class="sec-id">AUTH-015</span>
     <span class="badge b-c">02C</span>
-    <h2>Interest selection</h2>
+    <h2>Interests — planning intent</h2>
   </div>
   <div class="sec-grid">
     <div class="phone-wrap">
       <div class="phone"><div class="scr">
         <div class="sb"><span>9:41</span><span>▂▄▆ ● ▮</span></div>
         <div class="wf-dots"><i></i><i class="on"></i><i></i><i></i></div>
-        <div class="wf-h2">Interests headline <span class="ph">[proposed copy TBD]</span></div>
-        <div class="wf-row" style="justify-content:space-between">
-          <span class="wf-body">Photo cards, not checkboxes</span>
-          <span class="wf-body" style="font-weight:700; color:var(--wf-ink)">3 selected</span>
-        </div>
-        <div class="igrid">
-          <div class="icard h64 sel">Coffee</div>
-          <div class="icard h72">Restaurants</div>
-          <div class="icard h72 sel">Travel</div>
-          <div class="icard h56">Sports</div>
-          <div class="icard h56">Nightlife</div>
-          <div class="icard h64">Hotels</div>
-          <div class="icard h64 sel">Family</div>
-          <div class="icard h56">Beauty</div>
-          <div class="icard h56">Healthcare</div>
-          <div class="icard h64">Shopping</div>
-        </div>
-        <div class="wf-note">Scrolls — 13 categories total: coffee, restaurants, travel, sports, nightlife, hotels, family, beauty, healthcare, shopping, education, pets, home services</div>
+        <div class="wf-h2">Help Gurman understand you</div>
+        <div class="wf-body">What are you most likely planning today?</div>
+        <div class="optrow"><span class="radio"></span>Birthday</div>
+        <div class="optrow sel"><span class="radio"></span>Weekend</div>
+        <div class="optrow"><span class="radio"></span>Haircut</div>
+        <div class="optrow"><span class="radio"></span>Coffee</div>
+        <div class="optrow"><span class="radio"></span>Dinner</div>
+        <div class="optrow"><span class="radio"></span>Travel</div>
+        <div class="optrow"><span class="radio"></span>Wedding</div>
+        <div class="optrow"><span class="radio"></span>Family</div>
+        <div class="spacer"></div>
         <div class="wf-btn">Continue</div>
       </div></div>
-      <p class="phone-note">Pinterest-style photo cards per FLOW 001 — gray boxes stand in for category photography; selected cards show outline + check.</p>
+      <p class="phone-note"><span class="revtag">Review</span>Reframed per review feedback 2026-08-06: planning intent, not a Pinterest-style category grid. Headline, question, and all eight options verbatim from the review.</p>
     </div>
     <div class="spec"><dl>
-      <dt>Purpose</dt><dd>Seed recommendations by selecting interests from photo cards — feels like taste, not a form.</dd>
+      <dt>Purpose</dt><dd>Seed recommendations by capturing planning intent — “Help Gurman understand you”, closer to the confidence principle than a category taxonomy.</dd>
       <dt>Entry</dt><dd>Permissions introduction “Continue”.</dd>
       <dt>Exit</dt><dd>“Continue” → AI introduction (AI-001).</dd>
-      <dt>Components</dt><dd><span class="comp">OnboardingProgress</span> <span class="comp">InterestCard</span> ×13 <span class="comp">SelectionCounter</span> <span class="comp">PrimaryButton</span></dd>
+      <dt>Components</dt><dd><span class="comp">OnboardingProgress</span> <span class="comp">OptionRow</span> ×8 <span class="comp">PrimaryButton</span></dd>
       <dt>Primary action</dt><dd>“Continue”.</dd>
-      <dt>Motion</dt><dd>Cards stagger into the masonry grid; selecting a card scales it slightly and draws the check. <em>Reduced motion: no stagger or scale — selection shown by outline + check appearing instantly.</em></dd>
-      <dt>States</dt><dd>Loading — image skeletons per card, grid never blocks. Offline — gray placeholder cards remain selectable. Error — retry for card imagery only.</dd>
-      <dt>Accessibility</dt><dd>Each card is a toggle button with pressed state; selection announced with running count; selection not color-only (outline + check glyph); ≥ 44&nbsp;pt targets despite masonry.</dd>
-      <dt>Analytics</dt><dd><code>Interest Selected</code> (per selection).</dd>
-      <dt>Notes</dt><dd><span class="assume">Assumption</span>“Continue” enables after ≥ 1 selection — corpus silent on a minimum.</dd>
+      <dt>Motion</dt><dd>Option rows stagger in; selecting fills the radio and strengthens the row border. <em>Reduced motion: rows appear together; selection state switches without animation.</em></dd>
+      <dt>States</dt><dd>Static option list — works offline (choices sync later). Saving — brief loading on Continue. Error — retry without losing the choice.</dd>
+      <dt>Accessibility</dt><dd>Rendered as a radio group with visible labels; selection announced; state shown by fill + border weight, not color alone; rows ≥ 44&nbsp;pt.</dd>
+      <dt>Analytics</dt><dd><code>Interest Selected</code>.</dd>
+      <dt>Notes</dt><dd><span class="revtag">Review</span>Supersedes FLOW 001’s 13 photo-card categories (user decision, 2026-08-06). <span class="assume">Assumption</span>Single-select, per the radio marks in the review sketch. <span class="assume">Assumption</span>Overlap with AUTH-016’s “What are you planning most often?” flagged — differentiate the two questions in hi-fi (today’s intent here vs. habitual patterns there).</dd>
     </dl></div>
   </div>
   <div class="pn">
@@ -602,7 +612,7 @@ footer{border-top:1px solid var(--line); margin-top:44px; padding-top:20px;
 <!-- ================= 08 AI INTRO ================= -->
 <section class="screen-sec" id="s08">
   <div class="sec-head">
-    <span class="sec-num">08 / 11</span>
+    <span class="sec-num">08 / 12</span>
     <span class="sec-id">AI-001</span>
     <span class="badge b-c">02C</span>
     <h2>AI introduction</h2>
@@ -612,7 +622,7 @@ footer{border-top:1px solid var(--line); margin-top:44px; padding-top:20px;
       <div class="phone"><div class="scr">
         <div class="sb"><span>9:41</span><span>▂▄▆ ● ▮</span></div>
         <div class="ai-state"><i></i>Gurman AI · idle</div>
-        <div class="bubble">Hi — I’m Gurman. I can find places, compare them, and book for you. <span class="ph">[proposed capability copy]</span></div>
+        <div class="bubble">Tell me what you’re planning. I’ll handle the rest.</div>
         <div class="wf-body">Try one: <span class="ph">[proposed]</span></div>
         <div class="chips">
           <span class="chip">Plan a birthday</span>
@@ -624,31 +634,74 @@ footer{border-top:1px solid var(--line); margin-top:44px; padding-top:20px;
         <div class="spacer"></div>
         <div class="wf-note">PersistentAIBar deliberately absent — it first appears on HOME-001 (Prompt 02: “persistent AI bar hidden until First Home Arrival”)</div>
       </div></div>
-      <p class="phone-note">Quick suggestions verbatim from FLOW 001, sentence-cased per Design System. Teaches the interface without a tutorial.</p>
+      <p class="phone-note"><span class="revtag">Review</span>Promise-led opening verbatim from review feedback 2026-08-06 — the screen sells the promise, it does not explain AI. Quick suggestions from FLOW 001, sentence-cased per Design System.</p>
     </div>
     <div class="spec"><dl>
-      <dt>Purpose</dt><dd>First Gurman conversation: opens with capability + quick suggestions — teaches the interface without a tutorial. Emotional beat: confidence.</dd>
-      <dt>Entry</dt><dd>Interest selection “Continue”.</dd>
-      <dt>Exit</dt><dd>Tapping a suggestion → conversation continues into AI personalization (AUTH-016).</dd>
+      <dt>Purpose</dt><dd>First Gurman moment: state the promise, show five things to try — teaches the interface without a tutorial. Emotional beat: confidence.</dd>
+      <dt>Entry</dt><dd>Interests “Continue”.</dd>
+      <dt>Exit</dt><dd>Tap a suggestion → first prompt captured, Gurman acknowledges → Complete profile (AUTH-017).</dd>
       <dt>Components</dt><dd><span class="comp">AIStateIndicator</span> <span class="comp">AIMessageBubble</span> <span class="comp">SuggestionChip</span> ×5</dd>
       <dt>Primary action</dt><dd>Try one quick suggestion.</dd>
       <dt>Motion</dt><dd>Gurman’s message streams in; chips stagger in after the message completes; AI state indicator shows idle → thinking transitions. <em>Reduced motion: full message appears at once; chips appear together; state changes fade.</em></dd>
       <dt>States</dt><dd>Loading — “thinking” indicator while the intro renders. Offline — friendly note + retry; suggestions disabled. Error — recovery copy, no technical language.</dd>
       <dt>Accessibility</dt><dd>Streamed text delivered to screen readers as one utterance (never character-by-character); chips are buttons; AI state changes conveyed in text, not color alone.</dd>
       <dt>Analytics</dt><dd><code>AI Introduction Viewed</code> · <code>First AI Prompt Used</code> (on chip tap).</dd>
-      <dt>Notes</dt><dd><span class="assume">Assumption</span>Screen Bible’s AUTH block has no ID for this screen — mapped to <code>AI-001 Conversation</code> in introduction mode. <span class="assume">Assumption</span>Suggestion tap advances into AUTH-016; Prompt 02’s screen order (AI introduction before AI personalization) is followed where FLOW 001’s document order differs.</dd>
+      <dt>Notes</dt><dd><span class="assume">Assumption</span>Screen Bible’s AUTH block has no ID for this screen — mapped to <code>AI-001 Conversation</code> in introduction mode. <span class="revtag">Review</span>Order per review 2026-08-06: AI introduction → Profile → AI personalization, so Gurman knows the basics before asking preferences.</dd>
     </dl></div>
   </div>
   <div class="pn">
     <a href="#s07"><span class="pn-lbl">Prev</span>← Interests · AUTH-015</a>
-    <a href="#s09"><span class="pn-lbl">Next</span>AI personalization · AUTH-016 →</a>
+    <a href="#s09"><span class="pn-lbl">Next</span>Complete profile · AUTH-017 →</a>
   </div>
 </section>
 
-<!-- ================= 09 AI PERSONALIZATION ================= -->
+<!-- ================= 09 PROFILE ================= -->
 <section class="screen-sec" id="s09">
   <div class="sec-head">
-    <span class="sec-num">09 / 11</span>
+    <span class="sec-num">09 / 12</span>
+    <span class="sec-id">AUTH-017</span>
+    <span class="badge b-c">02C</span>
+    <h2>Complete profile</h2>
+  </div>
+  <div class="sec-grid">
+    <div class="phone-wrap">
+      <div class="phone"><div class="scr">
+        <div class="sb"><span>9:41</span><span>▂▄▆ ● ▮</span></div>
+        <div class="wf-dots"><i></i><i></i><i class="on"></i><i></i></div>
+        <div class="wf-h2">Profile headline <span class="ph">[proposed copy TBD]</span></div>
+        <div class="avatar-up">Add photo<br><span class="ph">[optional]</span></div>
+        <div class="wf-field"><div class="lbl">Display name</div><div class="val">Aziz <span class="ph">[prefilled from registration]</span></div></div>
+        <div class="wf-field"><div class="lbl">City</div><div class="val ph">[City — proposed per review]</div></div>
+        <div class="spacer"></div>
+        <div class="wf-note">Language is taken from device/app settings, not asked here</div>
+        <div class="wf-btn">Finish</div>
+        <div class="wf-textbtn">Skip for now</div>
+      </div></div>
+      <p class="phone-note"><span class="revtag">Review</span>Moved before AI personalization (review 2026-08-06): Gurman should already know name, city, and language before asking preferences. Kept deliberately thin per FLOW 001 — “minimal fields, never unnecessary information”.</p>
+    </div>
+    <div class="spec"><dl>
+      <dt>Purpose</dt><dd>Give Gurman the basics — a face, a confirmed name, a city — before the personalization conversation, without delaying arrival.</dd>
+      <dt>Entry</dt><dd>AI introduction (suggestion tapped).</dd>
+      <dt>Exit</dt><dd>“Finish” → AI personalization (AUTH-016). “Skip for now” → same destination.</dd>
+      <dt>Components</dt><dd><span class="comp">OnboardingProgress</span> <span class="comp">AvatarUploader</span> <span class="comp">TextField</span> ×2 <span class="comp">PrimaryButton</span> <span class="comp">TextButton</span></dd>
+      <dt>Primary action</dt><dd>“Finish”.</dd>
+      <dt>Motion</dt><dd>Avatar placeholder pulses gently on upload; progress ring during upload. <em>Reduced motion: static placeholder, textual progress.</em></dd>
+      <dt>States</dt><dd>Uploading — progress ring on avatar. Upload error — retry, never blocks Finish. Offline — photo deferred, Skip and Finish still work.</dd>
+      <dt>Accessibility</dt><dd>Uploader labeled (“Add profile photo, optional”); prefilled name editable and announced; skip reachable in focus order; no dead end if upload fails.</dd>
+      <dt>Analytics</dt><dd><em>No dedicated event in the FLOW 001 list</em> — completion is implied by <code>Home Loaded</code>.</dd>
+      <dt>Notes</dt><dd><span class="assume">Assumption</span>Fields (optional photo + prefilled display name + “Skip for now”) are the simplest structure — the corpus names the screen but never specifies its fields. <span class="assume">Assumption</span>City field added from the review rationale (“AI should already know name, city, language”); language sourced from device/app settings rather than asked.</dd>
+    </dl></div>
+  </div>
+  <div class="pn">
+    <a href="#s08"><span class="pn-lbl">Prev</span>← AI introduction · AI-001</a>
+    <a href="#s10"><span class="pn-lbl">Next</span>AI personalization · AUTH-016 →</a>
+  </div>
+</section>
+
+<!-- ================= 10 AI PERSONALIZATION ================= -->
+<section class="screen-sec" id="s10">
+  <div class="sec-head">
+    <span class="sec-num">10 / 12</span>
     <span class="sec-id">AUTH-016</span>
     <span class="badge b-c">02C</span>
     <h2>AI personalization</h2>
@@ -657,9 +710,9 @@ footer{border-top:1px solid var(--line); margin-top:44px; padding-top:20px;
     <div class="phone-wrap">
       <div class="phone"><div class="scr">
         <div class="sb"><span>9:41</span><span>▂▄▆ ● ▮</span></div>
-        <div class="wf-dots"><i></i><i></i><i class="on"></i><i></i></div>
+        <div class="wf-dots"><i></i><i></i><i></i><i class="on"></i></div>
         <div class="ai-state"><i></i>Gurman AI</div>
-        <div class="bubble">What are you planning most often?</div>
+        <div class="bubble">Aziz — what are you planning most often? <span class="ph">[name prefix proposed]</span></div>
         <div class="chips">
           <span class="chip sel">Date night</span>
           <span class="chip sel">Coffee</span>
@@ -675,72 +728,71 @@ footer{border-top:1px solid var(--line); margin-top:44px; padding-top:20px;
         <div class="spacer"></div>
         <div class="wf-btn">Continue</div>
       </div></div>
-      <p class="phone-note">Question and all ten answer buttons verbatim from FLOW 001 — “friendly conversation, not a survey”; trains recommendations.</p>
+      <p class="phone-note">Question and all ten answer buttons verbatim from FLOW 001 — “friendly conversation, not a survey”. With Profile now first, Gurman can address the user by name.</p>
     </div>
     <div class="spec"><dl>
-      <dt>Purpose</dt><dd>Train recommendations through one conversational question with tappable answers.</dd>
-      <dt>Entry</dt><dd>AI introduction (suggestion tapped).</dd>
-      <dt>Exit</dt><dd>“Continue” → Complete profile (AUTH-017).</dd>
+      <dt>Purpose</dt><dd>Train recommendations through one conversational question about habitual planning — asked by a Gurman who already knows the basics.</dd>
+      <dt>Entry</dt><dd>Complete profile “Finish” or “Skip for now”.</dd>
+      <dt>Exit</dt><dd>“Continue” → Ready (AUTH-018, proposed).</dd>
       <dt>Components</dt><dd><span class="comp">OnboardingProgress</span> <span class="comp">AIStateIndicator</span> <span class="comp">AIMessageBubble</span> <span class="comp">ChoiceChip</span> ×10 <span class="comp">PrimaryButton</span></dd>
       <dt>Primary action</dt><dd>“Continue” (after choosing).</dd>
       <dt>Motion</dt><dd>Bubble enters conversationally; chips stagger in; selecting springs the chip to filled state. <em>Reduced motion: fades only, chips fill without spring.</em></dd>
       <dt>States</dt><dd>Saving — brief loading on Continue. Offline — choices kept locally, synced later, user proceeds. Error — retry without losing selections.</dd>
       <dt>Accessibility</dt><dd>Chips are toggle buttons; selected state announced; filled state paired with weight change (not color-only); conversation region labeled for screen readers.</dd>
       <dt>Analytics</dt><dd><em>No dedicated event in the FLOW 001 list</em> — personalization signal is captured as data, not a named event.</dd>
-      <dt>Notes</dt><dd><span class="assume">Assumption</span>Multi-select allowed, “Continue” after ≥ 1 — FLOW 001 shows buttons but not selection rules.</dd>
+      <dt>Notes</dt><dd><span class="assume">Assumption</span>Multi-select allowed, “Continue” after ≥ 1 — FLOW 001 shows buttons but not selection rules. <span class="assume">Assumption</span>Name-prefixed greeting proposed, enabled by the v1.1 order.</dd>
     </dl></div>
   </div>
   <div class="pn">
-    <a href="#s08"><span class="pn-lbl">Prev</span>← AI introduction · AI-001</a>
-    <a href="#s10"><span class="pn-lbl">Next</span>Complete profile · AUTH-017 →</a>
+    <a href="#s09"><span class="pn-lbl">Prev</span>← Complete profile · AUTH-017</a>
+    <a href="#s11"><span class="pn-lbl">Next</span>Ready · AUTH-018 →</a>
   </div>
 </section>
 
-<!-- ================= 10 PROFILE ================= -->
-<section class="screen-sec" id="s10">
+<!-- ================= 11 READY ================= -->
+<section class="screen-sec" id="s11">
   <div class="sec-head">
-    <span class="sec-num">10 / 11</span>
-    <span class="sec-id">AUTH-017</span>
+    <span class="sec-num">11 / 12</span>
+    <span class="sec-id">AUTH-018*</span>
     <span class="badge b-c">02C</span>
-    <h2>Complete profile</h2>
+    <h2>Ready — onboarding complete</h2>
   </div>
   <div class="sec-grid">
     <div class="phone-wrap">
       <div class="phone"><div class="scr">
         <div class="sb"><span>9:41</span><span>▂▄▆ ● ▮</span></div>
-        <div class="wf-dots"><i></i><i></i><i></i><i class="on"></i></div>
-        <div class="wf-h2">Profile headline <span class="ph">[proposed copy TBD]</span></div>
-        <div class="avatar-up">Add photo<br><span class="ph">[optional]</span></div>
-        <div class="wf-field"><div class="lbl">Display name</div><div class="val">Aziz <span class="ph">[prefilled from registration]</span></div></div>
-        <div class="spacer"></div>
-        <div class="wf-btn">Finish</div>
-        <div class="wf-textbtn">Skip for now</div>
+        <div class="splash-center" style="gap:12px">
+          <div class="check check-lg">✓</div>
+          <div class="wf-h1" style="text-align:center">You’re ready.</div>
+          <div class="wf-body" style="text-align:center">Let’s plan your first experience.</div>
+        </div>
+        <div class="wf-note">Auto-advances after ~2 s · tap anywhere to continue immediately</div>
       </div></div>
-      <p class="phone-note">Kept deliberately thin — FLOW 001’s registration principle is “minimal fields, never unnecessary information”, and interests + personalization are already captured.</p>
+      <p class="phone-note"><span class="revtag">Review</span>New screen from REVIEW-v1.md — a two-second completion moment that psychologically marks the end of onboarding. Understated by requirement: a checkmark and two lines, nothing else. Copy verbatim from the review.</p>
     </div>
     <div class="spec"><dl>
-      <dt>Purpose</dt><dd>Optional finishing touch — a face and a confirmed name — without delaying the arrival moment.</dd>
+      <dt>Purpose</dt><dd>Mark the end of onboarding with a brief, understated moment of completion before the home reveal. Target emotion: confidence, not excitement (review addendum). Emotional beat: achievement (FLOW 001 timeline).</dd>
       <dt>Entry</dt><dd>AI personalization “Continue”.</dd>
-      <dt>Exit</dt><dd>“Finish” → First home arrival (HOME-001). “Skip for now” → same destination.</dd>
-      <dt>Components</dt><dd><span class="comp">OnboardingProgress</span> <span class="comp">AvatarUploader</span> <span class="comp">TextField</span> <span class="comp">PrimaryButton</span> <span class="comp">TextButton</span></dd>
-      <dt>Primary action</dt><dd>“Finish”.</dd>
-      <dt>Motion</dt><dd>Avatar placeholder pulses gently on upload; progress ring during upload. <em>Reduced motion: static placeholder, textual progress.</em></dd>
-      <dt>States</dt><dd>Uploading — progress ring on avatar. Upload error — retry, never blocks Finish. Offline — photo deferred, Skip and Finish still work.</dd>
-      <dt>Accessibility</dt><dd>Uploader labeled (“Add profile photo, optional”); prefilled name editable and announced; skip reachable in focus order; no dead end if upload fails.</dd>
-      <dt>Analytics</dt><dd><em>No dedicated event in the FLOW 001 list</em> — completion is implied by <code>Home Loaded</code>.</dd>
-      <dt>Notes</dt><dd><span class="assume">Assumption</span>Entire screen content (optional photo + prefilled display name + “Skip for now”) is the simplest structure — the corpus names the screen (AUTH-017) but never specifies its fields.</dd>
+      <dt>Exit</dt><dd>Auto-advance (~2&nbsp;s) → First home arrival (HOME-001); tap anywhere continues immediately.</dd>
+      <dt>Components</dt><dd><span class="comp">SuccessMark</span> <span class="comp">HeadlineBlock</span></dd>
+      <dt>Primary action</dt><dd>None — auto-advance; tap-through is the manual fallback (same pattern as Splash).</dd>
+      <dt>Motion</dt><dd>Gentle check draw-in (or plain fade), soft haptic, headline fades up, gentle fade to Home. Deliberately understated — no confetti, no fireworks, no gamification elements (review addendum, 2026-08-06). <em>Reduced motion: static checkmark, timed fade only.</em></dd>
+      <dt>States</dt><dd>Purely local screen — no loading, error, or offline state.</dd>
+      <dt>Accessibility</dt><dd>Announces “You’re ready — let’s plan your first experience”; auto-advance never shorter than the announcement; tap target is the whole screen; no focus trap.</dd>
+      <dt>Analytics</dt><dd><em>No dedicated event</em> — sits between the personalization data write and <code>Home Loaded</code>. Flag for the analytics map if a funnel marker is wanted here.</dd>
+      <dt>Notes</dt><dd><span class="revtag">Review</span>Screen added by user review 2026-08-06 (“One Missing Screen”). <span class="assume">Assumption</span>ID AUTH-018 proposed — the Screen Bible ends at AUTH-017; extension pending. <span class="assume">Assumption</span>Placed after AI personalization as the true end of onboarding; the review wrote “right after Profile, before Home” against the pre-reorder sequence where Profile was last.</dd>
     </dl></div>
   </div>
   <div class="pn">
-    <a href="#s09"><span class="pn-lbl">Prev</span>← AI personalization · AUTH-016</a>
-    <a href="#s11"><span class="pn-lbl">Next</span>First home arrival · HOME-001 →</a>
+    <a href="#s10"><span class="pn-lbl">Prev</span>← AI personalization · AUTH-016</a>
+    <a href="#s12"><span class="pn-lbl">Next</span>First home arrival · HOME-001 →</a>
   </div>
 </section>
 
-<!-- ================= 11 HOME ================= -->
-<section class="screen-sec" id="s11">
+<!-- ================= 12 HOME ================= -->
+<section class="screen-sec" id="s12">
   <div class="sec-head">
-    <span class="sec-num">11 / 11</span>
+    <span class="sec-num">12 / 12</span>
     <span class="sec-id">HOME-001</span>
     <span class="badge b-c">02C</span>
     <h2>First home arrival</h2>
@@ -749,32 +801,32 @@ footer{border-top:1px solid var(--line); margin-top:44px; padding-top:20px;
     <div class="phone-wrap">
       <div class="phone"><div class="scr">
         <div class="sb"><span>9:41</span><span>▂▄▆ ● ▮</span></div>
-        <div class="widget"><span class="stag wf-stag">1</span><div class="wt">Greeting</div><div class="wv"><span class="ph">[Good evening, Aziz]</span></div></div>
-        <div class="widget"><span class="stag wf-stag">2</span><div class="wt">Weather</div><div class="wv"><span class="ph">[24° · clear]</span></div></div>
+        <div class="widget"><span class="stag wf-stag">1</span><div class="wt">Greeting</div><div class="wv"><span class="ph">[Good evening, Aziz]</span> — what shall we plan first? <span class="ph">[proposed]</span></div></div>
+        <div class="widget"><span class="stag wf-stag">2</span><div class="wt">Weather</div><div class="wv"><span class="ph">[24° · clear]</span> · <span class="ph">[Great evening for a terrace — proposed hint]</span></div></div>
         <div class="widget"><span class="stag wf-stag">3</span><div class="wt">Upcoming booking</div><div class="wv">No bookings yet — ask Gurman to plan something <span class="ph">[proposed empty state]</span></div></div>
-        <div class="widget"><span class="stag wf-stag">4</span><div class="wt">Nearby</div><div class="wf-box" style="height:34px; margin-top:4px"></div></div>
-        <div class="widget"><span class="stag wf-stag">5</span><div class="wt">For You</div><div class="wf-box" style="height:52px; margin-top:4px"></div><div class="wv" style="margin-top:4px"><span class="ph">[Business video card]</span></div></div>
-        <div class="widget"><span class="stag wf-stag">6</span><div class="wt">AI suggestions</div><div class="chips" style="margin-top:4px"><span class="chip">Plan a birthday</span><span class="chip">Find dinner</span></div></div>
+        <div class="widget"><span class="stag wf-stag">4</span><div class="wt">Nearby</div><div class="wf-box" style="height:30px; margin-top:4px"></div><div class="wv" style="margin-top:3px"><span class="ph">[Places around you — always populated]</span></div></div>
+        <div class="widget"><span class="stag wf-stag">5</span><div class="wt">For You</div><div class="wf-box" style="height:46px; margin-top:4px"></div><div class="wv" style="margin-top:3px"><span class="ph">[Seeded from interests + personalization]</span></div></div>
+        <div class="widget"><span class="stag wf-stag">6</span><div class="wt">AI suggestions</div><div class="chips" style="margin-top:4px"><span class="chip">Plan a birthday</span><span class="chip">Find dinner</span><span class="chip">Best coffee nearby</span></div></div>
         <div class="spacer"></div>
         <div class="aibar">Ask Gurman anything… <span class="ph">[proposed]</span><span class="mic"></span></div>
       </div></div>
-      <p class="phone-note">Numbered markers show the documented staggered entrance order. The persistent AI bar (Manzil’s signature, per the universal screen pattern) appears here for the first time in the flow.</p>
+      <p class="phone-note">Numbered markers show the documented staggered entrance order. The persistent AI bar (Manzil’s signature) appears here for the first time in the flow. <span class="revtag">Review</span>Every widget answers “What can I do?” even with zero data.</p>
     </div>
     <div class="spec"><dl>
-      <dt>Purpose</dt><dd>The arrival moment — home widgets animate in “alive, not noisy”; the persistent AI bar appears for the first time. Emotional beat: possibility.</dd>
-      <dt>Entry</dt><dd>Complete profile “Finish” or “Skip for now”.</dd>
-      <dt>Exit</dt><dd>Every widget leads somewhere (UX Blueprint principle): AI bar → conversation; For You → feed; Nearby → nearby; booking widget → planning. Deeper destinations are beyond this 11-screen scope and not wireframed.</dd>
+      <dt>Purpose</dt><dd>The arrival moment — home widgets animate in “alive, not noisy”; the persistent AI bar appears for the first time. The screen immediately answers “What can I do?”. Emotional beat: possibility.</dd>
+      <dt>Entry</dt><dd>Ready auto-advance (or tap-through).</dd>
+      <dt>Exit</dt><dd>Every widget leads somewhere (UX Blueprint principle): AI bar → conversation; For You → feed; Nearby → nearby; booking widget → planning. Deeper destinations are beyond this 12-screen scope and not wireframed.</dd>
       <dt>Components</dt><dd><span class="comp">GreetingWidget</span> <span class="comp">WeatherWidget</span> <span class="comp">BookingWidget</span> <span class="comp">NearbyWidget</span> <span class="comp">ForYouCard</span> <span class="comp">AISuggestionsWidget</span> <span class="comp">PersistentAIBar</span></dd>
       <dt>Primary action</dt><dd>Ask Gurman via the persistent AI bar — widgets are secondary paths.</dd>
       <dt>Motion</dt><dd>Staggered widget entrance in documented order: greeting → weather → upcoming booking → nearby → For You → AI suggestions; the AI bar slides up last with subtle emphasis. <em>Reduced motion: everything fades in together, no translation, no stagger.</em></dd>
-      <dt>States</dt><dd>Loading — per-widget skeletons, screen never blocks. Offline — banner + cached content. Empty — booking widget shows guidance + suggested action (never blank, per Design System states).</dd>
+      <dt>States</dt><dd>Loading — per-widget skeletons, screen never blocks. Offline — banner + cached content. Empty — <span class="revtag">Review</span>no widget ever renders blank: booking shows guidance + suggested action, For You seeds from interests + personalization, Nearby always has places, AI suggestions are always available.</dd>
       <dt>Accessibility</dt><dd>Each widget is a labeled landmark; stagger is visual only — content available to screen readers immediately; AI bar labeled “Ask Gurman”; focus starts at greeting.</dd>
       <dt>Analytics</dt><dd><code>Home Loaded</code> · <code>First Meaningful Action Completed</code> — activation = save a business, start an AI conversation, make a booking, create a collection, follow a business, or share a story.</dd>
-      <dt>Notes</dt><dd><span class="assume">Assumption</span>Booking widget renders its empty state for brand-new users (no bookings can exist yet); FLOW 001 lists the widget without the first-run case.</dd>
+      <dt>Notes</dt><dd><span class="assume">Assumption</span>Booking widget renders its first-run empty state (no bookings can exist yet); FLOW 001 lists the widget without the first-run case.</dd>
     </dl></div>
   </div>
   <div class="pn">
-    <a href="#s10"><span class="pn-lbl">Prev</span>← Complete profile · AUTH-017</a>
+    <a href="#s11"><span class="pn-lbl">Prev</span>← Ready · AUTH-018</a>
     <span class="spacer-a"></span>
   </div>
 </section>
@@ -783,27 +835,28 @@ footer{border-top:1px solid var(--line); margin-top:44px; padding-top:20px;
 <section class="register" id="assumptions">
   <h2>Assumption register — for review</h2>
   <ol>
-    <li><b>Sub-flow placement:</b> Permissions introduction (AUTH-014) and AI personalization (AUTH-016) assigned to 02C — Prompt 02’s split names neither.</li>
+    <li><b>Sub-flow placement:</b> Permissions introduction (AUTH-014), AI personalization (AUTH-016), and Ready (AUTH-018*) assigned to 02C — Prompt 02’s split names none of them.</li>
     <li><b>Welcome exits:</b> both CTAs land on AUTH-006, which doubles as FLOW 001’s “Account Choice”; the new/returning fork resolves there.</li>
     <li><b>Sign in:</b> six auth methods with equal visual weight in FLOW 001 order; no default highlighted.</li>
     <li><b>Guest path:</b> button shown as documented; destination unspecified in corpus — flagged for product decision, not wired.</li>
-    <li><b>Register:</b> single combined “Phone or email” field; create-password (AUTH-013) treated as out of the 11-screen scope (“if needed”).</li>
+    <li><b>Register:</b> single combined “Phone or email” field; create-password (AUTH-013) treated as out of scope (“if needed”).</li>
     <li><b>OTP:</b> 6-digit code; resend affordance with ~30&nbsp;s cooldown; <code>Registration Completed</code> fires on verification success.</li>
     <li><b>Analytics trigger:</b> <code>Registration Started</code> fired on auth-method tap (funnel start).</li>
-    <li><b>Permissions:</b> screen is informational only — zero OS prompts (derived from “ask in context, never up-front”).</li>
-    <li><b>Onboarding progress:</b> 4 steps across 02C; AI introduction + personalization share step 3.</li>
-    <li><b>Interests:</b> “Continue” enabled after ≥ 1 selection (no documented minimum).</li>
-    <li><b>AI introduction ID:</b> no AUTH ID exists — mapped to <code>AI-001</code> in introduction mode; suggestion tap advances to AUTH-016 (Prompt 02 order followed over FLOW 001 document order).</li>
-    <li><b>AI personalization:</b> multi-select chips, “Continue” after ≥ 1.</li>
-    <li><b>Complete profile:</b> contents (optional photo + prefilled name + “Skip for now”) chosen as simplest — corpus silent on fields.</li>
+    <li><b>Permissions:</b> screen is informational only — zero OS prompts; Camera row kept per FLOW 001 although the review’s copy list omitted it — confirm.</li>
+    <li><b>Onboarding progress:</b> 4 steps (permissions → interests → profile → personalization); AI introduction and Ready carry no step indicator.</li>
+    <li><b>Interests:</b> single-select, per the radio marks in the review sketch; question overlap with AUTH-016 flagged for hi-fi differentiation (today’s intent vs. habitual patterns).</li>
+    <li><b>AI introduction ID:</b> no AUTH ID exists — mapped to <code>AI-001</code> in introduction mode.</li>
+    <li><b>AI personalization:</b> multi-select chips, “Continue” after ≥ 1; name-prefixed greeting proposed (enabled by v1.1 order).</li>
+    <li><b>Profile fields:</b> optional photo + prefilled name + “Skip for now” (corpus silent); City added from the review rationale; language sourced from device/app settings, not asked.</li>
+    <li><b>Ready:</b> ID AUTH-018 proposed (Screen Bible ends at AUTH-017); placed after AI personalization as the true end of onboarding — the review’s “right after Profile” was written against the pre-reorder sequence.</li>
     <li><b>Home:</b> booking widget shows first-run empty state.</li>
   </ol>
 </section>
 
 <footer>
-  <p>WOW Flow — Lo-Fi Wireframes v1.0 · Epic 1 · awaiting review · generated 2026-08-05.<br>
-  Grayscale lo-fi by design: structure, hierarchy, and annotation only — no brand color, gradients, or glassmorphism. CTA copy sentence-cased per Design System; FLOW 001 copy otherwise verbatim. Persistent AI bar appears only on HOME-001 per Prompt 02.<br>
-  Sources: ceo-office/manzil-3.0 — 12-user-flows-vol1-auth.md (FLOW 001) · 10-ux-blueprint.md · 07-screen-bible.md · 05-design-system.md · manzil-3.0-design-prompt.md · prompts/implementation-prompt-02-wow-flow.md · 14-execution-review.md §5 (repository structure).</p>
+  <p>WOW Flow — Lo-Fi Wireframes v1.1 · Epic 1 · review amendments applied 2026-08-06 (v1.0 generated 2026-08-05; verdict per REVIEW-v1.md: approve with minor changes, ready for hi-fi).<br>
+  Grayscale lo-fi by design: structure, hierarchy, and annotation only — no brand color, gradients, or glassmorphism. CTA copy sentence-cased per Design System; FLOW 001 copy otherwise verbatim; review copy marked with the Review tag. Persistent AI bar appears only on HOME-001 per Prompt 02.<br>
+  Sources: ceo-office/manzil-3.0 — 12-user-flows-vol1-auth.md (FLOW 001) · 10-ux-blueprint.md · 07-screen-bible.md · 05-design-system.md · manzil-3.0-design-prompt.md · prompts/implementation-prompt-02-wow-flow.md · 14-execution-review.md §5 (repository structure) · design/flows/wow-flow/REVIEW-v1.md (review record + addendum).</p>
 </footer>
 
 </main>
