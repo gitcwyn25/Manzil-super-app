@@ -1,0 +1,1086 @@
+// Discover (task A1): planner hero + category bento + curated card rows
+// (browse state) and the filter-sidebar results layout (filtered state).
+//
+// Loads from vibrant.scss AFTER globals.css and _vm-kit.scss, so restating a
+// globals.css selector at the same specificity deliberately wins the cascade
+// tie — that is how the legacy .gurman-hero / .home-category families are
+// re-skinned without touching their load-bearing class names (e2e welds:
+// .gurman-hero__*, .home-sections, .home-card, .home-card__rating,
+// .home-category + .is-empty).
+//
+// Motion contract: every transition short-circuits to its final state under
+// prefers-reduced-motion (block at the end; the hero is additionally covered
+// by globals.css's `.gurman-hero *` reduced-motion rule).
+
+// ---------------------------------------------------------------------------
+// Planner hero (browse state) — light Vibrant Marketplace ground replacing
+// the dark Anor hero. Same class names, new recipe.
+// ---------------------------------------------------------------------------
+
+.gurman-hero {
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  padding: 3rem 0 3.5rem;
+  border-radius: 0;
+  background: $vm-surface;
+  isolation: isolate;
+}
+
+@include media-breakpoint-up(lg) {
+  .gurman-hero {
+    padding: 4.5rem 0 5rem;
+  }
+}
+
+.gurman-hero__wash {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 15% 20%, rgba($vm-primary, .10), transparent 55%),
+    radial-gradient(circle at 85% 70%, rgba($vm-secondary-container, .22), transparent 55%);
+  filter: blur(48px);
+  pointer-events: none;
+}
+
+.gurman-shape__body {
+  border-color: rgba($vm-primary, .06);
+}
+
+.gurman-hero__inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  gap: 3rem;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding-inline: 1rem;
+  text-align: left;
+}
+
+@include media-breakpoint-up(lg) {
+  .gurman-hero__inner {
+    grid-template-columns: 1fr 1fr;
+    padding-inline: 2rem;
+  }
+}
+
+.gurman-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  margin-bottom: 1.25rem;
+  padding: .375rem .875rem;
+  border: 1px solid rgba($primary, .12);
+  border-radius: $border-radius-pill;
+  background: $vm-surface-container-highest;
+  color: $primary;
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+  box-shadow: $box-shadow-sm;
+
+  svg {
+    flex: none;
+  }
+}
+
+.gurman-hero__title {
+  margin: 0 0 1rem;
+  max-width: none;
+  font-family: $font-family-sans-serif;
+  font-size: clamp(2.25rem, 5vw, 3rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -.02em;
+  color: $vm-on-surface;
+}
+
+.gurman-hero__title span {
+  display: block;
+}
+
+// Higher specificity than globals' `.gurman-hero__title span` so the accent
+// phrase can shrink-wrap (the squiggle spans the text, not the column).
+.gurman-hero__title .gurman-hero__title-accent {
+  position: relative;
+  display: inline-block;
+  padding-bottom: .25rem;
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  color: $primary;
+}
+
+.gurman-hero__squiggle {
+  position: absolute;
+  left: 0;
+  bottom: -.125rem;
+  width: 100%;
+  height: .75rem;
+  color: $vm-secondary-container;
+  pointer-events: none;
+}
+
+.gurman-hero__sub {
+  margin: 0 0 1.5rem;
+  max-width: 36rem;
+  font-size: 1.125rem;
+  line-height: 1.55;
+  color: $vm-on-surface-variant;
+}
+
+// The planner input card: white L1 surface with the blue-tinted glow that
+// deepens on focus (DESIGN.md focus recipe).
+.gurman-hero__planner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  max-width: 34rem;
+  padding: .5rem;
+  border: 1px solid rgba($vm-outline-variant, .35);
+  border-radius: $card-border-radius;
+  background: $vm-surface-container-lowest;
+  box-shadow: 0 8px 20px rgba($vm-primary, .08);
+  transition: box-shadow .3s ease, border-color .3s ease;
+
+  &:focus-within {
+    border-color: rgba($primary, .4);
+    box-shadow: 0 12px 24px rgba($vm-primary, .12);
+  }
+}
+
+.gurman-hero__planner-well {
+  flex: 1 1 12rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .375rem .75rem;
+  border-radius: $border-radius;
+  background: $vm-surface-container-low;
+}
+
+.gurman-hero__planner-icon {
+  flex: none;
+  color: $primary;
+}
+
+.gurman-hero__planner-input {
+  flex: 1;
+  min-width: 0;
+  padding: .375rem 0;
+  border: 0;
+  background: transparent;
+  font-size: 1rem;
+  color: $vm-on-surface;
+
+  &:focus {
+    outline: 0;
+  }
+
+  &::placeholder {
+    color: $vm-outline;
+  }
+}
+
+.gurman-hero__cta {
+  white-space: nowrap;
+}
+
+@include media-breakpoint-down(sm) {
+  .gurman-hero__planner {
+    flex-direction: column;
+  }
+
+  .gurman-hero__cta {
+    width: 100%;
+  }
+}
+
+.gurman-hero__trust {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .75rem 1.5rem;
+  margin-top: 1.25rem;
+  font-size: .8125rem;
+  font-weight: 600;
+  color: $vm-on-surface-variant;
+}
+
+.gurman-hero__trust-item {
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+
+  svg {
+    flex: none;
+    color: $vm-secondary;
+  }
+}
+
+.gurman-hero__secondary {
+  font-size: .8125rem;
+  font-weight: 600;
+  color: $primary;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// Decorative lg-only bento: the honest three-step story (you ask → real
+// reviews → real places) instead of the mock's fabricated itinerary.
+.gurman-hero__bento {
+  display: none;
+}
+
+@include media-breakpoint-up(lg) {
+  .gurman-hero__bento {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(3, 1fr);
+    gap: 1rem;
+    height: 31rem;
+    transform: rotate(2deg);
+  }
+}
+
+.gurman-bento__tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: .125rem;
+  overflow: hidden;
+  padding: 1.25rem;
+  border-radius: $card-border-radius;
+  box-shadow: $box-shadow;
+}
+
+.gurman-bento__tile--brand {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  background: linear-gradient(160deg, $vm-primary-container, $primary);
+  color: #fff;
+}
+
+.gurman-bento__tile--ask {
+  grid-column: 2;
+  grid-row: 1;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: $vm-surface-container-low;
+  color: $vm-on-surface;
+  box-shadow: $box-shadow-sm;
+
+  > svg {
+    color: $primary;
+  }
+}
+
+.gurman-bento__tile--reviews {
+  grid-column: 2;
+  grid-row: 2 / 4;
+  background: linear-gradient(165deg, $vm-secondary-container, $vm-secondary-fixed-dim);
+  color: $vm-on-secondary-fixed;
+}
+
+.gurman-bento__tile--places {
+  grid-column: 1;
+  grid-row: 3;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: rgba($primary, .06);
+  border: 1px solid rgba($primary, .2);
+  color: $primary;
+  box-shadow: $box-shadow-sm;
+
+  > svg {
+    color: $primary;
+  }
+
+  .gurman-bento__hint {
+    color: $vm-on-surface-variant;
+  }
+}
+
+.gurman-bento__glyph {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  opacity: .22;
+  pointer-events: none;
+}
+
+.gurman-bento__title {
+  font-size: 1.125rem;
+  font-weight: 800;
+  letter-spacing: -.01em;
+}
+
+.gurman-bento__hint {
+  font-size: .75rem;
+  font-weight: 500;
+  opacity: .85;
+}
+
+// ---------------------------------------------------------------------------
+// Browse-state sections wrapper
+// ---------------------------------------------------------------------------
+
+.discover-page__sections {
+  padding-block: 2.5rem 4rem;
+}
+
+.home-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  margin: 0;
+}
+
+// ---------------------------------------------------------------------------
+// Category bento — .home-category tiles re-skinned as gradient art tiles
+// (the Category entity has no image; visuals come from the static slug map).
+// ---------------------------------------------------------------------------
+
+.home-categories--bento {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@include media-breakpoint-up(md) {
+  .home-categories--bento {
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 11.5rem;
+  }
+
+  .home-category--hero {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  .home-category--wide {
+    grid-column: span 2;
+  }
+}
+
+.home-category {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow: hidden;
+  min-height: 9rem;
+  padding: 0;
+  border: 0;
+  border-radius: $card-border-radius;
+  color: #fff;
+  box-shadow: $box-shadow-sm;
+  transition: box-shadow .3s ease, transform .3s ease;
+}
+
+.home-category:hover {
+  transform: translateY(-2px);
+  box-shadow: $box-shadow;
+}
+
+.home-category:focus-visible {
+  outline: 0;
+  box-shadow: $box-shadow-sm, 0 0 0 .25rem $focus-ring-color;
+}
+
+.home-category--hero {
+  min-height: 15rem;
+}
+
+// Gradient art per live slug (double class beats globals' `.is-empty`
+// background at 0,2,0); dark toward the bottom so captions stay legible.
+.home-category.home-category--art-restaurants {
+  background: linear-gradient(165deg, #0070eb, #003a80 80%);
+}
+
+.home-category.home-category--art-cafes {
+  background: linear-gradient(165deg, #c05400, #6b2f00 82%);
+}
+
+.home-category.home-category--art-beauty {
+  background: linear-gradient(165deg, #00875b, #00402b 82%);
+}
+
+.home-category.home-category--art-auto {
+  background: linear-gradient(165deg, #2c4165, #16233a 82%);
+}
+
+.home-category.home-category--art-repairs {
+  background: linear-gradient(165deg, #717786, #414755 82%);
+}
+
+.home-category.home-category--art-default {
+  background: linear-gradient(165deg, #5b6474, #3a4150 82%);
+}
+
+// An empty category is an invitation, not a dead end — a dashed inner frame
+// and muted saturation read as a slot waiting to be filled.
+.home-category.is-empty {
+  border: 0;
+  outline: 1.5px dashed rgba(#fff, .55);
+  outline-offset: -8px;
+  filter: saturate(.6);
+}
+
+.home-category__glyph {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  color: #fff;
+  opacity: .25;
+  pointer-events: none;
+}
+
+.home-category__chip {
+  position: absolute;
+  top: .75rem;
+  right: .75rem;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: rgba(#fff, .85);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  color: $primary;
+  box-shadow: $box-shadow-sm;
+}
+
+.home-category__caption {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: .125rem;
+  margin-top: auto;
+  padding: 1rem;
+}
+
+.home-category--hero .home-category__caption {
+  padding: 1.5rem 4.5rem 1.5rem 1.5rem;
+}
+
+.home-category__name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.home-category--hero .home-category__name {
+  font-size: 1.5rem;
+  letter-spacing: -.01em;
+}
+
+.home-category__count {
+  font-size: .75rem;
+  color: rgba(#fff, .8);
+  font-variant-numeric: tabular-nums;
+}
+
+.home-category.is-empty .home-category__count {
+  color: #fff;
+  font-weight: 600;
+}
+
+// Hero tile's hover arrow chip: fades in sliding from the right.
+.home-category__arrow {
+  position: absolute;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: rgba(#fff, .22);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  color: #fff;
+  opacity: 0;
+  transform: translateX(1rem);
+  transition: opacity .3s ease, transform .3s ease;
+}
+
+.home-category--hero:hover .home-category__arrow,
+.home-category--hero:focus-visible .home-category__arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+// ---------------------------------------------------------------------------
+// Curated card rows sit on a white slab (the mock's surface-container-lowest
+// panel floating over the blue-tinted page).
+// ---------------------------------------------------------------------------
+
+.home-slab {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  padding: 1.5rem;
+  border: 1px solid rgba($vm-outline-variant, .4);
+  border-radius: $border-radius-xl;
+  background: $vm-surface-container-lowest;
+  box-shadow: $box-shadow-sm;
+}
+
+@include media-breakpoint-up(md) {
+  .home-slab {
+    padding: 2rem;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Master Card additions: the rating chip moves onto the image (weld class
+// rides on it), featured badge + priceTier chips overlay, and the body gains
+// a review-count footer with the circular hover-fill arrow.
+// ---------------------------------------------------------------------------
+
+.home-card__photo .home-card__rating {
+  position: absolute;
+  top: .75rem;
+  left: .75rem;
+  display: inline-flex;
+  align-items: center;
+  padding: .25rem .5rem;
+  border-radius: .375rem;
+  background: rgba(#fff, .92);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  box-shadow: $box-shadow-sm;
+  font-size: .8125rem;
+}
+
+// The "New" state keeps its designed tint even inside the overlay chip.
+.home-card__photo .vm-rating--new {
+  background: $primary-bg-subtle;
+  color: $primary-text-emphasis;
+}
+
+.home-card__flag {
+  position: absolute;
+  top: .75rem;
+  right: .75rem;
+  border-radius: .375rem;
+}
+
+.home-card__meta {
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+
+  svg {
+    flex: none;
+    color: $vm-outline;
+  }
+}
+
+.home-card__foot {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin-top: .25rem;
+  padding-top: .625rem;
+  border-top: 1px solid rgba($vm-outline-variant, .45);
+  color: $vm-on-surface-variant;
+  font-size: .8125rem;
+}
+
+.home-card__go {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  margin-left: auto;
+  border-radius: 50%;
+  background: $vm-surface-container-low;
+  color: $primary;
+  transition: background-color .3s ease, color .3s ease;
+
+  svg {
+    flex: none;
+  }
+}
+
+.home-card:hover .home-card__go {
+  background: $primary;
+  color: #fff;
+}
+
+// ---------------------------------------------------------------------------
+// Filtered/results state: sidebar + results column
+// ---------------------------------------------------------------------------
+
+.discover-results {
+  padding-block: 2rem 4rem;
+}
+
+.discover-results__layout {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+@include media-breakpoint-up(md) {
+  .discover-results__layout {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+.discover-results__main {
+  flex: 1;
+  min-width: 0;
+}
+
+.discover-results__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.discover-results__title {
+  margin: 0;
+  max-width: none;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -.02em;
+}
+
+.discover-results__count {
+  margin: .25rem 0 0;
+  font-size: 1.125rem;
+  color: $vm-on-surface-variant;
+}
+
+// --- Filter sidebar --------------------------------------------------------
+
+.vm-filter {
+  width: 100%;
+}
+
+@include media-breakpoint-up(md) {
+  .vm-filter {
+    flex: 0 0 16rem;
+    position: sticky;
+    top: 5.5rem;
+    align-self: flex-start;
+  }
+}
+
+.vm-filter__card {
+  display: grid;
+  gap: 1.5rem;
+  padding: 1.25rem;
+  border: 1px solid rgba($vm-outline-variant, .5);
+  border-radius: $card-border-radius;
+  background: $vm-surface-container-lowest;
+  box-shadow: $box-shadow-sm;
+}
+
+.vm-filter__title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.vm-filter__group {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.vm-filter__label {
+  float: none;
+  display: block;
+  width: 100%;
+  margin-bottom: .5rem;
+  padding: 0;
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  line-height: calc(16 / 12);
+  text-transform: uppercase;
+  color: $vm-on-surface-variant;
+}
+
+// 3-segment price control ($ $$ $$$): the only real tiers (D7).
+.vm-segments {
+  display: flex;
+  gap: .5rem;
+}
+
+.vm-segment {
+  position: relative;
+  flex: 1;
+  margin: 0;
+}
+
+.vm-segment__input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.vm-segment__face {
+  display: block;
+  padding: .375rem .25rem;
+  border: 1px solid $vm-outline-variant;
+  border-radius: .375rem;
+  background: $vm-surface-container-lowest;
+  color: $vm-on-surface-variant;
+  font-size: .875rem;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+.vm-segment:hover .vm-segment__face {
+  background: $vm-surface-container-low;
+}
+
+.vm-segment__input:checked + .vm-segment__face {
+  background: $primary;
+  border-color: $primary;
+  color: #fff;
+  box-shadow: $box-shadow-sm;
+}
+
+.vm-segment__input:focus-visible + .vm-segment__face {
+  box-shadow: $input-focus-box-shadow;
+}
+
+.vm-filter__options {
+  display: grid;
+  gap: .5rem;
+}
+
+.vm-rating-option {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin: 0;
+  font-size: .875rem;
+  color: $vm-on-surface-variant;
+  cursor: pointer;
+
+  &:hover {
+    color: $vm-on-surface;
+  }
+
+  input[type="radio"] {
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+    margin: 0;
+    accent-color: $primary;
+  }
+}
+
+// One canonical rating accent (D3): the filter stars are tertiary-orange
+// too, not the mock's green.
+.vm-rating-option__stars {
+  display: inline-flex;
+  gap: .125rem;
+  color: $vm-tertiary-container;
+
+  svg {
+    flex: none;
+  }
+}
+
+.vm-filter__actions {
+  display: grid;
+  gap: .5rem;
+}
+
+.vm-filter__apply {
+  width: 100%;
+  padding: .5rem 1rem;
+  border: 0;
+  border-radius: $border-radius;
+  background: $vm-surface-container-highest;
+  color: $vm-on-surface;
+  font-size: .875rem;
+  font-weight: 600;
+  transition: background-color .2s ease;
+
+  &:hover {
+    background: $vm-surface-dim;
+  }
+
+  &:focus-visible {
+    outline: 0;
+    box-shadow: $input-focus-box-shadow;
+  }
+}
+
+.vm-filter__reset {
+  text-align: center;
+  font-size: .8125rem;
+  font-weight: 600;
+  color: $primary;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// --- Sort control ----------------------------------------------------------
+
+.vm-sort {
+  align-items: center;
+  gap: .5rem;
+  margin: 0;
+  font-size: .875rem;
+  color: $vm-on-surface-variant;
+  white-space: nowrap;
+}
+
+.vm-sort__select {
+  border: 0;
+  background: transparent;
+  color: $primary;
+  font-size: .875rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 0;
+    border-radius: $border-radius-sm;
+    box-shadow: $input-focus-box-shadow;
+  }
+}
+
+// --- Results grid ----------------------------------------------------------
+
+.vm-results {
+  display: flex;
+  flex-direction: column;
+}
+
+.vm-results-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@include media-breakpoint-up(sm) {
+  .vm-results-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@include media-breakpoint-up(xl) {
+  .vm-results-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+// RevealStagger wraps each card in a .reveal grid item.
+.vm-results-grid > .reveal {
+  display: flex;
+  min-width: 0;
+}
+
+.vm-results-grid > .reveal > .business-card {
+  width: 100%;
+}
+
+// --- Featured (promoted) result card ---------------------------------------
+
+.vm-featured-card {
+  margin-bottom: 1rem;
+  overflow: hidden;
+  border: 1px solid rgba($vm-outline-variant, .5);
+  border-radius: $card-border-radius;
+  background: $vm-surface-container-lowest;
+  box-shadow: $box-shadow-sm;
+}
+
+.vm-featured-card__link {
+  display: grid;
+  grid-template-columns: 1fr;
+  color: inherit;
+  text-decoration: none;
+}
+
+@include media-breakpoint-up(md) {
+  .vm-featured-card__link {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.vm-featured-card__media {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 12rem;
+  overflow: hidden;
+  background: linear-gradient(135deg, $vm-surface-container-high, $primary-bg-subtle);
+}
+
+.vm-featured-card__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .5s ease;
+}
+
+.vm-featured-card:hover .vm-featured-card__img {
+  transform: scale(1.05);
+}
+
+.vm-featured-card__initial {
+  color: $primary;
+  font-size: 3rem;
+  font-weight: 800;
+}
+
+.vm-featured-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  padding: 1.25rem;
+}
+
+.vm-featured-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .75rem;
+}
+
+.vm-featured-card__name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  transition: color .2s ease;
+}
+
+.vm-featured-card:hover .vm-featured-card__name {
+  color: $primary;
+}
+
+.vm-featured-card__rating {
+  flex: none;
+  padding: .25rem .5rem;
+  border-radius: .375rem;
+  background: $vm-surface-container-low;
+}
+
+.vm-featured-card__desc {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  margin: 0;
+  color: $vm-on-surface-variant;
+}
+
+.vm-featured-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-top: auto;
+}
+
+// --- Load more (client-side chunking; hides itself when exhausted) ---------
+
+.vm-load-more {
+  display: block;
+  width: 100%;
+  margin: 1.5rem auto 0;
+  padding: .75rem 1.5rem;
+  border: 1px solid rgba($primary, .25);
+  border-radius: $border-radius;
+  background: $vm-surface-container-low;
+  color: $primary;
+  font-size: .875rem;
+  font-weight: 600;
+  box-shadow: $box-shadow-sm;
+  transition: background-color .2s ease, color .2s ease;
+
+  &:hover {
+    background: $primary;
+    color: #fff;
+  }
+
+  &:focus-visible {
+    outline: 0;
+    box-shadow: $input-focus-box-shadow;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .vm-load-more {
+    width: auto;
+  }
+}
+
+// --- Empty state (restyled to a quiet white card) --------------------------
+
+.empty-state.vm-empty {
+  padding: 3rem 1.5rem;
+  border: 1px dashed $vm-outline-variant;
+  border-radius: $card-border-radius;
+  background: $vm-surface-container-lowest;
+  box-shadow: none;
+
+  p {
+    margin: .5rem 0 0;
+    color: $vm-on-surface-variant;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Reduced motion: every transition lands on its final state instantly.
+// (The hero subtree is additionally flattened by globals.css.)
+// ---------------------------------------------------------------------------
+
+@media (prefers-reduced-motion: reduce) {
+  .home-category,
+  .home-category__arrow,
+  .home-card__go,
+  .vm-segment__face,
+  .vm-filter__apply,
+  .vm-featured-card__img,
+  .vm-featured-card__name,
+  .vm-load-more,
+  .gurman-hero__planner {
+    transition: none;
+  }
+
+  .home-category:hover {
+    transform: none;
+  }
+
+  .home-category__arrow {
+    transform: none;
+  }
+
+  .vm-featured-card:hover .vm-featured-card__img {
+    transform: none;
+  }
+}
