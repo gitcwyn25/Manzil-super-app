@@ -142,6 +142,56 @@ export function getUiCopy(locale: Locale) {
           "Gurman AI can't answer right now. Please try again in a little while."
         ),
         locale
+      ),
+      assistantName: localize(L("Manzil Concierge", "Manzil Concierge", "Manzil Concierge"), locale),
+      statusReady: localize(
+        L("Savolingizga tayyor", "Готов к вашему вопросу", "Ready for your question"),
+        locale
+      ),
+      panelTitle: localize(
+        L("Gurman AI nima qila oladi", "Что умеет Gurman AI", "What Gurman AI can do"),
+        locale
+      ),
+      panelRealTitle: localize(L("Faqat haqiqiy joylar", "Только реальные места", "Only real places"), locale),
+      panelRealBody: localize(
+        L(
+          "Har bir tavsiya Manzil katalogidagi mavjud biznesga havola bo'ladi.",
+          "Каждая рекомендация — ссылка на реальный бизнес из каталога Manzil.",
+          "Every suggestion links to a real business in Manzil's catalog."
+        ),
+        locale
+      ),
+      panelReviewsTitle: localize(
+        L("Sharhlarga asoslanadi", "Опирается на отзывы", "Grounded in reviews"),
+        locale
+      ),
+      panelReviewsBody: localize(
+        L(
+          "Gurman AI foydalanuvchilarning haqiqiy sharhlari va reytinglariga tayanadi.",
+          "Gurman AI опирается на настоящие отзывы и рейтинги пользователей.",
+          "Gurman AI draws on real user reviews and ratings."
+        ),
+        locale
+      ),
+      panelLangTitle: localize(
+        L("Uch tilda ishlaydi", "Работает на трёх языках", "Works in three languages"),
+        locale
+      ),
+      panelLangBody: localize(
+        L(
+          "O'zbek, rus yoki ingliz tilida yozing — javob shu tilda qaytadi.",
+          "Пишите на узбекском, русском или английском — ответ придёт на том же языке.",
+          "Write in Uzbek, Russian, or English — the answer comes back in the same language."
+        ),
+        locale
+      ),
+      panelNote: localize(
+        L(
+          "Gurman hozircha tayyor paketlar tuzmaydi va bron qilmaydi. U joy tavsiya qiladi — tanlov sizniki.",
+          "Gurman пока не составляет готовые пакеты и не бронирует. Он советует места — выбор за вами.",
+          "Gurman doesn't assemble ready-made packages or make bookings yet. It recommends places — the choice is yours."
+        ),
+        locale
       )
     },
     pricing: {

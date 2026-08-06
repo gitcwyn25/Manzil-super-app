@@ -2,9 +2,12 @@
 
 import type { Locale } from "@manzil/shared";
 import { getUiCopy } from "@manzil/shared";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { API_BASE_URL } from "../lib/api-base-url";
 import { pickLocalized } from "../lib/locale-text";
+import { IconField } from "./vm/icon-field";
+import { Icon } from "./vm/icons";
+import { PrimaryCta } from "./vm/primary-cta";
 
 type Suggestion = { slug: string; name: string; reason: string };
 
@@ -55,6 +58,19 @@ export function ConciergeChat({
   // is throttled to 10 requests per 15 minutes, so a double-tap costs the user
   // a fifth of their budget for one question.
   const inFlight = useRef(false);
+
+  // The scroll area follows the newest message; instant (no smooth scroll)
+  // when the user prefers reduced motion.
+  const messagesRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const node = messagesRef.current;
+    if (!node) {
+      return;
+    }
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    node.scrollTo({ top: node.scrollHeight, behavior: reduceMotion ? "auto" : "smooth" });
+  }, [messages, pending]);
 
   async function sendMessage(raw: string) {
     const text = raw.trim();
@@ -108,37 +124,61 @@ export function ConciergeChat({
 
   return (
     <div className="concierge-shell">
-      <div className="concierge-messages" aria-live="polite">
+      <header className="concierge-head">
+        <span aria-hidden="true" className="concierge-head__avatar">
+          <Icon name="robot" size={22} />
+        </span>
+        <div>
+          <p className="concierge-head__name">{copy.concierge.assistantName}</p>
+          {/* Honest presence: mirrors the actual request state, never a
+              blanket "Always online" claim. */}
+          <p className="concierge-head__status">
+            {pending ? copy.concierge.thinking : copy.concierge.statusReady}
+          </p>
+        </div>
+      </header>
+
+      <div aria-live="polite" className="concierge-messages" ref={messagesRef}>
         {messages.map((message) => (
           <article className={`concierge-message ${message.role}`} key={message.id}>
-            <p>{message.text}</p>
-            {message.suggestions?.length ? (
-              <div className="concierge-suggestions">
-                {message.suggestions.map((suggestion) => (
-                  <a
-                    className="concierge-suggestion"
-                    href={`/${locale}/businesses/${suggestion.slug}`}
-                    key={suggestion.slug}
-                  >
-                    <strong>{suggestion.name}</strong>
-                    <span>{suggestion.reason}</span>
-                  </a>
-                ))}
-              </div>
-            ) : null}
+            <span aria-hidden="true" className="concierge-message__avatar">
+              <Icon name={message.role === "assistant" ? "robot" : "user"} size={16} />
+            </span>
+            <div className="concierge-message__bubble">
+              <p>{message.text}</p>
+              {message.suggestions?.length ? (
+                <div className="concierge-suggestions">
+                  {message.suggestions.map((suggestion) => (
+                    <a
+                      className="concierge-suggestion"
+                      href={`/${locale}/businesses/${suggestion.slug}`}
+                      key={suggestion.slug}
+                    >
+                      <strong>{suggestion.name}</strong>
+                      <span>{suggestion.reason}</span>
+                    </a>
+                  ))}
+                </div>
+              ) : null}
+            </div>
           </article>
         ))}
 
         {pending ? (
           <article className="concierge-message assistant is-thinking">
-            <p>
-              <span aria-hidden="true" className="concierge-dots">
-                <i />
-                <i />
-                <i />
-              </span>
-              {copy.concierge.thinking}
-            </p>
+            <span aria-hidden="true" className="concierge-message__avatar">
+              <Icon name="robot" size={16} />
+            </span>
+            <div className="concierge-message__bubble">
+              <p>
+                <span aria-hidden="true" className="concierge-dots">
+                  <i />
+                  <i />
+                  <i />
+                </span>
+                {copy.concierge.thinking}
+              </p>
+            </div>
           </article>
         ) : null}
       </div>
@@ -164,15 +204,18 @@ export function ConciergeChat({
           void sendMessage(input);
         }}
       >
-        <input
+        <IconField
+          className="concierge-form__field"
           disabled={pending}
+          icon="sparkles"
           placeholder={copy.concierge.placeholder}
           value={input}
           onChange={(event) => setInput(event.target.value)}
         />
-        <button className="primary-button" disabled={pending} type="submit">
+        <PrimaryCta className="concierge-form__send" disabled={pending} shape="pill" type="submit">
+          <Icon name="send" size={18} />
           {pending ? copy.concierge.thinking : copy.concierge.send}
-        </button>
+        </PrimaryCta>
       </form>
     </div>
   );
