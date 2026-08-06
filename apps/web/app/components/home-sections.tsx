@@ -1,5 +1,7 @@
 import type { Locale } from "@manzil/shared";
 import type { HomeCard, HomeSections as Sections } from "../lib/api";
+import { PriceTierBadge } from "./vm/price-tier-badge";
+import { RatingLine } from "./vm/rating-line";
 
 type SectionCopy = {
   featured: string;
@@ -10,7 +12,6 @@ type SectionCopy = {
   beFirst: string;
   beFirstHint: string;
   places: string;
-  noRating: string;
   addBusiness: string;
 };
 
@@ -26,7 +27,6 @@ const COPY: Record<string, SectionCopy> = {
     beFirst: "Birinchi bo'ling",
     beFirstHint: "Bu turkumda hali biznes yo'q",
     places: "ta joy",
-    noRating: "Yangi",
     addBusiness: "Biznesingizni qo'shing"
   },
   ru: {
@@ -38,7 +38,6 @@ const COPY: Record<string, SectionCopy> = {
     beFirst: "Будьте первым",
     beFirstHint: "В этой категории пока нет бизнесов",
     places: "мест",
-    noRating: "Новый",
     addBusiness: "Добавьте свой бизнес"
   },
   en: {
@@ -50,7 +49,6 @@ const COPY: Record<string, SectionCopy> = {
     beFirst: "Be the first",
     beFirstHint: "No businesses here yet",
     places: "places",
-    noRating: "New",
     addBusiness: "Add your business"
   }
 };
@@ -62,28 +60,34 @@ function categoryName(
   return locale === "ru" ? category.nameRu : locale === "en" ? category.nameEn : category.nameUz;
 }
 
-function Card({ business, locale, text }: { business: HomeCard; locale: Locale; text: SectionCopy }) {
+// The Master Card (Vibrant Marketplace): image block with the priceTier chip
+// overlaid, then name / meta / rating. `.home-card` on the anchor and
+// `.home-card__rating` on the rating element are e2e welds — RatingLine
+// renders the localized "New" chip at reviewCount 0, never "0.0 ★".
+function Card({ business, locale }: { business: HomeCard; locale: Locale }) {
   return (
-    <a className="home-card" href={`/${locale}/businesses/${business.slug}`}>
-      <span className="home-card__photo" aria-hidden="true">
+    <a className="home-card card-interactive" href={`/${locale}/businesses/${business.slug}`}>
+      <span className="home-card__photo">
         {business.coverPhotoUrl ? (
           <img alt="" className="home-card__cover-img" loading="lazy" src={business.coverPhotoUrl} />
         ) : (
-          <span className="home-card__initial">{business.name.charAt(0)}</span>
+          <span aria-hidden="true" className="home-card__initial">
+            {business.name.charAt(0)}
+          </span>
         )}
+        <PriceTierBadge className="home-card__price" tier={business.priceTier} />
       </span>
       <span className="home-card__text">
         <span className="home-card__name">{business.name}</span>
         <span className="home-card__meta">
           {categoryName(business.category, locale)} · {business.district}
         </span>
-        <span className="home-card__rating">
-          {/* A brand-new business has no rating. Showing "0.0 ★" would read as a
-              bad rating rather than an absent one. */}
-          {business.reviewCount > 0
-            ? `${business.avgRating.toFixed(1)} ★ (${business.reviewCount})`
-            : text.noRating}
-        </span>
+        <RatingLine
+          avgRating={business.avgRating}
+          className="home-card__rating"
+          locale={locale}
+          reviewCount={business.reviewCount}
+        />
       </span>
     </a>
   );
@@ -118,7 +122,7 @@ export function HomeSections({ sections, locale }: { sections: Sections; locale:
           </header>
           <div className="home-cards">
             {sections.featured.map((business) => (
-              <Card business={business} key={business.slug} locale={locale} text={text} />
+              <Card business={business} key={business.slug} locale={locale} />
             ))}
           </div>
         </section>
@@ -132,7 +136,7 @@ export function HomeSections({ sections, locale }: { sections: Sections; locale:
           </header>
           <div className="home-cards">
             {sections.justJoined.map((business) => (
-              <Card business={business} key={business.slug} locale={locale} text={text} />
+              <Card business={business} key={business.slug} locale={locale} />
             ))}
           </div>
         </section>

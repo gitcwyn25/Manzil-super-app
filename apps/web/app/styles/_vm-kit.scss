@@ -1,0 +1,806 @@
+// Vibrant Marketplace shared component kit (task K). Styles for the vm/
+// component modules (apps/web/app/components/vm/) plus the in-place Master
+// Card restyle of the legacy .home-card / .business-card families.
+//
+// This partial loads from vibrant.scss AFTER globals.css, so restating a
+// globals.css selector at the same specificity deliberately wins the cascade
+// tie — that is how the legacy cards are re-skinned without touching their
+// load-bearing class names (e2e welds: .home-card, .home-card__rating,
+// .home-category, .home-sections).
+//
+// Motion contract: every transition here short-circuits to its final state
+// under prefers-reduced-motion (single block at the end of the file).
+
+// ---------------------------------------------------------------------------
+// RatingLine — the one canonical rating treatment (D3)
+// ---------------------------------------------------------------------------
+
+.vm-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: .25rem;
+  color: $vm-on-surface;
+  font-size: .875rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.vm-rating__star {
+  flex: none;
+  // Tertiary-orange star per D3; the container hue matches the rendered
+  // PNGs' bright chip star better than the darker base tertiary.
+  color: $vm-tertiary-container;
+}
+
+.vm-rating__count {
+  color: $vm-on-surface-variant;
+  font-weight: 400;
+}
+
+// reviewCount === 0: the localized "New" chip — never "0.0 ★".
+.vm-rating--new {
+  padding: .125rem .5rem;
+  border-radius: $border-radius-sm;
+  background: $primary-bg-subtle;
+  color: $primary-text-emphasis;
+  font-size: .75rem;
+  font-weight: 500;
+  letter-spacing: .02em;
+}
+
+// ---------------------------------------------------------------------------
+// TagChip / CategoryChip
+// ---------------------------------------------------------------------------
+
+.vm-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .25rem;
+  padding: .125rem .5rem;
+  border-radius: $border-radius-sm;
+  // Softer than the raw surface-variant token: matches the near-neutral
+  // chips in the rendered PNGs (screen.png outranks the token sheet).
+  background: $vm-surface-container-low;
+  color: $vm-on-surface-variant;
+  font-size: .75rem;
+  font-weight: 500;
+  letter-spacing: .02em;
+  line-height: calc(16 / 12);
+  white-space: nowrap;
+}
+
+a.vm-chip {
+  text-decoration: none;
+  transition: background-color .2s ease, color .2s ease;
+
+  &:hover {
+    background: $vm-surface-container-high;
+    color: $vm-on-surface;
+  }
+}
+
+.vm-chip--category {
+  background: rgba($vm-secondary, .1);
+  color: $vm-on-secondary-fixed-variant;
+}
+
+a.vm-chip--category:hover {
+  background: rgba($vm-secondary, .18);
+  color: $vm-on-secondary-fixed-variant;
+}
+
+// ---------------------------------------------------------------------------
+// DealBadge — gated behind real deal data (D7); see deal-badge.tsx
+// ---------------------------------------------------------------------------
+
+.vm-deal-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .25rem;
+  padding: .25rem .625rem;
+  border-radius: $border-radius-pill;
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+  white-space: nowrap;
+}
+
+.vm-deal-badge--solid {
+  background: $vm-secondary;
+  color: #fff;
+}
+
+.vm-deal-badge--tint {
+  background: $vm-secondary-container;
+  color: $vm-on-secondary-container;
+}
+
+// ---------------------------------------------------------------------------
+// PriceTierBadge — the only honest price signal (D7)
+// ---------------------------------------------------------------------------
+
+.vm-price-tier {
+  color: $primary;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .04em;
+}
+
+.vm-price-tier--overlay {
+  display: inline-flex;
+  align-items: center;
+  padding: .125rem .5rem;
+  border-radius: $border-radius;
+  background: rgba(#fff, .9);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  box-shadow: $box-shadow-sm;
+  font-size: .8125rem;
+}
+
+// ---------------------------------------------------------------------------
+// SectionHeader
+// ---------------------------------------------------------------------------
+
+.vm-section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .75rem 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.vm-section-header__title {
+  margin: 0;
+}
+
+.vm-section-header__subtitle {
+  margin: .25rem 0 0;
+  color: $vm-on-surface-variant;
+}
+
+.vm-section-header__link {
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  color: $primary;
+  font-size: .875rem;
+  font-weight: 600;
+  letter-spacing: .01em;
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  svg {
+    flex: none;
+  }
+}
+
+// Mobile: the link drops below the text as a full-width ghost button.
+@include media-breakpoint-down(sm) {
+  .vm-section-header__link {
+    flex: 1 1 100%;
+    justify-content: center;
+    padding: .5rem 1rem;
+    border: 1.5px solid $vm-outline-variant;
+    border-radius: $border-radius;
+
+    &:hover {
+      border-color: $primary;
+      text-decoration: none;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// IconTile (+ .vm-hover-group convention)
+// ---------------------------------------------------------------------------
+
+.vm-icon-tile {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  border-radius: .625rem;
+  transition: background-color .3s ease, color .3s ease;
+}
+
+.vm-icon-tile--sm {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.vm-icon-tile--md {
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--vm-radius-md);
+}
+
+.vm-icon-tile--lg {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: var(--vm-radius-md);
+}
+
+.vm-icon-tile--primary {
+  background: rgba($primary, .1);
+  color: $primary;
+}
+
+.vm-icon-tile--secondary {
+  background: rgba($vm-secondary, .12);
+  color: $vm-secondary;
+}
+
+.vm-icon-tile--tertiary {
+  background: rgba($vm-tertiary, .12);
+  color: $vm-tertiary;
+}
+
+// Put .vm-hover-group on the card/row that owns the tile: hovering the group
+// fills the tile solid in its accent.
+.vm-hover-group:hover {
+  .vm-icon-tile--primary {
+    background: $primary;
+    color: #fff;
+  }
+
+  .vm-icon-tile--secondary {
+    background: $vm-secondary;
+    color: #fff;
+  }
+
+  .vm-icon-tile--tertiary {
+    background: $vm-tertiary;
+    color: #fff;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// StatusPill
+// ---------------------------------------------------------------------------
+
+.vm-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  padding: .125rem .625rem;
+  border-radius: $border-radius-pill;
+  font-size: .75rem;
+  font-weight: 500;
+  letter-spacing: .02em;
+  line-height: calc(16 / 12);
+  white-space: nowrap;
+}
+
+.vm-status-pill--success {
+  background: rgba($vm-secondary, .12);
+  color: $vm-on-secondary-fixed-variant;
+
+  // The confirmed-state dot.
+  &::before {
+    content: "";
+    width: .375rem;
+    height: .375rem;
+    border-radius: 50%;
+    background: $vm-secondary;
+  }
+}
+
+.vm-status-pill--pending {
+  background: $vm-surface-variant;
+  color: $vm-on-surface;
+}
+
+.vm-status-pill--danger {
+  background: $danger-bg-subtle;
+  color: $danger-text-emphasis;
+}
+
+.vm-status-pill--neutral {
+  background: $vm-surface-container-low;
+  color: $vm-on-surface-variant;
+}
+
+.vm-status-pill--kind {
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: .06em;
+  font-size: .6875rem;
+}
+
+// ---------------------------------------------------------------------------
+// InitialsAvatar
+// ---------------------------------------------------------------------------
+
+.vm-avatar {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  border-radius: 50%;
+  font-weight: 700;
+  letter-spacing: .02em;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.vm-avatar--sm {
+  width: 2rem;
+  height: 2rem;
+  font-size: .6875rem;
+}
+
+.vm-avatar--md {
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: .8125rem;
+}
+
+.vm-avatar--lg {
+  width: 3rem;
+  height: 3rem;
+  font-size: .9375rem;
+}
+
+.vm-avatar--primary {
+  background: rgba($primary, .12);
+  color: $primary;
+}
+
+.vm-avatar--secondary {
+  background: rgba($vm-secondary, .12);
+  color: $vm-secondary;
+}
+
+.vm-avatar--tertiary {
+  background: rgba($vm-tertiary, .12);
+  color: $vm-tertiary;
+}
+
+// ---------------------------------------------------------------------------
+// IconField / IconSelect + focus-glow recipe
+// ---------------------------------------------------------------------------
+
+.vm-icon-field {
+  position: relative;
+  display: block;
+}
+
+.vm-icon-field__icon {
+  position: absolute;
+  top: 50%;
+  left: .75rem;
+  transform: translateY(-50%);
+  color: $vm-outline;
+  pointer-events: none;
+}
+
+// Focus states (primary border + soft glow) come from the Bootstrap
+// $input-focus-* variables set in _tokens.scss — nothing to restate here.
+.vm-icon-field__control {
+  padding-left: 2.5rem;
+}
+
+// Our own chevron replaces Bootstrap's background-image one, so the select
+// never renders a double chevron.
+.vm-icon-field__control--select {
+  padding-right: 2.5rem;
+  background-image: none;
+}
+
+.vm-icon-field__chevron {
+  position: absolute;
+  top: 50%;
+  right: .75rem;
+  transform: translateY(-50%);
+  color: $vm-outline;
+  pointer-events: none;
+}
+
+// The same soft-glow focus recipe for controls that are not Bootstrap
+// .form-control/.form-select (e.g. bespoke planner inputs).
+.vm-focus-glow {
+  &:focus,
+  &:focus-within {
+    border-color: $primary;
+    box-shadow: $input-focus-box-shadow;
+    outline: 0;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// PrimaryCta — tactility layer over .btn-primary's gradient
+// ---------------------------------------------------------------------------
+
+.vm-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  box-shadow: $box-shadow-sm;
+  transition: transform .2s ease, box-shadow .2s ease;
+
+  &:hover,
+  &:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: $box-shadow;
+  }
+
+  &:active {
+    transform: translateY(0) scale(.97);
+    box-shadow: $box-shadow-sm;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// PageHeaderCard
+// ---------------------------------------------------------------------------
+
+.vm-page-header__body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .75rem 1.5rem;
+}
+
+.vm-page-header__title {
+  margin: 0;
+  letter-spacing: -.01em;
+  @include font-size(2rem);
+}
+
+.vm-page-header__subtitle {
+  margin: .25rem 0 0;
+  color: $vm-on-surface-variant;
+}
+
+.vm-page-header__action {
+  flex: none;
+}
+
+// ---------------------------------------------------------------------------
+// SplitAuthShell + BrandPanel
+// ---------------------------------------------------------------------------
+
+.vm-auth-shell {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: 100dvh;
+}
+
+.vm-auth-shell__panel {
+  display: none;
+}
+
+.vm-auth-shell__content {
+  display: grid;
+  align-content: center;
+  justify-items: stretch;
+  padding: 2rem 1rem;
+
+  > * {
+    width: 100%;
+    max-width: 34rem;
+    margin-inline: auto;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .vm-auth-shell {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .vm-auth-shell__panel {
+    display: block;
+  }
+
+  .vm-auth-shell__content {
+    padding: 3rem 2rem;
+  }
+}
+
+.vm-brand-panel {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  overflow: hidden;
+  // Fallback ground when no photo is supplied (CSP allows only self-hosted
+  // or coverPhotoUrl-pipeline images).
+  background: linear-gradient(160deg, $vm-primary-container, $primary 55%, $vm-on-primary-fixed);
+}
+
+.vm-brand-panel__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.vm-brand-panel__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba($vm-inverse-surface, .35),
+    rgba($vm-inverse-surface, .12) 40%,
+    rgba($vm-inverse-surface, .82)
+  );
+}
+
+.vm-brand-panel__chrome {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2.5rem;
+  color: $vm-inverse-on-surface;
+}
+
+.vm-brand-panel__wordmark {
+  margin: 0;
+  color: #fff;
+  font-size: 1.375rem;
+  font-weight: 800;
+  letter-spacing: -.01em;
+}
+
+.vm-brand-panel__title {
+  margin: 0;
+  color: #fff;
+  letter-spacing: -.01em;
+  @include font-size(2rem);
+}
+
+.vm-brand-panel__tagline {
+  margin: .75rem 0 0;
+  max-width: 30rem;
+  color: rgba(#fff, .85);
+  font-size: 1.125rem;
+  line-height: calc(28 / 18);
+}
+
+// ---------------------------------------------------------------------------
+// Glass panel recipe — sparing use (hero mockups, metric cards), never on
+// repeated list cards
+// ---------------------------------------------------------------------------
+
+.vm-glass {
+  background: rgba(#fff, .7);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(#fff, .35);
+  border-radius: var(--vm-radius-md);
+}
+
+// ---------------------------------------------------------------------------
+// Master Card restyle: .home-card (home + discover curated rows)
+// Same class names as globals.css — cascade order performs the re-skin.
+// ---------------------------------------------------------------------------
+
+.home-cards {
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.home-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba($vm-outline-variant, .5);
+  border-radius: $card-border-radius;
+  background: $vm-surface-container-lowest;
+  box-shadow: $box-shadow-sm;
+  color: $vm-on-surface;
+  transition: box-shadow .3s ease, transform .3s ease, border-color .3s ease;
+}
+
+.home-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba($vm-outline-variant, .9);
+  box-shadow: $box-shadow;
+}
+
+.home-card:focus-visible {
+  outline: 0;
+  box-shadow: $box-shadow-sm, 0 0 0 .25rem $focus-ring-color;
+}
+
+.home-card__photo {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 12rem;
+  overflow: hidden;
+  border-radius: 0;
+  background: linear-gradient(135deg, $vm-surface-container-high, $primary-bg-subtle);
+  font-family: inherit;
+  font-variation-settings: normal;
+}
+
+.home-card__cover-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  object-fit: cover;
+  transition: transform .5s ease;
+}
+
+.home-card:hover .home-card__cover-img {
+  transform: scale(1.05);
+}
+
+.home-card__initial {
+  color: $primary;
+  font-size: 2.5rem;
+  font-weight: 800;
+}
+
+.home-card__price {
+  position: absolute;
+  bottom: .75rem;
+  left: .75rem;
+}
+
+.home-card__text {
+  display: grid;
+  gap: .375rem;
+  padding: 1rem;
+}
+
+.home-card__name {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-card__meta {
+  color: $vm-on-surface-variant;
+  font-size: .875rem;
+}
+
+// The weld element (.home-card__rating) is a RatingLine; only the legacy
+// color/size opinions need neutralizing so .vm-rating's recipe shows through.
+.home-card__rating {
+  color: $vm-on-surface;
+  font-size: .875rem;
+}
+
+// ---------------------------------------------------------------------------
+// Master Card restyle: .business-card (discover results, lists, profile)
+// ---------------------------------------------------------------------------
+
+.business-card {
+  border: 1px solid rgba($vm-outline-variant, .5);
+  border-radius: $card-border-radius;
+  background: $vm-surface-container-lowest;
+  box-shadow: $box-shadow-sm;
+  transition: box-shadow .3s ease, transform .3s ease, border-color .3s ease;
+}
+
+.business-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba($vm-outline-variant, .9);
+  box-shadow: $box-shadow;
+}
+
+.business-card:focus-within {
+  box-shadow: $box-shadow-sm, 0 0 0 .25rem $focus-ring-color;
+}
+
+// The teal hover scrim is an Anor-era effect; VM cards zoom the photo only.
+.business-photo::after {
+  content: none;
+}
+
+.business-card .business-photo.photo-block,
+.business-photo__cover {
+  transition: transform .5s ease;
+}
+
+.business-card:hover .business-photo.photo-block {
+  transform: scale(1.05);
+}
+
+.business-card:hover .business-photo__cover {
+  transform: scale(1.05);
+}
+
+// Overlay chips on the photo: rating (RatingLine inside .rating-badge) and
+// the first tag (.status-chip) both become quiet blurred white chips.
+.rating-badge {
+  background: rgba(#fff, .92);
+  color: $vm-on-surface;
+  box-shadow: $box-shadow-sm;
+  font-weight: 700;
+}
+
+// The badge already IS the chip: the RatingLine inside it inherits its
+// scale, and the "New" state drops its own chip dressing so the overlay
+// never nests chip-in-chip.
+.rating-badge .vm-rating {
+  font-size: inherit;
+}
+
+.rating-badge .vm-rating--new {
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: $primary-text-emphasis;
+}
+
+.status-chip {
+  background: rgba(#fff, .92);
+  color: $vm-on-surface-variant;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  box-shadow: $box-shadow-sm;
+  font-family: inherit;
+  font-weight: 500;
+  letter-spacing: .02em;
+}
+
+.business-body h3 {
+  font-family: inherit;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -.01em;
+}
+
+.business-card:hover .business-body h3 {
+  color: $primary;
+}
+
+.business-meta {
+  color: $vm-on-surface-variant;
+  font-size: .875rem;
+}
+
+.business-footer {
+  color: $vm-on-surface-variant;
+  border-top-color: rgba($vm-outline-variant, .5);
+}
+
+// ---------------------------------------------------------------------------
+// Reduced motion: every kit transition lands on its final state instantly.
+// ---------------------------------------------------------------------------
+
+@media (prefers-reduced-motion: reduce) {
+  a.vm-chip,
+  .vm-icon-tile,
+  .vm-cta,
+  .home-card,
+  .home-card__cover-img,
+  .business-card,
+  .business-card .business-photo.photo-block,
+  .business-photo__cover {
+    transition: none;
+  }
+
+  .vm-cta:hover,
+  .vm-cta:focus-visible,
+  .vm-cta:active,
+  .home-card:hover,
+  .business-card:hover {
+    transform: none;
+  }
+
+  .home-card:hover .home-card__cover-img,
+  .business-card:hover .business-photo.photo-block,
+  .business-card:hover .business-photo__cover {
+    transform: none;
+  }
+}
