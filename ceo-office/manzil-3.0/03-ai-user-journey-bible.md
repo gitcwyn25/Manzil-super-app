@@ -91,6 +91,24 @@ Relevance to an active plan is the gate — genuinely useful, never noisy.
 - **Every conversation progresses Intent → Constraints → Plan → Action.** ("I want to celebrate my birthday" → budget/date/guests/location → venue/cake/taxi/photography → review/confirm/book.) Mirrors natural planning and reinforces the Workspace Timeline as the product core.
 - **Intent over category, everywhere.** The first question is never "which category?" but "what are you trying to accomplish?" — the intent model (birthday, date night, weekend trip, haircut today, coffee with friends, business meeting, wedding) drives onboarding, search, recommendations, and planning. Businesses are the solution, not the starting point.
 
+## v1.2 amendments (2026-08-06 — the memory model, adopted)
+
+**Two-tier memory. Never confuse the tiers.**
+
+- **Tier 1 — Mission Context (volatile):** the current objective ("Birthday · tomorrow · 6 guests · budget 2.5M · near Yunusabad"). Lives in the current session, the current Workspace, the active planning flow. Destroyed when appropriate.
+- **Tier 2 — Preference Context (persistent):** durable tastes ("prefers Italian · outdoor seating · luxury · pet-friendly · usually plans weekends · average spend · uses taxi"). Lives across months; improves discovery, ranking, AI planning, and the home feed. Never treated as today's objective.
+
+Seeded at onboarding by the AUTH-015/016 split: Interests → Tier 1, Personalization → Tier 2.
+
+**Retrieval priority (explicit, in order):**
+
+```text
+Workspace Timeline → Current Mission Context → Persistent Preferences →
+Recent Activity → Global User Profile → Business Knowledge → General LLM Knowledge
+```
+
+Gurman always prefers the user's current plan over generic knowledge. This ordering is part of the AI contract, not an implementation detail.
+
 ## Next document
 
 🏛️ Technical Architecture & Engineering Bible: backend microservices, database schema, authentication, API contracts, AI orchestration, booking engine, payment architecture, notifications, search infrastructure, media pipeline, security model, deployment strategy. Then Design System, then the Screen Bible.

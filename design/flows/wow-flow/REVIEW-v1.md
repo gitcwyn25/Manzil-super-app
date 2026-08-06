@@ -25,3 +25,23 @@ Amendments are refinements, not blockers; incorporate in wireframes v1.1 before 
    - **AUTH-016 AI Personalization = long-term preference profile** (preferred budget, favorite cuisines, travel distance, indoor/outdoor, luxury/casual, family-friendly, pet-friendly, accessibility). Feeds future recommendations and Gurman context (persistent memory). Must NOT duplicate the immediate intent question.
 
 **Hi-fi design CLEARED to begin** once the web launch reaches the Genesis Record. No further product clarification expected before visual design; subsequent changes require implementation evidence or user testing.
+
+## FREEZE (2026-08-06): WOW Flow v1.2 is the canonical baseline
+
+**Product Specification Stable.** v1.2 is the sole source for hi-fi design, mobile implementation, QA test cases, user-testing scripts, and analytics instrumentation. No parallel versions. The flow changes only if: (1) user testing demonstrates a measurable problem, (2) analytics contradict a product assumption, or (3) a technical constraint makes the design impossible.
+
+### Analytics event taxonomy (contract — no implementation invents event names)
+
+`wow_started → auth_started → auth_completed → permissions_completed → intent_selected → profile_completed → preferences_saved → ready_completed → home_arrived`
+
+### Hi-fi design goals (measurable)
+
+1. **Confidence** — every screen reduces uncertainty.
+2. **Focus** — exactly one dominant action.
+3. **Continuity** — transitions feel like one conversation.
+4. **Calmness** — no visual overload; no decorative animation without purpose.
+5. **Speed** — every onboarding decision in under **5 seconds**; a screen that makes users think for 20 seconds gets simplified.
+
+### Onboarding Complexity KPI (baseline for the Genesis Record and all future onboarding changes)
+
+Screens: 12 · Mandatory decisions: (count at hi-fi) · Permissions requested: 3 (+1 optional) · Average taps to Home: (measure) · Target completion: **< 90 seconds**. A redesign that increases taps or completion time without improving completion rate or satisfaction is rejected on evidence.
