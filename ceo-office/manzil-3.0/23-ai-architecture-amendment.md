@@ -25,6 +25,16 @@ The canonical repository of **derived facts**, computed once and reused everywhe
 
 First-class alongside the Knowledge Graph and Memory Engine — the piece separating an intelligent platform from a chatbot.
 
+## v1.1 additions (2026-08-06, adopted)
+
+**11. Decision Engine (first-class, between Tool Orchestrator and Reasoning Engine).** All business policy centralizes in a policy engine — never scattered through services. Candidate flow: Candidate Generator → **Policy Engine** (removes closed / admin-suspended / expired-subscription / out-of-radius / slot-unavailable / campaign-rule-violating businesses; enforces sponsored-boost caps, trust-score de-emphasis, premium-without-unfair-ranking, moderation rules, city/country regulations, fraud policies) → Ranking → Reasoning → LLM.
+
+**12. Explainability as a record, not a string.** Every recommendation produces a traceable record: recommendationId · reason codes WITH scores (cuisine match +22, distance +18, budget +30, availability +15, preference +12, sponsored +3) · confidence · knowledge nodes consulted · memory objects consulted · policies applied · execution time. Serves debugging, improvement, user-facing explanations, and owner insights.
+
+**13. One intelligence, two voices.** Business analytics consumes the SAME intelligence as consumer recommendations, expressed differently ("18% of users searched quiet workspaces near you; you ranked low because Wi-Fi info is missing"). No separate analytics AI.
+
+**Target stack:** Customer → Gurman → Tool Orchestrator → **Decision Engine** → Reasoning Engine → {Memory, Graph, Feature Store, Intelligence} → AI Jobs → Event Infrastructure → Repositories. The LLM sits OUTSIDE the stack as presentation.
+
 ## Revised epic ladder
 
 03 AI Foundation → **03.5 Domain Event Infrastructure** → 04 Knowledge Graph → 05 Memory Engine → 06 Marketplace Intelligence → 07 RAG → 08 Reasoning → 09 LLM → 10 Autonomous Intelligence. Everything depends on events; without event architecture the modules couple.
