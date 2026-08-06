@@ -14,4 +14,5 @@ First entry lands with the Vibrant Marketplace web launch gate, formatted as the
 system version · Product Bible version · ADR count · platform · environment ·
 build status · typecheck · lint · tests · bundle size · performance snapshot ·
 accessibility summary · known limitations · next milestone ·
-**architecture drift** (count of governance exceptions accepted this release — target 0; a rising count is accumulating technical debt made visible).
+**architecture drift** (count of governance exceptions accepted this release — target 0; a rising count is accumulating technical debt made visible) ·
+**component reuse ratio** (shared component usages ÷ new component definitions — should rise over time; a design system that mints dozens of new components per sprint is failing).

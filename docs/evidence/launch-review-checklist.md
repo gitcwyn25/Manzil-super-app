@@ -25,6 +25,10 @@ Applied to every launch-gate evidence entry, starting with the Genesis Record
 (2026-08-05). Suggestions in review must tie back to established product
 principles — no untethered subjective asks ("prettier", "trendier", "more glass").
 
+## 0. Track micro-review (each parallel track's commit, before integration proceeds)
+
+No duplicated components · no new styling values · no token violations · no navigation drift · no literal strings · no new icon sources (vm/icons.tsx or nothing). **Protect the Kit:** screens adapt to the Kit, never vice versa; a missing primitive is added to the Kit intentionally after review, not forked inside a screen.
+
 ## 1. Build health
 
 Production build succeeds · typecheck zero errors · lint zero errors (or explicitly accepted warnings) · no unexpected console errors at startup.
