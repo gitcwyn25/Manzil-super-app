@@ -120,7 +120,12 @@ const copy = {
       empty: "Hozircha xizmatlar yo'q.",
       table: { name: "Xizmat", price: "Narx", status: "Holat", actions: "Amallar" },
       active: "Faol",
-      inactive: "Faol emas"
+      inactive: "Faol emas",
+      addNew: "Yangi xizmat qo'shish",
+      searchLabel: "Xizmatlarni qidirish",
+      searchPlaceholder: "Masalan: Soch turmagi",
+      deleteAria: "Xizmatni o'chirish",
+      noMatches: "Qidiruvga mos xizmat topilmadi."
     },
     reviews: {
       title: "Sharhlar",
@@ -703,7 +708,12 @@ const copy = {
       empty: "Услуг пока нет.",
       table: { name: "Услуга", price: "Цена", status: "Статус", actions: "Действия" },
       active: "Активна",
-      inactive: "Неактивна"
+      inactive: "Неактивна",
+      addNew: "Добавить услугу",
+      searchLabel: "Поиск услуг",
+      searchPlaceholder: "Например: Укладка волос",
+      deleteAria: "Удалить услугу",
+      noMatches: "По запросу услуги не найдены."
     },
     reviews: {
       title: "Отзывы",
@@ -1286,7 +1296,12 @@ const copy = {
       empty: "No services yet.",
       table: { name: "Service", price: "Price", status: "Status", actions: "Actions" },
       active: "Active",
-      inactive: "Inactive"
+      inactive: "Inactive",
+      addNew: "Add new service",
+      searchLabel: "Search services",
+      searchPlaceholder: "e.g. Hair styling",
+      deleteAria: "Delete service",
+      noMatches: "No services match your search."
     },
     reviews: {
       title: "Reviews",

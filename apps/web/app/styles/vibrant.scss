@@ -194,6 +194,10 @@
 // recent-bookings list, mini-facts strip — new ws-* selectors, 140ms budget.
 @import "workspace-overview";
 
+// Services & pricing (task D3): create-service panel, glass metric + search
+// bento, service-card grid — ws-svc-* selectors, same 140ms budget.
+@import "workspace-services";
+
 // --- Unconverted-page bridge -----------------------------------------------
 // Bootstrap's reboot/type/containers modules (imported above) define `body`,
 // `a`, `.container`, and `h1`-`h6` with the SAME specificity as globals.css's

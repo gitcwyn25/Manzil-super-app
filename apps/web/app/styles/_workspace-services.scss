@@ -1,0 +1,359 @@
+// Services & pricing (task D3): page header CTA, glass metric + search bento,
+// and the service-card grid replacing the legacy .crm-table listing.
+// Visual truth: manage_services_pricing/screen.png reconciled with the
+// api-map — CrmPackage has no image/duration/booking fields, so the card has
+// no photo block, no duration meta, and the "Most popular" glass metric is
+// not rendered (nothing fabricated, D7). Selector namespace is ws-svc-*:
+// deliberately distinct from the consumer .home-card weld family.
+//
+// Motion: workspace budget only — 140ms micro-interactions, shadow-only card
+// hovers (L1 -> L2), no entrance animations; reduced motion short-circuits
+// everything at the end of the file.
+
+// Matches _workspace.scss's budget; !default keeps whichever loads first.
+$ws-motion: .14s ease !default;
+
+.ws-services {
+  display: grid;
+  gap: 1.25rem;
+  align-content: start;
+}
+
+// The kit CTA's consumer transition is 200ms; the workspace budget is 140ms.
+.ws-main .vm-cta {
+  transition-duration: .14s;
+}
+
+// ---------------------------------------------------------------------------
+// Create-service panel (opened by the header CTA; open by default only when
+// the business has zero services yet)
+// ---------------------------------------------------------------------------
+
+.ws-svc-panel__body {
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+}
+
+// Outranks the density layer's [data-shell="workspace"] h2 (0,1,1) cap.
+.ws-main .ws-svc-panel__title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -.01em;
+}
+
+.ws-svc-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.ws-svc-form__grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@include media-breakpoint-up(md) {
+  .ws-svc-form__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ws-svc-field--wide {
+    grid-column: 1 / -1;
+  }
+}
+
+.ws-svc-field {
+  display: grid;
+  gap: .375rem;
+}
+
+.ws-svc-field__label {
+  color: $vm-on-surface-variant;
+  font-size: .8125rem;
+  font-weight: 600;
+}
+
+.ws-svc-form__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+// ---------------------------------------------------------------------------
+// Metric + search bento. One glass panel only (the real aggregate) — glass
+// never rides the repeated service cards.
+// ---------------------------------------------------------------------------
+
+.ws-svc-bento {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@include media-breakpoint-up(md) {
+  .ws-svc-bento {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    align-items: stretch;
+  }
+}
+
+.ws-svc-metric {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  padding: 1.25rem 1.5rem;
+  box-shadow: $box-shadow-sm;
+  transition: box-shadow $ws-motion;
+
+  &:hover {
+    box-shadow: $box-shadow;
+  }
+}
+
+.ws-svc-metric__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+}
+
+.ws-svc-metric__caption {
+  color: $vm-on-surface-variant;
+  font-size: .6875rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.ws-svc-metric__icon {
+  flex: none;
+  color: $vm-primary-container;
+}
+
+.ws-svc-metric__value {
+  color: $primary;
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -.02em;
+  line-height: 1.1;
+}
+
+.ws-svc-search {
+  transition: box-shadow $ws-motion;
+
+  &:hover {
+    box-shadow: $box-shadow;
+  }
+}
+
+.ws-svc-search__body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: .5rem;
+  padding: 1.25rem 1.5rem;
+}
+
+.ws-svc-search__label {
+  color: $vm-on-surface-variant;
+  font-size: .75rem;
+  font-weight: 500;
+  letter-spacing: .02em;
+}
+
+// ---------------------------------------------------------------------------
+// Service-card grid
+// ---------------------------------------------------------------------------
+
+.ws-svc-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@include media-breakpoint-up(lg) {
+  .ws-svc-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@include media-breakpoint-up(xl) {
+  .ws-svc-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.ws-svc-card {
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow $ws-motion;
+
+  &:hover {
+    box-shadow: $box-shadow;
+  }
+}
+
+// Draft/inactive variant: dashed border + dimmed text block. The status pill
+// and the footer actions stay at full strength.
+.ws-svc-card--draft {
+  border: 1px dashed rgba($vm-outline-variant, .8);
+
+  .ws-svc-card__title-row,
+  .ws-svc-card__desc {
+    opacity: .7;
+  }
+}
+
+.ws-svc-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: .75rem;
+  padding: 1.25rem;
+}
+
+// Echoes the mock's corner badge (it floated over the photo; there is no
+// photo slot, so the pill holds the top-right of the body instead).
+.ws-svc-card__top {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.ws-svc-card__title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap; // long UZS sums ("1 500 000 so'm") drop to their own line
+  gap: .25rem .75rem;
+}
+
+// (0,2,0) outranks the density layer's [data-shell="workspace"] h3 cap.
+.ws-main .ws-svc-card__name {
+  margin: 0;
+  color: $vm-on-surface;
+  font-family: inherit;
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  overflow-wrap: anywhere;
+}
+
+.ws-svc-card__price {
+  color: $primary;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ws-svc-card__desc {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  margin: 0;
+  color: $vm-on-surface-variant;
+  font-size: .875rem;
+}
+
+// Footer row — a <div>, never <footer> (shell-boundary contract).
+.ws-svc-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid rgba($vm-outline-variant, .3);
+}
+
+// Activate/deactivate: the quiet ghost affordance the mock lacks but the
+// product keeps (togglePackageAction predates the redesign).
+.ws-svc-toggle {
+  padding: .375rem .75rem;
+  border: 1px solid $vm-outline-variant;
+  border-radius: $border-radius;
+  background: transparent;
+  color: $vm-on-surface-variant;
+  font-size: .75rem;
+  font-weight: 600;
+  transition: color $ws-motion, background-color $ws-motion, border-color $ws-motion;
+
+  &:hover {
+    border-color: $primary;
+    background: rgba($primary, .06);
+    color: $primary;
+  }
+
+  &:focus-visible {
+    outline: 0;
+    box-shadow: 0 0 0 .25rem $focus-ring-color;
+  }
+}
+
+// 40px circular icon buttons (mock footer-right). Only the danger/delete
+// variant ships today: edit has no backend action yet.
+.ws-svc-icon-btn {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid $vm-outline-variant;
+  border-radius: 50%;
+  background: transparent;
+  color: $vm-on-surface-variant;
+  transition: background-color $ws-motion, color $ws-motion, border-color $ws-motion;
+
+  &:hover {
+    background: $vm-surface-container;
+    color: $primary;
+  }
+
+  &:focus-visible {
+    outline: 0;
+    box-shadow: 0 0 0 .25rem $focus-ring-color;
+  }
+}
+
+.ws-svc-icon-btn--danger {
+  border-color: $vm-error-container;
+  background: rgba($vm-error-container, .2);
+  color: $vm-error;
+
+  &:hover {
+    border-color: $vm-error-container;
+    background: $vm-error-container;
+    color: $vm-on-error-container;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Empty / no-match state
+// ---------------------------------------------------------------------------
+
+.ws-svc-empty__body {
+  margin: 0;
+  padding: 2.5rem 1.5rem;
+  color: $vm-on-surface-variant;
+  font-size: .875rem;
+  text-align: center;
+}
+
+// ---------------------------------------------------------------------------
+// Reduced motion: transitions land on their final state instantly
+// ---------------------------------------------------------------------------
+
+@media (prefers-reduced-motion: reduce) {
+  .ws-svc-metric,
+  .ws-svc-search,
+  .ws-svc-card,
+  .ws-svc-toggle,
+  .ws-svc-icon-btn {
+    transition: none;
+  }
+}

@@ -1,11 +1,19 @@
 import type { Locale } from "@manzil/shared";
+import type { ServicesCopy } from "../../../../components/workspace/services-manager";
+import { ServicesManager } from "../../../../components/workspace/services-manager";
 import { getMyBusinesses } from "../../../../lib/api";
-import { createPackageAction, deletePackageAction, togglePackageAction } from "../../../../lib/crm-actions";
 import { getPackages } from "../../../../lib/crm-api";
 import { getCrmCopy } from "../../../../lib/crm-copy";
 
 export const dynamic = "force-dynamic";
 
+/**
+ * Services & pricing (Vibrant Marketplace, task D3). The server component
+ * only fetches and assembles the trilingual strings; layout, the create-panel
+ * toggle, and the search filter live in the client ServicesManager. Server
+ * actions keep working from inside it (imported from the "use server"
+ * crm-actions module).
+ */
 export default async function PackagesPage({
   params
 }: {
@@ -20,89 +28,35 @@ export default async function PackagesPage({
 
   const data = await getPackages(business.slug);
   const packages = data?.packages ?? [];
-  const priceFormat = new Intl.NumberFormat(locale === "en" ? "en-US" : "ru-RU");
+
+  const strings: ServicesCopy = {
+    title: copy.packages.title,
+    subtitle: copy.packages.subtitle,
+    addNew: copy.packages.addNew,
+    newTitle: copy.packages.newTitle,
+    name: copy.packages.name,
+    description: copy.packages.description,
+    price: copy.packages.price,
+    submit: copy.packages.submit,
+    activate: copy.packages.activate,
+    deactivate: copy.packages.deactivate,
+    deleteAria: copy.packages.deleteAria,
+    empty: copy.packages.empty,
+    noMatches: copy.packages.noMatches,
+    // Same aggregate the overview KPI reports — one wording for one number.
+    metricActive: copy.overview.activePackages,
+    searchLabel: copy.packages.searchLabel,
+    searchPlaceholder: copy.packages.searchPlaceholder,
+    active: copy.packages.active,
+    inactive: copy.packages.inactive
+  };
 
   return (
-    <>
-      <header className="crm-page-head">
-        <div>
-          <h1>{copy.packages.title}</h1>
-          <p>{copy.packages.subtitle}</p>
-        </div>
-      </header>
-
-      <section className="crm-panel">
-        <h2>{copy.packages.newTitle}</h2>
-        <form action={createPackageAction} className="crm-form compact">
-          <input name="business" type="hidden" value={business.slug} />
-          <div className="crm-form-grid">
-            <label>
-              <span>{copy.packages.name} *</span>
-              <input maxLength={140} minLength={2} name="name" required type="text" />
-            </label>
-            <label>
-              <span>{copy.packages.price} *</span>
-              <input min={0} name="price" required step="1000" type="number" />
-            </label>
-            <label className="span2">
-              <span>{copy.packages.description}</span>
-              <input name="description" type="text" />
-            </label>
-          </div>
-          <div className="crm-form-actions">
-            <button className="bz-btn-primary" type="submit">{copy.packages.submit}</button>
-          </div>
-        </form>
-      </section>
-
-      <section className="crm-panel">
-        <table className="crm-table">
-          <thead>
-            <tr>
-              <th>{copy.packages.table.name}</th>
-              <th>{copy.packages.table.price}</th>
-              <th>{copy.packages.table.status}</th>
-              <th>{copy.packages.table.actions}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {packages.map((item) => (
-              <tr key={item.id}>
-                <td>
-                  <strong>{item.name}</strong>
-                  {item.description ? <p className="crm-cell-sub">{item.description}</p> : null}
-                </td>
-                <td className="crm-price">{priceFormat.format(Number(item.price))} {item.currency}</td>
-                <td>
-                  <span className={`crm-chip crm-chip-${item.isActive ? "ok" : "muted"}`}>
-                    {item.isActive ? copy.packages.active : copy.packages.inactive}
-                  </span>
-                </td>
-                <td>
-                  <div className="crm-row-actions">
-                    <form action={togglePackageAction}>
-                      <input name="id" type="hidden" value={item.id} />
-                      <input name="isActive" type="hidden" value={item.isActive ? "false" : "true"} />
-                      <button type="submit">
-                        {item.isActive ? copy.packages.deactivate : copy.packages.activate}
-                      </button>
-                    </form>
-                    <form action={deletePackageAction}>
-                      <input name="id" type="hidden" value={item.id} />
-                      <button className="danger" type="submit">{copy.packages.remove}</button>
-                    </form>
-                  </div>
-                </td>
-              </tr>
-            ))}
-            {packages.length === 0 ? (
-              <tr>
-                <td className="crm-empty" colSpan={4}>{copy.packages.empty}</td>
-              </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </section>
-    </>
+    <ServicesManager
+      businessSlug={business.slug}
+      copy={strings}
+      locale={locale}
+      packages={packages}
+    />
   );
 }
