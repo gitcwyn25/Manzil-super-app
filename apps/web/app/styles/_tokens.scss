@@ -54,6 +54,17 @@ $vm-error:                      #ba1a1a; // same hex as legacy --error; keeps re
 $vm-error-container:            #ffdad6;
 $vm-on-error-container:         #93000a;
 
+// --- Category identity gradients -------------------------------------------
+// UI Isolation Rule: screens never mint visual values. Category art tiles are
+// design-system assets keyed by the live category slugs; light stop derives
+// from an existing role token, dark stop is its legibility ramp for captions.
+$vm-cat-grad-restaurants: linear-gradient(165deg, $vm-primary-container, #003a80 80%);
+$vm-cat-grad-cafes:       linear-gradient(165deg, $vm-tertiary-container, #6b2f00 82%);
+$vm-cat-grad-beauty:      linear-gradient(165deg, #00875b, #00402b 82%);
+$vm-cat-grad-auto:        linear-gradient(165deg, #2c4165, #16233a 82%);
+$vm-cat-grad-repairs:     linear-gradient(165deg, $vm-outline, $vm-on-surface-variant 82%);
+$vm-cat-grad-default:     linear-gradient(165deg, #5b6474, #3a4150 82%);
+
 // --- Bootstrap theme map ---------------------------------------------------
 // $secondary and $success are BOTH the savings green: DESIGN.md reserves green
 // for Savings/Confirmed (Bootstrap's success semantics), and .btn-secondary is

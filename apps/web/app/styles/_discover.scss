@@ -403,27 +403,27 @@
 // Gradient art per live slug (double class beats globals' `.is-empty`
 // background at 0,2,0); dark toward the bottom so captions stay legible.
 .home-category.home-category--art-restaurants {
-  background: linear-gradient(165deg, #0070eb, #003a80 80%);
+  background: $vm-cat-grad-restaurants;
 }
 
 .home-category.home-category--art-cafes {
-  background: linear-gradient(165deg, #c05400, #6b2f00 82%);
+  background: $vm-cat-grad-cafes;
 }
 
 .home-category.home-category--art-beauty {
-  background: linear-gradient(165deg, #00875b, #00402b 82%);
+  background: $vm-cat-grad-beauty;
 }
 
 .home-category.home-category--art-auto {
-  background: linear-gradient(165deg, #2c4165, #16233a 82%);
+  background: $vm-cat-grad-auto;
 }
 
 .home-category.home-category--art-repairs {
-  background: linear-gradient(165deg, #717786, #414755 82%);
+  background: $vm-cat-grad-repairs;
 }
 
 .home-category.home-category--art-default {
-  background: linear-gradient(165deg, #5b6474, #3a4150 82%);
+  background: $vm-cat-grad-default;
 }
 
 // An empty category is an invitation, not a dead end — a dashed inner frame
