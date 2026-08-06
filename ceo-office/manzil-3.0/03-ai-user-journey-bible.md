@@ -85,6 +85,12 @@ Gurman AI does not merely wait for instructions — it reacts to events **tied t
 
 Relevance to an active plan is the gate — genuinely useful, never noisy.
 
+## v1.1 amendments (2026-08-06 — AI behavior guidance, adopted from wireframe-review evolution)
+
+- **"Retrieve before asking. Ask before assuming."** Gurman consults known context (profile, locale, Workspace contents) before every question — onboarding personalization runs AFTER profile creation, and if the Workspace already holds an event date or budget, Gurman never asks for them again. (Architecture: Identity → Known Context → AI Retrieval → First Question.)
+- **Every conversation progresses Intent → Constraints → Plan → Action.** ("I want to celebrate my birthday" → budget/date/guests/location → venue/cake/taxi/photography → review/confirm/book.) Mirrors natural planning and reinforces the Workspace Timeline as the product core.
+- **Intent over category, everywhere.** The first question is never "which category?" but "what are you trying to accomplish?" — the intent model (birthday, date night, weekend trip, haircut today, coffee with friends, business meeting, wedding) drives onboarding, search, recommendations, and planning. Businesses are the solution, not the starting point.
+
 ## Next document
 
 🏛️ Technical Architecture & Engineering Bible: backend microservices, database schema, authentication, API contracts, AI orchestration, booking engine, payment architecture, notifications, search infrastructure, media pipeline, security model, deployment strategy. Then Design System, then the Screen Bible.
