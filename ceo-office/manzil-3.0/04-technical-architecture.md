@@ -105,3 +105,39 @@ Maps, payment gateways, calendar providers, ride-hailing, hotel systems, restaur
 ## Corpus status
 
 ✅ Product Bible · ✅ Information Architecture · ✅ AI & User Journey Bible · ✅ Technical Architecture → next: 🎨 **Manzil Design System** (visual language, tokens, components, spacing, typography, motion, accessibility — the foundation every generated screen inherits).
+
+## v1.1 amendment (2026-08-06 — the six-layer intelligence architecture, adopted; Epic 03)
+
+The AI Orchestrator section above is superseded in structure (not in intent)
+by the **six-layer Intelligence Platform**, shipped contracts-first in
+`apps/api/src/modules/intelligence/` (ADR-005). Doc 22's five layers gain a
+sixth: the Memory Engine is promoted to its own layer between the Knowledge
+Graph and Reasoning — memory has its own lifecycle, retrieval contract, and
+storage discipline, and doc 23 makes it first-class alongside the graph.
+
+```mermaid
+graph TD
+  L1["Layer 1 — Raw marketplace data<br/>(PostgreSQL/Prisma: businesses, services, reviews, bookings, stories)"]
+  L2["Layer 2 — Marketplace Intelligence<br/>(generated facts · AI Feature Store · business/customer profiles · Trust Engine)"]
+  L3["Layer 3 — Knowledge Graph<br/>(15 entity kinds · typed relationships · Experience Graph)"]
+  L4["Layer 4 — Memory Engine<br/>(6 tiers · binding retrieval priority · structured knowledge, never chat)"]
+  L5["Layer 5 — Reasoning<br/>(Decision Engine policy screen · ranking · explanation · 10 reasoning services)<br/><b>the only layer that decides</b>"]
+  L6["Layer 6 — Conversation<br/>(LLM as presentation: receives sealed decisions, returns narration)"]
+  L1 --> L2 --> L3 --> L4 --> L5 --> L6
+  EVT["Cross-cutting: async event chains · AI Jobs ·<br/>replayable event store · metrics · AI context ids (doc 23)"]
+  EVT -.-> L2
+  EVT -.-> L3
+  EVT -.-> L4
+  EVT -.-> L5
+```
+
+Binding rules: lower layers never import higher ones; every intelligence
+operation is an idempotent Job announced by versioned events (EventEmitter
+today, BullMQ later — bindings change, business logic never); every
+recommendation structurally carries its explanation, trace, and context ids.
+The candidate pipeline is typed: Candidate Generator → **Decision Engine**
+(centralized policy as data) → Ranking → Reasoning → LLM.
+
+**Revised epic ladder (doc 23):** 03 AI Foundation → **03.5 Domain Event
+Infrastructure** → 04 Knowledge Graph → 05 Memory Engine → 06 Marketplace
+Intelligence → 07 RAG → 08 Reasoning → 09 LLM → 10 Autonomous Intelligence.

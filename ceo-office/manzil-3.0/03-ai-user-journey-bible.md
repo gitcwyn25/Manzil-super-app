@@ -109,6 +109,20 @@ Recent Activity → Global User Profile → Business Knowledge → General LLM K
 
 Gurman always prefers the user's current plan over generic knowledge. This ordering is part of the AI contract, not an implementation detail.
 
+## v1.3 amendment (2026-08-06 — the memory model is now a typed contract)
+
+The memory engine ships as code:
+`apps/api/src/modules/intelligence/memory-engine/`. The v1.2 two-tier model
+extends to **six typed tiers** — MissionContext (volatile), PreferenceContext
+(persistent), RelationshipContext, WorkspaceTimeline, BusinessContext,
+MarketplaceContext — each a `MemoryObject` contract carrying `memoryId ·
+source · confidence · created · updated · expires · retrievalPriority`, with
+payloads that are structured knowledge shapes (raw chat is unrepresentable).
+The v1.2 retrieval priority is the typed constant `RETRIEVAL_PRIORITY`
+(`memory-engine/memory.retrieval.ts`), verbatim in the binding order —
+retrieval code sorts by it rather than re-deriving the contract. Behavior
+rules in this Bible are unchanged; they are now enforceable.
+
 ## Next document
 
 🏛️ Technical Architecture & Engineering Bible: backend microservices, database schema, authentication, API contracts, AI orchestration, booking engine, payment architecture, notifications, search infrastructure, media pipeline, security model, deployment strategy. Then Design System, then the Screen Bible.

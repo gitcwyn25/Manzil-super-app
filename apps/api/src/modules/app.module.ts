@@ -58,6 +58,7 @@ import { GurmanController } from "./gurman/gurman.controller";
 import { GurmanService } from "./gurman/gurman.service";
 import { CatalogRetriever, GURMAN_RETRIEVER } from "./gurman/gurman.retriever";
 import { AnthropicLlm, GURMAN_LLM } from "./gurman/gurman.llm";
+import { IntelligenceModule } from "./intelligence/intelligence.module";
 import { SecurityModule } from "./security/security.module";
 import { RedisThrottlerStorage } from "./security/throttler-redis.storage";
 import { ManzilThrottlerGuard } from "./security/manzil-throttler.guard";
@@ -67,6 +68,9 @@ import { DEFAULT_THROTTLE } from "./security/throttle.config";
   imports: [
     SentryModule.forRoot(),
     CacheModule,
+    // Contracts only (Epic 03): provider-empty by design, so importing it is
+    // a safe no-op until intelligence engines bind their tokens in later epics.
+    IntelligenceModule,
     // Storage is resolved async so it shares the CacheService Redis connection
     // rather than opening a second one (or adding a datastore just for limits).
     ThrottlerModule.forRootAsync({
