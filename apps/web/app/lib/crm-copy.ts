@@ -32,7 +32,18 @@ const copy = {
       completenessHint: "To'liq profil qidiruvda yuqoriroq ko'rinadi.",
       published: "Chop etilgan e'lonlar",
       activePackages: "Faol xizmatlar",
-      pendingNote: "Biznesingiz admin tasdig'ini kutmoqda. Tasdiqdan so'ng profil ochiq sahifada ko'rinadi."
+      pendingNote: "Biznesingiz admin tasdig'ini kutmoqda. Tasdiqdan so'ng profil ochiq sahifada ko'rinadi.",
+      welcome: "Xush kelibsiz! Biznesingizning bugungi holati quyida.",
+      totalBookings: "Jami bandlovlar",
+      revenue: "Tushum",
+      activeDiscounts: "Faol chegirmalar",
+      businessHealth: "Biznes holati",
+      rangeWeek: "Hafta",
+      rangeMonth: "Oy",
+      recentBookings: "So'nggi bandlovlar",
+      viewAll: "Barchasini ko'rish",
+      statusClaimed: "Tasdiqlangan",
+      statusPending: "Tasdiq kutilmoqda"
     },
     bookings: {
       title: "Bandlovlar",
@@ -604,7 +615,18 @@ const copy = {
       completenessHint: "Полный профиль выше показывается в поиске.",
       published: "Опубликованные объявления",
       activePackages: "Активные услуги",
-      pendingNote: "Бизнес ожидает подтверждения администратора. После проверки профиль станет публичным."
+      pendingNote: "Бизнес ожидает подтверждения администратора. После проверки профиль станет публичным.",
+      welcome: "С возвращением! Вот что происходит с вашим бизнесом сегодня.",
+      totalBookings: "Всего броней",
+      revenue: "Выручка",
+      activeDiscounts: "Активные скидки",
+      businessHealth: "Состояние бизнеса",
+      rangeWeek: "Неделя",
+      rangeMonth: "Месяц",
+      recentBookings: "Последние брони",
+      viewAll: "Смотреть все",
+      statusClaimed: "Подтверждён",
+      statusPending: "Ожидает подтверждения"
     },
     bookings: {
       title: "Брони",
@@ -1176,7 +1198,18 @@ const copy = {
       completenessHint: "Complete profiles rank higher in search.",
       published: "Published announcements",
       activePackages: "Active services",
-      pendingNote: "Your business is awaiting admin approval. The profile becomes public after review."
+      pendingNote: "Your business is awaiting admin approval. The profile becomes public after review.",
+      welcome: "Welcome back, here's what's happening today.",
+      totalBookings: "Total bookings",
+      revenue: "Revenue",
+      activeDiscounts: "Active discounts",
+      businessHealth: "Business health",
+      rangeWeek: "Week",
+      rangeMonth: "Month",
+      recentBookings: "Recent bookings",
+      viewAll: "View all",
+      statusClaimed: "Claimed",
+      statusPending: "Pending approval"
     },
     bookings: {
       title: "Bookings",

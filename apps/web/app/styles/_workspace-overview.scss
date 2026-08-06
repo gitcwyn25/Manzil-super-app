@@ -1,0 +1,404 @@
+// Dashboard overview (task D2): KPI stat cards, the Business Health trend
+// chart, the Recent Bookings list, and the carried-over mini-facts strip.
+// Visual truth: business_dashboard_overview/screen.png reconciled with the
+// api-map (no trend pills — CrmStats has no prior-period deltas; no costs
+// series — the chart draws the real visits.daily counts).
+//
+// Everything rides the workspace motion budget: 140ms micro-interactions,
+// shadow-only card hovers (L1 -> L2), no entrance animations, and a
+// reduced-motion short-circuit at the end of the file. Selectors are all
+// new ws-* names owned by this screen (plus density-scoped bumps over the
+// [data-shell="workspace"] h1/h2 caps in globals.css, which need the extra
+// .ws-main class to win specificity).
+
+// Matches _workspace.scss's budget; !default keeps whichever loads first.
+$ws-motion: .14s ease !default;
+
+.ws-overview {
+  display: grid;
+  gap: 1.25rem;
+  align-content: start;
+}
+
+// ---------------------------------------------------------------------------
+// Page header density: the workspace h1 cap (1.4rem) is too small for the
+// screen title card; (0,2,0) outranks the density layer's (0,1,1).
+// ---------------------------------------------------------------------------
+
+.ws-main .vm-page-header__title {
+  font-size: 1.75rem;
+}
+
+// Pending-approval note (the mock drops it; the product keeps it) — quiet
+// tertiary-tint band in the VM warning role.
+.ws-note {
+  margin: 0;
+  padding: .75rem 1rem;
+  border: 1px solid $warning-border-subtle;
+  border-radius: $card-border-radius;
+  background: $warning-bg-subtle;
+  color: $vm-tertiary;
+  font-size: .875rem;
+}
+
+// ---------------------------------------------------------------------------
+// KPI row
+// ---------------------------------------------------------------------------
+
+.ws-kpi-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@include media-breakpoint-up(sm) {
+  .ws-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@include media-breakpoint-up(xl) {
+  .ws-kpi-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.ws-stat {
+  transition: box-shadow $ws-motion;
+
+  &:hover {
+    box-shadow: $box-shadow;
+  }
+}
+
+.ws-stat__body {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  padding: 1rem;
+}
+
+.ws-stat__text {
+  display: grid;
+  gap: .25rem;
+}
+
+.ws-stat__caption {
+  color: $vm-on-surface-variant;
+  font-size: .6875rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  // CSS-only caps so uz apostrophes and ru Cyrillic stay source-cased in
+  // the copy record.
+  text-transform: uppercase;
+}
+
+// 1.25rem (not the mock's 28px): UZS sums like "12 450 000 so'm" must fit a
+// quarter-width card without wrapping the row apart.
+.ws-stat__value {
+  color: $vm-on-surface;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.ws-stat__suffix {
+  margin-left: .25rem;
+  color: $vm-on-surface-variant;
+  font-size: .8125rem;
+  font-weight: 500;
+}
+
+// The kit tile's consumer transition is 300ms; the workspace budget is 140ms.
+.ws-main .vm-icon-tile {
+  transition-duration: .14s;
+}
+
+// ---------------------------------------------------------------------------
+// Main grid: chart card (2fr) + bookings card (1fr)
+// ---------------------------------------------------------------------------
+
+.ws-main-grid {
+  display: grid;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+@include media-breakpoint-up(lg) {
+  .ws-main-grid {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  }
+}
+
+.ws-panel {
+  transition: box-shadow $ws-motion;
+
+  &:hover {
+    box-shadow: $box-shadow;
+  }
+}
+
+.ws-panel__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 1rem 1.25rem;
+}
+
+.ws-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .5rem .75rem;
+}
+
+// Outranks the density layer's [data-shell="workspace"] h2 (0,1,1) cap.
+.ws-main .ws-panel__title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -.01em;
+}
+
+.ws-panel__hint {
+  color: $vm-on-surface-variant;
+  font-size: .8125rem;
+}
+
+.ws-view-all {
+  color: $primary;
+  font-size: .8125rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 0;
+    border-radius: $border-radius-sm;
+    box-shadow: 0 0 0 .25rem $focus-ring-color;
+  }
+}
+
+.ws-panel-empty {
+  display: grid;
+  place-content: center;
+  flex: 1;
+  margin: 0;
+  padding: 1.5rem 1rem;
+  color: $vm-on-surface-variant;
+  font-size: .875rem;
+  text-align: center;
+}
+
+// ---------------------------------------------------------------------------
+// Segmented Week/Month toggle (query-param links — works without JS)
+// ---------------------------------------------------------------------------
+
+.ws-segmented {
+  display: inline-flex;
+  gap: .25rem;
+  padding: .25rem;
+  border-radius: $border-radius-pill;
+  background: $vm-surface-container-low;
+}
+
+.ws-segmented__option {
+  padding: .25rem .875rem;
+  border-radius: $border-radius-pill;
+  color: $vm-on-surface-variant;
+  font-size: .8125rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color $ws-motion, color $ws-motion;
+
+  &:hover {
+    background: $vm-surface-container-high;
+    color: $vm-on-surface;
+  }
+
+  &:focus-visible {
+    outline: 0;
+    box-shadow: 0 0 0 .25rem $focus-ring-color;
+  }
+
+  // Declared after :hover so the active fill wins the tie on hover.
+  &.active {
+    background: $vm-primary-container;
+    color: #fff;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Trend chart region
+// ---------------------------------------------------------------------------
+
+.ws-chart {
+  position: relative;
+  flex: 1;
+  min-height: 13rem;
+  overflow: hidden;
+  border-radius: .75rem;
+  background: $vm-surface;
+}
+
+.ws-chart__svg {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ws-chart__axis {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: $vm-on-surface-variant;
+  font-size: .75rem;
+}
+
+.ws-chart-empty {
+  display: grid;
+  place-items: center;
+  flex: 1;
+  min-height: 13rem;
+  padding: 1rem;
+  border-radius: .75rem;
+  background: $vm-surface;
+  color: $vm-on-surface-variant;
+  font-size: .875rem;
+  text-align: center;
+}
+
+// ---------------------------------------------------------------------------
+// Recent bookings list
+// ---------------------------------------------------------------------------
+
+.ws-booking-list {
+  display: grid;
+  gap: .5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ws-booking {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .625rem .75rem;
+  border: 1px solid transparent;
+  border-radius: .75rem;
+  transition: background-color $ws-motion, border-color $ws-motion;
+
+  &:hover {
+    background: $vm-surface-container-low;
+    border-color: rgba($vm-outline-variant, .4);
+  }
+}
+
+.ws-booking__text {
+  display: grid;
+  gap: .125rem;
+  min-width: 0;
+}
+
+.ws-booking__name,
+.ws-booking__service {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ws-booking__name {
+  color: $vm-on-surface;
+  font-size: .875rem;
+  font-weight: 600;
+}
+
+.ws-booking__service {
+  color: $vm-on-surface-variant;
+  font-size: .75rem;
+}
+
+.ws-booking__end {
+  display: grid;
+  flex: none;
+  gap: .25rem;
+  justify-items: end;
+  margin-left: auto;
+  text-align: right;
+}
+
+.ws-booking__amount {
+  color: $vm-on-surface;
+  font-size: .8125rem;
+  font-weight: 700;
+}
+
+// ---------------------------------------------------------------------------
+// Mini-facts strip (carried-over stats with no Stitch slot)
+// ---------------------------------------------------------------------------
+
+.ws-facts__body {
+  display: grid;
+  gap: 1rem 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+  margin: 0;
+  padding: 1rem 1.25rem;
+}
+
+.ws-fact {
+  display: grid;
+  gap: .125rem;
+  align-content: start;
+}
+
+.ws-fact dt {
+  color: $vm-on-surface-variant;
+  font-size: .75rem;
+  font-weight: 500;
+
+  a {
+    color: $primary;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.ws-fact dd {
+  margin: 0;
+  color: $vm-on-surface;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.ws-fact__delta {
+  margin-left: .375rem;
+  color: $vm-secondary;
+  font-size: .75rem;
+  font-weight: 500;
+}
+
+// ---------------------------------------------------------------------------
+// Reduced motion: transitions land on their final state instantly
+// ---------------------------------------------------------------------------
+
+@media (prefers-reduced-motion: reduce) {
+  .ws-stat,
+  .ws-panel,
+  .ws-segmented__option,
+  .ws-booking,
+  .ws-main .vm-icon-tile {
+    transition: none;
+  }
+}

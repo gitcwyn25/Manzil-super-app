@@ -185,6 +185,10 @@
 // consumer nav.mobile-nav, no <footer> under data-shell="workspace").
 @import "workspace";
 
+// Dashboard overview (task D2): KPI stat cards, Business Health trend chart,
+// recent-bookings list, mini-facts strip — new ws-* selectors, 140ms budget.
+@import "workspace-overview";
+
 // --- Unconverted-page bridge -----------------------------------------------
 // Bootstrap's reboot/type/containers modules (imported above) define `body`,
 // `a`, `.container`, and `h1`-`h6` with the SAME specificity as globals.css's
