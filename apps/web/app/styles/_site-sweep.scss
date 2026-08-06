@@ -1,0 +1,814 @@
+// Uncovered site sweep (task S): /business landing, /business/plans,
+// /business/pricing, /business/register/photos, /lists, /lists/[slug],
+// /occasions, /occasions/[slug], /profile, /waitlist/[topic] — the critic's
+// uncoveredRoutes recipes applied token-level. No layout re-architecture, no
+// data changes; class names (incl. the waitlist.spec.ts welds .wl-submit /
+// .wl-done and the form control names) are preserved verbatim.
+//
+// Mechanism: these pages still run on globals.css rules driven by the legacy
+// Kosmonavtlar/teal custom properties. Re-declaring those custom properties
+// inside each page's own wrapper (custom properties inherit) converts the
+// bulk of every rule to the Vibrant Marketplace palette in one move; the
+// remaining literal hex values are restated selector-by-selector below.
+// Scopes are strictly per-route (or [data-shell="site"]) so the workspace
+// screens — swept by their own task — are never touched from here.
+//
+// Motion contract: hover lifts short-circuit to their final state under
+// prefers-reduced-motion (block at the end of the file).
+
+// ---------------------------------------------------------------------------
+// Legacy-token remaps
+// ---------------------------------------------------------------------------
+
+// Kosmonavtlar aliases -> VM roles (consumed by .section-*, .tag-row,
+// .ghost-button, .wl-*, .pricing-*, .profile-*, .achievement-* rules).
+@mixin vm-legacy-palette {
+  --primary: #{$primary};
+  --primary-bright: #{$vm-primary-container};
+  --primary-ghost: #{rgba($primary, .08)};
+  --primary-soft: #{$vm-primary-fixed};
+  --ceramic: #{$primary};
+  --brass: #{$vm-tertiary-container};
+  --signal: #{$vm-secondary-container};
+  --gold: #{$vm-tertiary-container};
+  --gold-dark: #{$vm-on-tertiary-fixed-variant};
+  --gold-soft: #{$vm-tertiary-fixed};
+  --terracotta: #{$vm-tertiary};
+  --text: #{$vm-on-surface};
+  --muted: #{$vm-on-surface-variant};
+  --dust: #{$vm-on-surface-variant};
+  --outline: #{$vm-outline-variant};
+  --line: #{rgba($vm-outline-variant, .6)};
+  --surface-low: #{$vm-surface-container-low};
+  --surface-card: #{$vm-surface-container-lowest};
+  --surface-high: #{$vm-surface-container};
+  --error: #{$vm-error};
+  --success: #{$vm-secondary};
+  --ring: 0 0 0 .25rem #{rgba($vm-primary, .15)};
+  --soft-shadow: #{$box-shadow-sm};
+  --shadow: #{$box-shadow};
+  --hover-shadow: #{$box-shadow};
+  --radius-sm: #{$border-radius};
+  --radius-md: #{$card-border-radius};
+  --radius-lg: #{$card-border-radius}; // D2: cards are 12px, not 24
+}
+
+// Teal+gold SaaS aliases -> VM roles (consumed by every .bz-* / .mk-* rule).
+@mixin vm-bz-palette {
+  --bz-ink: #{$vm-on-surface};
+  --bz-teal: #{$primary};
+  --bz-teal-bright: #{$vm-primary-container};
+  --bz-gold: #{$vm-tertiary-container};
+  --bz-gold-soft: #{$vm-tertiary-fixed};
+  --bz-line: #{rgba($vm-outline-variant, .6)};
+  --bz-muted: #{$vm-on-surface-variant};
+  --bz-panel: #{$vm-surface-container-low};
+  --bz-surface: #{$vm-surface-container-lowest};
+}
+
+.vm-lists-page,
+.vm-occasions-page,
+.vm-occasion-detail,
+.pricing-page,
+.profile-page,
+.wl-page {
+  @include vm-legacy-palette;
+}
+
+.bz-page,
+.crm-plans,
+.crm-register,
+.pricing-page,
+[data-shell="site"] .crm-auth-panel {
+  @include vm-bz-palette;
+  @include vm-legacy-palette;
+}
+
+// ---------------------------------------------------------------------------
+// Shared recipes
+// ---------------------------------------------------------------------------
+
+// The white L1 card (Soft Tactility): outline-variant hairline, 12px radius,
+// L1 shadow resting, L2 + small lift on hover.
+@mixin vm-l1-card($hover-lift: -2px) {
+  border: 1px solid rgba($vm-outline-variant, .5);
+  border-radius: $card-border-radius;
+  background: $vm-surface-container-lowest;
+  box-shadow: $box-shadow-sm;
+  transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+
+  &:hover {
+    transform: translateY($hover-lift);
+    border-color: rgba($vm-outline-variant, .9);
+    box-shadow: $box-shadow;
+  }
+}
+
+// The PrimaryCta paint (kit recipe as plain CSS, for legacy button classes
+// whose markup must not change — PlanSubmit, waitlist submit, .gold-button).
+@mixin vm-primary-cta-paint {
+  border: 0;
+  border-radius: $border-radius;
+  background: $primary linear-gradient(180deg, $vm-primary-container, $primary);
+  color: #fff;
+  box-shadow: $box-shadow-sm;
+  transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease;
+
+  &:hover,
+  &:focus-visible {
+    background-image: linear-gradient(180deg, $primary, shade-color($primary, 10%));
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: $box-shadow;
+  }
+
+  &:focus-visible {
+    outline: 0;
+    box-shadow: $box-shadow, 0 0 0 .25rem $focus-ring-color;
+  }
+
+  &:active {
+    transform: translateY(0) scale(.97);
+    box-shadow: $box-shadow-sm;
+  }
+}
+
+// Ghost button (DESIGN.md .btn-secondary semantics) for the legacy
+// .bz-btn-ghost / .ghost-button / .secondary-button classes.
+@mixin vm-ghost-paint {
+  border: 1.5px solid $vm-outline-variant;
+  background: transparent;
+  color: $primary;
+  box-shadow: none;
+  transition: border-color .2s ease, background-color .2s ease, color .2s ease, transform .2s ease;
+
+  &:hover,
+  &:focus-visible {
+    border-color: $primary;
+    background: rgba($primary, .06);
+    color: $primary;
+    transform: translateY(-1px);
+  }
+
+  &:focus-visible {
+    outline: 0;
+    box-shadow: 0 0 0 .25rem $focus-ring-color;
+  }
+}
+
+// VM section heading restyle for the legacy .section-heading block (kicker +
+// h1 + body) without changing its markup or heading level.
+@mixin vm-section-heading {
+  .section-kicker {
+    color: $primary;
+    font-weight: 700;
+
+    &::before {
+      background: $vm-primary-fixed-dim;
+    }
+  }
+
+  .section-heading h1 {
+    max-width: none;
+    font-size: clamp(2rem, 4.5vw, 2.75rem);
+    font-weight: 800;
+    letter-spacing: -.02em;
+    line-height: 1.15;
+  }
+
+  // Section titles drop from the bridge's display scale to headline-lg.
+  .section-heading h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    line-height: 1.25;
+  }
+
+  .section-heading p {
+    color: $vm-on-surface-variant;
+  }
+}
+
+// Legacy .tag-row spans -> quiet TagChips (kit chip recipe).
+@mixin vm-tag-row-chips {
+  .tag-row span {
+    padding: .25rem .625rem;
+    border: 0;
+    border-radius: $border-radius-sm;
+    background: $vm-surface-container-low;
+    color: $vm-on-surface-variant;
+    font-size: .75rem;
+    font-weight: 500;
+    letter-spacing: .02em;
+
+    &:hover {
+      transform: none;
+      background: $vm-surface-container-high;
+      color: $vm-on-surface;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Site-shell .bz- buttons (used on /business, /business/plans,
+// /business/register/photos and the plans error state; the workspace usages
+// belong to the workspace sweep and keep their current paint).
+// ---------------------------------------------------------------------------
+
+[data-shell="site"] .bz-btn-primary {
+  @include vm-primary-cta-paint;
+}
+
+[data-shell="site"] .bz-btn-ghost {
+  @include vm-ghost-paint;
+}
+
+// ---------------------------------------------------------------------------
+// /business landing — primary-blue gradient hero band + white L1 cards
+// ---------------------------------------------------------------------------
+
+.bz-page {
+  background:
+    radial-gradient(60rem 30rem at 88% -5rem, rgba($vm-primary, .06), transparent 60%),
+    radial-gradient(45rem 26rem at -6% 8%, rgba($vm-tertiary-container, .05), transparent 58%),
+    linear-gradient(180deg, $vm-surface-container-lowest 0%, $vm-surface 100%);
+}
+
+// Full-bleed hero band; the .bz-hero grid inside keeps its geometry.
+.bz-hero-band {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: linear-gradient(135deg, $vm-on-primary-fixed 0%, $primary 68%, $vm-primary-container 100%);
+  color: #fff;
+
+  // Soft radial glow, echoing the home hero's orb language without the blobs.
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(38rem 22rem at 82% 0%, rgba($vm-primary-container, .5), transparent 70%),
+      radial-gradient(30rem 18rem at 8% 100%, rgba($vm-inverse-primary, .18), transparent 70%);
+    pointer-events: none;
+  }
+}
+
+.bz-hero-band .bz-hero-eyebrow {
+  color: $vm-inverse-primary;
+
+  &::before {
+    background: rgba(#fff, .55);
+  }
+}
+
+.bz-hero-band .bz-hero-copy h1 {
+  color: #fff;
+}
+
+.bz-hero-band .bz-hero-accent {
+  color: $vm-inverse-primary;
+}
+
+.bz-hero-band .bz-hero-text {
+  color: rgba(#fff, .85);
+}
+
+.bz-hero-band .bz-trust {
+  color: rgba(#fff, .8);
+}
+
+.bz-hero-band .bz-trust-stars {
+  color: $vm-tertiary-fixed-dim;
+}
+
+// On the blue band the primary CTA inverts to white, the ghost goes white.
+[data-shell="site"] .bz-hero-band .bz-btn-primary {
+  background: #fff;
+  color: $primary;
+
+  &:hover,
+  &:focus-visible {
+    background: $vm-primary-fixed;
+    color: $primary;
+  }
+
+  &:focus-visible {
+    box-shadow: $box-shadow, 0 0 0 .25rem rgba(#fff, .35);
+  }
+}
+
+[data-shell="site"] .bz-hero-band .bz-btn-ghost {
+  border-color: rgba(#fff, .55);
+  color: #fff;
+
+  &:hover,
+  &:focus-visible {
+    border-color: rgba(#fff, .85);
+    background: rgba(#fff, .1);
+    color: #fff;
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 .25rem rgba(#fff, .25);
+  }
+}
+
+// Proof strip, stats, plans: white L1 cards on the light page.
+.bz-page .bz-proof-item {
+  border-color: rgba($vm-outline-variant, .5);
+  box-shadow: $box-shadow-sm;
+}
+
+.bz-page .bz-stat {
+  @include vm-l1-card(-4px);
+}
+
+.bz-page .bz-feature-list li::before {
+  background: rgba($primary, .1) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230058bc' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12 5 5 9-10'/%3E%3C/svg%3E") center / 11px no-repeat;
+}
+
+// Plan cards (shared by the landing pricing section and /business/plans).
+.bz-plan {
+  @include vm-l1-card(-4px);
+}
+
+.bz-plan.highlight {
+  border-color: $primary;
+  box-shadow: $box-shadow-lg;
+}
+
+.bz-plan li::before {
+  background: rgba($primary, .1) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230058bc' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12 5 5 9-10'/%3E%3C/svg%3E") center / 9px no-repeat;
+}
+
+// Final CTA band: same blue gradient identity as the hero.
+.bz-page .bz-final-inner {
+  background:
+    radial-gradient(38rem 19rem at 50% -40%, rgba($vm-primary-container, .55), transparent 70%),
+    linear-gradient(160deg, $vm-on-primary-fixed, $primary 60%, $vm-primary-container);
+  box-shadow: $box-shadow-lg;
+}
+
+.bz-page .bz-final-cta {
+  background: #fff;
+  color: $primary;
+  box-shadow: $box-shadow;
+
+  &:hover {
+    background: $vm-primary-fixed;
+    transform: translateY(-2px);
+  }
+}
+
+// Product mockups: literal teal/gold tints not covered by the --bz-* remap.
+.bz-page .mk-frame {
+  border-color: rgba($vm-outline-variant, .6);
+  box-shadow: $box-shadow-lg;
+}
+
+.bz-page .mk-chrome,
+.bz-page .mk-side,
+.bz-page .mk-reply-bar,
+.bz-page .mk-input {
+  background: $vm-surface;
+}
+
+.bz-page .mk-nav-item.active {
+  background: rgba($primary, .09);
+}
+
+.bz-page .mk-nav-badge {
+  background: $primary;
+  color: #fff;
+}
+
+.bz-page .mk-pill-rating {
+  background: rgba($primary, .08);
+}
+
+.bz-page .mk-kpi i.up,
+.bz-page .mk-panel-head b.up {
+  color: $vm-secondary;
+}
+
+.bz-page .mk-bars i {
+  background: rgba($primary, .16);
+}
+
+.bz-page .mk-owner-reply {
+  border-color: rgba($primary, .16);
+  background: rgba($primary, .05);
+}
+
+.bz-page .mk-avatar.alt {
+  background: linear-gradient(140deg, $vm-tertiary, $vm-tertiary-container);
+}
+
+.bz-page .mk-promo-pct {
+  color: #fff;
+}
+
+// ---------------------------------------------------------------------------
+// /business/plans — plan selection (signed-in step). Cards come from .bz-plan
+// above; only the page head needs quieting.
+// ---------------------------------------------------------------------------
+
+.crm-plans .crm-register-head p,
+.crm-plans .crm-hint {
+  color: $vm-on-surface-variant;
+}
+
+// ---------------------------------------------------------------------------
+// /business/pricing — consumer pricing cards
+// ---------------------------------------------------------------------------
+
+.pricing-page {
+  @include vm-section-heading;
+}
+
+.pricing-page .pricing-card {
+  @include vm-l1-card(-4px);
+}
+
+.pricing-page .pricing-card.highlight {
+  border: 2px solid $primary;
+  box-shadow: $box-shadow-lg;
+}
+
+.pricing-page .gold-button {
+  @include vm-primary-cta-paint;
+}
+
+.pricing-page .secondary-button {
+  @include vm-ghost-paint;
+}
+
+// The h2 inside a plan card is the price label, not a section title.
+.pricing-page .pricing-card h2 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -.01em;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.pricing-page .pricing-features li {
+  border-bottom-color: rgba($vm-outline-variant, .4);
+}
+
+.bz-pricing-waitlist {
+  margin: 2rem 0 0;
+
+  a {
+    color: $primary;
+    font-weight: 600;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// /business/register/photos — sibling of the redesigned register step
+// ---------------------------------------------------------------------------
+
+.crm-register .crm-panel {
+  @include vm-l1-card;
+
+  // A form panel, not an interactive card: no hover lift.
+  &:hover {
+    transform: none;
+    border-color: rgba($vm-outline-variant, .5);
+    box-shadow: $box-shadow-sm;
+  }
+}
+
+.crm-register .crm-register-head p {
+  color: $vm-on-surface-variant;
+}
+
+.crm-register .photo-manager__thumb {
+  border-color: rgba($vm-outline-variant, .5);
+  border-radius: $card-border-radius;
+  background: $vm-surface-container-low;
+}
+
+// Moderation status keeps its success/pending semantics in VM tints.
+.crm-register .photo-manager__badge {
+  background: rgba($vm-secondary, .12);
+  color: $vm-on-secondary-fixed-variant;
+}
+
+.crm-register .photo-manager__badge--pending {
+  background: $vm-tertiary-fixed;
+  color: $vm-on-tertiary-fixed-variant;
+}
+
+.crm-register .photo-manager__cover-btn {
+  border-color: $vm-outline-variant;
+  color: $primary;
+
+  &:hover:not(:disabled) {
+    border-color: $primary;
+    background: rgba($primary, .08);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// /lists + /lists/[slug] — CommunityListCard as a (photo-less) Master Card
+// ---------------------------------------------------------------------------
+
+.vm-lists-page {
+  @include vm-section-heading;
+  @include vm-tag-row-chips;
+}
+
+.vm-lists-page .community-list-card {
+  @include vm-l1-card;
+}
+
+.vm-lists-page .community-list-card a:hover h3 {
+  color: $primary;
+}
+
+.vm-lists-page .ghost-button {
+  @include vm-ghost-paint;
+
+  &.active {
+    background: rgba($primary, .1);
+    border-color: $primary;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// /occasions — CategoryTile overlay variant (gradient art + white caption;
+// the Occasion entity has no photo, so the token-layer art ramps are the
+// honest ground — same recipe as the discover category bento).
+// ---------------------------------------------------------------------------
+
+.vm-occasions-page {
+  @include vm-section-heading;
+}
+
+.vm-occasions-page .occasion-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  min-height: 11.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: $card-border-radius;
+  color: #fff;
+  box-shadow: $box-shadow-sm;
+  transition: transform .3s ease, box-shadow .3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    border-color: transparent;
+    box-shadow: $box-shadow;
+  }
+
+  &:focus-visible {
+    outline: 0;
+    box-shadow: $box-shadow-sm, 0 0 0 .25rem $focus-ring-color;
+  }
+}
+
+// Deterministic art rotation (index % 3 assigned server-side): the
+// token-layer gradient ramps, reused as neutral art — not category identity.
+.vm-occasions-page .occasion-card--art-0 {
+  background: $vm-cat-grad-restaurants;
+}
+
+.vm-occasions-page .occasion-card--art-1 {
+  background: $vm-cat-grad-cafes;
+}
+
+.vm-occasions-page .occasion-card--art-2 {
+  background: $vm-cat-grad-beauty;
+}
+
+// Emoji rides in the blurred white chip, top-right (discover's tile chip).
+.vm-occasions-page .occasion-emoji {
+  position: absolute;
+  top: .75rem;
+  right: .75rem;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: rgba(#fff, .85);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  box-shadow: $box-shadow-sm;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.vm-occasions-page .occasion-card__caption {
+  display: grid;
+  gap: .25rem;
+  margin-top: auto;
+  padding: 1rem;
+}
+
+.vm-occasions-page .occasion-card h2 {
+  margin: 0;
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -.01em;
+}
+
+.vm-occasions-page .occasion-card p {
+  margin: 0;
+  color: rgba(#fff, .85);
+  font-size: .875rem;
+  line-height: 1.5;
+}
+
+// /occasions/[slug] — detail heading + package chips; the business grid
+// underneath is already the Master Card via the shared kit.
+.vm-occasion-detail {
+  @include vm-section-heading;
+}
+
+.vm-occasion-detail .package-item {
+  padding: .375rem .75rem;
+  border-radius: $border-radius-sm;
+  background: $vm-surface-container-low;
+  color: $vm-on-surface-variant;
+  font-size: .8125rem;
+  font-weight: 500;
+}
+
+// ---------------------------------------------------------------------------
+// /profile — Master Card grid (via kit), IconTile achievements, ghost follows
+// ---------------------------------------------------------------------------
+
+.profile-page {
+  @include vm-section-heading;
+  @include vm-tag-row-chips;
+}
+
+.profile-page h1 {
+  max-width: none;
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -.02em;
+}
+
+.profile-page .profile-hero {
+  @include vm-l1-card;
+
+  // Identity card, not an interactive one.
+  &:hover {
+    transform: none;
+    border-color: rgba($vm-outline-variant, .5);
+    box-shadow: $box-shadow-sm;
+  }
+}
+
+.profile-page .profile-hero-avatar,
+.profile-page .social-avatar {
+  background: rgba($primary, .1);
+  color: $primary;
+  box-shadow: inset 0 0 0 2px rgba($primary, .15);
+}
+
+.profile-page .achievement-card,
+.profile-page .discover-user-card,
+.profile-page .empty-state {
+  @include vm-l1-card(-4px);
+}
+
+.profile-page .empty-state:hover {
+  transform: none;
+  border-color: rgba($vm-outline-variant, .5);
+  box-shadow: $box-shadow-sm;
+}
+
+// Earned = confirmed semantics: the savings-green tint family.
+.profile-page .achievement-card.earned {
+  border-color: rgba($vm-secondary, .3);
+  background: linear-gradient(180deg, $vm-surface-container-lowest, rgba($vm-secondary-container, .16));
+}
+
+// Emoji sits in an IconTile-style accent square.
+.profile-page .achievement-emoji {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: .5rem;
+  border-radius: var(--vm-radius-md);
+  background: rgba($primary, .1);
+  font-size: 1.375rem;
+  line-height: 1;
+}
+
+.profile-page .achievement-card.earned .achievement-emoji {
+  background: rgba($vm-secondary, .12);
+}
+
+.profile-page .achievement-card.earned .achievement-status {
+  color: $vm-on-secondary-fixed-variant;
+}
+
+.profile-page .social-activity-row {
+  @include vm-l1-card;
+
+  &:hover {
+    transform: translateX(4px);
+  }
+}
+
+.profile-page .ghost-button,
+.profile-page .secondary-button {
+  @include vm-ghost-paint;
+
+  &.active {
+    background: rgba($primary, .1);
+    border-color: $primary;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// /waitlist/[topic] — one white L1 card, planner-style email field
+// ---------------------------------------------------------------------------
+
+.wl-page .wl-copy {
+  padding: clamp(1.5rem, 4vw, 2.75rem);
+  border: 1px solid rgba($vm-outline-variant, .5);
+  border-radius: $card-border-radius;
+  background: $vm-surface-container-lowest;
+  box-shadow: $box-shadow-sm;
+}
+
+.wl-page .wl-copy h1 {
+  font-size: clamp(1.75rem, 3.8vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -.02em;
+}
+
+// Inputs keep the 8px control radius (cards-only 12px stays on the card).
+.wl-page .wl-field input,
+.wl-page .wl-field select {
+  border-radius: $border-radius;
+  background: $vm-surface-container-lowest;
+}
+
+.wl-page .wl-field > span {
+  color: $vm-on-surface;
+  font-size: .875rem;
+  font-weight: 600;
+}
+
+.wl-page .wl-submit {
+  @include vm-primary-cta-paint;
+}
+
+.wl-page .wl-count {
+  letter-spacing: .02em;
+  font-weight: 600;
+}
+
+// ---------------------------------------------------------------------------
+// Reduced motion: every lift/zoom this partial introduces lands on its final
+// state instantly (the shadows alone keep the hover affordance).
+// ---------------------------------------------------------------------------
+
+@media (prefers-reduced-motion: reduce) {
+  [data-shell="site"] .bz-btn-primary,
+  [data-shell="site"] .bz-btn-ghost,
+  .bz-page .bz-stat,
+  .bz-page .bz-final-cta,
+  .bz-plan,
+  .pricing-page .pricing-card,
+  .pricing-page .gold-button,
+  .pricing-page .secondary-button,
+  .vm-lists-page .community-list-card,
+  .vm-lists-page .ghost-button,
+  .vm-occasions-page .occasion-card,
+  .vm-occasion-detail .package-item,
+  .profile-page .achievement-card,
+  .profile-page .discover-user-card,
+  .profile-page .social-activity-row,
+  .profile-page .ghost-button,
+  .profile-page .secondary-button,
+  .wl-page .wl-submit {
+    transition: none;
+
+    &:hover,
+    &:focus-visible,
+    &:active {
+      transform: none;
+    }
+  }
+}

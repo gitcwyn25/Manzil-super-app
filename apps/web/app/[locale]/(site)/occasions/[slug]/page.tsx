@@ -21,7 +21,7 @@ export default async function OccasionDetailPage({
   const { occasion, businesses } = page;
 
   return (
-    <section className="section-block container">
+    <section className="section-block container vm-occasion-detail">
       <div className="section-heading">
         <p className="section-kicker">{occasion.emoji} {copy.occasions.packageKicker}</p>
         <h1>{pickLocalized(occasion.name, locale)}</h1>

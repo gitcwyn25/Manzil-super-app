@@ -13,7 +13,7 @@ export default async function ListsPage({
   const lists = await getListsPage();
 
   return (
-    <section className="section-block container">
+    <section className="section-block container vm-lists-page">
       <div className="section-heading">
         <p className="section-kicker">{copy.lists.kicker}</p>
         <h1>{copy.lists.title}</h1>

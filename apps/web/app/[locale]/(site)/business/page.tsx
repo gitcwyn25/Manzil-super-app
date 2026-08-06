@@ -91,37 +91,41 @@ export default async function BusinessLandingPage({
   return (
     <div className="bz-page">
       {/* ============ HERO ============ */}
-      <section className="bz-hero">
-        <div className="bz-hero-copy">
-          <Reveal variant="fade-up">
-            <p className="bz-hero-eyebrow">{copy.heroEyebrow}</p>
-          </Reveal>
-          <Reveal delay={70} variant="fade-up">
-            <h1>
-              {copy.heroTitle1}
-              <br />
-              <span className="bz-hero-accent">{copy.heroTitle2}</span>
-            </h1>
-          </Reveal>
-          <Reveal delay={150} variant="fade-up">
-            <p className="bz-hero-text">{copy.heroText}</p>
-          </Reveal>
-          <Reveal delay={230} variant="fade-up">
-            <div className="bz-hero-actions">
-              <a className="bz-btn-primary" href={`/${locale}/business/register`}>{copy.ctaPrimary}</a>
-              <a className="bz-btn-ghost" href={`/${locale}/dashboard`}>{copy.ctaSecondary}</a>
-            </div>
-          </Reveal>
-          <Reveal delay={320} variant="fade-in">
-            <p className="bz-trust">
-              <span className="bz-trust-stars">★★★★★</span>
-              {copy.trustLine}
-            </p>
+      {/* The band carries the full-bleed primary-blue gradient (Vibrant
+          Marketplace); .bz-hero inside keeps its existing grid geometry. */}
+      <section className="bz-hero-band">
+        <div className="bz-hero">
+          <div className="bz-hero-copy">
+            <Reveal variant="fade-up">
+              <p className="bz-hero-eyebrow">{copy.heroEyebrow}</p>
+            </Reveal>
+            <Reveal delay={70} variant="fade-up">
+              <h1>
+                {copy.heroTitle1}
+                <br />
+                <span className="bz-hero-accent">{copy.heroTitle2}</span>
+              </h1>
+            </Reveal>
+            <Reveal delay={150} variant="fade-up">
+              <p className="bz-hero-text">{copy.heroText}</p>
+            </Reveal>
+            <Reveal delay={230} variant="fade-up">
+              <div className="bz-hero-actions">
+                <a className="bz-btn-primary" href={`/${locale}/business/register`}>{copy.ctaPrimary}</a>
+                <a className="bz-btn-ghost" href={`/${locale}/dashboard`}>{copy.ctaSecondary}</a>
+              </div>
+            </Reveal>
+            <Reveal delay={320} variant="fade-in">
+              <p className="bz-trust">
+                <span className="bz-trust-stars">★★★★★</span>
+                {copy.trustLine}
+              </p>
+            </Reveal>
+          </div>
+          <Reveal className="bz-hero-visual" delay={180} variant="scale-in">
+            <DashboardMock business={heroSample} />
           </Reveal>
         </div>
-        <Reveal className="bz-hero-visual" delay={180} variant="scale-in">
-          <DashboardMock business={heroSample} />
-        </Reveal>
       </section>
 
       {/* ============ PROOF STRIP ============ */}

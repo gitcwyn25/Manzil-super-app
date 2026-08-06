@@ -21,7 +21,7 @@ export default async function ListDetailPage({
   const { list, businesses } = page;
 
   return (
-    <section className="section-block container">
+    <section className="section-block container vm-lists-page">
       <div className="section-heading">
         <p className="section-kicker">{list.authorName}</p>
         <h1>{pickLocalized(list.title, locale)}</h1>

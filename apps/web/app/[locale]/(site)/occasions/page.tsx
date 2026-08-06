@@ -14,18 +14,24 @@ export default async function OccasionsPage({
   const occasions = await getOccasions();
 
   return (
-    <section className="section-block container">
+    <section className="section-block container vm-occasions-page">
       <div className="section-heading">
         <p className="section-kicker">{copy.occasions.kicker}</p>
         <h1>{copy.occasions.pageTitle}</h1>
         <p>{copy.occasions.pageBody}</p>
       </div>
       <div className="occasion-grid">
-        {occasions.map((occasion) => (
-          <Link className="occasion-card" href={`/${locale}/occasions/${occasion.slug}`} key={occasion.slug}>
+        {occasions.map((occasion, index) => (
+          <Link
+            className={`occasion-card occasion-card--art-${index % 3}`}
+            href={`/${locale}/occasions/${occasion.slug}`}
+            key={occasion.slug}
+          >
             <span className="occasion-emoji" aria-hidden="true">{occasion.emoji}</span>
-            <h2>{pickLocalized(occasion.name, locale)}</h2>
-            <p>{pickLocalized(occasion.description, locale)}</p>
+            <div className="occasion-card__caption">
+              <h2>{pickLocalized(occasion.name, locale)}</h2>
+              <p>{pickLocalized(occasion.description, locale)}</p>
+            </div>
           </Link>
         ))}
       </div>
