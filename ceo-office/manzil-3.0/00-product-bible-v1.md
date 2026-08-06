@@ -148,6 +148,12 @@ The converged identity of Manzil, in six lines:
 
 **Validation milestone:** a real user completes the birthday planning flow, books the experience successfully, and says *"that was easier than I expected."* Everything after that is optimization, expansion, and scale.
 
+## Appendix D (v1.4, 2026-08-07) — Planning is multiplayer
+
+- **Lifecycle amended:** Discover → **Collaborate** → Plan → Book → Experience → Remember. "Collaborate" is where people collectively shape an experience before any booking exists.
+- **The Workspace, not the user, is the central object** (owner · members · guests · Gurman · businesses). Gurman moderates a group rather than obeying the last speaker.
+- **Binding constraint:** solo planning stays the default with zero added friction; collaboration is optional and additive at any moment. See [24-collaborative-workspace.md](24-collaborative-workspace.md).
+
 ## What Comes Next (document order)
 
 1. ✅ Product Bible (this document)
