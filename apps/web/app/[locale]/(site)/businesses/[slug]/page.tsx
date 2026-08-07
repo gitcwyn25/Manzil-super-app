@@ -2,6 +2,10 @@ import type { Locale } from "@manzil/shared";
 import { getUiCopy } from "@manzil/shared";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { JsonLd } from "../../../../components/json-ld";
+import { formatHours } from "../../../../lib/api-text";
+import { pageMetadata, ROUTE_SEO } from "../../../../lib/seo";
+import { localBusinessSchema, routeBreadcrumb } from "../../../../lib/structured-data";
 import { AiSummaryBlock } from "../../../../components/ai-summary-block";
 import { BadgeRow } from "../../../../components/badge-chip";
 import {
@@ -24,6 +28,16 @@ import { getBusiness, getBusinessPhotos, getCategories } from "../../../../lib/a
 import { formatReviewCount } from "../../../../lib/format";
 import { formatCount, pickLocalized } from "../../../../lib/locale-text";
 
+/**
+ * The one route whose metadata already worked. Extended rather than replaced:
+ * the title and description stay as they were (minus the manual "| Manzil",
+ * which the root title template now appends), and it gains the canonical,
+ * hreflang, Open Graph and Twitter tags every page was missing.
+ *
+ * The description falls back to a composed one-liner from real fields when a
+ * business has no written description — an empty meta description is a wasted
+ * snippet, and address + district + price tier are facts already on the page.
+ */
 export async function generateMetadata({
   params
 }: {
@@ -33,13 +47,22 @@ export async function generateMetadata({
   const profile = await getBusiness(slug).catch(() => null);
 
   if (!profile) {
-    return {};
+    return { title: ROUTE_SEO.notFound.title[locale], robots: { index: false, follow: false } };
   }
 
-  return {
-    title: `${profile.business.name} | Manzil`,
-    description: profile.business.description[locale] ?? profile.business.description.uz
-  };
+  const { business } = profile;
+  const description =
+    business.description[locale] ??
+    business.description.uz ??
+    `${business.name} — ${business.district}, ${business.city}. ${business.priceTier}`;
+
+  return pageMetadata({
+    locale,
+    path: `/businesses/${business.slug}`,
+    title: business.name,
+    description,
+    images: business.coverPhotoUrl ? [business.coverPhotoUrl] : undefined
+  });
 }
 
 export default async function BusinessProfilePage({
@@ -73,8 +96,24 @@ export default async function BusinessProfilePage({
           `${business.address}, ${business.district}, ${business.city}`
         )}`;
 
+  // Only real, approved photos plus a real cover reach the schema — never a
+  // placeholder or a gradient stand-in.
+  const schemaImages = [
+    ...(business.coverPhotoUrl ? [business.coverPhotoUrl] : []),
+    ...photos
+  ];
+
   return (
     <>
+      <JsonLd
+        data={[
+          localBusinessSchema({ business, locale, reviews, images: schemaImages }),
+          routeBreadcrumb(locale, ["home", "discover"], {
+            name: business.name,
+            path: `/businesses/${business.slug}`
+          })
+        ]}
+      />
       <VisitPing slug={business.slug} />
       <div className="container-xxl biz-page">
         <Reveal variant="fade-up">
@@ -120,7 +159,9 @@ export default async function BusinessProfilePage({
                       only "current" signal — open/closed is never computed. */}
                   <span className="biz-head__meta-item">
                     <Icon name="schedule" size={16} />
-                    {business.liveStatus ? pickLocalized(business.liveStatus.label, locale) : business.hours}
+                    {business.liveStatus
+                      ? pickLocalized(business.liveStatus.label, locale)
+                      : formatHours(business.hours, locale)}
                   </span>
                   {business.status === "claimed" ? (
                     <span className="biz-head__meta-item biz-head__verified">
@@ -239,7 +280,7 @@ export default async function BusinessProfilePage({
                     <Icon className="biz-info__icon" name="schedule" size={18} />
                     <div>
                       <span className="visually-hidden">{copy.business.hoursLabel}</span>
-                      <p className="biz-info__value">{business.hours}</p>
+                      <p className="biz-info__value">{formatHours(business.hours, locale)}</p>
                       {business.liveStatus ? (
                         <LiveStatusDetails locale={locale} status={business.liveStatus} />
                       ) : null}

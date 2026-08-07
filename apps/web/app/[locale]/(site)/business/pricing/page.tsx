@@ -2,7 +2,21 @@ import type { Locale } from "@manzil/shared";
 import { getUiCopy } from "@manzil/shared";
 import Link from "next/link";
 import { pickLocalized } from "../../../../lib/locale-text";
+import type { Metadata } from "next";
+import { JsonLd } from "../../../../components/json-ld";
 import { getSubscriptionPlans } from "../../../../lib/api";
+import { planFeatureLabel } from "../../../../lib/plans";
+import { routeMetadata } from "../../../../lib/seo";
+import { routeBreadcrumb } from "../../../../lib/structured-data";
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return routeMetadata("pricing", locale);
+}
 
 export default async function BusinessPricingPage({
   params
@@ -15,6 +29,7 @@ export default async function BusinessPricingPage({
 
   return (
     <section className="section-block container pricing-page">
+      <JsonLd data={routeBreadcrumb(locale, ["home", "business", "pricing"])} />
       <div className="section-heading">
         <p className="section-kicker">{copy.pricing.kicker}</p>
         <h1>{copy.pricing.title}</h1>
@@ -28,11 +43,22 @@ export default async function BusinessPricingPage({
             <h2>{pickLocalized(plan.priceLabel, locale)}</h2>
             <p>{pickLocalized(plan.description, locale)}</p>
             <ul className="pricing-features">
-              {plan.features.map((feature) => (
-                <li className={feature.included ? "included" : "excluded"} key={pickLocalized(feature.label, locale)}>
-                  {feature.included ? "✓" : "—"} {pickLocalized(feature.label, locale)}
-                </li>
-              ))}
+              {/* A feature row whose label is still a raw entitlement key
+                  (`crm.segments`) is dropped rather than printed — see
+                  planFeatureLabel. */}
+              {plan.features.map((feature) => {
+                const label = planFeatureLabel({ label: feature.label }, locale);
+
+                if (!label) {
+                  return null;
+                }
+
+                return (
+                  <li className={feature.included ? "included" : "excluded"} key={label}>
+                    {feature.included ? "✓" : "—"} {label}
+                  </li>
+                );
+              })}
             </ul>
             <Link className={plan.highlight ? "gold-button" : "secondary-button"} href={`/${locale}/discover`}>
               {plan.slug === "starter" ? copy.pricing.freeStart : copy.pricing.comingSoon}

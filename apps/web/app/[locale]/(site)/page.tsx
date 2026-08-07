@@ -1,9 +1,25 @@
 import type { Locale } from "@manzil/shared";
+import type { Metadata } from "next";
 import { BentoBusinessGrid } from "../../components/home/bento-business-grid";
 import { FeatureTrio } from "../../components/home/feature-trio";
 import { HeroConcierge } from "../../components/home/hero-concierge";
 import { getHomeFeed } from "../../lib/api";
 import { getLandingCopy } from "../../lib/landing-copy";
+import { routeMetadata } from "../../lib/seo";
+
+/**
+ * The home page had no metadata of its own, so it inherited the root layout's
+ * hard-coded *Manzil Business* title and introduced the consumer product as
+ * the owner product — the wrong-page-identity finding from the audit.
+ */
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return routeMetadata("home", locale);
+}
 
 /**
  * Home — the Vibrant Marketplace AI-discovery landing (task A2).

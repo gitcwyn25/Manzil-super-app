@@ -6,8 +6,38 @@ import { SortSelect, type SortKey } from "../../../components/discover/sort-sele
 import { GurmanHero, type GurmanHeroCopy } from "../../../components/gurman-hero";
 import { HomeSections } from "../../../components/home-sections";
 import { Reveal } from "../../../components/motion/reveal";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { JsonLd } from "../../../components/json-ld";
 import { getHomeFeed, searchBusinesses } from "../../../lib/api";
 import { selectPlural } from "../../../lib/format";
+import { routeMetadata } from "../../../lib/seo";
+import { routeBreadcrumb } from "../../../lib/structured-data";
+
+/**
+ * Filtered result URLs (`?q=`, `?category=`, `?price=`, `?minRating=`,
+ * `?sort=`) are combinatorial: indexing them would spend crawl budget on
+ * near-duplicate pages of the same catalogue. They stay `follow` — the links
+ * out to business pages are exactly what should be crawled — but `noindex`,
+ * and they canonicalise to the unfiltered browse page.
+ */
+export async function generateMetadata({
+  params,
+  searchParams
+}: {
+  params: Promise<{ locale: Locale }>;
+  searchParams: Promise<Record<string, string | undefined>>;
+}): Promise<Metadata> {
+  const [{ locale }, filters] = await Promise.all([params, searchParams]);
+  const base = routeMetadata("discover", locale);
+  const isFiltered = Boolean(
+    filters.q?.trim() || (filters.category && filters.category !== "all") || filters.price || filters.minRating
+  );
+
+  return isFiltered
+    ? { ...base, robots: { index: false, follow: true } }
+    : base;
+}
 
 /**
  * Planner-hero copy per locale (D8: aspirational energy, honest claims).
@@ -101,6 +131,10 @@ type ResultsCopy = {
   searchTitle: (query: string) => string;
   countLine: (count: number) => string;
   loadMore: string;
+  /** Empty-result actions. A "no results" panel with nothing to click is a
+   *  dead end; these are the two things that genuinely help from here. */
+  clearFilters: string;
+  addBusiness: string;
 };
 
 const RESULTS_COPY: Record<string, ResultsCopy> = {
@@ -108,20 +142,26 @@ const RESULTS_COPY: Record<string, ResultsCopy> = {
     fallbackTitle: "Barcha joylar",
     searchTitle: (query) => `«${query}» bo'yicha natijalar`,
     countLine: (count) => `${count} ta joy topildi`,
-    loadMore: "Yana ko'rsatish"
+    loadMore: "Yana ko'rsatish",
+    clearFilters: "Filtrlarni tozalash",
+    addBusiness: "Biznes qo'shish"
   },
   ru: {
     fallbackTitle: "Все места",
     searchTitle: (query) => `Результаты по запросу «${query}»`,
     countLine: (count) =>
       `Найдено ${count} ${selectPlural(count, { one: "место", few: "места", many: "мест", other: "места" }, "ru")}`,
-    loadMore: "Показать ещё"
+    loadMore: "Показать ещё",
+    clearFilters: "Сбросить фильтры",
+    addBusiness: "Добавить бизнес"
   },
   en: {
     fallbackTitle: "All places",
     searchTitle: (query) => `Results for "${query}"`,
     countLine: (count) => `${count} ${selectPlural(count, { one: "place", other: "places" }, "en")} found`,
-    loadMore: "Show more"
+    loadMore: "Show more",
+    clearFilters: "Clear filters",
+    addBusiness: "Add a business"
   }
 };
 
@@ -162,6 +202,7 @@ export default async function DiscoverPage({
   if (isBrowsing) {
     return (
       <div className="discover-page">
+        <JsonLd data={routeBreadcrumb(locale, ["home", "discover"])} />
         <GurmanHero copy={gurmanCopy(locale)} locale={locale} />
         {feed?.sections ? (
           <div className="container discover-page__sections">
@@ -206,6 +247,7 @@ export default async function DiscoverPage({
 
   return (
     <section className="container discover-results">
+      <JsonLd data={routeBreadcrumb(locale, ["home", "discover"])} />
       <div className="discover-results__layout">
         <FilterSidebar
           categories={categories}
@@ -245,6 +287,20 @@ export default async function DiscoverPage({
               <div className="empty-state vm-empty">
                 <h3>{copy.search.emptyTitle}</h3>
                 <p>{copy.search.emptyBody}</p>
+                {/* Was a dead end: a heading and a sentence with nothing to
+                    click. Clearing the filters is the fix for most empty
+                    results; registering is the fix for the rest. */}
+                <div className="vm-empty-state__actions">
+                  <Link className="btn btn-primary vm-cta" href={`/${locale}/discover`}>
+                    {t.clearFilters}
+                  </Link>
+                  <Link
+                    className="btn btn-outline-primary"
+                    href={`/${locale}/business/register`}
+                  >
+                    {t.addBusiness}
+                  </Link>
+                </div>
               </div>
             </Reveal>
           )}

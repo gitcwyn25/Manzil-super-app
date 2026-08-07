@@ -8,8 +8,19 @@ import { RegisterSubmit } from "../../../../components/crm/register-submit";
 import { IconField, IconSelect } from "../../../../components/vm/icon-field";
 import { PrimaryCta } from "../../../../components/vm/primary-cta";
 import { BrandPanel, SplitAuthShell } from "../../../../components/vm/split-auth-shell";
+import type { Metadata } from "next";
+import { routeMetadata } from "../../../../lib/seo";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return routeMetadata("register", locale);
+}
 
 /**
  * Business registration in the Vibrant Marketplace split-auth composition:
@@ -124,7 +135,21 @@ export default async function RegisterBusinessPage({
             <legend>{copy.register.contactSection}</legend>
             <label className="vm-field">
               <span className="vm-field__label">{copy.settings.phone}</span>
-              <IconField icon="call" name="phone" placeholder="+998" type="tel" />
+              {/* The field accepted anything at all, so listings went live with
+                  unreachable numbers that then render as a `tel:` link on the
+                  public profile. Uzbek mobile/landline numbers are +998 plus
+                  nine digits; spaces, dashes and parentheses are tolerated so
+                  the pattern rejects wrong numbers, not wrong formatting. */}
+              <IconField
+                autoComplete="tel"
+                icon="call"
+                inputMode="tel"
+                name="phone"
+                pattern="^\+?998[\s\-()]*([0-9][\s\-()]*){9}$"
+                placeholder="+998 90 123 45 67"
+                title="+998 90 123 45 67"
+                type="tel"
+              />
             </label>
             <label className="vm-field">
               <span className="vm-field__label">{copy.settings.email}</span>

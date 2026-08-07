@@ -3,7 +3,20 @@ import { getUiCopy } from "@manzil/shared";
 import { ConciergeChat } from "../../../components/concierge-chat";
 import { IconTile } from "../../../components/vm/icon-tile";
 import { Icon } from "../../../components/vm/icons";
+import type { Metadata } from "next";
+import { JsonLd } from "../../../components/json-ld";
 import { getConciergePrompts } from "../../../lib/api";
+import { routeMetadata } from "../../../lib/seo";
+import { routeBreadcrumb } from "../../../lib/structured-data";
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return routeMetadata("concierge", locale);
+}
 
 export default async function ConciergePage({
   params
@@ -16,6 +29,7 @@ export default async function ConciergePage({
   // slug to a name. Gurman now returns grounded names with each suggestion,
   // so shipping the whole catalog to the browser is no longer needed.
   const prompts = await getConciergePrompts();
+  const breadcrumb = routeBreadcrumb(locale, ["home", "concierge"]);
 
   const panelPoints = [
     {
@@ -40,6 +54,7 @@ export default async function ConciergePage({
 
   return (
     <section className="section-block container concierge-page">
+      <JsonLd data={breadcrumb} />
       <div className="section-heading">
         <p className="section-kicker">{copy.concierge.kicker}</p>
         <h1>{copy.concierge.title}</h1>

@@ -11,6 +11,17 @@ import {
   getSocialActivities,
   getUserProfile
 } from "../../../lib/api";
+import type { Metadata } from "next";
+import { routeMetadata } from "../../../lib/seo";
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return routeMetadata("profile", locale);
+}
 
 export default async function ProfilePage({
   params

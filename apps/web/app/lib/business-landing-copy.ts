@@ -44,7 +44,7 @@ const copy: Record<string, BusinessLandingCopy> = {
       "Profilingizni yangilang, sharhlarga javob bering, aksiya e'lon qiling va statistikani kuzating — Toshkentdagi mijozlaringiz uchun barchasi bir joyda.",
     ctaPrimary: "Bepul boshlash",
     ctaSecondary: "Kabinetga kirish",
-    trustLine: "Toshkent bo'ylab 1 200+ biznes allaqachon Manzil'da.",
+    trustLine: "Yangi platforma — birinchilardan bo'ling.",
     proofTitle: "Toshkentning ishonchli joylari Manzil'da",
     features: [
       {
@@ -70,12 +70,7 @@ const copy: Record<string, BusinessLandingCopy> = {
       }
     ],
     statsTitle: "Raqamlarda Manzil",
-    stats: [
-      { value: 1200, suffix: "+", label: "Faol bizneslar" },
-      { value: 48000, suffix: "+", label: "Oylik ko'rishlar" },
-      { value: 9600, suffix: "+", label: "Mijoz sharhlari" },
-      { value: 12, suffix: "", label: "Tumanlar" }
-    ],
+    stats: [],
     pricingTitle: "Sizga mos rejani tanlang",
     pricingText: "Bepul boshlang. Xohlagan vaqtda yangilang.",
     perMonth: "/oy",
@@ -112,7 +107,7 @@ const copy: Record<string, BusinessLandingCopy> = {
       "Обновляйте профиль, отвечайте на отзывы, запускайте акции и следите за статистикой — всё для ваших клиентов в Ташкенте в одном месте.",
     ctaPrimary: "Начать бесплатно",
     ctaSecondary: "Войти в кабинет",
-    trustLine: "Более 1 200 бизнесов Ташкента уже на Manzil.",
+    trustLine: "Новая платформа — станьте одними из первых.",
     proofTitle: "Надёжные места Ташкента — на Manzil",
     features: [
       {
@@ -138,12 +133,7 @@ const copy: Record<string, BusinessLandingCopy> = {
       }
     ],
     statsTitle: "Manzil в цифрах",
-    stats: [
-      { value: 1200, suffix: "+", label: "Активных бизнесов" },
-      { value: 48000, suffix: "+", label: "Просмотров в месяц" },
-      { value: 9600, suffix: "+", label: "Отзывов клиентов" },
-      { value: 12, suffix: "", label: "Районов" }
-    ],
+    stats: [],
     pricingTitle: "Выберите подходящий план",
     pricingText: "Начните бесплатно. Обновляйтесь в любой момент.",
     perMonth: "/мес",
@@ -180,7 +170,7 @@ const copy: Record<string, BusinessLandingCopy> = {
       "Update your profile, reply to reviews, launch promotions, and track performance — everything for your Tashkent customers in one place.",
     ctaPrimary: "Start free",
     ctaSecondary: "Open dashboard",
-    trustLine: "1,200+ businesses across Tashkent are already on Manzil.",
+    trustLine: "A new platform — be among the first.",
     proofTitle: "Trusted places across Tashkent are on Manzil",
     features: [
       {
@@ -206,12 +196,7 @@ const copy: Record<string, BusinessLandingCopy> = {
       }
     ],
     statsTitle: "Manzil in numbers",
-    stats: [
-      { value: 1200, suffix: "+", label: "Active businesses" },
-      { value: 48000, suffix: "+", label: "Monthly views" },
-      { value: 9600, suffix: "+", label: "Customer reviews" },
-      { value: 12, suffix: "", label: "Districts" }
-    ],
+    stats: [],
     pricingTitle: "Choose the plan that fits",
     pricingText: "Start free. Upgrade any time.",
     perMonth: "/mo",
