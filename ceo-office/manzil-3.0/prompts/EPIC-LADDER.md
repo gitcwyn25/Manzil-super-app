@@ -20,7 +20,8 @@
 | 16 | **Experience Intelligence & Learning System** (the learning brain) | queued | [epic-16](epic-16-experience-intelligence.md) |
 | 17 | **Product Experience System (PXS)** — feedback/state framework, web track | queued | [epic-17](epic-17-product-experience-system.md) |
 | 18 | **API Idempotency & Mutation Integrity** — pairs with 17; fixes duplicate-record root cause | queued | [epic-18](epic-18-api-idempotency.md) |
-| 19 | Autonomous Marketplace (AI negotiation, ecosystem self-optimization) | outline only | *(largely absorbed into 13's forecasting + 10's evaluation; write when reached)* |
+| 19 | **Business Feed** — connects Workspace publishing to the public storefront | queued | [epic-19](epic-19-business-feed-storefront.md) |
+| 20 | Autonomous Marketplace (AI negotiation, ecosystem self-optimization) | outline only | *(largely absorbed into 13's forecasting + 10's evaluation; write when reached)* |
 
 **Ordering rationale:** ecosystem intelligence (13) precedes experience commerce (14) precedes per-business tooling (15) — each consumes the previous rather than reinventing it. Architecture ends at 16; beyond that is product capability on a mature platform.
 
