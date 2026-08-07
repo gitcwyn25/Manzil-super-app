@@ -1047,3 +1047,69 @@ model GraphRelationship {
   @@index([toId])
   @@index([kind])
 }
+
+/// ⚠️ GATED ON M1 — the table for this model does NOT exist yet. ⚠️
+///
+/// Epic 05 (Memory Engine): the six memory tiers, as one generic
+/// tier-discriminated row. Every memory object is structured knowledge with
+/// provenance, confidence, lifecycle and retrieval priority — never a
+/// transcript; see
+/// `apps/api/src/modules/intelligence/memory-engine/MEMORY-ENGINE.md`.
+///
+/// The migration lives in `packages/db/migrations-gated-m1/`, deliberately
+/// OUTSIDE the directory `prisma migrate deploy` reads, for the same reason
+/// as `GraphRelationship`: M1 (platform hygiene) must first reconcile the
+/// existing schema/migration drift.
+///
+/// Until then the engine stores memory **in process**: fully functional,
+/// fully tested, and honest about it — `MemoryEngineService.persistence`
+/// reports `{ backend: "memory", durable: false }`. The Prisma-backed store
+/// is selected only when `MEMORY_ENGINE_STORE=prisma`, so a `prisma generate`
+/// (which mints the delegate on every image build) cannot switch it on by
+/// accident.
+///
+/// Deliberately generic: one table for all six tiers, because the tier
+/// vocabulary is a TypeScript union (`MemoryTier`) and a table per tier would
+/// make every new tier a migration.
+model MemoryObject {
+  id String @id @default(cuid())
+
+  /// `MemoryTier`: mission_context, preference_context, relationship_context,
+  /// workspace_timeline, business_context, marketplace_context.
+  tier      String
+  /// Who or what the memory is *about*: a customer (tiers 1-3, 5), a
+  /// workspace (tier 4), or the market itself (tier 6).
+  subjectId String
+  /// Derived from (tier, subjectId) and stable across rewrites, so the
+  /// `memoryIds consulted` on a recommendation (doc 23 §9) still resolve
+  /// after the memory changes.
+  memoryId  String @unique
+
+  /// `KnowledgeSource` (core/core.primitives): conversation, booking, visit…
+  /// `conversation` means facts extracted FROM a conversation, never its text.
+  source     String
+  /// [0, 1]. The migration adds a CHECK constraint the schema cannot express.
+  confidence Float
+
+  /// The structured knowledge payload — a typed tier shape, never chat.
+  /// `memory.validation.ts` refuses transcript-shaped payloads on the way in
+  /// and on the way out.
+  knowledge Json @default("{}")
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  /// Null = does not expire on its own (the long-term tiers). Volatile tiers
+  /// set it; expiry is enforced on read AND by `ExpireMemoryJob`.
+  expiresAt DateTime?
+
+  /// Index into the binding tier order (0-5); denormalised so a mixed bag of
+  /// memories sorts without re-deriving the contract.
+  retrievalPriority Int
+
+  /// One memory per (tier, subject) — the uniqueness that makes writing a
+  /// memory twice idempotent, in Postgres as well as in memory.
+  @@unique([tier, subjectId])
+  @@index([subjectId])
+  @@index([expiresAt])
+  @@index([tier])
+}

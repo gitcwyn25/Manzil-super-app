@@ -31,20 +31,36 @@ The graph is fully functional without it — everything the relational schema
 proves is projected on read, at confidence 1.0 — so this is additive
 capability, never a launch blocker.
 
-## Applying it, after M1
+## Pending: `20260808000000_memory_object_GATED_ON_M1`
+
+Creates the `MemoryObject` table for Epic 05's memory engine: the six memory
+tiers as one generic, tier-discriminated row, unique on `(tier, subjectId)`.
+The engine is fully functional without it — memory is kept in process, and
+`MemoryEngineService.persistence` reports `{ backend: "memory", durable:
+false }` so nothing pretends otherwise — but memory does not survive a
+restart until this lands.
+
+## Applying them, after M1
+
+Both pending migrations follow the same five steps; do them one migration at
+a time.
 
 1. Land the M1 consolidation migration; confirm the drift check passes.
-2. `git mv packages/db/migrations-gated-m1/20260807000000_graph_relationship_GATED_ON_M1 packages/db/migrations/`
+2. `git mv packages/db/migrations-gated-m1/<migration> packages/db/migrations/`
    (rename off the `_GATED_ON_M1` suffix if you prefer; nothing reads it).
-3. `npm run db:migrate:deploy` — verify the table, unique index and CHECK
-   constraint exist.
-4. `npm run db:generate` so `@prisma/client` gains the `graphRelationship`
-   delegate.
-5. Set `KNOWLEDGE_GRAPH_EDGE_STORE=prisma` on the API service. **Both** signals
-   are required: the delegate appears at every image build once the model is in
+3. `npm run db:migrate:deploy` — verify the table, unique indexes and CHECK
+   constraints exist.
+4. `npm run db:generate` so `@prisma/client` gains the delegate
+   (`graphRelationship` / `memoryObject`).
+5. Set the opt-in env var on the API service:
+   `KNOWLEDGE_GRAPH_EDGE_STORE=prisma` for the graph,
+   `MEMORY_ENGINE_STORE=prisma` for memory. **Both** signals are required in
+   each case: the delegate appears at every image build once the model is in
    `schema.prisma`, so the env var is what says a human actually applied the
-   table. Until it is set, the API stays in projection-only mode and
-   `InferRelationshipsJob` reports `tool_unavailable` instead of writing.
+   table. Until it is set, the graph stays in projection-only mode
+   (`InferRelationshipsJob` reports `tool_unavailable` instead of writing) and
+   memory stays in process.
 
 No API code changes at any step — see
-`apps/api/src/modules/intelligence/knowledge-graph/KNOWLEDGE-GRAPH.md`.
+`apps/api/src/modules/intelligence/knowledge-graph/KNOWLEDGE-GRAPH.md` and
+`apps/api/src/modules/intelligence/memory-engine/MEMORY-ENGINE.md`.

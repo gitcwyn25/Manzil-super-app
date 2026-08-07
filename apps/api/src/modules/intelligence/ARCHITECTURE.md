@@ -289,3 +289,20 @@ frozen file. Nothing is instantiated by this module: the wiring is an exported
 inferred edges have a `GraphRelationship` model declared but **not applied**
 (gated on the M1 drift reconciliation); until then the layer runs in
 projection-only mode. See `knowledge-graph/KNOWLEDGE-GRAPH.md`.
+
+**Epic 05 — `memory-engine/`** (2026-08-07). Layer 4 implemented: the six
+tiers as slots keyed `(tier, subjectId)`, with retrieval in the binding order,
+expiry enforced on read *and* by a job, and a conflict rule (confidence floor →
+recency → confidence → source precedence) that resolves contradictions without
+ever averaging them. The preference tier is projected from visits and CRM rows
+and overlaid with what was explicitly remembered; the other five store what is
+written to them and claim nothing else. Mutations flow through
+`UpdateCustomerMemoryJob` and `ExpireMemoryJob` (the latter added to
+`IntelligenceJobCatalog` by declaration merging) and announce `MemoryUpdated`
+through the `EventPublisher` seam. Wiring is the exported
+`MEMORY_ENGINE_PROVIDERS` array — `IntelligenceModule` stays provider-empty.
+A generic `MemoryObject` model is declared but **not applied** (gated on M1);
+until then memory lives in process and says so
+(`MemoryEngineService.persistence`). The tier order refines the Bible's v1.2
+source order — the discrepancy is documented rather than patched, for the v1.4
+amendment. See `memory-engine/MEMORY-ENGINE.md`.
