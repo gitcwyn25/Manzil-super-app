@@ -154,6 +154,16 @@ The converged identity of Manzil, in six lines:
 - **The Workspace, not the user, is the central object** (owner · members · guests · Gurman · businesses). Gurman moderates a group rather than obeying the last speaker.
 - **Binding constraint:** solo planning stays the default with zero added friction; collaboration is optional and additive at any moment. See [24-collaborative-workspace.md](24-collaborative-workspace.md).
 
+## Appendix E (v1.5, 2026-08-07) — Manzil is a city intelligence platform
+
+The Intelligence Platform is **vertical-agnostic**. Retrieval, reasoning, the experience graph, the trust system, memory, and the learning loop do not know or care which category they serve. Restaurants are the first vertical, not the product.
+
+The same engine extends to doctors · lawyers · salons · repair services · real estate · schools · events · tourism · government services — because none of its layers encode "restaurant". This is why the architecture is worth its cost: it is a much larger company than an AI restaurant finder, and the marginal cost of vertical N+1 is catalogue data, not new intelligence.
+
+**Corollary (binding):** no layer below the presentation tier may hardcode a vertical. A category-specific rule belongs in data or policy, never in the graph, memory, retrieval, reasoning, or learning code.
+
+**Brand consequence:** the trust discipline — never fabricate data, always explain recommendations, keep every AI decision auditable — is a *product* differentiator, not merely an engineering practice. See [27-truth-economy-positioning.md](27-truth-economy-positioning.md).
+
 ## What Comes Next (document order)
 
 1. ✅ Product Bible (this document)
