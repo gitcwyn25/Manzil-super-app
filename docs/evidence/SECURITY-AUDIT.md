@@ -30,12 +30,17 @@ Every owner-scoped route follows the same shape: the slug (or a record id) is us
 | F-1 | Medium | Public photo endpoints do not exclude suspended businesses — the `6c0027f` visibility predicate is applied to 3 of 5 public read paths |
 | F-2 | Medium | `apps/backend/` is an undeployed second API whose admin controller has no role check |
 | F-3 | Medium | No audit trail exists for any business-owner mutation; `AuditLog.actorId` is FK-bound to `AdminUser` and structurally cannot record one |
+| F-11 | Medium | `GET /console/businesses/:id/detail` returns STIR, contracts, acceptance IPs and owner PII under `business.view`, bypassing the `legal.view` boundary |
 | F-4 | Low | Business claim submission (`POST /claims`) has no dedicated rate limit |
 | F-5 | Low | Public *writes* (visit, event, review) accept a suspended or merged business |
 | F-6 | Low | Two ownership predicates coexist with divergent rules (both fail closed) |
 | F-7 | Low | Any authenticated user can create `pending` Photo rows against any business |
+| F-10 | Low | `apps/admin` ships **zero** security headers — the highest-privilege origin has the weakest browser hardening |
+| F-12 | Low | `apps/admin` dev-header fallback has no `NODE_ENV` guard |
+| F-13 | Low | `MANZIL_DEV_AUTH` defaults **on** in the web app and **off** in the API |
 | F-8 | Info | `Permissions-Policy` header absent on the API |
 | F-9 | Info | Announcement/package draft state is protected by the *absence* of a public route, not by a predicate — Epic 19 cannot rely on today's model |
+| F-14 | Info | `apps/web` CSP allows `'unsafe-inline'` in `script-src` |
 
 No **critical** or **high** findings. See "Areas that came back clean" for the explicit no-findings statements.
 
@@ -367,6 +372,148 @@ Covered under Security headers below.
 
 Covered under Draft visibility below.
 
+### F-10 · Low · `apps/admin` ships zero security headers
+
+**Evidence**
+
+`apps/admin/next.config.ts` is seven lines in full:
+```ts
+const nextConfig = {
+  transpilePackages: ["@manzil/shared"],
+  eslint: { ignoreDuringBuilds: true },
+  typescript: { ignoreBuildErrors: false }
+};
+```
+No `headers()` function. `apps/admin/middleware.ts` sets none either — it only wraps `clerkMiddleware`. There is no reverse-proxy layer that could add them: the repo contains no `vercel.json`, no nginx or Caddy config, and `railway.json` covers build/deploy/healthcheck only. The API's own `helmet` (`apps/api/src/main.ts:43`) protects the API origin, not the admin frontend origin.
+
+**All six are absent** from the admin console: `Content-Security-Policy`, `Strict-Transport-Security`, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`.
+
+The contrast is the point. `apps/web/next.config.ts:75-100` configures all six, carefully, with comments explaining each choice — `frame-ancestors 'self'` deliberately agreed with a `SAMEORIGIN` legacy fallback, HSTS at two years with `preload`, `Permissions-Policy` denying camera/microphone/geolocation, `X-XSS-Protection: 0` with a note on why the legacy auditor is worse than nothing. That care was simply never applied to the sibling app, which happens to be the one holding ban, suspend, merge, approve, plan-pricing and Supabase-browsing powers.
+
+**Severity rationale — Low, deliberately.** I could not construct a clean exploit path, and inflating this would be dishonest:
+
+- **Clickjacking is largely self-mitigating.** Framing the console cross-site would not carry the session: Clerk's session cookie is `SameSite=Lax`, and Lax cookies are not sent on cross-site iframe subresource requests. The framed page renders logged-out, so there is nothing to trick a click into.
+- **HSTS adds downgrade protection only.** Both hosting targets terminate TLS and serve no plaintext origin.
+- **`nosniff` matters where user-controlled content is served** as a document; the console renders server components and proxies JSON.
+
+It is nonetheless a real omission on the highest-privilege surface in the product, and it is ranked first in the recommendations *because the fix is trivial* — not because the risk is large. Risk reduction per unit of effort is what makes it worth doing this week.
+
+### F-11 · Medium · Console business detail returns legal, tax and PII data under `business.view`
+
+**Evidence**
+
+`GET /v1/console/businesses/:id/detail` requires exactly one permission:
+
+`apps/api/src/modules/console/console.controller.ts:88-89`
+```ts
+@Get("businesses/:id/detail")
+@RequirePermission("business.view")
+```
+
+Its payload (`apps/api/src/modules/console/console-curation.repository.ts:42-141`) includes:
+
+- `legalName` and `taxId` — the Uzbek STIR (`:96-97`)
+- `claimedByUser` — the owner's `displayName`, **`email` and `phone`** (`:47`)
+- `legal.acceptances[]` — every terms acceptance with document kind/version, `acceptedBy`, and **`ipAddress`** (`:123-132`)
+- `legal.contracts[]` — contract numbers, template versions, generation timestamps (`:133-139`)
+- `subscription` — plan and billing status (`:48`)
+
+Meanwhile the console treats legal data as its own permission tier: `GET /v1/console/legal` is gated on `legal.view` (`console.controller.ts:135-136`), and `POST /v1/console/legal` on `legal.publish` (`:141-142`).
+
+The admin UI reflects the intended boundary — `apps/admin/app/businesses/[id]/page.tsx:103` computes `canViewLegal = can(me, "legal.view")` and hides the legal block at `:297`. That gate is applied to data the server already sent. Because the page is a React Server Component the hidden fields never reach the browser bundle, so **this is not a client-side leak**; the UI author correctly assumed a boundary that the API does not enforce.
+
+**Exploitation scenario**
+
+Grant a junior moderator the `business.view` permission so they can triage listings — a reasonable, minimal-looking grant, and the console's own `GET /console/businesses` list route requires exactly that. They open the browser devtools network tab on the business detail page they are legitimately allowed to view, or simply `curl` the endpoint with their session cookie:
+
+```
+GET /v1/console/businesses/<id>/detail
+Cookie: manzil_admin_session=<their own valid session>
+```
+
+The response hands them every listed business's STIR, legal entity name, owner email and phone, signed contract numbers, and the IP address from which the owner accepted the terms. Iterating the id list from `GET /console/businesses` — which they are also entitled to — turns this into a full dump of the platform's business-registry PII and legal records by someone holding only a read-triage permission. No `legal.view` grant, no audit distinction, and nothing in the console tells them they crossed a line.
+
+**Compounding factor — this read is not audited.** `GET /console/supabase/tables/:table` passes an actor context and writes an audit row, on the stated principle that "browsing production data, including other people's PII, is an auditable act" (`console.controller.ts:327-331`). But `businessDetail` and `businessConsumers` call `this.curation.getBusinessDetail(id)` / `getBusinessConsumers(id)` with **no `ctx`** (`console.controller.ts:90-91, 97-98`) and write nothing. So the endpoint that returns STIR, contracts, acceptance IPs and owner PII — plus the sibling route that returns a business's full customer and reviewer list — leaves no trace of who read it. The Supabase browser is held to a standard these two are not, despite returning comparable data.
+
+**Severity rationale:** Medium. It is a genuine privilege-boundary violation with a straightforward path and sensitive data (tax IDs, contract records, IP addresses attached to legal consent). It is not High because the actor must already be an authenticated, active `AdminUser` — this is privilege escalation *within* the admin population, not a boundary an outsider crosses. It is also the one place in the audit where the RBAC model's own vocabulary (`legal.view` exists as a distinct permission) is contradicted by an endpoint.
+
+**Remediation direction (not applied):** either split the endpoint so the legal/contract/tax block is a separate `legal.view`-gated fetch, or apply a permission check inside the handler and omit the block when the caller lacks `legal.view` — the same opt-in shape `mapBusiness`'s `includeLegalIdentity` already uses successfully on the public side (`database.repository.ts:1099-1104`).
+
+### F-12 · Low · Admin dev-header fallback has no environment guard
+
+**Evidence**
+
+`apps/admin/lib/console.ts:19-23`
+```ts
+// Local dev without Clerk: impersonate the bootstrap admin via dev headers.
+if (!headers.Authorization && process.env.ADMIN_DEV_CLERK_ID) {
+  headers["x-manzil-role"] = "admin";
+  headers["x-manzil-user-id"] = process.env.ADMIN_DEV_CLERK_ID;
+}
+```
+
+There is **no `NODE_ENV` check**. The sole condition is that no Clerk token was obtained and `ADMIN_DEV_CLERK_ID` is set. Compare the web app's equivalent (`apps/web/app/lib/auth.ts:28-34`), which requires `NODE_ENV !== "production"` *and* `MANZIL_DEV_AUTH !== "false"` *and* no Clerk key, and restricts the headers to `/admin*` and `/console*` paths.
+
+**Why this is Low and not High:** it fails closed at the receiving end. `ClerkAuthService` accepts dev headers only when `MANZIL_DEV_AUTH === "true"` **and** `NODE_ENV !== "production"` **and** Clerk is not configured (`clerk-auth.service.ts:12-13, 24-26`). A production API rejects them outright. The finding is that the admin console would *emit* forged admin credentials on every unauthenticated request if `ADMIN_DEV_CLERK_ID` were ever set in a production environment — a single stray variable away from sending admin-impersonation headers over the wire, defended only by the far end's discipline. Defence in depth means not relying on that.
+
+### F-13 · Low · `MANZIL_DEV_AUTH` has opposite defaults on the two sides
+
+`apps/web/app/lib/auth.ts:31` treats the flag as **opt-out** (`MANZIL_DEV_AUTH !== "false"` — absent means enabled). `apps/api/src/modules/auth/clerk-auth.service.ts:13` treats it as **opt-in** (`MANZIL_DEV_AUTH === "true"` — absent means disabled).
+
+Both are individually defensible and the composition is currently safe, because the restrictive side is the one that decides. But one environment variable with inverted polarity across two apps is a trap for whoever next reasons about it: reading either file alone yields a confident and wrong belief about what unsetting the variable does.
+
+### F-14 · Info · `apps/web` CSP allows `'unsafe-inline'` in `script-src`
+
+`apps/web/next.config.ts:60` includes `'unsafe-inline'` in `script-src` with no nonce or hash mechanism (`'unsafe-eval'` is correctly dev-only). This materially weakens the CSP's value as an XSS mitigation — an injected inline `<script>` executes.
+
+Recorded as informational rather than a finding: it is the standard trade-off for Next.js without nonce plumbing, everything else in that header block is well-configured, and no XSS sink was identified in this audit. Worth revisiting when Next's nonce support is wired up, not worth blocking on.
+
+---
+
+## Frontend (`apps/web`, `apps/admin`) — report only
+
+The brief asked one question: does the frontend ever treat a client-side `isOwner` check as security? **It does not.** Every ownership and role gate found in either app is a UI affordance backed by an independent server-side check.
+
+### Client-side ownership filtering — **no findings**
+
+The strongest evidence is structural. **Every** dashboard page re-derives its business scope from an authenticated server call to `GET /v1/businesses/mine` rather than from a URL parameter:
+
+`dashboard/page.tsx:50-51` · `bookings/page.tsx:76` · `analytics/page.tsx:77` · `customers/page.tsx:39` · `customers/[id]/page.tsx:52` · `reviews/page.tsx:45` · `packages/page.tsx:24` · `announcements/page.tsx:134` · `settings/page.tsx:29`
+
+There is consequently **no `?business=` IDOR surface on any owner-facing read** — the client cannot ask for a business it does not own, because it never names one. The layout gate (`apps/web/app/[locale]/(workspace)/dashboard/layout.tsx:26-35`) is a server-side `auth()` that renders a sign-in panel instead of children, not a client redirect.
+
+Writes *do* carry a slug in a hidden form field (`bookings/page.tsx:149`, `announcements/page.tsx:186, 252`, `settings/page.tsx:89` → `apps/web/app/lib/crm-actions.ts:166, 198, 309`). This is correct and expected: the API re-derives ownership from the session on every one of those calls via `requireOwnedBusiness`. The hidden field says *which*; the session says *whether*. `PATCH /businesses/:slug` is additionally DTO-allowlisted (`apps/api/src/modules/controllers/business.dto.ts:36-40`) so an owner cannot smuggle a status or ownership reassignment into a profile edit.
+
+Client components using `isSignedIn` (`claim-form.tsx:35`, `helpful-button.tsx:33, 71`, `review-form.tsx:126`, `header-auth.tsx:12, 28`) are pure affordances — the API rejects unauthenticated calls regardless. `apps/web/app/lib/mock-api.ts:143` sets `role: "business_owner"` in fixture data, not in a gate.
+
+### Route protection — **no findings**
+
+- `apps/admin/middleware.ts:10-16` — `clerkMiddleware` + `auth.protect()` on everything except `/sign-in(.*)` and `/access-denied`. **Authentication only**, and the comment at `:8-9` says so explicitly; authorization is per-page plus API-side.
+- `apps/web/middleware.ts:88-90` — deliberately performs no authorization, handling only locale redirects and Supabase session refresh. Admin gating was moved out, and `apps/web/app/[locale]/(workspace)/admin/` is now an empty directory with no route.
+- Admin console pages are all server components that fetch `getMe()` and gate on the returned permission set (`audit/page.tsx:33`, `businesses/page.tsx:39`, `categories/page.tsx:21`, `plans/page.tsx:24`, `reviews/page.tsx:28`, `users/page.tsx:29`, `legal/page.tsx:24`, `analytics/page.tsx:32`), with a step-up re-check before every mutation at `apps/admin/lib/actions.ts:13-18` — and the API re-checking independently via `@RequirePermission` regardless.
+
+One observation, not a finding: both middlewares gate Clerk on `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` being set (`web:6`, `admin:5`). If that variable were missing from a production deploy, `apps/admin/middleware.ts:16` degrades to `NextResponse.next()` and the edge authentication gate silently disappears. It still fails closed overall — pages call `getMe()` and the API enforces `PermissionGuard` — but the failure is silent, and a loud one would be better.
+
+### API calls and dev headers
+
+Bearer tokens are attached consistently: server-side at `apps/web/app/lib/auth.ts:37-42` and `apps/admin/lib/console.ts:12-14`; browser-side in `claim-form.tsx:45, 50`, `helpful-button.tsx:44, 47`, `review-form.tsx:59, 139, 144`, `photo-upload.tsx:75, 170-174`, `business-photo-manager.tsx:59-68`. The legacy console path forwards the httpOnly `manzil_admin_session` cookie server-to-server (`apps/web/app/lib/auth.ts:22-26`), re-issued with `httpOnly`, `sameSite: "lax"`, and `secure` in production (`apps/web/app/lib/console-actions.ts:78-84`).
+
+Two dev-mode auth bypass emitters exist, both server-side only (never reachable from a browser): `apps/web/app/lib/auth.ts:44-49` and `apps/admin/lib/console.ts:20-23`. See F-12 and F-13. Dev headers are also scrubbed from Sentry events (`apps/api/src/instrument.ts:40-41`).
+
+### `NEXT_PUBLIC_*` secrets exposure — **no findings**
+
+Every `NEXT_PUBLIC_*` variable in either app is a legitimate public identifier. No service-role key, private API key, or admin token is exposed through a public-prefixed name. Inventory (**names and locations only — no values were read or reproduced**):
+
+`NEXT_PUBLIC_API_URL` · `NEXT_PUBLIC_SUPABASE_URL` · `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (publishable/anon by design — RLS is the boundary) · `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` · `NEXT_PUBLIC_SENTRY_DSN` / `_ENVIRONMENT` / `_TRACES_SAMPLE_RATE` · `NEXT_PUBLIC_APP_URL` · `NEXT_PUBLIC_USE_MOCK`
+
+Genuinely secret variables are correctly server-only: `CLERK_SECRET_KEY`, `SENTRY_AUTH_TOKEN` (`apps/web/next.config.ts:140`), `ADMIN_DEV_CLERK_ID`, `CLOUDFLARE_R2_PUBLIC_URL`, `ADMIN_SESSION_SECRET`.
+
+**No credential was found committed to git.** Untracked `.env` files exist at the repo root and under `apps/web` and `apps/admin`; none was opened, and their contents are not reproduced anywhere in this document. Confirming they are covered by `.gitignore` is a worthwhile one-line check that was not performed as part of this read-only review.
+
+### Dead frontend code
+
+`apps/web/app/lib/console-api.ts`, `apps/web/app/lib/console-actions.ts`, and `apps/web/app/components/admin/` serve an admin surface whose routes no longer exist — `apps/web/app/[locale]/(workspace)/admin/` is empty. Removing them would also eliminate the web app's only dev-header emitter (`apps/web/app/lib/auth.ts:44-49`). Housekeeping, not a finding, but it shares a shape with F-2: retired code that still contains live-looking auth logic.
+
 ---
 
 ## Areas that came back clean
@@ -533,6 +680,23 @@ Set by `helmet` at `apps/api/src/main.ts:42-57`. The API serves JSON only, which
 
 `hsts` is correctly disabled outside production — enabling it would pin `localhost` in a developer's browser. Note it does not set `preload`; that is a deliberate, hard-to-reverse commitment and its absence is appropriate at this stage.
 
+### The two frontends
+
+Headers are per-origin, so the API's `helmet` config protects nothing on the web or admin origins. Those are configured independently — and inconsistently.
+
+| Header | `apps/web` | `apps/admin` |
+|---|---|---|
+| `Content-Security-Policy` | ✅ `next.config.ts:76` (built `:52-73`) | ❌ **absent** |
+| `Strict-Transport-Security` | ✅ `:92-94` — `max-age=63072000; includeSubDomains; preload` | ❌ **absent** |
+| `X-Frame-Options` | ✅ `:88` — `SAMEORIGIN`, agreeing with `frame-ancestors 'self'` | ❌ **absent** |
+| `X-Content-Type-Options` | ✅ `:78` — `nosniff` | ❌ **absent** |
+| `Referrer-Policy` | ✅ `:77` — `strict-origin-when-cross-origin` | ❌ **absent** |
+| `Permissions-Policy` | ✅ `:82-84` — camera/microphone/geolocation denied | ❌ **absent** |
+
+`apps/web` additionally sets `X-XSS-Protection: 0` (with a comment explaining the legacy auditor is worse than nothing), `X-DNS-Prefetch-Control: on`, `poweredByHeader: false` (`:111`) and `productionBrowserSourceMaps: false` (`:108`). It is a well-considered configuration; its only weakness is F-14.
+
+`apps/admin` has none of it — see F-10. No reverse proxy compensates: the repo contains no `vercel.json`, no nginx or Caddy configuration, and `railway.json` sets build, deploy and healthcheck only.
+
 ---
 
 ## RBAC maturity
@@ -573,11 +737,24 @@ Two lines of `where` clause (`media.controller.ts:258`, `business-cover.ts:38`) 
 
 F-2 is one config line away from being a real unauthenticated-claim-approval endpoint. It is not in the workspaces list, not deployed, and superseded by `apps/api`. `git rm -r apps/backend` costs nothing and permanently removes the possibility. If it must be kept for reference, move it outside `apps/` with a README stating it is superseded and must never be deployed.
 
-### 3. Give `AuditLog` a polymorphic actor and a `businessId`, while Epic 18 is open — *moderate effort, large and compounding return*
+### 3. Stop `GET /console/businesses/:id/detail` handing legal and tax data to `business.view` — *modest effort, closes a real privilege boundary*
 
-F-3 cannot be fixed incrementally: the `AdminUser` FK (`schema.prisma:593`) makes owner attribution structurally impossible, so it is a migration either way. Doing it now has two advantages that will not exist later. First, Epic 18's idempotency keys are being written this week and are the natural carrier for the `requestId` correlation field — adding it now is free, retrofitting means touching every mutation path a second time. Second, the highest-value call sites are small and known: `setMarketingConsent` (`customers.repository.ts:106`), `runCampaign` (`campaigns.repository.ts:177`), `chooseSubscription` (`crm.repository.ts:587`), and `updateBusiness` (`database.repository.ts:258`). Those four cover consent, outbound messaging, billing state, and legal-identity edits — the mutations most likely to be questioned after the fact. The remaining owner mutations can follow incrementally once the schema supports them.
+F-11 is the only finding in this audit where the RBAC model contradicts itself: `legal.view` exists as a distinct permission, gates `GET /console/legal`, and is checked by the admin UI at `apps/admin/app/businesses/[id]/page.tsx:103` — but the endpoint that actually carries STIR, contract records, owner email/phone and terms-acceptance IP addresses asks only for `business.view`. Roughly twenty lines: make the `legal` block conditional on the caller's permission set inside `getBusinessDetail`, using the same opt-in shape `mapBusiness`'s `includeLegalIdentity` flag already uses successfully on the public side. It closes a genuine intra-admin escalation path and, equally valuable, makes the permission vocabulary mean what the UI already assumes it means.
 
-**Honourable mentions** (lower ratio, still worth scheduling): add `ThrottleRegister`-equivalent limiting to `POST /claims` (F-4, one decorator); collapse `assertCanManageBusiness` into `requireOwnedBusiness` before Epic 15 makes the divergence expensive (F-6); define `PUBLISHED_ANNOUNCEMENT_WHERE` before Epic 19's first public feed route exists rather than after.
+### Time-sensitive, higher effort — do it while Epic 18 is open
+
+**Give `AuditLog` a polymorphic actor and a `businessId` (F-3).** This cannot be fixed incrementally: the `AdminUser` FK (`schema.prisma:593`) makes owner attribution structurally impossible, so it is a migration either way. Doing it now has two advantages that will not exist later. First, Epic 18's idempotency keys are being written this week and are the natural carrier for the `requestId` correlation field — adding it now is free, retrofitting means touching every mutation path a second time. Second, the highest-value call sites are small and known: `setMarketingConsent` (`customers.repository.ts:106`), `runCampaign` (`campaigns.repository.ts:177`), `chooseSubscription` (`crm.repository.ts:587`), and `updateBusiness` (`database.repository.ts:258`). Those four cover consent, outbound messaging, billing state, and legal-identity edits — the mutations most likely to be questioned after the fact. The rest can follow incrementally once the schema supports them.
+
+### Trivial — worth folding into the same pass
+
+- **Copy `apps/web`'s headers block into `apps/admin/next.config.ts`** (F-10). About fifteen lines, already written and commented in the sibling app. Low risk reduction, but the effort is close to zero and it removes an obvious asymmetry on the highest-privilege origin.
+- **Add a dedicated throttle to `POST /claims`** (F-4). One decorator, mirroring `ThrottleRegister` on the other ownership-acquisition route.
+- **Add a `NODE_ENV` guard to `apps/admin/lib/console.ts:20`** (F-12) and align the `MANZIL_DEV_AUTH` polarity across the two apps (F-13).
+
+### Before their epic lands, not after
+
+- **Collapse `assertCanManageBusiness` into `requireOwnedBusiness`** (F-6) *before* Epic 15. The reason the Organization/Employee migration is cheap today is that one file defines ownership for the entire CRM; a second, divergent copy is what turns a one-file change into a two-file change with one of them forgotten.
+- **Define an exported `PUBLISHED_ANNOUNCEMENT_WHERE`** (F-9) *before* Epic 19's first public feed route exists. F-1 is the empirical argument: a hand-copied visibility predicate reached three of five paths.
 
 ---
 
@@ -585,10 +762,10 @@ F-3 cannot be fixed incrementally: the `AdminUser` FK (`schema.prisma:593`) make
 
 **The architecture is sound, and that is the finding.**
 
-Nine findings, none critical, none high. Not one route in 109 authorizes on client input. Not one repository method filters by slug where it should filter by ownership. Not one owner-scoped operation escapes `requireOwnedBusiness`. The one place where private data could plausibly leak into a cached public response — `legalName` and `taxId` through `mapBusiness` — is gated by an opt-in flag with exactly two call sites, both verified, and the owner-scoped path that passes the flag is deliberately uncached.
+Fourteen findings, none critical, none high. Not one route in 109 authorizes on client input. Not one repository method filters by slug where it should filter by ownership. Not one owner-scoped operation escapes `requireOwnedBusiness`. Not one frontend page treats a client-side ownership check as security — every dashboard page re-derives its scope from an authenticated server call rather than a URL parameter, so there is no owner-facing IDOR surface to attack. The one place where private data could plausibly leak into a cached public response — `legalName` and `taxId` through `mapBusiness` — is gated by an opt-in flag with exactly two call sites, both verified, and the owner-scoped path that passes the flag is deliberately uncached.
 
-Changing `/businesses/iwash` to `/businesses/ravotsoy` changes the public page and nothing else.
+Changing `/businesses/iwash` to `/businesses/ravotsoy` changes the public page and nothing else. That claim was tested against the public surface, the owner surface, the serialization layer, the cache keys, and both frontends, and it held in every one.
 
-What is genuinely missing is not authorization but **accountability** (F-3: no owner action is attributable) and **durability** (rate limits that do not survive a restart, pending Redis). Both are real, both are addressable, and neither is a hole an attacker walks through today.
+What is genuinely missing is not ownership authorization but three things adjacent to it: **accountability** (F-3 — no owner action is attributable, and the schema cannot record one), **durability** (rate limits that do not survive a restart, pending Redis), and **one internal permission boundary that the model declares but the API does not enforce** (F-11). All three are real, all three are addressable, and none is a hole an outsider walks through today.
 
 The strongest signal in this codebase is that the comments explaining *why* a security decision was made match what the code actually does — checked repeatedly during this audit, and it held every time, including in the two places where a plausible-looking decorator would have failed open (`EntitlementGuard` on campaign-id routes) and where a client-supplied flag would have been the obvious shortcut (`isOwnerUpload` in the presign path). That is not a common property, and it is worth defending.
