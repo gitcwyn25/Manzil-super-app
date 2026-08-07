@@ -20,6 +20,8 @@ export * from "./knowledge-graph";
 export * from "./experience-graph";
 // Layer 4 — memory tiers and the binding retrieval order
 export * from "./memory-engine";
+// Layer 4.5 — hybrid retrieval: seven engines, one pipeline, context assembly
+export * from "./hybrid-retrieval";
 // Layer 5 — policy, explanation, ranking, reasoning
 export * from "./decision-engine";
 export * from "./explanation-engine";
