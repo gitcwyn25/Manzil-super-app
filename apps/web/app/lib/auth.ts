@@ -25,10 +25,19 @@ export async function getAdminConsoleHeaders(): Promise<Record<string, string>> 
   return cookie ? { cookie } : {};
 }
 
+/**
+ * `MANZIL_DEV_AUTH` is strictly opt-in: only the literal string `"true"`
+ * enables the fallback, matching the API's own gate
+ * (`clerk-auth.service.ts`). This used to be opt-out here (`!== "false"`),
+ * so one variable meant the opposite thing on each side of the wire and
+ * reading either file alone gave you a confident, wrong belief about what
+ * unsetting it does. The API is the side that actually decides, and it
+ * defaults closed — so closed is the default here too.
+ */
 function usesDevAuthFallback() {
   return (
     process.env.NODE_ENV !== "production" &&
-    process.env.MANZIL_DEV_AUTH !== "false" &&
+    process.env.MANZIL_DEV_AUTH === "true" &&
     !process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
   );
 }
