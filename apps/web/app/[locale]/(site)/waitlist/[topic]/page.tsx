@@ -1,5 +1,7 @@
 import type { Locale } from "@manzil/shared";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { pageMetadata, ROUTE_SEO } from "../../../../lib/seo";
 import { Aperture } from "../../../../components/motion/aperture";
 import { WaitlistForm } from "../../../../components/waitlist/waitlist-form";
 import { API_BASE_URL } from "../../../../lib/api-base-url";
@@ -7,6 +9,33 @@ import { getWaitlistCopy, isWaitlistTopic, WAITLIST_TOPICS } from "../../../../l
 
 export function generateStaticParams() {
   return WAITLIST_TOPICS.map((topic) => ({ topic }));
+}
+
+/**
+ * Title and description come from the topic's own copy, so the three waitlist
+ * pages never share a snippet. Indexable: each states a real, specific
+ * limitation of the product today ("Manzil is Tashkent only"), which is
+ * genuinely the answer to a query someone will type.
+ */
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: Locale; topic: string }>;
+}): Promise<Metadata> {
+  const { locale, topic } = await params;
+
+  if (!isWaitlistTopic(topic)) {
+    return { title: ROUTE_SEO.notFound.title[locale], robots: { index: false, follow: false } };
+  }
+
+  const copy = getWaitlistCopy(topic, locale);
+
+  return pageMetadata({
+    locale,
+    path: `/waitlist/${topic}`,
+    title: copy.title,
+    description: copy.lead
+  });
 }
 
 /** Real demand, not a fabricated counter. Renders nothing if the call fails. */

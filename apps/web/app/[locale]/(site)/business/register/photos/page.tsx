@@ -3,8 +3,19 @@ import type { Locale } from "@manzil/shared";
 import { BusinessPhotoManager } from "../../../../../components/business-photo-manager";
 import { getBusinessPhotos } from "../../../../../lib/crm-api";
 import { getCrmCopy } from "../../../../../lib/crm-copy";
+import type { Metadata } from "next";
+import { routeMetadata } from "../../../../../lib/seo";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return routeMetadata("registerPhotos", locale);
+}
 
 /**
  * The photos step: after the business exists and a plan is chosen, before

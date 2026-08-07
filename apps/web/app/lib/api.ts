@@ -118,6 +118,19 @@ export async function getBusinesses(): Promise<BusinessPlatform[]> {
   return withCovers(businesses, covers);
 }
 
+/**
+ * Catalogue search.
+ *
+ * Degrades to an empty result instead of throwing. Before Epic 00 an API
+ * hiccup here took `/discover` down with an unhandled `TypeError: fetch
+ * failed` and a hard HTTP 500 — verified locally against a build with the API
+ * unreachable. A public browse page must not 500 because a backend blipped:
+ * the empty state says "nothing here yet" and offers the next action, which is
+ * a page, while a 500 is a dead end that also costs crawl trust.
+ *
+ * `getHomeFeed` already worked this way; this brings the other public reads in
+ * line with it.
+ */
 export async function searchBusinesses(query = "", category = "all"): Promise<{
   businesses: BusinessPlatform[];
   categories: Category[];
@@ -130,15 +143,26 @@ export async function searchBusinesses(query = "", category = "all"): Promise<{
   if (query) params.set("q", query);
   if (category && category !== "all") params.set("category", category);
   const suffix = params.size > 0 ? `?${params.toString()}` : "";
-  const { getServerAuthHeaders } = await import("./auth");
-  const response = await fetch(`${API_BASE_URL}/search${suffix}`, {
-    headers: await getServerAuthHeaders("/search"),
-    next: { revalidate: 30 }
-  });
-  const payload = await response.json();
-  const data = payload.data as { businesses: BusinessPlatform[]; categories: Category[] };
-  const covers = await fetchBusinessCovers(data.businesses.map((business) => business.slug));
-  return { ...data, businesses: withCovers(data.businesses, covers) };
+
+  try {
+    const { getServerAuthHeaders } = await import("./auth");
+    const response = await fetch(`${API_BASE_URL}/search${suffix}`, {
+      headers: await getServerAuthHeaders("/search"),
+      next: { revalidate: 30 }
+    });
+
+    if (!response.ok) {
+      return { businesses: [], categories: [] };
+    }
+
+    const payload = await response.json();
+    const data = payload.data as { businesses: BusinessPlatform[]; categories: Category[] };
+    const businesses = data?.businesses ?? [];
+    const covers = await fetchBusinessCovers(businesses.map((business) => business.slug));
+    return { categories: data?.categories ?? [], businesses: withCovers(businesses, covers) };
+  } catch {
+    return { businesses: [], categories: [] };
+  }
 }
 
 export async function getBusiness(slug: string): Promise<{ business: BusinessPlatform; reviews: Review[] }> {
@@ -239,32 +263,53 @@ export async function getHomeFeed(locale = "uz") {
   }
 }
 
+/** Empty on failure — see `searchBusinesses` for why a public index page must
+ *  never 500 on a backend blip. The page renders its empty state instead. */
 export async function getOccasions(): Promise<Occasion[]> {
-  if (!useMockData) {
+  if (useMockData) {
+    return mockApi.getOccasions();
+  }
+
+  try {
     const { getServerAuthHeaders } = await import("./auth");
     const response = await fetch(`${API_BASE_URL}/occasions`, {
       headers: await getServerAuthHeaders("/occasions"),
       next: { revalidate: 300 }
     });
-    const payload = await response.json();
-    return payload.data.occasions;
-  }
 
-  return mockApi.getOccasions();
+    if (!response.ok) {
+      return [];
+    }
+
+    const payload = await response.json();
+    return payload?.data?.occasions ?? [];
+  } catch {
+    return [];
+  }
 }
 
+/** Empty on failure — see `searchBusinesses`. */
 export async function getListsPage(): Promise<CommunityList[]> {
   if (useMockData) {
     return mockApi.getListsPage();
   }
 
-  const { getServerAuthHeaders } = await import("./auth");
-  const response = await fetch(`${API_BASE_URL}/lists`, {
-    headers: await getServerAuthHeaders("/lists"),
-    next: { revalidate: 300 }
-  });
-  const payload = await response.json();
-  return payload.data.lists;
+  try {
+    const { getServerAuthHeaders } = await import("./auth");
+    const response = await fetch(`${API_BASE_URL}/lists`, {
+      headers: await getServerAuthHeaders("/lists"),
+      next: { revalidate: 300 }
+    });
+
+    if (!response.ok) {
+      return [];
+    }
+
+    const payload = await response.json();
+    return payload?.data?.lists ?? [];
+  } catch {
+    return [];
+  }
 }
 
 export async function getAchievements(): Promise<Achievement[]> {

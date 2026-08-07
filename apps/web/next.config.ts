@@ -78,16 +78,54 @@ const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   // App uses none of these; disable them everywhere. Add the origin here if a
   // feature (e.g. map "use my location") ever needs it.
-  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" }
+  {
+    key: "Permissions-Policy",
+    value: "camera=(), microphone=(), geolocation=(), interest-cohort=(), browsing-topics=()"
+  },
+  // CSP `frame-ancestors 'self'` above is the modern control; this is the
+  // fallback for the browsers and scanners that still only read the legacy
+  // header. Deliberately SAMEORIGIN so the two agree rather than conflict.
+  { key: "X-Frame-Options", value: "SAMEORIGIN" },
+  // Two years, subdomains included, preload-eligible. Vercel terminates TLS
+  // for every deployment, so there is no plaintext origin to lock out.
+  {
+    key: "Strict-Transport-Security",
+    value: "max-age=63072000; includeSubDomains; preload"
+  },
+  // Legacy XSS auditor: explicitly disabled. The filter is removed from every
+  // current browser and its heuristics could themselves be abused; the CSP is
+  // the real defence.
+  { key: "X-XSS-Protection", value: "0" },
+  { key: "X-DNS-Prefetch-Control", value: "on" }
 ];
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@manzil/shared"],
+  // Never ship the original sources to the browser. Sentry uploads maps at
+  // build time and deletes them from the bundle (see `sourcemaps` below), so
+  // stack traces stay readable in monitoring without being readable in
+  // devtools. Explicit rather than relying on the default.
+  productionBrowserSourceMaps: false,
+  // The framework version is free reconnaissance for an attacker fingerprinting
+  // known CVEs; nothing in the app reads it.
+  poweredByHeader: false,
   async headers() {
     return [
       {
         source: "/:path*",
         headers: securityHeaders
+      },
+      {
+        // The crawler entry points. Long shared-cache lifetime with
+        // stale-while-revalidate: a crawler should never wait on a cold
+        // render for the two files it fetches before anything else.
+        source: "/:file(robots.txt|sitemap.xml|llms.txt)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=0, s-maxage=86400, stale-while-revalidate=604800"
+          }
+        ]
       }
     ];
   }

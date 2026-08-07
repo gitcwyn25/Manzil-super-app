@@ -62,17 +62,24 @@ export function UserPreferencesProvider({
   const [followedUserIds, setFollowedUserIds] = useState<string[]>(defaults?.followedUserIds ?? []);
   const [followedListSlugs, setFollowedListSlugs] = useState<string[]>(defaults?.followedListSlugs ?? []);
 
+  // Stored state wins unconditionally, including when it is empty.
+  //
+  // The previous version fell back to `defaults` whenever a stored list was
+  // empty (`stored.x.length ? stored.x : defaults.x`), which meant a visitor
+  // who un-saved everything got the seed data back on the next render — the
+  // store could be added to but never cleared. `defaults` survives only as the
+  // pre-hydration value; nothing passes it today (see locale-providers.tsx).
   useEffect(() => {
     const timer = window.setTimeout(() => {
       const stored = readStorage();
-      setSavedBusinessSlugs(stored.savedBusinessSlugs.length ? stored.savedBusinessSlugs : defaults?.savedBusinessSlugs ?? []);
-      setFollowedUserIds(stored.followedUserIds.length ? stored.followedUserIds : defaults?.followedUserIds ?? []);
-      setFollowedListSlugs(stored.followedListSlugs.length ? stored.followedListSlugs : defaults?.followedListSlugs ?? []);
+      setSavedBusinessSlugs(stored.savedBusinessSlugs ?? []);
+      setFollowedUserIds(stored.followedUserIds ?? []);
+      setFollowedListSlugs(stored.followedListSlugs ?? []);
       setReady(true);
     }, 0);
 
     return () => window.clearTimeout(timer);
-  }, [defaults?.followedListSlugs, defaults?.followedUserIds, defaults?.savedBusinessSlugs]);
+  }, []);
 
   useEffect(() => {
     if (!ready) {

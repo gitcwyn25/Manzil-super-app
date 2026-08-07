@@ -74,8 +74,16 @@ export function getUiCopy(locale: Locale) {
       title: localize(L("Nima uchun ochyapsiz?", "Какой повод?", "What's the occasion?"), locale),
       all: localize(L("Hammasi", "Все", "All"), locale),
       pageTitle: localize(L("Qaysi voqea uchun qidiryapsiz?", "Какой повод вы ищете?", "Which occasion are you planning?"), locale),
+      // Trust audit (Epic 00): this line used to end with "Hozir mock rejimda"
+      // / "Сейчас mock-режим" — an internal engineering state printed to
+      // visitors on a public page. The limitation it was trying to convey is
+      // real and worth stating; "mock mode" is not the way to state it.
       pageBody: localize(
-        L("AI keyin to'liq paketlarni tavsiya qiladi. Hozir mock rejimda.", "AI позже предложит полные пакеты. Сейчас mock-режим.", "AI will recommend full packages later. Mock mode for now."),
+        L(
+          "Har bir voqea uchun katalogdagi haqiqiy joylar. To'liq paketlar tavsiyasi hali tayyor emas.",
+          "Для каждого повода — реальные места из каталога. Подбор полных пакетов пока не готов.",
+          "Real listed places for each occasion. Full package recommendations are not ready yet."
+        ),
         locale
       ),
       packageKicker: localize(L("Voqea paketi", "Пакет повода", "Occasion package"), locale),
@@ -219,10 +227,13 @@ export function getUiCopy(locale: Locale) {
       writeBody: localize(L("Sharh yozish uchun tizimga kiring. Har bir biznesga bitta sharh qoldirish mumkin.", "Войдите, чтобы оставить отзыв. Один отзыв на каждый бизнес.", "Sign in to leave a review. One review per business."), locale),
       writeSignIn: localize(L("Sharh yozish uchun avval tizimga kiring.", "Сначала войдите, чтобы оставить отзыв.", "Sign in first to leave a review."), locale),
       writeWait: localize(L("Bir soniya kuting…", "Секунду…", "One moment…"), locale),
-      claimKicker: localize(L("Claim flow", "Заявка", "Claim"), locale),
+      // Was "Claim flow" in Uzbek — an internal flow name, rendered uppercase
+      // as a section label on a public page. Every locale now names the thing
+      // the visitor is being offered, not the engineering step.
+      claimKicker: localize(L("Egalik so'rovi", "Заявка", "Claim"), locale),
       claimTitle: localize(L("Bu sizning biznesingizmi?", "Это ваш бизнес?", "Is this your business?"), locale),
       claimBody: localize(
-        L("Profilni claim qiling, rasmlar va ish vaqtini yangilang, sharhlarga javob bering.", "Заявите профиль, обновите фото и часы, отвечайте на отзывы.", "Claim the profile, update photos and hours, reply to reviews."),
+        L("Profilga egalik huquqini oling, rasmlar va ish vaqtini yangilang, sharhlarga javob bering.", "Заявите профиль, обновите фото и часы, отвечайте на отзывы.", "Claim the profile, update photos and hours, reply to reviews."),
         locale
       ),
       friendsVisited: localize(L("do'st tashrif buyurgan", "друзей посетили", "friends visited"), locale),

@@ -1,3 +1,5 @@
+import type { Locale } from "@manzil/shared";
+
 /**
  * High-fidelity product mockups for the business marketing site.
  *
@@ -6,6 +8,23 @@
  * placeholders — so the marketing page shows a shipping product the way
  * Asana/Linear market theirs. Purely presentational and aria-hidden; styled
  * by the `.mk-*` rules in globals.css.
+ *
+ * TRUST RULE (Epic 00 trust audit). Every figure in these frames is
+ * illustrative — there is no owner whose dashboard these numbers describe. The
+ * frames previously carried the name of a *real listed business* ("Caravan
+ * Coffee", Chilonzor) and reviews signed with plausible customer names, which
+ * made invented view counts, review counts and ratings read as that
+ * business's actual performance. Two changes fix that and must not be undone:
+ *
+ *   1. The sample business is `DEMO_BUSINESS` — "Namuna Kafe" literally means
+ *      "Sample Café" and matches no listing in the catalogue. Never point this
+ *      at a real business, and never accept one through props.
+ *   2. Every frame carries a visible `DEMO_LABEL` chip, so a visitor reading
+ *      "2 480 views" can see in the same glance that it is a demonstration.
+ *
+ * Reviewer names are placeholders ("Mijoz A." = "Customer A") rather than
+ * person-shaped names, for the same reason: a five-star review attributed to
+ * "Aziza R." is indistinguishable from a testimonial.
  */
 
 type SampleBusiness = {
@@ -15,11 +34,24 @@ type SampleBusiness = {
   rating: string;
 };
 
-const FALLBACK: SampleBusiness = {
-  name: "Caravan Coffee",
-  district: "Chilonzor",
+/** Fictional by construction: "Namuna" is Uzbek for "sample". */
+const DEMO_BUSINESS: SampleBusiness = {
+  name: "Namuna Kafe",
+  district: "Toshkent",
   category: "Kafe",
   rating: "4.8"
+};
+
+const DEMO_LABEL: Record<Locale, string> = {
+  uz: "Namuna",
+  ru: "Пример",
+  en: "Sample"
+};
+
+const REVIEWER_LABEL: Record<Locale, [string, string]> = {
+  uz: ["Mijoz A.", "Mijoz B."],
+  ru: ["Клиент А.", "Клиент Б."],
+  en: ["Customer A.", "Customer B."]
 };
 
 function Icon({ name }: { name: "grid" | "star" | "tag" | "chart" | "gear" }) {
@@ -49,13 +81,16 @@ function Icon({ name }: { name: "grid" | "star" | "tag" | "chart" | "gear" }) {
   }
 }
 
-function Chrome({ label }: { label: string }) {
+function Chrome({ label, locale }: { label: string; locale: Locale }) {
   return (
     <div className="mk-chrome">
       <span className="mk-dot" />
       <span className="mk-dot" />
       <span className="mk-dot" />
       <span className="mk-chrome-pill">{label}</span>
+      {/* Non-negotiable: the figures inside every frame are illustrative, and
+          this chip is what says so at the same glance. */}
+      <span className="mk-chrome-demo">{DEMO_LABEL[locale]}</span>
     </div>
   );
 }
@@ -86,12 +121,14 @@ function Sidebar({ active }: { active: "grid" | "star" | "tag" | "chart" }) {
   );
 }
 
-/** Hero: the dashboard overview screen. */
-export function DashboardMock({ business = FALLBACK }: { business?: SampleBusiness }) {
+/** Hero: the dashboard overview screen. Always the sample business — the
+ *  numbers below are illustrative and must never be attributed to a real one. */
+export function DashboardMock({ locale = "uz" }: { locale?: Locale }) {
+  const business = DEMO_BUSINESS;
   const bars = [38, 52, 45, 63, 58, 74, 88];
   return (
     <div aria-hidden="true" className="mk-frame mk-dashboard">
-      <Chrome label="app.manzil.uz/boshqaruv" />
+      <Chrome label="app.manzil.uz/boshqaruv" locale={locale} />
       <div className="mk-app">
         <Sidebar active="grid" />
         <div className="mk-main">
@@ -139,31 +176,36 @@ export function DashboardMock({ business = FALLBACK }: { business?: SampleBusine
   );
 }
 
-/** Feature: review inbox with reply. */
-export function ReviewsMock({ business = FALLBACK }: { business?: SampleBusiness }) {
+/** Feature: review inbox with reply. The two reviews are placeholders, not
+ *  testimonials — named "Customer A/B" precisely so they cannot be read as
+ *  real people vouching for a real place. */
+export function ReviewsMock({ locale = "uz" }: { locale?: Locale }) {
+  const business = DEMO_BUSINESS;
+  const [firstReviewer, secondReviewer] = REVIEWER_LABEL[locale];
+
   return (
     <div aria-hidden="true" className="mk-frame mk-reviews">
-      <Chrome label={`${business.name} · Sharhlar`} />
+      <Chrome label={`${business.name} · Sharhlar`} locale={locale} />
       <div className="mk-review-list">
         <div className="mk-review">
           <span className="mk-avatar">A</span>
           <div className="mk-review-body">
             <div className="mk-review-top">
-              <strong>Aziza R.</strong>
+              <strong>{firstReviewer}</strong>
               <span className="mk-stars">★★★★★</span>
             </div>
             <p>Ajoyib joy, xizmat zo&apos;r edi. Kofe hidi hali ham yodimda.</p>
             <div className="mk-owner-reply">
               <b>Sizning javobingiz</b>
-              <p>Rahmat, Aziza! Sizni yana kutamiz.</p>
+              <p>Rahmat! Sizni yana kutamiz.</p>
             </div>
           </div>
         </div>
         <div className="mk-review">
-          <span className="mk-avatar alt">D</span>
+          <span className="mk-avatar alt">B</span>
           <div className="mk-review-body">
             <div className="mk-review-top">
-              <strong>Doston K.</strong>
+              <strong>{secondReviewer}</strong>
               <span className="mk-stars">★★★★<i className="off">★</i></span>
             </div>
             <p>Yaxshi, lekin buyurtma biroz kechikdi.</p>
@@ -179,10 +221,10 @@ export function ReviewsMock({ business = FALLBACK }: { business?: SampleBusiness
 }
 
 /** Feature: promotion / deal composer (the O2O core). */
-export function PromoMock() {
+export function PromoMock({ locale = "uz" }: { locale?: Locale }) {
   return (
     <div aria-hidden="true" className="mk-frame mk-promo">
-      <Chrome label="Aksiyalar · Yangi" />
+      <Chrome label="Aksiyalar · Yangi" locale={locale} />
       <div className="mk-promo-body">
         <div className="mk-promo-card">
           <div className="mk-promo-img">
@@ -212,11 +254,11 @@ export function PromoMock() {
   );
 }
 
-/** Feature: analytics with a real area chart. */
-export function AnalyticsMock() {
+/** Feature: analytics with a real area chart and illustrative data. */
+export function AnalyticsMock({ locale = "uz" }: { locale?: Locale }) {
   return (
     <div aria-hidden="true" className="mk-frame mk-analytics">
-      <Chrome label="Statistika · Bu oy" />
+      <Chrome label="Statistika · Bu oy" locale={locale} />
       <div className="mk-analytics-body">
         <div className="mk-analytics-head">
           <span>

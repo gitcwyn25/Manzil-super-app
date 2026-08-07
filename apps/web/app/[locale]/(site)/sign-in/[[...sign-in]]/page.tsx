@@ -1,6 +1,18 @@
 import { SignIn } from "@clerk/nextjs";
+import { localeOrDefault } from "@manzil/shared";
+import type { Metadata } from "next";
 import { BrandPanel, SplitAuthShell } from "../../../../components/vm/split-auth-shell";
 import { vmClerkAppearance } from "../../../../lib/clerk-appearance";
+import { routeMetadata } from "../../../../lib/seo";
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return routeMetadata("signIn", localeOrDefault(locale));
+}
 
 /**
  * Consumer sign-in in the Vibrant Marketplace split-auth composition: the

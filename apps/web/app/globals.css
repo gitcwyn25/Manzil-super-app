@@ -5165,6 +5165,48 @@ textarea:focus {
   font-size: 11.5px;
 }
 
+/* Empty state that converts rather than dead-ends: a sentence saying what is
+   missing, then the two things the visitor can do about it. */
+.vm-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 3rem 1.5rem;
+  border: 1px dashed var(--vm-outline-variant, #cfd8e3);
+  border-radius: 16px;
+  text-align: center;
+}
+
+.vm-empty-state__body {
+  max-width: 46ch;
+  margin: 0;
+  color: var(--vm-on-surface-variant, #414755);
+}
+
+.vm-empty-state__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+/* "Namuna / Пример / Sample" chip. Every figure inside a .mk-frame is
+   illustrative; this is the label that says so in the same glance, so it must
+   stay legible rather than decorative — see components/business/mockups.tsx. */
+.mk-chrome-demo {
+  margin-left: auto;
+  padding: 4px 10px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  color: #8a6a1f;
+  background: #fdf4dd;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
 /* dashboard */
 
 .mk-app {

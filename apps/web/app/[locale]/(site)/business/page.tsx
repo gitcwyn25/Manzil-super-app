@@ -7,9 +7,22 @@ import {
   PromoMock,
   ReviewsMock
 } from "../../../components/business/mockups";
+import type { Metadata } from "next";
+import { JsonLd } from "../../../components/json-ld";
 import { getBusinessLandingCopy } from "../../../lib/business-landing-copy";
-import { formatPrice, getPlans } from "../../../lib/plans";
+import { formatPrice, getPlans, planFeatureLabel } from "../../../lib/plans";
 import { searchBusinesses } from "../../../lib/api";
+import { routeMetadata } from "../../../lib/seo";
+import { routeBreadcrumb } from "../../../lib/structured-data";
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return routeMetadata("business", locale);
+}
 
 type RenderPlan = {
   key: string;
@@ -45,7 +58,12 @@ export default async function BusinessLandingPage({
   const { locale } = await params;
   const copy = getBusinessLandingCopy(locale);
 
-  // Real, listed Tashkent businesses power the hero mockup + proof strip.
+  // Real, listed Tashkent businesses power the proof strip — and only the
+  // proof strip, which states nothing about them beyond "this place is on
+  // Manzil". The dashboard mockup carries illustrative figures (view counts,
+  // review totals); feeding it a real business name would attribute invented
+  // numbers to a named partner, so it always renders its own clearly-labelled
+  // sample identity instead. See components/business/mockups.tsx.
   let businesses: BusinessPlatform[] = [];
   try {
     const res = await searchBusinesses("", "all");
@@ -53,10 +71,6 @@ export default async function BusinessLandingPage({
   } catch {
     businesses = [];
   }
-  const top = businesses[0];
-  const heroSample = top
-    ? { name: top.name, district: top.district, category: top.tags?.[0] ?? "Kafe", rating: top.avgRating.toFixed(1) }
-    : undefined;
   const proof = businesses.length
     ? businesses.slice(0, 6).map((b) => ({ name: b.name, district: b.district }))
     : FALLBACK_PLACES;
@@ -73,7 +87,12 @@ export default async function BusinessLandingPage({
         key: p.tier,
         name: p.name[locale] ?? p.name.uz,
         price: formatPrice(p.priceMonthly, p.currency, locale),
-        features: p.features.filter((f) => f.included).map((f) => f.label[locale] ?? f.label.uz),
+        // planFeatureLabel drops rows whose label is still a raw entitlement
+        // key (`crm.segments`), which used to render verbatim in this table.
+        features: p.features
+          .filter((f) => f.included)
+          .map((f) => planFeatureLabel(f, locale))
+          .filter((label): label is string => Boolean(label)),
         cta: ctaFor[p.tier] ?? copy.plans.free.cta,
         highlight: p.tier === "pro",
         badge: p.tier === "pro" ? copy.plans.max.badge : undefined
@@ -90,6 +109,7 @@ export default async function BusinessLandingPage({
 
   return (
     <div className="bz-page">
+      <JsonLd data={routeBreadcrumb(locale, ["home", "business"])} />
       {/* ============ HERO ============ */}
       {/* The band carries the full-bleed primary-blue gradient (Vibrant
           Marketplace); .bz-hero inside keeps its existing grid geometry. */}
@@ -123,7 +143,7 @@ export default async function BusinessLandingPage({
             </Reveal>
           </div>
           <Reveal className="bz-hero-visual" delay={180} variant="scale-in">
-            <DashboardMock business={heroSample} />
+            <DashboardMock locale={locale} />
           </Reveal>
         </div>
       </section>
@@ -160,30 +180,35 @@ export default async function BusinessLandingPage({
                 </ul>
               </Reveal>
               <Reveal className="bz-feature-visual" delay={120} variant={index % 2 === 1 ? "slide-right" : "slide-left"}>
-                <Mock />
+                <Mock locale={locale} />
               </Reveal>
             </section>
           );
         })}
       </div>
 
-      {/* ============ STATS ============ */}
-      <section className="bz-stats-band">
-        <Reveal variant="fade-up">
-          <h2 className="bz-section-title">{copy.statsTitle}</h2>
-        </Reveal>
-        <RevealStagger className="bz-stats" step={90} variant="fade-up">
-          {copy.stats.map((stat) => (
-            <div className="bz-stat" key={stat.label}>
-              <strong>
-                <AnimatedCounter value={stat.value} />
-                {stat.suffix}
-              </strong>
-              <span>{stat.label}</span>
-            </div>
-          ))}
-        </RevealStagger>
-      </section>
+      {/* ============ STATS ============
+          Renders only when real platform figures exist. Manzil is pre-launch:
+          publishing invented totals on the page that converts business owners
+          is the one lie that costs the most, so the band hides instead. */}
+      {copy.stats.length > 0 && (
+        <section className="bz-stats-band">
+          <Reveal variant="fade-up">
+            <h2 className="bz-section-title">{copy.statsTitle}</h2>
+          </Reveal>
+          <RevealStagger className="bz-stats" step={90} variant="fade-up">
+            {copy.stats.map((stat) => (
+              <div className="bz-stat" key={stat.label}>
+                <strong>
+                  <AnimatedCounter value={stat.value} />
+                  {stat.suffix}
+                </strong>
+                <span>{stat.label}</span>
+              </div>
+            ))}
+          </RevealStagger>
+        </section>
+      )}
 
       {/* ============ PRICING ============ */}
       <section className="bz-pricing" id="pricing">

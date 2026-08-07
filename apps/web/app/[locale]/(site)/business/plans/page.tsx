@@ -4,9 +4,20 @@ import { PlanSubmit } from "../../../../components/crm/plan-submit";
 import { getBusinessLandingCopy } from "../../../../lib/business-landing-copy";
 import { choosePlanAction } from "../../../../lib/crm-actions";
 import { getCrmCopy } from "../../../../lib/crm-copy";
-import { formatPrice, getPlans } from "../../../../lib/plans";
+import { formatPrice, getPlans, planFeatureLabel } from "../../../../lib/plans";
+import type { Metadata } from "next";
+import { routeMetadata } from "../../../../lib/seo";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return routeMetadata("plans", locale);
+}
 
 export default async function PlanSelectionPage({
   params,
@@ -35,7 +46,10 @@ export default async function PlanSelectionPage({
         key: p.tier,
         name: p.name[locale] ?? p.name.uz,
         price: formatPrice(p.priceMonthly, p.currency, locale),
-        features: p.features.filter((f) => f.included).map((f) => f.label[locale] ?? f.label.uz),
+        features: p.features
+          .filter((f) => f.included)
+          .map((f) => planFeatureLabel(f, locale))
+          .filter((label): label is string => Boolean(label)),
         highlight: p.tier === "max",
         badge: p.tier === "max" ? landing.plans.max.badge : (undefined as string | undefined)
       }))

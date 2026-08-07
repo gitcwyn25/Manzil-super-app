@@ -1,3 +1,15 @@
+import type { Metadata } from "next";
+
+/**
+ * The whole workspace is per-account data behind a session. Nothing under it
+ * should ever enter an index — robots.txt disallows the paths, and this is the
+ * belt-and-braces header for a crawler that reached one anyway (a shared link,
+ * a referrer leak).
+ */
+export const metadata: Metadata = {
+  robots: { index: false, follow: false, googleBot: { index: false, follow: false } }
+};
+
 /**
  * Business workspace frame. Deliberately renders no consumer header, mobile nav,
  * or footer — a workspace that carries marketing chrome reads as a page rather
