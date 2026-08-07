@@ -39,15 +39,46 @@ function makeRetriever(live: Array<[string, LiveBusiness]>) {
 
 const LIVE_BIZ_1: [string, LiveBusiness] = ["biz-1", { id: "biz-1", slug: "caravan-coffee", name: "Caravan Coffee" }];
 
-describe("GurmanService.ask", () => {
-  const originalKey = process.env.ANTHROPIC_API_KEY;
+/** Obvious fakes. Nothing here is or resembles a real credential. */
+const OPENAI_ENV = { OPENAI_API_KEY: "test-openai-key" };
+const ANTHROPIC_ENV = { ANTHROPIC_API_KEY: "test-anthropic-key" };
 
-  afterEach(() => {
-    process.env.ANTHROPIC_API_KEY = originalKey;
+const SINGLE_PROVIDER: Array<[string, NodeJS.ProcessEnv]> = [
+  ["OpenAI", OPENAI_ENV],
+  ["Anthropic", ANTHROPIC_ENV]
+];
+
+const CONFIGURED: Array<[string, NodeJS.ProcessEnv]> = [
+  ["OpenAI only", OPENAI_ENV],
+  ["Anthropic only", ANTHROPIC_ENV],
+  ["both providers", { ...OPENAI_ENV, ...ANTHROPIC_ENV }]
+];
+
+describe("GurmanService.ask", () => {
+  const originalOpenAiKey = process.env.OPENAI_API_KEY;
+  const originalAnthropicKey = process.env.ANTHROPIC_API_KEY;
+
+  beforeEach(() => {
+    // Cleared rather than assumed: the host machine may export either key,
+    // and a test asserting the unconfigured path must not depend on that.
+    delete process.env.OPENAI_API_KEY;
+    delete process.env.ANTHROPIC_API_KEY;
   });
 
-  it("returns unavailable and never calls Anthropic, the retriever, or the cache when the key is missing", async () => {
-    delete process.env.ANTHROPIC_API_KEY;
+  afterEach(() => {
+    restore("OPENAI_API_KEY", originalOpenAiKey);
+    restore("ANTHROPIC_API_KEY", originalAnthropicKey);
+  });
+
+  function restore(key: string, value: string | undefined) {
+    if (value === undefined) {
+      delete process.env[key];
+    } else {
+      process.env[key] = value;
+    }
+  }
+
+  it("returns unavailable and never calls the model, the retriever, or the cache when no key is configured", async () => {
     const llm = { complete: jest.fn() };
     const retriever = makeRetriever([LIVE_BIZ_1]);
     const cache = passthroughCache();
@@ -61,8 +92,9 @@ describe("GurmanService.ask", () => {
     expect(cache.getOrSet).not.toHaveBeenCalled();
   });
 
-  it("treats a blank/whitespace key the same as a missing one", async () => {
+  it("treats blank/whitespace keys the same as missing ones", async () => {
     process.env.ANTHROPIC_API_KEY = "   ";
+    process.env.OPENAI_API_KEY = "   ";
     const llm = { complete: jest.fn() };
     const service = new GurmanService(makeRetriever([LIVE_BIZ_1]) as never, llm as never, passthroughCache() as never);
 
@@ -70,6 +102,45 @@ describe("GurmanService.ask", () => {
 
     expect(result.available).toBe(false);
     expect(llm.complete).not.toHaveBeenCalled();
+  });
+
+  it.each(CONFIGURED)("runs the full pipeline when configured with %s", async (_label, env) => {
+    Object.assign(process.env, env);
+    const llm = {
+      complete: jest
+        .fn()
+        .mockResolvedValue('{"reply":"Try Caravan.","suggestions":[{"businessId":"biz-1","reason":"Quiet"}]}')
+    };
+    const retriever = makeRetriever([LIVE_BIZ_1]);
+    const service = new GurmanService(retriever as never, llm as never, passthroughCache() as never);
+
+    const result = await service.ask("quiet cafe", "en");
+
+    // Identical outcome whichever vendor is configured: the service never
+    // learns which one answered, so the pipeline cannot vary by provider.
+    expect(result).toEqual({
+      text: "Try Caravan.",
+      businesses: [{ businessId: "biz-1", slug: "caravan-coffee", name: "Caravan Coffee", reason: "Quiet" }],
+      available: true
+    });
+    expect(retriever.liveBusinesses).toHaveBeenCalledWith(["biz-1"]);
+  });
+
+  it.each(SINGLE_PROVIDER)("still drops an invented business id under %s", async (_label, env) => {
+    Object.assign(process.env, env);
+    const llm = {
+      complete: jest
+        .fn()
+        .mockResolvedValue('{"reply":"Try Ghost Cafe.","suggestions":[{"businessId":"biz-ghost","reason":"Invented"}]}')
+    };
+    const service = new GurmanService(makeRetriever([LIVE_BIZ_1]) as never, llm as never, passthroughCache() as never);
+
+    const result = await service.ask("anything", "en");
+
+    // Grounding sits above the provider boundary, so swapping vendors cannot
+    // weaken it. A hallucinated id is dropped either way.
+    expect(result.businesses).toEqual([]);
+    expect(result.available).toBe(true);
   });
 
   it("returns a grounded answer for a valid model response", async () => {

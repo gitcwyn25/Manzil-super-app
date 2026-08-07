@@ -3,6 +3,7 @@ import { CacheService } from "../cache/cache.service";
 import { groundSuggestions } from "./gurman.grounding";
 import { GURMAN_LLM, type GurmanLlm } from "./gurman.llm";
 import { buildChatPrompt, parseModelReply } from "./gurman.prompt";
+import { isGurmanConfigured } from "./gurman.provider";
 import { GURMAN_RETRIEVER, type GurmanRetriever } from "./gurman.retriever";
 import type { GurmanAskResult, GurmanLocale, ModelReply } from "./gurman.types";
 
@@ -38,8 +39,10 @@ export class GurmanService {
     // it should only ever surface as this one endpoint reporting itself
     // unavailable. Checking before touching the cache, retriever, or LLM
     // also means this path never issues a database query or a network call.
-    if (!process.env.ANTHROPIC_API_KEY?.trim()) {
-      this.logger.warn("Gurman AI requested but ANTHROPIC_API_KEY is not configured");
+    // Either vendor key satisfies this; which one is chosen is `GurmanLlm`'s
+    // business, not the service's.
+    if (!isGurmanConfigured()) {
+      this.logger.warn("Gurman AI requested but neither OPENAI_API_KEY nor ANTHROPIC_API_KEY is configured");
       return UNAVAILABLE_RESULT;
     }
 
@@ -63,7 +66,7 @@ export class GurmanService {
 
       return { text: cached.reply, businesses, available: true };
     } catch (error) {
-      // Any failure along this path — an Anthropic error, a response that
+      // Any failure along this path — a provider error, a response that
       // stayed unparseable after one retry, a retriever/database error —
       // degrades to the same honest result. There is no fallback to a
       // keyword-matched canned answer: a concierge that invents places is
