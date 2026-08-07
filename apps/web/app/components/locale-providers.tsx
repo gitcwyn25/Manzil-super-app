@@ -17,10 +17,15 @@ import { AppProviders } from "../components/app-providers";
  * A new visitor now starts empty, which is the truth.
  */
 export function LocaleProviders({
-  children
+  children,
+  locale
 }: {
   children: React.ReactNode;
   locale: Locale;
 }) {
-  return <AppProviders>{children}</AppProviders>;
+  // `locale` was previously accepted and ignored. The Product Experience
+  // System (Epic 17) needs it: every toast, dialog, banner and announcement it
+  // renders is user-facing copy, and it is resolved from this one value rather
+  // than being threaded through every call site.
+  return <AppProviders locale={locale}>{children}</AppProviders>;
 }

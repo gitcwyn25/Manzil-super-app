@@ -17,8 +17,41 @@ import type {
 } from "@manzil/shared";
 import * as mockApi from "./mock-api";
 import { API_BASE_URL } from "./api-base-url";
+import { idempotencyHeaders } from "./pxs/idempotency";
 
 const useMockData = process.env.NEXT_PUBLIC_USE_MOCK !== "false";
+
+/**
+ * The one place a mutating request is built in this module (Epic 17).
+ *
+ * Every POST below routes through here so the `Idempotency-Key` header is
+ * threaded once rather than remembered at each call site — the failure mode
+ * with per-call-site headers being that the next POST somebody adds simply
+ * forgets it, and nothing catches that in review.
+ *
+ * `idempotencyKey` is optional and must originate in the browser, carried down
+ * from the control the user clicked. A key minted here would be different on
+ * every attempt and deduplicate nothing, so when none is supplied the header
+ * is omitted rather than fabricated — see `./pxs/idempotency`.
+ *
+ * Applied to POST only. The admin endpoints below are all POSTs that change
+ * state (approve, reject, resolve); a duplicate approve is at best noise in the
+ * audit trail and at worst a double state transition.
+ */
+async function postJson(path: string, body: unknown, idempotencyKey?: string) {
+  const { getServerAuthHeaders } = await import("./auth");
+
+  return fetch(`${API_BASE_URL}${path}`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      ...(await getServerAuthHeaders(path)),
+      ...idempotencyHeaders(idempotencyKey)
+    },
+    body: JSON.stringify(body ?? {}),
+    cache: "no-store"
+  });
+}
 
 /**
  * Batched cover-photo lookup, keyed by slug — every list/detail response
@@ -403,39 +436,21 @@ type OccasionDetailResponse = {
   businesses: BusinessPlatform[];
 };
 
-export async function approveClaim(id: string) {
+export async function approveClaim(id: string, idempotencyKey?: string) {
   if (useMockData) {
     return mockApi.approveClaim(id);
   }
 
-  const { getServerAuthHeaders } = await import("./auth");
-  const response = await fetch(`${API_BASE_URL}/admin/claims/${id}/approve`, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      ...(await getServerAuthHeaders(`/admin/claims/${id}/approve`))
-    },
-    body: "{}",
-    cache: "no-store"
-  });
+  const response = await postJson(`/admin/claims/${id}/approve`, {}, idempotencyKey);
   return response.json();
 }
 
-export async function rejectClaim(id: string) {
+export async function rejectClaim(id: string, idempotencyKey?: string) {
   if (useMockData) {
     return mockApi.rejectClaim(id);
   }
 
-  const { getServerAuthHeaders } = await import("./auth");
-  const response = await fetch(`${API_BASE_URL}/admin/claims/${id}/reject`, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      ...(await getServerAuthHeaders(`/admin/claims/${id}/reject`))
-    },
-    body: "{}",
-    cache: "no-store"
-  });
+  const response = await postJson(`/admin/claims/${id}/reject`, {}, idempotencyKey);
   return response.json();
 }
 
@@ -458,39 +473,29 @@ export async function getModerationQueue(status: ReportStatus = "open"): Promise
   return payload.data.reports;
 }
 
-export async function resolveReport(id: string, moderationStatus: ModerationStatus = "rejected") {
+export async function resolveReport(
+  id: string,
+  moderationStatus: ModerationStatus = "rejected",
+  idempotencyKey?: string
+) {
   if (useMockData) {
     return { data: { ok: true } };
   }
 
-  const { getServerAuthHeaders } = await import("./auth");
-  const response = await fetch(`${API_BASE_URL}/admin/reports/${id}/resolve`, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      ...(await getServerAuthHeaders(`/admin/reports/${id}/resolve`))
-    },
-    body: JSON.stringify({ moderationStatus }),
-    cache: "no-store"
-  });
+  const response = await postJson(
+    `/admin/reports/${id}/resolve`,
+    { moderationStatus },
+    idempotencyKey
+  );
   return response.json();
 }
 
-export async function rejectReport(id: string) {
+export async function rejectReport(id: string, idempotencyKey?: string) {
   if (useMockData) {
     return { data: { ok: true } };
   }
 
-  const { getServerAuthHeaders } = await import("./auth");
-  const response = await fetch(`${API_BASE_URL}/admin/reports/${id}/reject`, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      ...(await getServerAuthHeaders(`/admin/reports/${id}/reject`))
-    },
-    body: "{}",
-    cache: "no-store"
-  });
+  const response = await postJson(`/admin/reports/${id}/reject`, {}, idempotencyKey);
   return response.json();
 }
 

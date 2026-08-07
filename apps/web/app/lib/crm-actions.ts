@@ -4,15 +4,39 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { API_BASE_URL } from "./api-base-url";
 import { getServerAuthHeaders } from "./auth";
+import { formError, type FormActionState } from "./pxs/form-state";
+import { idempotencyHeaders, idempotencyKeyFrom } from "./pxs/idempotency";
 
 /** Server actions for CRM mutations. All requests carry the Clerk token. */
 
-async function crmSend(path: string, method: "POST" | "PATCH" | "DELETE", body?: unknown) {
+/**
+ * The single outbound path for every CRM write, and therefore the one place
+ * the `Idempotency-Key` header has to be threaded (Epic 17).
+ *
+ * The key is only ever sent on POST — the creates. PATCH and DELETE here
+ * address a specific resource by id and are idempotent by construction, so a
+ * duplicate of either is harmless; a duplicate POST is a second row in the
+ * catalogue.
+ *
+ * The key must arrive from the browser, carried through `FormData` by
+ * `MutationForm`. Minting one here would produce a different value on every
+ * attempt and deduplicate nothing, so `idempotencyHeaders()` deliberately
+ * returns `{}` when the caller has none rather than inventing one. Actions
+ * that do not yet pass one still work exactly as before — see the migration
+ * table in docs/design/PRODUCT-EXPERIENCE-SYSTEM.md.
+ */
+async function crmSend(
+  path: string,
+  method: "POST" | "PATCH" | "DELETE",
+  body?: unknown,
+  idempotencyKey?: string
+) {
   const response = await fetch(`${API_BASE_URL}${path}`, {
     method,
     headers: {
       "content-type": "application/json",
-      ...(await getServerAuthHeaders(path))
+      ...(await getServerAuthHeaders(path)),
+      ...(method === "POST" ? idempotencyHeaders(idempotencyKey) : {})
     },
     body: body === undefined ? undefined : JSON.stringify(body),
     cache: "no-store"
@@ -58,7 +82,34 @@ function tashkentIso(formData: FormData, key: string): string | undefined {
 
 /* ---------- Registration + plan ---------- */
 
-export async function registerBusinessAction(formData: FormData) {
+/**
+ * Business registration — a create, and the write most likely to have produced
+ * the duplicate listing in the live catalogue.
+ *
+ * Two changes from the previous version, both required by the mutation system
+ * (Epic 17) and both about what happens when things go wrong:
+ *
+ * 1. **It returns a `FormActionState` instead of throwing.** A thrown Server
+ *    Action hands the route to `error.tsx`, which destroys thirteen fields of
+ *    typing. Returning an error keeps the form mounted and filled; the user
+ *    gets the API's own message in a toast and can fix one field and resubmit.
+ *    The `useActionState` signature (previous state first) is what enables it.
+ *
+ * 2. **It forwards the browser's `Idempotency-Key`.** The interface already
+ *    refuses a second click, but a first request whose *response* was lost is
+ *    ambiguous to the browser, and the retry is the dangerous one. Carrying
+ *    the same key lets the API recognise it as the same intent. The server
+ *    half is specified in docs/design/PRODUCT-EXPERIENCE-SYSTEM.md and is not
+ *    implemented here — `apps/api` is a concurrent workstream.
+ *
+ * `redirect()` stays outside the try/catch on purpose: it signals by throwing
+ * `NEXT_REDIRECT`, and catching that would turn every successful registration
+ * into an error toast.
+ */
+export async function registerBusinessAction(
+  _previousState: FormActionState,
+  formData: FormData
+): Promise<FormActionState> {
   const locale = text(formData, "locale") ?? "uz";
 
   // An unchecked checkbox is simply absent from FormData, so this is false
@@ -66,25 +117,47 @@ export async function registerBusinessAction(formData: FormData) {
   // @Equals(true) — the client check is for a fast, clear error, not security.
   const acceptedTerms = formData.get("acceptedTerms") === "on";
 
-  const payload = await crmSend("/crm/register", "POST", {
-    name: text(formData, "name"),
-    categorySlug: text(formData, "categorySlug"),
-    descriptionUz: text(formData, "description"),
-    address: text(formData, "address"),
-    district: text(formData, "district"),
-    city: text(formData, "city"),
-    phone: text(formData, "phone"),
-    email: text(formData, "email"),
-    website: text(formData, "website"),
-    instagram: text(formData, "instagram"),
-    telegram: text(formData, "telegram"),
-    legalName: text(formData, "legalName"),
-    taxId: text(formData, "taxId"),
-    acceptedTerms,
-    acceptedTermsVersion: text(formData, "acceptedTermsVersion")
-  });
+  let slug: string;
 
-  const slug = (payload as { data: { slug: string } }).data.slug;
+  try {
+    const payload = await crmSend(
+      "/crm/register",
+      "POST",
+      {
+        name: text(formData, "name"),
+        categorySlug: text(formData, "categorySlug"),
+        descriptionUz: text(formData, "description"),
+        address: text(formData, "address"),
+        district: text(formData, "district"),
+        city: text(formData, "city"),
+        phone: text(formData, "phone"),
+        email: text(formData, "email"),
+        website: text(formData, "website"),
+        instagram: text(formData, "instagram"),
+        telegram: text(formData, "telegram"),
+        legalName: text(formData, "legalName"),
+        taxId: text(formData, "taxId"),
+        acceptedTerms,
+        acceptedTermsVersion: text(formData, "acceptedTermsVersion")
+      },
+      idempotencyKeyFrom(formData)
+    );
+
+    slug = (payload as { data: { slug: string } }).data.slug;
+  } catch (error) {
+    // Localized only as a last resort: `crmSend` lifts the API's validation
+    // messages into `Error.message`, and telling the owner which field is
+    // wrong beats a generic sentence in their own language.
+    return formError(
+      error,
+      locale === "ru"
+        ? "Не удалось зарегистрировать бизнес. Попробуйте ещё раз."
+        : locale === "en"
+          ? "Couldn't register the business. Please try again."
+          : "Biznesni ro'yxatdan o'tkazib bo'lmadi. Qayta urinib ko'ring."
+    );
+  }
+
   redirect(`/${locale}/business/plans?business=${slug}`);
 }
 

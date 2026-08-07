@@ -6,6 +6,7 @@ import { SortSelect, type SortKey } from "../../../components/discover/sort-sele
 import { GurmanHero, type GurmanHeroCopy } from "../../../components/gurman-hero";
 import { HomeSections } from "../../../components/home-sections";
 import { Reveal } from "../../../components/motion/reveal";
+import { NoResultsState } from "../../../components/pxs/state-panel";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { JsonLd } from "../../../components/json-ld";
@@ -284,24 +285,30 @@ export default async function DiscoverPage({
             />
           ) : (
             <Reveal delay={120} variant="fade-up">
-              <div className="empty-state vm-empty">
-                <h3>{copy.search.emptyTitle}</h3>
-                <p>{copy.search.emptyBody}</p>
-                {/* Was a dead end: a heading and a sentence with nothing to
-                    click. Clearing the filters is the fix for most empty
-                    results; registering is the fix for the rest. */}
-                <div className="vm-empty-state__actions">
-                  <Link className="btn btn-primary vm-cta" href={`/${locale}/discover`}>
-                    {t.clearFilters}
-                  </Link>
-                  <Link
-                    className="btn btn-outline-primary"
-                    href={`/${locale}/business/register`}
-                  >
-                    {t.addBusiness}
-                  </Link>
-                </div>
-              </div>
+              {/* PXS adoption (Epic 17). The trust audit fixed this dead end by
+                  hand — a heading and a sentence with nothing to click became
+                  the same copy plus the two things that genuinely help. It then
+                  existed as four near-identical copies across Discover, Lists,
+                  Occasions and occasion detail, so the fifth surface would have
+                  invented a fifth variant. `NoResultsState` is that markup,
+                  once. The copy and the actions are unchanged. */}
+              <NoResultsState
+                actions={
+                  <>
+                    <Link className="btn btn-primary vm-cta" href={`/${locale}/discover`}>
+                      {t.clearFilters}
+                    </Link>
+                    <Link
+                      className="btn btn-outline-primary"
+                      href={`/${locale}/business/register`}
+                    >
+                      {t.addBusiness}
+                    </Link>
+                  </>
+                }
+                body={copy.search.emptyBody}
+                title={copy.search.emptyTitle}
+              />
             </Reveal>
           )}
         </div>

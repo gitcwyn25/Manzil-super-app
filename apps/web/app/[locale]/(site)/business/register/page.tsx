@@ -5,6 +5,7 @@ import { registerBusinessAction } from "../../../../lib/crm-actions";
 import { getRegistrationTerms } from "../../../../lib/legal-api";
 import { getCrmCopy } from "../../../../lib/crm-copy";
 import { RegisterSubmit } from "../../../../components/crm/register-submit";
+import { MutationForm } from "../../../../components/pxs/mutation-form";
 import { IconField, IconSelect } from "../../../../components/vm/icon-field";
 import { PrimaryCta } from "../../../../components/vm/primary-cta";
 import { BrandPanel, SplitAuthShell } from "../../../../components/vm/split-auth-shell";
@@ -87,7 +88,28 @@ export default async function RegisterBusinessPage({
           <p className="vm-auth-head__subtitle">{copy.register.subtitle}</p>
         </header>
 
-        <form action={registerBusinessAction} className="vm-auth-form">
+        {/* PXS mutation system (Epic 17). This form is a *create*, and before
+            this change a double-click produced two business rows — the most
+            likely origin of the duplicate listing in the live catalogue.
+            MutationForm supplies, for free and unforgettably: one request per
+            intent (the button disables and the form refuses re-entry), an
+            `Idempotency-Key` per submission attempt that survives a retry, a
+            red toast carrying the API's own message on failure, and — the part
+            that matters most on a thirteen-field form — the user's typing left
+            intact when a save fails. */}
+        <MutationForm
+          action={registerBusinessAction}
+          className="vm-auth-form"
+          // The toast body is the API's own validation message, so the owner
+          // is told which field is wrong rather than getting a generic line.
+          errorTitle={copy.register.failedTitle}
+          // Thirteen fields of typing is real work. This guards both exits:
+          // the browser prompt for closing the tab, and a confirm dialog for
+          // an in-app link — the one Next.js client navigation never fires
+          // `beforeunload` for.
+          guardUnsavedChanges
+          locale={locale}
+        >
           <input name="locale" type="hidden" value={locale} />
 
           <fieldset>
@@ -220,8 +242,12 @@ export default async function RegisterBusinessPage({
             </label>
           </fieldset>
 
-          <RegisterSubmit label={copy.register.submit} pendingLabel={copy.register.submitting} />
-        </form>
+          <RegisterSubmit
+            label={copy.register.submit}
+            locale={locale}
+            pendingLabel={copy.register.submitting}
+          />
+        </MutationForm>
       </div>
     </SplitAuthShell>
   );
