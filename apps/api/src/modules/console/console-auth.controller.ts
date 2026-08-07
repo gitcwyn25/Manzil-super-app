@@ -24,6 +24,7 @@ import {
   verifyAdminSession
 } from "./admin-session.util";
 import { ThrottleAdminLogin } from "../security/throttle.config";
+import { NoIdempotency } from "../idempotency";
 import type { ManzilRequest } from "../auth/auth.types";
 
 /** Identical response for every failure mode — unknown username, wrong
@@ -70,6 +71,10 @@ export class ConsoleAuthController {
 
   @Post("login")
   @ThrottleAdminLogin()
+  // A login response carries a session cookie and an admin identity. Recording
+  // it for 24h would put a credential in a replay store and hand its lifetime
+  // to something other than the session logic that issued it.
+  @NoIdempotency()
   @HttpCode(200)
   async login(
     @Body() body: ConsoleLoginDto,

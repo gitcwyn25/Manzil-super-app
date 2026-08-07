@@ -3,6 +3,7 @@ import type { ManzilRequest } from "../auth/auth.types";
 import { ManzilAuthGuard } from "../auth/manzil-auth.guard";
 import { RequireAuth } from "../auth/require-auth.decorator";
 import { requireOwnedBusiness } from "../crm/business-ownership.util";
+import { NoIdempotency } from "../idempotency";
 import { PrismaService } from "../prisma.service";
 import { ThrottleWebhook, ThrottleWrite } from "../security/throttle.config";
 import { CreateCheckoutSessionDto } from "./billing.dto";
@@ -57,6 +58,10 @@ export class BillingController {
    */
   @Post("webhook")
   @ThrottleWebhook()
+  // Stripe has its own redelivery contract keyed on the event id, and the
+  // signature is computed over the exact bytes; a second deduplication scheme
+  // layered on top could only ever disagree with the first.
+  @NoIdempotency()
   async webhook(@Req() request: RawBodyCarrier, @Headers("stripe-signature") signature?: string) {
     if (!request.rawBody) {
       // Only reachable if `rawBody: true` were ever removed from main.ts —

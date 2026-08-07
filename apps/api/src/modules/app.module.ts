@@ -59,6 +59,7 @@ import { GurmanService } from "./gurman/gurman.service";
 import { CatalogRetriever, GURMAN_RETRIEVER } from "./gurman/gurman.retriever";
 import { AnthropicLlm, GURMAN_LLM } from "./gurman/gurman.llm";
 import { IntelligenceModule } from "./intelligence/intelligence.module";
+import { IDEMPOTENCY_PROVIDERS } from "./idempotency";
 import { SecurityModule } from "./security/security.module";
 import { RedisThrottlerStorage } from "./security/throttler-redis.storage";
 import { ManzilThrottlerGuard } from "./security/manzil-throttler.guard";
@@ -112,6 +113,10 @@ import { DEFAULT_THROTTLE } from "./security/throttle.config";
     // Rate limiting is global: a route is protected unless it opts out, so a
     // newly added endpoint is never silently unthrottled.
     { provide: APP_GUARD, useClass: ManzilThrottlerGuard },
+    // Idempotency (Epic 18) is global for the same reason: any POST carrying
+    // an `Idempotency-Key` is replay-safe unless it declares @NoIdempotency.
+    // A POST without the header behaves exactly as it did before.
+    ...IDEMPOTENCY_PROVIDERS,
     PrismaService,
     DatabaseRepository,
     CrmRepository,
