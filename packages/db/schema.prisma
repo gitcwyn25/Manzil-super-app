@@ -1185,3 +1185,57 @@ model IntelligenceSummary {
   @@index([subjectId])
   @@index([kind, computedAt])
 }
+
+/// Epic 18 — one recorded mutation outcome, keyed by the caller's
+/// `Idempotency-Key`.
+///
+/// **The table does not exist yet.** Its migration is written but gated on M1
+/// (`packages/db/migrations-gated-m1/20260810000000_idempotency_record_GATED_ON_M1`),
+/// outside the directory `prisma migrate deploy` reads, because
+/// `schema.prisma` and `packages/db/migrations/` already disagree and stacking
+/// a new migration on that history would deepen the problem M1 exists to fix.
+///
+/// Until then the API stores records in Redis — shared across replicas,
+/// TTL'd, and evictable — or in process when no Redis is configured, and
+/// `IdempotencyStore.durable` reports false either way. The Prisma-backed
+/// store is selected only when `API_IDEMPOTENCY_STORE=prisma`, so a
+/// `prisma generate` (which mints the delegate on every image build the moment
+/// this model exists) cannot switch it on by accident.
+model IdempotencyRecord {
+  id String @id @default(cuid())
+
+  /// Who the key belongs to: `user:<id>`, `admin:<id>`, or `anon:<digest>` for
+  /// an unauthenticated caller. Half of the uniqueness below, and what stops
+  /// one caller's key from ever reading another's recorded response.
+  scope String
+  /// The client's key — a UUID v4 from the browser under the PXS contract.
+  key   String
+
+  /// `POST /v1/crm/register`. For audit; matching is done on the fingerprint.
+  route       String
+  /// SHA-256 of method + URL + canonicalized body. The hash and never the
+  /// body, so this table never becomes a 24h copy of every create payload.
+  /// A key replayed against a different fingerprint is a 409, not a replay.
+  fingerprint String
+
+  /// `in_flight` while the original request runs, `completed` once recorded.
+  /// The migration adds a CHECK constraint the schema cannot express.
+  state String @default("in_flight")
+
+  /// The status and body the first caller received, replayed verbatim. Only a
+  /// 2xx is ever recorded: a failure is not an outcome worth replaying.
+  responseStatus Int?
+  responseBody   Json?
+
+  createdAt   DateTime  @default(now())
+  completedAt DateTime?
+  /// createdAt + 24h — the window the PXS contract promises.
+  expiresAt   DateTime
+
+  /// ⭐ The unique constraint the whole design rests on. `claim()` is an
+  /// unconditional insert; when two duplicate requests race, this index
+  /// rejects the loser. The database arbitrates — there is no read-then-write
+  /// window for a second request to slip through.
+  @@unique([scope, key])
+  @@index([expiresAt])
+}

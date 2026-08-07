@@ -52,9 +52,25 @@ functional without it — summaries are kept in process, and
 `{ backend: "memory", durable: false }` so nothing pretends otherwise — but a
 restart costs a re-summarization pass until this lands.
 
+## Pending: `20260810000000_idempotency_record_GATED_ON_M1`
+
+Creates the `IdempotencyRecord` table for Epic 18's replay-safe mutations: one
+recorded outcome per `(scope, key)`, where the scope is the authenticated
+principal. The unique index on that pair is not an optimization — it is the
+arbiter. `claim()` is an unconditional insert, so two duplicate requests racing
+each other are separated by the index rather than by a read-then-write check
+with a window in it.
+
+The layer is fully functional without it: the API claims via Redis `SET NX PX`
+when `REDIS_URL` is configured, which is already shared across replicas, and
+falls back to a bounded in-process map otherwise. `IdempotencyStore.durable`
+reports false in both cases so nothing pretends otherwise — what Postgres adds
+is survival of a Redis eviction or flush, and a record an operator can query
+when auditing a disputed create.
+
 ## Applying them, after M1
 
-All three pending migrations follow the same five steps; do them one migration
+All four pending migrations follow the same five steps; do them one migration
 at a time.
 
 1. Land the M1 consolidation migration; confirm the drift check passes.
@@ -63,18 +79,21 @@ at a time.
 3. `npm run db:migrate:deploy` — verify the table, unique indexes and CHECK
    constraints exist.
 4. `npm run db:generate` so `@prisma/client` gains the delegate
-   (`graphRelationship` / `memoryObject` / `intelligenceSummary`).
+   (`graphRelationship` / `memoryObject` / `intelligenceSummary` /
+   `idempotencyRecord`).
 5. Set the opt-in env var on the API service:
    `KNOWLEDGE_GRAPH_EDGE_STORE=prisma` for the graph,
    `MEMORY_ENGINE_STORE=prisma` for memory,
-   `MARKETPLACE_INTELLIGENCE_STORE=prisma` for summaries. **Both** signals are
+   `MARKETPLACE_INTELLIGENCE_STORE=prisma` for summaries,
+   `API_IDEMPOTENCY_STORE=prisma` for idempotency. **Both** signals are
    required in each case: the delegate appears at every image build once the
    model is in `schema.prisma`, so the env var is what says a human actually
    applied the table. Until it is set, the graph stays in projection-only mode
-   (`InferRelationshipsJob` reports `tool_unavailable` instead of writing), and
-   memory and summaries stay in process.
+   (`InferRelationshipsJob` reports `tool_unavailable` instead of writing),
+   memory and summaries stay in process, and idempotency stays on Redis.
 
 No API code changes at any step — see
 `apps/api/src/modules/intelligence/knowledge-graph/KNOWLEDGE-GRAPH.md`,
-`apps/api/src/modules/intelligence/memory-engine/MEMORY-ENGINE.md` and
-`apps/api/src/modules/intelligence/marketplace-intelligence/MARKETPLACE-INTELLIGENCE.md`.
+`apps/api/src/modules/intelligence/memory-engine/MEMORY-ENGINE.md`,
+`apps/api/src/modules/intelligence/marketplace-intelligence/MARKETPLACE-INTELLIGENCE.md`
+and `apps/api/src/modules/idempotency/IDEMPOTENCY.md`.

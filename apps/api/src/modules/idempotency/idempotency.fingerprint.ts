@@ -226,9 +226,11 @@ export function principalFor(request: IdempotencyRequestFacts): IdempotencyPrinc
 /**
  * The store's primary key: scope and key together, never the key alone.
  *
- * ` ` as the separator because it cannot occur in a valid key (printable
- * ASCII only), so no scope/key pair can be spelled two ways.
+ * A single space separates them, because a valid key is printable ASCII with
+ * no space in it (`isValidIdempotencyKey`). No two distinct (scope, key) pairs
+ * can therefore produce the same string — which matters, since that string is
+ * what a Map, a Redis key and a unique index all use as the identity.
  */
 export function scopedKey(scope: string, key: string): string {
-  return `${scope} ${key}`;
+  return `${scope} ${key}`;
 }
