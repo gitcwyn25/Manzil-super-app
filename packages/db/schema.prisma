@@ -1113,3 +1113,75 @@ model MemoryObject {
   @@index([expiresAt])
   @@index([tier])
 }
+
+/// ⚠️ GATED ON M1 — the table for this model does NOT exist yet. ⚠️
+///
+/// Epic 06 (Marketplace Intelligence): the stored summaries and derived
+/// feature vectors, as one generic kind-discriminated row. Doc 22 is binding —
+/// summaries are stored and refreshed by jobs, never regenerated per query;
+/// see
+/// `apps/api/src/modules/intelligence/marketplace-intelligence/MARKETPLACE-INTELLIGENCE.md`.
+///
+/// The migration lives in `packages/db/migrations-gated-m1/`, deliberately
+/// OUTSIDE the directory `prisma migrate deploy` reads, for the same reason as
+/// `GraphRelationship` and `MemoryObject`: M1 (platform hygiene) must first
+/// reconcile the existing schema/migration drift.
+///
+/// Until then the layer stores summaries **in process**: fully functional,
+/// fully tested, and honest about it — `MarketplaceIntelligenceService.
+/// persistence` reports `{ backend: "memory", durable: false }`. The
+/// Prisma-backed store is selected only when
+/// `MARKETPLACE_INTELLIGENCE_STORE=prisma`, so a `prisma generate` (which
+/// mints the delegate on every image build) cannot switch it on by accident.
+///
+/// Deliberately generic: one table for every summary kind AND for the three
+/// feature vectors, because a feature vector is a summary of a different kind
+/// — same slot, same provenance quartet, same freshness policy, same job-only
+/// write path — and a table per summarizer would make every new summarizer a
+/// migration.
+model IntelligenceSummary {
+  id String @id @default(cuid())
+
+  /// `SummaryKind`: business, customer, neighborhood, service, trend,
+  /// campaign, workspace, demand, demand_prediction, and the three
+  /// *_features vectors. Text, not an enum: the vocabulary lives in
+  /// TypeScript and an enum would make every new summarizer a migration.
+  kind      String
+  /// What the summary is about: a business, a person (account id), a
+  /// neighborhood id, a normalized service id, a `<metric>@<entity>` pair for
+  /// trends, or a `<category>@<area>` pair for demand.
+  subjectId String
+  /// Derived from (kind, subjectId) and stable across recomputes, so the
+  /// knowledge a recommendation records as consulted (doc 23 §9) still
+  /// resolves after the nightly job has run.
+  summaryId String @unique
+
+  /// `KnowledgeSource` (core/core.primitives): review, booking, visit,
+  /// merchant_input, campaign, platform_inference.
+  source     String
+  /// [0, 1]. The migration adds a CHECK constraint the schema cannot express.
+  confidence Float
+  /// Observations behind the payload. A summary of 3 rows must never be
+  /// indistinguishable from one of 3,000 — which is why it is a column and
+  /// not a detail buried in the JSON.
+  sampleSize Int    @default(0)
+
+  /// Observation window of the summary, where it has one.
+  windowStart DateTime?
+  windowEnd   DateTime?
+
+  /// The structured summary or feature vector. Never prose, never chat.
+  payload Json @default("{}")
+
+  /// When the platform last looked. Freshness is policy
+  /// (`SUMMARY_TTL_SECONDS`), and this is what it is measured against.
+  computedAt DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  /// One summary per (kind, subject) — the uniqueness that makes running a
+  /// summarizer twice idempotent, in Postgres as well as in memory.
+  @@unique([kind, subjectId])
+  @@index([subjectId])
+  @@index([kind, computedAt])
+}

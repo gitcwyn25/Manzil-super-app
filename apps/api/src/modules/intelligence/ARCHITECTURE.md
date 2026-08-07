@@ -306,3 +306,26 @@ until then memory lives in process and says so
 (`MemoryEngineService.persistence`). The tier order refines the Bible's v1.2
 source order — the discrepancy is documented rather than patched, for the v1.4
 amendment. See `memory-engine/MEMORY-ENGINE.md`.
+
+**Epic 06 — `marketplace-intelligence/`** (2026-08-07). Layer 2 implemented,
+binding four frozen tokens at once (`INTELLIGENCE_MARKETPLACE`,
+`INTELLIGENCE_BUSINESS`, `INTELLIGENCE_CUSTOMER`, `INTELLIGENCE_FEATURE_STORE`)
+from one module: seven summarizers (Business, Customer, Neighborhood, Service,
+Trend, Campaign, Workspace), the ten intelligence models the epic names, the
+three doc-23 feature vectors, and eight jobs — two from the frozen catalog and
+six added by declaration merging, alongside two new events. Everything is
+computed from real rows (reviews, bookings, visits, `BusinessEvent`,
+`SearchQueryLog`, CRM rows) and every model passes an evidence gate first: it
+returns either a value with the evidence behind it or a typed
+`IntelligenceFailure` carrying the real observation count, with the refusal
+**stored beside the knowledge** as an `IntelligenceGap`. At the current dataset
+size most models refuse, which is the intended behaviour — `marketplace_sparse`
+where growth will fix it, `knowledge_missing` where only a schema change will
+(party size, capacity, workspaces, stories), `feature_unavailable` where an
+unshipped module will. Summaries are stored in `(kind, subjectId)` slots and
+refreshed by event-triggered and scheduled jobs, never regenerated per query
+(doc 22). Wiring is the exported `MARKETPLACE_INTELLIGENCE_PROVIDERS` array —
+`IntelligenceModule` stays provider-empty. A generic `IntelligenceSummary` model
+is declared but **not applied** (gated on M1); until then summaries live in
+process and say so (`MarketplaceIntelligenceService.persistence`). See
+`marketplace-intelligence/MARKETPLACE-INTELLIGENCE.md`.

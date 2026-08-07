@@ -40,10 +40,22 @@ The engine is fully functional without it — memory is kept in process, and
 false }` so nothing pretends otherwise — but memory does not survive a
 restart until this lands.
 
+## Pending: `20260809000000_intelligence_summary_GATED_ON_M1`
+
+Creates the `IntelligenceSummary` table for Epic 06's marketplace
+intelligence: every stored summary and derived feature vector as one generic,
+kind-discriminated row, unique on `(kind, subjectId)`. Doc 22 requires
+summaries to be *stored* and refreshed by jobs rather than regenerated per
+query, so this is what makes that promise durable. The layer is fully
+functional without it — summaries are kept in process, and
+`MarketplaceIntelligenceService.persistence` reports
+`{ backend: "memory", durable: false }` so nothing pretends otherwise — but a
+restart costs a re-summarization pass until this lands.
+
 ## Applying them, after M1
 
-Both pending migrations follow the same five steps; do them one migration at
-a time.
+All three pending migrations follow the same five steps; do them one migration
+at a time.
 
 1. Land the M1 consolidation migration; confirm the drift check passes.
 2. `git mv packages/db/migrations-gated-m1/<migration> packages/db/migrations/`
@@ -51,16 +63,18 @@ a time.
 3. `npm run db:migrate:deploy` — verify the table, unique indexes and CHECK
    constraints exist.
 4. `npm run db:generate` so `@prisma/client` gains the delegate
-   (`graphRelationship` / `memoryObject`).
+   (`graphRelationship` / `memoryObject` / `intelligenceSummary`).
 5. Set the opt-in env var on the API service:
    `KNOWLEDGE_GRAPH_EDGE_STORE=prisma` for the graph,
-   `MEMORY_ENGINE_STORE=prisma` for memory. **Both** signals are required in
-   each case: the delegate appears at every image build once the model is in
-   `schema.prisma`, so the env var is what says a human actually applied the
-   table. Until it is set, the graph stays in projection-only mode
-   (`InferRelationshipsJob` reports `tool_unavailable` instead of writing) and
-   memory stays in process.
+   `MEMORY_ENGINE_STORE=prisma` for memory,
+   `MARKETPLACE_INTELLIGENCE_STORE=prisma` for summaries. **Both** signals are
+   required in each case: the delegate appears at every image build once the
+   model is in `schema.prisma`, so the env var is what says a human actually
+   applied the table. Until it is set, the graph stays in projection-only mode
+   (`InferRelationshipsJob` reports `tool_unavailable` instead of writing), and
+   memory and summaries stay in process.
 
 No API code changes at any step — see
-`apps/api/src/modules/intelligence/knowledge-graph/KNOWLEDGE-GRAPH.md` and
-`apps/api/src/modules/intelligence/memory-engine/MEMORY-ENGINE.md`.
+`apps/api/src/modules/intelligence/knowledge-graph/KNOWLEDGE-GRAPH.md`,
+`apps/api/src/modules/intelligence/memory-engine/MEMORY-ENGINE.md` and
+`apps/api/src/modules/intelligence/marketplace-intelligence/MARKETPLACE-INTELLIGENCE.md`.
