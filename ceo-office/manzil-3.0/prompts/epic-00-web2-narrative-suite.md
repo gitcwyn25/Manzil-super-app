@@ -60,6 +60,40 @@ Cross-cutting rules: every statistic originates from backend data · every page 
 
 1. Trust audit → 2. Landing rewrite → 3. Gurman showcase → 4. Business landing → 5. Trust Center → 6. Empty states → 7. Experience OS page → 8. Premium interactions → then Web 2.0 surface-by-surface.
 
+## Addendum (2026-08-07) — the diagnosis, the sentence, and three product moats
+
+**Diagnosis in one line:** *Manzil looks like a Series A company but behaves like an MVP.* That mismatch is what destroys trust — the redesign must make it feel like a complete product from the first second, not a prettier UI.
+
+**The one sentence everything supports:** **"Manzil is your city's AI operating system."** Today a visitor must guess between Maps / Booking / Yelp / AI chat / CRM / super app. One sentence, then every section supports it.
+
+**Hero must show the machine thinking, not a slogan:** birthday dinner → Gurman compares 46 restaurants → removes closed → checks ratings → checks parking → finds live music → books → creates itinerary → invites friends. People understand instantly.
+
+### Moat 1 — Transparent rejection (highest-trust, lowest-cost)
+
+Never just "Recommended: Restaurant A". Instead: *"I excluded A — too noisy. Removed B — closed today. Removed C — no parking. Compared 14 places. These three fit."* **This is already architecturally supported**: Epic 03's Explanation Engine + RecommendationTrace make unexplained recommendations unrepresentable, and Epic 08's reason codes carry the scores. The UI simply has to surface what the engine already produces. Ship it the moment Gurman is live.
+
+### Moat 2 — Structured experience reviews
+
+Replace ★★★★★ + "Good" with what actually happened: visited (family dinner) · budget (300,000) · time (Saturday evening) · wait (12 min) · noise (medium) · kids (yes) · parking (easy) · would return (definitely). Machine-readable by construction — this is the input Epic 16's Experience DNA needs, gathered from day one rather than reverse-engineered from prose later. **Design the review form for this now; it costs nothing today and compounds for years.**
+
+### Moat 3 — Living business objects
+
+Businesses stop being database rows: identity, summary, atmosphere, crowd, strengths, weaknesses, events, history, owner personality, community perception, relationships, popularity trends, seasonality, best audience — AI-generated, continuously updated (Epic 06 summarizers + Epic 16 DNA).
+
+**Also captured:** Gurman as "your city expert" (knows hours, availability, prices, parking, noise, atmosphere, owner replies, your memories, friends, budget, mood, weather, traffic) · Discovery as TikTok-meets-Maps with contextual rows (trending, friends visited, AI picks, couples, families, late night, budget, luxury, pet friendly, wheelchair, rainy day, study, work) · business pages as *stories* not profiles · the social layer (follow, lists, collections, shared itineraries, votes, invitations, memories) · CRM as an **AI Business Manager** that analyses so the owner doesn't (morning summary → negative review → suggested reply → campaign idea → slow-Tuesday detection → VIP arriving → revenue forecast) · desktop-for-planning vs mobile-for-experiencing.
+
+### Agreed priority order (supersedes the 8-step list above where they differ)
+
+1. **Trust** — remove fabricated content, fix production issues, SEO, authentication
+2. **Narrative** — landing understood in <10s
+3. **Discovery** — rich, contextual, enjoyable *before* AI
+4. **Gurman** — genuinely useful planner that reasons transparently
+5. **Business CRM** — AI-assisted workflow
+6. **Social & multiplayer**
+7. **Marketplace Intelligence** — the graph/memory/prediction work already underway
+
+> The remaining challenge is not inventing features. It is making every promise on the landing page work end to end.
+
 ## Launch gate (CTO): do NOT launch until
 
 Site explains Manzil in <10s · Gurman completes ≥1 real end-to-end planning workflow · 100-300 verified businesses with accurate data · trust issues resolved (fabricated metrics, production auth keys, SEO, legal pages, duplicate data) · owners can onboard, manage listings, and see genuine CRM value.
