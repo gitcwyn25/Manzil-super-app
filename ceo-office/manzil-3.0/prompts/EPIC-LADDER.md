@@ -18,7 +18,8 @@
 | 14 | **Experience Commerce Platform** | queued | [epic-14](epic-14-experience-commerce.md) |
 | 15 | **Business Operating System** | queued | [epic-15](epic-15-business-os.md) |
 | 16 | **Experience Intelligence & Learning System** (the learning brain) | queued | [epic-16](epic-16-experience-intelligence.md) |
-| 17 | Autonomous Marketplace (AI negotiation, ecosystem self-optimization) | outline only | *(largely absorbed into 13's forecasting + 10's evaluation; write when reached)* |
+| 17 | **Product Experience System (PXS)** — feedback/state framework, web track | queued | [epic-17](epic-17-product-experience-system.md) |
+| 18 | Autonomous Marketplace (AI negotiation, ecosystem self-optimization) | outline only | *(largely absorbed into 13's forecasting + 10's evaluation; write when reached)* |
 
 **Ordering rationale:** ecosystem intelligence (13) precedes experience commerce (14) precedes per-business tooling (15) — each consumes the previous rather than reinventing it. Architecture ends at 16; beyond that is product capability on a mature platform.
 
