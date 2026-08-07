@@ -44,6 +44,26 @@ const CACHE_TTL = {
   adminOverview: 20
 } as const;
 
+/**
+ * What "publicly visible" means for a business.
+ *
+ * `suspended` is the state an admin puts a business into when they reject or
+ * take one down (`ConsoleRepository.rejectBusiness`), and `mergedIntoId` marks
+ * a duplicate folded into another listing (`ConsoleRepository.mergeBusiness`).
+ * Without this predicate on the public reads, an admin suspension changed a
+ * status column and nothing else: the listing stayed in search, in the
+ * directory, and on its own URL.
+ *
+ * Same rule the home feed, the public photo gallery and the Gurman retriever
+ * already apply (`gurman.retriever.ts` exports the identical shape as
+ * `VISIBLE_BUSINESS_WHERE`); duplicated here rather than imported so the core
+ * repository does not depend on a feature module.
+ */
+const PUBLICLY_VISIBLE = {
+  status: { not: "suspended" },
+  mergedIntoId: null
+} as const;
+
 type BusinessWithCategory = PrismaBusiness & {
   category: PrismaCategory;
 };
@@ -112,6 +132,7 @@ export class DatabaseRepository {
 
   private async searchUncached(normalizedQuery: string, category: string): Promise<Business[]> {
     const where = {
+      ...PUBLICLY_VISIBLE,
       ...(category !== "all" ? { category: { slug: category } } : {}),
       ...(normalizedQuery.length > 0
         ? {
@@ -140,6 +161,7 @@ export class DatabaseRepository {
   async listBusinesses(): Promise<Business[]> {
     return this.cache.getOrSet(CACHE_NS.businesses, "list", CACHE_TTL.businessList, async () => {
       const businesses = await this.prisma.business.findMany({
+        where: PUBLICLY_VISIBLE,
         include: { category: true },
         orderBy: [{ avgRating: "desc" }, { reviewCount: "desc" }, { name: "asc" }],
         take: 500
@@ -182,15 +204,20 @@ export class DatabaseRepository {
     });
 
     return {
-      businesses: owned.map((business) => this.mapBusiness(business)),
+      // Owner-scoped read: the dashboard's settings form prefills legalName and
+      // taxId, so this is one of the two places they are allowed out.
+      businesses: owned.map((business) => this.mapBusiness(business, { includeLegalIdentity: true })),
       reviews: reviews.map((review) => this.mapReview(review, slugByBusinessId.get(review.businessId) ?? ""))
     };
   }
 
   async getBusiness(slug: string): Promise<{ business: Business; reviews: Review[] }> {
     return this.cache.getOrSet(CACHE_NS.businesses, `detail:${slug}`, CACHE_TTL.businessDetail, async () => {
-      const business = await this.prisma.business.findUnique({
-        where: { slug },
+      // findFirst, not findUnique: the slug alone no longer decides visibility —
+      // a suspended or merged-away listing must 404 here exactly as it already
+      // does on the public photo gallery, rather than serving a full profile.
+      const business = await this.prisma.business.findFirst({
+        where: { slug, ...PUBLICLY_VISIBLE },
         include: { category: true }
       });
 
@@ -252,7 +279,9 @@ export class DatabaseRepository {
 
     await this.cache.invalidate(CACHE_NS.businesses);
 
-    return this.mapBusiness(updatedBusiness);
+    // Ownership was asserted above, so echoing the legal identity back is the
+    // owner reading their own submission — not a public response.
+    return this.mapBusiness(updatedBusiness, { includeLegalIdentity: true });
   }
 
   async listReviews(): Promise<Review[]> {
@@ -1020,7 +1049,23 @@ export class DatabaseRepository {
     };
   }
 
-  private mapBusiness(business: BusinessWithCategory): Business {
+  /**
+   * Serialises a business for an API response.
+   *
+   * `legalName` and `taxId` (the Uzbek STIR) are the business's *legal identity*
+   * — collected once at registration to generate the contract, never intended
+   * for a public profile. They are therefore opt-in via `includeLegalIdentity`,
+   * which only the owner-scoped paths (`listOwnedBusinesses`, `updateBusiness`)
+   * pass. Every public path — search, the business list, the profile detail,
+   * curated lists and occasions — gets the default and never sees them.
+   *
+   * The distinction matters because the public paths are also the cached ones:
+   * a single leaked field there is served to everyone for the life of the entry.
+   */
+  private mapBusiness(
+    business: BusinessWithCategory,
+    options: { includeLegalIdentity?: boolean } = {}
+  ): Business {
     return {
       id: business.id,
       slug: business.slug,
@@ -1045,13 +1090,18 @@ export class DatabaseRepository {
       photo: "business",
       tags: [business.district, business.category.nameUz],
       foundingBusiness: business.status === "claimed",
-      // CRM contact/legal fields (superset of the shared Business type).
+      // Public contact channels — a business publishes these to be reached on.
       email: business.email ?? undefined,
       website: business.website ?? undefined,
       instagram: business.instagram ?? undefined,
       telegram: business.telegram ?? undefined,
-      legalName: business.legalName ?? undefined,
-      taxId: business.taxId ?? undefined
+      // Owner-only legal identity.
+      ...(options.includeLegalIdentity
+        ? {
+            legalName: business.legalName ?? undefined,
+            taxId: business.taxId ?? undefined
+          }
+        : {})
     } as Business;
   }
 
