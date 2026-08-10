@@ -20,20 +20,20 @@
     "animejs": "^4.5.0",
     "bootstrap": "^5.3.8",
     "framer-motion": "^11.18.2",
-    "next": "latest",
-    "react": "latest",
-    "react-dom": "latest",
+    "next": "*",
+    "react": "*",
+    "react-dom": "*",
     "sass": "^1.102.0"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.1",
-    "@types/node": "latest",
-    "@types/react": "latest",
-    "@types/react-dom": "latest",
-    "autoprefixer": "latest",
-    "cross-env": "latest",
+    "@eslint/eslintrc": "^3.3.6",
+    "@types/node": "*",
+    "@types/react": "*",
+    "@types/react-dom": "*",
+    "autoprefixer": "^10.5.4",
+    "cross-env": "*",
     "eslint": "^9.30.1",
-    "eslint-config-next": "^16.2.9",
-    "typescript": "latest"
+    "eslint-config-next": "^16.3.0",
+    "typescript": "*"
   }
 }
