@@ -14,33 +14,33 @@
     "ensure-media-bucket": "tsx scripts/ensure-media-bucket.ts"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.115.0",
-    "@clerk/backend": "^3.8.4",
+    "@anthropic-ai/sdk": "^0.120.0",
+    "@clerk/backend": "^3.16.10",
     "@manzil/shared": "file:../../packages/shared",
-    "@nestjs/common": "latest",
-    "@nestjs/core": "latest",
-    "@nestjs/platform-express": "latest",
+    "@nestjs/common": "^11.2.1",
+    "@nestjs/core": "^11.2.1",
+    "@nestjs/platform-express": "^11.2.1",
     "@nestjs/throttler": "^6.5.0",
     "@prisma/client": "6.19.3",
-    "@sentry/nestjs": "^10.68.0",
-    "@sentry/node": "^10.68.0",
-    "@supabase/supabase-js": "^2.110.0",
+    "@sentry/nestjs": "^10.70.0",
+    "@sentry/node": "^10.70.0",
+    "@supabase/supabase-js": "^2.112.3",
     "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.4",
+    "class-validator": "^0.15.1",
     "helmet": "^8.3.0",
     "ioredis": "^5.11.1",
-    "reflect-metadata": "latest",
-    "rxjs": "latest",
-    "stripe": "^22.3.2"
+    "reflect-metadata": "*",
+    "rxjs": "*",
+    "stripe": "^22.5.0"
   },
   "devDependencies": {
-    "@nestjs/cli": "latest",
-    "@nestjs/schematics": "latest",
+    "@nestjs/cli": "*",
+    "@nestjs/schematics": "*",
     "@nestjs/testing": "^11.1.28",
     "@types/jest": "^29.5.14",
-    "@types/node": "latest",
+    "@types/node": "*",
     "jest": "^29.7.0",
     "ts-jest": "^29.4.12",
-    "typescript": "latest"
+    "typescript": "*"
   }
 }
