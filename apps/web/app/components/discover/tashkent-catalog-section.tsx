@@ -19,6 +19,41 @@ const DISTRICTS = [
   "Sergeli"
 ];
 
+const OCCASION_IMAGES: Record<string, string> = {
+  "birthday": "https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80",
+  "date-night": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80",
+  "family-dinner": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80",
+  "business-lunch": "https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=800&q=80",
+  "default": "https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=800&q=80"
+};
+
+const CATEGORY_COVERS: Record<string, string> = {
+  "restaurants": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80",
+  "cafes": "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80",
+  "auto": "https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80",
+  "beauty": "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80",
+  "repairs": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80",
+  "resort": "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80"
+};
+
+function getBusinessCover(b: BusinessPlatform): string {
+  if (b.coverPhotoUrl) return b.coverPhotoUrl;
+  const nameLower = b.name.toLowerCase();
+  if (nameLower.includes("dam olish") || nameLower.includes("resort") || nameLower.includes("oromgoh")) {
+    return CATEGORY_COVERS.resort;
+  }
+  if (nameLower.includes("moyka") || nameLower.includes("wash") || nameLower.includes("avto") || b.categorySlug === "auto") {
+    return CATEGORY_COVERS.auto;
+  }
+  if (nameLower.includes("kafe") || nameLower.includes("cafe") || nameLower.includes("coffee") || nameLower.includes("bread") || b.categorySlug === "cafes") {
+    return CATEGORY_COVERS.cafes;
+  }
+  if (nameLower.includes("osh") || nameLower.includes("milliy") || nameLower.includes("plov") || nameLower.includes("taom") || b.categorySlug === "restaurants") {
+    return CATEGORY_COVERS.restaurants;
+  }
+  return CATEGORY_COVERS[b.categorySlug ?? ""] || "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80";
+}
+
 export function TashkentCatalogSection({
   locale,
   businesses,
@@ -41,7 +76,8 @@ export function TashkentCatalogSection({
     const matchesQuery =
       !searchQuery ||
       b.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      descText.toLowerCase().includes(searchQuery.toLowerCase());
+      descText.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      b.district.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesDistrict && matchesCategory && matchesQuery;
   });
 
@@ -52,17 +88,17 @@ export function TashkentCatalogSection({
         {/* MERGED TADBIRLAR & MAROSIMLAR SHOWCASE */}
         {occasions.length > 0 && (
           <div className="tashkent-events-band">
-            <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+            <div className="tashkent-events-band__header">
               <div>
-                <span className="text-xs font-bold text-[#00ffcb] uppercase tracking-wider">
+                <span className="tashkent-events-band__kicker">
                   🎉 Tadbirlar & Marosimlar
                 </span>
-                <h3 className="text-2xl font-extrabold text-white mt-1">
+                <h3 className="tashkent-events-band__title">
                   Toshkent bayramlari va maxsus kunlar
                 </h3>
               </div>
               <Link
-                className="inline-flex items-center gap-1 text-sm font-semibold text-[#00ffcb] hover:underline"
+                className="tashkent-events-band__link"
                 href={`/${locale}/occasions`}
               >
                 <span>Barcha tadbirlar</span>
@@ -70,61 +106,67 @@ export function TashkentCatalogSection({
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {occasions.slice(0, 4).map((occ) => (
-                <Link
-                  key={occ.slug}
-                  className="tashkent-event-card"
-                  href={`/${locale}/occasions/${occ.slug}`}
-                >
-                  <div className="text-3xl mb-2">{occ.emoji}</div>
-                  <h4 className="text-base font-bold text-white mb-1">
-                    {pickLocalized(occ.name, locale)}
-                  </h4>
-                  <p className="text-xs text-slate-400">
-                    Mos maskanlar va to&apos;plamlar
-                  </p>
-                </Link>
-              ))}
+            <div className="tashkent-events-grid">
+              {occasions.slice(0, 4).map((occ) => {
+                const bgImg = OCCASION_IMAGES[occ.slug] || OCCASION_IMAGES.default;
+                return (
+                  <Link
+                    key={occ.slug}
+                    className="tashkent-event-card"
+                    href={`/${locale}/occasions/${occ.slug}`}
+                  >
+                    <img
+                      alt={pickLocalized(occ.name, locale)}
+                      className="tashkent-event-card__bg"
+                      src={bgImg}
+                    />
+                    <div className="tashkent-event-card__overlay" />
+                    <div className="tashkent-event-card__body">
+                      <span className="tashkent-event-card__emoji">{occ.emoji}</span>
+                      <h4 className="tashkent-event-card__title">
+                        {pickLocalized(occ.name, locale)}
+                      </h4>
+                      <p className="tashkent-event-card__sub">
+                        Mos maskanlar va to&apos;plamlar
+                      </p>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         )}
 
-        {/* SEARCH & FILTERS */}
-        <div className="flex flex-col gap-6 mb-10">
+        {/* SEARCH & FILTERS BAR */}
+        <div className="tashkent-filter-bar">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
-              <span className="text-xs font-bold text-[#00ffcb] uppercase tracking-wider">
+              <span className="text-xs font-bold text-[#00ffcb] uppercase tracking-wider block mb-1">
                 📍 Maskanlar Katalogi
               </span>
-              <h2 className="text-3xl font-extrabold text-white mt-1">
+              <h2 className="text-3xl font-extrabold text-white m-0">
                 Toshkentdagi tasdiqlangan joylar
               </h2>
             </div>
 
             {/* Search input */}
-            <div className="relative w-full md:w-80">
-              <Icon name="search" size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+            <div className="tashkent-search-wrapper">
+              <Icon name="search" size={18} className="tashkent-search-icon" />
               <input
-                className="w-full bg-slate-900 border border-white/15 rounded-full pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-[#00ffcb]"
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Joy yoki xizmat qidirish..."
+                placeholder="Joy nomi, xizmat yoki tuman qidirish..."
                 type="search"
                 value={searchQuery}
               />
             </div>
           </div>
 
-          {/* District Pills */}
-          <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
+          {/* District Pills Scroll */}
+          <div className="tashkent-pill-scroll">
             {DISTRICTS.map((d) => (
               <button
                 key={d}
-                className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition ${
-                  selectedDistrict === d
-                    ? "bg-[#0058bc] text-white shadow-lg"
-                    : "bg-white/5 text-slate-300 hover:bg-white/10 border border-white/10"
-                }`}
+                className={`tashkent-filter-chip ${selectedDistrict === d ? "tashkent-filter-chip--active" : ""}`}
                 onClick={() => setSelectedDistrict(d)}
                 type="button"
               >
@@ -133,14 +175,10 @@ export function TashkentCatalogSection({
             ))}
           </div>
 
-          {/* Category Chips */}
-          <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
+          {/* Category Chips Scroll */}
+          <div className="tashkent-pill-scroll">
             <button
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition ${
-                selectedCategory === "all"
-                  ? "bg-[#00ffcb] text-slate-950 font-bold"
-                  : "bg-white/5 text-slate-300 hover:bg-white/10 border border-white/10"
-              }`}
+              className={`tashkent-filter-chip ${selectedCategory === "all" ? "tashkent-filter-chip--cat-active" : ""}`}
               onClick={() => setSelectedCategory("all")}
               type="button"
             >
@@ -149,11 +187,7 @@ export function TashkentCatalogSection({
             {categories.map((c) => (
               <button
                 key={c.slug}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition ${
-                  selectedCategory === c.slug
-                    ? "bg-[#00ffcb] text-slate-950 font-bold"
-                    : "bg-white/5 text-slate-300 hover:bg-white/10 border border-white/10"
-                }`}
+                className={`tashkent-filter-chip ${selectedCategory === c.slug ? "tashkent-filter-chip--cat-active" : ""}`}
                 onClick={() => setSelectedCategory(c.slug)}
                 type="button"
               >
@@ -165,54 +199,65 @@ export function TashkentCatalogSection({
 
         {/* BUSINESS RESULTS GRID */}
         {filteredBusinesses.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="tashkent-biz-grid">
             {filteredBusinesses.map((b) => {
               const desc = pickLocalized(b.description, locale);
+              const coverImg = getBusinessCover(b);
+              const rating = b.avgRating ?? (b as any).ratingAverage ?? 4.8;
+              const reviews = b.reviewCount ?? 1;
+
               return (
                 <Link
                   key={b.slug}
-                  className="group bg-slate-900/80 border border-white/10 rounded-2xl p-5 hover:border-[#00ffcb]/60 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_15px_35px_rgba(0,88,188,0.2)] flex flex-col justify-between"
+                  className="tashkent-biz-card"
                   href={`/${locale}/businesses/${b.slug}`}
                 >
-                  <div>
-                    <div className="flex items-start justify-between gap-2 mb-3">
-                      <div>
-                        <span className="text-[11px] font-bold text-[#00ffcb] uppercase tracking-wider">
-                          {b.district} tumani
-                        </span>
-                        <h3 className="text-lg font-bold text-white group-hover:text-[#00ffcb] transition flex items-center gap-1.5 mt-0.5">
-                          <span>{b.name}</span>
-                          <Icon name="verified" size={16} className="text-[#00ffcb]" />
-                        </h3>
-                      </div>
-                      <div className="flex items-center gap-1 bg-black/40 px-2.5 py-1 rounded-full border border-white/10 text-xs font-bold text-amber-400">
-                        <span>★</span>
-                        <span>{b.avgRating?.toFixed(1) ?? "4.8"}</span>
-                      </div>
+                  <div className="tashkent-biz-card__cover">
+                    <img
+                      alt={b.name}
+                      className="tashkent-biz-card__cover-img"
+                      src={coverImg}
+                    />
+                    <div className="tashkent-biz-card__badge-verified">
+                      <span>✓</span>
+                      <span>Tasdiqlangan</span>
                     </div>
-
-                    <p className="text-xs text-slate-300 line-clamp-2 mb-4 leading-relaxed">
-                      {desc || "Toshkent shahrida joylashgan tasdiqlangan va sara xizmat ko'rsatish maskani."}
-                    </p>
+                    <div className="tashkent-biz-card__badge-rating">
+                      <span>★ {rating.toFixed(1)}</span>
+                    </div>
                   </div>
 
-                  <div className="flex items-center justify-between pt-3 border-t border-white/10 text-xs">
-                    <span className="text-slate-400">
-                      💬 {b.reviewCount ?? 120} ta sharhlar
-                    </span>
-                    <span className="text-[#00ffcb] font-semibold group-hover:translate-x-1 transition-transform flex items-center gap-1">
-                      Batafsil ko&apos;rish →
-                    </span>
+                  <div className="tashkent-biz-card__body">
+                    <div>
+                      <div className="tashkent-biz-card__district">
+                        📍 {b.district} tumani
+                      </div>
+                      <h3 className="tashkent-biz-card__name">
+                        {b.name}
+                      </h3>
+                      <p className="tashkent-biz-card__desc">
+                        {desc || "Toshkent shahrida joylashgan tasdiqlangan va sara xizmat ko'rsatish maskani."}
+                      </p>
+                    </div>
+
+                    <div className="tashkent-biz-card__footer">
+                      <span className="tashkent-biz-card__reviews">
+                        💬 {reviews} ta sharhlar
+                      </span>
+                      <span className="tashkent-biz-card__cta">
+                        Batafsil ko&apos;rish →
+                      </span>
+                    </div>
                   </div>
                 </Link>
               );
             })}
           </div>
         ) : (
-          <div className="text-center py-16 bg-slate-900/40 rounded-2xl border border-white/10">
-            <span className="text-4xl mb-3 block">🔍</span>
-            <h3 className="text-lg font-bold text-white mb-1">Mos maskanlar topilmadi</h3>
-            <p className="text-xs text-slate-400">Filtrlarni o&apos;zgartirib ko&apos;ring yoki boshqa tuman tanlang.</p>
+          <div className="tashkent-empty-state">
+            <span className="tashkent-empty-state__icon">🔍</span>
+            <h3 className="tashkent-empty-state__title">Mos maskanlar topilmadi</h3>
+            <p className="tashkent-empty-state__sub">Filtrlarni o&apos;zgartirib ko&apos;ring yoki boshqa tuman tanlang.</p>
           </div>
         )}
       </div>
