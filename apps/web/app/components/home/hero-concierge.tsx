@@ -1,4 +1,7 @@
+"use client";
+
 import type { Locale } from "@manzil/shared";
+import { GurmanAiBackground } from "../gurman-ai-background";
 import { Reveal } from "../motion/reveal";
 import { Icon } from "../vm/icons";
 
@@ -28,15 +31,13 @@ export type HeroConciergeCopy = {
  * the chat mockup claim only what Gurman AI does — recommendations from real
  * reviews and real catalog data. No bookings, no invented venues.
  *
- * The mock's Three.js orb scene is reimplemented as pure-CSS drifting blobs
- * (D12: CDN scripts are banned); the chat preview is a static, localized
- * illustration hidden below lg. Everything is server-rendered — the Reveal
- * wrappers are decorative entrances that the noscript rule and reduced-motion
- * config short-circuit to the visible state.
+ * The Three.js particle swarm animation brings the AI concierge presence to life,
+ * paired with accessible server-rendered content and responsive layout.
  */
 export function HeroConcierge({ copy, locale }: { copy: HeroConciergeCopy; locale: Locale }) {
   return (
     <section className="vm-hero">
+      <GurmanAiBackground opacity={0.55} dotColor="#F4F1EA" accentColor="#00FFCB" />
       <div aria-hidden="true" className="vm-hero__orbs">
         <span className="vm-hero__orb vm-hero__orb--one" />
         <span className="vm-hero__orb vm-hero__orb--two" />

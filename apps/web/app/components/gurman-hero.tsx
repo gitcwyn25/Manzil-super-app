@@ -2,6 +2,7 @@
 
 import type { Locale } from "@manzil/shared";
 import { motion } from "framer-motion";
+import { GurmanAiBackground } from "./gurman-ai-background";
 import { Icon } from "./vm/icons";
 
 /**
@@ -105,6 +106,7 @@ export type GurmanHeroCopy = {
 export function GurmanHero({ copy, locale }: { copy: GurmanHeroCopy; locale: Locale }) {
   return (
     <section className="gurman-hero">
+      <GurmanAiBackground opacity={0.65} dotColor="#F4F1EA" accentColor="#00FFCB" />
       <div className="gurman-hero__wash" />
 
       <div aria-hidden="true" className="gurman-hero__shapes">

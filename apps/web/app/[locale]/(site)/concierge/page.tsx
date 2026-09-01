@@ -1,6 +1,7 @@
 import type { Locale } from "@manzil/shared";
 import { getUiCopy } from "@manzil/shared";
 import { ConciergeChat } from "../../../components/concierge-chat";
+import { GurmanAiBackground } from "../../../components/gurman-ai-background";
 import { IconTile } from "../../../components/vm/icon-tile";
 import { Icon } from "../../../components/vm/icons";
 import type { Metadata } from "next";
@@ -54,6 +55,7 @@ export default async function ConciergePage({
 
   return (
     <section className="section-block container concierge-page">
+      <GurmanAiBackground opacity={0.3} dotColor="#F4F1EA" accentColor="#00FFCB" />
       <JsonLd data={breadcrumb} />
       <div className="section-heading">
         <p className="section-kicker">{copy.concierge.kicker}</p>
