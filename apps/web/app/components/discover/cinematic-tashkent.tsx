@@ -4,10 +4,13 @@ import type { BusinessPlatform, Locale, Occasion } from "@manzil/shared";
 import Link from "next/link";
 import { pickLocalized } from "../../lib/locale-text";
 
-const TASHKENT_HERO_BG = "https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=2000&q=85";
+// High-quality Tashkent / Central Asia imagery via Pexels CDN (no hotlink block)
+const TASHKENT_HERO_BG = "https://images.pexels.com/photos/3155666/pexels-photo-3155666.jpeg?auto=compress&cs=tinysrgb&w=2000";
 
-const ANCIENT_IMG = "https://images.unsplash.com/photo-1569154941061-e231b4725ef1?auto=format&fit=crop&w=1200&q=80";
-const MODERN_IMG = "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=1200&q=80";
+// Ancient heritage — ornate Eastern architecture / bazaar
+const ANCIENT_IMG = "https://images.pexels.com/photos/2412600/pexels-photo-2412600.jpeg?auto=compress&cs=tinysrgb&w=1200";
+// Modern lifestyle — city café / urban Tashkent
+const MODERN_IMG = "https://images.pexels.com/photos/1855214/pexels-photo-1855214.jpeg?auto=compress&cs=tinysrgb&w=1200";
 
 const DISTRICTS = [
   "Chilonzor",

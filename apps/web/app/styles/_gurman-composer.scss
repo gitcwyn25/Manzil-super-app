@@ -43,16 +43,34 @@
   }
 }
 
-/* Stage & Background */
+/* Stage & Background — fixed to escape the site layout header/main/footer */
 .gurman-stage {
-  position: relative;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
   width: 100vw;
   height: 100vh;
-  min-height: 100vh;
   overflow: hidden;
   background: #0a0d12;
   color: #ffffff;
   font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Spacer so the scroll container knows to reserve the height */
+.gurman-dedicated-page {
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Hide site header, footer, and mobile nav on the concierge page */
+body:has(.gurman-stage) {
+  overflow: hidden;
+
+  .site-root > header,
+  .site-root > footer,
+  .mobile-nav {
+    display: none !important;
+  }
 }
 
 .gurman-stage-bg {

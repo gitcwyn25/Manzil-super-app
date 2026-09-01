@@ -59,8 +59,8 @@ const csp = [
   // 'unsafe-inline' is required; dev additionally needs 'unsafe-eval' for HMR.
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} ${clerk} ${turnstile} ${vercel}`,
   `style-src 'self' 'unsafe-inline'`,
-  `img-src 'self' data: blob: https://img.clerk.com https://*.clerk.com ${r2Images} ${supabaseImages}`,
-  `font-src 'self' data:`,
+  `img-src 'self' data: blob: https://img.clerk.com https://*.clerk.com ${r2Images} ${supabaseImages} https://images.pexels.com https://*.cloudfront.net`,
+  `font-src 'self' data: https://*.cloudfront.net`,
   `connect-src 'self' ${apiOrigin} ${supabaseSources} ${clerk} https://clerk-telemetry.com ${vercel} ${sentry}${
     isDev ? " ws://localhost:* http://localhost:*" : ""
   }`,
