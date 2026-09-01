@@ -1,7 +1,8 @@
 import type { Locale } from "@manzil/shared";
 import type { Metadata } from "next";
-import { CinematicTashkent } from "../../../components/discover/cinematic-tashkent";
-import { TashkentCatalogSection } from "../../../components/discover/tashkent-catalog-section";
+import { Suspense } from "react";
+import { MarketplaceClient } from "../../../components/discover/marketplace-client";
+import { MarketplaceSkeletons } from "../../../components/discover/marketplace-states";
 import { JsonLd } from "../../../components/json-ld";
 import { getCategories, getHomeFeed, searchBusinesses } from "../../../lib/api";
 import { routeMetadata } from "../../../lib/seo";
@@ -17,7 +18,9 @@ export async function generateMetadata({
 }
 
 /**
- * Tashkent Discover Page — Cinematic Scroll Experience with Merged Events.
+ * Modern Local-Commerce Marketplace Discover Page
+ * Features: Omni-search hero, 9-category discovery strip, curated carousels,
+ * multi-dimensional filter sidebar, mobile bottom-sheet drawer, and compact Tashkent landmarks showcase.
  */
 export default async function DiscoverPage({
   params
@@ -27,31 +30,37 @@ export default async function DiscoverPage({
   const { locale } = await params;
 
   const [feed, categoriesRes, searchRes] = await Promise.all([
-    getHomeFeed(locale).catch(() => ({ businesses: [], occasions: [], lists: [], feedItems: [], socialActivities: [], sections: null })),
+    getHomeFeed(locale).catch(() => ({
+      businesses: [],
+      occasions: [],
+      lists: [],
+      feedItems: [],
+      socialActivities: [],
+      sections: null
+    })),
     getCategories().catch(() => []),
-    searchBusinesses("", "all").catch(() => ({ businesses: [] }))
+    searchBusinesses("", "all").catch(() => ({ businesses: [], categories: [] }))
   ]);
 
-  const businesses = searchRes.businesses && searchRes.businesses.length > 0 ? searchRes.businesses : feed.businesses;
-  const occasions = feed.occasions ?? [];
-  const categories = categoriesRes ?? [];
+  const businesses =
+    searchRes.businesses && searchRes.businesses.length > 0
+      ? searchRes.businesses
+      : feed.businesses && feed.businesses.length > 0
+      ? feed.businesses
+      : [];
+
+  const categories = categoriesRes && categoriesRes.length > 0 ? categoriesRes : [];
 
   return (
-    <div className="discover-cinema-page">
+    <>
       <JsonLd data={routeBreadcrumb(locale, ["home", "discover"])} />
-
-      <CinematicTashkent
-        businesses={businesses}
-        locale={locale}
-        occasions={occasions}
-      />
-
-      <TashkentCatalogSection
-        businesses={businesses}
-        categories={categories}
-        locale={locale}
-        occasions={occasions}
-      />
-    </div>
+      <Suspense fallback={<MarketplaceSkeletons />}>
+        <MarketplaceClient
+          categories={categories}
+          initialBusinesses={businesses}
+          locale={locale}
+        />
+      </Suspense>
+    </>
   );
 }
