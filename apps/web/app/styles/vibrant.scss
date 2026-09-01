@@ -386,3 +386,5 @@ h6 {
 .h6 {
   @include font-size($h6-font-size);
 }
+
+@import "discover-cinema";
