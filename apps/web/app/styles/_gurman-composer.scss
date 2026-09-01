@@ -1,0 +1,676 @@
+/* ==========================================================================
+   Gurman AI Hero Composer & Full Viewport Stage (Pixel-Faithful)
+   ========================================================================== */
+
+:root {
+  --u: min(0.06410256vw, 0.12400794vh);
+  --vu: 0.09920635vh;
+  --inset-top: 41;
+  --inset-bottom: 106;
+
+  /* Nav */
+  --brand-fs: 18.49;
+  --links-fs: 21.69;
+  --cta-fs: 15.70;
+
+  /* Hero */
+  --hero-gap: 51;
+  --h1-fs: 36.25;
+
+  /* Composer Card */
+  --card-w: 708;
+  --card-h: 143;
+  --card-r: 26;
+  --ph-fs: 9.97;
+  --chip-h: 30;
+  --chip-r: 9;
+  --chip-fs: 9.0;
+  --son-fs: 10.4;
+  --send-d: 35;
+}
+
+@supports (height: 100dvh) {
+  :root {
+    --u: min(0.06410256vw, 0.12400794dvh);
+    --vu: 0.09920635dvh;
+  }
+}
+
+@media (min-width: 1561px) {
+  :root {
+    --inset-top: 27;
+    --inset-bottom: 74;
+  }
+}
+
+/* Stage & Background */
+.gurman-stage {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  overflow: hidden;
+  background: #0a0d12;
+  color: #ffffff;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.gurman-stage-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.gurman-stage-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: brightness(0.72) contrast(1.05);
+}
+
+.gurman-stage-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 45%, rgba(10, 13, 18, 0.35) 0%, rgba(10, 13, 18, 0.75) 75%, #0a0d12 100%),
+              linear-gradient(to bottom, rgba(10, 13, 18, 0.25) 0%, rgba(10, 13, 18, 0.85) 85%, #0a0d12 100%);
+}
+
+/* Frame */
+.gurman-frame {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  padding: calc(var(--inset-top) * var(--vu)) calc(225 * var(--u)) calc(var(--inset-bottom) * var(--vu));
+  box-sizing: border-box;
+}
+
+/* Nav */
+.gurman-nav {
+  height: calc(43 * var(--u));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 10;
+}
+
+.gurman-brand {
+  display: flex;
+  align-items: center;
+  gap: calc(12 * var(--u));
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.gurman-mark {
+  width: calc(34 * var(--u));
+  height: calc(34 * var(--u));
+}
+
+.gurman-brand-name {
+  font-size: calc(var(--brand-fs) * var(--u));
+  font-weight: 500;
+  letter-spacing: -0.0154em;
+  transform: translateY(calc(1 * var(--u)));
+  text-shadow: 0 calc(1 * var(--u)) calc(10 * var(--u)) rgba(0, 0, 0, 0.3);
+}
+
+.gurman-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: calc(50 * var(--u));
+
+  a {
+    font-size: calc(var(--links-fs) * var(--u));
+    font-weight: 400;
+    letter-spacing: -0.0115em;
+    line-height: 1.2;
+    color: #ffffff;
+    text-decoration: none;
+    text-shadow: 0 calc(1 * var(--u)) calc(12 * var(--u)) rgba(0, 0, 0, 0.32);
+    transition: opacity 0.18s ease;
+
+    &:hover {
+      opacity: 0.72;
+    }
+  }
+}
+
+.gurman-cta {
+  width: calc(140 * var(--u));
+  height: calc(43 * var(--u));
+  border-radius: calc(12 * var(--u));
+  font-size: calc(var(--cta-fs) * var(--u));
+  font-weight: 520;
+  letter-spacing: -0.0127em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  text-decoration: none;
+  background: linear-gradient(180deg, #3d3d3f 0%, #1d1d20 100%);
+  box-shadow: inset 0 calc(1 * var(--u)) 0 rgba(255, 255, 255, 0.1), 0 calc(2 * var(--u)) calc(14 * var(--u)) rgba(0, 0, 0, 0.28);
+  transition: filter 0.2s ease, transform 0.1s ease;
+
+  span {
+    transform: translateY(calc(2 * var(--u)));
+  }
+
+  &:hover {
+    filter: brightness(1.16);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+/* Hero Content */
+.gurman-hero {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--hero-gap) * var(--vu));
+  padding-bottom: calc(4 * var(--vu));
+  position: relative;
+  z-index: 5;
+}
+
+.gurman-h1 {
+  font-size: calc(var(--h1-fs) * var(--u));
+  font-weight: 410;
+  line-height: 1.1;
+  letter-spacing: 0.0018em;
+  color: #ffffff;
+  text-align: center;
+  margin: 0;
+  text-shadow: 0 calc(2 * var(--u)) calc(22 * var(--u)) rgba(0, 0, 0, 0.3);
+}
+
+/* Composer Card */
+.gurman-composer-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gurman-card {
+  width: calc(var(--card-w) * var(--u));
+  height: calc(var(--card-h) * var(--u));
+  border-radius: calc(var(--card-r) * var(--u));
+  background: rgba(41, 41, 43, 0.955);
+  backdrop-filter: blur(calc(26 * var(--u))) saturate(112%);
+  -webkit-backdrop-filter: blur(calc(26 * var(--u))) saturate(112%);
+  box-shadow: inset 0 0 0 1px rgba(214, 228, 255, 0.14), 0 calc(22 * var(--u)) calc(60 * var(--u)) rgba(0, 0, 0, 0.3);
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* Input Placeholder Area */
+.gurman-ph-input {
+  position: absolute;
+  left: calc(27 * var(--u));
+  top: calc(33 * var(--u));
+  right: calc(24 * var(--u));
+  background: none;
+  border: none;
+  outline: none;
+  color: #ffffff;
+  font-size: calc(14 * var(--u));
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: 0.007em;
+
+  &::placeholder {
+    color: #8B8C8E;
+    font-size: calc(var(--ph-fs) * var(--u));
+  }
+}
+
+/* Toolbar Strip (.tools) */
+.gurman-tools {
+  position: absolute;
+  left: calc(19 * var(--u));
+  top: calc(92 * var(--u));
+  height: calc(30 * var(--u));
+  right: calc(-1 * var(--u));
+  display: flex;
+  align-items: center;
+}
+
+/* Left Chips */
+.gurman-chips {
+  display: flex;
+  align-items: center;
+  gap: calc(5.5 * var(--u));
+}
+
+.gurman-chip {
+  height: calc(var(--chip-h) * var(--u));
+  border-radius: calc(var(--chip-r) * var(--u));
+  font-size: calc(var(--chip-fs) * var(--u));
+  font-weight: 500;
+  color: #909093;
+  line-height: 1;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.088) 0%, rgba(255, 255, 255, 0.05) 45%, rgba(255, 255, 255, 0.038) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 0 calc(12 * var(--u));
+  display: inline-flex;
+  align-items: center;
+  gap: calc(4 * var(--u));
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  span {
+    transform: translateY(calc(2 * var(--u)));
+  }
+
+  &:hover {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.07));
+    color: #c8c8cb;
+  }
+}
+
+/* Right Cluster (.right) - Desktop Exact Positioning */
+.gurman-right {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  > * {
+    position: absolute;
+    pointer-events: auto;
+  }
+}
+
+.gurman-model {
+  left: calc(510.2 * var(--u));
+  top: calc(15.5 * var(--u));
+  font-size: calc(var(--son-fs) * var(--u));
+  font-weight: 400;
+  color: #98999C;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: calc(6.2 * var(--u));
+}
+
+.gurman-chevron {
+  width: calc(6.8 * var(--u));
+}
+
+.gurman-attach {
+  left: calc(599.15 * var(--u));
+  top: calc(10.14 * var(--u));
+  color: #A9AAAD;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.18s ease;
+
+  svg {
+    width: calc(19.79 * var(--u));
+  }
+
+  &:hover {
+    color: #ffffff;
+  }
+}
+
+.gurman-send {
+  left: calc(640 * var(--u));
+  top: calc(2 * var(--u));
+  width: calc(var(--send-d) * var(--u));
+  height: calc(var(--send-d) * var(--u));
+  border-radius: 50%;
+  background: linear-gradient(163deg, #FBBC94 0%, #F49D70 46%, #E88654 100%);
+  box-shadow: 0 calc(3 * var(--u)) calc(12 * var(--u)) rgba(210, 110, 60, 0.34);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: filter 0.2s ease, transform 0.1s ease;
+
+  svg {
+    width: calc(11.66 * var(--u));
+  }
+
+  &:hover {
+    filter: brightness(1.07);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.gurman-send-spin {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: gurmanSpin 0.6s linear infinite;
+}
+
+@keyframes gurmanSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* Results Dropdown */
+.gurman-results-panel {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 0;
+  right: 0;
+  background: rgba(24, 24, 27, 0.95);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 1.25rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+  max-height: 380px;
+  overflow-y: auto;
+  z-index: 50;
+  animation: gurmanPanelIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes gurmanPanelIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.gurman-results-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+  h4 {
+    margin: 0;
+    font-size: 0.9375rem;
+    font-weight: 800;
+    color: #00ffcb;
+  }
+}
+
+.gurman-results-close {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 1rem;
+  cursor: pointer;
+
+  &:hover {
+    color: #ffffff;
+  }
+}
+
+.gurman-results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.gurman-place-item {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 0.875rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #00ffcb;
+  }
+}
+
+.gurman-place-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}
+
+.gurman-place-name {
+  font-weight: 800;
+  color: #ffffff;
+  font-size: 0.875rem;
+}
+
+.gurman-place-rating {
+  font-size: 0.75rem;
+  color: #fbbf24;
+  font-weight: 700;
+}
+
+.gurman-place-type {
+  font-size: 0.6875rem;
+  color: #00ffcb;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.35rem;
+}
+
+.gurman-place-desc {
+  font-size: 0.75rem;
+  color: #cbd5e1;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Footer Proof */
+.gurman-proof {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(18 * var(--vu));
+  position: relative;
+  z-index: 5;
+}
+
+.gurman-proof-caption {
+  font-size: calc(14.01 * var(--u));
+  font-weight: 480;
+  letter-spacing: 0.0065em;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+  text-shadow: 0 calc(1 * var(--u)) calc(12 * var(--u)) rgba(0, 0, 0, 0.35);
+}
+
+.gurman-logos {
+  display: flex;
+  align-items: center;
+  gap: calc(62 * var(--u));
+}
+
+.gurman-logo-text {
+  font-size: calc(16 * var(--u));
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.75);
+  text-shadow: 0 calc(1 * var(--u)) calc(10 * var(--u)) rgba(0, 0, 0, 0.3);
+}
+
+/* ==========================================================================
+   Responsive Architectures
+   ========================================================================== */
+
+/* TABLET (600–1180 wide AND height >= 600) */
+@media (min-width: 600px) and (max-width: 1180px) and (min-height: 600px) {
+  :root {
+    --u: 1px;
+  }
+
+  .gurman-frame {
+    padding: clamp(24px, 3.4vh, 44px) clamp(28px, 4.2vw, 60px) clamp(26px, 4.4vh, 56px);
+  }
+
+  .gurman-h1 {
+    font-size: clamp(27px, 4.3vw, 44px);
+    line-height: 1.12;
+  }
+
+  .gurman-card {
+    width: min(100%, clamp(516px, 74vw, 760px));
+    height: auto;
+    margin-right: 0;
+    padding: clamp(15px, 1.9vw, 24px);
+    border-radius: clamp(17px, 2.1vw, 26px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(20px, 3.2vh, 44px);
+  }
+
+  .gurman-ph-input {
+    position: static;
+    font-size: clamp(11px, 1.35vw, 14px);
+    line-height: 1.4;
+  }
+
+  .gurman-tools {
+    position: static;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: clamp(10px, 1.4vw, 18px);
+  }
+
+  .gurman-chips {
+    gap: clamp(6px, 0.85vw, 10px);
+  }
+
+  .gurman-chip {
+    width: auto;
+    height: clamp(29px, 3.4vh, 34px);
+    padding: 0 clamp(7px, 1vw, 13px);
+    font-size: clamp(9.6px, 1.12vw, 12.5px);
+  }
+
+  .gurman-right {
+    position: static;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    gap: 0;
+
+    > * {
+      position: static;
+    }
+  }
+
+  .gurman-attach {
+    margin-left: clamp(9px, 1.4vw, 20px);
+  }
+
+  .gurman-send {
+    margin-left: clamp(9px, 1.3vw, 18px);
+    width: clamp(32px, 3.5vw, 38px);
+    height: clamp(32px, 3.5vw, 38px);
+  }
+}
+
+/* COMPACT / MOBILE (max-width: 599px) */
+@media (max-width: 599px), (max-height: 599px) and (max-width: 1180px) {
+  :root {
+    --u: 1px;
+  }
+
+  .gurman-frame {
+    padding: max(18px, env(safe-area-inset-top)) max(clamp(18px, 5.2vw, 40px), env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(clamp(18px, 5.2vw, 40px), env(safe-area-inset-left));
+  }
+
+  .gurman-links {
+    display: none;
+  }
+
+  .gurman-h1 {
+    width: 100%;
+    font-size: clamp(26px, 7vw, 40px);
+    line-height: 1.14;
+    letter-spacing: -0.012em;
+  }
+
+  .gurman-card {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 16px;
+    border-radius: 20px;
+  }
+
+  .gurman-ph-input {
+    position: static;
+    font-size: 13px;
+  }
+
+  .gurman-tools {
+    position: static;
+    height: auto;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .gurman-chips {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .gurman-chip {
+    height: 28px;
+    padding: 0 10px;
+    font-size: 11px;
+  }
+
+  .gurman-right {
+    position: static;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    > * {
+      position: static;
+    }
+  }
+
+  .gurman-attach {
+    margin-left: auto;
+  }
+
+  .gurman-send {
+    margin-left: 14px;
+    width: 36px;
+    height: 36px;
+  }
+}
