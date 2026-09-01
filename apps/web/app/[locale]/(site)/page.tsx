@@ -1,17 +1,19 @@
 import type { Locale } from "@manzil/shared";
 import type { Metadata } from "next";
 import { BentoBusinessGrid } from "../../components/home/bento-business-grid";
-import { FeatureTrio } from "../../components/home/feature-trio";
-import { HeroConcierge } from "../../components/home/hero-concierge";
+import { CleverBenefits } from "../../components/home/clever-benefits";
+import { CleverCtaBanner } from "../../components/home/clever-cta-banner";
+import { CleverFaq } from "../../components/home/clever-faq";
+import { CleverFeatures } from "../../components/home/clever-features";
+import { CleverHero } from "../../components/home/clever-hero";
+import { CleverPricing } from "../../components/home/clever-pricing";
+import { CleverProcess } from "../../components/home/clever-process";
+import { CleverTestimonials } from "../../components/home/clever-testimonials";
+import { CleverWaitlistCard } from "../../components/home/clever-waitlist-card";
 import { getHomeFeed } from "../../lib/api";
 import { getLandingCopy } from "../../lib/landing-copy";
 import { routeMetadata } from "../../lib/seo";
 
-/**
- * The home page had no metadata of its own, so it inherited the root layout's
- * hard-coded *Manzil Business* title and introduced the consumer product as
- * the owner product — the wrong-page-identity finding from the audit.
- */
 export async function generateMetadata({
   params
 }: {
@@ -22,14 +24,19 @@ export async function generateMetadata({
 }
 
 /**
- * Home — the Vibrant Marketplace AI-discovery landing (task A2).
+ * Home — Originkit "Clever" Template Architecture with Manzil Catalog & AI Grounding.
  *
- * Three movements: the green concierge hero (D6 — the one green brand
- * moment), the honest AI-concierge feature trio (D9 — replaces
- * AudienceFeatures; StoreBadges is removed, the app is unlaunched), and the
- * bento business grid built from real getHomeFeed data. The retired hero
- * carousel/Aperture/download sections have no counterpart in the approved
- * design.
+ * Full section sequence:
+ * 1. CleverHero: Avatar badge, headline, dual CTAs, trust perks, Canvas 2D background, chat card.
+ * 2. CleverBenefits: 4-card bento grid highlighting AI, verified reviews, speed, business reach.
+ * 3. CleverFeatures: Interactive tabbed switcher for Concierge, Smart Directory, and Business Hub.
+ * 4. CleverProcess: 3-step numbered workflow timeline.
+ * 5. BentoBusinessGrid: Real live business catalog feed from getHomeFeed(locale).
+ * 6. CleverPricing: 3-tier business pricing cards (Free / Pro / Enterprise).
+ * 7. CleverWaitlistCard: City expansion early-access interactive card.
+ * 8. CleverTestimonials: Customer & business partner ratings and quotes.
+ * 9. CleverFaq: Interactive collapsible Q&A accordion.
+ * 10. CleverCtaBanner: Final high-conversion bottom banner.
  */
 export default async function LandingPage({
   params
@@ -40,9 +47,6 @@ export default async function LandingPage({
   const copy = getLandingCopy(locale);
   const feed = await getHomeFeed(locale);
 
-  // Featured first, then recent arrivals, deduplicated — so the bento's large
-  // slot receives featured[0] ?? justJoined[0] (D10: live featured[] is empty
-  // today, and the grid must degrade rather than blank).
   const ranked = [
     ...(feed.sections?.featured ?? []),
     ...(feed.sections?.justJoined ?? [])
@@ -56,9 +60,16 @@ export default async function LandingPage({
         <span className="page-reveal-panel second" />
       </div>
 
-      <HeroConcierge copy={copy.hero} locale={locale} />
-      <FeatureTrio copy={copy.features} />
+      <CleverHero copy={copy.hero} locale={locale} />
+      <CleverBenefits copy={copy.benefits} />
+      <CleverFeatures copy={copy.features} locale={locale} />
+      <CleverProcess copy={copy.process} />
       <BentoBusinessGrid businesses={ranked} copy={copy.bento} locale={locale} />
+      <CleverPricing copy={copy.pricing} />
+      <CleverWaitlistCard copy={copy.waitlist} />
+      <CleverTestimonials copy={copy.testimonials} />
+      <CleverFaq copy={copy.faq} />
+      <CleverCtaBanner copy={copy.finalCta} />
     </>
   );
 }
