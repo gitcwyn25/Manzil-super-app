@@ -40,15 +40,12 @@ export default function Hero06Content() {
 
         {/* Title */}
         <h1 className="originkit-hero-06__title">
-          Qayerga borishni rejalashtiryapsiz?{" "}
-          <span className="originkit-hero-06__title-gradient">
-            Gurman AI topadi.
-          </span>
+          Qayerga borishni rejalashtiryapsiz? Gurman AI topadi.
         </h1>
 
         {/* Subtitle */}
         <p className="originkit-hero-06__desc">
-          Istagingizni tabiiy tilda yozing — Gurman AI Manzil katalogidagi tasdiqlangan
+          Istagingizni tabiiy tilda yozing, Gurman AI Manzil katalogidagi tasdiqlangan
           restoranlar, kafelar va xizmatlarni siz uchun saralaydi.
         </p>
 

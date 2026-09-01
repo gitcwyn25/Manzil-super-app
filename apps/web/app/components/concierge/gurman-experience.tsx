@@ -264,10 +264,10 @@ export function GurmanExperience({
               </h1>
               <p className="g-hero-subtitle">
                 {locale === "uz"
-                  ? "Istagingizni yozing — Gurman AI Manzil katalogidan sizga mos joylarni topadi."
+                  ? "Istagingizni yozing, Gurman AI Manzil katalogidan sizga mos joylarni topadi."
                   : locale === "ru"
-                  ? "Напишите ваши пожелания — Gurman подберет проверенные заведения из каталога."
-                  : "Describe what you want — Gurman AI finds verified spots from the Manzil catalogue."}
+                  ? "Напишите ваши пожелания, и Gurman подберет проверенные заведения из каталога."
+                  : "Describe what you want, and Gurman AI will find verified spots from the Manzil catalogue."}
               </p>
               <div className="g-trust-line">
                 <span>🛡️</span>

@@ -47,7 +47,7 @@ export const HeroContent = ({
           {...reveal(0.36)}
           className="pointer-events-auto w-full max-w-[312px] font-sans text-[14px] leading-normal tracking-[-0.56px] text-black/60 text-pretty ipad:max-w-none ipad:text-[15px] ipad:tracking-[-0.6px]"
         >
-          Tabiiy tilda yozing — Gurman AI Manzil katalogidan sizga mos restoran, kafe va xizmatlarni tavsiya qiladi.
+          Tabiiy tilda yozing: Gurman AI Manzil katalogidan sizga mos restoran, kafe va xizmatlarni tavsiya qiladi.
         </motion.p>
       </div>
 
