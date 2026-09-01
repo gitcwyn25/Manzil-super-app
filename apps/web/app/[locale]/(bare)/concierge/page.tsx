@@ -15,7 +15,8 @@ export async function generateMetadata({
 }
 
 /**
- * Dedicated Gurman AI Concierge Page — Pixel-Faithful Hero Composer with Tashkent Metro background.
+ * Dedicated Gurman AI Concierge Page.
+ * Lives in (bare) layout group — NO site header, footer, or mobile nav.
  */
 export default async function ConciergePage({
   params
@@ -24,9 +25,8 @@ export default async function ConciergePage({
 }) {
   const { locale } = await params;
   const breadcrumb = routeBreadcrumb(locale, ["home", "concierge"]);
-
   return (
-    <div className="gurman-dedicated-page">
+    <div className="gurman-bare-page">
       <JsonLd data={breadcrumb} />
       <GurmanHeroComposer locale={locale} />
     </div>
