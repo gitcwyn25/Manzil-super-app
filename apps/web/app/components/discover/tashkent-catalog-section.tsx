@@ -51,7 +51,7 @@ function getBusinessCover(b: BusinessPlatform): string {
   if (nameLower.includes("osh") || nameLower.includes("milliy") || nameLower.includes("plov") || nameLower.includes("taom") || b.categorySlug === "restaurants") {
     return CATEGORY_COVERS.restaurants;
   }
-  return CATEGORY_COVERS[b.categorySlug ?? ""] || "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80";
+  return CATEGORY_COVERS[b.categorySlug ?? ""] || "https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?auto=compress&cs=tinysrgb&w=800";
 }
 
 export function TashkentCatalogSection({

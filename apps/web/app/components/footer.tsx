@@ -138,7 +138,6 @@ export function Footer({ locale }: { locale: Locale }) {
   const navLinks = [
     { label: businessCopy.nav.discover, href: `/${locale}/discover` },
     { label: businessCopy.nav.concierge, href: `/${locale}/concierge` },
-    { label: businessCopy.nav.events, href: `/${locale}/occasions` },
     { label: businessCopy.nav.forBusiness, href: `/${locale}/business` },
     { label: businessCopy.footer.pricing, href: `/${locale}/business/pricing` },
     { label: businessCopy.footer.dashboard, href: `/${locale}/dashboard` },

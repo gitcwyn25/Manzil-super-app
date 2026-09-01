@@ -14,7 +14,6 @@ import { getBusinessCopy } from "../lib/business-copy";
 const links = [
   { key: "discover" as const, href: (locale: Locale) => `/${locale}/discover` },
   { key: "concierge" as const, href: (locale: Locale) => `/${locale}/concierge` },
-  { key: "events" as const, href: (locale: Locale) => `/${locale}/occasions` },
   { key: "forBusiness" as const, href: (locale: Locale) => `/${locale}/business` }
 ];
 
@@ -91,7 +90,6 @@ export function MobileSiteNav({ locale }: { locale: Locale }) {
     { key: "home" as const, href: `/${locale}`, label: copy.nav.home },
     { key: "discover" as const, href: `/${locale}/discover`, label: copy.nav.discover },
     { key: "concierge" as const, href: `/${locale}/concierge`, label: copy.nav.concierge },
-    { key: "events" as const, href: `/${locale}/occasions`, label: copy.nav.events },
     { key: "forBusiness" as const, href: `/${locale}/business`, label: copy.nav.forBusiness }
   ];
 
