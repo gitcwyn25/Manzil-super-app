@@ -65,7 +65,7 @@ const csp = [
     isDev ? " ws://localhost:* http://localhost:*" : ""
   }`,
   `worker-src 'self' blob:`,
-  `frame-src 'self' ${clerk} ${turnstile} ${vercel}`,
+  `frame-src 'self' ${clerk} ${turnstile} ${vercel} https://www.youtube.com https://www.youtube-nocookie.com`,
   `manifest-src 'self'`,
   // Upgrade http subresources to https in production only (would break the
   // local http://localhost API during development).
