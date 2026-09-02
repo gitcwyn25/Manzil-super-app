@@ -395,3 +395,7 @@ h6 {
 
 @import "gurman-experience";
 @import "docs";
+
+// Appearance is intentionally last: it must be able to retint both the
+// converted marketplace shell and the older global component recipes.
+@import "theme";
