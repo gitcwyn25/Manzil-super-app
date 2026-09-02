@@ -1,0 +1,357 @@
+/* footer-02 — Manzil footer with the original Tetris composition */
+
+@import url("https://fonts.googleapis.com/css2?family=Hedvig+Letters+Serif:opsz@12..24&display=swap");
+
+@theme {
+  --font-hedvig: "Hedvig Letters Serif", Georgia, ui-serif, serif;
+}
+
+@keyframes social-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@theme {
+  --animate-social-slide-up: social-slide-up 800ms cubic-bezier(0.215, 0.61, 0.355, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes social-slide-up {
+    from {
+      opacity: 0;
+      transform: none;
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* Manzil adaptation: preserve the original Footer 02 composition and
+   reference palette while replacing the brand copy and destinations. */
+.manzil-footer-02-shell {
+  background: #f6f3ea;
+}
+
+.manzil-footer-02-card {
+  color: #ffffff;
+  background: #212121;
+}
+
+.manzil-footer-02-card nav a {
+  color: rgb(255 255 255 / 0.82);
+}
+
+.manzil-footer-02-card nav a:hover {
+  color: #ffffff;
+}
+
+.manzil-footer-02-muted {
+  color: #c2c2c2;
+}
+
+.manzil-footer-02-social {
+  background: #292929;
+}
+
+.manzil-footer-02-board {
+  background: #212121;
+}
+
+/* Responsive sizing: the reference composition stays intact without forcing
+   a viewport-height footer or leaving oversized empty bands on small screens. */
+.manzil-footer-02-shell {
+  min-height: 0;
+  padding: 32px 12px 16px;
+}
+
+.manzil-footer-02-frame {
+  width: 100%;
+  max-width: 1440px;
+}
+
+.manzil-footer-02-card {
+  min-height: 0;
+  border-radius: 12px;
+}
+
+.manzil-footer-02-content {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 32px 24px 168px;
+}
+
+.manzil-footer-02-content > div:first-child {
+  gap: 24px;
+}
+
+.manzil-footer-02-card nav {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px 20px;
+}
+
+.manzil-footer-02-card nav > div {
+  gap: 12px;
+}
+
+.manzil-footer-02-card nav ul {
+  gap: 10px;
+}
+
+.manzil-footer-02-card nav a {
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.manzil-footer-02-tetris,
+.manzil-footer-02-board {
+  height: 150px;
+}
+
+.manzil-footer-02-wash {
+  height: 300px;
+  min-height: 0;
+}
+
+.manzil-footer-02-wash img {
+  top: -30%;
+  left: 50%;
+  width: 280%;
+  max-width: none;
+  height: auto;
+  transform: translateX(-50%) scale(1.1);
+  opacity: .9;
+  filter: blur(40px);
+}
+
+@media (min-width: 768px) {
+  .manzil-footer-02-shell {
+    padding: 56px 24px 24px;
+  }
+
+  .manzil-footer-02-content {
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 48px;
+    padding: 56px 56px 190px;
+  }
+
+  .manzil-footer-02-content > div:first-child {
+    width: 190px;
+    flex: 0 0 190px;
+    justify-content: space-between;
+    gap: 0;
+  }
+
+  .manzil-footer-02-card nav {
+    width: min(650px, 100%);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 32px;
+  }
+
+  .manzil-footer-02-card nav a {
+    font-size: 14px;
+  }
+
+  .manzil-footer-02-board {
+    height: 190px;
+  }
+
+  .manzil-footer-02-wash {
+    height: 360px;
+  }
+
+  .manzil-footer-02-wash img {
+    top: -40%;
+    width: 220%;
+    filter: blur(60px);
+  }
+}
+
+@media (min-width: 1200px) {
+  .manzil-footer-02-content {
+    padding: 72px 56px 210px;
+  }
+
+  .manzil-footer-02-board {
+    height: 210px;
+  }
+
+  .manzil-footer-02-wash {
+    height: 420px;
+  }
+
+  .manzil-footer-02-wash img {
+    top: -55%;
+    width: 200%;
+    transform: translateX(-50%) scale(1.25);
+    filter: blur(80px);
+  }
+}
+
+/* The installed section lives outside the app source tree, so keep the
+   structural primitives explicit as well as styling the Manzil palette. */
+section.manzil-footer-02-shell {
+  position: relative;
+  display: block;
+  min-height: 0 !important;
+  padding: 32px 12px 16px !important;
+}
+
+.manzil-footer-02-wash {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  z-index: 0;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.manzil-footer-02-frame {
+  position: relative;
+  z-index: 10;
+}
+
+.manzil-footer-02-card {
+  position: relative;
+  isolation: isolate;
+  z-index: 1;
+}
+
+.manzil-footer-02-content {
+  position: relative;
+  z-index: 10;
+}
+
+.manzil-footer-02-board {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 0;
+}
+
+.manzil-footer-02-content > div:first-child,
+.manzil-footer-02-content > div:first-child > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.manzil-footer-02-content > div:first-child {
+  width: 100%;
+  gap: 24px;
+}
+
+.manzil-footer-02-content > div:first-child > ul {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.manzil-footer-02-content > div:first-child li {
+  display: block;
+  margin: 0;
+}
+
+.manzil-footer-02-social {
+  display: inline-flex !important;
+  width: 40px !important;
+  height: 40px !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.manzil-footer-02-social > span {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+.manzil-footer-02-social svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.manzil-footer-02-card nav > div {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 12px;
+}
+
+.manzil-footer-02-card nav ul {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.manzil-footer-02-card nav li {
+  display: block;
+  margin: 0;
+}
+
+.manzil-footer-02-card nav a {
+  display: inline-flex;
+}
+
+@media (min-width: 768px) {
+  section.manzil-footer-02-shell {
+    padding: 56px 24px 24px !important;
+  }
+
+  .manzil-footer-02-content > div:first-child {
+    width: 190px;
+    flex: 0 0 190px;
+    justify-content: space-between;
+    gap: 0;
+  }
+}
+
+.manzil-footer-02-card nav {
+  row-gap: 20px !important;
+  column-gap: 20px !important;
+}
+
+.manzil-footer-02-card nav > div {
+  gap: 12px !important;
+}
+
+.manzil-footer-02-card nav > div > p {
+  margin: 0 !important;
+}
+
+.manzil-footer-02-card nav ul {
+  gap: 10px !important;
+}
+
+@media (min-width: 600px) and (max-width: 767.98px) {
+  .manzil-footer-02-card nav {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .manzil-footer-02-card nav > div {
+    gap: 10px !important;
+  }
+
+  .manzil-footer-02-card nav ul {
+    gap: 8px !important;
+  }
+}
