@@ -4,6 +4,7 @@ import { getLandingCopy } from "../lib/landing-copy";
 import { HeaderAuth, WorkspaceSwitch } from "./header-auth";
 import { LocaleSwitcher } from "./locale-switcher";
 import { SiteNav } from "./site-nav";
+import { ThemeSwitcher } from "./theme-switcher";
 
 const MOBILE_NAV_PANEL_ID = "mobile-nav-panel";
 const MENU_LABEL: Record<Locale, string> = { uz: "Menyu", ru: "Меню", en: "Menu" };
@@ -65,6 +66,7 @@ export function Header({ locale }: { locale: Locale }) {
           </form>
 
           <LocaleSwitcher locale={locale} />
+          <ThemeSwitcher locale={locale} />
           <WorkspaceSwitch locale={locale} />
           <HeaderAuth locale={locale} />
 
