@@ -2,11 +2,11 @@ import type { Locale } from "@manzil/shared";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { GurmanExperience } from "../../../components/concierge/gurman-experience";
+import { GurmanWorkspaceGuide } from "../../../components/gurman-workspace-guide";
 import { JsonLd } from "../../../components/json-ld";
 import { getHomeFeed, searchBusinesses } from "../../../lib/api";
 import { routeMetadata } from "../../../lib/seo";
 import { routeBreadcrumb } from "../../../lib/structured-data";
-import { Section15Hero } from "../../../../../../components/originkit/ui/hero-06/section-15-hero";
 
 export async function generateMetadata({
   params
@@ -50,19 +50,13 @@ export default async function ConciergePage({
       : [];
 
   return (
-    <div className="gurman-bare-page">
+    <div className="gurman-bare-page gurman-concierge-page">
       <JsonLd data={breadcrumb} />
+      <GurmanWorkspaceGuide locale={locale} />
 
-      {/* Originkit Hero 06 — full-viewport spiral + concentric rings + lens visual */}
-      <Section15Hero locale={locale} />
-
-      {/* Workstation — 2-column discovery UI; targeted by Hero CTA scroll */}
-      <div id="gurman-workstation">
+      <div className="gurman-workspace-entry" id="gurman-workstation">
         <Suspense fallback={null}>
-          <GurmanExperience
-            catalogBusinesses={businesses}
-            locale={locale}
-          />
+          <GurmanExperience catalogBusinesses={businesses} locale={locale} />
         </Suspense>
       </div>
     </div>
