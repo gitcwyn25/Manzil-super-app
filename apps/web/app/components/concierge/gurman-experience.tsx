@@ -6,6 +6,8 @@ import { useEffect, useMemo, useState } from "react";
 import { GurmanDetailDrawer } from "./gurman-detail-drawer";
 import { GurmanRecommendationCard, type GurmanRecommendation } from "./gurman-recommendation-card";
 import { GurmanSavedDrawer } from "./gurman-saved-drawer";
+import { ThemeSwitcher } from "../theme-switcher";
+import ScrollHighlight from "../../../../../components/originkit/ui/scroll-text-highlight";
 import { GurmanSearchingState } from "./gurman-searching-state";
 
 const QUICK_CHIPS = [
@@ -238,6 +240,7 @@ export function GurmanExperience({
             <div className="g-lang-pill">
               <span className="g-lang-pill__active">{locale.toUpperCase()}</span>
             </div>
+            <ThemeSwitcher locale={locale} />
           </nav>
         </div>
       </header>
@@ -458,6 +461,25 @@ export function GurmanExperience({
                         ? "Заведения подобраны с учетом атмосферы, бюджета и формата встречи."
                         : "Selections are tailored to your stated mood, budget, and group size."}
                     </p>
+                    <ScrollHighlight
+                      className="g-results-highlight"
+                      containerStyle={{ padding: 0 }}
+                      dimColor="rgba(255, 255, 255, 0.42)"
+                      font={{
+                        color: "rgba(255, 255, 255, 0.42)",
+                        fontFamily: "var(--font-data), ui-monospace, monospace",
+                        fontSize: "0.7rem",
+                        lineHeight: 1.4,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.08em"
+                      }}
+                      highlightColor="#6cf8bb"
+                      scrollEnd="bottom 55%"
+                      scrollStart="top 85%"
+                      spacer={false}
+                      splitBy="words"
+                      text={locale === "uz" ? "Har bir joy katalogdagi haqiqiy yozuv bilan bog'langan." : locale === "ru" ? "Каждое место связано с реальной записью каталога." : "Every place is tied to a real catalogue record."}
+                    />
                   </div>
                   <button
                     className="g-reset-link"
