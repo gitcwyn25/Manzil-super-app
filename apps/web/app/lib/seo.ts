@@ -144,6 +144,20 @@ export const ROUTE_SEO = {
       en: "Describe what you are looking for in your own words. Gurman AI recommends real listed places grounded in real reviews."
     }
   },
+  gurman: {
+    path: "/gurman",
+    absoluteTitle: true,
+    title: {
+      uz: "Gurman AI — Toshkentdagi keyingi rejangiz",
+      ru: "Gurman AI — ваш следующий план в Ташкенте",
+      en: "Gurman AI — plan your next experience in Tashkent"
+    },
+    description: {
+      uz: "Gurman AI ga istagingizni ayting. U Manzil katalogidagi haqiqiy joylarni saralab, nima uchun mosligini tushuntiradi.",
+      ru: "Расскажите Gurman AI о своём плане. Он подберёт реальные места из каталога Manzil и объяснит свой выбор.",
+      en: "Tell Gurman AI what you want to do. It surfaces real places from the Manzil catalogue and explains why they fit."
+    }
+  },
   lists: {
     path: "/lists",
     title: {
@@ -301,6 +315,7 @@ export const CRUMB_LABEL = {
   home: { uz: "Bosh sahifa", ru: "Главная", en: "Home" },
   discover: { uz: "Kashfiyot", ru: "Поиск", en: "Discover" },
   concierge: { uz: "Concierge", ru: "Concierge", en: "Concierge" },
+  gurman: { uz: "Gurman AI", ru: "Gurman AI", en: "Gurman AI" },
   lists: { uz: "Ro'yxatlar", ru: "Списки", en: "Lists" },
   occasions: { uz: "Voqealar", ru: "Поводы", en: "Occasions" },
   business: { uz: "Biznes", ru: "Бизнес", en: "Business" },

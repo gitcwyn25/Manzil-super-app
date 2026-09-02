@@ -13,7 +13,7 @@ import { getBusinessCopy } from "../lib/business-copy";
 // workspace is reached through the signed-in switch in the header instead.
 const links = [
   { key: "discover" as const, href: (locale: Locale) => `/${locale}/discover` },
-  { key: "concierge" as const, href: (locale: Locale) => `/${locale}/concierge` },
+  { key: "concierge" as const, href: (locale: Locale) => `/${locale}/gurman` },
   { key: "docs" as const, href: (locale: Locale) => `/${locale}/docs` },
   { key: "forBusiness" as const, href: (locale: Locale) => `/${locale}/business` }
 ];
@@ -90,7 +90,7 @@ export function MobileSiteNav({ locale }: { locale: Locale }) {
   const mobileLinks = [
     { key: "home" as const, href: `/${locale}`, label: copy.nav.home },
     { key: "discover" as const, href: `/${locale}/discover`, label: copy.nav.discover },
-    { key: "concierge" as const, href: `/${locale}/concierge`, label: copy.nav.concierge },
+    { key: "concierge" as const, href: `/${locale}/gurman`, label: copy.nav.concierge },
     { key: "forBusiness" as const, href: `/${locale}/business`, label: copy.nav.forBusiness }
   ];
 
