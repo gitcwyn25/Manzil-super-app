@@ -1002,3 +1002,117 @@ nav.mobile-nav a {
     }
   }
 }
+
+// ---------------------------------------------------------------------------
+// Final responsive polish: compact header controls and full-width small-screen
+// chrome. These rules intentionally come last so they beat legacy Bootstrap
+// container and theme defaults without changing page content geometry.
+// ---------------------------------------------------------------------------
+
+.clever-nav-wrapper .clever-nav-row {
+  min-height: 64px;
+}
+
+.clever-nav-wrapper .clever-brand {
+  gap: 8px;
+}
+
+.clever-nav-wrapper .clever-brand .site-nav__logo {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+}
+
+.clever-nav-wrapper .clever-brand .site-nav__logo::after {
+  inset: 8px 8px 0;
+}
+
+.clever-nav-wrapper .clever-brand-text {
+  font-size: 1.1rem;
+}
+
+.clever-nav-wrapper .clever-nav-actions {
+  gap: 8px;
+}
+
+.clever-nav-wrapper .site-nav__lang .lang-button {
+  min-height: 36px;
+  padding: 6px 9px;
+  font-size: .88rem;
+}
+
+.clever-nav-wrapper .site-nav__lang .lang-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.clever-nav-wrapper .theme-button {
+  width: 36px;
+  height: 36px;
+}
+
+.clever-nav-wrapper .mobile-nav-toggle {
+  width: 36px;
+  height: 36px;
+}
+
+.clever-nav-wrapper .header-signin {
+  color: #334155 !important;
+  font-size: .88rem;
+  font-weight: 600;
+}
+
+[data-theme="night"] .clever-nav-wrapper .header-signin {
+  color: #c8ddda !important;
+}
+
+@media (max-width: 767.98px) {
+  .clever-nav-wrapper .clever-nav-row,
+  .clever-nav-wrapper .site-nav__row {
+    min-height: 56px;
+  }
+
+  .clever-nav-wrapper .container.site-nav__row {
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+    padding-inline: 12px;
+  }
+
+  .clever-nav-wrapper .clever-brand .site-nav__logo {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+  }
+
+  .clever-nav-wrapper .clever-brand .site-nav__logo::after {
+    inset: 7px 7px 0;
+  }
+
+  .clever-nav-wrapper .clever-brand-text {
+    font-size: 1rem;
+  }
+
+  .clever-nav-wrapper .site-nav__lang .lang-button {
+    min-height: 34px;
+    padding: 5px 7px;
+    font-size: .82rem;
+  }
+
+  .clever-nav-wrapper .site-nav__lang .lang-button svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .clever-nav-wrapper .theme-button,
+  .clever-nav-wrapper .mobile-nav-toggle {
+    width: 34px;
+    height: 34px;
+  }
+}
+
+@media (max-width: 520px) {
+  .clever-nav-wrapper .header-signin {
+    display: none;
+  }
+}
