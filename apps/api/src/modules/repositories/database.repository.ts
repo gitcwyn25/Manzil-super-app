@@ -26,6 +26,7 @@ import type {
   Review as PrismaReview,
   User
 } from "@prisma/client";
+import { PUBLICLY_VISIBLE_BUSINESS } from "../business-visibility";
 import { CacheService } from "../cache/cache.service";
 import { PrismaService } from "../prisma.service";
 import { writeAudit } from "../console/audit.util";
@@ -54,15 +55,13 @@ const CACHE_TTL = {
  * status column and nothing else: the listing stayed in search, in the
  * directory, and on its own URL.
  *
- * Same rule the home feed, the public photo gallery and the Gurman retriever
- * already apply (`gurman.retriever.ts` exports the identical shape as
- * `VISIBLE_BUSINESS_WHERE`); duplicated here rather than imported so the core
- * repository does not depend on a feature module.
+ * Defined once in `../business-visibility` and imported by every public read
+ * path. It used to be copied into three files, which is how it reached three
+ * of five paths — the photo gallery and cover loader still served a suspended
+ * business (SECURITY-AUDIT F-1). The shared module depends on nothing, so the
+ * core repository importing it introduces no feature-module coupling.
  */
-const PUBLICLY_VISIBLE = {
-  status: { not: "suspended" },
-  mergedIntoId: null
-} as const;
+const PUBLICLY_VISIBLE = PUBLICLY_VISIBLE_BUSINESS;
 
 type BusinessWithCategory = PrismaBusiness & {
   category: PrismaCategory;

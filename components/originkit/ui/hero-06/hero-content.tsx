@@ -39,15 +39,15 @@ export const HeroContent = ({
           {...reveal(0.28)}
           className="pointer-events-auto w-full max-w-[370px] font-helvetica-neue text-[30px] desktop-sm:text-[38px] font-medium leading-tight tracking-[-1.28px] text-balance ipad:max-w-[423px] ipad:text-[38px] ipad:tracking-[-1.6px]"
         >
-          <span className="text-black/40">Toshkentdagi Sara Joylar. </span>
-          <span className="text-black">Gurman AI Topadi.</span>
+          <span className="text-black/40">Toshkentdagi sara joylar. </span>
+          <span className="text-black">Gurman AI topadi.</span>
         </motion.h1>
 
         <motion.p
           {...reveal(0.36)}
           className="pointer-events-auto w-full max-w-[312px] font-sans text-[14px] leading-normal tracking-[-0.56px] text-black/60 text-pretty ipad:max-w-none ipad:text-[15px] ipad:tracking-[-0.6px]"
         >
-          Tabiiy tilda yozing: Gurman AI Manzil katalogidan sizga mos restoran, kafe va xizmatlarni tavsiya qiladi.
+          Tabiiy tilda yozing: Gurman AI Manzil katalogidan sizga mos restoran, kafe va xizmatlarni saralaydi.
         </motion.p>
       </div>
 
@@ -59,11 +59,12 @@ export const HeroContent = ({
           variant="primary"
           aria-label="Tavsiya olish"
           onClick={() => {
-            window.location.href = "/uz/concierge";
+            const el = document.getElementById("gurman-workstation");
+            el?.scrollIntoView({ behavior: "smooth", block: "start" });
           }}
           className="w-full sm:w-auto"
         >
-          Tavsiya olish →
+          Tavsiya olish
         </Button>
 
         <Button

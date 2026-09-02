@@ -14,6 +14,7 @@ import { getBusinessCopy } from "../lib/business-copy";
 const links = [
   { key: "discover" as const, href: (locale: Locale) => `/${locale}/discover` },
   { key: "concierge" as const, href: (locale: Locale) => `/${locale}/concierge` },
+  { key: "docs" as const, href: (locale: Locale) => `/${locale}/docs` },
   { key: "forBusiness" as const, href: (locale: Locale) => `/${locale}/business` }
 ];
 
@@ -32,7 +33,7 @@ export function SiteNav({ locale }: { locale: Locale }) {
         const active = pathname === href || pathname.startsWith(`${href}/`);
         return (
           <Link className={active ? "active" : undefined} href={href} key={link.key}>
-            {copy.nav[link.key]}
+            {link.key === "docs" ? (locale === "uz" ? "Hujjatlar" : locale === "ru" ? "Документы" : "Docs") : copy.nav[link.key as keyof typeof copy.nav]}
           </Link>
         );
       })}

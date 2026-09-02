@@ -136,6 +136,8 @@ export function Footer({ locale }: { locale: Locale }) {
   const t = FOOTER_DOWNLOAD_TEXT[locale] ?? FOOTER_DOWNLOAD_TEXT.uz;
 
   const navLinks = [
+    { label: locale === "uz" ? "Hujjatlar" : locale === "ru" ? "Документы" : "Docs", href: `/${locale}/docs` },
+    { label: locale === "uz" ? "Maxfiylik" : locale === "ru" ? "Конфиденциальность" : "Privacy", href: `/${locale}/legal/privacy` },
     { label: businessCopy.nav.discover, href: `/${locale}/discover` },
     { label: businessCopy.nav.concierge, href: `/${locale}/concierge` },
     { label: businessCopy.nav.forBusiness, href: `/${locale}/business` },

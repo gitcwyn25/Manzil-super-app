@@ -101,6 +101,14 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@manzil/shared"],
+  webpack(config) {
+    config.resolve.alias = {
+      ...(config.resolve.alias ?? {}),
+      // Resolve monorepo-root Originkit components from apps/web @/ alias
+      "@/components/originkit": require("path").resolve(__dirname, "../../components/originkit"),
+    };
+    return config;
+  },
   // Never ship the original sources to the browser. Sentry uploads maps at
   // build time and deletes them from the bundle (see `sourcemaps` below), so
   // stack traces stay readable in monitoring without being readable in

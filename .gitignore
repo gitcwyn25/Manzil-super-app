@@ -43,3 +43,4 @@ blob-report/
 
 # Playwright auth state (contains a real session cookie)
 tests/e2e/.auth/
+.originkit/

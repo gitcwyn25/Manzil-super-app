@@ -1,3 +1,4 @@
+import { PUBLICLY_VISIBLE_BUSINESS } from "../business-visibility";
 import type { PrismaService } from "../prisma.service";
 
 /**
@@ -37,7 +38,10 @@ export async function getBusinessCoversBySlug(
     where: {
       isCover: true,
       moderationStatus: "approved",
-      business: { slug: { in: uniqueSlugs } }
+      // The business predicate matters as much as the moderation one: an
+      // approved cover belonging to a suspended listing was still being served
+      // here after that listing had been taken down (SECURITY-AUDIT F-1).
+      business: { slug: { in: uniqueSlugs }, ...PUBLICLY_VISIBLE_BUSINESS }
     },
     select: { publicUrl: true, business: { select: { slug: true } } }
   });
