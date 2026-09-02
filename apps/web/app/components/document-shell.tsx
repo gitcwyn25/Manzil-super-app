@@ -28,10 +28,20 @@ export function DocumentShell({
   return (
     <html className={fontVariables} lang={lang} suppressHydrationWarning>
       <body suppressHydrationWarning>
-        {/* Progressive enhancement gate: reveal start-states apply only when
-            JS is present, so content is never hidden for no-JS / crawlers. */}
+        {/* Restore appearance before paint so Night mode does not flash Day mode.
+            The provider takes over afterwards and listens for System changes. */}
         <script
-          dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }}
+          dangerouslySetInnerHTML={{
+            __html: `try {
+              var p = localStorage.getItem("manzil-theme");
+              p = p === "day" || p === "night" || p === "system" ? p : "system";
+              var t = p === "system" && matchMedia("(prefers-color-scheme: dark)").matches ? "night" : p === "system" ? "day" : p;
+              document.documentElement.dataset.theme = t;
+              document.documentElement.dataset.themePreference = p;
+              document.documentElement.style.colorScheme = t === "night" ? "dark" : "light";
+            } catch (e) {}
+            document.documentElement.classList.add("js");`
+          }}
         />
         {/* Safety net for the JS-disabled path: Framer Motion inlines the
             hidden start-state (opacity:0) during SSR, so without this a
