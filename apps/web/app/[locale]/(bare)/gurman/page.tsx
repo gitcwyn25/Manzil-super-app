@@ -25,7 +25,8 @@ export async function generateMetadata({
  * The page follows the product narrative: explain the intent-first experience,
  * show the evidence and trust model, then let visitors try the existing
  * catalogue workstation. Future capabilities are labelled as roadmap items in
- * the landing copy rather than presented as shipped functionality.
+ * the landing copy rather than presented as shipped functionality. This page
+ * is statically generated for all three supported locales.
  */
 export default async function GurmanLandingPage({
   params
