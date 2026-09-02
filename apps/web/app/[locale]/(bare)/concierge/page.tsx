@@ -1,10 +1,12 @@
 import type { Locale } from "@manzil/shared";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { GurmanExperience } from "../../../components/concierge/gurman-experience";
 import { JsonLd } from "../../../components/json-ld";
 import { getHomeFeed, searchBusinesses } from "../../../lib/api";
 import { routeMetadata } from "../../../lib/seo";
 import { routeBreadcrumb } from "../../../lib/structured-data";
+import { Section15Hero } from "../../../../../../components/originkit/ui/hero-06/section-15-hero";
 
 export async function generateMetadata({
   params
@@ -17,9 +19,8 @@ export async function generateMetadata({
 
 /**
  * Gurman AI 2.0 — Local Discovery & Recommendation Workstation.
- * Features: 2-column layout (42%/58%), natural language request composer,
- * structured intent criteria extraction, 3-stage searching status, curated recommendations
- * with transparent "Why Recommended" reasoning, and shortlist/detail drawers.
+ * Layout: Originkit Hero 06 spiral/rings visual full-viewport hero,
+ * followed by the 2-column discovery workstation.
  */
 export default async function ConciergePage({
   params
@@ -51,10 +52,19 @@ export default async function ConciergePage({
   return (
     <div className="gurman-bare-page">
       <JsonLd data={breadcrumb} />
-      <GurmanExperience
-        catalogBusinesses={businesses}
-        locale={locale}
-      />
+
+      {/* Originkit Hero 06 — full-viewport spiral + concentric rings + lens visual */}
+      <Section15Hero locale={locale} />
+
+      {/* Workstation — 2-column discovery UI; targeted by Hero CTA scroll */}
+      <div id="gurman-workstation">
+        <Suspense fallback={null}>
+          <GurmanExperience
+            catalogBusinesses={businesses}
+            locale={locale}
+          />
+        </Suspense>
+      </div>
     </div>
   );
 }

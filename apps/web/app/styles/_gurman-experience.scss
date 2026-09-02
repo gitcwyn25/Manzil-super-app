@@ -1442,3 +1442,180 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* =====================================================================
+   OriginKit Hero 06 adaptation — Gurman AI
+   The template's concentric composition becomes a map-search field: each
+   ring is the widening radius of a real Tashkent recommendation, and the
+   gold points are places returned from the catalogue.  This deliberately
+   shares Manzil's deep teal and brass rather than the template's cream.
+   ===================================================================== */
+.gurman-orbit-hero {
+  --orbit-deep: #063f43;
+  --orbit-ink: #eaf4ed;
+  --orbit-muted: #b4d0c6;
+  --orbit-gold: #dfb668;
+  --orbit-gold-ink: #172b2d;
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  min-height: min(780px, 100svh);
+  overflow: hidden;
+  background: var(--orbit-deep);
+  color: var(--orbit-ink);
+}
+
+.gurman-orbit-hero__nav {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: min(100% - 2.5rem, 82rem);
+  margin: 0 auto;
+  padding-block: 1.25rem;
+  border-bottom: 1px solid rgb(234 244 237 / .25);
+}
+
+.gurman-orbit-hero__brand,
+.gurman-orbit-hero__catalogue {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  color: inherit;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.gurman-orbit-hero__catalogue {
+  min-height: 2.75rem;
+  padding-inline: .9rem;
+  border: 1px solid rgb(234 244 237 / .45);
+  border-radius: .35rem;
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: .875rem;
+  transition: background-color .18s ease, color .18s ease;
+}
+
+.gurman-orbit-hero__catalogue:hover { background: var(--orbit-ink); color: var(--orbit-deep); }
+.gurman-orbit-hero__catalogue:focus-visible,
+.gurman-orbit-hero__primary:focus-visible,
+.gurman-orbit-hero__secondary:focus-visible,
+.gurman-orbit-hero__brand:focus-visible { outline: 3px solid var(--orbit-gold); outline-offset: 4px; }
+
+.gurman-orbit-hero__arch {
+  width: 1.4rem;
+  height: 1.4rem;
+  border: 3px solid var(--orbit-gold);
+  border-bottom: 0;
+  border-radius: 1.4rem 1.4rem 0 0;
+}
+
+.gurman-orbit-hero__content {
+  position: relative;
+  z-index: 2;
+  align-self: center;
+  width: min(100% - 2.5rem, 47rem);
+  margin: 0 auto;
+  padding-block: clamp(5rem, 13vh, 8.5rem);
+  text-align: center;
+}
+
+.gurman-orbit-hero__note {
+  margin: 0 0 1.25rem;
+  color: var(--orbit-gold);
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: .82rem;
+  font-weight: 750;
+}
+
+.gurman-orbit-hero h1 {
+  margin: 0;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: clamp(2.85rem, 6.6vw, 5.85rem);
+  font-weight: 750;
+  line-height: .98;
+  letter-spacing: -.035em;
+  text-wrap: balance;
+}
+
+.gurman-orbit-hero h1 span,
+.gurman-orbit-hero h1 strong { display: block; }
+.gurman-orbit-hero h1 strong { color: var(--orbit-gold); font-weight: inherit; }
+
+.gurman-orbit-hero__body {
+  max-width: 55ch;
+  margin: 1.5rem auto 0;
+  color: var(--orbit-muted);
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.gurman-orbit-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .75rem;
+  margin-top: 2rem;
+}
+
+.gurman-orbit-hero__primary,
+.gurman-orbit-hero__secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding-inline: 1.1rem;
+  border-radius: .35rem;
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: .9rem;
+  font-weight: 750;
+  text-decoration: none;
+  transition: transform .18s ease, background-color .18s ease, border-color .18s ease;
+}
+
+.gurman-orbit-hero__primary { gap: .6rem; background: var(--orbit-gold); color: var(--orbit-gold-ink); }
+.gurman-orbit-hero__secondary { border: 1px solid rgb(234 244 237 / .5); color: var(--orbit-ink); }
+.gurman-orbit-hero__primary:hover,
+.gurman-orbit-hero__secondary:hover { transform: translateY(-2px); }
+.gurman-orbit-hero__secondary:hover { background: rgb(234 244 237 / .1); border-color: var(--orbit-ink); }
+
+.gurman-orbit-hero__proof {
+  display: inline-flex;
+  gap: .5rem;
+  align-items: center;
+  margin: 1.5rem 0 0;
+  color: var(--orbit-muted);
+  font-size: .78rem;
+}
+.gurman-orbit-hero__proof span { color: var(--orbit-gold); font-size: .55rem; }
+
+.gurman-orbit-hero__rings { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
+.gurman-orbit-hero__ring { position: absolute; top: 52%; left: 50%; border: 1px solid rgb(234 244 237 / .27); border-radius: 50%; transform: translate(-50%, -50%); }
+.gurman-orbit-hero__ring--outer { width: min(116vw, 92rem); aspect-ratio: 1; }
+.gurman-orbit-hero__ring--middle { width: min(76vw, 61rem); aspect-ratio: 1; border-color: rgb(223 182 104 / .45); animation: gurman-orbit-spin 42s linear infinite; }
+.gurman-orbit-hero__ring--inner { width: min(40vw, 32rem); aspect-ratio: 1; border-color: rgb(234 244 237 / .38); animation: gurman-orbit-spin 27s linear infinite reverse; }
+.gurman-orbit-hero__pin { position: absolute; width: .65rem; aspect-ratio: 1; border-radius: 50%; background: var(--orbit-gold); box-shadow: 0 0 0 5px rgb(223 182 104 / .18); }
+.gurman-orbit-hero__pin--one { top: 17%; left: 22%; }
+.gurman-orbit-hero__pin--two { top: 69%; right: 18%; }
+.gurman-orbit-hero__pin--three { right: 32%; bottom: 15%; width: .43rem; background: var(--orbit-ink); box-shadow: 0 0 0 4px rgb(234 244 237 / .13); }
+
+@keyframes gurman-orbit-spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+@media (max-width: 640px) {
+  .gurman-orbit-hero { min-height: 42rem; }
+  .gurman-orbit-hero__nav { width: min(100% - 1.5rem, 82rem); }
+  .gurman-orbit-hero__content { width: min(100% - 2rem, 47rem); }
+  .gurman-orbit-hero__ring--outer { width: 138vw; }
+  .gurman-orbit-hero__ring--middle { width: 105vw; }
+  .gurman-orbit-hero__ring--inner { width: 66vw; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gurman-orbit-hero__ring { animation: none; }
+  .gurman-orbit-hero__primary:hover,
+  .gurman-orbit-hero__secondary:hover { transform: none; }
+}
