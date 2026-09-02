@@ -61,3 +61,32 @@
 @theme {
   --animate-ring-rotate: ring-rotate 32s linear infinite;
 }
+
+/* originkit:features-03 */
+/* components/originkit/process-01.css */
+@theme {
+  --font-clash: "Clash Grotesk", Inter, ui-sans-serif, sans-serif;
+  --font-instrument-tight: "Instrument Sans", Inter, sans-serif;
+}
+
+@theme {
+  --animate-phone-slide-up: phone-slide-up 500ms cubic-bezier(0.215, 0.61, 0.355, 1) both;
+}
+
+@theme {
+  --animate-phone-flip-in-x: phone-flip-in-x 600ms cubic-bezier(0.215, 0.61, 0.355, 1) both;
+}
+
+@theme {
+  --animate-page-reveal: page-reveal 500ms cubic-bezier(0.215, 0.61, 0.355, 1) both;
+}
+
+/* originkit:footer-02 */
+/* components/originkit/footer-02.css */
+@theme {
+  --font-hedvig: "Hedvig Letters Serif", Georgia, ui-serif, serif;
+}
+
+@theme {
+  --animate-social-slide-up: social-slide-up 800ms cubic-bezier(0.215, 0.61, 0.355, 1) both;
+}
