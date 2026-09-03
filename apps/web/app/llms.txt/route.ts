@@ -53,7 +53,7 @@ Every page exists at three locale-prefixed URLs: \`/uz/...\` (canonical default)
 ## For business owners
 
 - [Manzil Business](${SITE_URL}/uz/business): what the owner-facing product does.
-- [Pricing](${SITE_URL}/uz/business/pricing): Starter, Growth and Premium plans.
+- [Pricing](${SITE_URL}/uz/business/pricing): Free, Pro and Max plans; paid-plan prices are served from the active plan catalogue.
 
 ## Machine-readable
 

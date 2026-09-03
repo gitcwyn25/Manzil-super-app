@@ -301,7 +301,7 @@ const landing: Record<string, LandingCopy> = {
       tiers: [
         {
           id: "free",
-          name: "Boshlang'ich",
+          name: "Free",
           tagline: "Katalogda paydo bo'lish va asosiy ma'lumotlarni ko'rsatish uchun.",
           price: "0 so'm",
           period: "doimiy bepul",
@@ -317,13 +317,13 @@ const landing: Record<string, LandingCopy> = {
         },
         {
           id: "pro",
-          name: "Biznes Pro",
+          name: "Pro",
           tagline: "Ko'proq mijoz jalb qilish va o'z sohasida yetakchi bo'lish uchun.",
-          price: "490,000",
-          period: "so'm / oy",
+          price: "Tez orada",
+          period: "narx e'lon qilinadi",
           popular: true,
           features: [
-            "Boshlang'ich tarifidagi barcha imkoniyatlar",
+            "Free tarifidagi barcha imkoniyatlar",
             "Tasdiqlangan 'Verified' ko'k nishon",
             "Qidiruv natijalarida yuqori o'rinlar",
             "Gurman AI konsyerj tavsiyalarida ustunlik",
@@ -334,13 +334,13 @@ const landing: Record<string, LandingCopy> = {
           ctaHref: "/uz/business/register?plan=pro"
         },
         {
-          id: "enterprise",
-          name: "Premium Hamkor",
+          id: "max",
+          name: "Max",
           tagline: "Tarmoqli restoranlar va yirik xizmat ko'rsatuvchilar uchun.",
-          price: "1,200,000",
-          period: "so'm / oy",
+          price: "Tez orada",
+          period: "narx e'lon qilinadi",
           features: [
-            "Biznes Pro dagi barcha imkoniyatlar",
+            "Pro rejasidagi barcha imkoniyatlar",
             "Bosh sahifada maxsus banner joylashuvi",
             "Eksklyuziv promo-aksiyalar e'loni",
             "Bir nechta filiallarni yagona boshqarish",
@@ -348,7 +348,7 @@ const landing: Record<string, LandingCopy> = {
             "Shaxsiy brending va foto-suratga olish"
           ],
           cta: "Biz bilan bog'lanish",
-          ctaHref: "/uz/business/register?plan=enterprise"
+          ctaHref: "/uz/business/register?plan=max"
         }
       ]
     },
@@ -419,7 +419,7 @@ const landing: Record<string, LandingCopy> = {
         {
           question: "Biznesimni Manzilga qo'shish bepulmi?",
           answer:
-            "Ha! Asosiy tarifimiz doimiy bepul. Siz istalgan vaqtda biznes profilingizni yaratib, o'z joyingizni katalogga qo'shishingiz mumkin. Kengaytirilgan imkoniyatlar uchun Pro tariflari ham mavjud."
+            "Ha! Asosiy tarifimiz doimiy bepul. Siz istalgan vaqtda biznes profilingizni yaratib, o'z joyingizni katalogga qo'shishingiz mumkin. Pro va Max imkoniyatlari tez orada taqdim etiladi."
         },
         {
           question: "Platforma qaysi tillarda ishlaydi?",
@@ -596,7 +596,7 @@ const landing: Record<string, LandingCopy> = {
       tiers: [
         {
           id: "free",
-          name: "Базовый",
+          name: "Free",
           tagline: "Для присутствия в каталоге и отображения основной информации.",
           price: "0 сум",
           period: "навсегда бесплатно",
@@ -612,13 +612,13 @@ const landing: Record<string, LandingCopy> = {
         },
         {
           id: "pro",
-          name: "Бизнес Pro",
+          name: "Pro",
           tagline: "Для активного привлечения клиентов и лидерства в своей категории.",
-          price: "490,000",
-          period: "сум / месяц",
+          price: "Скоро",
+          period: "цена будет объявлена",
           popular: true,
           features: [
-            "Все возможности Базового тарифа",
+            "Все возможности тарифа Free",
             "Синяя галочка 'Verified'",
             "Высокие позиции в результатах поиска",
             "Приоритетные рекомендации от Gurman AI",
@@ -629,11 +629,11 @@ const landing: Record<string, LandingCopy> = {
           ctaHref: "/ru/business/register?plan=pro"
         },
         {
-          id: "enterprise",
-          name: "Премиум Партнёр",
+          id: "max",
+          name: "Max",
           tagline: "Для ресторанных сетей и крупных сервисных компаний.",
-          price: "1,200,000",
-          period: "сум / месяц",
+          price: "Скоро",
+          period: "цена будет объявлена",
           features: [
             "Все возможности тарифа Pro",
             "Спец-размещение на главной странице",
@@ -643,7 +643,7 @@ const landing: Record<string, LandingCopy> = {
             "Профессиональная фотосъёмка заведения"
           ],
           cta: "Связаться с нами",
-          ctaHref: "/ru/business/register?plan=enterprise"
+          ctaHref: "/ru/business/register?plan=max"
         }
       ]
     },
@@ -714,7 +714,7 @@ const landing: Record<string, LandingCopy> = {
         {
           question: "Бесплатно ли добавлять бизнес на платформу?",
           answer:
-            "Да, Базовый тариф полностью бесплатный навсегда. Для расширенных возможностей продвижения и аналитики доступны тарифы Pro и Premium."
+            "Да, тариф Free полностью бесплатен. Расширенные возможности Pro и Max появятся позже."
         },
         {
           question: "Какие языки поддерживает сервис?",
@@ -890,7 +890,7 @@ const landing: Record<string, LandingCopy> = {
       tiers: [
         {
           id: "free",
-          name: "Starter",
+          name: "Free",
           tagline: "Essential listing to establish your presence on the platform.",
           price: "0 UZS",
           period: "forever free",
@@ -906,13 +906,13 @@ const landing: Record<string, LandingCopy> = {
         },
         {
           id: "pro",
-          name: "Business Pro",
+          name: "Pro",
           tagline: "For growing businesses looking to dominate search rankings.",
-          price: "490,000",
-          period: "UZS / month",
+          price: "Coming soon",
+          period: "pricing to be announced",
           popular: true,
           features: [
-            "Everything in Starter plan",
+            "Everything in Free plan",
             "Verified blue badge",
             "Top ranking in search & catalog results",
             "Priority Gurman AI Concierge recommendations",
@@ -923,13 +923,13 @@ const landing: Record<string, LandingCopy> = {
           ctaHref: "/en/business/register?plan=pro"
         },
         {
-          id: "enterprise",
-          name: "Premium Partner",
+          id: "max",
+          name: "Max",
           tagline: "For restaurant groups, multi-branch chains, and premier venues.",
-          price: "1,200,000",
-          period: "UZS / month",
+          price: "Coming soon",
+          period: "pricing to be announced",
           features: [
-            "Everything in Business Pro",
+            "Everything in Pro",
             "Featured placement on homepage banner",
             "Exclusive promotional announcements",
             "Multi-branch centralized management",
@@ -937,7 +937,7 @@ const landing: Record<string, LandingCopy> = {
             "Professional photo shoot included"
           ],
           cta: "Contact Us",
-          ctaHref: "/en/business/register?plan=enterprise"
+          ctaHref: "/en/business/register?plan=max"
         }
       ]
     },
@@ -1008,7 +1008,7 @@ const landing: Record<string, LandingCopy> = {
         {
           question: "Is it free to list my business?",
           answer:
-            "Yes! Our Starter tier is completely free forever. You can create your profile and start receiving reviews today. Pro options are available for accelerated growth."
+            "Yes. The Free tier is available at no cost. Expanded Pro and Max capabilities will be introduced later."
         },
         {
           question: "What languages are supported?",
