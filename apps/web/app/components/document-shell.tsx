@@ -26,7 +26,7 @@ export function DocumentShell({
   lang?: Locale;
 }) {
   return (
-    <html className={fontVariables} lang={lang} suppressHydrationWarning>
+    <html className={fontVariables} lang={lang} data-scroll-behavior="smooth" suppressHydrationWarning>
       <body suppressHydrationWarning>
         {/* Restore appearance before paint so Night mode does not flash Day mode.
             The provider takes over afterwards and listens for System changes. */}
