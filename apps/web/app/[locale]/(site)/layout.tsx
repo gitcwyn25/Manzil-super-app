@@ -1,5 +1,5 @@
 import type { Locale } from "@manzil/shared";
-import { Footer } from "../../components/footer";
+import { FooterTemplate } from "../../components/footer-template";
 import { Header } from "../../components/header";
 import { MobileNav } from "../../components/mobile-nav";
 
@@ -21,7 +21,7 @@ export default async function SiteLayout({
       <Header locale={locale as Locale} />
       <main>{children}</main>
       <MobileNav locale={locale as Locale} />
-      <Footer locale={locale as Locale} />
+      <FooterTemplate locale={locale as Locale} />
     </div>
   );
 }

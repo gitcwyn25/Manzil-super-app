@@ -160,6 +160,41 @@
   color: var(--g-primary);
 }
 
+.g-header .theme-button {
+  width: 40px;
+  height: 40px;
+  border-color: var(--g-border);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--g-text-main);
+}
+
+.g-header .theme-button:hover,
+.g-header .theme-button[aria-expanded="true"] {
+  border-color: var(--g-primary);
+  background: rgba(0, 255, 203, 0.1);
+  color: var(--g-primary);
+}
+
+.g-header .theme-dropdown {
+  background: var(--g-bg-card);
+  border-color: var(--g-border);
+  color: var(--g-text-main);
+}
+
+.g-header .theme-dropdown > button {
+  color: var(--g-text-main);
+}
+
+.g-header .theme-dropdown > button:hover,
+.g-header .theme-dropdown > button.active {
+  background: rgba(0, 255, 203, 0.1);
+  color: var(--g-primary);
+}
+
+.g-header .theme-option__copy small {
+  color: var(--g-text-muted);
+}
+
 /* ==========================================================================
    2. Main 2-Column Workstation Layout
    ========================================================================== */

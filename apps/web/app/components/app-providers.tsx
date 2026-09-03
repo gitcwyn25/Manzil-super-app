@@ -2,6 +2,7 @@
 
 import type { Locale } from "@manzil/shared";
 import { PxsProvider } from "./pxs/pxs-provider";
+import { ThemeProvider } from "./theme-provider";
 import { UserPreferencesProvider } from "./user-preferences-provider";
 
 /**
@@ -26,10 +27,12 @@ export function AppProviders({
   };
 }) {
   return (
-    <PxsProvider locale={locale}>
-      <UserPreferencesProvider defaults={defaults} locale={locale}>
-        {children}
-      </UserPreferencesProvider>
-    </PxsProvider>
+    <ThemeProvider>
+      <PxsProvider locale={locale}>
+        <UserPreferencesProvider defaults={defaults} locale={locale}>
+          {children}
+        </UserPreferencesProvider>
+      </PxsProvider>
+    </ThemeProvider>
   );
 }

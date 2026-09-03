@@ -74,6 +74,7 @@ export type GurmanHeroCopy = {
   trustReviews: string;
   trustPlaces: string;
   waitlistCta: string;
+  howItWorksCta: string;
   bento: {
     brandTitle: string;
     brandHint: string;
@@ -233,41 +234,13 @@ export function GurmanHero({ copy, locale }: { copy: GurmanHeroCopy; locale: Loc
               <Icon name="check_circle" size={16} />
               {copy.trustPlaces}
             </span>
-            <a className="gurman-hero__secondary" href={`/${locale}/waitlist/gurman`}>
-              {copy.waitlistCta}
+            <a className="gurman-hero__secondary" href={`/${locale}/gurman/how-it-works`}>
+              {copy.howItWorksCta}
             </a>
           </motion.div>
         </div>
 
-        <motion.div
-          animate="visible"
-          className="gurman-hero__bento"
-          custom={2}
-          data-reveal=""
-          initial="hidden"
-          variants={fadeUp}
-        >
-          <div className="gurman-bento__tile gurman-bento__tile--brand">
-            <Icon className="gurman-bento__glyph" name="sparkles" size={96} />
-            <span className="gurman-bento__title">{copy.bento.brandTitle}</span>
-            <span className="gurman-bento__hint">{copy.bento.brandHint}</span>
-          </div>
-          <div className="gurman-bento__tile gurman-bento__tile--ask">
-            <Icon name="send" size={28} />
-            <span className="gurman-bento__title">{copy.bento.askTitle}</span>
-            <span className="gurman-bento__hint">{copy.bento.askHint}</span>
-          </div>
-          <div className="gurman-bento__tile gurman-bento__tile--reviews">
-            <Icon className="gurman-bento__glyph" name="star_filled" size={84} />
-            <span className="gurman-bento__title">{copy.bento.reviewsTitle}</span>
-            <span className="gurman-bento__hint">{copy.bento.reviewsHint}</span>
-          </div>
-          <div className="gurman-bento__tile gurman-bento__tile--places">
-            <Icon name="storefront" size={28} />
-            <span className="gurman-bento__title">{copy.bento.placesTitle}</span>
-            <span className="gurman-bento__hint">{copy.bento.placesHint}</span>
-          </div>
-        </motion.div>
+
       </div>
     </section>
   );

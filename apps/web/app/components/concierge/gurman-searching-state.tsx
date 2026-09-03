@@ -2,6 +2,7 @@
 
 import type { Locale } from "@manzil/shared";
 import { useEffect, useState } from "react";
+import ParticleInterlock from "../../../../../components/originkit/ui/particle-interlock";
 
 export function GurmanSearchingState({ locale }: { locale: Locale }) {
   const [activeStep, setActiveStep] = useState(0);
@@ -77,19 +78,17 @@ export function GurmanSearchingState({ locale }: { locale: Locale }) {
         })}
       </div>
 
-      {/* Card Silhouettes */}
-      <div className="g-silhouettes-stack">
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="g-silhouette-card g-pulse">
-            <div className="g-silhouette-card__media" />
-            <div className="g-silhouette-card__body">
-              <div className="g-silhouette-line g-silhouette-line--short" />
-              <div className="g-silhouette-line g-silhouette-line--title" />
-              <div className="g-silhouette-line g-silhouette-line--desc" />
-              <div className="g-silhouette-line g-silhouette-line--reason" />
-            </div>
-          </div>
-        ))}
+      {/* Particle Interlock represents the catalogue being compared in real time. */}
+      <div className="g-particle-search-visual" aria-hidden="true">
+        <ParticleInterlock
+          accentColor="#75b8d4"
+          density={210}
+          dotColor="#6cf8bb"
+          height={190}
+          pointer={{ damping: 28, drag: 24 }}
+          speed={32}
+          style={{ height: "190px", width: "100%" }}
+        />
       </div>
     </div>
   );
