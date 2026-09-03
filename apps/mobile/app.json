@@ -1,7 +1,8 @@
 {
   "expo": {
     "name": "Manzil",
-    "slug": "mobile",
+    "slug": "manzil-android-app",
+    "owner": "manzil-group",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -29,7 +30,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "aa1b6dbb-f7ac-45ba-b654-361fb833094d"
+        "projectId": "30b10401-1526-44a2-9dfc-5b9fa4329d96"
       }
     }
   }
