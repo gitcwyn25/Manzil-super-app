@@ -231,6 +231,24 @@ export class DatabaseRepository {
     });
   }
 
+  /** Public storefront feed: never exposes drafts or owner-only CRM data. */
+  async listPublicAnnouncements(slug: string) {
+    const business = await this.prisma.business.findFirst({
+      where: { slug, ...PUBLICLY_VISIBLE },
+      select: { id: true }
+    });
+
+    if (!business) {
+      throw new NotFoundException("Business not found");
+    }
+
+    return this.prisma.announcement.findMany({
+      where: { businessId: business.id, status: "published" },
+      orderBy: [{ startsAt: "desc" }, { createdAt: "desc" }],
+      take: 100
+    });
+  }
+
   async updateBusiness(
     slug: string,
     input: BusinessUpdateInput & {

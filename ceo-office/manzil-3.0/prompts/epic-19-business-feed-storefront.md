@@ -1,5 +1,9 @@
 # Epic 19 — Business Feed: connecting Workspace to Marketplace
 
+## Sequencing addendum (ko'chirilgan)
+
+Ushbu epic dastlab pozitsiya 19'da rejalashtirilgan edi, lekin amalga oshirish ustuvorligi bo'yicha Epic 00 blokiga (00A dan keyin) ko'chirildi: bu yangi arxitektura talab qilmaydigan, mavjud sxema (BusinessPackage, Announcement, Campaign) ustida ishlaydigan proyeksiya qatlami, va Truth & Trust muammosining to'g'ridan-to'g'ri davomi hisoblanadi. Raqam (19) hujjat identifikatori sifatida saqlanadi; BAJARILISH TARTIBI o'zgaradi.
+
 > **QUEUED.** Numbered 19; Autonomous Marketplace moves to 20. See [EPIC-LADDER.md](EPIC-LADDER.md).
 
 ## The verified problem
@@ -57,8 +61,9 @@ With live feedback (no page refresh): spinner → "Publishing…" → invalidate
 
 1. **Honesty rules apply.** A business with no services/offers/announcements shows honest empty sections or omits them — never placeholder content. "AI summary" renders only when Epic 06 can actually compute one; otherwise it is absent, not invented.
 2. **Menus and Events have no schema today.** Report what they require; do not invent models mid-epic. Announcements and campaigns exist and are the immediate win.
-3. **Any new table follows the M1 gating discipline** (`packages/db/migrations-gated-m1/`, double-signal activation) used by Epics 04-06.
+3. **No new table or migration is required for this epic.** The Business Feed is a projection, not a second store: it reads the existing `BusinessPackage`, `Announcement`, and `Campaign` Prisma models directly. If a future scope change ever requires a new table, it must follow the M1 gating discipline (`packages/db/migrations-gated-m1/`, double-signal activation) used by Epics 04-06.
 4. **The feed is a projection, not a second store.** It reads published entities; it does not duplicate them.
+5. **No dependency on Epic 04-06 — reads existing Announcement/Campaign models directly.**
 
 ## Why it matters
 

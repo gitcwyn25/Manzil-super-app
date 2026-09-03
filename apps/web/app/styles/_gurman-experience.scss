@@ -7,9 +7,11 @@
   --g-bg-surface: #0f1422;
   --g-bg-card: #131b2e;
   --g-border: rgba(255, 255, 255, 0.08);
-  --g-border-hover: rgba(0, 255, 203, 0.35);
+  --g-border-hover: rgb(0 255 203 / 0.35);
+  --g-primary-rgb: 0 255 203;
   --g-primary: #00ffcb;
-  --g-primary-glow: rgba(0, 255, 203, 0.18);
+  --g-primary-bright: #06b6d4;
+  --g-primary-glow: rgb(var(--g-primary-rgb) / 0.18);
   --g-text-main: #f8fafc;
   --g-text-muted: #94a3b8;
   --g-text-subtle: #64748b;
@@ -63,7 +65,7 @@
     width: 32px;
     height: 32px;
     border-radius: 9px;
-    background: linear-gradient(135deg, #00ffcb 0%, #06b6d4 100%);
+    background: linear-gradient(135deg, var(--g-primary) 0%, var(--g-primary-bright) 100%);
     box-shadow: 0 0 12px var(--g-primary-glow);
     display: flex;
     align-items: center;
@@ -87,7 +89,7 @@
     font-size: 0.75rem;
     font-weight: 700;
     color: var(--g-primary);
-    background: rgba(0, 255, 203, 0.1);
+    background: rgb(var(--g-primary-rgb) / 0.1);
     padding: 0.15rem 0.45rem;
     border-radius: 4px;
   }
@@ -158,6 +160,41 @@
   font-size: 0.75rem;
   font-weight: 700;
   color: var(--g-primary);
+}
+
+.g-header .theme-button {
+  width: 40px;
+  height: 40px;
+  border-color: var(--g-border);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--g-text-main);
+}
+
+.g-header .theme-button:hover,
+.g-header .theme-button[aria-expanded="true"] {
+  border-color: var(--g-primary);
+  background: rgb(var(--g-primary-rgb) / 0.1);
+  color: var(--g-primary);
+}
+
+.g-header .theme-dropdown {
+  background: var(--g-bg-card);
+  border-color: var(--g-border);
+  color: var(--g-text-main);
+}
+
+.g-header .theme-dropdown > button {
+  color: var(--g-text-main);
+}
+
+.g-header .theme-dropdown > button:hover,
+.g-header .theme-dropdown > button.active {
+  background: rgb(var(--g-primary-rgb) / 0.1);
+  color: var(--g-primary);
+}
+
+.g-header .theme-option__copy small {
+  color: var(--g-text-muted);
 }
 
 /* ==========================================================================
@@ -349,8 +386,8 @@
 
 /* Intent Extraction Panel */
 .g-intent-panel {
-  background: rgba(0, 255, 203, 0.04);
-  border: 1px solid rgba(0, 255, 203, 0.2);
+  background: rgb(var(--g-primary-rgb) / 0.04);
+  border: 1px solid rgb(var(--g-primary-rgb) / 0.2);
   border-radius: 16px;
   padding: 1rem;
   display: flex;
@@ -388,8 +425,8 @@
   gap: 0.35rem;
   padding: 0.25rem 0.65rem;
   border-radius: 8px;
-  background: rgba(0, 255, 203, 0.1);
-  border: 1px solid rgba(0, 255, 203, 0.3);
+  background: rgb(var(--g-primary-rgb) / 0.1);
+  border: 1px solid rgb(var(--g-primary-rgb) / 0.3);
   color: var(--g-primary);
   font-size: 0.75rem;
   font-weight: 700;
@@ -468,7 +505,7 @@
   cursor: pointer;
 
   &:hover {
-    background: rgba(0, 255, 203, 0.08);
+    background: rgb(var(--g-primary-rgb) / 0.08);
     border-color: var(--g-primary);
     color: var(--g-primary);
   }
@@ -678,8 +715,8 @@
 
   /* EXPLICIT RECOMMENDATION REASON BOX */
   &__reason-box {
-    background: rgba(0, 255, 203, 0.05);
-    border: 1px solid rgba(0, 255, 203, 0.18);
+    background: rgb(var(--g-primary-rgb) / 0.05);
+    border: 1px solid rgb(var(--g-primary-rgb) / 0.18);
     border-radius: 12px;
     padding: 0.65rem 0.85rem;
     display: flex;
@@ -731,8 +768,8 @@
   backdrop-filter: blur(6px);
 
   &--verified {
-    background: rgba(0, 255, 203, 0.15);
-    border: 1px solid rgba(0, 255, 203, 0.4);
+    background: rgb(var(--g-primary-rgb) / 0.15);
+    border: 1px solid rgb(var(--g-primary-rgb) / 0.4);
     color: var(--g-primary);
   }
 
@@ -810,8 +847,8 @@
     display: inline-flex;
     padding: 0.3rem 0.75rem;
     border-radius: 9999px;
-    background: rgba(0, 255, 203, 0.08);
-    border: 1px solid rgba(0, 255, 203, 0.2);
+    background: rgb(var(--g-primary-rgb) / 0.08);
+    border: 1px solid rgb(var(--g-primary-rgb) / 0.2);
     color: var(--g-primary);
     font-size: 0.75rem;
     font-weight: 700;
@@ -906,7 +943,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: rgba(0, 255, 203, 0.1);
+  background: rgb(var(--g-primary-rgb) / 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1287,7 +1324,7 @@
 .g-detail-tag {
   font-size: 0.6875rem;
   color: var(--g-primary);
-  background: rgba(0, 255, 203, 0.08);
+  background: rgb(var(--g-primary-rgb) / 0.08);
   padding: 0.2rem 0.5rem;
   border-radius: 6px;
 }

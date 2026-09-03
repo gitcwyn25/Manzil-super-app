@@ -39,6 +39,15 @@ export class BusinessesController {
     };
   }
 
+  @Get(":slug/announcements")
+  async listPublicAnnouncements(@Param("slug") slug: string) {
+    return {
+      data: {
+        announcements: await this.repository.listPublicAnnouncements(slug)
+      }
+    };
+  }
+
   // NOTE: must stay above the ":slug" route or Nest matches "mine" as a slug.
   @Get("mine")
   @UseGuards(ManzilAuthGuard)

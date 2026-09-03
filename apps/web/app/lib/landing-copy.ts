@@ -155,12 +155,12 @@ const landing: Record<string, LandingCopy> = {
     ios: "App Store",
     android: "Google Play",
     hero: {
-      memberBadge: "Toshkent bo'ylab 1,000+ faol a'zolar",
-      title1: "Shahringizni kashf eting,",
-      title2: "Gurman AI bilan.",
+      memberBadge: "Toshkentdagi haqiqiy maskanlar",
+      title1: "Joy emas,",
+      title2: "tajriba rejalashtiring.",
       subtitle:
-        "Manzil — O'zbekistondagi haqiqiy joylar va xizmatlar katalogi. Gurman AI haqiqiy sharhlar va katalog ma'lumotlari asosida sizga eng mos maskanlarni tavsiya qiladi.",
-      explore: "Katalogga o'tish",
+        "Nima rejalashtirayotganingizni Gurman'ga ayting. U mavjud maskanlarni solishtiradi va qaror qabul qilishingizga yordam beradi.",
+      explore: "Rejani boshlash",
       how: "Gurman AI bilan suhbat",
       chatName: "Gurman AI Konsyerj",
       chatStatus: "Real vaqtda tavsiya tayyorlanmoqda…",
@@ -170,7 +170,7 @@ const landing: Record<string, LandingCopy> = {
     },
     benefits: {
       badge: "Afzalliklar",
-      title: "Nima uchun aynan Manzil?",
+      title: "Bir qarordan to'liq tajribagacha",
       subtitle:
         "Sun'iy intellekt, tekshirilgan sharhlar va qulay interfeys orqali vaqtingizni tejang va eng yaxshi joylarni tanlang.",
       cards: [
@@ -258,26 +258,26 @@ const landing: Record<string, LandingCopy> = {
     },
     process: {
       badge: "Qanday ishlaydi",
-      title: "3 ta oddiy qadamda boshlang",
-      subtitle: "Manzil orqali sevimli joylaringizni topish va tanlash juda oson.",
+      title: "G'oyadan yaxshi xotiragacha",
+      subtitle: "Gurman rejangizni aniqlashtiradi, mos variantlarni ko'rsatadi va keyingi qadamni belgilaydi.",
       steps: [
         {
           number: "01",
-          title: "Qidiring yoki Gurman AI'dan so'rang",
+          title: "Nimani rejalashtirayotganingizni ayting",
           description:
             "Katalog bo'ylab kerakli xizmatni qidiring yoki Gurman AI'ga o'zingiz istagan muhitni tasvirlab bering.",
           icon: "search"
         },
         {
           number: "02",
-          title: "Haqiqiy sharhlar bilan tanishing",
+          title: "Variantlarni solishtiring",
           description:
             "Mehmonlarning xolisona fikrlari, baholari va haqiqiy fotosuratlarini ko'rib, to'g'ri qaror qabul qiling.",
           icon: "star"
         },
         {
           number: "03",
-          title: "Tashrif buyuring va rohatlaning",
+          title: "Tajriba yarating",
           description:
             "Marshrutni bosing, to'g'ridan-to'g'ri qo'ng'iroq qiling va ajoyib dam oling. Taassurotlaringizni boshqalar bilan bo'lishing.",
           icon: "verified"
@@ -301,7 +301,7 @@ const landing: Record<string, LandingCopy> = {
       tiers: [
         {
           id: "free",
-          name: "Boshlang'ich",
+          name: "Free",
           tagline: "Katalogda paydo bo'lish va asosiy ma'lumotlarni ko'rsatish uchun.",
           price: "0 so'm",
           period: "doimiy bepul",
@@ -317,13 +317,13 @@ const landing: Record<string, LandingCopy> = {
         },
         {
           id: "pro",
-          name: "Biznes Pro",
+          name: "Pro",
           tagline: "Ko'proq mijoz jalb qilish va o'z sohasida yetakchi bo'lish uchun.",
-          price: "490,000",
-          period: "so'm / oy",
+          price: "Tez orada",
+          period: "narx e'lon qilinadi",
           popular: true,
           features: [
-            "Boshlang'ich tarifidagi barcha imkoniyatlar",
+            "Free tarifidagi barcha imkoniyatlar",
             "Tasdiqlangan 'Verified' ko'k nishon",
             "Qidiruv natijalarida yuqori o'rinlar",
             "Gurman AI konsyerj tavsiyalarida ustunlik",
@@ -334,13 +334,13 @@ const landing: Record<string, LandingCopy> = {
           ctaHref: "/uz/business/register?plan=pro"
         },
         {
-          id: "enterprise",
-          name: "Premium Hamkor",
+          id: "max",
+          name: "Max",
           tagline: "Tarmoqli restoranlar va yirik xizmat ko'rsatuvchilar uchun.",
-          price: "1,200,000",
-          period: "so'm / oy",
+          price: "Tez orada",
+          period: "narx e'lon qilinadi",
           features: [
-            "Biznes Pro dagi barcha imkoniyatlar",
+            "Pro rejasidagi barcha imkoniyatlar",
             "Bosh sahifada maxsus banner joylashuvi",
             "Eksklyuziv promo-aksiyalar e'loni",
             "Bir nechta filiallarni yagona boshqarish",
@@ -348,7 +348,7 @@ const landing: Record<string, LandingCopy> = {
             "Shaxsiy brending va foto-suratga olish"
           ],
           cta: "Biz bilan bog'lanish",
-          ctaHref: "/uz/business/register?plan=enterprise"
+          ctaHref: "/uz/business/register?plan=max"
         }
       ]
     },
@@ -419,7 +419,7 @@ const landing: Record<string, LandingCopy> = {
         {
           question: "Biznesimni Manzilga qo'shish bepulmi?",
           answer:
-            "Ha! Asosiy tarifimiz doimiy bepul. Siz istalgan vaqtda biznes profilingizni yaratib, o'z joyingizni katalogga qo'shishingiz mumkin. Kengaytirilgan imkoniyatlar uchun Pro tariflari ham mavjud."
+            "Ha! Asosiy tarifimiz doimiy bepul. Siz istalgan vaqtda biznes profilingizni yaratib, o'z joyingizni katalogga qo'shishingiz mumkin. Pro va Max imkoniyatlari tez orada taqdim etiladi."
         },
         {
           question: "Platforma qaysi tillarda ishlaydi?",
@@ -450,12 +450,12 @@ const landing: Record<string, LandingCopy> = {
     ios: "App Store",
     android: "Google Play",
     hero: {
-      memberBadge: "Более 1,000+ участников по Ташкенту",
-      title1: "Откройте свой город,",
-      title2: "вместе с Gurman AI.",
+      memberBadge: "Реальные места Ташкента",
+      title1: "Планируйте впечатления,",
+      title2: "а не просто места.",
       subtitle:
-        "Manzil — каталог реальных мест и сервисов в Узбекистане. Gurman AI рекомендует лучшие локации на основе настоящих отзывов и актуальных данных каталога.",
-      explore: "Перейти в каталог",
+        "Расскажите Gurman, что вы планируете. Он сравнит доступные места и поможет принять решение на основе данных каталога.",
+      explore: "Начать планирование",
       how: "Чат с Gurman AI",
       chatName: "Gurman AI Консьерж",
       chatStatus: "Подбирает рекомендацию…",
@@ -465,7 +465,7 @@ const landing: Record<string, LandingCopy> = {
     },
     benefits: {
       badge: "Преимущества",
-      title: "Почему именно Manzil?",
+      title: "От идеи до готового впечатления",
       subtitle:
         "Искусственный интеллект, проверенные отзывы и продуманный интерфейс экономят ваше время и помогают выбрать лучшее.",
       cards: [
@@ -553,7 +553,7 @@ const landing: Record<string, LandingCopy> = {
     },
     process: {
       badge: "Как это работает",
-      title: "3 простых шага к цели",
+      title: "От идеи до воспоминания",
       subtitle: "Найти подходящее место или услугу на Manzil легко и приятно.",
       steps: [
         {
@@ -596,7 +596,7 @@ const landing: Record<string, LandingCopy> = {
       tiers: [
         {
           id: "free",
-          name: "Базовый",
+          name: "Free",
           tagline: "Для присутствия в каталоге и отображения основной информации.",
           price: "0 сум",
           period: "навсегда бесплатно",
@@ -612,13 +612,13 @@ const landing: Record<string, LandingCopy> = {
         },
         {
           id: "pro",
-          name: "Бизнес Pro",
+          name: "Pro",
           tagline: "Для активного привлечения клиентов и лидерства в своей категории.",
-          price: "490,000",
-          period: "сум / месяц",
+          price: "Скоро",
+          period: "цена будет объявлена",
           popular: true,
           features: [
-            "Все возможности Базового тарифа",
+            "Все возможности тарифа Free",
             "Синяя галочка 'Verified'",
             "Высокие позиции в результатах поиска",
             "Приоритетные рекомендации от Gurman AI",
@@ -629,11 +629,11 @@ const landing: Record<string, LandingCopy> = {
           ctaHref: "/ru/business/register?plan=pro"
         },
         {
-          id: "enterprise",
-          name: "Премиум Партнёр",
+          id: "max",
+          name: "Max",
           tagline: "Для ресторанных сетей и крупных сервисных компаний.",
-          price: "1,200,000",
-          period: "сум / месяц",
+          price: "Скоро",
+          period: "цена будет объявлена",
           features: [
             "Все возможности тарифа Pro",
             "Спец-размещение на главной странице",
@@ -643,7 +643,7 @@ const landing: Record<string, LandingCopy> = {
             "Профессиональная фотосъёмка заведения"
           ],
           cta: "Связаться с нами",
-          ctaHref: "/ru/business/register?plan=enterprise"
+          ctaHref: "/ru/business/register?plan=max"
         }
       ]
     },
@@ -714,7 +714,7 @@ const landing: Record<string, LandingCopy> = {
         {
           question: "Бесплатно ли добавлять бизнес на платформу?",
           answer:
-            "Да, Базовый тариф полностью бесплатный навсегда. Для расширенных возможностей продвижения и аналитики доступны тарифы Pro и Premium."
+            "Да, тариф Free полностью бесплатен. Расширенные возможности Pro и Max появятся позже."
         },
         {
           question: "Какие языки поддерживает сервис?",
@@ -745,12 +745,12 @@ const landing: Record<string, LandingCopy> = {
     ios: "App Store",
     android: "Google Play",
     hero: {
-      memberBadge: "Over 1,000+ active members in Tashkent",
-      title1: "Discover your city,",
-      title2: "with Gurman AI.",
+      memberBadge: "Real places in Tashkent",
+      title1: "Plan experiences,",
+      title2: "not just places.",
       subtitle:
-        "Manzil is the premier verified catalog of places and local services in Uzbekistan. Gurman AI provides personalized recommendations backed by authentic reviews and real data.",
-      explore: "Explore catalog",
+        "Tell Gurman what you are planning. It compares available places and helps you decide using the catalogue's real data.",
+      explore: "Start planning",
       how: "Chat with Gurman AI",
       chatName: "Gurman AI Concierge",
       chatStatus: "Generating real-time recommendation…",
@@ -760,7 +760,7 @@ const landing: Record<string, LandingCopy> = {
     },
     benefits: {
       badge: "Benefits",
-      title: "Why choose Manzil?",
+      title: "From one decision to a full experience",
       subtitle:
         "Intelligent AI guidance, verified community reviews, and an intuitive catalog save you time and help you find the best spots.",
       cards: [
@@ -848,26 +848,26 @@ const landing: Record<string, LandingCopy> = {
     },
     process: {
       badge: "How it works",
-      title: "Get started in 3 simple steps",
-      subtitle: "Discovering and connecting with top local spots has never been easier.",
+      title: "From an idea to a memory",
+      subtitle: "Gurman clarifies your plan, compares real options, and helps you take the next step.",
       steps: [
         {
           number: "01",
-          title: "Search or ask Gurman AI",
+          title: "Tell Gurman what you are planning",
           description:
             "Browse categories or describe the vibe and preferences you want to our AI Concierge.",
           icon: "search"
         },
         {
           number: "02",
-          title: "Explore verified reviews",
+          title: "Compare real options",
           description:
             "Review real ratings, genuine opinions, and visitor photos before making your choice.",
           icon: "star"
         },
         {
           number: "03",
-          title: "Visit and share your feedback",
+          title: "Make the experience happen",
           description:
             "Get directions, connect directly with the venue, and share your experience with the community.",
           icon: "verified"
@@ -890,7 +890,7 @@ const landing: Record<string, LandingCopy> = {
       tiers: [
         {
           id: "free",
-          name: "Starter",
+          name: "Free",
           tagline: "Essential listing to establish your presence on the platform.",
           price: "0 UZS",
           period: "forever free",
@@ -906,13 +906,13 @@ const landing: Record<string, LandingCopy> = {
         },
         {
           id: "pro",
-          name: "Business Pro",
+          name: "Pro",
           tagline: "For growing businesses looking to dominate search rankings.",
-          price: "490,000",
-          period: "UZS / month",
+          price: "Coming soon",
+          period: "pricing to be announced",
           popular: true,
           features: [
-            "Everything in Starter plan",
+            "Everything in Free plan",
             "Verified blue badge",
             "Top ranking in search & catalog results",
             "Priority Gurman AI Concierge recommendations",
@@ -923,13 +923,13 @@ const landing: Record<string, LandingCopy> = {
           ctaHref: "/en/business/register?plan=pro"
         },
         {
-          id: "enterprise",
-          name: "Premium Partner",
+          id: "max",
+          name: "Max",
           tagline: "For restaurant groups, multi-branch chains, and premier venues.",
-          price: "1,200,000",
-          period: "UZS / month",
+          price: "Coming soon",
+          period: "pricing to be announced",
           features: [
-            "Everything in Business Pro",
+            "Everything in Pro",
             "Featured placement on homepage banner",
             "Exclusive promotional announcements",
             "Multi-branch centralized management",
@@ -937,7 +937,7 @@ const landing: Record<string, LandingCopy> = {
             "Professional photo shoot included"
           ],
           cta: "Contact Us",
-          ctaHref: "/en/business/register?plan=enterprise"
+          ctaHref: "/en/business/register?plan=max"
         }
       ]
     },
@@ -1008,7 +1008,7 @@ const landing: Record<string, LandingCopy> = {
         {
           question: "Is it free to list my business?",
           answer:
-            "Yes! Our Starter tier is completely free forever. You can create your profile and start receiving reviews today. Pro options are available for accelerated growth."
+            "Yes. The Free tier is available at no cost. Expanded Pro and Max capabilities will be introduced later."
         },
         {
           question: "What languages are supported?",

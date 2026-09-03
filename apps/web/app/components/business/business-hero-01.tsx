@@ -18,8 +18,8 @@ const HERO_COPY: Record<
     ctaPrimary: string;
     ctaSecondary: string;
     annotationText: string;
-    trustedTitle: string;
-    stats: { label: string; value: string }[];
+    proofTitle: string;
+    proofItems: string[];
   }
 > = {
   uz: {
@@ -31,12 +31,8 @@ const HERO_COPY: Record<
     ctaPrimary: "Biznesni bepul ro'yxatdan o'tkazish",
     ctaSecondary: "Kabinetga kirish",
     annotationText: "Kredit karta talab etilmaydi · 100% bepul boshlash",
-    trustedTitle: "TOSHKENTNING YETAKCHI BRENDLARI ISHONCHI",
-    stats: [
-      { label: "Oylik faol qidiruvlar", value: "120,000+" },
-      { label: "Ro'yxatdagi bizneslar", value: "1,450+" },
-      { label: "Gurman AI tavsiyalari", value: "85% moslik" }
-    ]
+    proofTitle: "Bugun biznes egalari uchun mavjud",
+    proofItems: ["Listingni tasdiqlash", "Ma'lumotlarni yangilash", "Sharhlarga javob berish"]
   },
   ru: {
     badge: "Бизнес-портал Manzil",
@@ -47,12 +43,8 @@ const HERO_COPY: Record<
     ctaPrimary: "Зарегистрировать бизнес бесплатно",
     ctaSecondary: "Войти в кабинет",
     annotationText: "Без кредитной карты · 100% бесплатный старт",
-    trustedTitle: "НАМ ДОВЕРЯЮТ ВЕДУЩИЕ ЗАВЕДЕНИЯ ТАШКЕНТА",
-    stats: [
-      { label: "Ежемесячных просмотров", value: "120,000+" },
-      { label: "Компаний в каталоге", value: "1,450+" },
-      { label: "Точность рекомендаций AI", value: "85%" }
-    ]
+    proofTitle: "Доступно владельцам бизнеса уже сегодня",
+    proofItems: ["Подтверждение профиля", "Обновление данных", "Ответы на отзывы"]
   },
   en: {
     badge: "Manzil Business Portal",
@@ -63,23 +55,10 @@ const HERO_COPY: Record<
     ctaPrimary: "Register Your Business Free",
     ctaSecondary: "Open Dashboard",
     annotationText: "No credit card required · 100% free start",
-    trustedTitle: "TRUSTED BY TOP VENUES ACROSS TASHKENT",
-    stats: [
-      { label: "Monthly Local Searches", value: "120,000+" },
-      { label: "Verified Businesses", value: "1,450+" },
-      { label: "AI Recommendation Accuracy", value: "85%" }
-    ]
+    proofTitle: "Available to business owners today",
+    proofItems: ["Claim your listing", "Keep details current", "Reply to reviews"]
   }
 };
-
-const TRUSTED_BRANDS = [
-  "Caravan Coffee",
-  "Plov Center",
-  "Bon! Bakery",
-  "City Grill",
-  "Iwash Avtomoyka",
-  "Rayhon Milliy"
-];
 
 export function BusinessHero01({ locale }: { locale: Locale }) {
   const copy = HERO_COPY[locale] ?? HERO_COPY.uz;
@@ -159,13 +138,13 @@ export function BusinessHero01({ locale }: { locale: Locale }) {
           </div>
         </Reveal>
 
-        {/* Stats Strip */}
+        {/* Capability strip — factual product actions, not unverified metrics. */}
         <Reveal as="div" delay={320} variant="fade-up">
           <div className="bz-hero-01__stats-grid">
-            {copy.stats.map((stat, i) => (
+            {copy.proofItems.map((item, i) => (
               <div className="bz-hero-01__stat-box" key={i}>
-                <div className="bz-hero-01__stat-val">{stat.value}</div>
-                <div className="bz-hero-01__stat-lbl">{stat.label}</div>
+                <div className="bz-hero-01__stat-val">{String(i + 1).padStart(2, "0")}</div>
+                <div className="bz-hero-01__stat-lbl">{item}</div>
               </div>
             ))}
           </div>
@@ -183,10 +162,11 @@ export function BusinessHero01({ locale }: { locale: Locale }) {
               <div className="bz-hero-01__browser-address">
                 <span>🔒 business.manzil.uz/dashboard</span>
               </div>
-              <span className="bz-hero-01__browser-badge">Live Analytics</span>
+              <span className="bz-hero-01__browser-badge">Example workspace</span>
             </div>
 
             <div className="bz-hero-01__dashboard-inner">
+              <p className="bz-mock-disclaimer">Illustrative preview — your dashboard shows your verified activity.</p>
               {/* Dashboard Top Stats */}
               <div className="bz-mock-stats-row">
                 <div className="bz-mock-stat-tile">
@@ -212,8 +192,8 @@ export function BusinessHero01({ locale }: { locale: Locale }) {
                     <span>O'rtacha Reyting</span>
                     <Icon name="star" size={16} className="text-warning" />
                   </div>
-                  <div className="bz-mock-stat-tile__val">4.9 ★</div>
-                  <div className="bz-mock-stat-tile__growth">128 ta tasdiqlangan sharh</div>
+                  <div className="bz-mock-stat-tile__val">—</div>
+                  <div className="bz-mock-stat-tile__growth">Sizning haqiqiy sharhlaringiz</div>
                 </div>
               </div>
 
@@ -266,15 +246,15 @@ export function BusinessHero01({ locale }: { locale: Locale }) {
           </div>
         </Reveal>
 
-        {/* Trusted By Brands Strip */}
+        {/* Launch proof strip — no invented customer logos or adoption claims. */}
         <Reveal as="div" delay={480} variant="fade-up">
           <div className="bz-hero-01__trusted">
-            <p className="bz-hero-01__trusted-label">{copy.trustedTitle}</p>
+            <p className="bz-hero-01__trusted-label">{copy.proofTitle}</p>
             <div className="bz-hero-01__brands-row">
-              {TRUSTED_BRANDS.map((brand, i) => (
-                <div className="bz-hero-01__brand-pill" key={i}>
+              {copy.proofItems.map((item) => (
+                <div className="bz-hero-01__brand-pill" key={item}>
                   <Icon name="verified" size={14} className="text-primary" />
-                  <span>{brand}</span>
+                  <span>{item}</span>
                 </div>
               ))}
             </div>
