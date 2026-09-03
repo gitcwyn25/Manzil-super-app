@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SITE_URL } from "./lib/seo";
 import "./globals.css";
 import "./styles/vibrant.scss";
@@ -76,5 +77,10 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return children;
+  return (
+    <>
+      {children}
+      <SpeedInsights />
+    </>
+  );
 }
