@@ -11,7 +11,7 @@ const A = "/originkit/footer-01";
 const FOOTER_DOWNLOAD_TEXT: Record<Locale, { title: string; desc: string }> = {
   uz: {
     title: "Manzil ilovasini yuklab oling",
-    desc: "Toshkentning barcha sara joylari, haqiqiy sharhlar va Gurman AI shaxsiy konsyerji cho'ntagingizda."
+    desc: "Toshkentning barcha sara joylari va haqiqiy sharhlar cho'ntagingizda."
   },
   ru: {
     title: "Скачайте приложение Manzil",
@@ -19,7 +19,7 @@ const FOOTER_DOWNLOAD_TEXT: Record<Locale, { title: string; desc: string }> = {
   },
   en: {
     title: "Download the Manzil App Today",
-    desc: "Discover top verified spots across Tashkent and get tailored recommendations with Gurman AI."
+    desc: "Discover verified spots across Tashkent through real local reviews."
   }
 };
 
@@ -67,20 +67,20 @@ function ManzilPhonesStage() {
         </div>
       </div>
 
-      {/* Center Phone: Gurman AI Concierge Live Chat */}
+      {/* Center Phone: Manzil discovery */}
       <div className="manzil-phone manzil-phone--center">
         <div className="manzil-phone__notch" />
         <div className="manzil-phone__screen">
           <div className="manzil-mock-header">
-            <span className="manzil-mock-header__brand">Gurman AI</span>
-            <span className="manzil-mock-header__status">Online</span>
+            <span className="manzil-mock-header__brand">Manzil Discover</span>
+            <span className="manzil-mock-header__status">Toshkent</span>
           </div>
           <div className="manzil-mock-chat">
             <div className="manzil-mock-chat__user">
-              Toshkentda tinch, mazali qahva va desertlari bor joy tavsiya qil.
+              Toshkentda tinch, mazali qahva va desertlari bor joy top.
             </div>
             <div className="manzil-mock-chat__ai-card">
-              <div className="manzil-mock-chat__ai-title">✨ Tavsiya: Breadly Bakery & Café</div>
+              <div className="manzil-mock-chat__ai-title">Topildi: Breadly Bakery & Café</div>
               <div className="manzil-mock-chat__ai-meta">⭐ 4.9 (189 sharhlar) · Mirobod tumani</div>
               <div className="manzil-mock-chat__ai-desc">
                 Mehmonlar sharhlariga ko'ra sokin atmosfera, yangi kruassanlar va ajoyib espresso.
@@ -139,7 +139,6 @@ export function Footer({ locale }: { locale: Locale }) {
     { label: locale === "uz" ? "Hujjatlar" : locale === "ru" ? "Документы" : "Docs", href: `/${locale}/docs` },
     { label: locale === "uz" ? "Maxfiylik" : locale === "ru" ? "Конфиденциальность" : "Privacy", href: `/${locale}/legal/privacy` },
     { label: businessCopy.nav.discover, href: `/${locale}/discover` },
-    { label: businessCopy.nav.concierge, href: `/${locale}/concierge` },
     { label: businessCopy.nav.forBusiness, href: `/${locale}/business` },
     { label: businessCopy.footer.pricing, href: `/${locale}/business/pricing` },
     { label: businessCopy.footer.dashboard, href: `/${locale}/dashboard` },

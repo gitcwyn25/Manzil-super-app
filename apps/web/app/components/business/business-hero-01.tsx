@@ -27,7 +27,7 @@ const HERO_COPY: Record<
     title1: "Biznesingizni yangi bosqichga olib chiqing,",
     title2: "Manzil bilan.",
     subtitle:
-      "Toshkentdagi minglab mijozlar biznesingizni Manzil ilovasi va Gurman AI orqali topishadi. Listingni tasdiqlang, sharhlarga javob bering va obro'ingizni bitta qulay kabinetdan boshqaring.",
+      "Toshkentdagi minglab mijozlar biznesingizni Manzil ilovasida topishadi. Listingni tasdiqlang, sharhlarga javob bering va obro'ingizni bitta qulay kabinetdan boshqaring.",
     ctaPrimary: "Biznesni bepul ro'yxatdan o'tkazish",
     ctaSecondary: "Kabinetga kirish",
     annotationText: "Kredit karta talab etilmaydi · 100% bepul boshlash",
@@ -39,7 +39,7 @@ const HERO_COPY: Record<
     title1: "Выведите ваш бизнес на новый уровень,",
     title2: "вместе с Manzil.",
     subtitle:
-      "Тысячи клиентов в Ташкенте находят заведения через приложение Manzil и AI-консьержа Gurman. Подтвердите профиль, отвечайте на отзывы и управляйте репутацией в удобном кабинете.",
+      "Тысячи клиентов в Ташкенте находят заведения через приложение Manzil. Подтвердите профиль, отвечайте на отзывы и управляйте репутацией в удобном кабинете.",
     ctaPrimary: "Зарегистрировать бизнес бесплатно",
     ctaSecondary: "Войти в кабинет",
     annotationText: "Без кредитной карты · 100% бесплатный старт",
@@ -51,7 +51,7 @@ const HERO_COPY: Record<
     title1: "Scale your local business to new heights,",
     title2: "with Manzil.",
     subtitle:
-      "Thousands of high-intent customers discover local venues on Manzil and through Gurman AI. Claim your listing, reply to customer reviews, and manage your reputation in one powerful workspace.",
+      "Thousands of customers discover local venues on Manzil. Claim your listing, reply to customer reviews, and manage your reputation in one powerful workspace.",
     ctaPrimary: "Register Your Business Free",
     ctaSecondary: "Open Dashboard",
     annotationText: "No credit card required · 100% free start",
@@ -180,7 +180,7 @@ export function BusinessHero01({ locale }: { locale: Locale }) {
 
                 <div className="bz-mock-stat-tile">
                   <div className="bz-mock-stat-tile__head">
-                    <span>Gurman AI Tavsiyalari</span>
+                    <span>Manzil katalogi</span>
                     <Icon name="sparkles" size={16} className="text-primary" />
                   </div>
                   <div className="bz-mock-stat-tile__val">1,420</div>
@@ -233,7 +233,7 @@ export function BusinessHero01({ locale }: { locale: Locale }) {
                       </div>
                     </div>
                     <p className="bz-mock-review-text">
-                      &ldquo;Gurman AI orqali topib keldik. Qahva va xizmat sifati ajoyib!&rdquo;
+                      &ldquo;Manzil orqali topib keldik. Qahva va xizmat sifati ajoyib!&rdquo;
                     </p>
                     <div className="bz-mock-reply-box">
                       <strong>Egasining javobi:</strong>

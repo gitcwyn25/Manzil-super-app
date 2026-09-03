@@ -41,10 +41,10 @@ export async function generateMetadata({
       title: locale === "uz" ? "Manzil hujjatlari" : locale === "ru" ? "Документы Manzil" : "Manzil documentation",
       description:
         locale === "uz"
-          ? "Manzil kompaniyasi, ishonch, xizmatlardan foydalanish va Gurman AI haqida aniq ma’lumotlar."
+          ? "Manzil kompaniyasi, ishonch va xizmatlardan foydalanish haqida aniq ma’lumotlar."
           : locale === "ru"
-            ? "Понятная информация о Manzil, доверии, использовании сервиса и Gurman AI."
-            : "Clear information about Manzil, trust, using the service, and Gurman AI."
+            ? "Понятная информация о Manzil, доверии и использовании сервиса."
+            : "Clear information about Manzil, trust, and using the service."
     });
   }
 

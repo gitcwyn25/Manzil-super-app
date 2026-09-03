@@ -159,12 +159,12 @@ const landing: Record<string, LandingCopy> = {
       title1: "Joy emas,",
       title2: "tajriba rejalashtiring.",
       subtitle:
-        "Nima rejalashtirayotganingizni Gurman'ga ayting. U mavjud maskanlarni solishtiradi va qaror qabul qilishingizga yordam beradi.",
+        "Nima rejalashtirayotganingizni ayting. Manzil katalogi mavjud maskanlarni solishtirishga yordam beradi.",
       explore: "Rejani boshlash",
-      how: "Gurman AI bilan suhbat",
-      chatName: "Gurman AI Konsyerj",
-      chatStatus: "Real vaqtda tavsiya tayyorlanmoqda…",
-      chatAi: "Salom! Qanday joy izlayapsiz? Haqiqiy sharhlar va joriy ma'lumotlar asosida tanlab beraman.",
+      how: "Katalogni ko'rish",
+      chatName: "Manzil katalogi",
+      chatStatus: "Toshkentdagi joylar",
+      chatAi: "Salom! Toshkentdagi haqiqiy joylar va sharhlarni ko'ring.",
       chatUser: "Shanba oqshomi uchun sokin, sifatli qahva va desertlari bor joy kerak.",
       microPerks: ["100% haqiqiy sharhlar", "Jonli katalog ma'lumotlari", "Mutlaqo bepul"]
     },
@@ -177,9 +177,9 @@ const landing: Record<string, LandingCopy> = {
         {
           icon: "sparkles",
           tag: "AI Konsyerj",
-          title: "Gurman AI bilan shaxsiy tavsiyalar",
+          title: "Haqiqiy joylarni oson toping",
           description:
-            "Oddiy tilda o'z hohishingizni ayting — Gurman AI haqiqiy sharhlarni tahlil qilib, sizga mos variantlarni saralab beradi."
+            "Katalogdagi haqiqiy sharhlar va ma'lumotlar asosida sizga mos variantlarni toping."
         },
         {
           icon: "verified",
@@ -211,10 +211,10 @@ const landing: Record<string, LandingCopy> = {
       tabs: [
         {
           id: "concierge",
-          label: "Gurman AI Konsyerj",
+          label: "Katalog",
           title: "Sizning shaxsiy shahar gid-maslahatchisi",
           description:
-            "Bir necha soniyada hohishingizga mos maskanni toping. Gurman AI oddiy qidiruv tizimlaridan farqli ravishda atmosferani, sharhlardagi nozik jihatlarni va narx sifat mutanosibligini hisobga oladi.",
+            "Turkumlar, tumanlar va reytinglar bo'yicha kerakli maskanni tez toping.",
           bullets: [
             "Tabiiy tildagi savollarni tushunish (O'zbek, Rus, Ingliz)",
             "Haqiqiy sharhlardagi muhim jihatlarni umumlashtirish",
@@ -248,7 +248,7 @@ const landing: Record<string, LandingCopy> = {
           bullets: [
             "Qulay boshqaruv paneli va tahlillar",
             "Mijozlar sharhlariga tezkor javob berish",
-            "Gurman AI tavsiyalarida ustunlik"
+            "Katalogda ko'rinish"
           ],
           badge: "Biznes O'sishi",
           metricLabel: "Mijozlar jalb qilish",
@@ -259,13 +259,13 @@ const landing: Record<string, LandingCopy> = {
     process: {
       badge: "Qanday ishlaydi",
       title: "G'oyadan yaxshi xotiragacha",
-      subtitle: "Gurman rejangizni aniqlashtiradi, mos variantlarni ko'rsatadi va keyingi qadamni belgilaydi.",
+      subtitle: "Manzil katalogi rejangizga mos joylarni topishga yordam beradi.",
       steps: [
         {
           number: "01",
           title: "Nimani rejalashtirayotganingizni ayting",
           description:
-            "Katalog bo'ylab kerakli xizmatni qidiring yoki Gurman AI'ga o'zingiz istagan muhitni tasvirlab bering.",
+            "Katalog bo'ylab kerakli xizmat, restoran yoki dam olish maskanini qidiring.",
           icon: "search"
         },
         {
@@ -326,7 +326,7 @@ const landing: Record<string, LandingCopy> = {
             "Free tarifidagi barcha imkoniyatlar",
             "Tasdiqlangan 'Verified' ko'k nishon",
             "Qidiruv natijalarida yuqori o'rinlar",
-            "Gurman AI konsyerj tavsiyalarida ustunlik",
+            "Katalogdagi ustuvor ko'rinish",
             "Cheksiz fotosuratlar va menyu",
             "Batafsil ko'rishlar tahlili (Analytics)"
           ],
@@ -375,9 +375,9 @@ const landing: Record<string, LandingCopy> = {
           company: "Toshkent",
           avatar: "JR",
           rating: 5,
-          highlight: "Gurman AI shunchaki mo'jiza!",
+          highlight: "Manzil juda qulay!",
           content:
-            "Kechki ovqat uchun tinch va mazali joy izlayotgandim. Gurman AI tavsiya qilgan qahvaxona kutganimdan ham a'lo chiqdi. Endi har dam olish kunlari faqat Manzil orqali joy tanlayman."
+            "Kechki ovqat uchun tinch va mazali joy izlayotgandim. Manzil orqali mos qahvaxonani tez topdim."
         },
         {
           name: "Dilnoza Karimova",
@@ -387,7 +387,7 @@ const landing: Record<string, LandingCopy> = {
           rating: 5,
           highlight: "Mijozlar oqimi sezilarli oshdi",
           content:
-            "Manzil platformasida ro'yxatdan o'tganimizdan so'ng, yangi mehmonlarimiz safi kengaydi. Ayniqsa yoshlar bizni Gurman AI orqali topib kelishayotganini aytishmoqda."
+            "Manzil platformasida ro'yxatdan o'tganimizdan so'ng, yangi mehmonlarimiz safi kengaydi."
         },
         {
           name: "Bobur Mirzayev",
@@ -404,7 +404,7 @@ const landing: Record<string, LandingCopy> = {
     faq: {
       badge: "Ko'p so'raladigan savollar",
       title: "Barcha savollaringizga aniq javoblar",
-      subtitle: "Manzil platformasi va Gurman AI haqida eng ko'p beriladigan savollar.",
+      subtitle: "Manzil platformasi haqida eng ko'p beriladigan savollar.",
       items: [
         {
           question: "Manzil nima va u qanday xizmatlarni taqdim etadi?",
@@ -412,9 +412,9 @@ const landing: Record<string, LandingCopy> = {
             "Manzil — O'zbekistondagi eng yaxshi kafe, restoran, xizmat ko'rsatish markazlari va dam olish joylarini birlashtirgan zamonaviy shahar katalogi va AI konsyerj platformasidir."
         },
         {
-          question: "Gurman AI tavsiyalari nimaga asoslanadi?",
+          question: "Manzildagi joylar qanday tanlanadi?",
           answer:
-            "Gurman AI faqat Manzil katalogidagi haqiqiy joylar va ularga mehmonlar qoldirgan haqiqiy sharhlar tahliliga tayanadi. U hech qachon mavjud bo'lmagan joylarni o'ylab topmaydi."
+            "Manzil katalogidagi joylar haqiqiy ma'lumotlar va mehmonlar qoldirgan sharhlar asosida ko'rsatiladi."
         },
         {
           question: "Biznesimni Manzilga qo'shish bepulmi?",
@@ -424,7 +424,7 @@ const landing: Record<string, LandingCopy> = {
         {
           question: "Platforma qaysi tillarda ishlaydi?",
           answer:
-            "Manzil va Gurman AI uch tilda: O'zbekcha (lotin), Ruscha va Inglizcha to'liq ravishda faoliyat yuritadi."
+            "Manzil uch tilda: O'zbekcha (lotin), Ruscha va Inglizcha faoliyat yuritadi."
         },
         {
           question: "Boshqa shaharlar (Samarqand, Buxoro) qachon qo'shiladi?",
@@ -437,7 +437,7 @@ const landing: Record<string, LandingCopy> = {
       badge: "Hoziroq kashf eting",
       title: "Shahringizning eng sara maskanlarini topishga tayyormisiz?",
       subtitle:
-        "Gurman AI bilan vaqtingizni tejang, haqiqiy sharhlar asosida tanlang yoki o'z biznesingizni minglab yangi mijozlarga taniting.",
+        "Haqiqiy sharhlar asosida tanlang yoki o'z biznesingizni minglab yangi mijozlarga taniting.",
       primaryCta: "Katalogga o'tish",
       primaryHref: "/uz/discover",
       secondaryCta: "Biznesni qo'shish",

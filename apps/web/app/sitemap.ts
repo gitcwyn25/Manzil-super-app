@@ -29,7 +29,6 @@ export const revalidate = 3600;
 const STATIC_KEYS = [
   "home",
   "discover",
-  "concierge",
   "lists",
   "occasions",
   "business",
@@ -39,7 +38,6 @@ const STATIC_KEYS = [
 const PRIORITY: Record<(typeof STATIC_KEYS)[number], number> = {
   home: 1,
   discover: 0.9,
-  concierge: 0.8,
   lists: 0.7,
   occasions: 0.7,
   business: 0.8,

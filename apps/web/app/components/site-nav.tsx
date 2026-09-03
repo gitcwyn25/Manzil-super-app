@@ -6,14 +6,13 @@ import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { getBusinessCopy } from "../lib/business-copy";
 
-// The canonical D5 link set: Discover · Concierge · Events(→/occasions) ·
+// The canonical link set: Discover · Docs · For Business.
 // For Business. Home rides on the brand wordmark. Admin is intentionally
 // absent here — its entry point lives in the footer. "Dashboard" is
 // deliberately absent: a visitor with no business has nothing there, and the
 // workspace is reached through the signed-in switch in the header instead.
 const links = [
   { key: "discover" as const, href: (locale: Locale) => `/${locale}/discover` },
-  { key: "concierge" as const, href: (locale: Locale) => `/${locale}/gurman` },
   { key: "docs" as const, href: (locale: Locale) => `/${locale}/docs` },
   { key: "forBusiness" as const, href: (locale: Locale) => `/${locale}/business` }
 ];
@@ -60,12 +59,6 @@ const mobileIcons: Record<string, ReactNode> = {
       <path d="m20 20-3.5-3.5" />
     </svg>
   ),
-  concierge: (
-    <svg aria-hidden="true" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
-      <path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H12l-4.5 4v-4h-1A2.5 2.5 0 0 1 4 13.5v-7Z" />
-      <path d="M9 9.5h.01M15 9.5h.01M9.5 12.5c.7.7 1.6 1 2.5 1s1.8-.3 2.5-1" />
-    </svg>
-  ),
   events: (
     <svg aria-hidden="true" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
       <rect x="4" y="5" width="16" height="16" rx="2" />
@@ -90,7 +83,6 @@ export function MobileSiteNav({ locale }: { locale: Locale }) {
   const mobileLinks = [
     { key: "home" as const, href: `/${locale}`, label: copy.nav.home },
     { key: "discover" as const, href: `/${locale}/discover`, label: copy.nav.discover },
-    { key: "concierge" as const, href: `/${locale}/gurman`, label: copy.nav.concierge },
     { key: "forBusiness" as const, href: `/${locale}/business`, label: copy.nav.forBusiness }
   ];
 

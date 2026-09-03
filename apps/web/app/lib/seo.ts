@@ -45,10 +45,9 @@ export const SITE_URL = resolveSiteUrl();
 export const SITE_NAME = "Manzil";
 
 /** Entity-consistent naming for structured data and AI crawlers — matches
- *  Appendix C of the product bible (Discover · Plan · Experience, Gurman). */
+ *  Appendix C of the product bible (Discover · Plan · Experience). */
 export const BRAND = {
   name: "Manzil",
-  aiName: "Gurman",
   city: "Tashkent",
   country: "UZ"
 } as const;
@@ -108,14 +107,14 @@ export const ROUTE_SEO = {
     path: "",
     absoluteTitle: true,
     title: {
-      uz: "Manzil — Toshkentdagi joylarni Gurman AI bilan toping",
-      ru: "Manzil — места Ташкента вместе с Gurman AI",
-      en: "Manzil — discover Tashkent with Gurman AI"
+      uz: "Manzil — Toshkentdagi joylarni kashf eting",
+      ru: "Manzil — места Ташкента",
+      en: "Manzil — discover Tashkent"
     },
     description: {
-      uz: "Toshkentdagi kafe, restoran va xizmatlarni haqiqiy sharhlar asosida toping. Gurman AI so'rovingizga qarab katalogdagi real joylarni tavsiya qiladi.",
-      ru: "Находите кафе, рестораны и услуги Ташкента по реальным отзывам. Gurman AI подбирает настоящие места из каталога под ваш запрос.",
-      en: "Find cafés, restaurants and services in Tashkent through real reviews. Gurman AI recommends real listed places based on what you ask for."
+      uz: "Toshkentdagi kafe, restoran va xizmatlarni haqiqiy sharhlar asosida toping.",
+      ru: "Находите кафе, рестораны и услуги Ташкента по реальным отзывам.",
+      en: "Find cafés, restaurants and services in Tashkent through real reviews."
     }
   },
   discover: {
@@ -129,33 +128,6 @@ export const ROUTE_SEO = {
       uz: "Kategoriya, tuman va reyting bo'yicha filtrlab Toshkentdagi joylarni qidiring. Har bir kartochka katalogdagi real biznes.",
       ru: "Ищите места в Ташкенте с фильтрами по категории, району и рейтингу. Каждая карточка — реальный бизнес из каталога.",
       en: "Search places in Tashkent with filters for category, district and rating. Every card is a real listed business."
-    }
-  },
-  concierge: {
-    path: "/concierge",
-    title: {
-      uz: "Gurman AI Concierge — tabiiy tilda so'rang",
-      ru: "Gurman AI Concierge — спросите естественно",
-      en: "Gurman AI Concierge — ask naturally"
-    },
-    description: {
-      uz: "Nima izlayotganingizni o'z so'zlaringiz bilan yozing. Gurman AI katalogdagi real joylarni haqiqiy sharhlar asosida tavsiya qiladi.",
-      ru: "Опишите, что ищете, своими словами. Gurman AI подбирает реальные места из каталога по настоящим отзывам.",
-      en: "Describe what you are looking for in your own words. Gurman AI recommends real listed places grounded in real reviews."
-    }
-  },
-  gurman: {
-    path: "/gurman",
-    absoluteTitle: true,
-    title: {
-      uz: "Gurman AI — Toshkentdagi keyingi rejangiz",
-      ru: "Gurman AI — ваш следующий план в Ташкенте",
-      en: "Gurman AI — plan your next experience in Tashkent"
-    },
-    description: {
-      uz: "Gurman AI ga istagingizni ayting. U Manzil katalogidagi haqiqiy joylarni saralab, nima uchun mosligini tushuntiradi.",
-      ru: "Расскажите Gurman AI о своём плане. Он подберёт реальные места из каталога Manzil и объяснит свой выбор.",
-      en: "Tell Gurman AI what you want to do. It surfaces real places from the Manzil catalogue and explains why they fit."
     }
   },
   lists: {
@@ -314,8 +286,6 @@ export type RouteKey = keyof typeof ROUTE_SEO;
 export const CRUMB_LABEL = {
   home: { uz: "Bosh sahifa", ru: "Главная", en: "Home" },
   discover: { uz: "Kashfiyot", ru: "Поиск", en: "Discover" },
-  concierge: { uz: "Concierge", ru: "Concierge", en: "Concierge" },
-  gurman: { uz: "Gurman AI", ru: "Gurman AI", en: "Gurman AI" },
   lists: { uz: "Ro'yxatlar", ru: "Списки", en: "Lists" },
   occasions: { uz: "Voqealar", ru: "Поводы", en: "Occasions" },
   business: { uz: "Biznes", ru: "Бизнес", en: "Business" },

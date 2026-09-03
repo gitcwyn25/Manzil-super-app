@@ -1,6 +1,6 @@
 import type { Locale } from "@manzil/shared";
 
-export const WAITLIST_TOPICS = ["city", "gurman", "pro"] as const;
+export const WAITLIST_TOPICS = ["city", "pro"] as const;
 export type WaitlistTopic = (typeof WAITLIST_TOPICS)[number];
 
 export function isWaitlistTopic(value: string): value is WaitlistTopic {
@@ -62,38 +62,6 @@ const COPY: Record<WaitlistTopic, Record<string, WaitlistCopy>> = {
       successTitle: "Your vote is counted",
       successBody: (position) => `You're number ${position} for this city.`,
       countLabel: (count) => `${count} people have asked`,
-      errorGeneric: "That didn't send. Try again."
-    }
-  },
-  gurman: {
-    uz: {
-      title: "Gurman avval kichik guruhga javob beradi",
-      lead: "Gurman AI haqiqiy sharhlar asosida joy tavsiya qiladi. Sifatni ushlab turish uchun navbat bilan ochamiz.",
-      emailLabel: "Email",
-      submit: "Navbatga qo'shilish",
-      successTitle: "Navbatdasiz",
-      successBody: (position) => `Navbatda ${position}-o'rindasiz.`,
-      countLabel: (count) => `Navbatda ${count} kishi`,
-      errorGeneric: "Yuborib bo'lmadi. Qaytadan urinib ko'ring."
-    },
-    ru: {
-      title: "Сначала Gurman отвечает небольшой группе",
-      lead: "Gurman AI подбирает места по реальным отзывам. Мы открываем доступ очередями, чтобы держать качество.",
-      emailLabel: "Email",
-      submit: "Встать в очередь",
-      successTitle: "Вы в очереди",
-      successBody: (position) => `Вы ${position}-й в очереди.`,
-      countLabel: (count) => `${count} человек в очереди`,
-      errorGeneric: "Не удалось отправить. Попробуйте ещё раз."
-    },
-    en: {
-      title: "Gurman answers a small group first",
-      lead: "Gurman AI recommends places from real reviews. We open access in batches to keep the answers good.",
-      emailLabel: "Email",
-      submit: "Join the queue",
-      successTitle: "You're in the queue",
-      successBody: (position) => `You're number ${position} in line.`,
-      countLabel: (count) => `${count} people waiting`,
       errorGeneric: "That didn't send. Try again."
     }
   },

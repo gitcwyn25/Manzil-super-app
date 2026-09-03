@@ -18,14 +18,13 @@ export const revalidate = 86400;
 
 const BODY = `# Manzil
 
-> Manzil is a business directory and AI concierge for Tashkent, Uzbekistan. People find cafés, restaurants, salons and services through real listings and real customer reviews, and can ask Gurman — the site's AI concierge — for recommendations in natural language. The site is trilingual: Uzbek (default), Russian and English.
+> Manzil is a business directory for Tashkent, Uzbekistan. People find cafés, restaurants, salons and services through real listings and real customer reviews. The site is trilingual: Uzbek (default), Russian and English.
 
 Every page exists at three locale-prefixed URLs: \`/uz/...\` (canonical default), \`/ru/...\` and \`/en/...\`. Replace the locale prefix to get the same page in another language.
 
 ## What Manzil is
 
 - A directory of real businesses in Tashkent, each with an address, price tier, category, and customer reviews.
-- An AI concierge (Gurman) that answers "where should I go for X" using businesses that are actually listed and reviews that were actually written.
 - A business console where owners claim their listing, reply to reviews, and manage their profile.
 
 ## What Manzil is not (as of this writing)
@@ -37,9 +36,8 @@ Every page exists at three locale-prefixed URLs: \`/uz/...\` (canonical default)
 
 ## Core pages
 
-- [Home](${SITE_URL}/uz): Gurman AI concierge entry point and featured businesses.
+- [Home](${SITE_URL}/uz): featured businesses and the Manzil catalogue.
 - [Discover](${SITE_URL}/uz/discover): searchable, filterable catalogue of every listed business. Accepts \`?q=\` for a text query and \`?category=\` for a category slug.
-- [Gurman AI Concierge](${SITE_URL}/uz/concierge): natural-language recommendations grounded in listed businesses and real reviews.
 - [Community lists](${SITE_URL}/uz/lists): place collections curated by people in Tashkent.
 - [Occasions](${SITE_URL}/uz/occasions): places grouped by what they are for — birthdays, dates, family dinners.
 

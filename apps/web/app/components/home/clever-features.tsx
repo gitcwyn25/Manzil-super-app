@@ -7,9 +7,10 @@ import { Reveal } from "../motion/reveal";
 import { Icon } from "../vm/icons";
 
 export function CleverFeatures({ copy, locale }: { copy: CleverFeaturesCopy; locale: Locale }) {
-  const [activeTab, setActiveTab] = useState(copy.tabs[0]?.id ?? "concierge");
+  const tabs = copy.tabs.filter((tab) => tab.id !== "concierge");
+  const [activeTab, setActiveTab] = useState(tabs[0]?.id ?? "catalog");
 
-  const currentTab = copy.tabs.find((t) => t.id === activeTab) ?? copy.tabs[0];
+  const currentTab = tabs.find((t) => t.id === activeTab) ?? tabs[0];
 
   return (
     <section className="clever-section clever-features" id="features">
@@ -32,7 +33,7 @@ export function CleverFeatures({ copy, locale }: { copy: CleverFeaturesCopy; loc
 
         {/* Tab Buttons */}
         <div className="clever-tabs-nav">
-          {copy.tabs.map((tab) => (
+          {tabs.map((tab) => (
             <button
               className={`clever-tab-btn ${activeTab === tab.id ? "clever-tab-btn--active" : ""}`}
               key={tab.id}
@@ -70,9 +71,7 @@ export function CleverFeatures({ copy, locale }: { copy: CleverFeaturesCopy; loc
                 <a
                   className="clever-btn clever-btn--primary clever-btn--sm"
                   href={
-                    currentTab.id === "concierge"
-                      ? `/${locale}/concierge`
-                      : currentTab.id === "business"
+                    currentTab.id === "business"
                       ? `/${locale}/business`
                       : `/${locale}/discover`
                   }

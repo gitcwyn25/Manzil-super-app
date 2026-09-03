@@ -3,6 +3,8 @@ import { Reveal } from "../motion/reveal";
 import { Icon } from "../vm/icons";
 
 export function CleverBenefits({ copy }: { copy: CleverBenefitsCopy }) {
+  const cards = copy.cards.slice(1);
+
   return (
     <section className="clever-section clever-benefits" id="benefits">
       <div className="container">
@@ -24,7 +26,7 @@ export function CleverBenefits({ copy }: { copy: CleverBenefitsCopy }) {
 
         {/* Bento Grid */}
         <div className="clever-benefits__grid">
-          {copy.cards.map((card, i) => (
+          {cards.map((card, i) => (
             <Reveal as="div" delay={i * 90} key={card.tag} variant="fade-up">
               <div className={`clever-card clever-benefits__card clever-benefits__card--${i + 1}`}>
                 <div className="clever-card__glow" />

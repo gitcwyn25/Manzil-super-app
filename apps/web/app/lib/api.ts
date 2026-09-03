@@ -418,10 +418,6 @@ export async function getSubscriptionPlans(): Promise<SubscriptionPlan[]> {
   return mockApi.getSubscriptionPlans();
 }
 
-export async function getConciergePrompts() {
-  return mockApi.getConciergePrompts();
-}
-
 export async function getSocialActivities(): Promise<SocialActivity[]> {
   return mockApi.getSocialActivities();
 }

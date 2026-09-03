@@ -35,8 +35,8 @@ const BENTO_COPY: Record<
       },
       {
         tag: "AI Konsyerj",
-        title: "Gurman AI tavsiyalarida ustunlik",
-        desc: "Gurman AI foydalanuvchilarga joy tavsiya qilganda sizning tasdiqlangan profilingiz va sharhlaringiz birinchi o'rinda chiqadi.",
+        title: "Katalogda yaxshi ko'rinish",
+        desc: "Tasdiqlangan profilingiz va sharhlaringiz Manzil katalogida mijozlarga aniq ko'rinadi.",
         icon: "sparkles",
         metric: "02",
         metricLabel: "Haqiqiy ma'lumotlar"
@@ -74,7 +74,7 @@ const BENTO_COPY: Record<
       },
       {
         tag: "AI-консьерж",
-        title: "Приоритет в рекомендациях Gurman AI",
+        title: "Заметный профиль в каталоге",
         desc: "При поиске мест искусственный интеллект рекомендует верифицированные компании с высоким рейтингом в первую очередь.",
         icon: "sparkles",
         metric: "02",
@@ -112,9 +112,9 @@ const BENTO_COPY: Record<
         metricLabel: "You stay in control"
       },
       {
-        tag: "AI Concierge",
-        title: "Priority Gurman AI recommendations",
-        desc: "Gurman AI prioritizes verified venues with authentic ratings when suggesting places to local guests.",
+        tag: "Каталог",
+        title: "A stronger catalogue profile",
+        desc: "Verified profiles and authentic ratings help local guests find your business.",
         icon: "sparkles",
         metric: "02",
         metricLabel: "Real catalogue data"
