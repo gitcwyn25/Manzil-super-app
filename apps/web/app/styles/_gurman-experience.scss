@@ -23,7 +23,7 @@
 .g-workspace-root {
   background-color: var(--g-bg-base);
   color: var(--g-text-main);
-  min-height: 100vh;
+  min-height: min(42rem, 82vh);
   font-family: var(--g-font);
   display: flex;
   flex-direction: column;
@@ -1643,7 +1643,7 @@
 @keyframes gurman-orbit-spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
 
 @media (max-width: 640px) {
-  .gurman-orbit-hero { min-height: 42rem; }
+  .gurman-orbit-hero { min-height: 34rem; }
   .gurman-orbit-hero__nav { width: min(100% - 1.5rem, 82rem); }
   .gurman-orbit-hero__content { width: min(100% - 2rem, 47rem); }
   .gurman-orbit-hero__ring--outer { width: 138vw; }

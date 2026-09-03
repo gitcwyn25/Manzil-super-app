@@ -85,7 +85,7 @@ export function GurmanDetailDrawer({
                 <span>Verified Business</span>
               </span>
             )}
-            <span className="g-badge g-badge--trust">📍 {business.district || "Toshkent"}</span>
+            {business.district && <span className="g-badge g-badge--trust">📍 {business.district}</span>}
           </div>
         </div>
 
@@ -94,13 +94,17 @@ export function GurmanDetailDrawer({
           {/* Title & Rating */}
           <div className="g-detail-header">
             <h2 className="g-detail-title">{business.name}</h2>
-            <div className="g-detail-rating">
-              <span className="g-detail-star">★</span>
-              <span className="g-detail-rating-num">{(business.avgRating || 4.8).toFixed(1)}</span>
-              <span className="g-detail-reviews">
-                ({business.reviewCount || 42} {locale === "uz" ? "ta haqiqiy sharh" : locale === "ru" ? "отзывов" : "reviews"})
-              </span>
-            </div>
+            {business.avgRating != null && (
+              <div className="g-detail-rating">
+                <span className="g-detail-star">★</span>
+                <span className="g-detail-rating-num">{business.avgRating.toFixed(1)}</span>
+                {business.reviewCount != null && (
+                  <span className="g-detail-reviews">
+                    ({business.reviewCount} {locale === "uz" ? "ta sharh" : locale === "ru" ? "отзывов" : "reviews"})
+                  </span>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Key Facts */}
@@ -109,7 +113,7 @@ export function GurmanDetailDrawer({
               <span className="g-detail-fact__icon">📍</span>
               <div>
                 <span className="g-detail-fact__label">{locale === "uz" ? "Manzil" : locale === "ru" ? "Адрес" : "Address"}</span>
-                <span className="g-detail-fact__val">{business.address || `${business.district}, Toshkent`}</span>
+                <span className="g-detail-fact__val">{business.address || business.district || "—"}</span>
               </div>
             </div>
 
@@ -117,7 +121,7 @@ export function GurmanDetailDrawer({
               <span className="g-detail-fact__icon">🕒</span>
               <div>
                 <span className="g-detail-fact__label">{locale === "uz" ? "Ish vaqti" : locale === "ru" ? "Часы работы" : "Hours"}</span>
-                <span className="g-detail-fact__val">{business.hours || "Har kuni 09:00 - 23:00"}</span>
+                <span className="g-detail-fact__val">{business.hours || "—"}</span>
               </div>
             </div>
 

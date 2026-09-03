@@ -53,7 +53,7 @@ export default async function ConciergePage({
     <div className="gurman-bare-page">
       <JsonLd data={breadcrumb} />
 
-      {/* Originkit Hero 06 — full-viewport spiral + concentric rings + lens visual */}
+      {/* Keep the visual intro compact so the planning task is visible without a long scroll. */}
       <Section15Hero locale={locale} />
 
       {/* Workstation — 2-column discovery UI; targeted by Hero CTA scroll */}

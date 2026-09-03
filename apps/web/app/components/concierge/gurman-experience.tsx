@@ -140,32 +140,24 @@ export function GurmanExperience({
 
       const top3 = pool.slice(0, 3);
 
-      const reasons = [
-        {
-          uz: "Tinch va shinam muhit, 4 kishilik stol va sifatli menyu uchun mos.",
-          ru: "Уютная и тихая атмосфера, подходит для компании из 4 человек.",
-          en: "Quiet, cozy atmosphere with great menu options for small groups."
-        },
-        {
-          uz: "Mirobod tumanidagi qulay lokatsiya va yuqori mijozlar reytingi (4.9⭐).",
-          ru: "Удобная локация в Мирабадском районе и высокий рейтинг (4.9⭐).",
-          en: "Prime central location in Mirobod with high 4.9⭐ customer rating."
-        },
-        {
-          uz: "Sifatli xizmat, boy shirinliklar tanlovi va sokin suhbat uchun ideal.",
-          ru: "Отличный сервис, десерты и спокойная обстановка для беседы.",
-          en: "Exceptional artisan coffee, fresh pastries, and pleasant ambiance."
-        }
-      ];
-
-      const recommendations: GurmanRecommendation[] = top3.map((biz, idx) => ({
+      const recommendations: GurmanRecommendation[] = top3.map((biz) => ({
         business: biz,
-        matchScore: 95 - idx * 3,
-        reason: reasons[idx % reasons.length],
+        matchScore: 0,
+        reason: {
+          uz: biz.avgRating
+            ? `${biz.name} katalogdagi ${biz.avgRating.toFixed(1)} reyting bilan ko‘rsatildi.`
+            : "Bu joy katalogdagi mavjud ma'lumot asosida ko‘rsatildi; reyting ma'lumoti mavjud emas.",
+          ru: biz.avgRating
+            ? `${biz.name} показан с рейтингом ${biz.avgRating.toFixed(1)} в каталоге.`
+            : "Место показано на основе доступных данных каталога; рейтинг не указан.",
+          en: biz.avgRating
+            ? `${biz.name} is listed with its catalogue rating of ${biz.avgRating.toFixed(1)}.`
+            : "This place is shown from available catalogue data; no rating is listed."
+        },
         highlights: {
-          uz: ["Haqiqiy sharhlar", "Verified egasi", "Markaziy lokatsiya"],
-          ru: ["Реальные отзывы", "Проверенный статус", "В центре"],
-          en: ["Verified Reviews", "Claimed Business", "Prime District"]
+          uz: ["Katalogdagi joy", ...(biz.district ? [biz.district] : []), ...(biz.priceTier ? [biz.priceTier] : [])],
+          ru: ["Место из каталога", ...(biz.district ? [biz.district] : []), ...(biz.priceTier ? [biz.priceTier] : [])],
+          en: ["Catalogue listing", ...(biz.district ? [biz.district] : []), ...(biz.priceTier ? [biz.priceTier] : [])]
         }
       }));
 
@@ -522,9 +514,9 @@ export function GurmanExperience({
                       >
                         <img alt={biz.name} className="g-preview-card__img" src={cover} />
                         <div className="g-preview-card__body">
-                          <span className="g-preview-card__district">📍 {biz.district || "Toshkent"}</span>
+                          {biz.district && <span className="g-preview-card__district">📍 {biz.district}</span>}
                           <h4 className="g-preview-card__name">{biz.name}</h4>
-                          <span className="g-preview-card__rating">⭐ {(biz.avgRating || 4.8).toFixed(1)}</span>
+                          {biz.avgRating != null && <span className="g-preview-card__rating">⭐ {biz.avgRating.toFixed(1)}</span>}
                         </div>
                       </div>
                     );

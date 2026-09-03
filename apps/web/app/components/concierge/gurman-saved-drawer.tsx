@@ -90,7 +90,9 @@ export function GurmanSavedDrawer({
                     <div className="g-saved-item__body">
                       <h4 className="g-saved-item__name">{biz.name}</h4>
                       <span className="g-saved-item__meta">
-                        📍 {biz.district || "Toshkent"} · ⭐ {(biz.avgRating || 4.8).toFixed(1)}
+                        {biz.district && <>📍 {biz.district}</>}
+                        {biz.district && biz.avgRating != null && " · "}
+                        {biz.avgRating != null && <>⭐ {biz.avgRating.toFixed(1)}</>}
                       </span>
                       <div className="g-saved-item__actions">
                         <Link

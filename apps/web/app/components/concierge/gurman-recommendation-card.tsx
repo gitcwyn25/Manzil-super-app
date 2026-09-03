@@ -86,8 +86,8 @@ export function GurmanRecommendationCard({
 
         {/* Bottom District & Price */}
         <div className="g-rec-card__status-bottom">
-          <span className="g-meta-chip">📍 {business.district || "Toshkent"}</span>
-          <span className="g-meta-chip g-meta-chip--price">{business.priceTier || "$$"}</span>
+          {business.district && <span className="g-meta-chip">📍 {business.district}</span>}
+          {business.priceTier && <span className="g-meta-chip g-meta-chip--price">{business.priceTier}</span>}
         </div>
       </div>
 
@@ -98,9 +98,13 @@ export function GurmanRecommendationCard({
             {business.name}
           </h3>
           <div className="g-rec-card__rating">
-            <span className="g-rec-card__star">★</span>
-            <span className="g-rec-card__rating-val">{(business.avgRating || 4.8).toFixed(1)}</span>
-            <span className="g-rec-card__reviews-count">({business.reviewCount || 42})</span>
+            {business.avgRating != null && (
+              <>
+                <span className="g-rec-card__star">★</span>
+                <span className="g-rec-card__rating-val">{business.avgRating.toFixed(1)}</span>
+                {business.reviewCount != null && <span className="g-rec-card__reviews-count">({business.reviewCount})</span>}
+              </>
+            )}
           </div>
         </div>
 
