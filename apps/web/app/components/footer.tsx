@@ -8,18 +8,21 @@ import { Icon } from "./vm/icons";
 
 const A = "/originkit/footer-01";
 
-const FOOTER_DOWNLOAD_TEXT: Record<Locale, { title: string; desc: string }> = {
+const FOOTER_DOWNLOAD_TEXT: Record<Locale, { title: string; desc: string; soon: string }> = {
   uz: {
     title: "Manzil ilovasini yuklab oling",
-    desc: "Toshkentning barcha sara joylari, haqiqiy sharhlar va Gurman AI shaxsiy konsyerji cho'ntagingizda."
+    desc: "Toshkentning barcha sara joylari, haqiqiy sharhlar va Gurman AI shaxsiy konsyerji cho'ntagingizda.",
+    soon: "Tez kunda do'konlarda"
   },
   ru: {
-    title: "Скачайте приложение Manzil",
-    desc: "Лучшие заведения Ташкента, честные отзывы и персональный AI-консьерж Gurman всегда с вами."
+    title: "Приложение Manzil — скоро",
+    desc: "Лучшие заведения Ташкента, честные отзывы и персональный AI-консьерж Gurman всегда с вами.",
+    soon: "Скоро в магазинах приложений"
   },
   en: {
     title: "Download the Manzil App Today",
-    desc: "Discover top verified spots across Tashkent and get tailored recommendations with Gurman AI."
+    desc: "Discover top verified spots across Tashkent and get tailored recommendations with Gurman AI.",
+    soon: "Coming soon to the stores"
   }
 };
 
@@ -156,13 +159,9 @@ export function Footer({ locale }: { locale: Locale }) {
           <h2 className="manzil-footer__title">{t.title}</h2>
           <p className="manzil-footer__subtitle">{t.desc}</p>
 
-          <div className="manzil-store-row">
-            {/* Google Play */}
-            <a
-              aria-label="Google Play"
-              className="manzil-store-btn"
-              href={`/${locale}#download`}
-            >
+          <div className="manzil-store-row" aria-label={t.soon}>
+            {/* Store listings are not live yet: these are informational badges, not dead links. */}
+            <span aria-label={`Google Play — ${t.soon}`} className="manzil-store-btn" role="img">
               <Image
                 src={`${A}/google-play.svg`}
                 alt=""
@@ -170,18 +169,13 @@ export function Footer({ locale }: { locale: Locale }) {
                 height={28}
                 aria-hidden="true"
               />
-              <div className="manzil-store-btn__meta">
+              <span className="manzil-store-btn__meta">
                 <span className="manzil-store-btn__eyebrow">GET IT ON</span>
                 <span className="manzil-store-btn__label">Google Play</span>
-              </div>
-            </a>
+              </span>
+            </span>
 
-            {/* App Store */}
-            <a
-              aria-label="App Store"
-              className="manzil-store-btn"
-              href={`/${locale}#download`}
-            >
+            <span aria-label={`App Store — ${t.soon}`} className="manzil-store-btn" role="img">
               <Image
                 src={`${A}/app-store.svg`}
                 alt=""
@@ -189,12 +183,13 @@ export function Footer({ locale }: { locale: Locale }) {
                 height={28}
                 aria-hidden="true"
               />
-              <div className="manzil-store-btn__meta">
+              <span className="manzil-store-btn__meta">
                 <span className="manzil-store-btn__eyebrow">Download on the</span>
                 <span className="manzil-store-btn__label">App Store</span>
-              </div>
-            </a>
+              </span>
+            </span>
           </div>
+          <p className="manzil-store-status">{t.soon}</p>
         </div>
 
         {/* Contact Bar */}

@@ -76,20 +76,20 @@ const copy: Record<string, BusinessLandingCopy> = {
     perMonth: "/oy",
     plans: {
       free: {
-        name: "Boshlang'ich",
+        name: "Free",
         price: "0 so'm",
         features: ["Biznes profili", "Sharhlarga javob", "Asosiy statistika"],
         cta: "Bepul boshlash"
       },
       pro: {
         name: "Pro",
-        price: "399 000 so'm",
-        features: ["Boshlang'ich rejadagi hammasi", "E'lonlar va aksiyalar", "Foto galereya", "Kengaytirilgan statistika"],
+        price: "Tez orada",
+        features: ["Free rejadagi hammasi", "E'lonlar va aksiyalar", "Foto galereya", "Kengaytirilgan statistika"],
         cta: "Pro rejani tanlash"
       },
       max: {
         name: "Max",
-        price: "499 000 so'm",
+        price: "Tez orada",
         features: ["Pro rejadagi hammasi", "Qidiruvda ustuvor o'rin", "Bir nechta filial", "Shaxsiy menejer"],
         cta: "Max rejani tanlash",
         badge: "Ommabop"
@@ -139,20 +139,20 @@ const copy: Record<string, BusinessLandingCopy> = {
     perMonth: "/мес",
     plans: {
       free: {
-        name: "Начальный",
+        name: "Free",
         price: "0 сум",
         features: ["Профиль бизнеса", "Ответы на отзывы", "Базовая статистика"],
         cta: "Начать бесплатно"
       },
       pro: {
         name: "Pro",
-        price: "399 000 сум",
-        features: ["Всё из Начального", "Объявления и акции", "Фотогалерея", "Расширенная статистика"],
+        price: "Скоро",
+        features: ["Всё из Free", "Объявления и акции", "Фотогалерея", "Расширенная статистика"],
         cta: "Выбрать Pro"
       },
       max: {
         name: "Max",
-        price: "499 000 сум",
+        price: "Скоро",
         features: ["Всё из Pro", "Приоритет в поиске", "Несколько филиалов", "Персональный менеджер"],
         cta: "Выбрать Max",
         badge: "Популярный"
@@ -202,20 +202,20 @@ const copy: Record<string, BusinessLandingCopy> = {
     perMonth: "/mo",
     plans: {
       free: {
-        name: "Starter",
+        name: "Free",
         price: "0 UZS",
         features: ["Business profile", "Review replies", "Basic statistics"],
         cta: "Start free"
       },
       pro: {
         name: "Pro",
-        price: "399,000 UZS",
-        features: ["Everything in Starter", "Announcements and promotions", "Photo gallery", "Advanced statistics"],
+        price: "Coming soon",
+        features: ["Everything in Free", "Announcements and promotions", "Photo gallery", "Advanced statistics"],
         cta: "Choose Pro"
       },
       max: {
         name: "Max",
-        price: "499,000 UZS",
+        price: "Coming soon",
         features: ["Everything in Pro", "Priority in search", "Multiple branches", "Dedicated manager"],
         cta: "Choose Max",
         badge: "Most popular"

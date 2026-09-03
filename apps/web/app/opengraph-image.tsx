@@ -75,7 +75,7 @@ export default function OpengraphImage() {
             color: "rgba(255,255,255,0.7)"
           }}
         >
-          <div style={{ display: "flex" }}>manzil-business.vercel.app</div>
+          <div style={{ display: "flex" }}>manzilgroup.uz</div>
           <div style={{ display: "flex" }}>UZ · RU · EN</div>
         </div>
       </div>
