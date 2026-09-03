@@ -8,12 +8,31 @@ body:has(.gurman-cinematic-page) main {
 }
 
 :root {
-  --gurman-ink: #071719;
-  --gurman-deep: #0a2427;
-  --gurman-paper: #f4f1e8;
+  /* Gurman shares the Manzil shell's primary blue; mint remains a state
+     signal rather than a second competing brand color. */
+  --gurman-ink: #0d1b1f;
+  --gurman-deep: #14272b;
+  --gurman-paper: #edf6f3;
+  --gurman-paper-rgb: 237 246 243;
   --gurman-mint: #6cf8bb;
-  --gurman-blue: #75b8d4;
-  --gurman-line: rgb(244 241 232 / 0.2);
+  --gurman-signal-rgb: 108 248 187;
+  --gurman-blue: #0070eb;
+  --gurman-blue-rgb: 0 112 235;
+  --gurman-primary: #0058bc;
+  --gurman-line: rgb(var(--gurman-paper-rgb) / 0.2);
+}
+
+[data-theme="day"] .gurman-cinematic-page {
+  --gurman-ink: #f4f8f7;
+  --gurman-deep: #e7f2ef;
+  --gurman-paper: #102426;
+  --gurman-paper-rgb: 16 36 38;
+  --gurman-mint: #087f75;
+  --gurman-signal-rgb: 8 127 117;
+  --gurman-blue: #0058bc;
+  --gurman-blue-rgb: 0 88 188;
+  --gurman-primary: #0058bc;
+  --gurman-line: rgb(var(--gurman-paper-rgb) / 0.16);
 }
 
 .gurman-cinematic {
@@ -60,7 +79,7 @@ body:has(.gurman-cinematic-page) main {
   inset: auto -12vw -42vh auto;
   width: 68vw;
   height: 80vh;
-  border: 1px solid rgb(108 248 187 / 0.1);
+  border: 1px solid rgb(var(--gurman-signal-rgb) / 0.1);
   border-radius: 50%;
   transform: rotate(-18deg) translate3d(calc(var(--story-progress) * -20px), calc(var(--story-progress) * 20px), 0);
 }
@@ -70,7 +89,7 @@ body:has(.gurman-cinematic-page) main {
   inset: 14vh auto auto -28vw;
   width: 70vw;
   height: 72vh;
-  border: 1px solid rgb(117 184 212 / 0.12);
+  border: 1px solid rgb(var(--gurman-blue-rgb) / 0.12);
   border-radius: 50%;
   transform: rotate(22deg) translate3d(calc(var(--story-progress) * 24px), calc(var(--story-progress) * -14px), 0);
 }
@@ -78,7 +97,7 @@ body:has(.gurman-cinematic-page) main {
 .gurman-cinematic__ring {
   position: absolute;
   display: block;
-  border: 1px solid rgb(244 241 232 / 0.08);
+  border: 1px solid rgb(var(--gurman-paper-rgb) / 0.08);
   border-radius: 50%;
   transform: rotate(-25deg) scaleX(1.6);
 }
@@ -109,7 +128,7 @@ body:has(.gurman-cinematic-page) main {
   right: 22%;
   width: 1px;
   height: 132vh;
-  background: rgb(108 248 187 / 0.16);
+  background: rgb(var(--gurman-signal-rgb) / 0.16);
   transform: rotate(28deg) translateX(calc(var(--story-progress) * 32px));
   transform-origin: center;
 }
@@ -146,7 +165,7 @@ body:has(.gurman-cinematic-page) main {
 }
 
 .gurman-cinematic__status {
-  color: rgb(244 241 232 / 0.62);
+  color: rgb(var(--gurman-paper-rgb) / 0.62);
   font-family: var(--font-data), ui-monospace, monospace;
   font-size: 0.68rem;
   letter-spacing: 0.13em;
@@ -200,7 +219,7 @@ body:has(.gurman-cinematic-page) main {
   display: flex;
   align-items: baseline;
   gap: 10px;
-  color: rgb(244 241 232 / 0.28);
+  color: rgb(var(--gurman-paper-rgb) / 0.28);
   font-family: var(--font-data), ui-monospace, monospace;
   font-size: 0.62rem;
   line-height: 1.15;
@@ -312,7 +331,7 @@ body:has(.gurman-cinematic-page) main {
 .gurman-cinematic__lead {
   max-width: 600px;
   margin: 30px 0 0;
-  color: rgb(244 241 232 / 0.72);
+  color: rgb(var(--gurman-paper-rgb) / 0.72);
   font-size: clamp(1rem, 1.5vw, 1.25rem);
   line-height: 1.5;
 }
@@ -325,7 +344,7 @@ body:has(.gurman-cinematic-page) main {
 .gurman-cinematic__planner label {
   display: block;
   margin-bottom: 10px;
-  color: rgb(244 241 232 / 0.48);
+  color: rgb(var(--gurman-paper-rgb) / 0.48);
   font-family: var(--font-data), ui-monospace, monospace;
   font-size: 0.68rem;
   letter-spacing: 0.12em;
@@ -335,7 +354,7 @@ body:has(.gurman-cinematic-page) main {
 .gurman-cinematic__planner > div {
   display: flex;
   align-items: stretch;
-  border-bottom: 1px solid rgb(244 241 232 / 0.48);
+  border-bottom: 1px solid rgb(var(--gurman-paper-rgb) / 0.48);
 }
 
 .gurman-cinematic__planner input {
@@ -352,7 +371,7 @@ body:has(.gurman-cinematic-page) main {
 }
 
 .gurman-cinematic__planner input::placeholder {
-  color: rgb(244 241 232 / 0.38);
+  color: rgb(var(--gurman-paper-rgb) / 0.38);
 }
 
 .gurman-cinematic__planner button,
@@ -364,8 +383,8 @@ body:has(.gurman-cinematic-page) main {
   padding: 0 19px;
   border: 0;
   border-radius: 999px;
-  color: var(--gurman-ink);
-  background: var(--gurman-mint);
+  color: #ffffff;
+  background: var(--gurman-primary);
   font: inherit;
   font-size: 0.86rem;
   font-weight: 800;
@@ -378,6 +397,7 @@ body:has(.gurman-cinematic-page) main {
 .gurman-cinematic__planner button:focus-visible,
 .gurman-cinematic__close-button:hover,
 .gurman-cinematic__close-button:focus-visible {
+  color: var(--gurman-ink);
   background: var(--gurman-paper);
   transform: translateY(-2px);
 }
@@ -387,7 +407,7 @@ body:has(.gurman-cinematic-page) main {
   flex-wrap: wrap;
   gap: 10px 24px;
   margin-top: 20px;
-  color: rgb(244 241 232 / 0.5);
+  color: rgb(var(--gurman-paper-rgb) / 0.5);
   font-size: 0.77rem;
 }
 
@@ -397,13 +417,20 @@ body:has(.gurman-cinematic-page) main {
   content: "✓";
 }
 
-.gurman-cinematic__proof a {
+.gurman-cinematic__proof a,
+.gurman-cinematic__proof button {
+  padding: 0;
+  border: 0;
   color: var(--gurman-paper);
+  background: transparent;
+  font: inherit;
   font-weight: 700;
   text-decoration: none;
+  cursor: pointer;
 }
 
-.gurman-cinematic__proof a span {
+.gurman-cinematic__proof a span,
+.gurman-cinematic__proof button span {
   margin-left: 5px;
   color: var(--gurman-mint);
 }
@@ -416,7 +443,7 @@ body:has(.gurman-cinematic-page) main {
   place-items: center;
   width: clamp(170px, 19vw, 280px);
   aspect-ratio: 1;
-  border: 1px solid rgb(108 248 187 / 0.42);
+  border: 1px solid rgb(var(--gurman-signal-rgb) / 0.42);
   border-radius: 50%;
   color: var(--gurman-mint);
   transform: rotate(-12deg);
@@ -425,7 +452,7 @@ body:has(.gurman-cinematic-page) main {
 .gurman-cinematic__hero-mark::before,
 .gurman-cinematic__hero-mark::after {
   position: absolute;
-  border: 1px solid rgb(108 248 187 / 0.16);
+  border: 1px solid rgb(var(--gurman-signal-rgb) / 0.16);
   border-radius: 50%;
   content: "";
 }
@@ -517,12 +544,12 @@ body:has(.gurman-cinematic-page) main {
 
 .gurman-cinematic__evidence-row > div p {
   margin-bottom: 8px;
-  color: rgb(244 241 232 / 0.46);
+  color: rgb(var(--gurman-paper-rgb) / 0.46);
 }
 
 .gurman-cinematic__evidence-row > p {
   margin: 0;
-  color: rgb(244 241 232 / 0.56);
+  color: rgb(var(--gurman-paper-rgb) / 0.56);
   font-size: 0.92rem;
   line-height: 1.45;
 }
@@ -537,7 +564,7 @@ body:has(.gurman-cinematic-page) main {
   grid-template-columns: repeat(8, minmax(0, 1fr));
   gap: 0;
   margin-top: 18px;
-  border-top: 1px solid rgb(108 248 187 / 0.5);
+  border-top: 1px solid rgb(var(--gurman-signal-rgb) / 0.5);
 }
 
 .gurman-cinematic__pipeline-track span {
@@ -568,7 +595,7 @@ body:has(.gurman-cinematic-page) main {
 .gurman-cinematic__pipeline-track span i {
   display: block;
   margin-bottom: 10px;
-  color: rgb(244 241 232 / 0.4);
+  color: rgb(var(--gurman-paper-rgb) / 0.4);
   font-family: var(--font-data), ui-monospace, monospace;
   font-size: 0.62rem;
   font-style: normal;
@@ -582,7 +609,7 @@ body:has(.gurman-cinematic-page) main {
   width: min(850px, 80%);
   margin: 70px 0 0 auto;
   padding: 20px 0;
-  border-top: 1px solid rgb(108 248 187 / 0.5);
+  border-top: 1px solid rgb(var(--gurman-signal-rgb) / 0.5);
   border-bottom: 1px solid var(--gurman-line);
 }
 
@@ -598,7 +625,7 @@ body:has(.gurman-cinematic-page) main {
 
 .gurman-cinematic__boundary p {
   margin: 0;
-  color: rgb(244 241 232 / 0.58);
+  color: rgb(var(--gurman-paper-rgb) / 0.58);
   font-size: 0.9rem;
   line-height: 1.45;
 }
@@ -614,7 +641,7 @@ body:has(.gurman-cinematic-page) main {
 .gurman-cinematic__memory-note {
   align-self: start;
   padding-top: 16px;
-  border-top: 1px solid rgb(108 248 187 / 0.5);
+  border-top: 1px solid rgb(var(--gurman-signal-rgb) / 0.5);
 }
 
 .gurman-cinematic__memory-note h3 {
@@ -627,7 +654,7 @@ body:has(.gurman-cinematic-page) main {
 .gurman-cinematic__memory-note > span {
   display: block;
   margin-top: 18px;
-  color: rgb(244 241 232 / 0.56);
+  color: rgb(var(--gurman-paper-rgb) / 0.56);
   font-size: 0.9rem;
   line-height: 1.4;
 }
@@ -641,7 +668,7 @@ body:has(.gurman-cinematic-page) main {
 }
 
 .gurman-cinematic__memory-note li {
-  color: rgb(244 241 232 / 0.65);
+  color: rgb(var(--gurman-paper-rgb) / 0.65);
   font-family: var(--font-data), ui-monospace, monospace;
   font-size: 0.67rem;
   line-height: 1.25;
@@ -681,7 +708,7 @@ body:has(.gurman-cinematic-page) main {
 }
 
 .gurman-cinematic__memory-tiers small {
-  color: rgb(244 241 232 / 0.48);
+  color: rgb(var(--gurman-paper-rgb) / 0.48);
   font-size: 0.75rem;
   line-height: 1.3;
 }
@@ -693,7 +720,7 @@ body:has(.gurman-cinematic-page) main {
   width: min(950px, 86%);
   margin: 54px 0 0 auto;
   padding: 22px 0;
-  border-top: 1px solid rgb(108 248 187 / 0.5);
+  border-top: 1px solid rgb(var(--gurman-signal-rgb) / 0.5);
   border-bottom: 1px solid var(--gurman-line);
 }
 
@@ -705,7 +732,7 @@ body:has(.gurman-cinematic-page) main {
 
 .gurman-cinematic__collab-panel > div > p:last-child {
   margin: 18px 0 0;
-  color: rgb(244 241 232 / 0.57);
+  color: rgb(var(--gurman-paper-rgb) / 0.57);
   font-size: 0.9rem;
   line-height: 1.45;
 }
@@ -752,9 +779,9 @@ body:has(.gurman-cinematic-page) main {
   width: min(260px, 100%);
   aspect-ratio: 9 / 16;
   overflow: hidden;
-  border: 1px solid rgb(108 248 187 / 0.4);
+  border: 1px solid rgb(var(--gurman-signal-rgb) / 0.4);
   background: #020c0e;
-  box-shadow: 24px 24px 0 rgb(108 248 187 / 0.1);
+  box-shadow: 24px 24px 0 rgb(var(--gurman-signal-rgb) / 0.1);
 }
 
 .gurman-cinematic__video-frame iframe {
@@ -846,7 +873,7 @@ body:has(.gurman-cinematic-page) main {
   .gurman-cinematic__planner input {
     width: 100%;
     height: 52px;
-    border-bottom: 1px solid rgb(244 241 232 / 0.48);
+    border-bottom: 1px solid rgb(var(--gurman-paper-rgb) / 0.48);
   }
 
   .gurman-cinematic__planner button {

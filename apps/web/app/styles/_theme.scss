@@ -146,12 +146,29 @@
   color: var(--text);
 }
 
+/* Keep section headings readable in Night mode without recolouring the
+   explicitly light card surfaces below them. The previous `.clever-section
+   h3/p` rule won over card-local colors and produced near-white text on white
+   cards (contrast ratio ~1.1:1). */
 [data-theme="night"] .clever-header,
 [data-theme="night"] .clever-heading,
-[data-theme="night"] .clever-section h2,
-[data-theme="night"] .clever-section h3,
-[data-theme="night"] .clever-section p {
+[data-theme="night"] .clever-header .clever-heading,
+[data-theme="night"] .clever-header .clever-subheading {
   color: var(--text);
+}
+
+// Benefit cards stay white in both appearances. Their local ink must outrank
+// any broad Night-mode `.clever-section h3/p` rule from an older build.
+[data-theme="night"] .clever-benefits .clever-benefits__card {
+  color: $vm-on-surface;
+}
+
+[data-theme="night"] .clever-benefits .clever-card__title {
+  color: $vm-on-surface;
+}
+
+[data-theme="night"] .clever-benefits .clever-card__desc {
+  color: $vm-on-surface-variant;
 }
 
 [data-theme="night"] .clever-section .text-muted,
@@ -704,13 +721,13 @@
 
 [data-theme="day"] .g-guide-screen__button,
 [data-theme="day"] .gurman-workspace-guide__action {
-  background: #087f75;
-  border-color: #087f75;
+  background: #0058bc;
+  border-color: #0058bc;
   color: #ffffff;
 }
 
 [data-theme="day"] .gurman-workspace-guide__action:hover {
-  background: #0b625a;
+  background: #004493;
 }
 
 [data-theme="day"] .gurman-concierge-page .gurman-workspace-entry {
@@ -725,9 +742,11 @@
   --g-text-muted: #54706d;
   --g-text-subtle: #6b8581;
   --g-border: #cbded9;
-  --g-border-hover: #087f75;
-  --g-primary: #087f75;
-  --g-primary-glow: rgb(8 127 117 / 0.16);
+  --g-border-hover: #0058bc;
+  --g-primary-rgb: 0 88 188;
+  --g-primary: #0058bc;
+  --g-primary-bright: #0070eb;
+  --g-primary-glow: rgb(0 88 188 / 0.16);
   background: #f4f8f7 !important;
   color: #102426;
 }
@@ -837,7 +856,7 @@
 [data-theme="day"] .gurman-cinematic-page .gurman-cinematic__planner button,
 [data-theme="day"] .gurman-cinematic-page .gurman-cinematic__close-button {
   color: #ffffff;
-  background: #087f75;
+  background: #0058bc;
 }
 
 @media (max-width: 700px) {

@@ -190,16 +190,19 @@ export function GurmanWorkspaceGuide({ locale }: { locale: Locale }) {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let frame = 0;
     let current = 0;
-    let initialized = false;
 
     const update = () => {
       frame = 0;
       const rect = guide.getBoundingClientRect();
       const viewport = Math.max(1, window.innerHeight);
-      const total = Math.max(1, guide.offsetHeight - viewport * 0.72);
-      const target = clamp((viewport * 0.28 - rect.top) / total);
-      current = !initialized || reduceMotion.matches ? target : current + (target - current) * 0.16;
-      initialized = true;
+      const distance = Math.max(1, guide.offsetHeight - viewport);
+      const travelled = clamp(-rect.top, 0, distance);
+      const target = travelled / distance;
+      // Scroll-driven motion must stay aligned with the scroll position. The
+      // previous easing formula used the wrong direction and kept the guide at
+      // its initial state for most of the page; CSS transitions then added a
+      // second layer of lag.
+      current = target;
 
       const request = smoothstep(0, 0.25, current) * (1 - smoothstep(0.34, 0.56, current));
       const understand = smoothstep(0.3, 0.56, current) * (1 - smoothstep(0.63, 0.79, current));

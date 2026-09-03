@@ -11,12 +11,12 @@ function clamp(value: number, min = 0, max = 1) {
 }
 
 function sceneWeight(progress: number, start: number, end: number) {
-  // Each scene owns its interval. It fades in after the previous scene has
-  // fully left, so headlines never sit on top of one another during a fast
-  // scroll or when the browser is catching up with smooth scrolling.
-  const fade = 0.04;
-  const enter = start === 0 ? 1 : clamp((progress - start) / fade);
-  const exit = 1 - clamp((progress - (end - fade)) / fade);
+  // Crossfade adjacent scenes. The previous implementation faded a scene out
+  // exactly as the next one started, leaving a blank frame at every chapter
+  // boundary — especially noticeable during wheel and touch scrolling.
+  const fade = 0.08;
+  const enter = start === 0 ? 1 : clamp((progress - (start - fade)) / (fade * 2));
+  const exit = end >= 1 ? 1 : 1 - clamp((progress - (end - fade)) / (fade * 2));
   return enter * exit;
 }
 
@@ -31,6 +31,13 @@ export function GurmanCinematicStory({
 }) {
   const scrollRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
+
+  const scrollToEvidence = () => {
+    const section = scrollRef.current;
+    if (!section) return;
+    const distance = Math.max(1, section.offsetHeight - window.innerHeight);
+    window.scrollTo({ top: section.offsetTop + distance * 0.16, behavior: "smooth" });
+  };
 
   useEffect(() => {
     const section = scrollRef.current;
@@ -177,7 +184,9 @@ export function GurmanCinematicStory({
             <div className="gurman-cinematic__proof">
               <span>{copy.hero.trustReviews}</span>
               <span>{copy.hero.trustPlaces}</span>
-              <a href="#gurman-evidence">{copy.hero.howItWorksCta} <span aria-hidden="true">↓</span></a>
+              <button type="button" onClick={scrollToEvidence}>
+                {copy.hero.howItWorksCta} <span aria-hidden="true">↓</span>
+              </button>
             </div>
           </div>
           <div className="gurman-cinematic__hero-mark" aria-hidden="true">
@@ -186,7 +195,7 @@ export function GurmanCinematicStory({
           </div>
         </article>
 
-        <article id="gurman-evidence" className="gurman-cinematic__scene gurman-cinematic__scene--evidence">
+        <article className="gurman-cinematic__scene gurman-cinematic__scene--evidence">
           <div className="gurman-cinematic__chapter-number">02</div>
           <div className="gurman-cinematic__chapter-copy">
             <p className="gurman-cinematic__eyebrow">{copy.trust.eyebrow}</p>
