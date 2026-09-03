@@ -37,8 +37,8 @@
     "seed": "tsx packages/db/prisma/seed.ts"
   },
   "devDependencies": {
-    "@clerk/testing": "^2.2.13",
-    "@playwright/test": "^1.61.1",
+    "@clerk/testing": "^2.2.31",
+    "@playwright/test": "^1.62.1",
     "prisma": "6.19.3",
     "tsx": "latest",
     "typescript": "latest",
