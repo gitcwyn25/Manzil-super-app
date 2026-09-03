@@ -104,6 +104,58 @@ async function main() {
     record("GET /v1/categories returns data", false, error.message);
   }
 
+  // Public business reads must not expose suspended or merged listings. This
+  // catches a stale API deployment even when health and basic reads succeed.
+  try {
+    const response = await fetchWithTimeout(`${baseUrl}/v1/businesses`);
+    const body = await response.json().catch(() => null);
+    const businesses = body?.data?.businesses;
+    const visible = Array.isArray(businesses)
+      && businesses.every((business) => business?.status !== "suspended" && !business?.mergedIntoId);
+    record(
+      "public business list excludes suspended and merged listings",
+      response.status === 200 && visible,
+      `status=${response.status} count=${Array.isArray(businesses) ? businesses.length : "invalid"}`
+    );
+  } catch (error) {
+    record("public business list excludes suspended and merged listings", false, error.message);
+  }
+
+  // Search is a separate public read path and must apply the same visibility
+  // predicate as the directory list.
+  try {
+    const response = await fetchWithTimeout(`${baseUrl}/v1/search?q=ravotsoy`);
+    const body = await response.json().catch(() => null);
+    const businesses = body?.data?.businesses;
+    const visible = Array.isArray(businesses)
+      && businesses.every((business) => business?.status !== "suspended" && !business?.mergedIntoId);
+    record(
+      "public search excludes suspended and merged listings",
+      response.status === 200 && visible,
+      `status=${response.status} count=${Array.isArray(businesses) ? businesses.length : "invalid"}`
+    );
+  } catch (error) {
+    record("public search excludes suspended and merged listings", false, error.message);
+  }
+
+  // Legal identity fields belong to owner/admin views, never anonymous public
+  // responses. Keep this assertion on a list endpoint so it covers the normal
+  // catalog serialization path rather than only a special-case fixture.
+  try {
+    const response = await fetchWithTimeout(`${baseUrl}/v1/businesses`);
+    const body = await response.json().catch(() => null);
+    const businesses = body?.data?.businesses;
+    const omitted = Array.isArray(businesses)
+      && businesses.every((business) => !("legalName" in business) && !("taxId" in business));
+    record(
+      "public business list omits legal identity fields",
+      response.status === 200 && omitted,
+      `status=${response.status} count=${Array.isArray(businesses) ? businesses.length : "invalid"}`
+    );
+  } catch (error) {
+    record("public business list omits legal identity fields", false, error.message);
+  }
+
   // Security headers must survive the deploy — a stripped helmet would be
   // invisible without an explicit assertion.
   try {
