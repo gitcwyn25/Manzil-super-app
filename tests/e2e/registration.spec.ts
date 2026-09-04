@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+﻿import { expect, test } from "@playwright/test";
 import { E2E_TERMS_VERSION } from "./fixtures/seed";
 
 /**
@@ -19,8 +19,7 @@ import { E2E_TERMS_VERSION } from "./fixtures/seed";
  */
 test.skip(
   Boolean(process.env.SKIP_AUTH_SETUP),
-  "SKIP_AUTH_SETUP is set — no Clerk session available for authenticated specs"
-);
+  "SKIP_AUTH_SETUP is set - no Clerk session available for authenticated specs");
 
 test.describe("business registration terms (authenticated)", () => {
   test.beforeEach(async ({ page }) => {
@@ -44,7 +43,7 @@ test.describe("business registration terms (authenticated)", () => {
 
     let submitted = false;
     page.on("request", (request) => {
-      if (request.url().includes("/crm/register")) submitted = true;
+      if (request.url().includes("/crm/applications")) submitted = true;
     });
 
     await page.locator("input[name='name']").fill("E2E Test Business");
