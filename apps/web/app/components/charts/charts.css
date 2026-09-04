@@ -26,42 +26,6 @@
   --viz-step-4: #104281;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:where(:not([data-theme="light"])) .mz-analytics {
-    --viz-surface: #1a1a19;
-    --viz-text-primary: #ffffff;
-    --viz-text-secondary: #c3c2b7;
-    --viz-text-muted: #898781;
-    --viz-grid: #2c2c2a;
-    --viz-border: rgba(255, 255, 255, 0.1);
-
-    --viz-series: #3987e5;
-
-    /* Ordinal ramp, dark: blue 150 -> 600 (lighter end nearest the surface). */
-    --viz-step-0: #b7d3f6;
-    --viz-step-1: #86b6ef;
-    --viz-step-2: #5598e7;
-    --viz-step-3: #2a78d6;
-    --viz-step-4: #184f95;
-  }
-}
-
-:root[data-theme="dark"] .mz-analytics {
-  --viz-surface: #1a1a19;
-  --viz-text-primary: #ffffff;
-  --viz-text-secondary: #c3c2b7;
-  --viz-text-muted: #898781;
-  --viz-grid: #2c2c2a;
-  --viz-border: rgba(255, 255, 255, 0.1);
-
-  --viz-series: #3987e5;
-
-  --viz-step-0: #b7d3f6;
-  --viz-step-1: #86b6ef;
-  --viz-step-2: #5598e7;
-  --viz-step-3: #2a78d6;
-  --viz-step-4: #184f95;
-}
 
 /* ---------- stat tiles ---------- */
 

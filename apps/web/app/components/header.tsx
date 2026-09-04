@@ -4,7 +4,6 @@ import type { Locale } from "@manzil/shared";
 import Link from "next/link";
 import { LocaleSwitcher } from "./locale-switcher";
 import { SiteNav } from "./site-nav";
-import { ThemeSwitcher } from "./theme-switcher";
 
 const MOBILE_NAV_PANEL_ID = "mobile-nav-panel";
 const MENU_LABEL: Record<Locale, string> = { uz: "Menyu", ru: "Меню", en: "Menu" };
@@ -26,7 +25,6 @@ export function Header({ locale }: { locale: Locale }) {
 
         <div className="site-nav__actions clever-nav-actions">
           <LocaleSwitcher locale={locale} />
-          <ThemeSwitcher locale={locale} />
 
           <button
             type="button"

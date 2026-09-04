@@ -1046,10 +1046,6 @@ nav.mobile-nav a {
   height: 16px;
 }
 
-.clever-nav-wrapper .theme-button {
-  width: 36px;
-  height: 36px;
-}
 
 .clever-nav-wrapper .mobile-nav-toggle {
   width: 36px;
@@ -1062,9 +1058,6 @@ nav.mobile-nav a {
   font-weight: 600;
 }
 
-[data-theme="night"] .clever-nav-wrapper .header-signin {
-  color: #c8ddda !important;
-}
 
 @media (max-width: 767.98px) {
   .clever-nav-wrapper .clever-nav-row,
@@ -1104,7 +1097,6 @@ nav.mobile-nav a {
     height: 15px;
   }
 
-  .clever-nav-wrapper .theme-button,
   .clever-nav-wrapper .mobile-nav-toggle {
     width: 34px;
     height: 34px;
@@ -1199,8 +1191,7 @@ nav.mobile-nav a {
   gap: 6px;
 }
 
-.clever-nav-wrapper .clever-nav-actions .lang-button,
-.clever-nav-wrapper .clever-nav-actions .theme-button {
+.clever-nav-wrapper .clever-nav-actions .lang-button {
   border: 1px solid rgba(111, 142, 177, .32);
   background: rgba(255, 255, 255, .46);
   color: #36516f;
@@ -1208,18 +1199,12 @@ nav.mobile-nav a {
 }
 
 .clever-nav-wrapper .clever-nav-actions .lang-button:hover,
-.clever-nav-wrapper .clever-nav-actions .lang-button[aria-expanded="true"],
-.clever-nav-wrapper .clever-nav-actions .theme-button:hover,
-.clever-nav-wrapper .clever-nav-actions .theme-button[aria-expanded="true"] {
+.clever-nav-wrapper .clever-nav-actions .lang-button[aria-expanded="true"] {
   border-color: rgba(23, 117, 245, .52);
   background: rgba(255, 255, 255, .82);
   color: #075dc5;
 }
 
-.clever-nav-wrapper .clever-nav-actions .theme-button {
-  width: 38px;
-  height: 38px;
-}
 
 @media (max-width: 991.98px) {
   .clever-nav-wrapper .clever-nav-row {
@@ -1248,7 +1233,6 @@ nav.mobile-nav a {
   }
 
   .clever-nav-wrapper .clever-nav-actions .lang-button,
-  .clever-nav-wrapper .clever-nav-actions .theme-button,
   .clever-nav-wrapper .clever-nav-actions .mobile-nav-toggle {
     min-width: 40px;
     min-height: 40px;
