@@ -166,17 +166,17 @@ const landing: Record<string, LandingCopy> = {
       chatStatus: "Toshkentdagi joylar",
       chatAi: "Salom! Toshkentdagi haqiqiy joylar va sharhlarni ko'ring.",
       chatUser: "Shanba oqshomi uchun sokin, sifatli qahva va desertlari bor joy kerak.",
-      microPerks: ["100% haqiqiy sharhlar", "Jonli katalog ma'lumotlari", "Mutlaqo bepul"]
+      microPerks: ["Katalog ma'lumotlari", "Toshkentdan boshlang", "Bepul boshlash"]
     },
     benefits: {
       badge: "Afzalliklar",
       title: "Bir qarordan to'liq tajribagacha",
       subtitle:
-        "Sun'iy intellekt, tekshirilgan sharhlar va qulay interfeys orqali vaqtingizni tejang va eng yaxshi joylarni tanlang.",
+        "Toshkent katalogi, jamoa sharhlari va qulay interfeys orqali vaqtingizni tejang va mos joyni tanlang.",
       cards: [
         {
           icon: "sparkles",
-          tag: "AI Konsyerj",
+          tag: "Toshkent katalogi",
           title: "Haqiqiy joylarni oson toping",
           description:
             "Katalogdagi haqiqiy sharhlar va ma'lumotlar asosida sizga mos variantlarni toping."
@@ -184,9 +184,9 @@ const landing: Record<string, LandingCopy> = {
         {
           icon: "verified",
           tag: "Haqiqiylik",
-          title: "Tasdiqlangan va ishonchli sharhlar",
+          title: "Sharhlarni kontekst bilan ko'ring",
           description:
-            "Soxta reytinglar yo'q. Faqat tashrif buyurgan haqiqiy mehmonlarning xolisona baholari va fotosuratlari."
+            "Mavjud baholar, fikrlar va fotosuratlarni ko'rib, joy haqida o'zingizga mos qaror qiling."
         },
         {
           icon: "search",
@@ -222,22 +222,22 @@ const landing: Record<string, LandingCopy> = {
           ],
           badge: "Aqlli Tavsiya",
           metricLabel: "Qidiruv vaqti tejalishi",
-          metricValue: "85%"
+          metricValue: "—"
         },
         {
           id: "catalog",
           label: "Aqlli Katalog",
           title: "Toshkentning eng yaxshi maskanlari bir joyda",
           description:
-            "Turkumlar, tumanlar va reytinglar bo'yicha qulay filtrlash tizimi. Har bir joyning ish vaqti, menyusi, fotosuratlari va aloqa ma'lumotlari muntazam yangilanadi.",
+            "Turkumlar, tumanlar va reytinglar bo'yicha qulay filtrlash tizimi. Mavjud ish vaqti, menyu, fotosuratlar va aloqa ma'lumotlarini bir joyda ko'ring.",
           bullets: [
             "Tumanlar va lokatsiya bo'yicha tezkor saralash",
-            "Haqiqiy tashrif buyuruvchilarning fotosuratlari",
+            "Mavjud fotosuratlarni ko'rish",
             "To'g'ridan-to'g'ri telefon va Telegram havolalari"
           ],
-          badge: "Tasdiqlangan Joylar",
-          metricLabel: "Katalog yangilanishi",
-          metricValue: "Har kuni"
+          badge: "Katalog ma'lumotlari",
+          metricLabel: "Katalog holati",
+          metricValue: "—"
         },
         {
           id: "business",
@@ -250,9 +250,9 @@ const landing: Record<string, LandingCopy> = {
             "Mijozlar sharhlariga tezkor javob berish",
             "Katalogda ko'rinish"
           ],
-          badge: "Biznes O'sishi",
-          metricLabel: "Mijozlar jalb qilish",
-          metricValue: "3.2x"
+          badge: "Biznes profili",
+          metricLabel: "Profil holati",
+          metricValue: "—"
         }
       ]
     },
@@ -286,7 +286,7 @@ const landing: Record<string, LandingCopy> = {
     },
     bento: {
       title: "Eng yaxshi joylar",
-      subtitle: "Manzildagi haqiqiy joylar — mehmonlarning haqiqiy sharhlari bilan.",
+      subtitle: "Manzildagi katalog joylari — mavjud sharhlar va ma'lumotlar bilan.",
       viewAll: "Barcha turkumlarni ko'rish",
       featuredBadge: "Tanlangan",
       partnerTitle: "Biznesingiz bormi?",
@@ -409,7 +409,7 @@ const landing: Record<string, LandingCopy> = {
         {
           question: "Manzil nima va u qanday xizmatlarni taqdim etadi?",
           answer:
-            "Manzil — O'zbekistondagi eng yaxshi kafe, restoran, xizmat ko'rsatish markazlari va dam olish joylarini birlashtirgan zamonaviy shahar katalogi va AI konsyerj platformasidir."
+            "Manzil — Toshkentdagi mahalliy bizneslarni topish va solishtirish uchun shahar katalogi. Gurman esa kelajakdagi mobil rejalashtirish tajribasi sifatida ishlab chiqilmoqda."
         },
         {
           question: "Manzildagi joylar qanday tanlanadi?",
@@ -437,12 +437,12 @@ const landing: Record<string, LandingCopy> = {
       badge: "Hoziroq kashf eting",
       title: "Shahringizning eng sara maskanlarini topishga tayyormisiz?",
       subtitle:
-        "Haqiqiy sharhlar asosida tanlang yoki o'z biznesingizni minglab yangi mijozlarga taniting.",
+        "Katalogdagi mavjud ma'lumotlarni solishtiring yoki biznesingizni Manzilga qo'shing.",
       primaryCta: "Katalogga o'tish",
       primaryHref: "/uz/discover",
       secondaryCta: "Biznesni qo'shish",
       secondaryHref: "/uz/business/register",
-      perks: ["Tezkor & Oson", "Haqiqiy sharhlar", "100% bepul boshlash"]
+      perks: ["Tezkor & Oson", "Mavjud sharhlar", "Bepul boshlash"]
     }
   },
   ru: {
@@ -454,24 +454,24 @@ const landing: Record<string, LandingCopy> = {
       title1: "Планируйте впечатления,",
       title2: "а не просто места.",
       subtitle:
-        "Расскажите Gurman, что вы планируете. Он сравнит доступные места и поможет принять решение на основе данных каталога.",
+        "Расскажите, что ищете. Каталог Manzil поможет сравнить доступные места и принять решение на основе имеющихся данных.",
       explore: "Начать планирование",
       how: "Чат с Gurman AI",
       chatName: "Gurman AI Консьерж",
       chatStatus: "Подбирает рекомендацию…",
       chatAi: "Здравствуйте! Какое место вы ищете? Подберу на основе настоящих отзывов и проверенных данных.",
       chatUser: "Нужно тихое, атмосферное место с хорошим кофе и десертами на субботний вечер.",
-      microPerks: ["100% честные отзывы", "Живой каталог заведений", "Полностью бесплатно"]
+      microPerks: ["Каталог Manzil", "Данные профилей", "Бесплатный старт"]
     },
     benefits: {
       badge: "Преимущества",
       title: "От идеи до готового впечатления",
       subtitle:
-        "Искусственный интеллект, проверенные отзывы и продуманный интерфейс экономят ваше время и помогают выбрать лучшее.",
+        "Каталог Manzil, отзывы сообщества и продуманный интерфейс экономят ваше время и помогают выбрать подходящее место.",
       cards: [
         {
           icon: "sparkles",
-          tag: "AI Консьерж",
+          tag: "Каталог Manzil",
           title: "Персональные советы от Gurman AI",
           description:
             "Опишите свои пожелания простыми словами — Gurman AI проанализирует реальные отзывы и подберёт идеальные варианты."
@@ -479,9 +479,9 @@ const landing: Record<string, LandingCopy> = {
         {
           icon: "verified",
           tag: "Достоверность",
-          title: "Проверенные и честные отзывы",
+          title: "Изучайте отзывы с контекстом",
           description:
-            "Никаких накруток. Только настоящие оценки, впечатления и фотографии от реальных посетителей."
+            "Смотрите доступные оценки, впечатления и фотографии, чтобы принять решение, подходящее именно вам."
         },
         {
           icon: "search",
@@ -517,22 +517,22 @@ const landing: Record<string, LandingCopy> = {
           ],
           badge: "Умный выбор",
           metricLabel: "Экономия времени поиска",
-          metricValue: "85%"
+          metricValue: "—"
         },
         {
           id: "catalog",
           label: "Умный каталог",
           title: "Лучшие локации Ташкента в одном месте",
           description:
-            "Удобные фильтры по категориям, районам и рейтингам. График работы, актуальное меню, фотографии и контакты обновляются ежедневно.",
+            "Удобные фильтры по категориям, районам и рейтингам. Смотрите доступные часы работы, меню, фотографии и контакты в одном месте.",
           bullets: [
             "Быстрая сортировка по районам и геолокации",
-            "Честные фотографии от реальных гостей",
+            "Доступные фотографии от посетителей",
             "Прямые контакты и переход в Telegram"
           ],
-          badge: "Проверенные места",
-          metricLabel: "Обновление каталога",
-          metricValue: "Ежедневно"
+          badge: "Данные каталога",
+          metricLabel: "Статус каталога",
+          metricValue: "—"
         },
         {
           id: "business",
@@ -543,11 +543,11 @@ const landing: Record<string, LandingCopy> = {
           bullets: [
             "Удобный личный кабинет и аналитика просмотров",
             "Оперативные ответы на отзывы гостей",
-            "Приоритет в рекомендациях Gurman AI"
+            "Расширенное представление профиля"
           ],
-          badge: "Рост продаж",
-          metricLabel: "Приток клиентов",
-          metricValue: "3.2x"
+          badge: "Профиль бизнеса",
+          metricLabel: "Статус профиля",
+          metricValue: "—"
         }
       ]
     },
@@ -558,9 +558,9 @@ const landing: Record<string, LandingCopy> = {
       steps: [
         {
           number: "01",
-          title: "Ищите сами или спросите Gurman AI",
+          title: "Начните с каталога Manzil",
           description:
-            "Воспользуйтесь каталогом или опишите желаемую атмосферу нашему AI-консьержу.",
+            "Выберите категорию, район или поисковый запрос и откройте подходящие варианты.",
           icon: "search"
         },
         {
@@ -581,7 +581,7 @@ const landing: Record<string, LandingCopy> = {
     },
     bento: {
       title: "Лучшие места",
-      subtitle: "Реальные места на Manzil — с настоящими отзывами гостей.",
+      subtitle: "Места из каталога Manzil — с доступными отзывами и данными.",
       viewAll: "Все категории",
       featuredBadge: "Выбор Manzil",
       partnerTitle: "У вас свой бизнес?",
@@ -621,7 +621,7 @@ const landing: Record<string, LandingCopy> = {
             "Все возможности тарифа Free",
             "Синяя галочка 'Verified'",
             "Высокие позиции в результатах поиска",
-            "Приоритетные рекомендации от Gurman AI",
+            "Расширенное представление профиля",
             "Неограниченно фото и полное меню",
             "Подробная аналитика просмотров"
           ],
@@ -699,17 +699,17 @@ const landing: Record<string, LandingCopy> = {
     faq: {
       badge: "Часто задаваемые вопросы",
       title: "Ответы на популярные вопросы",
-      subtitle: "Всё, что нужно знать о платформе Manzil и возможностях Gurman AI.",
+      subtitle: "Всё, что нужно знать о платформе Manzil и планах по мобильному Gurman.",
       items: [
         {
           question: "Что такое Manzil?",
           answer:
-            "Manzil — это современная городская платформа и AI-консьерж для поиска лучших кафе, ресторанов, сервисов и мест отдыха в Узбекистане."
+            "Manzil — это городской каталог для поиска и сравнения локальных бизнесов в Ташкенте. Gurman разрабатывается как будущий мобильный помощник для планирования впечатлений."
         },
         {
-          question: "На чём строятся рекомендации Gurman AI?",
+          question: "Что такое Gurman?",
           answer:
-            "Рекомендации формируются исключительно на базе реальных данных заведений и настоящих отзывов гостей из каталога Manzil. Искусственный интеллект не выдумывает несуществующие места."
+            "Gurman — будущий мобильный помощник для планирования локальных впечатлений. Сейчас он находится в разработке; о запуске можно узнать через лист ожидания."
         },
         {
           question: "Бесплатно ли добавлять бизнес на платформу?",
@@ -719,7 +719,7 @@ const landing: Record<string, LandingCopy> = {
         {
           question: "Какие языки поддерживает сервис?",
           answer:
-            "Платформа Manzil и Gurman AI полноценно работают на узбекском, русском и английском языках."
+            "Платформа Manzil доступна на узбекском, русском и английском языках. Мобильный Gurman находится в разработке."
         },
         {
           question: "Когда сервис появится в других городах Узбекистана?",
@@ -732,12 +732,12 @@ const landing: Record<string, LandingCopy> = {
       badge: "Начните прямо сейчас",
       title: "Готовы открыть лучшие места своего города?",
       subtitle:
-        "Экономьте время с Gurman AI, выбирайте по честным отзывам или зарегистрируйте свой бизнес на платформе уже сегодня.",
+        "Сравнивайте доступные данные каталога или добавьте свой бизнес на Manzil уже сегодня.",
       primaryCta: "В каталог",
       primaryHref: "/ru/discover",
       secondaryCta: "Зарегистрировать бизнес",
       secondaryHref: "/ru/business/register",
-      perks: ["Быстрый старт", "Честные отзывы", "100% бесплатно"]
+      perks: ["Быстрый старт", "Доступные отзывы", "Бесплатный старт"]
     }
   },
   en: {
@@ -749,24 +749,24 @@ const landing: Record<string, LandingCopy> = {
       title1: "Plan experiences,",
       title2: "not just places.",
       subtitle:
-        "Tell Gurman what you are planning. It compares available places and helps you decide using the catalogue's real data.",
+        "Tell us what you are looking for. The Manzil directory helps you compare available places using the data it has.",
       explore: "Start planning",
       how: "Chat with Gurman AI",
       chatName: "Gurman AI Concierge",
       chatStatus: "Generating real-time recommendation…",
       chatAi: "Hello! What kind of place are you looking for? I recommend based on authentic reviews and verified data.",
       chatUser: "Looking for a quiet, high-quality café with great coffee and desserts for Saturday evening.",
-      microPerks: ["100% verified reviews", "Live catalog updates", "Completely free"]
+      microPerks: ["Manzil directory", "Profile details", "Free to start"]
     },
     benefits: {
       badge: "Benefits",
       title: "From one decision to a full experience",
       subtitle:
-        "Intelligent AI guidance, verified community reviews, and an intuitive catalog save you time and help you find the best spots.",
+        "The Manzil directory, community reviews, and an intuitive catalog save you time and help you find a suitable place.",
       cards: [
         {
           icon: "sparkles",
-          tag: "AI Concierge",
+          tag: "Manzil Directory",
           title: "Personalized advice with Gurman AI",
           description:
             "Describe what you need in natural language — Gurman AI analyzes authentic guest feedback to deliver tailored options."
@@ -774,9 +774,9 @@ const landing: Record<string, LandingCopy> = {
         {
           icon: "verified",
           tag: "Authenticity",
-          title: "100% verified local reviews",
+          title: "Read reviews with context",
           description:
-            "No fake ratings. Only genuine opinions, photos, and ratings submitted by real visitors."
+            "See the available ratings, opinions, and photos before choosing the place that fits you."
         },
         {
           icon: "search",
@@ -812,22 +812,22 @@ const landing: Record<string, LandingCopy> = {
           ],
           badge: "Smart Match",
           metricLabel: "Search time saved",
-          metricValue: "85%"
+          metricValue: "—"
         },
         {
           id: "catalog",
           label: "Smart Directory",
           title: "Tashkent's top venues in one place",
           description:
-            "Effortless filtering by category, district, and ratings. Operating hours, current menus, photos, and contact info updated daily.",
+            "Effortless filtering by category, district, and ratings. See available hours, menus, photos, and contact details in one place.",
           bullets: [
             "Fast district and geolocation filtering",
-            "Authentic guest photo galleries",
+            "Available visitor photo galleries",
             "Direct phone and Telegram shortcuts"
           ],
-          badge: "Verified Places",
-          metricLabel: "Catalog updates",
-          metricValue: "Daily"
+          badge: "Catalogue data",
+          metricLabel: "Catalogue status",
+          metricValue: "—"
         },
         {
           id: "business",
@@ -838,11 +838,11 @@ const landing: Record<string, LandingCopy> = {
           bullets: [
             "Intuitive management console and view analytics",
             "Prompt review responses to build trust",
-            "Priority placement in Gurman AI recommendations"
+            "Enhanced catalogue profile"
           ],
-          badge: "Business Growth",
-          metricLabel: "Customer reach",
-          metricValue: "3.2x"
+          badge: "Business profile",
+          metricLabel: "Profile status",
+          metricValue: "—"
         }
       ]
     },
@@ -853,9 +853,9 @@ const landing: Record<string, LandingCopy> = {
       steps: [
         {
           number: "01",
-          title: "Tell Gurman what you are planning",
+          title: "Start with the Manzil directory",
           description:
-            "Browse categories or describe the vibe and preferences you want to our AI Concierge.",
+            "Choose a category, district, or search query to open options that fit your plan.",
           icon: "search"
         },
         {
@@ -876,7 +876,7 @@ const landing: Record<string, LandingCopy> = {
     },
     bento: {
       title: "Experience the best",
-      subtitle: "Real places on Manzil, with real reviews from guests.",
+      subtitle: "Places listed on Manzil, with the reviews and details that are available.",
       viewAll: "View all categories",
       featuredBadge: "Featured",
       partnerTitle: "Own a local business?",
@@ -915,7 +915,7 @@ const landing: Record<string, LandingCopy> = {
             "Everything in Free plan",
             "Verified blue badge",
             "Top ranking in search & catalog results",
-            "Priority Gurman AI Concierge recommendations",
+            "Enhanced catalogue profile",
             "Unlimited photos and full menu upload",
             "Detailed audience view analytics"
           ],
@@ -993,17 +993,17 @@ const landing: Record<string, LandingCopy> = {
     faq: {
       badge: "FAQ",
       title: "Frequently Asked Questions",
-      subtitle: "Everything you need to know about Manzil and Gurman AI.",
+      subtitle: "Everything you need to know about Manzil and the planned Gurman mobile app.",
       items: [
         {
           question: "What is Manzil?",
           answer:
-            "Manzil is Uzbekistan's premier local discovery platform and AI concierge, connecting people with top verified dining, leisure, and service establishments."
+            "Manzil is a local-business directory for finding and comparing places in Tashkent. Gurman is being developed as a future mobile planner for local experiences."
         },
         {
-          question: "How does Gurman AI generate suggestions?",
+          question: "What is Gurman?",
           answer:
-            "Gurman AI analyzes real business data and authentic customer reviews from the Manzil directory. It never fabricates non-existent venues."
+            "Gurman is a future mobile planner for local experiences. It is currently in development; join the waitlist to hear when it launches."
         },
         {
           question: "Is it free to list my business?",
@@ -1013,7 +1013,7 @@ const landing: Record<string, LandingCopy> = {
         {
           question: "What languages are supported?",
           answer:
-            "The entire Manzil experience and Gurman AI natively support Uzbek (Latin), Russian, and English."
+            "The Manzil website is available in Uzbek (Latin), Russian, and English. Gurman mobile is still in development."
         },
         {
           question: "When will other cities be added?",
@@ -1026,12 +1026,12 @@ const landing: Record<string, LandingCopy> = {
       badge: "Start Today",
       title: "Ready to explore the best of your city?",
       subtitle:
-        "Save time with Gurman AI, discover genuine local spots, or list your business for thousands of new customers.",
+        "Compare the available directory details or add your business to Manzil today.",
       primaryCta: "Explore Catalog",
       primaryHref: "/en/discover",
       secondaryCta: "Register Business",
       secondaryHref: "/en/business/register",
-      perks: ["Instant Start", "Verified Reviews", "100% Free to Begin"]
+      perks: ["Instant Start", "Available reviews", "Free to begin"]
     }
   }
 };

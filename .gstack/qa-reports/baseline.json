@@ -1,0 +1,74 @@
+{
+  "date": "2026-09-04",
+  "url": "http://localhost:3000/uz",
+  "branch": "feat/frontend-elevation",
+  "commit": "61df8df3f564b49fd8f65a141ada9f8c66bdee87",
+  "tier": "standard",
+  "scope": "Diff-aware public web surfaces",
+  "healthScore": 85,
+  "baselineHealthScore": 69,
+  "categoryScores": {
+    "console": 100,
+    "links": 100,
+    "visual": 88,
+    "functional": 85,
+    "ux": 86,
+    "performance": 55,
+    "content": 90,
+    "accessibility": 78
+  },
+  "issues": [
+    { "id": "ISSUE-001", "title": "Discover filter navigation triggered a client-side update error", "severity": "medium", "category": "functional", "status": "verified" },
+    { "id": "ISSUE-002", "title": "Discover search did not persist the submitted query", "severity": "medium", "category": "functional", "status": "verified" },
+    { "id": "ISSUE-003", "title": "Legacy web Gurman routes were dead ends", "severity": "medium", "category": "links", "status": "verified" },
+    { "id": "ISSUE-004", "title": "Discover cards presented unsupported status and fallback data", "severity": "medium", "category": "content", "status": "verified" },
+    { "id": "ISSUE-005", "title": "Public pages overpromised Gurman, downloads, metrics, and customer proof", "severity": "medium", "category": "content", "status": "verified" },
+    { "id": "ISSUE-006", "title": "Gurman waitlist did not match the mobile-only boundary", "severity": "medium", "category": "functional", "status": "verified" },
+    { "id": "ISSUE-007", "title": "Existing Discover E2E assertion encoded the removed product direction", "severity": "medium", "category": "test", "status": "best-effort" },
+    { "id": "ISSUE-008", "title": "QA changes introduced lint blockers", "severity": "low", "category": "code-quality", "status": "verified" },
+    { "id": "ISSUE-009", "title": "Production build stalls after compilation", "severity": "high", "category": "performance", "status": "deferred" }
+  ],
+  "routes": {
+    "/": { "status": 307, "location": "/uz" },
+    "/uz": { "status": 200 },
+    "/ru": { "status": 200 },
+    "/en": { "status": 200 },
+    "/uz/discover": { "status": 200 },
+    "/uz/business": { "status": 200 },
+    "/uz/docs": { "status": 200 },
+    "/uz/waitlist/gurman": { "status": 200, "emailField": true, "cityField": false, "businessField": false },
+    "/uz/waitlist/city": { "status": 200 },
+    "/uz/gurman": { "status": 308, "location": "/uz/waitlist/gurman" },
+    "/uz/concierge": { "status": 308, "location": "/uz/waitlist/gurman" }
+  },
+  "contentBoundary": {
+    "auditedPages": ["/uz", "/uz/discover", "/uz/business", "/uz/docs", "/uz/waitlist/gurman"],
+    "liveGurmanChat": false,
+    "appDownloadClaim": false,
+    "unsupportedMetric": false,
+    "legacyWebGurmanLink": false
+  },
+  "validation": {
+    "typecheck": "pass",
+    "lint": "pass with 26 warnings, 0 errors",
+    "routeProbe": "pass",
+    "contentAudit": "pass",
+    "manualVisualPass": "pass for five captured public surfaces",
+    "productionBuild": "blocked after optimized compilation; static generation did not progress in bounded run",
+    "fullPlaywrightSuite": "not completed"
+  },
+  "screenshots": [
+    "screenshots/initial.png",
+    "screenshots/homepage.png",
+    "screenshots/discover.png",
+    "screenshots/discover-search.png",
+    "screenshots/business.png",
+    "screenshots/docs.png"
+  ],
+  "externalActions": {
+    "push": false,
+    "pullRequest": false,
+    "deploy": false,
+    "waitlistSubmission": false
+  }
+}

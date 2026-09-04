@@ -18,15 +18,24 @@ test.describe("discover page", () => {
     await expect(page.locator("form, input[type='search'], input[name='q']").first()).toBeVisible();
   });
 
-  test("the Gurman AI hero appears while browsing", async ({ page }) => {
+  test("keeps the web Discover surface separate from mobile Gurman", async ({ page }) => {
     await page.goto("/uz/discover");
 
-    const hero = page.locator(".gurman-hero");
-    await expect(hero).toBeVisible();
-    // Target the badge element specifically — "Gurman AI" also appears in the
-    // subtitle, and a text match would resolve to both under strict mode.
-    await expect(hero.locator(".gurman-hero__badge")).toContainText("Gurman AI");
-    await expect(hero.locator(".gurman-hero__cta")).toBeVisible();
+    // Gurman is a mobile product with a waitlist, not a web chat embedded in
+    // Discover. This protects the approved product boundary from regressing.
+    await expect(page.locator(".gurman-hero")).toHaveCount(0);
+    await expect(page.locator('a[href$="/gurman"], a[href$="/concierge"]')).toHaveCount(0);
+  });
+
+  test("search and category filters persist in the URL", async ({ page }) => {
+    await page.goto("/uz/discover");
+
+    await page.locator("form[role='search'] input").fill("coffee");
+    await page.getByRole("button", { name: "Qidirish" }).click();
+    await expect(page).toHaveURL(/\\/uz\\/discover\\?q=coffee/);
+
+    await page.getByRole("button", { name: "Qahvaxonalar" }).click();
+    await expect(page).toHaveURL(/category=cafes/);
   });
 
   test("curated sections give way to results once a search is run", async ({ page }) => {

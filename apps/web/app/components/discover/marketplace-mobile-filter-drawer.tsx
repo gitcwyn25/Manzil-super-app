@@ -78,7 +78,7 @@ export function MarketplaceMobileFilterDrawer({
               <label className="mp-toggle-row">
                 <span className="mp-toggle-row__label">
                   <span>🛡️</span>
-                  <span>{locale === "uz" ? "Faqat tasdiqlanganlar" : locale === "ru" ? "Только проверенные" : "Verified only"}</span>
+                  <span>{locale === "uz" ? "Egasi tasdiqlagan profillar" : locale === "ru" ? "Профили, подтверждённые владельцем" : "Claimed profiles only"}</span>
                 </span>
                 <input
                   checked={filters.verifiedOnly}

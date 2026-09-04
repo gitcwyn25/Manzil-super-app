@@ -106,7 +106,7 @@ const nextConfig: NextConfig = {
     config.resolve.alias = {
       ...(config.resolve.alias ?? {}),
       // Resolve monorepo-root Originkit components from apps/web @/ alias
-      "@/components/originkit": require("path").resolve(__dirname, "../../components/originkit"),
+      "@/components/originkit": `${__dirname}/../../components/originkit`,
     };
     return config;
   },

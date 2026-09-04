@@ -27,7 +27,7 @@ const HERO_COPY: Record<
     title1: "Biznesingizni yangi bosqichga olib chiqing,",
     title2: "Manzil bilan.",
     subtitle:
-      "Toshkentdagi minglab mijozlar biznesingizni Manzil ilovasida topishadi. Listingni tasdiqlang, sharhlarga javob bering va obro'ingizni bitta qulay kabinetdan boshqaring.",
+      "Mijozlar Manzil katalogida biznesingizni topishi uchun profil yarating. Ma'lumotlarni yangilang, sharhlarga javob bering va obro'ingizni bitta qulay kabinetdan boshqaring.",
     ctaPrimary: "Biznesni bepul ro'yxatdan o'tkazish",
     ctaSecondary: "Kabinetga kirish",
     annotationText: "Kredit karta talab etilmaydi · 100% bepul boshlash",
@@ -39,7 +39,7 @@ const HERO_COPY: Record<
     title1: "Выведите ваш бизнес на новый уровень,",
     title2: "вместе с Manzil.",
     subtitle:
-      "Тысячи клиентов в Ташкенте находят заведения через приложение Manzil. Подтвердите профиль, отвечайте на отзывы и управляйте репутацией в удобном кабинете.",
+      "Создайте профиль в каталоге Manzil, чтобы местные клиенты могли вас найти. Обновляйте данные, отвечайте на отзывы и управляйте репутацией в одном кабинете.",
     ctaPrimary: "Зарегистрировать бизнес бесплатно",
     ctaSecondary: "Войти в кабинет",
     annotationText: "Без кредитной карты · 100% бесплатный старт",
@@ -51,7 +51,7 @@ const HERO_COPY: Record<
     title1: "Scale your local business to new heights,",
     title2: "with Manzil.",
     subtitle:
-      "Thousands of customers discover local venues on Manzil. Claim your listing, reply to customer reviews, and manage your reputation in one powerful workspace.",
+      "Create a Manzil catalogue profile so local customers can find you. Keep details current, reply to reviews, and manage your reputation in one workspace.",
     ctaPrimary: "Register Your Business Free",
     ctaSecondary: "Open Dashboard",
     annotationText: "No credit card required · 100% free start",
@@ -166,16 +166,16 @@ export function BusinessHero01({ locale }: { locale: Locale }) {
             </div>
 
             <div className="bz-hero-01__dashboard-inner">
-              <p className="bz-mock-disclaimer">Illustrative preview — your dashboard shows your verified activity.</p>
+              <p className="bz-mock-disclaimer">Illustrative preview — live activity appears after a listing is claimed.</p>
               {/* Dashboard Top Stats */}
               <div className="bz-mock-stats-row">
                 <div className="bz-mock-stat-tile">
                   <div className="bz-mock-stat-tile__head">
-                    <span>Oylik Ko'rishlar</span>
+                    <span>Oylik Ko&apos;rishlar</span>
                     <Icon name="trending_up" size={16} className="text-success" />
                   </div>
-                  <div className="bz-mock-stat-tile__val">24,850</div>
-                  <div className="bz-mock-stat-tile__growth">+18.4% o'tgan oyga nisbatan</div>
+                  <div className="bz-mock-stat-tile__val">—</div>
+                  <div className="bz-mock-stat-tile__growth">Profil ko&apos;rishlari shu yerda ko&apos;rsatiladi</div>
                 </div>
 
                 <div className="bz-mock-stat-tile">
@@ -183,17 +183,17 @@ export function BusinessHero01({ locale }: { locale: Locale }) {
                     <span>Manzil katalogi</span>
                     <Icon name="sparkles" size={16} className="text-primary" />
                   </div>
-                  <div className="bz-mock-stat-tile__val">1,420</div>
-                  <div className="bz-mock-stat-tile__growth">+32% yangi mijozlar</div>
+                  <div className="bz-mock-stat-tile__val">—</div>
+                  <div className="bz-mock-stat-tile__growth">Mijozlar so&apos;rovlari shu yerda ko&apos;rsatiladi</div>
                 </div>
 
                 <div className="bz-mock-stat-tile">
                   <div className="bz-mock-stat-tile__head">
-                    <span>O'rtacha Reyting</span>
+                    <span>O&apos;rtacha Reyting</span>
                     <Icon name="star" size={16} className="text-warning" />
                   </div>
                   <div className="bz-mock-stat-tile__val">—</div>
-                  <div className="bz-mock-stat-tile__growth">Sizning haqiqiy sharhlaringiz</div>
+                  <div className="bz-mock-stat-tile__growth">Sharhlar shu yerda ko&apos;rsatiladi</div>
                 </div>
               </div>
 
@@ -201,8 +201,8 @@ export function BusinessHero01({ locale }: { locale: Locale }) {
               <div className="bz-mock-content-row">
                 <div className="bz-mock-chart-card">
                   <div className="bz-mock-card-head">
-                    <span className="bz-mock-card-title">Mijozlar faolligi grafigi</span>
-                    <span className="bz-mock-card-tag">Haftalik</span>
+                    <span className="bz-mock-card-title">Faollik ko&apos;rinishi</span>
+                    <span className="bz-mock-card-tag">Namuna</span>
                   </div>
                   <div className="bz-mock-bars">
                     {[45, 60, 52, 78, 90, 85, 95].map((h, idx) => (
@@ -221,23 +221,23 @@ export function BusinessHero01({ locale }: { locale: Locale }) {
 
                 <div className="bz-mock-reviews-card">
                   <div className="bz-mock-card-head">
-                    <span className="bz-mock-card-title">So'nggi sharhlar va javoblar</span>
-                    <span className="bz-mock-badge-verified">Verified</span>
+                    <span className="bz-mock-card-title">So&apos;nggi sharhlar va javoblar</span>
+                    <span className="bz-mock-badge-verified">Namuna</span>
                   </div>
                   <div className="bz-mock-review-item">
                     <div className="bz-mock-review-user">
-                      <div className="bz-mock-user-avatar">SR</div>
+                      <div className="bz-mock-user-avatar">M</div>
                       <div className="bz-mock-user-info">
-                        <strong>Sardor R.</strong>
-                        <span>⭐⭐⭐⭐⭐ · Kecha</span>
+                        <strong>Mijoz sharhi</strong>
+                        <span>Tashrif ma&apos;lumoti · Namuna</span>
                       </div>
                     </div>
                     <p className="bz-mock-review-text">
-                      &ldquo;Manzil orqali topib keldik. Qahva va xizmat sifati ajoyib!&rdquo;
+                      &ldquo;Yangi sharhlar shu yerda ko&apos;rinadi.&rdquo;
                     </p>
                     <div className="bz-mock-reply-box">
-                      <strong>Egasining javobi:</strong>
-                      <span>&ldquo;Tashrifingiz uchun rahmat! Sizni yana kutib qolamiz.&rdquo;</span>
+                      <strong>Javob maydoni:</strong>
+                      <span>Bu yerda biznes egasining javobi ko&apos;rinadi.</span>
                     </div>
                   </div>
                 </div>

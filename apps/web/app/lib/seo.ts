@@ -308,7 +308,7 @@ const DEFAULT_OG_IMAGE = {
   url: "/opengraph-image",
   width: 1200,
   height: 630,
-  alt: "Manzil — Tashkent business directory with the Gurman AI concierge"
+  alt: "Manzil — Tashkent business directory with a waitlist for mobile Gurman"
 };
 
 /** OG locale tags. Uzbek Latin as used on the site is uz_UZ. */

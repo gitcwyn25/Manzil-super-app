@@ -34,9 +34,9 @@ const BENTO_COPY: Record<
         metricLabel: "O'zingiz boshqaring"
       },
       {
-        tag: "AI Konsyerj",
-        title: "Katalogda yaxshi ko'rinish",
-        desc: "Tasdiqlangan profilingiz va sharhlaringiz Manzil katalogida mijozlarga aniq ko'rinadi.",
+        tag: "Katalog ko'rinishi",
+        title: "Katalogda aniq profil",
+        desc: "Profilingiz va sharhlaringiz Manzil katalogida mijozlarga tushunarli ko'rinadi.",
         icon: "sparkles",
         metric: "02",
         metricLabel: "Haqiqiy ma'lumotlar"
@@ -73,9 +73,9 @@ const BENTO_COPY: Record<
         metricLabel: "Вы управляете"
       },
       {
-        tag: "AI-консьерж",
-        title: "Заметный профиль в каталоге",
-        desc: "При поиске мест искусственный интеллект рекомендует верифицированные компании с высоким рейтингом в первую очередь.",
+        tag: "Каталог",
+        title: "Понятный профиль в каталоге",
+        desc: "Актуальные данные профиля помогают местным клиентам понять, какие услуги вы предлагаете.",
         icon: "sparkles",
         metric: "02",
         metricLabel: "Реальные данные"
@@ -112,9 +112,9 @@ const BENTO_COPY: Record<
         metricLabel: "You stay in control"
       },
       {
-        tag: "Каталог",
-        title: "A stronger catalogue profile",
-        desc: "Verified profiles and authentic ratings help local guests find your business.",
+        tag: "Catalogue",
+        title: "A clearer catalogue profile",
+        desc: "Accurate profile details help local guests understand what your business offers.",
         icon: "sparkles",
         metric: "02",
         metricLabel: "Real catalogue data"

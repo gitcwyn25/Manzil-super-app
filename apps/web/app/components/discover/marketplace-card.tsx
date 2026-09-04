@@ -4,6 +4,7 @@ import type { BusinessPlatform, Locale } from "@manzil/shared";
 import Link from "next/link";
 import { useState } from "react";
 import { pickLocalized } from "../../lib/locale-text";
+import { LiveStatusPill } from "../live-status-pill";
 
 const CATEGORY_FALLBACK_IMAGES: Record<string, string> = {
   restaurants: "https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?auto=compress&cs=tinysrgb&w=800",
@@ -49,9 +50,10 @@ export function MarketplaceCard({
   const [isSaved, setIsSaved] = useState(false);
   const coverUrl = resolveCoverPhoto(business);
   const desc = pickLocalized(business.description, locale) || "";
-  const isVerified = business.status === "claimed" || Boolean(business.foundingBusiness);
-  const isOpen = true; // Tashkent business hours active
-  const isPopular = (business.avgRating ?? 0) >= 4.8 || (business.reviewCount ?? 0) > 100;
+  const hasReviews = (business.reviewCount ?? 0) > 0 && (business.avgRating ?? 0) > 0;
+  const isClaimed = business.status === "claimed";
+  const isFounding = Boolean(business.foundingBusiness);
+  const isPopular = hasReviews && ((business.avgRating ?? 0) >= 4.8 || (business.reviewCount ?? 0) > 100);
 
   const handleSave = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -78,12 +80,15 @@ export function MarketplaceCard({
 
           {/* Top Badges */}
           <div className="mp-card__badges-top">
-            {isVerified && (
-              <span className="mp-badge mp-badge--verified" title="Tasdiqlangan biznes">
+            {(isClaimed || isFounding) && (
+              <span
+                className="mp-badge mp-badge--verified"
+                title={isClaimed ? "Biznes egasi tomonidan da'vo qilingan profil" : "Manzil asoschisi biznesi"}
+              >
                 <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor">
                   <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" />
                 </svg>
-                <span>Verified</span>
+                <span>{isClaimed ? (locale === "uz" ? "Claimed" : locale === "ru" ? "Заявлен" : "Claimed") : (locale === "uz" ? "Asoschi" : locale === "ru" ? "Основатель" : "Founding")}</span>
               </span>
             )}
 
@@ -115,21 +120,20 @@ export function MarketplaceCard({
             </svg>
           </button>
 
-          {/* Bottom Live Status Pill */}
-          <div className="mp-card__status-bottom">
-            <span className="mp-status-pill">
-              <span className="mp-status-pill__dot" />
-              <span>{isOpen ? (locale === "uz" ? "Ochiq" : locale === "ru" ? "Открыто" : "Open") : (locale === "uz" ? "Yopiq" : locale === "ru" ? "Закрыто" : "Closed")}</span>
-            </span>
-          </div>
+          {/* Bottom live status: omitted when the catalogue has no live-status evidence. */}
+          {business.liveStatus ? (
+            <div className="mp-card__status-bottom">
+              <LiveStatusPill compact locale={locale} status={business.liveStatus} />
+            </div>
+          ) : null}
         </div>
 
         {/* Card Body */}
         <div className="mp-card__body">
           {/* Category & District Header */}
           <div className="mp-card__meta-top">
-            <span className="mp-card__district">📍 {business.district || "Toshkent"}</span>
-            <span className="mp-card__price-tier">{business.priceTier || "$$"}</span>
+            {business.district ? <span className="mp-card__district">📍 {business.district}</span> : null}
+            {business.priceTier ? <span className="mp-card__price-tier">{business.priceTier}</span> : null}
           </div>
 
           {/* Business Name */}
@@ -137,14 +141,21 @@ export function MarketplaceCard({
 
           {/* Rating & Reviews */}
           <div className="mp-card__rating-row">
-            <div className="mp-card__stars">
-              <span className="mp-card__star-icon">★</span>
-              <span className="mp-card__rating-val">{(business.avgRating || 4.8).toFixed(1)}</span>
-            </div>
-            <span className="mp-card__reviews-count">
-              ({business.reviewCount || 42}{" "}
-              {locale === "uz" ? "sharh" : locale === "ru" ? "отзывов" : "reviews"})
-            </span>
+            {hasReviews ? (
+              <>
+                <div className="mp-card__stars">
+                  <span className="mp-card__star-icon">★</span>
+                  <span className="mp-card__rating-val">{business.avgRating.toFixed(1)}</span>
+                </div>
+                <span className="mp-card__reviews-count">
+                  ({business.reviewCount} {locale === "uz" ? "sharh" : locale === "ru" ? "отзывов" : "reviews"})
+                </span>
+              </>
+            ) : (
+              <span className="mp-card__reviews-count">
+                {locale === "uz" ? "Yangi profil" : locale === "ru" ? "Новый профиль" : "New profile"}
+              </span>
+            )}
           </div>
 
           {/* One-Line Description */}
@@ -152,9 +163,7 @@ export function MarketplaceCard({
 
           {/* Footer Info */}
           <div className="mp-card__footer">
-            <span className="mp-card__tag">
-              {business.tags?.[0] || (locale === "uz" ? "Tavsiya etiladi" : "Recommended")}
-            </span>
+            {business.tags?.[0] ? <span className="mp-card__tag">{business.tags[0]}</span> : null}
             <span className="mp-card__action-hint">
               {locale === "uz" ? "Ko'rish →" : locale === "ru" ? "Подробнее →" : "View →"}
             </span>

@@ -1,6 +1,7 @@
 import { locales } from "@manzil/shared";
 import type { MetadataRoute } from "next";
 import { API_BASE_URL } from "./lib/api-base-url";
+import { fetchWithTimeout } from "./lib/fetch-with-timeout";
 import { absoluteUrl, languageAlternates, ROUTE_SEO } from "./lib/seo";
 
 /**
@@ -62,7 +63,7 @@ function localizedEntries(
 /** Anonymous GET against the public API. Never throws — callers get []. */
 async function publicList<T>(path: string, pick: (payload: unknown) => T[]): Promise<T[]> {
   try {
-    const response = await fetch(`${API_BASE_URL}${path}`, { next: { revalidate: 3600 } });
+    const response = await fetchWithTimeout(`${API_BASE_URL}${path}`, { next: { revalidate: 3600 } });
     if (!response.ok) return [];
     return pick(await response.json()) ?? [];
   } catch {

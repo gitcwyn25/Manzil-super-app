@@ -293,9 +293,8 @@ export default async function BusinessProfilePage({
           <aside className="biz-rail">
             <Reveal variant="fade-up">
               <section className="biz-card biz-action">
-                {/* Honest AI CTA (D8): routes to the Gurman AI concierge chat —
-                    no packages, no booking promises. */}
-                <PrimaryCta className="biz-action__cta" href={`/${locale}/gurman`}>
+                {/* Gurman is mobile-first; this public CTA only collects waitlist interest. */}
+                <PrimaryCta className="biz-action__cta" href={`/${locale}/waitlist/gurman`}>
                   <Icon name="sparkles" size={18} />
                   {copy.business.askGurman}
                 </PrimaryCta>

@@ -1,6 +1,6 @@
 import type { Locale } from "@manzil/shared";
 
-export const WAITLIST_TOPICS = ["city", "pro"] as const;
+export const WAITLIST_TOPICS = ["city", "gurman", "pro"] as const;
 export type WaitlistTopic = (typeof WAITLIST_TOPICS)[number];
 
 export function isWaitlistTopic(value: string): value is WaitlistTopic {
@@ -62,6 +62,38 @@ const COPY: Record<WaitlistTopic, Record<string, WaitlistCopy>> = {
       successTitle: "Your vote is counted",
       successBody: (position) => `You're number ${position} for this city.`,
       countLabel: (count) => `${count} people have asked`,
+      errorGeneric: "That didn't send. Try again."
+    }
+  },
+  gurman: {
+    uz: {
+      title: "Gurman mobil ilovasi tayyorlanmoqda",
+      lead: "Gurman sizga mahalliy reja tuzishda yordam beradi. Ilova ishga tushganda birinchi bo'lib xabar olish uchun emailingizni qoldiring.",
+      emailLabel: "Email",
+      submit: "Gurman yangiliklariga yozilish",
+      successTitle: "Ro'yxatdasiz",
+      successBody: (position) => `Siz ${position}-o'rindasiz. Ilova tayyor bo'lganda xabar beramiz.`,
+      countLabel: () => "",
+      errorGeneric: "Yuborib bo'lmadi. Qaytadan urinib ko'ring."
+    },
+    ru: {
+      title: "Мобильное приложение Gurman готовится",
+      lead: "Gurman поможет планировать местные впечатления. Оставьте email, чтобы первым узнать о запуске приложения.",
+      emailLabel: "Email",
+      submit: "Получать новости Gurman",
+      successTitle: "Вы в списке",
+      successBody: (position) => `Вы ${position}-й в списке. Мы напишем, когда приложение будет готово.`,
+      countLabel: () => "",
+      errorGeneric: "Не удалось отправить. Попробуйте ещё раз."
+    },
+    en: {
+      title: "Gurman mobile is being built",
+      lead: "Gurman will help people plan local experiences. Leave your email to hear first when the app is ready.",
+      emailLabel: "Email",
+      submit: "Join Gurman updates",
+      successTitle: "You're on the list",
+      successBody: (position) => `You're number ${position}. We'll write when the app is ready.`,
+      countLabel: () => "",
       errorGeneric: "That didn't send. Try again."
     }
   },

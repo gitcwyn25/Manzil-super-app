@@ -17,6 +17,7 @@ import type {
 } from "@manzil/shared";
 import * as mockApi from "./mock-api";
 import { API_BASE_URL } from "./api-base-url";
+import { fetchWithTimeout } from "./fetch-with-timeout";
 import { idempotencyHeaders } from "./pxs/idempotency";
 
 const useMockData = process.env.NEXT_PUBLIC_USE_MOCK !== "false";
@@ -73,7 +74,7 @@ export async function getBusinessPhotos(slug: string): Promise<string[]> {
   }
 
   try {
-    const response = await fetch(`${API_BASE_URL}/media/businesses/${slug}/photos`, {
+    const response = await fetchWithTimeout(`${API_BASE_URL}/media/businesses/${slug}/photos`, {
       next: { revalidate: 30 }
     });
 
@@ -98,7 +99,7 @@ slugs: string[]): Promise<Record<string, string>> {
   }
 
   try {
-    const response = await fetch(
+    const response = await fetchWithTimeout(
       `${API_BASE_URL}/media/business-covers?slugs=${encodeURIComponent(uniqueSlugs.join(","))}`,
       { next: { revalidate: 30 } }
     );
@@ -126,13 +127,22 @@ export async function getCategories(): Promise<Category[]> {
     return mockApi.getCategories();
   }
 
-  const { getServerAuthHeaders } = await import("./auth");
-  const response = await fetch(`${API_BASE_URL}/categories`, {
-    headers: await getServerAuthHeaders("/categories"),
-    next: { revalidate: 30 }
-  });
-  const payload = await response.json();
-  return payload.data.categories;
+  try {
+    const { getServerAuthHeaders } = await import("./auth");
+    const response = await fetchWithTimeout(`${API_BASE_URL}/categories`, {
+      headers: await getServerAuthHeaders("/categories"),
+      next: { revalidate: 30 }
+    });
+
+    if (!response.ok) {
+      return [];
+    }
+
+    const payload = await response.json();
+    return payload?.data?.categories ?? [];
+  } catch {
+    return [];
+  }
 }
 
 export async function getBusinesses(): Promise<BusinessPlatform[]> {
@@ -140,15 +150,24 @@ export async function getBusinesses(): Promise<BusinessPlatform[]> {
     return mockApi.getBusinesses();
   }
 
-  const { getServerAuthHeaders } = await import("./auth");
-  const response = await fetch(`${API_BASE_URL}/businesses`, {
-    headers: await getServerAuthHeaders("/businesses"),
-    next: { revalidate: 30 }
-  });
-  const payload = await response.json();
-  const businesses = payload.data.businesses as BusinessPlatform[];
-  const covers = await fetchBusinessCovers(businesses.map((business) => business.slug));
-  return withCovers(businesses, covers);
+  try {
+    const { getServerAuthHeaders } = await import("./auth");
+    const response = await fetchWithTimeout(`${API_BASE_URL}/businesses`, {
+      headers: await getServerAuthHeaders("/businesses"),
+      next: { revalidate: 30 }
+    });
+
+    if (!response.ok) {
+      return [];
+    }
+
+    const payload = await response.json();
+    const businesses = (payload?.data?.businesses ?? []) as BusinessPlatform[];
+    const covers = await fetchBusinessCovers(businesses.map((business) => business.slug));
+    return withCovers(businesses, covers);
+  } catch {
+    return [];
+  }
 }
 
 /**
@@ -179,7 +198,7 @@ export async function searchBusinesses(query = "", category = "all"): Promise<{
 
   try {
     const { getServerAuthHeaders } = await import("./auth");
-    const response = await fetch(`${API_BASE_URL}/search${suffix}`, {
+    const response = await fetchWithTimeout(`${API_BASE_URL}/search${suffix}`, {
       headers: await getServerAuthHeaders("/search"),
       next: { revalidate: 30 }
     });
@@ -204,7 +223,7 @@ export async function getBusiness(slug: string): Promise<{ business: BusinessPla
   }
 
   const { getServerAuthHeaders } = await import("./auth");
-  const response = await fetch(`${API_BASE_URL}/businesses/${slug}`, {
+  const response = await fetchWithTimeout(`${API_BASE_URL}/businesses/${slug}`, {
     headers: await getServerAuthHeaders(`/businesses/${slug}`),
     next: { revalidate: 30 }
   });
@@ -268,7 +287,7 @@ export async function getHomeFeed(locale = "uz") {
   }
 
   try {
-    const response = await fetch(`${API_BASE_URL}/home?locale=${locale}`, {
+    const response = await fetchWithTimeout(`${API_BASE_URL}/home?locale=${locale}`, {
       next: { revalidate: 60 }
     });
 
@@ -305,7 +324,7 @@ export async function getOccasions(): Promise<Occasion[]> {
 
   try {
     const { getServerAuthHeaders } = await import("./auth");
-    const response = await fetch(`${API_BASE_URL}/occasions`, {
+    const response = await fetchWithTimeout(`${API_BASE_URL}/occasions`, {
       headers: await getServerAuthHeaders("/occasions"),
       next: { revalidate: 300 }
     });
@@ -329,7 +348,7 @@ export async function getListsPage(): Promise<CommunityList[]> {
 
   try {
     const { getServerAuthHeaders } = await import("./auth");
-    const response = await fetch(`${API_BASE_URL}/lists`, {
+    const response = await fetchWithTimeout(`${API_BASE_URL}/lists`, {
       headers: await getServerAuthHeaders("/lists"),
       next: { revalidate: 300 }
     });
@@ -538,7 +557,7 @@ export async function getListDetail(slug: string): Promise<ListDetailResponse> {
   }
 
   const { getServerAuthHeaders } = await import("./auth");
-  const response = await fetch(`${API_BASE_URL}/lists/${slug}`, {
+  const response = await fetchWithTimeout(`${API_BASE_URL}/lists/${slug}`, {
     headers: await getServerAuthHeaders(`/lists/${slug}`),
     next: { revalidate: 300 }
   });
@@ -552,7 +571,7 @@ export async function getOccasionPage(slug: string): Promise<OccasionDetailRespo
   }
 
   const { getServerAuthHeaders } = await import("./auth");
-  const response = await fetch(`${API_BASE_URL}/occasions/${slug}`, {
+  const response = await fetchWithTimeout(`${API_BASE_URL}/occasions/${slug}`, {
     headers: await getServerAuthHeaders(`/occasions/${slug}`),
     next: { revalidate: 300 }
   });

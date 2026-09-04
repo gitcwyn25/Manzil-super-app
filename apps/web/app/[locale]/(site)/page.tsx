@@ -8,7 +8,6 @@ import { CleverFeatures } from "../../components/home/clever-features";
 import { CleverHero } from "../../components/home/clever-hero";
 import { CleverPricing } from "../../components/home/clever-pricing";
 import { CleverProcess } from "../../components/home/clever-process";
-import { CleverTestimonials } from "../../components/home/clever-testimonials";
 import { CleverWaitlistCard } from "../../components/home/clever-waitlist-card";
 import { getHomeFeed } from "../../lib/api";
 import { getLandingCopy } from "../../lib/landing-copy";
@@ -28,15 +27,14 @@ export async function generateMetadata({
  *
  * Full section sequence:
  * 1. CleverHero: Avatar badge, headline, dual CTAs, trust perks, Canvas 2D background, chat card.
- * 2. CleverBenefits: 4-card bento grid highlighting AI, verified reviews, speed, business reach.
- * 3. CleverFeatures: Interactive tabbed switcher for Concierge, Smart Directory, and Business Hub.
+ * 2. CleverBenefits: bento grid highlighting catalog trust, speed, and business reach.
+ * 3. CleverFeatures: Interactive tabbed switcher for the Smart Directory and Business Hub.
  * 4. CleverProcess: 3-step numbered workflow timeline.
  * 5. BentoBusinessGrid: Real live business catalog feed from getHomeFeed(locale).
  * 6. CleverPricing: 3-tier business pricing cards (Free / Pro / Enterprise).
  * 7. CleverWaitlistCard: City expansion early-access interactive card.
- * 8. CleverTestimonials: Customer & business partner ratings and quotes.
- * 9. CleverFaq: Interactive collapsible Q&A accordion.
- * 10. CleverCtaBanner: Final high-conversion bottom banner.
+ * 8. CleverFaq: Interactive collapsible Q&A accordion.
+ * 9. CleverCtaBanner: Final high-conversion bottom banner.
  */
 export default async function LandingPage({
   params
@@ -67,7 +65,6 @@ export default async function LandingPage({
       <BentoBusinessGrid businesses={ranked} copy={copy.bento} locale={locale} />
       <CleverPricing copy={copy.pricing} />
       <CleverWaitlistCard copy={copy.waitlist} />
-      <CleverTestimonials copy={copy.testimonials} />
       <CleverFaq copy={copy.faq} />
       <CleverCtaBanner copy={copy.finalCta} />
     </>
