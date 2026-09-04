@@ -126,6 +126,72 @@ export class BusinessRegistrationDto {
   acceptedTermsVersion?: string;
 }
 
+export class BusinessApplicationDto {
+  @IsString()
+  @MinLength(2, { message: "Business name must be 2–120 characters" })
+  @MaxLength(120, { message: "Business name must be 2–120 characters" })
+  name!: string;
+
+  @IsString()
+  @MaxLength(120)
+  categorySlug!: string;
+
+  @IsString()
+  @MinLength(10, { message: "Description must be at least 10 characters" })
+  @MaxLength(5000)
+  descriptionUz!: string;
+
+  @IsString()
+  @MinLength(1, TRIMMED)
+  @MaxLength(300)
+  address!: string;
+
+  @IsString()
+  @MinLength(1, TRIMMED)
+  @MaxLength(120)
+  district!: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(120)
+  city?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(40)
+  phone?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(200)
+  email?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  @Matches(/^https?:\/\/.+\..+/, { message: "Website must be a valid http(s) URL" })
+  website?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(120)
+  telegram?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  workingHours?: string;
+
+  @Equals(true, {
+    message: "You must accept the terms of service to submit a business application"
+  })
+  acceptedTerms!: boolean;
+
+  @IsString()
+  @MaxLength(40)
+  acceptedTermsVersion!: string;
+}
+
 export class AnnouncementDto {
   @IsOptional()
   @IsIn(["news", "discount", "broadcast"])
