@@ -16,7 +16,7 @@
     "dev": "npm run dev --workspace @manzil/web",
     "dev:web": "npm run dev --workspace @manzil/web",
     "dev:api": "npm run start:dev --workspace @manzil/api",
-    "build": "npm run build --workspaces --if-present",
+    "build": "npm run db:generate && npm run build --workspaces --if-present",
     "build:shared": "npm run build --workspace @manzil/shared",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
