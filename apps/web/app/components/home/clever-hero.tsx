@@ -38,6 +38,17 @@ export function CleverHero({ copy, locale }: { copy: CleverHeroCopy; locale: Loc
             <p className="clever-hero__subtitle">{copy.subtitle}</p>
           </Reveal>
 
+          <Reveal as="div" delay={200} variant="fade-up">
+            <a
+              className="clever-hero__site-link"
+              href="https://manzilgroup.uz"
+              aria-label="Visit manzilgroup.uz"
+            >
+              <span aria-hidden="true">↗</span>
+              <span>manzilgroup.uz</span>
+            </a>
+          </Reveal>
+
           <Reveal as="div" delay={240} variant="fade-up">
             <div className="clever-hero__actions">
               <a className="clever-btn clever-btn--primary" href={`/${locale}/discover`}>
