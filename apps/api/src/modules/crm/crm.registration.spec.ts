@@ -8,7 +8,8 @@ const validInput = {
   categorySlug: "cafe",
   descriptionUz: "Sokin muhitli qahvaxona",
   address: "Amir Temur 12",
-  district: "Chilonzor"
+  district: "Chilonzor",
+  workingHours: "09:00 - 23:00"
 };
 
 /**
@@ -47,6 +48,97 @@ function makeRepo(existingBusiness: unknown | null) {
 
   return { repo, prisma, geocoding };
 }
+
+function makeApplicationRepo(existingApplication: unknown | null = null) {
+  const created = {
+    id: "app_1",
+    status: "submitted",
+    name: validInput.name,
+    categorySlug: validInput.categorySlug,
+    address: validInput.address,
+    district: validInput.district,
+    workingHours: validInput.workingHours,
+    submittedAt: new Date("2026-09-04T10:00:00.000Z"),
+    reviewNote: null,
+    applicantUserId: actor.userId
+  };
+  const prisma = {
+    business: { create: jest.fn() },
+    category: { findUnique: jest.fn().mockResolvedValue({ id: "cat_1", slug: "cafe" }) },
+    user: { upsert: jest.fn().mockResolvedValue({ id: actor.userId }) },
+    businessApplication: {
+      findFirst: jest.fn().mockResolvedValue(existingApplication),
+      findUnique: jest.fn().mockResolvedValue(created),
+      create: jest.fn().mockResolvedValue(created)
+    }
+  };
+  const repo = new CrmRepository(
+    prisma as never,
+    { invalidate: jest.fn() } as never,
+    { geocode: jest.fn() } as never,
+    { dispatch: jest.fn() } as never,
+    { resolveCurrentDocuments: jest.fn(), recordAcceptance: jest.fn() } as never
+  );
+  return { repo, prisma };
+}
+
+describe("CrmRepository.submitBusinessApplication — application-first boundary", () => {
+  it("creates a submitted application without creating a Business", async () => {
+    const { repo, prisma } = makeApplicationRepo();
+
+    const result = await repo.submitBusinessApplication(validInput, actor, {
+      acceptedTerms: true,
+      acceptedTermsVersion: "terms-v3"
+    });
+
+    expect(result).toMatchObject({ id: "app_1", status: "submitted" });
+    expect(prisma.business.create).not.toHaveBeenCalled();
+    expect(prisma.businessApplication.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        status: "submitted",
+        acceptedTermsVersion: "terms-v3",
+        workingHours: validInput.workingHours,
+        acceptedTermsAt: expect.any(Date),
+        submittedAt: expect.any(Date)
+      })
+    });
+  });
+
+  it("returns the existing application on a repeated submission", async () => {
+    const existing = {
+      id: "app_existing",
+      status: "submitted",
+      name: validInput.name,
+      submittedAt: new Date("2026-09-04T10:00:00.000Z")
+    };
+    const { repo, prisma } = makeApplicationRepo(existing);
+
+    const result = await repo.submitBusinessApplication(validInput, actor, {
+      acceptedTerms: true,
+      acceptedTermsVersion: "terms-v3"
+    });
+
+    expect(result).toEqual({
+      id: "app_existing",
+      status: "submitted",
+      name: validInput.name,
+      submittedAt: existing.submittedAt
+    });
+    expect(prisma.businessApplication.create).not.toHaveBeenCalled();
+  });
+
+  it("requires current terms before persistence", async () => {
+    const { repo, prisma } = makeApplicationRepo();
+
+    await expect(
+      repo.submitBusinessApplication(validInput, actor, {
+        acceptedTerms: false,
+        acceptedTermsVersion: "terms-v3"
+      })
+    ).rejects.toThrow("current terms");
+    expect(prisma.businessApplication.create).not.toHaveBeenCalled();
+  });
+});
 
 describe("CrmRepository.registerBusiness — duplicate guard", () => {
   it("returns the existing business instead of creating a second one", async () => {
