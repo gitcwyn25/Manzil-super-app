@@ -2,7 +2,6 @@ import type { Locale } from "@manzil/shared";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { pageMetadata, ROUTE_SEO } from "../../../../lib/seo";
-import { Aperture } from "../../../../components/motion/aperture";
 import { WaitlistForm } from "../../../../components/waitlist/waitlist-form";
 import { API_BASE_URL } from "../../../../lib/api-base-url";
 import { fetchWithTimeout } from "../../../../lib/fetch-with-timeout";
@@ -79,9 +78,6 @@ export default async function WaitlistPage({
           <p className="wl-count">{copy.countLabel(count)}</p>
         ) : null}
         <WaitlistForm locale={locale} topic={topic} />
-      </div>
-      <div className="wl-aperture">
-        <Aperture live={count !== null && count > 0} />
       </div>
     </section>
   );
