@@ -169,7 +169,7 @@ function DocsSidebar({ locale, activeId }: { locale: Locale; activeId: DocId | "
   const t = copy[locale];
   const groups: Array<{ label: string; ids: DocId[] }> = [
     { label: t.company, ids: ["about", "founders", "contact", "trust"] },
-    { label: t.trust, ids: ["terms", "privacy", "cookies", "reviews"] }
+    { label: t.trust, ids: ["terms", "privacy", "cookies", "reviews", "ai-transparency"] }
   ];
 
   return (
@@ -272,7 +272,7 @@ export function DocumentationHub({ locale }: { locale: Locale }) {
                   {group.ids.length ? (
                     <div className="docs-grid">
                       {group.ids.map((docId) => (
-                        <Link className="docs-card" href={`/${locale}${docs[docId].path}`} key={docId}>
+                        <Link className={`docs-card${docId === "ai-transparency" ? " docs-card--accent" : ""}`} href={`/${locale}${docs[docId].path}`} key={docId}>
                           <span className="docs-card__arrow" aria-hidden="true">↗</span>
                           <h3>{docs[docId].title[locale]}</h3>
                           <p>{docs[docId].description[locale]}</p>

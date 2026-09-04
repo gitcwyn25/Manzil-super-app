@@ -48,6 +48,7 @@
     "@openrouter/sdk": "^0.13.20",
     "@prisma/client": "^6.19.3",
     "@tailwindcss/postcss": "^4.3.3",
+    "gsap": "^3.15.0",
     "motion": "^13.1.1",
     "postcss": "^8.5.26",
     "tailwindcss": "^4.3.3"

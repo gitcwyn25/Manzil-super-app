@@ -32,7 +32,7 @@ test.describe("discover page", () => {
 
     await page.locator("form[role='search'] input").fill("coffee");
     await page.getByRole("button", { name: "Qidirish" }).click();
-    await expect(page).toHaveURL(/\\/uz\\/discover\\?q=coffee/);
+    await expect(page).toHaveURL(/\/uz\/discover\?q=coffee/);
 
     await page.getByRole("button", { name: "Qahvaxonalar" }).click();
     await expect(page).toHaveURL(/category=cafes/);

@@ -180,7 +180,7 @@ export type ConciergeReply = {
   suggestions: ConciergeSuggestion[];
 };
 
-export type SubscriptionTierSlug = "starter" | "growth" | "premium";
+export type SubscriptionTierSlug = "free" | "pro" | "max";
 
 export type SubscriptionFeature = {
   label: LocalizedText;

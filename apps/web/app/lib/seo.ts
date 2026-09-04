@@ -13,31 +13,30 @@ import type { Metadata } from "next";
  * from the same locale-relative path so they can never drift apart.
  */
 
-/** Last-resort origin: the current production host. Better a slightly stale
- *  absolute URL than a relative canonical or a localhost one. */
-const PRODUCTION_ORIGIN = "https://manzil-business.vercel.app";
+/** Last-resort origin: the intended custom production host. Better a
+ *  slightly stale absolute URL than a relative canonical or a localhost one. */
+const PRODUCTION_ORIGIN = "https://manzilgroup.uz";
 
 /**
  * Deployment origin for canonicals, hreflang and OG URLs.
  *
- * `NEXT_PUBLIC_APP_URL` is `http://localhost:3000` in local `.env.local`, and
- * that value is inlined at build time. A production build that picked it up
- * would ship `<link rel="canonical" href="http://localhost:3000/...">` on every
- * page — worse than having no canonical at all, because it actively tells
- * Google the real pages are duplicates of an unreachable host. So a localhost
- * origin is only honoured outside production; Vercel's own
- * `VERCEL_PROJECT_PRODUCTION_URL` is the next choice, then the literal above.
+ * `NEXT_PUBLIC_SITE_URL` is the explicit production origin and should be set
+ * to `https://manzilgroup.uz` in every deployment environment. The older
+ * `NEXT_PUBLIC_APP_URL` remains useful for local `.env.local` development, but
+ * must not decide production canonicals: it may contain localhost or an old
+ * Vercel alias. This keeps canonical, hreflang, sitemap and OG URLs on the
+ * intended public host even when Vercel's project alias changes.
  */
 function resolveSiteUrl(): string {
-  const configured = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/+$/, "");
-  const isLocal = Boolean(configured && /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(:|$)/.test(configured));
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "");
+  if (siteUrl) return siteUrl;
 
-  if (configured && (!isLocal || process.env.NODE_ENV !== "production")) {
-    return configured;
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/+$/, "");
+  if (appUrl && process.env.NODE_ENV !== "production") {
+    return appUrl;
   }
 
-  const vercel = process.env.VERCEL_PROJECT_PRODUCTION_URL;
-  return vercel ? `https://${vercel.replace(/\/+$/, "")}` : PRODUCTION_ORIGIN;
+  return PRODUCTION_ORIGIN;
 }
 
 export const SITE_URL = resolveSiteUrl();
@@ -173,9 +172,9 @@ export const ROUTE_SEO = {
   pricing: {
     path: "/business/pricing",
     title: {
-      uz: "Tariflar — Starter, Growth, Premium",
-      ru: "Тарифы — Starter, Growth, Premium",
-      en: "Pricing — Starter, Growth, Premium"
+      uz: "Tariflar — Free, Pro, Max",
+      ru: "Тарифы — Free, Pro, Max",
+      en: "Pricing — Free, Pro, Max"
     },
     description: {
       uz: "Manzil Business tariflari va har biriga kiradigan imkoniyatlar.",

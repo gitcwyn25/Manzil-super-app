@@ -567,8 +567,8 @@ export const demoUserProfile: UserProfile = {
 
 export const subscriptionPlans: SubscriptionPlan[] = [
   {
-    slug: "starter",
-    name: { uz: "Starter", ru: "Starter", en: "Starter" },
+    slug: "free",
+    name: { uz: "Free", ru: "Free", en: "Free" },
     priceLabel: { uz: "Bepul", ru: "Бесплатно", en: "Free" },
     description: {
       uz: "Asosiy biznes profili va sharhlar.",
@@ -585,9 +585,9 @@ export const subscriptionPlans: SubscriptionPlan[] = [
     ]
   },
   {
-    slug: "growth",
-    name: { uz: "Growth", ru: "Growth", en: "Growth" },
-    priceLabel: { uz: "299,000 so'm / oy", ru: "299 000 сум / мес", en: "299,000 UZS / mo" },
+    slug: "pro",
+    name: { uz: "Pro", ru: "Pro", en: "Pro" },
+    priceLabel: { uz: "Tez orada", ru: "Скоро", en: "Coming soon" },
     description: {
       uz: "Kafelar, restoranlar va salonlar uchun.",
       ru: "Для кафе, ресторанов и салонов.",
@@ -595,7 +595,7 @@ export const subscriptionPlans: SubscriptionPlan[] = [
     },
     highlight: true,
     features: [
-      { label: { uz: "Starter'dagi hamma narsa", ru: "Всё из Starter", en: "Everything in Starter" }, included: true },
+      { label: { uz: "Free'dagi hamma narsa", ru: "Всё из Free", en: "Everything in Free" }, included: true },
       { label: { uz: "Ko'proq rasmlar", ru: "Больше фото", en: "More photos" }, included: true },
       { label: { uz: "Analytics", ru: "Аналитика", en: "Analytics" }, included: true },
       { label: { uz: "Aksiyalar", ru: "Акции", en: "Promotions" }, included: true },
@@ -605,16 +605,16 @@ export const subscriptionPlans: SubscriptionPlan[] = [
     ]
   },
   {
-    slug: "premium",
-    name: { uz: "Premium", ru: "Premium", en: "Premium" },
-    priceLabel: { uz: "799,000 so'm / oy", ru: "799 000 сум / мес", en: "799,000 UZS / mo" },
+    slug: "max",
+    name: { uz: "Max", ru: "Max", en: "Max" },
+    priceLabel: { uz: "Tez orada", ru: "Скоро", en: "Coming soon" },
     description: {
       uz: "O'rnatilgan bizneslar va zanjirlar uchun.",
       ru: "Для устоявшихся бизнесов и сетей.",
       en: "For established businesses and chains."
     },
     features: [
-      { label: { uz: "Growth'dagi hamma narsa", ru: "Всё из Growth", en: "Everything in Growth" }, included: true },
+      { label: { uz: "Pro'dagi hamma narsa", ru: "Всё из Pro", en: "Everything in Pro" }, included: true },
       { label: { uz: "Sponsored placement", ru: "Спонсорское размещение", en: "Sponsored placement" }, included: true },
       { label: { uz: "Advanced analytics", ru: "Расширенная аналитика", en: "Advanced analytics" }, included: true },
       { label: { uz: "Mijoz segmentatsiyasi", ru: "Сегментация клиентов", en: "Customer segmentation" }, included: true },

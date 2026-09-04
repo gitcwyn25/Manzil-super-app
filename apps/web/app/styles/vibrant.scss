@@ -384,7 +384,9 @@ h6 {
 
 @import "discover-cinema";
 
-
 @import "discover-marketplace";
 
 @import "docs";
+
+// Appearance is last so Day/Night/System can retint the active public shells.
+@import "theme";

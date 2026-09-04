@@ -1,0 +1,105 @@
+"use client";
+
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode
+} from "react";
+
+export type ThemePreference = "day" | "night" | "system";
+export type ResolvedTheme = "day" | "night";
+
+type ThemeContextValue = {
+  preference: ThemePreference;
+  resolvedTheme: ResolvedTheme;
+  setPreference: (preference: ThemePreference) => void;
+};
+
+const STORAGE_KEY = "manzil-theme";
+const ThemeContext = createContext<ThemeContextValue | null>(null);
+
+function isThemePreference(value: string | null): value is ThemePreference {
+  return value === "day" || value === "night" || value === "system";
+}
+
+function getSystemTheme(): ResolvedTheme {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "night" : "day";
+}
+
+function applyTheme(preference: ThemePreference): ResolvedTheme {
+  const resolvedTheme = preference === "system" ? getSystemTheme() : preference;
+  const root = document.documentElement;
+
+  root.dataset.theme = resolvedTheme;
+  root.dataset.themePreference = preference;
+  root.style.colorScheme = resolvedTheme === "night" ? "dark" : "light";
+
+  return resolvedTheme;
+}
+
+function getInitialPreference(): ThemePreference {
+  if (typeof window === "undefined") return "system";
+
+  try {
+    const stored = window.localStorage.getItem(STORAGE_KEY);
+    return isThemePreference(stored) ? stored : "system";
+  } catch {
+    // Private browsing and blocked storage should not prevent the theme UI.
+    return "system";
+  }
+}
+
+function getInitialResolvedTheme(preference: ThemePreference): ResolvedTheme {
+  if (typeof window === "undefined") return "day";
+  return preference === "system" ? getSystemTheme() : preference;
+}
+
+export function ThemeProvider({ children }: { children: ReactNode }) {
+  const [preference, setPreferenceState] = useState<ThemePreference>(getInitialPreference);
+  const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>(() =>
+    getInitialResolvedTheme(getInitialPreference())
+  );
+
+  useEffect(() => {
+    applyTheme(preference);
+  }, [preference]);
+
+  useEffect(() => {
+    if (preference !== "system") return;
+
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleChange = () => setResolvedTheme(applyTheme("system"));
+
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, [preference]);
+
+  const setPreference = useCallback((nextPreference: ThemePreference) => {
+    try {
+      window.localStorage.setItem(STORAGE_KEY, nextPreference);
+    } catch {
+      // The current tab can still honor the choice when storage is unavailable.
+    }
+    setPreferenceState(nextPreference);
+    setResolvedTheme(applyTheme(nextPreference));
+  }, []);
+
+  const value = useMemo(
+    () => ({ preference, resolvedTheme, setPreference }),
+    [preference, resolvedTheme, setPreference]
+  );
+
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
+}
+
+export function useTheme() {
+  const context = useContext(ThemeContext);
+  if (!context) {
+    throw new Error("useTheme must be used within ThemeProvider");
+  }
+  return context;
+}

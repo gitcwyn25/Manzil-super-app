@@ -2,7 +2,7 @@ import type { Locale } from "@manzil/shared";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
-export type DocId = "about" | "contact" | "trust" | "terms" | "privacy" | "cookies" | "reviews" | "founders";
+export type DocId = "about" | "contact" | "trust" | "terms" | "privacy" | "cookies" | "reviews" | "ai-transparency" | "founders";
 
 type DocMeta = { path: string; source?: string; legal?: boolean; title: Record<Locale, string>; description: Record<Locale, string> };
 
@@ -15,11 +15,12 @@ export const docs: Record<DocId, DocMeta> = {
   privacy: { path: "/legal/privacy", source: "privacy-policy", legal: true, title: { uz: "Maxfiylik siyosati", ru: "Политика конфиденциальности", en: "Privacy Policy" }, description: { uz: "Manzil shaxsiy ma’lumotlarga qanday ishlov berishini tushuntiruvchi draft.", ru: "Проект о том, как Manzil обрабатывает персональные данные.", en: "Draft explaining how Manzil handles personal data." } },
   cookies: { path: "/legal/cookies", source: "cookie-policy", legal: true, title: { uz: "Cookie siyosati", ru: "Политика cookie", en: "Cookie Policy" }, description: { uz: "Cookie va o‘xshash texnologiyalar bo‘yicha draft.", ru: "Проект о cookie и похожих технологиях.", en: "Draft policy for cookies and similar technologies." } },
   reviews: { path: "/legal/reviews", source: "community-and-reviews-policy", legal: true, title: { uz: "Sharhlar va hamjamiyat qoidalari", ru: "Правила отзывов и сообщества", en: "Reviews and Community Rules" }, description: { uz: "Halol, foydali va hurmatli sharhlar uchun qoidalar.", ru: "Правила честных, полезных и уважительных отзывов.", en: "Rules for honest, useful, and respectful reviews." } },
+  "ai-transparency": { path: "/legal/ai-transparency", source: "ai-transparency", legal: true,  title: { uz: "Gurman AI shaffofligi", ru: "Прозрачность Gurman AI", en: "Gurman AI Transparency" },  description: { uz: "Gurman AI nima qiladi va uning muhim cheklovlari.", ru: "Что делает Gurman AI и его важные ограничения.", en: "What Gurman AI does and its important limitations." } },
 };
 
 export const docGroups: Array<{ title: Record<Locale, string>; ids: DocId[] }> = [
   { title: { uz: "Kompaniya", ru: "Компания", en: "Company" }, ids: ["about", "founders", "contact", "trust"] },
-  { title: { uz: "Ishonch va huquqiy", ru: "Доверие и право", en: "Trust & Legal" }, ids: ["terms", "privacy", "cookies", "reviews"] },
+  { title: { uz: "Ishonch va huquqiy", ru: "Доверие и право", en: "Trust & Legal" }, ids: ["terms", "privacy", "cookies", "reviews", "ai-transparency"] },
   { title: { uz: "Bizneslar uchun", ru: "Для бизнеса", en: "For Businesses" }, ids: [] }
 ];
 

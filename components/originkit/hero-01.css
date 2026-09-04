@@ -1,0 +1,14 @@
+/* hero-01 — trusted marquee (from globals.css) */
+
+@keyframes trusted-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@theme {
+  --animate-trusted-marquee: trusted-marquee 36s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  @keyframes trusted-marquee {
+    from, to { transform: none; }
+  }
+}
