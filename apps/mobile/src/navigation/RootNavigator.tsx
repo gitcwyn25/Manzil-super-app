@@ -11,6 +11,8 @@ import ProfileScreen from '../screens/ProfileScreen';
 import SavedScreen from '../screens/SavedScreen';
 import BusinessDetailScreen from '../screens/BusinessDetailScreen';
 import ReviewScreen from '../screens/ReviewScreen';
+import OnboardingFlow from '../screens/OnboardingFlow';
+import { useAppState } from '../app-state';
 import { colors } from '../theme';
 import type { MainStackParamList, RootTabParamList } from './types';
 
@@ -19,18 +21,10 @@ const copy = getUiCopy(locale);
 const Tab = createBottomTabNavigator<RootTabParamList>();
 const Stack = createNativeStackNavigator<MainStackParamList>();
 
-function TabIcon({ label, color }: { label: string; color: string }) {
+function TabIcon({ glyph, color }: { glyph: string; color: string }) {
   return (
-    <View
-      style={{
-        width: 28,
-        height: 28,
-        borderRadius: 14,
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}
-    >
-      <Text style={{ color, fontWeight: '900', fontSize: 15 }}>{label}</Text>
+    <View style={{ width: 32, height: 26, alignItems: 'center', justifyContent: 'center' }}>
+      <Text style={{ color, fontWeight: '900', fontSize: glyph === 'AI' ? 11 : 20 }}>{glyph}</Text>
     </View>
   );
 }
@@ -47,11 +41,7 @@ function ScreenStack({ initial }: { initial: keyof MainStackParamList }) {
         contentStyle: { backgroundColor: colors.background }
       }}
     >
-      <Stack.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Search" component={SearchScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Concierge" component={ConciergeScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Saved" component={SavedScreen} options={{ headerShown: false }} />
@@ -63,6 +53,12 @@ function ScreenStack({ initial }: { initial: keyof MainStackParamList }) {
 }
 
 export default function RootNavigator() {
+  const { hasCompletedOnboarding, completeOnboarding } = useAppState();
+
+  if (!hasCompletedOnboarding) {
+    return <OnboardingFlow onComplete={completeOnboarding} onGuest={completeOnboarding} />;
+  }
+
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -71,59 +67,16 @@ export default function RootNavigator() {
           tabBarInactiveTintColor: colors.subtle,
           headerShown: false,
           tabBarHideOnKeyboard: true,
-          tabBarStyle: {
-            backgroundColor: colors.surface,
-            borderTopColor: '#E2E3E1',
-            height: 72,
-            paddingTop: 8,
-            paddingBottom: 12
-          },
-          tabBarLabelStyle: {
-            fontSize: 12,
-            fontWeight: '800'
-          }
+          tabBarStyle: { backgroundColor: colors.surface, borderTopColor: colors.surfaceHigh, borderTopWidth: 1, height: 78, paddingTop: 8, paddingBottom: 12 },
+          tabBarLabelStyle: { fontSize: 11, fontWeight: '800' },
+          tabBarItemStyle: { borderRadius: 14, marginHorizontal: 2 }
         }}
       >
-        <Tab.Screen
-          name="HomeTab"
-          children={() => <ScreenStack initial="Home" />}
-          options={{
-            tabBarLabel: copy.nav.feed,
-            tabBarIcon: ({ color }) => <TabIcon color={color} label="H" />,
-          }}
-        />
-        <Tab.Screen
-          name="SearchTab"
-          children={() => <ScreenStack initial="Search" />}
-          options={{
-            tabBarLabel: copy.nav.discover,
-            tabBarIcon: ({ color }) => <TabIcon color={color} label="⌕" />,
-          }}
-        />
-        <Tab.Screen
-          name="ConciergeTab"
-          children={() => <ScreenStack initial="Concierge" />}
-          options={{
-            tabBarLabel: copy.nav.concierge,
-            tabBarIcon: ({ color }) => <TabIcon color={color} label="AI" />,
-          }}
-        />
-        <Tab.Screen
-          name="SavedTab"
-          children={() => <ScreenStack initial="Saved" />}
-          options={{
-            tabBarLabel: copy.actions.saved,
-            tabBarIcon: ({ color }) => <TabIcon color={color} label="★" />,
-          }}
-        />
-        <Tab.Screen
-          name="ProfileTab"
-          children={() => <ScreenStack initial="Profile" />}
-          options={{
-            tabBarLabel: copy.nav.profile,
-            tabBarIcon: ({ color }) => <TabIcon color={color} label="P" />,
-          }}
-        />
+        <Tab.Screen name="HomeTab" children={() => <ScreenStack initial="Home" />} options={{ tabBarLabel: copy.nav.feed, tabBarAccessibilityLabel: 'Bosh sahifa', tabBarIcon: ({ color }) => <TabIcon color={color} glyph="⌂" /> }} />
+        <Tab.Screen name="SearchTab" children={() => <ScreenStack initial="Search" />} options={{ tabBarLabel: copy.nav.discover, tabBarAccessibilityLabel: 'Kashfiyot', tabBarIcon: ({ color }) => <TabIcon color={color} glyph="⌕" /> }} />
+        <Tab.Screen name="ConciergeTab" children={() => <ScreenStack initial="Concierge" />} options={{ tabBarLabel: 'Gurman', tabBarAccessibilityLabel: 'Gurman yordamchisi', tabBarIcon: ({ color }) => <TabIcon color={color} glyph="AI" /> }} />
+        <Tab.Screen name="SavedTab" children={() => <ScreenStack initial="Saved" />} options={{ tabBarLabel: copy.actions.saved, tabBarAccessibilityLabel: 'Saqlangan joylar', tabBarIcon: ({ color }) => <TabIcon color={color} glyph="☆" /> }} />
+        <Tab.Screen name="ProfileTab" children={() => <ScreenStack initial="Profile" />} options={{ tabBarLabel: copy.nav.profile, tabBarAccessibilityLabel: 'Profil', tabBarIcon: ({ color }) => <TabIcon color={color} glyph="◉" /> }} />
       </Tab.Navigator>
     </NavigationContainer>
   );

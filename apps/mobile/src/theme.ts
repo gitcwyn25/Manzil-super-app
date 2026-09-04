@@ -1,19 +1,20 @@
 export const colors = {
-  ink: '#1A1C1B',
-  muted: '#3E4948',
-  subtle: '#6E7979',
-  background: '#F9F9F7',
+  ink: '#102A2A',
+  inkSoft: '#274443',
+  muted: '#526968',
+  subtle: '#738785',
+  background: '#F7FAF8',
   surface: '#FFFFFF',
-  surfaceSoft: '#F4F4F2',
-  surfaceHigh: '#E8E8E6',
-  outline: '#BEC9C8',
+  surfaceSoft: '#ECF4F1',
+  surfaceHigh: '#DCEAE5',
+  outline: '#B7CBC5',
   primary: '#005454',
-  primarySoft: '#A1F0EF',
-  primaryContainer: '#0F6E6E',
-  primaryDark: '#002020',
-  gold: '#FEB300',
-  goldSoft: '#FFDEAC',
-  danger: '#BA1A1A',
+  primarySoft: '#C8F3EA',
+  primaryContainer: '#0B6B68',
+  primaryDark: '#003B3B',
+  gold: '#F7B51D',
+  goldSoft: '#FFF0C4',
+  danger: '#B3261E',
   success: '#0F6E4B'
 } as const;
 
@@ -29,18 +30,18 @@ export const spacing = {
 export const radius = {
   sm: 8,
   md: 12,
-  lg: 16,
-  xl: 20,
+  lg: 18,
+  xl: 24,
   pill: 999
 } as const;
 
 export const shadow = {
   card: {
-    shadowColor: '#000',
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 2
+    shadowColor: '#003B3B',
+    shadowOpacity: 0.08,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 3
   }
 } as const;
 
@@ -49,13 +50,13 @@ export const locale = 'uz' as const;
 export function photoTone(photo: string) {
   switch (photo) {
     case 'coffee':
-      return { bg: '#D8ECE8', fg: '#005454', mark: '☕' };
+      return { bg: '#D6EFE8', fg: '#005454', mark: '☕' };
     case 'somsa':
-      return { bg: '#FFE6B3', fg: '#6A4800', mark: '△' };
+      return { bg: '#FFE8B7', fg: '#795000', mark: '△' };
     case 'beauty':
-      return { bg: '#FFE1D4', fg: '#823100', mark: '✦' };
+      return { bg: '#FFE0D6', fg: '#873D32', mark: '✦' };
     case 'plov':
     default:
-      return { bg: '#E2EFE7', fg: '#0F6E4B', mark: '●' };
+      return { bg: '#DDEEE2', fg: '#0F6E4B', mark: '●' };
   }
 }

@@ -17,7 +17,7 @@ Added `apps/web/app/lib/fetch-with-timeout.ts`, which aborts server-side reads a
 ## Regression verification
 
 - `npm run typecheck --workspace @manzil/web`: PASS.
-- `npm run lint --workspace @manzil/web`: PASS with 0 errors and the existing 26 warnings.
+- `npm run lint --workspace @manzil/web`: PASS with 0 errors and the existing 32 warnings.
 - Real-mode production build with the API still unavailable: PASS through `Generating static pages using 11 workers (109/109) in 10.2s`, route optimization, and build-trace collection.
 - Post-merge direct build verification: `cmd.exe /d /s /c "set NEXT_TELEMETRY_DISABLED=1&& npm run build --workspace @manzil/web > build-merge-validation-2.log 2>&1"` exited `0`; Next compiled in 22.3s, completed TypeScript, generated `109/109` static pages in 7.0s, finalized optimization, and collected build traces.
 - The earlier post-merge run appeared to stop at the type-check phase because PowerShell's native stderr pipeline surfaced Sass/Next warnings as `NativeCommandError`; the direct `cmd.exe` run completed normally. This was a logging-wrapper failure, not a production build stall.
@@ -25,11 +25,20 @@ Added `apps/web/app/lib/fetch-with-timeout.ts`, which aborts server-side reads a
 - Completed build artifacts included `.next/BUILD_ID`; no build worker processes remained after completion.
 - The generated route table confirmed the expected static, dynamic, Gurman redirect, waitlist, sitemap, and robots routes.
 
-The current post-merge build has a verified numeric exit code of `0` and a completed build artifact. Remaining warnings are the existing Sass deprecations, middleware-convention notice, and Supabase Edge Runtime compatibility warning.
+The current post-merge build has a verified numeric exit code of `0` and a completed build artifact. The remote feature branch's mobile dependencies and history are retained, while the incoming web-only Gurman presentation files were removed to preserve the approved mobile-only boundary. Remaining warnings are the existing Sass deprecations, middleware-convention notice, and Supabase Edge Runtime compatibility warning.
+
+## Remote feature-branch merge verification
+
+- Resolved the active merge of `origin/feat/frontend-elevation` without dropping its remote history; the web-side resolution keeps `/gurman` and `/concierge` as waitlist redirects and retains the Docs/Trust Center surface.
+- `npm run typecheck --workspace @manzil/web`: PASS after the conflict resolution.
+- `npm run lint --workspace @manzil/web`: PASS with 0 errors and 32 warnings.
+- A fresh production build exited `0`, completed TypeScript, generated `109/109` static pages, finalized optimization, and collected build traces; `.next/BUILD_ID` was `dYFC16D8xAUv7wQA8HMXu`.
+- Direct HTTP probes against the completed artifact passed: `/en`, `/uz/discover`, `/uz/docs`, `/uz/business`, and `/uz/waitlist/gurman` returned 200; `/uz/gurman` and `/uz/concierge` returned 308 to `/uz/waitlist/gurman`.
+- `npx playwright test tests/e2e/discover.spec.ts --list`: PASS; 6 tests collected. Full browser execution remains blocked by the missing sandbox Chromium executable.
 
 ## Remaining release gates
 
-- Playwright test collection passes for the selected public smoke subset (10 tests across Discover and shell-boundary specs), but execution is blocked because the sandbox lacks `chrome-headless-shell.exe`; no browser download was performed.
+- Playwright test collection passes for the selected public Discover smoke file (6 tests), but execution is blocked because the sandbox lacks `chrome-headless-shell.exe`; no browser download was performed.
 - Direct HTTP probes against the final production artifact pass: `/en`, `/uz/discover`, and `/uz/waitlist/gurman` return 200; `/uz/gurman` and `/uz/concierge` return 308 to `/uz/waitlist/gurman`.
 - The incoming `origin/main` copy of `.github/workflows/deploy-api.yml` was truncated and progressively mis-indented; the last valid branch version was restored unchanged and parsed successfully as YAML. No deployment behavior was added by this merge.
 - Local Git staging/commit is still blocked by Windows ACL errors on `.git/index.lock` and `.git/objects`; no push, PR, merge, or deployment was attempted.
