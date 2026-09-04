@@ -26,21 +26,13 @@ export function DocumentShell({
   lang?: Locale;
 }) {
   return (
-    <html className={fontVariables} lang={lang} data-scroll-behavior="smooth" suppressHydrationWarning>
+    <html className={fontVariables} lang={lang} data-scroll-behavior="smooth" data-theme="day" data-theme-preference="day" style={{ colorScheme: "light" }} suppressHydrationWarning>
       <body suppressHydrationWarning>
-        {/* Restore appearance before paint so Night mode does not flash Day mode.
-            The provider takes over afterwards and listens for System changes. */}
+        {/* Light is the single public appearance. Keep the JS marker for reveal fallbacks,
+            but never read device or localStorage theme preferences. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `try {
-              var p = localStorage.getItem("manzil-theme");
-              p = p === "day" || p === "night" || p === "system" ? p : "system";
-              var t = p === "system" && matchMedia("(prefers-color-scheme: dark)").matches ? "night" : p === "system" ? "day" : p;
-              document.documentElement.dataset.theme = t;
-              document.documentElement.dataset.themePreference = p;
-              document.documentElement.style.colorScheme = t === "night" ? "dark" : "light";
-            } catch (e) {}
-            document.documentElement.classList.add("js");`
+            __html: "document.documentElement.classList.add('js');"
           }}
         />
         {/* Safety net for the JS-disabled path: Framer Motion inlines the
