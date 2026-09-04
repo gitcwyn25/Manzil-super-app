@@ -628,6 +628,138 @@
   line-height: 1.65;
 }
 
+.founders-panel {
+  margin: clamp(3.5rem, 7vw, 6rem) 0 clamp(3.5rem, 7vw, 6.5rem);
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--line);
+}
+
+.founders-panel__intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(13rem, .8fr);
+  gap: clamp(1.5rem, 5vw, 5rem);
+  align-items: end;
+  padding-bottom: 1.6rem;
+}
+
+.founders-panel__kicker,
+.founder-card__index {
+  color: var(--brass);
+  font-family: var(--font-data), ui-monospace, monospace;
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.founders-panel h2 {
+  margin: .7rem 0 0;
+  color: var(--text);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 550;
+  letter-spacing: -.055em;
+  line-height: 1;
+}
+
+.founders-panel__intro > p {
+  max-width: 27rem;
+  margin: 0;
+  color: var(--muted);
+  font-size: .98rem;
+  line-height: 1.65;
+}
+
+.founders-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--line);
+  box-shadow: var(--soft-shadow);
+}
+
+.founder-card {
+  display: flex;
+  min-width: 0;
+  min-height: 24rem;
+  flex-direction: column;
+  padding: clamp(1.2rem, 2.3vw, 1.8rem);
+  background: var(--surface-card);
+}
+
+.founder-card__topline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.founder-card__mark {
+  display: grid;
+  width: 3.5rem;
+  height: 3.5rem;
+  place-items: center;
+  border: 1px solid var(--ceramic);
+  border-radius: 50%;
+  outline: 1px solid rgb(0 112 107 / .18);
+  outline-offset: .28rem;
+  color: var(--ceramic);
+  font-family: var(--font-data), ui-monospace, monospace;
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+}
+
+.founder-card:nth-child(2) .founder-card__mark {
+  border-color: var(--brass);
+  outline-color: rgb(200 162 76 / .22);
+  color: var(--brass);
+}
+
+.founder-card:nth-child(3) .founder-card__mark {
+  border-color: var(--void);
+  outline-color: rgb(10 26 30 / .18);
+  color: var(--void);
+}
+
+.founder-card__identity {
+  margin-top: clamp(3rem, 5vw, 4.5rem);
+}
+
+.founder-card h3 {
+  margin: 0;
+  color: var(--text);
+  overflow-wrap: normal;
+  font-size: clamp(1.15rem, 1.15vw, 1.5rem);
+  font-weight: 650;
+  letter-spacing: -.06em;
+  line-height: 1.05;
+}
+
+.founder-card__role {
+  margin: .7rem 0 0;
+  color: var(--ceramic);
+  font-family: var(--font-data), ui-monospace, monospace;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .03em;
+  line-height: 1.45;
+}
+
+.founder-card:nth-child(2) .founder-card__role {
+  color: var(--brass);
+}
+
+.founder-card__bio {
+  margin: auto 0 0;
+  padding-top: 2rem;
+  color: var(--muted);
+  font-size: .94rem;
+  line-height: 1.65;
+}
+
 .docs-back {
   display: inline-flex;
   margin-top: 3rem;
@@ -696,8 +828,21 @@
   }
 
   .docs-grid,
-  .docs-business-links {
+  .docs-business-links,
+  .founders-grid {
     grid-template-columns: 1fr;
+  }
+
+  .founders-panel__intro {
+    display: block;
+  }
+
+  .founders-panel__intro > p {
+    margin-top: 1.2rem;
+  }
+
+  .founder-card {
+    min-height: 19rem;
   }
 
   .docs-card {
