@@ -48,6 +48,21 @@ export type CrmStats = {
   customerCount: number;
 };
 
+export type CrmBusinessApplication = {
+  id: string;
+  status: "draft" | "submitted" | "under_review" | "changes_requested" | "approved" | "rejected" | "withdrawn";
+  name: string;
+  categorySlug: string;
+  address: string;
+  district: string;
+  submittedAt: string | null;
+  reviewNote: string | null;
+};
+
+export function getBusinessApplication(id: string) {
+  return crmGet<CrmBusinessApplication>(`/crm/applications/${id}`);
+}
+
 export type CrmSubscription = {
   plan: "free" | "pro" | "max";
   status: "trial" | "active" | "invoice_pending" | "canceled";
