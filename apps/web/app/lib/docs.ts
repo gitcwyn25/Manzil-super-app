@@ -4,11 +4,70 @@ import { join } from "node:path";
 
 export type DocId = "about" | "contact" | "trust" | "terms" | "privacy" | "cookies" | "reviews" | "ai-transparency" | "founders";
 
-type DocMeta = { path: string; source?: string; legal?: boolean; title: Record<Locale, string>; description: Record<Locale, string> };
+type DocMeta = { path: string; source?: string; legal?: boolean; title: Record<Locale, string>; description: Record<Locale, string>; updated?: Record<Locale, string> };
+
+export type FounderProfile = {
+  id: string;
+  initials: string;
+  name: Record<Locale, string>;
+  role: Record<Locale, string>;
+  bio: Record<Locale, string>;
+};
+
+export const founderProfiles: FounderProfile[] = [
+  {
+    id: "sunnatilla-tursunov",
+    initials: "ST",
+    name: { uz: "Sunnatilla Tursunov", ru: "Sunnatilla Tursunov", en: "Sunnatilla Tursunov" },
+    role: { uz: "Founder", ru: "Основатель", en: "Founder" },
+    bio: {
+      uz: "Sunnatilla Tursunov — TSUE bitiruvchisi, xalqaro iqtisodchi va Manzil asoschisi. U Manzilni odamlar uchun O‘zbekistondagi haqiqiy joylarni topishni, mahalliy bizneslar uchun esa to‘g‘ri mijozlarga yetib borishni osonlashtiradigan platforma sifatida qurmoqda.",
+      ru: "Суннатилла Турсунов — международный экономист и выпускник TSUE. Он основал Manzil и создаёт платформу, которая помогает людям находить реальные места в Узбекистане, а местным компаниям — привлекать подходящих клиентов.",
+      en: "Sunnatilla Tursunov is an International Economist and TSUE alumnus. He founded Manzil and is building it as a platform that makes it easier for people to find real places in Uzbekistan and for local businesses to reach the right customers."
+    }
+  },
+  {
+    id: "khayitov-muhammadkarim",
+    initials: "KM",
+    name: { uz: "Khayitov Muhammadkarim", ru: "Khayitov Muhammadkarim", en: "Khayitov Muhammadkarim" },
+    role: { uz: "Co-founder · CMO", ru: "Сооснователь · CMO", en: "Co-founder · CMO" },
+    bio: {
+      uz: "Khayitov Muhammadkarim — xalqaro iqtisodchi va TSUE bitiruvchisi. U 605 Marketing Agency a’zosi bo‘lib, Manzil Group marketingi va savdosini boshqaradi.",
+      ru: "Хайитов Мухаммадкарим — международный экономист и выпускник TSUE. Он является участником 605 Marketing Agency и отвечает за маркетинг и продажи Manzil Group.",
+      en: "Khayitov Muhammadkarim is an International Economist and TSUE alumnus. He is a member of 605 Marketing Agency and oversees Manzil Group’s marketing and sales."
+    }
+  },
+  {
+    id: "ismoilov-abduqodir",
+    initials: "IA",
+    name: { uz: "Ismoilov Abduqodir", ru: "Ismoilov Abduqodir", en: "Ismoilov Abduqodir" },
+    role: { uz: "Co-founder · CEO, daraxtkent.uz", ru: "Сооснователь · CEO, daraxtkent.uz", en: "Co-founder · CEO, daraxtkent.uz" },
+    bio: {
+      uz: "Ismoilov Abduqodir — xalqaro iqtisodchi va TSUE bitiruvchisi. U daraxtkent.uz bosh direktori sifatida Manzil operatsiyalari va biznes aloqalarini boshqaradi.",
+      ru: "Измоилов Абдукодир — международный экономист и выпускник TSUE. Как CEO daraxtkent.uz, он отвечает за операционную работу Manzil и деловые отношения.",
+      en: "Ismoilov Abduqodir is an International Economist and TSUE alumnus. As CEO of daraxtkent.uz, he oversees Manzil’s operations and business relations."
+    }
+  }
+];
+
+export const founderSectionCopy: Record<Locale, { title: string; intro: string }> = {
+  uz: {
+    title: "Ta’sischilar",
+    intro: "Manzilning asoschilari — mahalliy joylar va bizneslar uchun ishonchli raqamli yo‘lko‘rsatkich qurayotgan jamoa."
+  },
+  ru: {
+    title: "Основатели",
+    intro: "Manzil создаёт команда, которая помогает людям находить местные места и компаниям — понятнее рассказывать о своих услугах."
+  },
+  en: {
+    title: "Founders",
+    intro: "Manzil is being built by a founding team focused on making local places and businesses easier to discover and trust."
+  }
+};
 
 export const docs: Record<DocId, DocMeta> = {
-  about: { path: "/about", source: "about", title: { uz: "Manzil haqida", ru: "О Manzil", en: "About Manzil" }, description: { uz: "Manzilning maqsadi, tamoyillari va ishlash usuli.", ru: "Цель, принципы и подход Manzil.", en: "Manzil’s purpose, principles, and approach." } },
-  founders: { path: "/founders", title: { uz: "Ta’sischilar", ru: "Основатели", en: "Founders" }, description: { uz: "Manzil ortidagi jamoa haqida ma’lumot.", ru: "Информация о команде Manzil.", en: "Information about the people behind Manzil." } },
+  about: { path: "/about", source: "about", title: { uz: "Manzil haqida", ru: "О Manzil", en: "About Manzil" }, description: { uz: "Manzilning maqsadi, tamoyillari va ishlash usuli.", ru: "Цель, принципы и подход Manzil.", en: "Manzil’s purpose, principles, and approach." }, updated: { uz: "4 sentyabr 2026", ru: "4 сентября 2026", en: "September 4, 2026" } },
+  founders: { path: "/founders", title: { uz: "Ta’sischilar", ru: "Основатели", en: "Founders" }, description: { uz: "Manzil ortidagi jamoa haqida ma’lumot.", ru: "Информация о команде Manzil.", en: "Information about the people behind Manzil." }, updated: { uz: "4 sentyabr 2026", ru: "4 сентября 2026", en: "September 4, 2026" } },
   contact: { path: "/contact", source: "contact", title: { uz: "Kontaktlar", ru: "Контакты", en: "Contact Manzil" }, description: { uz: "Savollar, biznes va ma’lumotlarni tuzatish uchun aloqa kanallari.", ru: "Каналы связи для вопросов, бизнеса и исправления данных.", en: "Channels for questions, business matters, and data corrections." } },
   trust: { path: "/trust", source: "trust", title: { uz: "Ishonch markazi", ru: "Центр доверия", en: "Trust Center" }, description: { uz: "Manzil ma’lumot, sharh va AI tavsiyalarini qanday ishonchli saqlashi.", ru: "Как Manzil работает с данными, отзывами и рекомендациями AI.", en: "How Manzil handles data, reviews, and AI recommendations." } },
   terms: { path: "/legal/terms", source: "terms-of-service", legal: true, title: { uz: "Xizmatlardan foydalanish shartlari", ru: "Условия использования", en: "Terms of Service" }, description: { uz: "Manzil xizmatlaridan foydalanish shartlari loyihasi.", ru: "Проект условий использования Manzil.", en: "Draft terms for using Manzil." } },
@@ -37,12 +96,20 @@ function documentationRoot() {
 
 export function docMarkdown(id: DocId, locale: Locale) {
   if (id === "founders") {
-    const placeholder = {
-      uz: "## Ta’sischilar\n\n### [Ta’sischi 1 — ism-familiya]\n\nLavozimi va biografiyasi nashrdan oldin tasdiqlanadi.\n\n### [Ta’sischi 2 — ism-familiya]\n\nLavozimi va biografiyasi nashrdan oldin tasdiqlanadi.",
-      ru: "## Основатели\n\n### [Основатель 1 — имя и фамилия]\n\nДолжность и биография будут подтверждены до публикации.\n\n### [Основатель 2 — имя и фамилия]\n\nДолжность и биография будут подтверждены до публикации.",
-      en: "## Founders\n\n### [Founder 1 — full name]\n\nThe role and biography will be confirmed before publication.\n\n### [Founder 2 — full name]\n\nThe role and biography will be confirmed before publication."
-    } satisfies Record<Locale, string>;
-    return placeholder[locale];
+    const section = founderSectionCopy[locale];
+    return [
+      `## ${section.title}`,
+      "",
+      section.intro,
+      "",
+      ...founderProfiles.flatMap((founder) => [
+        `### ${founder.name[locale]}`,
+        `**${locale === "uz" ? "Lavozimi" : locale === "ru" ? "Должность" : "Position"}:** ${founder.role[locale]}`,
+        "",
+        founder.bio[locale],
+        ""
+      ])
+    ].join("\n").trim();
   }
   const source = docs[id].source!;
   const suffix = locale === "uz" ? "" : locale;
