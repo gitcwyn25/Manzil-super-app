@@ -9,6 +9,7 @@ type DocMeta = { path: string; source?: string; legal?: boolean; title: Record<L
 export type FounderProfile = {
   id: string;
   initials: string;
+  image: string;
   name: Record<Locale, string>;
   role: Record<Locale, string>;
   bio: Record<Locale, string>;
@@ -18,8 +19,9 @@ export const founderProfiles: FounderProfile[] = [
   {
     id: "sunnatilla-tursunov",
     initials: "ST",
+    image: "/founders/sunnatilla.jpg",
     name: { uz: "Sunnatilla Tursunov", ru: "Sunnatilla Tursunov", en: "Sunnatilla Tursunov" },
-    role: { uz: "Founder", ru: "Основатель", en: "Founder" },
+    role: { uz: "Founder · CEO · CTO", ru: "Основатель · CEO · CTO", en: "Founder · CEO · CTO" },
     bio: {
       uz: "Sunnatilla Tursunov — TSUE bitiruvchisi, xalqaro iqtisodchi va Manzil asoschisi. U Manzilni odamlar uchun O‘zbekistondagi haqiqiy joylarni topishni, mahalliy bizneslar uchun esa to‘g‘ri mijozlarga yetib borishni osonlashtiradigan platforma sifatida qurmoqda.",
       ru: "Суннатилла Турсунов — международный экономист и выпускник TSUE. Он основал Manzil и создаёт платформу, которая помогает людям находить реальные места в Узбекистане, а местным компаниям — привлекать подходящих клиентов.",
@@ -29,6 +31,7 @@ export const founderProfiles: FounderProfile[] = [
   {
     id: "khayitov-muhammadkarim",
     initials: "KM",
+    image: "/founders/muhammadkarim.jpg",
     name: { uz: "Khayitov Muhammadkarim", ru: "Khayitov Muhammadkarim", en: "Khayitov Muhammadkarim" },
     role: { uz: "Co-founder · CMO", ru: "Сооснователь · CMO", en: "Co-founder · CMO" },
     bio: {
@@ -40,8 +43,9 @@ export const founderProfiles: FounderProfile[] = [
   {
     id: "ismoilov-abduqodir",
     initials: "IA",
+    image: "/founders/abduqodir.jpg",
     name: { uz: "Ismoilov Abduqodir", ru: "Ismoilov Abduqodir", en: "Ismoilov Abduqodir" },
-    role: { uz: "Co-founder · CEO, daraxtkent.uz", ru: "Сооснователь · CEO, daraxtkent.uz", en: "Co-founder · CEO, daraxtkent.uz" },
+    role: { uz: "Co-founder · COO", ru: "Сооснователь · COO", en: "Co-founder · COO" },
     bio: {
       uz: "Ismoilov Abduqodir — xalqaro iqtisodchi va TSUE bitiruvchisi. U daraxtkent.uz bosh direktori sifatida Manzil operatsiyalari va biznes aloqalarini boshqaradi.",
       ru: "Измоилов Абдукодир — международный экономист и выпускник TSUE. Как CEO daraxtkent.uz, он отвечает за операционную работу Manzil и деловые отношения.",

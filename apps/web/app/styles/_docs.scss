@@ -683,7 +683,7 @@
 .founder-card {
   display: flex;
   min-width: 0;
-  min-height: 24rem;
+  min-height: 35rem;
   flex-direction: column;
   padding: clamp(1.2rem, 2.3vw, 1.8rem);
   background: var(--surface-card);
@@ -724,8 +724,34 @@
   color: var(--void);
 }
 
+.founder-card__portrait {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  margin-top: 1.5rem;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background: var(--surface-low);
+}
+
+.founder-card__portrait img {
+  object-fit: cover;
+  object-position: center;
+}
+
+.founder-card:first-child .founder-card__portrait img {
+  object-position: center 38%;
+}
+
+.founder-card:nth-child(2) .founder-card__portrait img {
+  object-position: center 30%;
+}
+
+.founder-card:nth-child(3) .founder-card__portrait img {
+  object-position: center 28%;
+}
+
 .founder-card__identity {
-  margin-top: clamp(3rem, 5vw, 4.5rem);
+  margin-top: 1.35rem;
 }
 
 .founder-card h3 {
@@ -842,7 +868,7 @@
   }
 
   .founder-card {
-    min-height: 19rem;
+    min-height: 31rem;
   }
 
   .docs-card {
