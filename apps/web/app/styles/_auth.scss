@@ -73,6 +73,38 @@
 }
 
 // ---------------------------------------------------------------------------
+// Application status summary: clear state, timestamp, and boundary note.
+.vm-auth-summary {
+  display: grid;
+  gap: .75rem;
+  padding: 1.25rem;
+  border: 1px solid rgba($primary, .18);
+  border-radius: 1rem;
+  background: rgba($primary, .04);
+}
+
+.vm-auth-summary__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  color: $vm-on-surface-variant;
+
+  strong {
+    color: $vm-on-surface;
+    text-align: right;
+  }
+}
+
+.vm-auth-summary__note {
+  margin: .5rem 0 0;
+  padding-top: .75rem;
+  border-top: 1px solid rgba($primary, .12);
+  color: $vm-on-surface-variant;
+  font-size: .9375rem;
+  line-height: 1.5;
+}
+
 // Form: single column, quiet fieldset sections, IconField recipe
 // ---------------------------------------------------------------------------
 
