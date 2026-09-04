@@ -55,7 +55,7 @@ const WIZARD_COPY: Record<
   uz: {
     step1: { title: "1. Asosiy ma'lumotlar", desc: "Biznesingiz nomi, faoliyat turi va aloqa raqami" },
     step2: { title: "2. Joylashuv va Tavsif", desc: "Tuman, aniq manzil, ish vaqti va xizmatlar tavsifi" },
-    step3: { title: "3. Tasdiqlash va Shartlar", desc: "Ommaviy oferta roziligi va profilingizni faollashtirish" },
+    step3: { title: "3. Tekshirish va Shartlar", desc: "Profilingizni ko'rib chiqing va Manzil tekshiruviga yuboring" },
     name: "Biznes nomi",
     namePlaceholder: "Masalan: Rayhon Milliy Taomlar yoki Breadly",
     category: "Faoliyat turkumi",
@@ -76,13 +76,13 @@ const WIZARD_COPY: Record<
     termsDoc: "Ommaviy oferta shartlarini o'qish",
     btnNext: "Keyingi bosqich",
     btnPrev: "Orqaga",
-    btnSubmit: "Biznesni ro'yxatdan o'tkazish",
-    pendingLabel: "Ro'yxatdan o'tkazilmoqda..."
+    btnSubmit: "Arizani yuborish",
+    pendingLabel: "Ariza yuborilmoqda..."
   },
   ru: {
     step1: { title: "1. Основные данные", desc: "Название, категория деятельности и контакты" },
     step2: { title: "2. Локация и Описание", desc: "Район, точный адрес, график работы и описание" },
-    step3: { title: "3. Подтверждение и Условия", desc: "Согласие с офертой и запуск профиля" },
+    step3: { title: "3. Проверка и Условия", desc: "Проверьте профиль и отправьте его на проверку Manzil" },
     name: "Название компании",
     namePlaceholder: "Например: Rayhon Milliy Taomlar или Breadly",
     category: "Категория деятельности",
@@ -103,13 +103,13 @@ const WIZARD_COPY: Record<
     termsDoc: "Читать текст оферты",
     btnNext: "Далее",
     btnPrev: "Назад",
-    btnSubmit: "Зарегистрировать бизнес",
-    pendingLabel: "Регистрация..."
+    btnSubmit: "Отправить заявку",
+    pendingLabel: "Заявка отправляется..."
   },
   en: {
     step1: { title: "1. Basic Information", desc: "Business name, category, and direct contact" },
     step2: { title: "2. Location & Details", desc: "District, exact address, operating hours, and bio" },
-    step3: { title: "3. Confirmation & Terms", desc: "Terms agreement and instant launch" },
+    step3: { title: "3. Review & Terms", desc: "Review your profile and submit it for Manzil review" },
     name: "Business Name",
     namePlaceholder: "e.g., Rayhon Traditional Dining or Breadly Café",
     category: "Category",
@@ -130,8 +130,8 @@ const WIZARD_COPY: Record<
     termsDoc: "Read Terms & Policy",
     btnNext: "Continue",
     btnPrev: "Back",
-    btnSubmit: "Complete Registration",
-    pendingLabel: "Registering..."
+    btnSubmit: "Submit application",
+    pendingLabel: "Submitting application..."
   }
 };
 
@@ -142,7 +142,7 @@ export function BusinessRegisterWizard({
 }: {
   locale: Locale;
   categories: Category[];
-  terms?: { id?: string; title?: string; body?: string } | null;
+  terms?: { id?: string; version?: string; title?: string; body?: string } | null;
 }) {
   const [currentStep, setCurrentStep] = useState(1);
   const copy = WIZARD_COPY[locale] ?? WIZARD_COPY.uz;
@@ -419,26 +419,40 @@ export function BusinessRegisterWizard({
             <label className="bz-terms-checkbox">
               <input
                 checked={agree}
-                name="consent"
+                id="acceptedTerms"
+                name="acceptedTerms"
                 onChange={(e) => setAgree(e.target.checked)}
                 required
                 type="checkbox"
-                value="terms-accepted"
+                value="true"
               />
               <span className="bz-terms-text">
                 {copy.terms}
               </span>
             </label>
 
-            {terms?.title && (
-              <details className="bz-terms-details">
+            {terms?.title ? (
+              <details className="crm-terms-doc">
                 <summary>{copy.termsDoc}</summary>
-                <div className="bz-terms-body">
+                <div className="crm-terms-body">
                   <h4>{terms.title}</h4>
                   <p>{terms.body}</p>
                 </div>
               </details>
+            ) : (
+              <p className="bz-terms-unavailable" role="status">
+                {locale === "ru"
+                  ? "Текст условий сейчас недоступен. Обновите страницу перед отправкой."
+                  : locale === "en"
+                    ? "The terms document is unavailable. Refresh the page before submitting."
+                    : "Shartlar hujjati hozircha mavjud emas. Yuborishdan oldin sahifani yangilang."}
+              </p>
             )}
+            <input
+              name="acceptedTermsVersion"
+              type="hidden"
+              value={terms?.version ?? terms?.id ?? ""}
+            />
           </div>
 
           <div className="bz-wizard-actions">
