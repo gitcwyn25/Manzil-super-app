@@ -29,6 +29,7 @@ import { RequireEntitlement } from "../plans/require-entitlement.decorator";
 import {
   AnnouncementDto,
   AnnouncementUpdateDto,
+  BusinessApplicationDto,
   BusinessRegistrationDto,
   ChooseSubscriptionDto,
   PackageDto,
@@ -77,6 +78,30 @@ export class CrmController {
         userAgent: userAgent ?? null
       })
     };
+  }
+
+  @Post("applications")
+  @ThrottleRegister()
+  async submitApplication(
+    @Body() body: BusinessApplicationDto,
+    @Req() request: ManzilRequest,
+    @Ip() ip: string,
+    @Headers("user-agent") userAgent?: string
+  ) {
+    await this.legal.assertIsCurrentVersion("terms_of_service", body.acceptedTermsVersion);
+    return {
+      data: await this.crm.submitBusinessApplication(body, request.manzilActor!, {
+        acceptedTerms: body.acceptedTerms,
+        acceptedTermsVersion: body.acceptedTermsVersion,
+        ipAddress: ip ?? null,
+        userAgent: userAgent ?? null
+      })
+    };
+  }
+
+  @Get("applications/:id")
+  async getApplication(@Param("id") id: string, @Req() request: ManzilRequest) {
+    return { data: await this.crm.getBusinessApplication(id, request.manzilActor!) };
   }
 
   /* ---------- Announcements ---------- */
