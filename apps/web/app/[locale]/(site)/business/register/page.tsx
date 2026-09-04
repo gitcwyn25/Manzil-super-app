@@ -52,12 +52,17 @@ export default async function RegisterBusinessPage({
             <h1 className="vm-auth-head__title">{copy.register.signInFirst}</h1>
             <p className="vm-auth-head__subtitle">{copy.register.signInText}</p>
           </header>
-          <PrimaryCta className="vm-auth-submit" href={`/${locale}/sign-in`}>
+          <PrimaryCta
+            className="vm-auth-submit"
+            href={`/${locale}/sign-in?redirect_url=${encodeURIComponent(`/${locale}/business/register`)}`}
+          >
             {copy.register.signIn}
           </PrimaryCta>
           <p className="vm-auth-switch">
             <span>{copy.register.signUpPrompt}</span>
-            <a href={`/${locale}/sign-up`}>{copy.register.signUpCta}</a>
+            <a href={`/${locale}/sign-up?redirect_url=${encodeURIComponent(`/${locale}/business/register`)}`}>
+              {copy.register.signUpCta}
+            </a>
           </p>
         </div>
       </SplitAuthShell>
