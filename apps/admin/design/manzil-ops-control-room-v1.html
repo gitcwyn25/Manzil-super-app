@@ -1,0 +1,938 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a1a1e">
+  <title>Manzil Ops Control Room — Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /*
+      Manzil Ops Control Room — design prototype
+      Design thesis: a quiet, evidence-first workspace for people moving a
+      waitlist entry into a trusted, live company. The layout leads with work
+      and proof, not decorative analytics.
+    */
+    :root {
+      --void: #0a1a1e;
+      --void-2: #10262a;
+      --void-3: #17363a;
+      --panel: #f1f3f2;
+      --panel-2: #ffffff;
+      --panel-3: #e5eae8;
+      --ink: #122428;
+      --ink-soft: #506261;
+      --line: #d2dcda;
+      --line-dark: #2b4a4d;
+      --ceramic: #00706b;
+      --ceramic-dark: #005b57;
+      --signal: #4de1c1;
+      --signal-soft: #d8f7ee;
+      --brass: #c8a24c;
+      --brass-soft: #f6eed8;
+      --warn: #b7791f;
+      --warn-soft: #fff5d9;
+      --danger: #a63c43;
+      --danger-soft: #fae4e6;
+      --good: #167456;
+      --good-soft: #def4e9;
+      --muted: #748583;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --speed: 140ms;
+      --ease: cubic-bezier(.16, 1, .3, 1);
+      --rail: 258px;
+      --header: 76px;
+    }
+
+    * { box-sizing: border-box; }
+    html { color-scheme: light; background: var(--void); }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--ink);
+      background: var(--panel);
+      font-family: "IBM Plex Sans", system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+    button:disabled { cursor: not-allowed; }
+    a { color: inherit; }
+    ::selection { color: var(--void); background: var(--signal); }
+    :focus-visible { outline: 3px solid rgba(0,112,107,.35); outline-offset: 3px; }
+    .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+    .display { font-family: "Archivo", "IBM Plex Sans", sans-serif; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    .hidden { display: none !important; }
+
+    /* Login is intentionally one door. The account's server-side role decides access. */
+    .login-screen {
+      min-height: 100svh;
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(420px, .92fr);
+      background: var(--void);
+      color: #edf6f3;
+    }
+    .login-brief {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: clamp(28px, 5vw, 76px);
+      border-right: 1px solid rgba(150, 220, 204, .18);
+      background:
+        radial-gradient(circle at 20% 15%, rgba(77,225,193,.10), transparent 32%),
+        linear-gradient(145deg, var(--void) 0%, #0c2226 54%, #123338 100%);
+    }
+    .wordmark { display: inline-flex; align-items: center; gap: 11px; font-weight: 700; letter-spacing: -.02em; }
+    .wordmark-mark {
+      position: relative;
+      width: 27px; height: 27px;
+      border: 1px solid var(--signal);
+      border-radius: 50%;
+      box-shadow: inset 0 0 0 5px var(--void), inset 0 0 0 6px rgba(77,225,193,.45);
+    }
+    .wordmark-mark::after { content: ""; position: absolute; width: 7px; height: 7px; border-radius: 50%; background: var(--signal); left: 9px; top: 9px; }
+    .wordmark small { display: block; color: #91aaa5; font-size: 10px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; margin-top: 2px; }
+    .login-copy { max-width: 590px; padding-bottom: 2vh; }
+    .kicker { color: var(--signal); font-size: 11px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
+    .login-copy h1 { max-width: 650px; margin: 22px 0 20px; font-size: clamp(44px, 6vw, 92px); line-height: .93; letter-spacing: -.065em; }
+    .login-copy p { max-width: 480px; color: #afc2bd; font-size: clamp(17px, 1.6vw, 21px); line-height: 1.5; margin: 0; }
+    .login-proof { display: flex; gap: 28px; margin-top: 54px; }
+    .login-proof div { min-width: 118px; padding-top: 12px; border-top: 1px solid rgba(150,220,204,.28); }
+    .login-proof strong { display: block; color: #f4fbf8; font-family: "IBM Plex Mono", monospace; font-size: 16px; font-weight: 500; }
+    .login-proof span { display: block; color: #7f9b95; font-size: 11px; line-height: 1.35; margin-top: 5px; }
+    .login-form-wrap { display: grid; place-items: center; padding: 32px; background: var(--panel); color: var(--ink); }
+    .login-form { width: min(100%, 430px); }
+    .login-form .wordmark { color: var(--ink); margin-bottom: 52px; }
+    .login-form .wordmark-mark { border-color: var(--ceramic); box-shadow: inset 0 0 0 5px var(--panel), inset 0 0 0 6px rgba(0,112,107,.35); }
+    .login-form .wordmark-mark::after { background: var(--ceramic); }
+    .login-form .wordmark small { color: var(--ink-soft); }
+    .login-form h2 { margin: 0 0 9px; font-family: "Archivo", sans-serif; font-size: 34px; letter-spacing: -.045em; }
+    .login-form .lead { margin: 0 0 30px; color: var(--ink-soft); font-size: 14px; line-height: 1.5; }
+    .concept-note { display: flex; align-items: flex-start; gap: 10px; padding: 11px 13px; margin: 0 0 24px; border: 1px solid #b8d6cf; border-radius: var(--radius-sm); background: #e7f4f0; color: #24534c; font-size: 12px; line-height: 1.45; }
+    .concept-note svg { flex: 0 0 auto; margin-top: 1px; }
+    .field { display: grid; gap: 7px; margin-bottom: 17px; }
+    .field label { color: var(--ink-soft); font-size: 12px; font-weight: 600; }
+    .field input, .field select, .field textarea { width: 100%; min-height: 46px; padding: 0 13px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel-2); color: var(--ink); outline: none; transition: border-color var(--speed) ease, box-shadow var(--speed) ease; }
+    .field textarea { min-height: 118px; padding-top: 12px; resize: vertical; }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--ceramic); box-shadow: 0 0 0 3px rgba(0,112,107,.12); }
+    .field input::placeholder, .field textarea::placeholder { color: #98a8a5; }
+    .login-submit { width: 100%; min-height: 48px; border: 0; border-radius: var(--radius-sm); background: var(--ceramic); color: white; font-size: 14px; font-weight: 700; transition: background var(--speed) ease, transform var(--speed) ease; }
+    .login-submit:hover { background: var(--ceramic-dark); transform: translateY(-1px); }
+    .login-meta { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 17px; color: var(--muted); font-size: 11px; }
+    .login-meta button { padding: 0; border: 0; background: transparent; color: var(--ceramic); font-size: inherit; font-weight: 600; }
+    .login-foot { margin-top: 52px; padding-top: 14px; border-top: 1px solid var(--line); color: #8b9c99; font-size: 11px; line-height: 1.5; }
+
+    /* App shell: fixed rail + dense main, matching Manzil's workspace split. */
+    .app-shell { min-height: 100svh; display: grid; grid-template-columns: var(--rail) minmax(0, 1fr); background: var(--panel); }
+    .rail {
+      position: sticky; top: 0; height: 100svh; display: flex; flex-direction: column;
+      padding: 21px 14px 15px; overflow-y: auto; background: var(--void); color: #d9e7e3;
+    }
+    .rail-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 10px 20px; border-bottom: 1px solid rgba(181,226,213,.14); }
+    .rail .wordmark { color: #f1faf7; }
+    .rail .wordmark small { color: #7b9891; }
+    .rail .wordmark-mark { width: 25px; height: 25px; }
+    .rail-section { padding: 23px 7px 5px; color: #6e8c86; font-size: 10px; font-weight: 700; letter-spacing: .17em; text-transform: uppercase; }
+    .rail-nav { display: grid; gap: 3px; }
+    .rail-link { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 9px; min-height: 38px; padding: 0 10px; border: 1px solid transparent; border-radius: var(--radius-sm); background: transparent; color: #a7bcb7; text-align: left; font-size: 13px; transition: color var(--speed) ease, background var(--speed) ease, border-color var(--speed) ease; }
+    .rail-link:hover { border-color: rgba(181,226,213,.13); background: rgba(181,226,213,.08); color: #f2fbf8; }
+    .rail-link.active { border-color: rgba(77,225,193,.25); background: rgba(77,225,193,.12); color: #f4fffb; }
+    .rail-link.active::before { content: ""; position: absolute; left: -14px; width: 3px; height: 21px; border-radius: 0 3px 3px 0; background: var(--signal); }
+    .rail-link-main { display: inline-flex; align-items: center; gap: 10px; }
+    .rail-link svg { width: 16px; height: 16px; color: #78948e; }
+    .rail-link.active svg { color: var(--signal); }
+    .rail-count { display: inline-grid; place-items: center; min-width: 21px; height: 20px; padding: 0 5px; border-radius: 10px; background: rgba(77,225,193,.16); color: var(--signal); font-family: "IBM Plex Mono", monospace; font-size: 10px; }
+    .rail-count.warn { background: rgba(200,162,76,.18); color: #e5c879; }
+    .rail-bottom { margin-top: auto; padding-top: 17px; border-top: 1px solid rgba(181,226,213,.14); }
+    .operator-card { display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid rgba(181,226,213,.13); border-radius: var(--radius-sm); background: rgba(181,226,213,.05); }
+    .avatar { display: inline-grid; place-items: center; width: 30px; height: 30px; flex: 0 0 auto; border-radius: 50%; background: #d0eee6; color: var(--ceramic-dark); font-size: 11px; font-weight: 700; }
+    .operator-card strong { display: block; color: #f1faf7; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .operator-card span { display: block; margin-top: 2px; color: #77928d; font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .signature-chip { display: inline-flex; align-items: center; gap: 5px; margin: 12px 10px 0; color: var(--signal); font-family: "IBM Plex Mono", monospace; font-size: 9px; }
+    .signature-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 0 3px rgba(77,225,193,.11); }
+
+    .main-shell { min-width: 0; }
+    .topbar { position: sticky; top: 0; z-index: 4; display: flex; align-items: center; justify-content: space-between; gap: 20px; height: var(--header); padding: 0 clamp(20px, 3vw, 44px); border-bottom: 1px solid var(--line); background: rgba(241,243,242,.92); backdrop-filter: blur(16px); }
+    .crumbs { display: flex; align-items: center; gap: 8px; color: var(--ink-soft); font-size: 12px; }
+    .crumbs strong { color: var(--ink); font-weight: 600; }
+    .topbar-actions { display: flex; align-items: center; gap: 11px; }
+    .scope-pill, .sync-pill, .icon-button { min-height: 34px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel-2); color: var(--ink-soft); }
+    .scope-pill { display: inline-flex; align-items: center; gap: 7px; padding: 0 11px; font-size: 11px; font-weight: 600; }
+    .scope-pill svg { color: var(--ceramic); }
+    .sync-pill { display: inline-flex; align-items: center; gap: 7px; padding: 0 10px; color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 10px; }
+    .sync-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--good); }
+    .icon-button { display: inline-grid; place-items: center; width: 34px; padding: 0; color: var(--ink-soft); transition: border-color var(--speed) ease, color var(--speed) ease; }
+    .icon-button:hover { border-color: #9db8b2; color: var(--ceramic); }
+    .menu-button { display: none; }
+    .content { width: min(100%, 1680px); margin: 0 auto; padding: clamp(26px, 3.3vw, 48px) clamp(20px, 3vw, 44px) 64px; }
+    .concept-ribbon { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 10px 13px; margin-bottom: 26px; border: 1px solid #b9d3cc; border-radius: var(--radius-sm); background: #e6f3ef; color: #2e5e55; font-size: 11px; }
+    .concept-ribbon span { display: inline-flex; align-items: center; gap: 8px; }
+    .concept-ribbon strong { font-weight: 700; }
+    .ribbon-action { border: 0; background: transparent; color: var(--ceramic); font-size: 11px; font-weight: 700; }
+    .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 22px; margin-bottom: 29px; }
+    .eyebrow { display: flex; align-items: center; gap: 8px; color: var(--ceramic); font-size: 11px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; }
+    .eyebrow .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 0 4px rgba(77,225,193,.18); }
+    .page-head h1 { margin: 8px 0 7px; font-family: "Archivo", sans-serif; font-size: clamp(32px, 4vw, 56px); line-height: .98; letter-spacing: -.06em; }
+    .page-head p { max-width: 600px; margin: 0; color: var(--ink-soft); font-size: 14px; line-height: 1.45; }
+    .page-head-actions { display: flex; align-items: center; gap: 9px; }
+    .button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 38px; padding: 0 13px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel-2); color: var(--ink); font-size: 12px; font-weight: 600; transition: background var(--speed) ease, border-color var(--speed) ease, color var(--speed) ease, transform var(--speed) ease; }
+    .button:hover { border-color: #98b2ac; background: #fbfdfc; transform: translateY(-1px); }
+    .button.primary { border-color: var(--ceramic); background: var(--ceramic); color: white; }
+    .button.primary:hover { border-color: var(--ceramic-dark); background: var(--ceramic-dark); }
+    .button.danger { border-color: #e6b7bb; background: var(--danger-soft); color: var(--danger); }
+    .button.small { min-height: 31px; padding: 0 10px; font-size: 11px; }
+    .button[disabled] { opacity: .48; transform: none; }
+
+    .stats-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-bottom: 29px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: rgba(255,255,255,.38); }
+    .stat { min-height: 95px; padding: 17px 19px 14px; border-right: 1px solid var(--line); }
+    .stat:last-child { border-right: 0; }
+    .stat-label { color: var(--ink-soft); font-size: 11px; }
+    .stat-value { display: block; margin-top: 8px; color: var(--ink); font-family: "IBM Plex Mono", monospace; font-size: 27px; letter-spacing: -.06em; }
+    .stat-note { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; }
+    .stat-note.signal { color: var(--ceramic); }
+
+    .workspace-grid { display: grid; grid-template-columns: minmax(0, 1.56fr) minmax(300px, .84fr); gap: 19px; align-items: start; }
+    .surface { border: 1px solid var(--line); background: var(--panel-2); }
+    .surface-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; padding: 17px 18px 15px; border-bottom: 1px solid var(--line); }
+    .surface-head h2 { margin: 0; font-family: "Archivo", sans-serif; font-size: 17px; letter-spacing: -.035em; }
+    .surface-head p { margin: 5px 0 0; color: var(--ink-soft); font-size: 11px; }
+    .surface-head .head-meta { color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 10px; white-space: nowrap; }
+    .queue-list { display: grid; }
+    .queue-row { display: grid; grid-template-columns: minmax(160px, 1.2fr) minmax(100px, .72fr) minmax(86px, .65fr) auto; align-items: center; gap: 14px; min-height: 74px; padding: 12px 18px; border: 0; border-bottom: 1px solid #e4eae8; background: white; color: var(--ink); text-align: left; transition: background var(--speed) ease; }
+    .queue-row:last-child { border-bottom: 0; }
+    .queue-row:hover, .queue-row.selected { background: #f4f9f7; }
+    .queue-primary { min-width: 0; display: flex; align-items: center; gap: 11px; }
+    .queue-icon { display: inline-grid; place-items: center; width: 29px; height: 29px; flex: 0 0 auto; border-radius: 50%; background: var(--panel-3); color: var(--ceramic); }
+    .queue-icon.gurman { background: #e4f3ef; }
+    .queue-icon.city { background: #f8efd9; color: #9b7424; }
+    .queue-icon.company { background: #e9e8f6; color: #57508c; }
+    .queue-icon.payment { background: #f7e6e1; color: #a24e35; }
+    .queue-icon.campaign { background: #e8eef4; color: #486d8e; }
+    .queue-title { min-width: 0; }
+    .queue-title strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; font-weight: 700; }
+    .queue-title span { display: block; margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink-soft); font-family: "IBM Plex Mono", monospace; font-size: 10px; }
+    .queue-detail { min-width: 0; }
+    .queue-detail span { display: block; color: var(--muted); font-size: 10px; }
+    .queue-detail strong { display: block; margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 500; }
+    .status { display: inline-flex; align-items: center; gap: 6px; width: fit-content; padding: 4px 7px; border-radius: 4px; font-size: 10px; font-weight: 600; white-space: nowrap; }
+    .status::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+    .status.new { background: var(--signal-soft); color: var(--ceramic-dark); }
+    .status.waiting { background: var(--warn-soft); color: var(--warn); }
+    .status.flagged { background: var(--danger-soft); color: var(--danger); }
+    .status.neutral { background: #edf1f0; color: var(--ink-soft); }
+    .status.good { background: var(--good-soft); color: var(--good); }
+    .queue-action { color: var(--ceramic); font-size: 11px; font-weight: 700; white-space: nowrap; }
+    .surface-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; }
+    .surface-foot button { padding: 0; border: 0; background: transparent; color: var(--ceramic); font-size: 10px; font-weight: 700; }
+
+    .focus-panel { min-height: 100%; }
+    .focus-body { padding: 18px; }
+    .focus-label { display: flex; align-items: center; justify-content: space-between; color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .12em; }
+    .focus-body h3 { margin: 12px 0 5px; font-family: "Archivo", sans-serif; font-size: 23px; letter-spacing: -.045em; }
+    .focus-email { color: var(--ink-soft); font-family: "IBM Plex Mono", monospace; font-size: 10px; }
+    .focus-divider { height: 1px; margin: 18px 0; background: var(--line); }
+    .detail-list { display: grid; gap: 10px; margin: 0; }
+    .detail-item { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; font-size: 11px; }
+    .detail-item dt { color: var(--muted); }
+    .detail-item dd { max-width: 62%; margin: 0; color: var(--ink); font-family: "IBM Plex Mono", monospace; font-size: 10px; text-align: right; }
+    .evidence-box { padding: 12px; margin: 18px 0; border-left: 3px solid var(--brass); background: var(--brass-soft); }
+    .evidence-box strong { display: block; color: #755c1f; font-size: 11px; }
+    .evidence-box p { margin: 5px 0 0; color: #725f31; font-size: 11px; line-height: 1.45; }
+    .focus-actions { display: grid; gap: 8px; }
+    .focus-actions .button { width: 100%; }
+    .signed-line { display: flex; align-items: center; gap: 7px; margin-top: 17px; color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 9px; }
+    .signed-line svg { color: var(--ceramic); }
+
+    .lower-grid { display: grid; grid-template-columns: minmax(0, 1.56fr) minmax(300px, .84fr); gap: 19px; margin-top: 19px; }
+    .timeline { padding: 5px 18px 16px; }
+    .timeline-item { position: relative; display: grid; grid-template-columns: 25px minmax(0, 1fr) auto; gap: 11px; align-items: start; padding: 13px 0; border-bottom: 1px solid #e4eae8; }
+    .timeline-item:last-child { border-bottom: 0; }
+    .timeline-marker { display: inline-grid; place-items: center; width: 23px; height: 23px; border: 1px solid #b5d3ca; border-radius: 50%; background: #eff8f4; color: var(--ceramic); }
+    .timeline-copy strong { display: block; font-size: 11px; }
+    .timeline-copy span { display: block; margin-top: 3px; color: var(--ink-soft); font-size: 10px; line-height: 1.4; }
+    .timeline-time { color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 9px; white-space: nowrap; }
+    .exception-list { padding: 4px 18px 11px; }
+    .exception { display: grid; grid-template-columns: 7px minmax(0, 1fr) auto; gap: 10px; align-items: start; padding: 13px 0; border-bottom: 1px solid #e4eae8; }
+    .exception:last-child { border-bottom: 0; }
+    .exception-bar { width: 7px; height: 30px; border-radius: 4px; background: var(--brass); }
+    .exception-bar.danger { background: var(--danger); }
+    .exception-bar.good { background: var(--good); }
+    .exception strong { display: block; font-size: 11px; }
+    .exception span { display: block; margin-top: 3px; color: var(--ink-soft); font-size: 10px; line-height: 1.4; }
+    .exception time { color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 9px; white-space: nowrap; }
+
+    /* Queue and company views share the same dense, readable primitives. */
+    .subnav { display: flex; align-items: center; gap: 4px; overflow-x: auto; padding: 4px; margin-bottom: 17px; border-bottom: 1px solid var(--line); }
+    .tab-button { position: relative; min-height: 36px; padding: 0 11px; border: 0; background: transparent; color: var(--muted); font-size: 11px; font-weight: 600; white-space: nowrap; }
+    .tab-button.active { color: var(--ceramic); }
+    .tab-button.active::after { content: ""; position: absolute; right: 10px; bottom: -5px; left: 10px; height: 2px; background: var(--ceramic); }
+    .tab-count { display: inline-block; margin-left: 4px; color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 9px; }
+    .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 17px; }
+    .search-box { position: relative; flex: 1; max-width: 390px; }
+    .search-box svg { position: absolute; top: 11px; left: 11px; color: var(--muted); }
+    .search-box input { width: 100%; height: 38px; padding: 0 12px 0 34px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel-2); outline: none; color: var(--ink); font-size: 11px; }
+    .search-box input:focus { border-color: var(--ceramic); box-shadow: 0 0 0 3px rgba(0,112,107,.12); }
+    .filter-set { display: flex; align-items: center; gap: 5px; overflow-x: auto; }
+    .filter-chip { min-height: 29px; padding: 0 9px; border: 1px solid var(--line); border-radius: 99px; background: transparent; color: var(--ink-soft); font-size: 10px; white-space: nowrap; }
+    .filter-chip.active { border-color: #9acfc1; background: var(--signal-soft); color: var(--ceramic-dark); font-weight: 700; }
+    .data-table { overflow: hidden; border: 1px solid var(--line); background: var(--panel-2); }
+    .table-row { display: grid; grid-template-columns: minmax(190px, 1.4fr) minmax(105px, .7fr) minmax(110px, .75fr) minmax(110px, .8fr) auto; align-items: center; gap: 14px; min-height: 68px; padding: 10px 17px; border: 0; border-bottom: 1px solid #e4eae8; background: white; color: var(--ink); text-align: left; }
+    .table-row:last-child { border-bottom: 0; }
+    .table-row.header { min-height: 38px; background: #f4f7f6; color: var(--muted); font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .table-row:not(.header):hover, .table-row.selected { background: #f4f9f7; }
+    .table-cell { min-width: 0; }
+    .table-cell strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; }
+    .table-cell span { display: block; margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink-soft); font-size: 10px; }
+    .table-cell .mono { font-size: 10px; }
+    .table-action { color: var(--ceramic); font-size: 10px; font-weight: 700; white-space: nowrap; }
+    .split-view { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, .62fr); gap: 19px; align-items: start; }
+    .review-drawer { position: sticky; top: calc(var(--header) + 22px); }
+    .review-drawer .focus-body { min-height: 450px; }
+    .duplicate-warning { display: flex; gap: 9px; padding: 11px; margin: 16px 0; border: 1px solid #e4c778; background: var(--warn-soft); color: #755c1f; font-size: 10px; line-height: 1.4; }
+    .duplicate-warning svg { flex: 0 0 auto; }
+    .activity-mini { display: grid; gap: 8px; }
+    .activity-mini-item { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; font-size: 10px; }
+    .activity-mini-item span { color: var(--ink-soft); }
+    .activity-mini-item time { color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 9px; white-space: nowrap; }
+    .empty-state { display: grid; place-items: center; min-height: 290px; padding: 35px; border: 1px solid var(--line); background: var(--panel-2); text-align: center; }
+    .empty-state svg { color: var(--ceramic); }
+    .empty-state h3 { margin: 14px 0 6px; font-family: "Archivo", sans-serif; font-size: 19px; letter-spacing: -.035em; }
+    .empty-state p { max-width: 350px; margin: 0; color: var(--ink-soft); font-size: 11px; line-height: 1.5; }
+
+    /* Company detail. It is a full workspace, not a modal, because the timeline is the proof. */
+    .company-hero { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; padding-bottom: 21px; border-bottom: 1px solid var(--line); }
+    .company-title-line { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; }
+    .company-title-line h2 { margin: 0; font-family: "Archivo", sans-serif; font-size: clamp(26px, 3vw, 40px); letter-spacing: -.055em; }
+    .company-subtitle { display: flex; flex-wrap: wrap; gap: 6px 15px; margin-top: 7px; color: var(--ink-soft); font-size: 12px; }
+    .company-subtitle span { display: inline-flex; align-items: center; gap: 5px; }
+    .attention-bar { display: flex; align-items: center; gap: 9px; padding: 12px 14px; margin: 18px 0; border: 1px solid #efd99d; background: var(--warn-soft); color: #735b1f; font-size: 11px; }
+    .company-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, .75fr); gap: 19px; margin-top: 19px; }
+    .mini-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--line); background: var(--panel-2); }
+    .mini-metric { padding: 14px; border-right: 1px solid var(--line); }
+    .mini-metric:last-child { border-right: 0; }
+    .mini-metric span { display: block; color: var(--muted); font-size: 10px; }
+    .mini-metric strong { display: block; margin-top: 8px; font-family: "IBM Plex Mono", monospace; font-size: 20px; font-weight: 500; letter-spacing: -.05em; }
+    .company-section { margin-top: 19px; }
+    .company-section .surface-head { align-items: center; }
+    .key-value-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); }
+    .key-value { min-height: 72px; padding: 14px; background: var(--panel-2); }
+    .key-value span { display: block; color: var(--muted); font-size: 10px; }
+    .key-value strong { display: block; margin-top: 7px; font-size: 12px; }
+    .key-value em { display: block; margin-top: 4px; color: var(--ink-soft); font-size: 10px; font-style: normal; }
+    .locked-panel { display: flex; align-items: flex-start; gap: 11px; padding: 17px; background: #f7f9f8; color: var(--muted); }
+    .locked-panel svg { flex: 0 0 auto; color: var(--warn); }
+    .locked-panel strong { display: block; color: var(--ink); font-size: 11px; }
+    .locked-panel p { max-width: 420px; margin: 5px 0 0; font-size: 10px; line-height: 1.45; }
+    .connection-card { padding: 17px; }
+    .connection-state { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-bottom: 15px; margin-bottom: 14px; border-bottom: 1px solid var(--line); }
+    .connection-state strong { display: block; font-size: 13px; }
+    .connection-state span { display: block; margin-top: 4px; color: var(--ink-soft); font-size: 10px; }
+    .progress-line { height: 5px; overflow: hidden; margin: 11px 0 15px; border-radius: 5px; background: #e4eae8; }
+    .progress-line span { display: block; width: 64%; height: 100%; border-radius: inherit; background: var(--ceramic); }
+    .connection-steps { display: grid; gap: 10px; }
+    .connection-step { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 10px; }
+    .connection-step.done { color: var(--good); }
+    .connection-step.current { color: var(--ink); font-weight: 600; }
+    .connection-step svg { color: currentColor; }
+
+    /* Team and access makes the onboarding / signature requirement visible without implying a legal signature. */
+    .team-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(330px, .85fr); gap: 19px; align-items: start; }
+    .member-row { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 11px; align-items: center; min-height: 70px; padding: 11px 17px; border-bottom: 1px solid #e4eae8; background: white; text-align: left; }
+    .member-row:last-child { border-bottom: 0; }
+    .member-row:hover, .member-row.selected { background: #f4f9f7; }
+    .member-meta strong { display: block; font-size: 11px; }
+    .member-meta span { display: block; margin-top: 3px; color: var(--ink-soft); font-size: 10px; }
+    .member-status { text-align: right; }
+    .member-status span { display: block; margin-top: 4px; color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 9px; }
+    .check-list { display: grid; gap: 9px; margin: 17px 0 20px; }
+    .check-item { display: flex; align-items: flex-start; gap: 9px; color: var(--ink-soft); font-size: 11px; line-height: 1.4; }
+    .check-item.done { color: var(--good); }
+    .check-item svg { flex: 0 0 auto; margin-top: 1px; }
+    .signature-preview { padding: 15px; margin: 16px 0; border: 1px solid #bad7ce; background: #eff8f4; }
+    .signature-preview .label { color: var(--ceramic); font-size: 9px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+    .signature-preview strong { display: block; margin-top: 8px; font-family: "Archivo", sans-serif; font-size: 17px; letter-spacing: -.035em; }
+    .signature-preview span { display: block; margin-top: 4px; color: var(--ink-soft); font-size: 10px; }
+    .permission-row { display: flex; align-items: center; justify-content: space-between; gap: 15px; padding: 10px 0; border-bottom: 1px solid #e4eae8; font-size: 10px; }
+    .permission-row:last-child { border-bottom: 0; }
+    .permission-row span { color: var(--ink-soft); }
+    .permission-value { color: var(--ceramic); font-family: "IBM Plex Mono", monospace; font-size: 9px; }
+
+    /* Overlays are for consequential actions: review, then queue; never silently send. */
+    .overlay { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 22px; background: rgba(5, 20, 23, .58); backdrop-filter: blur(5px); }
+    .dialog { width: min(100%, 620px); max-height: min(780px, calc(100svh - 44px)); overflow: auto; border: 1px solid #aac7bf; background: var(--panel); box-shadow: 0 24px 80px rgba(2, 20, 22, .3); }
+    .dialog-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; padding: 19px 20px; border-bottom: 1px solid var(--line); }
+    .dialog-head h2 { margin: 0; font-family: "Archivo", sans-serif; font-size: 21px; letter-spacing: -.04em; }
+    .dialog-head p { margin: 5px 0 0; color: var(--ink-soft); font-size: 11px; line-height: 1.4; }
+    .dialog-body { padding: 20px; }
+    .dialog-foot { display: flex; align-items: center; justify-content: flex-end; gap: 8px; padding: 14px 20px; border-top: 1px solid var(--line); background: #eaf0ee; }
+    .close-button { display: inline-grid; place-items: center; width: 30px; height: 30px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--panel-2); color: var(--ink-soft); }
+    .mail-meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 12px; margin-bottom: 18px; background: #e6efec; }
+    .mail-meta div { min-width: 0; }
+    .mail-meta span { display: block; color: var(--muted); font-size: 9px; text-transform: uppercase; letter-spacing: .1em; }
+    .mail-meta strong { display: block; margin-top: 5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: "IBM Plex Mono", monospace; font-size: 10px; font-weight: 500; }
+    .mail-body { min-height: 175px; padding: 15px; border: 1px solid var(--line); background: white; color: var(--ink-soft); font-size: 12px; line-height: 1.6; }
+    .mail-body p { margin: 0 0 12px; }
+    .mail-signature { padding-top: 11px; margin-top: 13px; border-top: 1px solid #e3ebe8; color: var(--ink); font-size: 11px; }
+    .mail-signature strong { display: block; color: var(--ceramic-dark); }
+    .mail-signature span { display: block; margin-top: 3px; color: var(--muted); font-family: "IBM Plex Mono", monospace; font-size: 9px; }
+    .modal-warning { padding: 11px 12px; margin-top: 15px; border-left: 3px solid var(--brass); background: var(--brass-soft); color: #725f31; font-size: 10px; line-height: 1.45; }
+    .toast { position: fixed; right: 24px; bottom: 24px; z-index: 30; display: flex; align-items: flex-start; gap: 10px; width: min(360px, calc(100vw - 32px)); padding: 13px; border: 1px solid #abd2c7; background: #edf9f5; color: var(--ink); box-shadow: 0 14px 40px rgba(13, 45, 46, .16); }
+    .toast svg { flex: 0 0 auto; color: var(--good); }
+    .toast strong { display: block; font-size: 11px; }
+    .toast span { display: block; margin-top: 3px; color: var(--ink-soft); font-size: 10px; line-height: 1.4; }
+
+    /* Honest failure / no-data states can be previewed from the top status menu. */
+    .system-state { display: flex; align-items: flex-start; gap: 11px; padding: 16px 18px; border: 1px solid var(--line); background: #fafcfb; }
+    .system-state svg { flex: 0 0 auto; color: var(--warn); }
+    .system-state strong { display: block; font-size: 12px; }
+    .system-state p { margin: 4px 0 0; color: var(--ink-soft); font-size: 10px; line-height: 1.45; }
+    .system-state.error { border-color: #e5b9bd; background: var(--danger-soft); }
+    .system-state.error svg { color: var(--danger); }
+    .system-state.error strong { color: var(--danger); }
+
+    /* Responsive rules intentionally change the shell, not just shrink it. */
+    @media (max-width: 1180px) {
+      :root { --rail: 226px; }
+      .workspace-grid, .lower-grid, .company-grid, .team-grid { grid-template-columns: minmax(0, 1fr); }
+      .focus-panel, .review-drawer { position: static; }
+      .focus-panel { min-height: 0; }
+      .review-drawer .focus-body { min-height: 0; }
+    }
+    @media (max-width: 840px) {
+      .login-screen { grid-template-columns: 1fr; }
+      .login-brief { min-height: 46svh; padding: 28px; border-right: 0; border-bottom: 1px solid rgba(150, 220, 204, .18); }
+      .login-copy { padding-top: 54px; }
+      .login-copy h1 { font-size: clamp(42px, 11vw, 70px); }
+      .login-proof { margin-top: 34px; }
+      .login-form-wrap { min-height: 54svh; padding: 33px 24px; }
+      .login-form .wordmark { display: none; }
+      .app-shell { display: block; }
+      .rail { position: fixed; z-index: 12; top: 0; left: 0; width: min(84vw, 320px); transform: translateX(-102%); transition: transform 180ms var(--ease); box-shadow: 18px 0 50px rgba(0,0,0,.25); }
+      .app-shell.rail-open .rail { transform: translateX(0); }
+      .menu-button { display: inline-grid; }
+      .topbar { padding: 0 20px; }
+      .crumbs { min-width: 0; }
+      .crumbs span { display: none; }
+      .topbar-actions { gap: 6px; }
+      .scope-pill { max-width: 140px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+      .sync-pill { display: none; }
+      .content { padding: 24px 20px 48px; }
+      .page-head { align-items: flex-start; flex-direction: column; }
+      .page-head-actions { width: 100%; }
+      .page-head-actions .button { flex: 1; }
+      .stats-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .stat:nth-child(2) { border-right: 0; }
+      .stat:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+      .toolbar { align-items: stretch; flex-direction: column; }
+      .search-box { max-width: none; }
+      .table-row, .table-row.header { grid-template-columns: minmax(180px, 1fr) minmax(90px, .65fr) auto; }
+      .table-row > :nth-child(3), .table-row > :nth-child(4) { display: none; }
+      .company-hero { flex-direction: column; }
+    }
+    @media (max-width: 560px) {
+      .login-brief { min-height: 43svh; }
+      .login-copy { padding-top: 42px; }
+      .login-copy p { font-size: 15px; }
+      .login-proof { gap: 17px; }
+      .login-proof div { min-width: 90px; }
+      .login-proof strong { font-size: 13px; }
+      .login-proof span { font-size: 9px; }
+      .topbar { height: 62px; --header: 62px; }
+      .topbar-actions .scope-pill { display: none; }
+      .content { padding: 20px 14px 38px; }
+      .concept-ribbon { align-items: flex-start; flex-direction: column; gap: 8px; }
+      .page-head h1 { font-size: 38px; }
+      .stats-strip { margin-right: -14px; margin-left: -14px; }
+      .stat { padding-right: 14px; padding-left: 14px; }
+      .stat-value { font-size: 23px; }
+      .queue-row { grid-template-columns: minmax(0, 1fr) auto; gap: 9px; padding-right: 13px; padding-left: 13px; }
+      .queue-row > :nth-child(2), .queue-row > :nth-child(3) { display: none; }
+      .surface-head { padding-right: 13px; padding-left: 13px; }
+      .surface-foot { padding-right: 13px; padding-left: 13px; }
+      .lower-grid { gap: 14px; margin-top: 14px; }
+      .timeline { padding-right: 13px; padding-left: 13px; }
+      .timeline-item { grid-template-columns: 25px minmax(0, 1fr); }
+      .timeline-time { grid-column: 2; }
+      .table-row, .table-row.header { grid-template-columns: minmax(0, 1fr) auto; padding-right: 12px; padding-left: 12px; }
+      .table-row > :nth-child(2) { display: none; }
+      .mini-metrics { grid-template-columns: 1fr; }
+      .mini-metric { border-right: 0; border-bottom: 1px solid var(--line); }
+      .mini-metric:last-child { border-bottom: 0; }
+      .key-value-grid { grid-template-columns: 1fr; }
+      .dialog { max-height: calc(100svh - 24px); }
+      .dialog-head, .dialog-body, .dialog-foot { padding-right: 15px; padding-left: 15px; }
+      .dialog-foot { flex-wrap: wrap; }
+      .dialog-foot .button { flex: 1; }
+      .mail-meta { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Login screen: one identity door; role is determined by the authenticated account. -->
+  <section id="login-screen" class="login-screen" aria-labelledby="login-title">
+    <div class="login-brief">
+      <div class="wordmark" aria-label="Manzil Group">
+        <span class="wordmark-mark" aria-hidden="true"></span>
+        <span>Manzil Group<small>Operations console</small></span>
+      </div>
+      <div class="login-copy">
+        <div class="kicker">Merchant activation control room</div>
+        <h1 id="login-title" class="display">Move the next good business forward.</h1>
+        <p>One place for the work behind Manzil: qualify demand, connect owners, protect trust, and make the next decision visible.</p>
+        <div class="login-proof" aria-label="Prototype principles">
+          <div><strong>Evidence</strong><span>Every decision has a source.</span></div>
+          <div><strong>Attribution</strong><span>Every action has an operator.</span></div>
+          <div><strong>Recovery</strong><span>Every failure can be retried.</span></div>
+        </div>
+      </div>
+      <div class="mono" style="color:#6f8a84;font-size:10px;">ADMIN.MANZILGROUP.UZ / INTERNAL ACCESS</div>
+    </div>
+    <div class="login-form-wrap">
+      <form id="login-form" class="login-form">
+        <div class="wordmark" aria-hidden="true">
+          <span class="wordmark-mark"></span>
+          <span>Manzil Group<small>Operations console</small></span>
+        </div>
+        <h2 class="display">Sign in</h2>
+        <p class="lead">For Manzil employees and administrators. Your access is determined by your assigned role and scope.</p>
+        <div class="concept-note" role="note">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 10v6m0-9h.01"></path></svg>
+          <span><strong>Concept preview.</strong> This sign-in is visual only. No credentials are sent and no real account is created.</span>
+        </div>
+        <div class="field"><label for="employee-email">Work email</label><input id="employee-email" type="email" placeholder="you@manzilgroup.uz" autocomplete="username" required></div>
+        <div class="field"><label for="employee-password">Password</label><input id="employee-password" type="password" placeholder="••••••••••••" autocomplete="current-password" required></div>
+        <button class="login-submit" type="submit">Continue to control room</button>
+        <div class="login-meta"><span>Protected by Manzil access policy</span><button type="button" id="help-login">Need access?</button></div>
+        <div class="login-foot">New employees receive a role-aware first-login checklist, signature setup, and a welcome pack only after their account is approved.</div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Application shell. Hidden until the visual login flow is completed. -->
+  <div id="app-shell" class="app-shell hidden">
+    <aside id="rail" class="rail" aria-label="Primary navigation">
+      <div class="rail-head">
+        <div class="wordmark">
+          <span class="wordmark-mark" aria-hidden="true"></span>
+          <span>Manzil<small>Group ops</small></span>
+        </div>
+        <button id="close-rail" class="icon-button" type="button" aria-label="Close navigation drawer" style="display:none;color:#bdd7d0;background:transparent;border-color:rgba(181,226,213,.2);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m6 6 12 12M18 6 6 18"></path></svg>
+        </button>
+      </div>
+
+      <div class="rail-section">Work</div>
+      <nav class="rail-nav">
+        <button class="rail-link active" type="button" data-view="dashboard"><span class="rail-link-main"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"></path></svg>Today</span></button>
+        <button class="rail-link" type="button" data-view="waitlist"><span class="rail-link-main"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 6h14M5 12h14M5 18h9"></path><circle cx="18" cy="18" r="2.5"></circle></svg>Waitlist</span><span class="rail-count">24</span></button>
+        <button class="rail-link" type="button" data-view="companies"><span class="rail-link-main"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 20V5l8-2 8 2v15M4 20h16M8 8h2m4 0h2M8 12h2m4 0h2M8 16h2m4 0h2"></path></svg>Companies</span><span class="rail-count">18</span></button>
+      </nav>
+
+      <div class="rail-section">Trust & money</div>
+      <nav class="rail-nav">
+        <button class="rail-link" type="button" data-view="reviews"><span class="rail-link-main"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m12 4 2.2 4.6 5 .7-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5-3.6-3.5 5-.7z"></path></svg>Reviews</span><span class="rail-count warn">7</span></button>
+        <button class="rail-link" type="button" data-view="payments"><span class="rail-link-main"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 10h18M7 15h4"></path></svg>Payment exceptions</span><span class="rail-count warn">3</span></button>
+        <button class="rail-link" type="button" data-view="campaigns"><span class="rail-link-main"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m4 12 16-7-3 14-5-5-4 4zM12 14l5 5"></path></svg>Campaigns</span></button>
+      </nav>
+
+      <div class="rail-section">Governance</div>
+      <nav class="rail-nav">
+        <button class="rail-link" type="button" data-view="activity"><span class="rail-link-main"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 5h14v14H5z"></path><path d="M8 9h8M8 12h8M8 15h5"></path></svg>Signed activity</span></button>
+        <button class="rail-link" type="button" data-view="team"><span class="rail-link-main"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="8" r="3"></circle><path d="M3.5 19c.6-3 2.4-4.5 5.5-4.5s4.9 1.5 5.5 4.5M16 11a3 3 0 1 0 0-6M16 14.5c2.8 0 4.4 1.2 4.9 3.5"></path></svg>Team & access</span><span class="rail-count">1</span></button>
+      </nav>
+
+      <div class="rail-bottom">
+        <button class="operator-card" type="button" data-view="team" aria-label="Open your profile and signature">
+          <span class="avatar">MT</span>
+          <span style="min-width:0"><strong>Madina Tursunova</strong><span>Merchant Success · admin</span></span>
+        </button>
+        <div class="signature-chip"><span class="signature-dot"></span> Signature active · v2</div>
+      </div>
+    </aside>
+
+    <div class="main-shell">
+      <header class="topbar">
+        <div class="crumbs">
+          <button id="open-rail" class="icon-button menu-button" type="button" aria-label="Open navigation drawer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button>
+          <span>Operations</span><span aria-hidden="true">/</span><strong id="crumb-page">Today</strong>
+        </div>
+        <div class="topbar-actions">
+          <button class="scope-pill" type="button" aria-label="Current operating scope"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s7-5.4 7-11A7 7 0 0 0 5 10c0 5.6 7 11 7 11Z"></path><circle cx="12" cy="10" r="2.2"></circle></svg>Tashkent · All operations</button>
+          <span class="sync-pill"><span class="sync-dot"></span>synced 2m ago</span>
+          <button class="icon-button" type="button" aria-label="Notifications"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"></path></svg></button>
+          <button class="icon-button" type="button" aria-label="Account"><span class="avatar" style="width:24px;height:24px;font-size:9px;">MT</span></button>
+        </div>
+      </header>
+
+      <main id="main-content" class="content" tabindex="-1">
+        <!-- Dashboard view -->
+        <section class="view" data-screen="dashboard" aria-labelledby="dashboard-title">
+          <div class="concept-ribbon" role="status"><span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"></circle><path d="M12 10v6m0-9h.01"></path></svg><strong>Illustrative control-room data.</strong> Actions below are simulated for feedback; no email, payment, or company state changes occur.</span><button class="ribbon-action" type="button" data-view="activity">View operating principles</button></div>
+          <div class="page-head">
+            <div><div class="eyebrow"><span class="live-dot"></span>Friday · 04 Sep 2026</div><h1 id="dashboard-title" class="display editable" contenteditable="true" spellcheck="false">Today</h1><p>Move the next good business forward. Start with the oldest decision, then leave a clear next action.</p></div>
+            <div class="page-head-actions"><button class="button" type="button" data-view="waitlist">Open waitlist</button><button class="button primary" type="button" data-view="companies"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"></path></svg>Review a company</button></div>
+          </div>
+          <div class="stats-strip" aria-label="Illustrative dashboard statistics">
+            <div class="stat"><span class="stat-label">Open decisions</span><strong class="stat-value">24</strong><span class="stat-note signal">8 need a first touch</span></div>
+            <div class="stat"><span class="stat-label">Oldest unresolved</span><strong class="stat-value">19h</strong><span class="stat-note">Gurman · new</span></div>
+            <div class="stat"><span class="stat-label">Live companies</span><strong class="stat-value">118</strong><span class="stat-note">Tashkent · catalog</span></div>
+            <div class="stat"><span class="stat-label">Email delivery</span><strong class="stat-value">97%</strong><span class="stat-note">last 30 days · preview</span></div>
+          </div>
+          <div class="workspace-grid">
+            <section class="surface" aria-labelledby="decision-title">
+              <div class="surface-head"><div><h2 id="decision-title">Needs a decision</h2><p>Ordered by risk and age, not volume.</p></div><span class="head-meta">5 of 24</span></div>
+              <div class="queue-list" id="decision-queue">
+                <button class="queue-row selected" type="button" data-focus="gurman"><span class="queue-primary"><span class="queue-icon gurman"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 6h14M5 12h14M5 18h9"></path><circle cx="18" cy="18" r="2.5"></circle></svg></span><span class="queue-title"><strong>Gurman beta access</strong><span>aziz.karimov@gmail.com</span></span></span><span class="queue-detail"><span>Topic</span><strong>Gurman · Tashkent</strong></span><span class="queue-detail"><span>Age</span><strong>19h</strong></span><span class="status new">New</span></button>
+                <button class="queue-row" type="button" data-focus="city"><span class="queue-primary"><span class="queue-icon city"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 21s7-5.4 7-11A7 7 0 0 0 5 10c0 5.6 7 11 7 11Z"></path><circle cx="12" cy="10" r="2.2"></circle></svg></span><span class="queue-title"><strong>Samarqand city request</strong><span>nargiza.saidova@mail.ru</span></span></span><span class="queue-detail"><span>Topic</span><strong>City · Samarqand</strong></span><span class="queue-detail"><span>Age</span><strong>14h</strong></span><span class="status waiting">Qualify</span></button>
+                <button class="queue-row" type="button" data-focus="company"><span class="queue-primary"><span class="queue-icon company"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 20V5l8-2 8 2v15M4 20h16M8 8h2m4 0h2M8 12h2m4 0h2M8 16h2m4 0h2"></path></svg></span><span class="queue-title"><strong>Nomad Coffee claim</strong><span>Owner connection · phone proof</span></span></span><span class="queue-detail"><span>Operation</span><strong>Café · Mirzo Ulugbek</strong></span><span class="queue-detail"><span>Age</span><strong>6h</strong></span><span class="status waiting">Verify</span></button>
+                <button class="queue-row" type="button" data-focus="payment"><span class="queue-primary"><span class="queue-icon payment"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 10h18M7 15h4"></path></svg></span><span class="queue-title"><strong>Zira Studio subscription</strong><span>stripe · invoice_0041</span></span></span><span class="queue-detail"><span>Operation</span><strong>Beauty · Chilanzar</strong></span><span class="queue-detail"><span>Age</span><strong>3h</strong></span><span class="status flagged">Review</span></button>
+                <button class="queue-row" type="button" data-focus="campaign"><span class="queue-primary"><span class="queue-icon campaign"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m4 12 16-7-3 14-5-5-4 4zM12 14l5 5"></path></svg></span><span class="queue-title"><strong>Makon welcome campaign</strong><span>Consent evidence missing</span></span></span><span class="queue-detail"><span>Operation</span><strong>Events · Yakkasaray</strong></span><span class="queue-detail"><span>Age</span><strong>1h</strong></span><span class="status neutral">Hold</span></button>
+              </div>
+              <div class="surface-foot"><span>Every action opens the evidence before the decision.</span><button type="button" data-view="waitlist">View all 24 decisions →</button></div>
+            </section>
+            <aside class="surface focus-panel" aria-labelledby="focus-title"><div class="surface-head"><div><h2 id="focus-title">Operator focus</h2><p id="focus-subtitle">Selected from the decision queue.</p></div><span class="head-meta mono" id="focus-id">WL-2041</span></div><div class="focus-body" id="dashboard-focus-panel"></div></aside>
+          </div>
+          <div class="lower-grid">
+            <section class="surface" aria-labelledby="activity-title"><div class="surface-head"><div><h2 id="activity-title">Signed activity</h2><p>Recent actions with accountable identity.</p></div><button class="button small" type="button" data-view="activity">Open log</button></div><div class="timeline">
+              <div class="timeline-item"><span class="timeline-marker"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"></path></svg></span><span class="timeline-copy"><strong>Company profile approved</strong><span>Nomad Coffee · public visibility remains staged until claim review is complete.</span></span><time class="timeline-time">16:32</time></div>
+              <div class="timeline-item"><span class="timeline-marker"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16M12 4v16"></path></svg></span><span class="timeline-copy"><strong>Gurman onboarding prepared</strong><span>One email draft created; sending still requires a final review.</span></span><time class="timeline-time">15:48</time></div>
+              <div class="timeline-item"><span class="timeline-marker"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h12v12H6z"></path></svg></span><span class="timeline-copy"><strong>Payment exception opened</strong><span>Zira Studio · provider state is invoice_pending; no entitlement changed.</span></span><time class="timeline-time">14:06</time></div>
+            </div></section>
+            <section class="surface" aria-labelledby="exception-title"><div class="surface-head"><div><h2 id="exception-title">Exceptions</h2><p>Things that need a different kind of care.</p></div><span class="head-meta">3 open</span></div><div class="exception-list">
+              <div class="exception"><span class="exception-bar danger"></span><span><strong>Onboarding email blocked</strong><span>Recipient is on the do-not-contact list.</span></span><time>2h</time></div>
+              <div class="exception"><span class="exception-bar"></span><span><strong>Claim has a duplicate signal</strong><span>Two phone numbers point to the same company.</span></span><time>6h</time></div>
+              <div class="exception"><span class="exception-bar good"></span><span><strong>Review queue is within SLA</strong><span>Oldest flagged review is 7 hours old.</span></span><time>now</time></div>
+            </div></section>
+          </div>
+        </section>
+
+        <!-- Waitlist view -->
+        <section class="view hidden" data-screen="waitlist" aria-labelledby="waitlist-title">
+          <div class="page-head"><div><div class="eyebrow"><span class="live-dot"></span>Intake · demand signals</div><h1 id="waitlist-title" class="display">Waitlist</h1><p>Qualify the person behind the signup, then choose the right next action. City demand is not the same workflow as a Gurman beta invite.</p></div><div class="page-head-actions"><button class="button" type="button" data-view="dashboard">Back to today</button><button class="button primary" type="button" data-toast="New waitlist entries would arrive here from the API.">Refresh queue</button></div></div>
+          <div class="subnav" role="tablist" aria-label="Waitlist topics"><button class="tab-button active" type="button" data-waitlist-filter="all">All <span class="tab-count">24</span></button><button class="tab-button" type="button" data-waitlist-filter="gurman">Gurman <span class="tab-count">8</span></button><button class="tab-button" type="button" data-waitlist-filter="city">City <span class="tab-count">11</span></button><button class="tab-button" type="button" data-waitlist-filter="pro">Pro <span class="tab-count">5</span></button></div>
+          <div class="toolbar"><label class="search-box"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="6"></circle><path d="m16 16 4 4"></path></svg><span class="sr-only">Search waitlist</span><input id="waitlist-search" type="search" placeholder="Search email, city, or source"></label><div class="filter-set"><button class="filter-chip active" type="button">Needs action</button><button class="filter-chip" type="button">Assigned to me</button><button class="filter-chip" type="button">Oldest first</button></div></div>
+          <div class="split-view"><div class="data-table" id="waitlist-table">
+            <div class="table-row header"><span>Signup</span><span>Topic</span><span>Source / locale</span><span>State</span><span></span></div>
+            <button class="table-row selected" type="button" data-waitlist-row="gurman"><span class="table-cell"><strong>Aziz Karimov</strong><span class="mono">aziz.karimov@gmail.com</span></span><span class="table-cell"><span class="status new">Gurman</span></span><span class="table-cell"><span>web · en</span><span>Tashkent</span></span><span class="table-cell"><span class="status new">New · 19h</span></span><span class="table-action">Review →</span></button>
+            <button class="table-row" type="button" data-waitlist-row="city"><span class="table-cell"><strong>Nargiza Saidova</strong><span class="mono">nargiza.saidova@mail.ru</span></span><span class="table-cell"><span class="status waiting">City</span></span><span class="table-cell"><span>web · ru</span><span>Samarqand</span></span><span class="table-cell"><span class="status waiting">Qualify · 14h</span></span><span class="table-action">Review →</span></button>
+            <button class="table-row" type="button" data-waitlist-row="pro"><span class="table-cell"><strong>Zebo Interiors</strong><span class="mono">hello@zebo.uz</span></span><span class="table-cell"><span class="status neutral">Pro</span></span><span class="table-cell"><span>web · uz</span><span>Tashkent</span></span><span class="table-cell"><span class="status neutral">Contacted · 9h</span></span><span class="table-action">Review →</span></button>
+            <button class="table-row" type="button" data-waitlist-row="city"><span class="table-cell"><strong>Bekzod Umarov</strong><span class="mono">bekzod.u@mail.com</span></span><span class="table-cell"><span class="status waiting">City</span></span><span class="table-cell"><span>telegram · uz</span><span>Buxoro</span></span><span class="table-cell"><span class="status good">Accepted · 1d</span></span><span class="table-action">Open →</span></button>
+            <button class="table-row" type="button" data-waitlist-row="gurman"><span class="table-cell"><strong>Malika Rakhimova</strong><span class="mono">malika.r@icloud.com</span></span><span class="table-cell"><span class="status new">Gurman</span></span><span class="table-cell"><span>web · en</span><span>Tashkent</span></span><span class="table-cell"><span class="status flagged">Duplicate</span></span><span class="table-action">Resolve →</span></button>
+            <div class="surface-foot"><span>Showing illustrative rows · cursor pagination in production.</span><button type="button" data-toast="Pagination would load the next cursor from the API.">Next page →</button></div>
+          </div><aside class="surface review-drawer" aria-labelledby="waitlist-review-title"><div class="surface-head"><div><h2 id="waitlist-review-title">Review signup</h2><p>Evidence first, action second.</p></div><span class="head-meta mono">WL-2041</span></div><div class="focus-body" id="waitlist-detail"></div></aside></div>
+        </section>
+
+        <!-- Company list view -->
+        <section class="view hidden" data-screen="companies" aria-labelledby="companies-title">
+          <div class="page-head"><div><div class="eyebrow"><span class="live-dot"></span>Supply · trusted catalog</div><h1 id="companies-title" class="display">Companies</h1><p>One record per business, with ownership, verification, public visibility, relationship, and the next operational action in view.</p></div><div class="page-head-actions"><button class="button" type="button" data-view="dashboard">Back to today</button><button class="button primary" type="button" data-toast="Company creation is intentionally outside this operator surface.">Add a company</button></div></div>
+          <div class="toolbar"><label class="search-box"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="6"></circle><path d="m16 16 4 4"></path></svg><span class="sr-only">Search companies</span><input id="company-search" type="search" placeholder="Search company, owner, or district"></label><div class="filter-set"><button class="filter-chip active" type="button">All operations</button><button class="filter-chip" type="button">Café & dining</button><button class="filter-chip" type="button">Beauty</button><button class="filter-chip" type="button">Events</button><button class="filter-chip" type="button">Retail</button></div></div>
+          <div class="split-view"><div class="data-table" id="company-table">
+            <div class="table-row header"><span>Company</span><span>Operation</span><span>Owner / district</span><span>Lifecycle</span><span></span></div>
+            <button class="table-row selected" type="button" data-company="nomad"><span class="table-cell"><strong>Nomad Coffee</strong><span class="mono">nomad-coffee · updated 2h ago</span></span><span class="table-cell"><span>Café & dining</span><span>Mirzo Ulugbek</span></span><span class="table-cell"><span>Bekzod Aliyev</span><span>+998 90 123 45 67</span></span><span class="table-cell"><span class="status waiting">Claim pending</span></span><span class="table-action">Open →</span></button>
+            <button class="table-row" type="button" data-company="zira"><span class="table-cell"><strong>Zira Studio</strong><span class="mono">zira-studio · updated 3h ago</span></span><span class="table-cell"><span>Beauty & wellness</span><span>Chilanzar</span></span><span class="table-cell"><span>Madina Ismailova</span><span>+998 93 555 01 11</span></span><span class="table-cell"><span class="status good">Verified · Pro</span></span><span class="table-action">Open →</span></button>
+            <button class="table-row" type="button" data-company="makon"><span class="table-cell"><strong>Makon Events</strong><span class="mono">makon-events · updated 1d ago</span></span><span class="table-cell"><span>Events</span><span>Yakkasaray</span></span><span class="table-cell"><span>Unclaimed</span><span>—</span></span><span class="table-cell"><span class="status neutral">Unclaimed</span></span><span class="table-action">Open →</span></button>
+            <button class="table-row" type="button" data-company="sahar"><span class="table-cell"><strong>Sahar Market</strong><span class="mono">sahar-market · updated 2d ago</span></span><span class="table-cell"><span>Retail</span><span>Yunusabad</span></span><span class="table-cell"><span>Komila Nabiyeva</span><span>+998 97 441 20 20</span></span><span class="table-cell"><span class="status flagged">Suspended</span></span><span class="table-action">Open →</span></button>
+            <div class="surface-foot"><span>18 companies need an operator touch · filters are server-backed in production.</span><button type="button" data-toast="Bulk actions stay out of the first release until concurrency and audit behavior are proven.">Why no bulk actions?</button></div>
+          </div><aside class="surface review-drawer" aria-labelledby="company-preview-title"><div class="surface-head"><div><h2 id="company-preview-title">Company preview</h2><p>Open the full operational record.</p></div><span class="head-meta mono">BUS-782</span></div><div class="focus-body" id="company-preview"></div></aside></div>
+        </section>
+
+        <!-- Company detail view -->
+        <section class="view hidden" data-screen="company-detail" aria-labelledby="company-detail-title">
+          <div class="company-hero"><div><button class="button small" type="button" data-view="companies">← All companies</button><div class="company-title-line" style="margin-top:17px"><h2 id="company-detail-title" class="display editable" contenteditable="true" spellcheck="false">Nomad Coffee</h2><span class="status waiting">Claim pending</span><span class="status neutral">Illustrative record</span></div><div class="company-subtitle"><span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 21s7-5.4 7-11A7 7 0 0 0 5 10c0 5.6 7 11 7 11Z"></path><circle cx="12" cy="10" r="2.2"></circle></svg>Tashkent · Mirzo Ulugbek</span><span>Café & dining</span><span class="mono">BUS-782 · updated 2h ago</span></div></div><div class="page-head-actions"><button class="button" type="button" data-toast="The relationship note would open here.">Log touchpoint</button><button class="button primary" type="button" data-toast="The claim review flow would open here before any approval.">Review connection</button></div></div>
+          <div class="attention-bar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 2.8 20h18.4z"></path><path d="M12 9v5m0 3h.01"></path></svg><span><strong>Next best action:</strong> verify the owner's phone proof, then decide whether this listing can become publicly visible.</span></div>
+          <div class="subnav" role="tablist" aria-label="Company sections"><button class="tab-button active" type="button" data-company-tab="overview">Overview</button><button class="tab-button" type="button" data-company-tab="trust">Verification & trust</button><button class="tab-button" type="button" data-company-tab="growth">Growth</button><button class="tab-button" type="button" data-company-tab="billing">Billing</button><button class="tab-button" type="button" data-company-tab="relationship">Relationship</button><button class="tab-button" type="button" data-company-tab="documents">Documents & audit</button></div>
+          <div id="company-tab-content">
+            <div class="mini-metrics"><div class="mini-metric"><span>Profile completeness</span><strong>84%</strong></div><div class="mini-metric"><span>Reviews / reports</span><strong>32 / 1</strong></div><div class="mini-metric"><span>Last owner touch</span><strong>6h ago</strong></div></div>
+            <div class="company-grid"><div><section class="surface company-section"><div class="surface-head"><div><h2>Operational overview</h2><p>What is true about the record now.</p></div><span class="head-meta">source: console API</span></div><div class="key-value-grid"><div class="key-value"><span>Owner connection</span><strong>Pending verification</strong><em>Phone proof uploaded · waiting for review</em></div><div class="key-value"><span>Public visibility</span><strong>Staged</strong><em>Not promoted until claim decision</em></div><div class="key-value"><span>Plan</span><strong>Pro · invoice pending</strong><em>Payment state is read-only here</em></div><div class="key-value"><span>Review health</span><strong>4.8 · 32 reviews</strong><em>Illustrative data · review moderation is separate</em></div></div></section><section class="surface company-section"><div class="surface-head"><div><h2>Growth lane</h2><p>Approval is separate from sending and consent.</p></div><span class="status neutral">Read-only preview</span></div><div class="locked-panel"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="5" y="10" width="14" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg><div><strong>Campaign approval is not available to this operator.</strong><p>Requires <span class="mono">campaign.approve</span>, consent evidence, and a server-side state transition. The preview never implies that a campaign can be sent.</p></div></div></section></div><aside class="surface company-section"><div class="surface-head"><div><h2>Connection</h2><p>Own the relationship, not just the record.</p></div></div><div class="connection-card"><div class="connection-state"><div><strong>Phone proof review</strong><span>Assigned to Madina Tursunova</span></div><span class="status waiting">Current</span></div><div class="progress-line" aria-label="Connection progress"><span></span></div><div class="connection-steps"><div class="connection-step done"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"></path></svg>Business identified</div><div class="connection-step done"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"></path></svg>Owner contacted</div><div class="connection-step current"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle></svg>Evidence review</div><div class="connection-step"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle></svg>Partner / live</div></div><button class="button primary" style="width:100%;margin-top:19px" type="button" data-toast="A real implementation would open the claim evidence and require an audited decision.">Open claim evidence</button></div></aside></div>
+          </div>
+        </section>
+
+        <!-- Team / access view -->
+        <section class="view hidden" data-screen="team" aria-labelledby="team-title">
+          <div class="page-head"><div><div class="eyebrow"><span class="live-dot"></span>People · least privilege</div><h1 id="team-title" class="display">Team & access</h1><p>Each employee has an identity, permission set, operating scope, and versioned signature. A new login starts a first-value path, not an information dump.</p></div><div class="page-head-actions"><button class="button" type="button" data-view="dashboard">Back to today</button><button class="button primary" type="button" data-toast="Employee invitations need an approved identity and role before they can be sent.">Invite employee</button></div></div>
+          <div class="team-grid"><section class="surface"><div class="surface-head"><div><h2>Employees</h2><p>One account, one role boundary, one accountable actor.</p></div><span class="head-meta">3 active · 1 needs setup</span></div><div id="member-list"><button class="member-row selected" type="button" data-member="madina"><span class="avatar">MT</span><span class="member-meta"><strong>Madina Tursunova</strong><span>Merchant Success · administrator</span></span><span class="member-status"><span class="status good">Active</span><span>signature v2</span></span></button><button class="member-row" type="button" data-member="aziz"><span class="avatar" style="background:#f8efd9;color:#795f21">AK</span><span class="member-meta"><strong>Aziz Karimov</strong><span>Operations · waitlist operator</span></span><span class="member-status"><span class="status waiting">First login</span><span>signature missing</span></span></button><button class="member-row" type="button" data-member="dilnoza"><span class="avatar" style="background:#e8eef4;color:#486d8e">DR</span><span class="member-meta"><strong>Dilnoza Rakhimova</strong><span>Trust & safety · moderator</span></span><span class="member-status"><span class="status neutral">Invited</span><span>not started</span></span></button></div><div class="surface-foot"><span>Access changes require <span class="mono">employee.manage</span>.</span><button type="button" data-toast="A production audit would show the role-change reason and actor.">View access policy →</button></div></section><aside class="surface" aria-labelledby="member-detail-title"><div class="surface-head"><div><h2 id="member-detail-title">Employee setup</h2><p id="member-detail-subtitle">Madina Tursunova · current account</p></div><span class="head-meta mono" id="member-id">ADM-001</span></div><div class="focus-body" id="member-detail"></div></aside></div>
+        </section>
+
+        <!-- Trust/money/governance views: honest scope placeholders with useful next action. -->
+        <section class="view hidden" data-screen="reviews" aria-labelledby="reviews-title"><div class="page-head"><div><div class="eyebrow"><span class="live-dot"></span>Trust · moderation</div><h1 id="reviews-title" class="display">Reviews</h1><p>Moderate what customers say without turning a queue into a score that hides evidence.</p></div><div class="page-head-actions"><button class="button" type="button" data-view="dashboard">Back to today</button></div></div><div class="workspace-grid"><section class="surface"><div class="surface-head"><div><h2>Review queue</h2><p>Flagged and pending items from the existing moderation flow.</p></div><span class="head-meta">7 flagged</span></div><div class="queue-list"><button class="queue-row" type="button" data-toast="Review evidence drawer would open here."><span class="queue-primary"><span class="queue-icon company"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m12 4 2.2 4.6 5 .7-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5-3.6-3.5 5-.7z"></path></svg></span><span class="queue-title"><strong>“The service changed after booking”</strong><span>Nomad Coffee · reviewer verified</span></span></span><span class="queue-detail"><span>Reports</span><strong>2 open</strong></span><span class="queue-detail"><span>Age</span><strong>7h</strong></span><span class="status flagged">Flagged</span></button><button class="queue-row" type="button" data-toast="Review evidence drawer would open here."><span class="queue-primary"><span class="queue-icon company"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m12 4 2.2 4.6 5 .7-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5-3.6-3.5 5-.7z"></path></svg></span><span class="queue-title"><strong>“Photos do not match the place”</strong><span>Sahar Market · media report</span></span></span><span class="queue-detail"><span>Reports</span><strong>1 open</strong></span><span class="queue-detail"><span>Age</span><strong>11h</strong></span><span class="status waiting">Needs review</span></button></div><div class="surface-foot"><span>Existing approve / reject / delete actions remain permission-gated.</span><button type="button" data-view="activity">Open audit trail →</button></div></section><aside class="surface"><div class="surface-head"><div><h2>Moderation rule</h2><p>Trust before velocity.</p></div></div><div class="focus-body"><div class="evidence-box" style="margin-top:0"><strong>Never delete the reason.</strong><p>Reject and delete actions require a reason, keep the evidence chain, and record the acting employee.</p></div><button class="button primary" style="width:100%" type="button" data-toast="The existing review moderation route would open here.">Open review queue</button></div></aside></div></section>
+        <section class="view hidden" data-screen="payments" aria-labelledby="payments-title"><div class="page-head"><div><div class="eyebrow"><span class="live-dot"></span>Money · exceptions only</div><h1 id="payments-title" class="display">Payment exceptions</h1><p>Read provider truth and reconcile discrepancies. Do not grant access because a human clicked “approve.”</p></div><div class="page-head-actions"><button class="button" type="button" data-view="dashboard">Back to today</button></div></div><div class="system-state"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3 2.8 20h18.4z"></path><path d="M12 9v5m0 3h.01"></path></svg><div><strong>Read-only reconciliation lane</strong><p>Provider webhooks remain the source of truth. Manual approval, refunds, and local payment rails stay behind a future finance workflow.</p></div></div><div class="data-table" style="margin-top:19px"><div class="table-row header"><span>Business / provider</span><span>Purpose</span><span>State</span><span>Age</span><span></span></div><button class="table-row" type="button" data-toast="Payment detail would show provider event history and reconciliation evidence."><span class="table-cell"><strong>Zira Studio</strong><span class="mono">stripe · invoice_0041</span></span><span class="table-cell"><span>Subscription</span><span>Pro plan</span></span><span class="table-cell"><span class="status flagged">Invoice pending</span></span><span class="table-cell"><span class="mono">3h</span></span><span class="table-action">Reconcile →</span></button><button class="table-row" type="button" data-toast="Payment detail would show provider event history and reconciliation evidence."><span class="table-cell"><strong>Nomad Coffee</strong><span class="mono">stripe · pi_0092</span></span><span class="table-cell"><span>Subscription</span><span>Pro plan</span></span><span class="table-cell"><span class="status good">Paid</span></span><span class="table-cell"><span class="mono">1d</span></span><span class="table-action">Open →</span></button></div></section>
+        <section class="view hidden" data-screen="campaigns" aria-labelledby="campaigns-title"><div class="page-head"><div><div class="eyebrow"><span class="live-dot"></span>Growth · consent first</div><h1 id="campaigns-title" class="display">Campaigns</h1><p>Review consent, audience, and message state before an owner can activate a campaign.</p></div><div class="page-head-actions"><button class="button" type="button" data-view="dashboard">Back to today</button></div></div><div class="system-state"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="5" y="10" width="14" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg><div><strong>Approval lane not wired in this prototype</strong><p>Campaign delivery must remain fail-closed when consent or provider state is missing. This screen is an operating shape, not a claim that approval is live.</p></div></div><div class="empty-state" style="margin-top:19px"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m4 12 16-7-3 14-5-5-4 4zM12 14l5 5"></path></svg><h3>No approval queue connected</h3><p>When the API exposes campaign review states, this becomes a consent and message evidence queue.</p><button class="button small" style="margin-top:16px" type="button" data-toast="The empty state is intentional until the backend state machine exists.">Why this is empty</button></div></section>
+        <section class="view hidden" data-screen="activity" aria-labelledby="activity-page-title"><div class="page-head"><div><div class="eyebrow"><span class="live-dot"></span>Governance · audit</div><h1 id="activity-page-title" class="display">Signed activity</h1><p>Operational decisions should be reversible where possible and attributable always.</p></div><div class="page-head-actions"><button class="button" type="button" data-view="dashboard">Back to today</button><button class="button" type="button" data-toast="Export would be permission-gated and redacted.">Export log</button></div></div><div class="surface"><div class="surface-head"><div><h2>Audit trail</h2><p>Illustrative entries show the shape: actor, action, target, reason, timestamp.</p></div><span class="head-meta mono">UTC+5 · 04 Sep</span></div><div class="timeline"><div class="timeline-item"><span class="timeline-marker"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"></path></svg></span><span class="timeline-copy"><strong>Madina Tursunova approved business profile edit</strong><span><span class="mono">BUS-782</span> · changed phone and opening hours · reason: “Owner confirmed on call.”</span></span><time class="timeline-time">16:32</time></div><div class="timeline-item"><span class="timeline-marker"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16M12 4v16"></path></svg></span><span class="timeline-copy"><strong>Madina Tursunova queued onboarding email</strong><span><span class="mono">WL-2041</span> · Gurman · signature v2 · provider status: preview queued.</span></span><time class="timeline-time">15:48</time></div><div class="timeline-item"><span class="timeline-marker"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h12v12H6z"></path></svg></span><span class="timeline-copy"><strong>System blocked campaign send</strong><span><span class="mono">CMP-018</span> · missing marketing consent · no customer message dispatched.</span></span><time class="timeline-time">14:06</time></div></div></div></section>
+      </main>
+    </div>
+  </div>
+
+  <!-- Email composer: an explicit review gate before any send. -->
+  <div id="email-overlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="email-dialog-title">
+    <div class="dialog">
+      <div class="dialog-head"><div><h2 id="email-dialog-title" class="display">Prepare onboarding email</h2><p>Acceptance prepares a draft. Sending is a separate, attributable action.</p></div><button class="close-button" type="button" data-close-overlay="email-overlay" aria-label="Close email composer"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m6 6 12 12M18 6 6 18"></path></svg></button></div>
+      <div class="dialog-body"><div class="mail-meta"><div><span>To</span><strong>aziz.karimov@gmail.com</strong></div><div><span>Locale</span><strong>English · Gurman</strong></div></div><div class="field"><label for="email-subject">Subject</label><input id="email-subject" value="Gurman is getting ready — you’re on the list"></div><div class="field"><label for="email-message">Message</label><div id="email-message" class="mail-body" contenteditable="true" role="textbox" aria-label="Email body"><p>Hi Aziz,</p><p>Thanks for joining the Gurman list. We’ll write when the mobile app is ready for its first group.</p><p>There is no download link yet. This message is an update, not a promise of immediate access.</p><div class="mail-signature"><strong>Madina Tursunova</strong><span>Merchant Success · Manzil Group · Signed with signature v2 · 04 Sep 2026, 16:58</span></div></div></div><div class="modal-warning"><strong>Delivery guard:</strong> this preview will show <span class="mono">queued</span>, <span class="mono">sent</span>, <span class="mono">failed</span>, or <span class="mono">blocked</span>. It will never call Resend from this file.</div></div>
+      <div class="dialog-foot"><button class="button" type="button" data-close-overlay="email-overlay">Keep as draft</button><button class="button primary" type="button" id="queue-email">Queue email in preview</button></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m5 12 4 4L19 6"></path></svg><div><strong id="toast-title">Preview state updated</strong><span id="toast-copy"></span></div></div>
+
+  <script>
+    const state = {
+      screen: 'dashboard',
+      focus: 'gurman',
+      waitlist: 'gurman',
+      company: 'nomad',
+      member: 'madina'
+    };
+
+    const focusData = {
+      gurman: {
+        id: 'WL-2041', label: 'Gurman beta access', email: 'aziz.karimov@gmail.com', topic: 'Gurman · Tashkent', age: '19h', state: 'New', stateClass: 'new',
+        evidence: 'Signup came from the public Gurman mobile waitlist. The product is still being built; acceptance should prepare an honest update, not promise a download.',
+        action: 'Accept and prepare email', secondary: 'Reject with reason'
+      },
+      city: {
+        id: 'WL-2037', label: 'Samarqand city request', email: 'nargiza.saidova@mail.ru', topic: 'City · Samarqand', age: '14h', state: 'Qualify', stateClass: 'waiting',
+        evidence: 'City demand is a signal for expansion. The right next action is to qualify the request and preserve the city/locale context, not send a Gurman invite.',
+        action: 'Qualify city request', secondary: 'Close with reason'
+      },
+      company: {
+        id: 'BUS-782', label: 'Nomad Coffee claim', email: 'Owner connection · phone proof', topic: 'Café · Mirzo Ulugbek', age: '6h', state: 'Verify', stateClass: 'waiting',
+        evidence: 'The owner submitted phone proof. Review the claim, duplicate signals, and legal evidence before changing public visibility.',
+        action: 'Open company record', secondary: 'Request more evidence'
+      },
+      payment: {
+        id: 'PAY-0041', label: 'Zira Studio subscription', email: 'stripe · invoice_0041', topic: 'Beauty · Chilanzar', age: '3h', state: 'Review', stateClass: 'flagged',
+        evidence: 'The provider reports invoice_pending. A console button must not grant entitlement; reconciliation belongs to the payment state machine.',
+        action: 'Open reconciliation', secondary: 'Keep read-only'
+      },
+      campaign: {
+        id: 'CMP-018', label: 'Makon welcome campaign', email: 'Consent evidence missing', topic: 'Events · Yakkasaray', age: '1h', state: 'Hold', stateClass: 'neutral',
+        evidence: 'The campaign is held because consent evidence is absent. The correct action is to preserve the block and route the missing dependency.',
+        action: 'View consent gap', secondary: 'Keep on hold'
+      }
+    };
+
+    const icon = {
+      check: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"></path></svg>',
+      lock: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="5" y="10" width="14" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>',
+      note: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5h16v14H4z"></path><path d="M8 9h8M8 13h8M8 17h4"></path></svg>'
+    };
+
+    function showToast(copy, title = 'Preview state updated') {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-title').textContent = title;
+      document.getElementById('toast-copy').textContent = copy;
+      toast.classList.remove('hidden');
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => toast.classList.add('hidden'), 4200);
+    }
+
+    function showScreen(screen) {
+      state.screen = screen;
+      document.querySelectorAll('.view').forEach((view) => view.classList.toggle('hidden', view.dataset.screen !== screen));
+      document.querySelectorAll('.rail-link').forEach((link) => link.classList.toggle('active', link.dataset.view === screen || (screen === 'company-detail' && link.dataset.view === 'companies')));
+      const pageTitles = { dashboard: 'Today', waitlist: 'Waitlist', companies: 'Companies', 'company-detail': 'Nomad Coffee', reviews: 'Reviews', payments: 'Payment exceptions', campaigns: 'Campaigns', activity: 'Signed activity', team: 'Team & access' };
+      document.getElementById('crumb-page').textContent = pageTitles[screen] || 'Today';
+      document.getElementById('main-content').focus({ preventScroll: true });
+      document.getElementById('app-shell').classList.remove('rail-open');
+      if (screen === 'waitlist') renderWaitlistDetail('gurman');
+      if (screen === 'companies') renderCompanyPreview('nomad');
+      if (screen === 'team') renderMemberDetail('madina');
+    }
+
+    function renderFocus(key) {
+      state.focus = key;
+      const item = focusData[key];
+      document.getElementById('focus-id').textContent = item.id;
+      document.getElementById('dashboard-focus-panel').innerHTML = `
+        <div class="focus-label"><span>${item.topic.split(' · ')[0]} queue</span><span class="status ${item.stateClass}">${item.state}</span></div>
+        <h3 id="focus-selected-title" class="editable" contenteditable="true" spellcheck="false">${item.label}</h3>
+        <div class="focus-email">${item.email}</div>
+        <div class="focus-divider"></div>
+        <dl class="detail-list">
+          <div class="detail-item"><dt>Age</dt><dd>${item.age}</dd></div>
+          <div class="detail-item"><dt>Assigned to</dt><dd>Madina Tursunova</dd></div>
+          <div class="detail-item"><dt>Next action</dt><dd>${key === 'gurman' ? 'Review + email draft' : item.action}</dd></div>
+        </dl>
+        <div class="evidence-box"><strong>What the record tells us</strong><p>${item.evidence}</p></div>
+        <div class="focus-actions">
+          <button class="button primary" type="button" data-focus-action="${key}">${item.action} <span aria-hidden="true">→</span></button>
+          <button class="button" type="button" data-toast="${item.secondary} would open a reason-required confirmation.">${item.secondary}</button>
+        </div>
+        <div class="signed-line">${icon.note} Decision will be signed by Madina Tursunova · admin · v2</div>`;
+      document.querySelectorAll('[data-focus]').forEach((row) => row.classList.toggle('selected', row.dataset.focus === key));
+      observeEditable(document.getElementById('dashboard-focus-panel'));
+    }
+
+    function renderWaitlistDetail(topic) {
+      state.waitlist = topic;
+      const data = {
+        gurman: { title: 'Aziz Karimov', email: 'aziz.karimov@gmail.com', topic: 'Gurman', city: 'Tashkent', locale: 'English', source: 'Public web · /waitlist/gurman', status: 'New · 19h', statusClass: 'new', duplicate: false, consent: 'Marketing updates accepted', action: 'Accept and prepare email' },
+        city: { title: 'Nargiza Saidova', email: 'nargiza.saidova@mail.ru', topic: 'City', city: 'Samarqand', locale: 'Russian', source: 'Public web · /waitlist/city', status: 'Qualify · 14h', statusClass: 'waiting', duplicate: false, consent: 'Marketing updates accepted', action: 'Qualify city request' },
+        pro: { title: 'Zebo Interiors', email: 'hello@zebo.uz', topic: 'Pro', city: 'Tashkent', locale: 'Uzbek', source: 'Public web · /waitlist/pro', status: 'Contacted · 9h', statusClass: 'neutral', duplicate: true, consent: 'Business updates accepted', action: 'Open contact history' }
+      }[topic];
+      document.querySelectorAll('[data-waitlist-row]').forEach((row) => row.classList.toggle('selected', row.dataset.waitlistRow === topic));
+      document.getElementById('waitlist-detail').innerHTML = `
+        <div class="focus-label"><span>${data.topic} waitlist</span><span class="status ${data.statusClass}">${data.status}</span></div>
+        <h3>${data.title}</h3><div class="focus-email">${data.email}</div>
+        ${data.duplicate ? `<div class="duplicate-warning">${icon.note}<span><strong>Possible duplicate.</strong> A related address exists on another signup. Resolve before sending an invite.</span></div>` : ''}
+        <div class="focus-divider"></div>
+        <dl class="detail-list"><div class="detail-item"><dt>Topic</dt><dd>${data.topic}</dd></div><div class="detail-item"><dt>City</dt><dd>${data.city}</dd></div><div class="detail-item"><dt>Locale</dt><dd>${data.locale}</dd></div><div class="detail-item"><dt>Source</dt><dd>${data.source}</dd></div><div class="detail-item"><dt>Consent</dt><dd>${data.consent}</dd></div></dl>
+        <div class="evidence-box"><strong>Operator note</strong><p>${topic === 'city' ? 'This is a city-demand signal. Keep the request alive and qualify the reason; do not frame it as a product acceptance.' : topic === 'gurman' ? 'Gurman is mobile-first and still being built. The email must say that plainly and never imply an active download.' : 'Business-interest entries need a contact history and duplicate check before they become a company connection.'}</p></div>
+        <div class="focus-actions"><button class="button primary" type="button" data-waitlist-action="${topic}">${data.action} <span aria-hidden="true">→</span></button><button class="button" type="button" data-toast="Reject/close requires a reason and an audit record.">Close with reason</button></div>
+        <div class="signed-line">${icon.note} Acceptance / qualification is attributed to Madina Tursunova · v2</div>`;
+    }
+
+    function renderCompanyPreview(key) {
+      state.company = key;
+      const data = {
+        nomad: { name: 'Nomad Coffee', status: 'Claim pending', statusClass: 'waiting', operation: 'Café & dining', district: 'Mirzo Ulugbek', next: 'Verify phone proof', note: 'Owner connection has evidence; public visibility is still staged.' },
+        zira: { name: 'Zira Studio', status: 'Verified · Pro', statusClass: 'good', operation: 'Beauty & wellness', district: 'Chilanzar', next: 'Reconcile invoice', note: 'Subscription entitlement follows provider state, not a manual click.' },
+        makon: { name: 'Makon Events', status: 'Unclaimed', statusClass: 'neutral', operation: 'Events', district: 'Yakkasaray', next: 'Find owner', note: 'No business owner is connected yet.' },
+        sahar: { name: 'Sahar Market', status: 'Suspended', statusClass: 'flagged', operation: 'Retail', district: 'Yunusabad', next: 'Review suspension', note: 'Public visibility is off until the reason is resolved.' }
+      }[key];
+      document.querySelectorAll('[data-company]').forEach((row) => row.classList.toggle('selected', row.dataset.company === key));
+      document.getElementById('company-preview').innerHTML = `
+        <div class="focus-label"><span>${data.operation}</span><span class="status ${data.statusClass}">${data.status}</span></div>
+        <h3>${data.name}</h3><div class="focus-email">${data.district} · illustrative record</div><div class="focus-divider"></div>
+        <dl class="detail-list"><div class="detail-item"><dt>Next action</dt><dd>${data.next}</dd></div><div class="detail-item"><dt>Public state</dt><dd>${key === 'nomad' ? 'Staged' : key === 'sahar' ? 'Off' : 'Visible'}</dd></div><div class="detail-item"><dt>Plan</dt><dd>${key === 'zira' ? 'Pro · invoice pending' : 'Free / unknown'}</dd></div></dl>
+        <div class="evidence-box"><strong>Why it is here</strong><p>${data.note}</p></div><div class="focus-actions"><button class="button primary" type="button" data-company-open="${key}">Open company record →</button><button class="button" type="button" data-toast="The next action would open a reason-aware, permission-gated flow.">See next action</button></div>
+        <div class="signed-line">${icon.note} Company actions keep the actor, reason, and before/after state.</div>`;
+    }
+
+    function renderMemberDetail(member) {
+      state.member = member;
+      const data = {
+        madina: { name: 'Madina Tursunova', role: 'Merchant Success · administrator', id: 'ADM-001', status: 'Active', statusClass: 'good', signature: 'Signature v2 · active', firstLogin: true, copy: 'Current operator profile. Sensitive actions still require the server-side permission check.' },
+        aziz: { name: 'Aziz Karimov', role: 'Operations · waitlist operator', id: 'ADM-014', status: 'First login', statusClass: 'waiting', signature: 'Signature not configured', firstLogin: false, copy: 'First login is incomplete. Send the role-aware welcome pack after identity and access are confirmed.' },
+        dilnoza: { name: 'Dilnoza Rakhimova', role: 'Trust & safety · moderator', id: 'ADM-018', status: 'Invited', statusClass: 'neutral', signature: 'Signature not configured', firstLogin: false, copy: 'Invitation has not been accepted. No permissions should be treated as active yet.' }
+      }[member];
+      document.querySelectorAll('[data-member]').forEach((row) => row.classList.toggle('selected', row.dataset.member === member));
+      document.getElementById('member-id').textContent = data.id;
+      document.getElementById('member-detail-subtitle').textContent = `${data.name} · ${data.role}`;
+      document.getElementById('member-detail').innerHTML = `
+        <div class="focus-label"><span>Account state</span><span class="status ${data.statusClass}">${data.status}</span></div><h3>${data.name}</h3><div class="focus-email">${data.role}</div><div class="focus-divider"></div><p style="margin:0;color:var(--ink-soft);font-size:11px;line-height:1.45">${data.copy}</p>
+        <div class="signature-preview"><div class="label">Employee signature</div><strong>${data.signature}</strong><span>Used for attributable operational actions and outbound drafts. Not a legal e-signature.</span></div>
+        <div class="focus-label"><span>First-login path</span><span class="mono">${data.firstLogin ? 'complete' : '2 of 5'}</span></div><div class="check-list"><div class="check-item ${data.firstLogin ? 'done' : ''}">${data.firstLogin ? icon.check : icon.note}<span>Confirm identity and role scope</span></div><div class="check-item ${data.firstLogin ? 'done' : ''}">${data.firstLogin ? icon.check : icon.lock}<span>Set up 2FA before sensitive actions</span></div><div class="check-item ${data.firstLogin ? 'done' : ''}">${data.firstLogin ? icon.check : icon.note}<span>Configure signature profile</span></div><div class="check-item ${data.firstLogin ? 'done' : ''}">${data.firstLogin ? icon.check : icon.note}<span>Read operating and security policy</span></div><div class="check-item ${data.firstLogin ? 'done' : ''}">${data.firstLogin ? icon.check : icon.note}<span>Open the first assigned queue</span></div></div>
+        <div class="focus-actions"><button class="button primary" type="button" data-member-action="${member}">${data.firstLogin ? 'Open signature profile' : 'Queue welcome pack'} <span aria-hidden="true">→</span></button><button class="button" type="button" data-toast="Role and permission changes require an explicit, audited action.">Review permissions</button></div><div class="signed-line">${icon.note} Historical actions keep the signature version used at that time.</div>`;
+    }
+
+    function observeEditable(root = document) {
+      root.querySelectorAll?.('[contenteditable="true"]').forEach((node) => {
+        if (node.dataset.observed) return;
+        node.dataset.observed = 'true';
+        const observer = new MutationObserver(() => node.setAttribute('aria-label', `Editable ${node.textContent.trim()}`));
+        observer.observe(node, { childList: true, characterData: true, subtree: true });
+        node.addEventListener('keydown', (event) => { if (event.key === 'Enter') { event.preventDefault(); node.blur(); showToast('Text edit stays local to this prototype.', 'Edited locally'); } });
+      });
+    }
+
+    document.getElementById('login-form').addEventListener('submit', (event) => {
+      event.preventDefault();
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('app-shell').classList.remove('hidden');
+      renderFocus('gurman');
+      showToast('Preview session opened. No credentials were sent.', 'Signed in to preview');
+      setTimeout(() => document.getElementById('main-content').focus(), 0);
+    });
+
+    document.getElementById('help-login').addEventListener('click', () => showToast('In production, access would be provisioned by an administrator and recovered through the accepted identity provider.', 'Access request'));
+    document.getElementById('open-rail').addEventListener('click', () => document.getElementById('app-shell').classList.add('rail-open'));
+    document.getElementById('close-rail').addEventListener('click', () => document.getElementById('app-shell').classList.remove('rail-open'));
+
+    document.addEventListener('click', (event) => {
+      const viewButton = event.target.closest('[data-view]');
+      if (viewButton) showScreen(viewButton.dataset.view);
+      const toastButton = event.target.closest('[data-toast]');
+      if (toastButton) showToast(toastButton.dataset.toast);
+      const focusRow = event.target.closest('[data-focus]');
+      if (focusRow) renderFocus(focusRow.dataset.focus);
+      const focusAction = event.target.closest('[data-focus-action]');
+      if (focusAction) {
+        const key = focusAction.dataset.focusAction;
+        if (key === 'gurman') document.getElementById('email-overlay').classList.remove('hidden');
+        else if (key === 'company') showScreen('company-detail');
+        else showToast(`${focusData[key].action} is represented as a safe preview state.`, 'Action prepared');
+      }
+      const waitlistFilter = event.target.closest('[data-waitlist-filter]');
+      if (waitlistFilter) {
+        document.querySelectorAll('[data-waitlist-filter]').forEach((button) => button.classList.toggle('active', button === waitlistFilter));
+        const filter = waitlistFilter.dataset.waitlistFilter;
+        document.querySelectorAll('[data-waitlist-row]').forEach((row) => row.classList.toggle('hidden', filter !== 'all' && row.dataset.waitlistRow !== filter));
+        renderWaitlistDetail(filter === 'all' ? 'gurman' : filter);
+      }
+      const waitlistRow = event.target.closest('[data-waitlist-row]');
+      if (waitlistRow) renderWaitlistDetail(waitlistRow.dataset.waitlistRow);
+      const waitlistAction = event.target.closest('[data-waitlist-action]');
+      if (waitlistAction) {
+        const topic = waitlistAction.dataset.waitlistAction;
+        if (topic === 'gurman') document.getElementById('email-overlay').classList.remove('hidden');
+        else showToast('This topic would move to its own reasoned state transition; no email is sent automatically.', 'Qualification prepared');
+      }
+      const companyRow = event.target.closest('[data-company]');
+      if (companyRow) renderCompanyPreview(companyRow.dataset.company);
+      const companyOpen = event.target.closest('[data-company-open]');
+      if (companyOpen) showScreen('company-detail');
+      const companyTab = event.target.closest('[data-company-tab]');
+      if (companyTab) {
+        document.querySelectorAll('[data-company-tab]').forEach((button) => button.classList.toggle('active', button === companyTab));
+        const tab = companyTab.dataset.companyTab;
+        if (tab === 'overview') return;
+        const content = document.getElementById('company-tab-content');
+        const labels = { trust: ['Verification & trust', 'Claim evidence, duplicate signals, and public visibility stay together.', 'Needs live verification data before action'], growth: ['Growth', 'Campaign state, consent, and message evidence would appear here.', 'Approval lane not connected'], billing: ['Billing', 'Provider events and reconciliation, not manual entitlement grants.', 'Payment view is read-only'], relationship: ['Relationship', 'Assigned owner, last touch, next step, and contact history.', 'Connection timeline'], documents: ['Documents & audit', 'Exact legal version, contract provenance, and signed activity.', 'Immutable evidence'] };
+        const [title, body, tag] = labels[tab];
+        content.innerHTML = `<div class="surface" style="margin-top:19px"><div class="surface-head"><div><h2>${title}</h2><p>${body}</p></div><span class="status neutral">${tag}</span></div><div class="locked-panel">${icon.lock}<div><strong>This surface is shaped, not connected in the prototype.</strong><p>Production implementation must wire this to a permissioned API, a real state transition, a retryable failure path, and an audit entry. The UI does not claim the capability is live.</p></div></div></div>`;
+      }
+      const memberRow = event.target.closest('[data-member]');
+      if (memberRow) renderMemberDetail(memberRow.dataset.member);
+      const memberAction = event.target.closest('[data-member-action]');
+      if (memberAction) showToast(memberAction.dataset.memberAction === 'aziz' ? 'Welcome pack queued in preview. Production would use an idempotent provider-backed outbox.' : 'Signature profile would open here.', 'Action prepared');
+      const close = event.target.closest('[data-close-overlay]');
+      if (close) document.getElementById(close.dataset.closeOverlay).classList.add('hidden');
+    });
+
+    document.getElementById('queue-email').addEventListener('click', () => {
+      document.getElementById('email-overlay').classList.add('hidden');
+      showToast('Onboarding email is queued in preview with signature v2. Nothing was sent.', 'Email queued · preview');
+    });
+
+    document.querySelectorAll('.filter-chip').forEach((chip) => chip.addEventListener('click', () => {
+      chip.parentElement.querySelectorAll('.filter-chip').forEach((item) => item.classList.remove('active'));
+      chip.classList.add('active');
+      showToast('Filter changed locally. Production filters would be server-backed and cursor-paginated.', 'Filter applied');
+    }));
+
+    document.getElementById('waitlist-search').addEventListener('input', (event) => {
+      const needle = event.target.value.toLowerCase();
+      document.querySelectorAll('[data-waitlist-row]').forEach((row) => row.classList.toggle('hidden', !row.textContent.toLowerCase().includes(needle)));
+    });
+    document.getElementById('company-search').addEventListener('input', (event) => {
+      const needle = event.target.value.toLowerCase();
+      document.querySelectorAll('[data-company]').forEach((row) => row.classList.toggle('hidden', !row.textContent.toLowerCase().includes(needle)));
+    });
+
+    // ResizeObserver and MutationObserver keep the prototype honest when text is edited or resized.
+    if ('ResizeObserver' in window) {
+      const observer = new ResizeObserver((entries) => entries.forEach((entry) => entry.target.style.setProperty('--observed-width', `${entry.contentRect.width}px`)));
+      observer.observe(document.getElementById('main-content'));
+    }
+    observeEditable(document);
+
+    // Optional Pretext enhancement. The prototype remains usable if the CDN is unavailable.
+    document.fonts?.ready?.then(async () => {
+      try {
+        const pretext = await import('https://esm.sh/@chenglou/pretext');
+        document.documentElement.dataset.layoutEngine = pretext?.layout ? 'pretext-ready' : 'css-fallback';
+      } catch {
+        document.documentElement.dataset.layoutEngine = 'css-fallback';
+      }
+    });
+  </script>
+</body>
+</html>

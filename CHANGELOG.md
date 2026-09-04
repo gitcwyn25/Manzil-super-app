@@ -2,6 +2,25 @@
 
 All notable changes to Manzil are documented here.
 
+## [0.3.0] - 2026-09-04
+
+### Added
+
+- Added application-first business onboarding with an owner-facing application status flow, change-request resubmission, and an admin review queue.
+- Added admin operational surfaces for business applications, activation, outbox, signatures, waitlist, payments, team, and campaigns.
+
+### Changed
+
+- Routed the legacy `/crm/register` compatibility endpoint through the BusinessApplication review boundary instead of creating a public business directly.
+- Restricted company activation initiation to qualified or accepted signups and added a separately gated M1 activation migration.
+
+### Verification
+
+- API: 78 test suites and 1,011 tests passed.
+- Workspace typecheck passed.
+- Web lint passed with 0 errors and 32 warnings.
+- Full authenticated browser E2E remains pending because the required authenticated browser session is not available in this run.
+
 ## [0.2.0] - 2026-09-04
 
 ### Added

@@ -1,8 +1,12 @@
+import Link from "next/link";
 import { approveReview, deleteReview, rejectReview } from "@/lib/actions";
 import { ActionButton } from "@/components/action-button";
 import { AccessDenied } from "@/components/access-denied";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { consoleGet, getMe } from "@/lib/console";
-import { Badge, EmptyRow, PageHeader, StatusBadge, timeAgo } from "@/lib/ui";
+import { Badge, PageHeader, StatusBadge, timeAgo } from "@/lib/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -46,53 +50,79 @@ export default async function ReviewsPage({
 
   return (
     <>
-      <PageHeader title="Review moderation" subtitle="Flagged & pending reviews with spam signals" />
+      <PageHeader title="Review moderation" subtitle="Flagged and pending reviews with spam signals" />
 
-      <div className="mb-4 flex gap-1">
-        {tabs.map((t) => (
-          <a key={t.label} href={`/reviews${t.q}`} className={`rounded-md px-3 py-1.5 text-sm ${t.active ? "bg-panel-2 text-fg" : "text-muted hover:text-fg"}`}>
-            {t.label}
-          </a>
+      <div className="mb-5 flex flex-wrap gap-2" aria-label="Review filters">
+        {tabs.map((tab) => (
+          <Button key={tab.label} asChild size="sm" variant={tab.active ? "default" : "outline"}>
+            <Link href={`/reviews${tab.q}`} aria-current={tab.active ? "page" : undefined}>
+              {tab.label}
+            </Link>
+          </Button>
         ))}
       </div>
 
+      {!res.ok ? (
+        <Alert variant="destructive" className="mb-5">
+          <AlertTitle>Moderation queue unavailable</AlertTitle>
+          <AlertDescription>{res.error}</AlertDescription>
+        </Alert>
+      ) : null}
+
       <div className="space-y-3">
-        {reviews.map((r) => (
-          <div key={r.id} className="card p-4">
-            <div className="flex items-start justify-between gap-4">
-              <div className="min-w-0">
-                <div className="flex items-center gap-2">
-                  <span className="text-warn">{"★".repeat(r.rating)}{"☆".repeat(5 - r.rating)}</span>
-                  <StatusBadge kind="review" value={r.moderationStatus} />
-                  {r.spam.last24hReviews >= 5 ? <Badge tone="bad">spam risk: {r.spam.last24hReviews}/24h</Badge> : null}
-                  {r.openReports.length ? <Badge tone="warn">{r.openReports.length} report(s)</Badge> : null}
+        {reviews.map((review) => (
+          <Card key={review.id} className="overflow-hidden">
+            <CardContent className="p-5">
+              <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="font-data text-sm tracking-[0.12em] text-brass" aria-label={`${review.rating} out of 5 stars`}>
+                      {"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}
+                    </span>
+                    <StatusBadge kind="review" value={review.moderationStatus} />
+                    {review.spam.last24hReviews >= 5 ? (
+                      <Badge tone="bad">spam risk: {review.spam.last24hReviews}/24h</Badge>
+                    ) : null}
+                    {review.openReports.length ? (
+                      <Badge tone="warn">{review.openReports.length} report(s)</Badge>
+                    ) : null}
+                  </div>
+                  <p className="mt-3 text-sm leading-6 text-fg">{review.text}</p>
+                  <div className="mt-3 text-xs text-muted">
+                    on <span className="text-fg">{review.business.name}</span> · by{" "}
+                    <Link className="text-ceramic hover:underline" href={`/users/${review.author.id}`}>
+                      {review.author.email ?? review.author.displayName}
+                    </Link>{" "}
+                    · {timeAgo(review.createdAt)}
+                  </div>
+                  {review.openReports.length ? (
+                    <div className="mt-3 border-l-2 border-brass/50 pl-3 text-xs leading-5 text-muted">
+                      <span className="font-medium text-fg">Report reasons:</span>{" "}
+                      {review.openReports.map((report) => report.reason).join("; ")}
+                    </div>
+                  ) : null}
                 </div>
-                <p className="mt-2 text-sm">{r.text}</p>
-                <div className="mt-2 text-xs text-muted">
-                  on <span className="text-fg">{r.business.name}</span> · by{" "}
-                  <a className="text-brand hover:underline" href={`/users/${r.author.id}`}>
-                    {r.author.email ?? r.author.displayName}
-                  </a>{" "}
-                  · {timeAgo(r.createdAt)}
+                <div className="flex shrink-0 flex-wrap gap-2 lg:justify-end">
+                  {canApprove && review.moderationStatus !== "approved" ? (
+                    <ActionButton action={approveReview} id={review.id} label="Approve" variant="primary" />
+                  ) : null}
+                  {canReject && review.moderationStatus !== "rejected" ? (
+                    <ActionButton action={rejectReview} id={review.id} label="Reject" variant="ghost" reason />
+                  ) : null}
+                  {canDelete ? (
+                    <ActionButton action={deleteReview} id={review.id} label="Delete" variant="danger" reason />
+                  ) : null}
                 </div>
-                {r.openReports.length ? (
-                  <div className="mt-2 text-xs text-muted">Reasons: {r.openReports.map((o) => o.reason).join("; ")}</div>
-                ) : null}
               </div>
-              <div className="flex shrink-0 gap-1.5">
-                {canApprove && r.moderationStatus !== "approved" ? (
-                  <ActionButton action={approveReview} id={r.id} label="Approve" variant="primary" />
-                ) : null}
-                {canReject && r.moderationStatus !== "rejected" ? (
-                  <ActionButton action={rejectReview} id={r.id} label="Reject" variant="ghost" reason />
-                ) : null}
-                {canDelete ? <ActionButton action={deleteReview} id={r.id} label="Delete" variant="danger" reason /> : null}
-              </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         ))}
         {reviews.length === 0 ? (
-          <div className="card p-10 text-center text-muted">No reviews in this queue.</div>
+          <Card>
+            <CardContent className="p-10 text-center text-sm text-muted">
+              {res.ok ? "No reviews in this queue." : "No queue data was returned."}
+            </CardContent>
+          </Card>
         ) : null}
       </div>
     </>

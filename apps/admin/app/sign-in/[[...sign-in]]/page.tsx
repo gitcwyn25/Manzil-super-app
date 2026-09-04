@@ -1,18 +1,9 @@
-import { SignIn } from "@clerk/nextjs";
+import { ArrowUpRight, Check, LockKeyhole, ShieldCheck } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { LoginForm } from "@/components/auth/login-form";
+
+const PRINCIPLES = ["One identity per operator", "Every consequential action is attributed", "Business and customer data stay permissioned"];
 
 export default function SignInPage() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-bg">
-      <div className="text-center">
-        <div className="mb-6">
-          <span className="text-lg font-bold tracking-tight">Manzil</span>
-          <span className="ml-2 rounded bg-brand/15 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-brand">
-            Admin
-          </span>
-          <p className="mt-2 text-sm text-muted">Authorized operators only.</p>
-        </div>
-        <SignIn />
-      </div>
-    </div>
-  );
+  return <main className="min-h-screen overflow-hidden bg-void text-white"><div className="grid min-h-screen lg:grid-cols-[minmax(0,1.05fr)_minmax(440px,0.95fr)]"><section className="relative hidden overflow-hidden border-r border-line-dark px-10 py-10 lg:flex lg:flex-col lg:justify-between xl:px-16"><div className="absolute -left-20 -top-24 size-[420px] rounded-full bg-ceramic/20 blur-3xl" aria-hidden="true" /><div className="absolute bottom-[-180px] right-[-120px] size-[460px] rounded-full bg-signal/10 blur-3xl" aria-hidden="true" /><div className="relative flex items-center gap-3"><div className="flex size-10 items-center justify-center rounded-[10px] border border-signal/30 bg-signal/10 text-signal"><ShieldCheck className="size-5" strokeWidth={1.8} /></div><div><div className="font-display text-lg font-semibold tracking-[-0.03em]">Manzil</div><div className="font-data text-[9px] uppercase tracking-[0.2em] text-white/40">Group operations</div></div></div><div className="relative max-w-xl pb-8"><p className="mb-5 font-data text-[10px] font-semibold uppercase tracking-[0.2em] text-signal">Merchant activation control room</p><h1 className="font-display text-5xl font-semibold leading-[1.03] tracking-[-0.055em] xl:text-7xl">Make the next trustworthy decision.</h1><p className="mt-6 max-w-lg text-base leading-7 text-white/60">One workspace for the operators who turn local demand into verified, useful, and accountable businesses.</p><div className="mt-10 space-y-4">{PRINCIPLES.map((principle) => <div key={principle} className="flex items-center gap-3 text-sm text-white/75"><span className="flex size-6 items-center justify-center rounded-full bg-signal/10 text-signal"><Check className="size-3.5" strokeWidth={2.4} /></span>{principle}</div>)}</div></div><div className="relative flex items-center gap-2 font-data text-[10px] uppercase tracking-[0.15em] text-white/35"><LockKeyhole className="size-3.5" />Internal access · admin.manzilgroup.uz <ArrowUpRight className="size-3" /></div></section><section className="flex min-h-screen items-center justify-center px-5 py-10 sm:px-8"><div className="w-full max-w-[420px]"><div className="mb-8 lg:hidden"><div className="flex items-center gap-3"><div className="flex size-9 items-center justify-center rounded-[9px] border border-signal/30 bg-signal/10 text-signal"><ShieldCheck className="size-[18px]" /></div><div><div className="font-display text-base font-semibold">Manzil</div><div className="font-data text-[9px] uppercase tracking-[0.16em] text-white/40">Operations</div></div></div></div><div className="mb-7"><p className="mb-2 font-data text-[10px] font-semibold uppercase tracking-[0.18em] text-signal">Authorized operators only</p><h2 className="font-display text-3xl font-semibold tracking-[-0.04em]">Enter the control room.</h2><p className="mt-2 text-sm leading-6 text-white/55">Use your approved Manzil employee account. Access and role boundaries are enforced server-side.</p></div><div className="rounded-[12px] border border-white/10 bg-white/[0.06] p-1 shadow-float"><div className="rounded-[9px] bg-card p-6 text-card-foreground"><LoginForm /></div></div><div className="mt-7 flex items-center gap-3 text-xs text-white/40"><Separator className="bg-line-dark" /><span className="shrink-0">Permissioned session</span><Separator className="bg-line-dark" /></div><p className="mt-4 text-center text-[11px] leading-5 text-white/35">Your session opens only the queues your role allows. Contact a Manzil administrator if your access is missing.</p></div></section></div></main>;
 }

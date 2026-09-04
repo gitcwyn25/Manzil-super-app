@@ -2,6 +2,10 @@
 
 import { useActionState } from "react";
 import { editBusinessDetail } from "@/lib/actions";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 type Editable = {
   id: string;
@@ -23,50 +27,36 @@ const FIELDS: Array<{ key: keyof Omit<Editable, "id">; label: string; type?: str
   { key: "website", label: "Website", type: "url" }
 ];
 
-/**
- * Contact/profile editor for a business.
- *
- * Inputs are pre-filled with current values and the action only sends fields
- * that are non-empty, so an untouched optional field is never posted as "" and
- * silently cleared.
- */
 export function BusinessEditor({ business }: { business: Editable }) {
   const [state, formAction, pending] = useActionState(editBusinessDetail, { ok: false });
 
   return (
-    <form action={formAction} className="space-y-3">
+    <form action={formAction} className="space-y-4">
       <input type="hidden" name="id" value={business.id} />
-
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2">
         {FIELDS.map((field) => (
-          <label key={field.key} className="block">
-            <span className="mb-1 block text-xs font-medium text-muted">{field.label}</span>
-            <input
-              className="input"
-              name={field.key}
-              type={field.type ?? "text"}
-              defaultValue={business[field.key] ?? ""}
-            />
+          <label key={field.key} className="block space-y-2">
+            <span className="text-xs font-medium text-muted-foreground">{field.label}</span>
+            <Input name={field.key} type={field.type ?? "text"} defaultValue={business[field.key] ?? ""} />
           </label>
         ))}
-
-        <label className="block">
-          <span className="mb-1 block text-xs font-medium text-muted">Price tier</span>
-          <select className="input" name="priceTier" defaultValue={business.priceTier ?? ""}>
-            <option value="">— unset —</option>
-            <option value="$">$</option>
-            <option value="$$">$$</option>
-            <option value="$$$">$$$</option>
-          </select>
+        <label className="block space-y-2">
+          <span className="text-xs font-medium text-muted-foreground">Price tier</span>
+          <Select name="priceTier" defaultValue={business.priceTier ?? "__none"}>
+            <SelectTrigger><SelectValue placeholder="— unset —" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="__none">— unset —</SelectItem>
+              <SelectItem value="$">$</SelectItem>
+              <SelectItem value="$$">$$</SelectItem>
+              <SelectItem value="$$$">$$$</SelectItem>
+            </SelectContent>
+          </Select>
         </label>
       </div>
-
-      <div className="flex items-center gap-3">
-        <button className="btn-primary btn-xs" disabled={pending} type="submit">
-          {pending ? "Saving…" : "Save changes"}
-        </button>
-        {state.ok ? <span className="text-sm text-good">Saved.</span> : null}
-        {state.error ? <span className="text-sm text-bad">{state.error}</span> : null}
+      <div className="flex flex-wrap items-center gap-3">
+        <Button type="submit" size="sm" disabled={pending}>{pending ? "Saving…" : "Save changes"}</Button>
+        {state.ok ? <span className="text-sm text-good" role="status">Saved.</span> : null}
+        {state.error ? <Alert variant="destructive" className="py-2"><AlertDescription>{state.error}</AlertDescription></Alert> : null}
       </div>
     </form>
   );

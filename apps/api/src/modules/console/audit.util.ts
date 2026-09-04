@@ -20,8 +20,8 @@ export type AuditEntry = {
  * the enclosing $transaction rolls back the mutation — audit and mutation
  * succeed or fail together, never independently.
  */
-export async function writeAudit(tx: Tx, entry: AuditEntry): Promise<void> {
-  await tx.auditLog.create({
+export async function writeAudit(tx: Tx, entry: AuditEntry): Promise<{ id: string }> {
+  return tx.auditLog.create({
     data: {
       actorId: entry.actorId,
       action: entry.action,
@@ -31,7 +31,8 @@ export async function writeAudit(tx: Tx, entry: AuditEntry): Promise<void> {
       afterState: (entry.afterState ?? undefined) as Prisma.InputJsonValue | undefined,
       reason: entry.reason ?? null,
       ipAddress: entry.ipAddress ?? null
-    }
+    },
+    select: { id: true }
   });
 }
 

@@ -1,76 +1,176 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  color-scheme: dark;
+@layer base {
+  :root {
+    color-scheme: light;
+    --void: 181 50% 7%;
+    --void-2: 185 45% 12%;
+    --line-dark: 181 28% 23%;
+    --panel: 150 12% 95%;
+    --panel-2: 0 0% 100%;
+    --panel-3: 150 10% 91%;
+    --ink: 190 33% 12%;
+    --ink-soft: 174 10% 35%;
+    --line: 162 14% 84%;
+    --ceramic: 177 100% 22%;
+    --ceramic-dark: 177 100% 18%;
+    --signal: 165 70% 59%;
+    --signal-soft: 163 67% 91%;
+    --brass: 42 54% 54%;
+    --brass-soft: 44 64% 91%;
+    --warn: 37 71% 42%;
+    --warn-soft: 44 100% 93%;
+    --danger: 356 47% 44%;
+    --danger-soft: 356 65% 94%;
+    --good: 160 66% 27%;
+    --good-soft: 148 57% 92%;
+
+    --background: var(--panel);
+    --foreground: var(--ink);
+    --card: var(--panel-2);
+    --card-foreground: var(--ink);
+    --popover: var(--panel-2);
+    --popover-foreground: var(--ink);
+    --primary: var(--ceramic);
+    --primary-foreground: 0 0% 100%;
+    --secondary: var(--panel-3);
+    --secondary-foreground: var(--ink);
+    --muted: var(--panel-3);
+    --muted-foreground: var(--ink-soft);
+    --accent: var(--signal-soft);
+    --accent-foreground: var(--ceramic-dark);
+    --destructive: var(--danger);
+    --destructive-foreground: 0 0% 100%;
+    --border: var(--line);
+    --input: var(--line);
+    --ring: var(--ceramic);
+    --radius: 0.625rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-ibm), "IBM Plex Sans", system-ui, sans-serif;
+    font-feature-settings: "cv11" 1, "ss01" 1;
+  }
+
+  button,
+  a,
+  input,
+  textarea,
+  select {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  ::selection {
+    background: hsl(var(--signal));
+    color: hsl(var(--void));
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--ceramic));
+    outline-offset: 2px;
+  }
 }
 
-html,
-body {
-  background: #0b0e14;
-  color: #e6e9ef;
+@layer utilities {
+  .font-display {
+    font-family: var(--font-archivo), "Archivo", system-ui, sans-serif;
+  }
+
+  .font-data {
+    font-family: var(--font-mono), "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
 }
 
-body {
-  font-family: var(--font-inter), system-ui, sans-serif;
-  -webkit-font-smoothing: antialiased;
-}
-
-* {
-  border-color: #222b3a;
-}
-
-::selection {
-  background: #2b7a78;
-  color: #fff;
-}
-
-/* Dense scrollbars for data-grid feel */
+/* Dense, quiet scrollbars for long operational queues. */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
+
 ::-webkit-scrollbar-thumb {
-  background: #222b3a;
-  border-radius: 6px;
+  background: hsl(var(--line));
+  border: 3px solid hsl(var(--panel));
+  border-radius: 999px;
 }
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors disabled:opacity-50 disabled:pointer-events-none;
+    @apply inline-flex min-h-10 items-center justify-center gap-1.5 rounded-[6px] px-3.5 py-2 text-sm font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ceramic focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50;
   }
+
   .btn-primary {
-    @apply btn bg-brand text-white hover:bg-brand-dim;
+    @apply btn bg-ceramic text-white hover:bg-ceramic-dark;
   }
+
   .btn-ghost {
-    @apply btn border border-border bg-transparent text-fg hover:bg-panel-2;
+    @apply btn border border-border bg-transparent text-foreground hover:bg-panel-3;
   }
+
   .btn-danger {
-    @apply btn border border-bad/40 bg-transparent text-bad hover:bg-bad/10;
+    @apply btn border border-danger/30 bg-danger-soft text-danger hover:bg-danger-soft/80;
   }
+
   .btn-xs {
-    @apply px-2 py-1 text-xs;
+    @apply min-h-9 px-3 py-1.5 text-xs;
   }
+
   .input {
-    @apply w-full rounded-md border border-border bg-panel px-3 py-1.5 text-sm text-fg placeholder:text-muted outline-none focus:border-brand;
+    @apply flex h-10 w-full rounded-[6px] border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground outline-none transition-colors focus:border-ceramic focus:ring-2 focus:ring-ceramic/20;
   }
+
   .card {
-    @apply rounded-lg border border-border bg-panel;
+    @apply rounded-[10px] border border-border bg-card text-card-foreground shadow-[0_1px_2px_rgba(18,36,40,0.03)];
   }
+
   .grid-table {
     @apply w-full text-sm;
   }
+
   .grid-table th {
-    @apply px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-muted border-b border-border;
+    @apply border-b border-border px-4 py-3 text-left text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground;
   }
+
   .grid-table td {
-    @apply px-3 py-2.5 border-b border-border/60 align-top;
+    @apply border-b border-border/70 px-4 py-3 align-top;
   }
+
   .grid-table tr:hover td {
-    @apply bg-panel-2/50;
+    @apply bg-panel-3/70;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

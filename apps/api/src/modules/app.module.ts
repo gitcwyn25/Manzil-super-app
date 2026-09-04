@@ -36,6 +36,10 @@ import { ConsoleRepository } from "./console/console.repository";
 import { ConsoleCurationRepository } from "./console/console-curation.repository";
 import { ConsoleNotificationsRepository } from "./console/console-notifications.repository";
 import { ConsoleSupabaseRepository } from "./console/console-supabase.repository";
+import { ActivationController } from "./console/activation.controller";
+import { ActivationRepository } from "./console/activation.repository";
+import { BusinessApplicationsController } from "./console/business-applications.controller";
+import { BusinessApplicationsRepository } from "./console/business-applications.repository";
 import { AdminAuthService } from "./console/admin-auth.service";
 import { PermissionGuard } from "./console/permission.guard";
 import { AlertService } from "./alerts/alert.service";
@@ -100,6 +104,7 @@ import { GurmanV0ScoringService } from "./gurman-v0/gurman-v0.scoring.service";
     ReviewsController,
     SearchController,
     ConsoleController,
+    ActivationController,
     ConsoleAuthController,
     PlansController,
     AnalyticsController,
@@ -137,6 +142,8 @@ import { GurmanV0ScoringService } from "./gurman-v0/gurman-v0.scoring.service";
     SupabaseStorageService,
     MEDIA_STORAGE_PROVIDER,
     ConsoleRepository,
+    ActivationRepository,
+    BusinessApplicationsRepository,
     ConsoleCurationRepository,
     ConsoleNotificationsRepository,
     ConsoleSupabaseRepository,

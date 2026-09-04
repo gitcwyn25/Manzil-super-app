@@ -115,7 +115,8 @@ export async function registerBusinessAction(
   // An unchecked checkbox is simply absent from FormData, so this is false
   // unless the user actually ticked it. The API enforces the same rule with
   // @Equals(true) — the client check is for a fast, clear error, not security.
-  const acceptedTerms = formData.get("acceptedTerms") === "on";
+  const acceptedTermsValue = formData.get("acceptedTerms");
+  const acceptedTerms = acceptedTermsValue === "on" || acceptedTermsValue === "true";
 
   let applicationId: string;
 
@@ -139,7 +140,8 @@ export async function registerBusinessAction(
 
 
         acceptedTerms,
-        acceptedTermsVersion: text(formData, "acceptedTermsVersion")
+        acceptedTermsVersion: text(formData, "acceptedTermsVersion"),
+        applicationId: text(formData, "applicationId")
       },
       idempotencyKeyFrom(formData)
     );

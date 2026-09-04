@@ -268,7 +268,7 @@ export class CrmRepository {
    * the applicant's submitted snapshot for Manzil review first.
    */
   async submitBusinessApplication(
-    input: BusinessRegistrationInput & { workingHours?: string },
+    input: BusinessRegistrationInput & { applicationId?: string; workingHours?: string },
     actor: AuthActor,
     acceptance: {
       acceptedTerms: boolean;
@@ -317,14 +317,51 @@ export class CrmRepository {
       }
     });
 
-    const existing = await this.prisma.businessApplication.findFirst({
-      where: {
-        applicantUserId: applicant.id,
-        name: { equals: name, mode: "insensitive" },
-        status: { notIn: ["rejected", "withdrawn"] }
-      },
-      orderBy: { createdAt: "desc" }
-    });
+    const existing = input.applicationId
+      ? await this.prisma.businessApplication.findUnique({ where: { id: input.applicationId } })
+      : await this.prisma.businessApplication.findFirst({
+          where: {
+            applicantUserId: applicant.id,
+            name: { equals: name, mode: "insensitive" },
+            status: { notIn: ["rejected", "withdrawn"] }
+          },
+          orderBy: { createdAt: "desc" }
+        });
+    if (input.applicationId && (!existing || existing.applicantUserId !== applicant.id)) {
+      throw new NotFoundException("Business application not found");
+    }
+    if (existing?.status === "changes_requested") {
+      const submittedAt = new Date();
+      const revised = await this.prisma.businessApplication.update({
+        where: { id: existing.id },
+        data: {
+          status: "submitted",
+          name,
+          categorySlug,
+          descriptionUz: description,
+          address,
+          district,
+          city: input.city?.trim() || "Tashkent",
+          phone: input.phone?.trim() || null,
+          email: input.email?.trim() || undefined,
+          website: input.website?.trim() || undefined,
+          telegram: input.telegram?.trim() || null,
+          workingHours: input.workingHours?.trim() || undefined,
+          acceptedTermsVersion: acceptance.acceptedTermsVersion,
+          acceptedTermsAt: submittedAt,
+          acceptedTermsIp: acceptance.ipAddress ?? undefined,
+          acceptedTermsUserAgent: acceptance.userAgent ?? undefined,
+          submittedAt,
+          reviewNote: null
+        }
+      });
+      return {
+        id: revised.id,
+        status: revised.status,
+        name: revised.name,
+        submittedAt: revised.submittedAt
+      };
+    }
     if (existing) {
       return {
         id: existing.id,
@@ -367,7 +404,10 @@ export class CrmRepository {
   }
 
   async getBusinessApplication(id: string, actor: AuthActor) {
-    const application = await this.prisma.businessApplication.findUnique({ where: { id } });
+    const application = await this.prisma.businessApplication.findUnique({
+      where: { id },
+      include: { business: { select: { id: true, slug: true, name: true, status: true } } }
+    });
     if (!application || application.applicantUserId !== actor.userId) {
       throw new NotFoundException("Business application not found");
     }
@@ -376,10 +416,20 @@ export class CrmRepository {
       status: application.status,
       name: application.name,
       categorySlug: application.categorySlug,
+      descriptionUz: application.descriptionUz,
       address: application.address,
       district: application.district,
+      city: application.city,
+      phone: application.phone,
+      email: application.email,
+      website: application.website,
+      telegram: application.telegram,
+      workingHours: application.workingHours,
+      acceptedTermsVersion: application.acceptedTermsVersion,
+      acceptedTermsAt: application.acceptedTermsAt,
       submittedAt: application.submittedAt,
-      reviewNote: application.reviewNote
+      reviewNote: application.reviewNote,
+      business: application.business
     };
   }
 

@@ -32,7 +32,10 @@ const STATUS_COPY = {
     withdrawn: "Bekor qilingan",
     submittedAt: "Yuborilgan vaqt",
     back: "Biznes sahifasiga qaytish",
-    noWorkspace: "Tekshiruv tugamaguncha biznes ish joyi ochilmaydi."
+    openWorkspace: "Biznes kabinetini ochish",
+    editApplication: "Arizani yangilash",
+    noWorkspace: "Tekshiruv tugamaguncha biznes ish joyi ochilmaydi.",
+    workspaceReady: "Arizangiz ma'qullandi. Biznes kabinetingiz tayyor."
   },
   ru: {
     title: "Заявка отправлена",
@@ -46,7 +49,10 @@ const STATUS_COPY = {
     withdrawn: "Отозвана",
     submittedAt: "Отправлена",
     back: "Вернуться на бизнес-страницу",
-    noWorkspace: "Рабочее пространство бизнеса откроется после завершения проверки."
+    openWorkspace: "Открыть кабинет бизнеса",
+    editApplication: "Обновить заявку",
+    noWorkspace: "Рабочее пространство бизнеса откроется после завершения проверки.",
+    workspaceReady: "Заявка одобрена. Кабинет бизнеса готов."
   },
   en: {
     title: "Your application was submitted",
@@ -60,7 +66,10 @@ const STATUS_COPY = {
     withdrawn: "Withdrawn",
     submittedAt: "Submitted",
     back: "Back to business page",
-    noWorkspace: "Your business workspace opens after the review is complete."
+    openWorkspace: "Open business workspace",
+    editApplication: "Update application",
+    noWorkspace: "Your business workspace opens after the review is complete.",
+    workspaceReady: "Your application is approved. The business workspace is ready."
   }
 } as const;
 
@@ -71,7 +80,9 @@ export default async function BusinessApplicationStatusPage({
 }) {
   const { locale, id } = await params;
   const { userId } = await auth();
-  if (!userId) redirect(`/${locale}/sign-in`);
+  if (!userId) {
+    redirect(`/${locale}/sign-in?redirect_url=${encodeURIComponent(`/${locale}/business/application/${id}`)}`);
+  }
 
   const application = await getBusinessApplication(id);
   if (!application) notFound();
@@ -79,6 +90,8 @@ export default async function BusinessApplicationStatusPage({
   const copy = getCrmCopy(locale);
   const text = STATUS_COPY[locale] ?? STATUS_COPY.en;
   const statusLabel = (text as Record<string, string>)[application.status] ?? application.status;
+  const workspaceReady = application.status === "approved" && Boolean(application.business);
+  const needsChanges = application.status === "changes_requested";
   const submittedAt = application.submittedAt
     ? new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short" }).format(
         new Date(application.submittedAt)
@@ -111,11 +124,14 @@ export default async function BusinessApplicationStatusPage({
             <span>{text.submittedAt}</span>
             <strong>{submittedAt}</strong>
           </div>
-          <p className="vm-auth-summary__note">{text.noWorkspace}</p>
+          <p className="vm-auth-summary__note">{workspaceReady ? text.workspaceReady : text.noWorkspace}</p>
         </div>
 
-        <PrimaryCta className="vm-auth-submit" href={`/${locale}/business`}>
-          {text.back}
+        <PrimaryCta
+          className="vm-auth-submit"
+          href={workspaceReady ? `/${locale}/dashboard` : needsChanges ? `/${locale}/business/register?application=${id}` : `/${locale}/business`}
+        >
+          {workspaceReady ? text.openWorkspace : needsChanges ? text.editApplication : text.back}
         </PrimaryCta>
       </div>
     </SplitAuthShell>

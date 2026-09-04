@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -64,16 +65,19 @@ export class CrmController {
     @Ip() ip: string,
     @Headers("user-agent") userAgent?: string
   ) {
-    // Reject a stale form before creating anything: if the terms changed while
-    // the page was open, the version the user actually read is no longer the
-    // one we would record.
-    if (body.acceptedTermsVersion) {
-      await this.legal.assertIsCurrentVersion("terms_of_service", body.acceptedTermsVersion);
+    // Compatibility endpoint: older clients may still call /crm/register, but
+    // it must not bypass the application review boundary. The old repository
+    // method remains available for its isolated legacy tests and migration
+    // work; no HTTP caller can create a public business directly anymore.
+    if (!body.acceptedTermsVersion) {
+      throw new BadRequestException("A current terms version is required to submit a business application");
     }
+    await this.legal.assertIsCurrentVersion("terms_of_service", body.acceptedTermsVersion);
 
     return {
-      data: await this.crm.registerBusiness(body, request.manzilActor!, {
+      data: await this.crm.submitBusinessApplication(body, request.manzilActor!, {
         acceptedTerms: body.acceptedTerms,
+        acceptedTermsVersion: body.acceptedTermsVersion,
         ipAddress: ip ?? null,
         userAgent: userAgent ?? null
       })

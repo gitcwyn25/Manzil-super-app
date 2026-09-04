@@ -127,6 +127,11 @@ export class BusinessRegistrationDto {
 }
 
 export class BusinessApplicationDto {
+  @IsOptional()
+  @IsString()
+  @MaxLength(40)
+  applicationId?: string;
+
   @IsString()
   @MinLength(2, { message: "Business name must be 2–120 characters" })
   @MaxLength(120, { message: "Business name must be 2–120 characters" })

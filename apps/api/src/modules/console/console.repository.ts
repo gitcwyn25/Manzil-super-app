@@ -125,6 +125,8 @@ export class ConsoleRepository {
         ...(q
           ? {
               OR: [
+                { id: { contains: q, mode: "insensitive" } },
+                { slug: { contains: q, mode: "insensitive" } },
                 { name: { contains: q, mode: "insensitive" } },
                 { address: { contains: q, mode: "insensitive" } },
                 { district: { contains: q, mode: "insensitive" } }
@@ -525,7 +527,20 @@ export class ConsoleRepository {
         ...(params.action ? { action: params.action } : {}),
         ...(params.targetType ? { targetType: params.targetType } : {})
       },
-      include: { actor: { select: { email: true, name: true } } },
+      include: {
+        actor: { select: { email: true, name: true } },
+        operationalSignature: {
+          select: {
+            id: true,
+            adminSignatureId: true,
+            payloadHash: true,
+            signature: true,
+            algorithm: true,
+            createdAt: true,
+            adminSignature: { select: { version: true, displayName: true, title: true } }
+          }
+        }
+      },
       orderBy: { createdAt: "desc" },
       take
     });
@@ -540,6 +555,19 @@ export class ConsoleRepository {
       afterState: r.afterState,
       ipAddress: r.ipAddress,
       actor: r.actor,
+      operationalSignature: r.operationalSignature
+        ? {
+            id: r.operationalSignature.id,
+            adminSignatureId: r.operationalSignature.adminSignatureId,
+            signatureVersion: r.operationalSignature.adminSignature.version,
+            displayName: r.operationalSignature.adminSignature.displayName,
+            title: r.operationalSignature.adminSignature.title,
+            payloadHash: r.operationalSignature.payloadHash,
+            signature: r.operationalSignature.signature,
+            algorithm: r.operationalSignature.algorithm,
+            createdAt: r.operationalSignature.createdAt.toISOString()
+          }
+        : null,
       createdAt: r.createdAt.toISOString()
     }));
   }
@@ -547,12 +575,13 @@ export class ConsoleRepository {
   /* ================= Dashboard counts ================= */
 
   async overview() {
-    const [pendingBusinesses, flaggedReviews, bannedUsers, admins] = await this.prisma.$transaction([
+    const [pendingBusinesses, pendingApplications, flaggedReviews, bannedUsers, admins] = await this.prisma.$transaction([
       this.prisma.business.count({ where: { status: "pending_claim" } }),
+      this.prisma.businessApplication.count({ where: { status: { in: ["submitted", "under_review", "changes_requested"] } } }),
       this.prisma.review.count({ where: { reports: { some: { status: "open" } } } }),
       this.prisma.user.count({ where: { status: "banned" } }),
       this.prisma.adminUser.count({ where: { isActive: true } })
     ]);
-    return { pendingBusinesses, flaggedReviews, bannedUsers, admins };
+    return { pendingBusinesses, pendingApplications, flaggedReviews, bannedUsers, admins };
   }
 }

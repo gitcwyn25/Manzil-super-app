@@ -22,13 +22,11 @@ export class WaitlistRepository {
    * behind themselves.
    */
   async join(input: WaitlistJoinInput): Promise<{ position: number }> {
-    const signup = await this.prisma.waitlistSignup.upsert({
+    await this.prisma.waitlistSignup.upsert({
       where: { topic_email: { topic: input.topic, email: input.email } },
-      update: {
-        locale: input.locale,
-        city: input.city,
-        businessName: input.businessName
-      },
+      // Existing reviewed/qualified records are intentionally immutable from
+      // the public form. Only a still-new record may refresh intake context.
+      update: {},
       create: {
         topic: input.topic,
         email: input.email,
@@ -37,6 +35,23 @@ export class WaitlistRepository {
         businessName: input.businessName,
         source: input.source
       }
+    });
+
+    await this.prisma.waitlistSignup.updateMany({
+      where: {
+        topic: input.topic,
+        email: input.email,
+        status: "new"
+      },
+      data: {
+        locale: input.locale,
+        city: input.city,
+        businessName: input.businessName
+      }
+    });
+
+    const signup = await this.prisma.waitlistSignup.findUniqueOrThrow({
+      where: { topic_email: { topic: input.topic, email: input.email } }
     });
 
     const position = await this.prisma.waitlistSignup.count({

@@ -252,6 +252,7 @@ model Business {
   contracts        Contract[]
   campaigns        Campaign[]
   adminNotifications AdminNotification[]
+  waitlistConnections WaitlistSignup[] @relation("WaitlistCompanyConnection")
   applications      BusinessApplication[]
 
   @@index([categoryId])
@@ -271,7 +272,7 @@ model BusinessApplication {
   status                BusinessApplicationStatus @default(draft)
   name                  String
   categorySlug          String
-  descriptionUz         String
+  descriptionUz        String
   address               String
   district              String
   city                  String                    @default("Tashkent")
@@ -279,10 +280,10 @@ model BusinessApplication {
   email                 String?
   website               String?
   telegram              String?
-  workingHours          Json?
-  acceptedTermsVersion  String?
-  acceptedTermsAt       DateTime?
-  acceptedTermsIp       String?
+  workingHours         Json?
+  acceptedTermsVersion   String?
+  acceptedTermsAt        DateTime?
+  acceptedTermsIp        String?
   acceptedTermsUserAgent String?
   submittedAt           DateTime?
   reviewedByUserId      String?
@@ -576,6 +577,12 @@ model AdminUser {
   user      User?           @relation(fields: [userId], references: [id])
   roles     AdminUserRole[]
   auditLogs AuditLog[]
+  signatures AdminSignature[]
+  signedOperations OperationalSignature[] @relation("AdminOperationalSignatures")
+  assignedWaitlist WaitlistSignup[] @relation("WaitlistAssignment")
+  reviewedWaitlist WaitlistSignup[] @relation("WaitlistReview")
+  connectedWaitlist WaitlistSignup[] @relation("WaitlistConnector")
+  createdOutboxMessages OutboxMessage[] @relation("OutboxCreator")
 
   @@index([isActive])
 }
@@ -641,6 +648,7 @@ model AuditLog {
   createdAt   DateTime @default(now())
 
   actor AdminUser @relation(fields: [actorId], references: [id])
+  operationalSignature OperationalSignature?
 
   @@index([actorId, createdAt])
   @@index([action])
@@ -664,6 +672,81 @@ model AdminNotification {
 
   @@index([readAt, createdAt])
   @@index([businessId])
+}
+
+/// Employee attribution profile. This is an operational signature, not a legal
+/// e-signature: it snapshots the name/title shown on an outbound draft and on
+/// signed activity, while the AdminUser remains the authorization identity.
+model AdminSignature {
+  id         String              @id @default(cuid())
+  adminUserId String
+  version    Int
+  displayName String
+  title      String?
+  status     AdminSignatureStatus @default(active)
+  createdAt  DateTime            @default(now())
+  revokedAt  DateTime?
+
+  adminUser AdminUser             @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+  operations OperationalSignature[] @relation("AdminSignatureOperations")
+
+  @@unique([adminUserId, version])
+  @@index([adminUserId, status])
+}
+
+/// Durable, provider-agnostic outbound work. The API only queues records in
+/// this slice; a future worker may claim and deliver them. `idempotencyKey`
+/// prevents a retry or double-click from creating a second message.
+model OutboxMessage {
+  id              String        @id @default(cuid())
+  channel         OutboxChannel
+  status          OutboxStatus  @default(pending)
+  kind            String
+  recipient       String
+  subject         String
+  body            String
+  payload         Json?
+  idempotencyKey  String        @unique
+  attempts        Int           @default(0)
+  availableAt     DateTime      @default(now())
+  lockedAt        DateTime?
+  sentAt          DateTime?
+  lastError       String?
+  waitlistSignupId String?
+  createdByAdminId String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  waitlistSignup WaitlistSignup? @relation(fields: [waitlistSignupId], references: [id], onDelete: SetNull)
+  createdByAdmin AdminUser?      @relation("OutboxCreator", fields: [createdByAdminId], references: [id], onDelete: SetNull)
+
+  @@index([status, availableAt])
+  @@index([waitlistSignupId, createdAt])
+  @@index([createdByAdminId, createdAt])
+}
+
+/// Immutable attribution record for a state-changing admin action. The digest
+/// is signed with the server-side operational key when configured; this record
+/// is deliberately distinct from legal document acceptance/signatures.
+model OperationalSignature {
+  id                String   @id @default(cuid())
+  adminUserId       String
+  adminSignatureId  String
+  auditLogId        String   @unique
+  action            String
+  targetType        String
+  targetId          String?
+  payloadHash       String
+  signature         String
+  algorithm         String   @default("hmac-sha256")
+  createdAt         DateTime @default(now())
+
+  adminUser      AdminUser     @relation("AdminOperationalSignatures", fields: [adminUserId], references: [id], onDelete: Restrict)
+  adminSignature AdminSignature @relation("AdminSignatureOperations", fields: [adminSignatureId], references: [id], onDelete: Restrict)
+  auditLog       AuditLog      @relation(fields: [auditLogId], references: [id], onDelete: Cascade)
+
+  @@index([adminUserId, createdAt])
+  @@index([targetType, targetId, createdAt])
 }
 
 model FeatureFlag {
@@ -1019,11 +1102,42 @@ enum WaitlistTopic {
   pro
 }
 
+enum WaitlistReviewStatus {
+  new
+  contacted
+  qualified
+  accepted
+  rejected
+  duplicate
+  connected
+}
+
+enum OutboxChannel {
+  email
+}
+
+enum OutboxStatus {
+  pending
+  processing
+  sent
+  failed
+  canceled
+}
+
+enum AdminSignatureStatus {
+  active
+  revoked
+}
+
+/// Public intake remains idempotent and preserves the original signup fields.
+/// The fields below are the separate operator workflow: a queue state never
+/// changes what the person originally submitted, and a company connection is a
+/// CRM link only — it does not grant ownership or public visibility.
 model WaitlistSignup {
-  id           String        @id @default(cuid())
+  id           String             @id @default(cuid())
   topic        WaitlistTopic
   email        String
-  locale       String        @default("uz")
+  locale       String             @default("uz")
   /// Only set for topic=city. The whole point of the city waitlist is knowing
   /// which city to open next, so a signup without one carries no information.
   city         String?
@@ -1032,13 +1146,35 @@ model WaitlistSignup {
   businessName String?
   /// Which page the signup came from, for attribution.
   source       String?
-  createdAt    DateTime      @default(now())
+  createdAt    DateTime           @default(now())
+
+  /// Operator workflow state. `connected` means linked to a Business record;
+  /// it is not equivalent to an approved ownership claim.
+  status           WaitlistReviewStatus @default(new)
+  assignedAdminId  String?
+  reviewedByAdminId String?
+  decisionReason   String?
+  contactedAt      DateTime?
+  reviewedAt       DateTime?
+  connectedBusinessId String?
+  connectedAt      DateTime?
+  connectedByAdminId String?
+  updatedAt        DateTime           @updatedAt
+
+  assignedAdmin    AdminUser? @relation("WaitlistAssignment", fields: [assignedAdminId], references: [id], onDelete: SetNull)
+  reviewedByAdmin  AdminUser? @relation("WaitlistReview", fields: [reviewedByAdminId], references: [id], onDelete: SetNull)
+  connectedBusiness Business? @relation("WaitlistCompanyConnection", fields: [connectedBusinessId], references: [id], onDelete: SetNull)
+  connectedByAdmin AdminUser? @relation("WaitlistConnector", fields: [connectedByAdminId], references: [id], onDelete: SetNull)
+  outboxMessages  OutboxMessage[]
 
   /// One signup per email per topic. A person re-submitting the Gurman form
   /// should not create a second queue entry and jump their own position.
   @@unique([topic, email])
   @@index([topic, createdAt])
   @@index([topic, city])
+  @@index([status, createdAt])
+  @@index([assignedAdminId, status])
+  @@index([connectedBusinessId])
 }
 
 /// ⚠️ GATED ON M1 — DECLARED BUT **NOT APPLIED**. ⚠️

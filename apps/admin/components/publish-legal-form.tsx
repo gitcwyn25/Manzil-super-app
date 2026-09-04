@@ -2,72 +2,43 @@
 
 import { useActionState } from "react";
 import { publishLegalDocument } from "@/lib/actions";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
-/**
- * Publishes a new legal document version.
- *
- * There is no edit form anywhere by design — the only write operation on legal
- * text is publishing a new version, because acceptances are bound to the exact
- * version they were made against.
- */
 export function PublishLegalForm() {
   const [state, formAction, pending] = useActionState(publishLegalDocument, { ok: false });
 
   return (
-    <details className="card p-5">
-      <summary className="cursor-pointer text-sm font-semibold">Publish a new version</summary>
-
-      <form action={formAction} className="mt-4 space-y-3">
-        <div className="grid gap-3 sm:grid-cols-3">
-          <label className="block">
-            <span className="mb-1 block text-xs font-medium text-muted">Kind</span>
-            <select className="input" name="kind" defaultValue="terms_of_service" required>
-              <option value="terms_of_service">Terms of service</option>
-              <option value="privacy_policy">Privacy policy</option>
-              <option value="contract_template">Contract template</option>
-            </select>
+    <details className="rounded-[10px] border border-border bg-card text-card-foreground shadow-[0_1px_2px_rgba(18,36,40,0.03)]">
+      <summary className="cursor-pointer px-5 py-4 text-sm font-semibold">Publish a new version</summary>
+      <form action={formAction} className="space-y-4 border-t border-border p-5">
+        <div className="grid gap-4 sm:grid-cols-3">
+          <label className="block space-y-2">
+            <span className="text-xs font-medium text-muted-foreground">Kind</span>
+            <Select name="kind" defaultValue="terms_of_service">
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent><SelectItem value="terms_of_service">Terms of service</SelectItem><SelectItem value="privacy_policy">Privacy policy</SelectItem><SelectItem value="contract_template">Contract template</SelectItem></SelectContent>
+            </Select>
           </label>
-
-          <label className="block">
-            <span className="mb-1 block text-xs font-medium text-muted">Version</span>
-            <input className="input" name="version" placeholder="1.0" required />
-          </label>
-
-          <label className="block">
-            <span className="mb-1 block text-xs font-medium text-muted">Locale</span>
-            <select className="input" name="locale" defaultValue="uz">
-              <option value="uz">uz</option>
-              <option value="ru">ru</option>
-              <option value="en">en</option>
-            </select>
+          <label className="block space-y-2"><span className="text-xs font-medium text-muted-foreground">Version</span><Input name="version" placeholder="1.0" required /></label>
+          <label className="block space-y-2">
+            <span className="text-xs font-medium text-muted-foreground">Locale</span>
+            <Select name="locale" defaultValue="uz">
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent><SelectItem value="uz">uz</SelectItem><SelectItem value="ru">ru</SelectItem><SelectItem value="en">en</SelectItem></SelectContent>
+            </Select>
           </label>
         </div>
-
-        <label className="block">
-          <span className="mb-1 block text-xs font-medium text-muted">Title</span>
-          <input className="input" name="title" required />
-        </label>
-
-        <label className="block">
-          <span className="mb-1 block text-xs font-medium text-muted">
-            Body (markdown)
-          </span>
-          <textarea className="input min-h-[220px] font-mono text-xs" name="body" required />
-        </label>
-
-        <p className="text-xs text-muted">
-          For a contract template, use <code>{"{{businessName}}"}</code>,{" "}
-          <code>{"{{legalName}}"}</code>, <code>{"{{taxId}}"}</code>,{" "}
-          <code>{"{{contractNo}}"}</code>, and <code>{"{{date}}"}</code> — they are substituted once,
-          at acceptance, and then frozen.
-        </p>
-
-        <div className="flex items-center gap-3">
-          <button className="btn-primary btn-xs" disabled={pending} type="submit">
-            {pending ? "Publishing…" : "Publish version"}
-          </button>
-          {state.ok ? <span className="text-sm text-good">Published.</span> : null}
-          {state.error ? <span className="text-sm text-bad">{state.error}</span> : null}
+        <label className="block space-y-2"><span className="text-xs font-medium text-muted-foreground">Title</span><Input name="title" required /></label>
+        <label className="block space-y-2"><span className="text-xs font-medium text-muted-foreground">Body (markdown)</span><Textarea className="min-h-[220px] font-data text-xs" name="body" required /></label>
+        <p className="text-xs leading-5 text-muted-foreground">For a contract template, use <code>{"{{businessName}}"}</code>, <code>{"{{legalName}}"}</code>, <code>{"{{taxId}}"}</code>, <code>{"{{contractNo}}"}</code>, and <code>{"{{date}}"}</code>. They are substituted once, at acceptance, then frozen.</p>
+        <div className="flex flex-wrap items-center gap-3">
+          <Button type="submit" size="sm" disabled={pending}>{pending ? "Publishing…" : "Publish version"}</Button>
+          {state.ok ? <span className="text-sm text-good" role="status">Published.</span> : null}
+          {state.error ? <Alert variant="destructive" className="py-2"><AlertDescription>{state.error}</AlertDescription></Alert> : null}
         </div>
       </form>
     </details>

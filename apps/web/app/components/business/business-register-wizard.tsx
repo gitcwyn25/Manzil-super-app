@@ -135,27 +135,43 @@ const WIZARD_COPY: Record<
   }
 };
 
+type InitialApplication = {
+  id: string;
+  name: string;
+  categorySlug: string;
+  descriptionUz: string;
+  address: string;
+  district: string;
+  phone: string | null;
+  telegram: string | null;
+  workingHours: unknown;
+};
+
 export function BusinessRegisterWizard({
   locale,
   categories,
-  terms
+  terms,
+  initialApplication
 }: {
   locale: Locale;
   categories: Category[];
   terms?: { id?: string; version?: string; title?: string; body?: string } | null;
+  initialApplication?: InitialApplication;
 }) {
   const [currentStep, setCurrentStep] = useState(1);
   const copy = WIZARD_COPY[locale] ?? WIZARD_COPY.uz;
 
   // Form states for progressive validation
-  const [name, setName] = useState("");
-  const [categorySlug, setCategorySlug] = useState("");
-  const [phone, setPhone] = useState("");
-  const [telegram, setTelegram] = useState("");
-  const [district, setDistrict] = useState("Chilonzor");
-  const [address, setAddress] = useState("");
-  const [hours, setHours] = useState("09:00 - 23:00");
-  const [description, setDescription] = useState("");
+  const [name, setName] = useState(initialApplication?.name ?? "");
+  const [categorySlug, setCategorySlug] = useState(initialApplication?.categorySlug ?? "");
+  const [phone, setPhone] = useState(initialApplication?.phone ?? "");
+  const [telegram, setTelegram] = useState(initialApplication?.telegram ?? "");
+  const [district, setDistrict] = useState(initialApplication?.district ?? "Chilonzor");
+  const [address, setAddress] = useState(initialApplication?.address ?? "");
+  const [hours, setHours] = useState(
+    typeof initialApplication?.workingHours === "string" ? initialApplication.workingHours : "09:00 - 23:00"
+  );
+  const [description, setDescription] = useState(initialApplication?.descriptionUz ?? "");
   const [agree, setAgree] = useState(false);
 
   const canProceedStep1 = name.trim().length >= 2 && categorySlug && phone.trim().length >= 7;
@@ -199,6 +215,7 @@ export function BusinessRegisterWizard({
         locale={locale}
       >
         <input name="locale" type="hidden" value={locale} />
+        {initialApplication ? <input name="applicationId" type="hidden" value={initialApplication.id} /> : null}
 
         {/* STEP 1: Basics */}
         <div className={`bz-wizard-step-content ${currentStep === 1 ? "d-block" : "d-none"}`}>

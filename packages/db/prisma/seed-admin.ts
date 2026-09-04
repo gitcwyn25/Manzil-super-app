@@ -6,8 +6,10 @@ const prisma = new PrismaClient();
  * Idempotent seed for the admin platform: permissions, roles, role→permission
  * wiring, and a bootstrap super_admin.
  *
- * Bootstrap admin is resolved from env, falling back to the known launch admin:
+ * Bootstrap admin is explicit outside local development:
  *   BOOTSTRAP_ADMIN_EMAIL, BOOTSTRAP_ADMIN_CLERK_ID, BOOTSTRAP_ADMIN_NAME
+ * Local development may use the historical defaults for convenience; hosted
+ * staging and production must never do so.
  */
 
 // slug → category, description. Adding a permission = add a line here + reseed.
@@ -56,6 +58,15 @@ const PERMISSIONS: Array<[string, string, string]> = [
   ["category.manage", "category", "Create and edit the category taxonomy shown on the landing page"],
   // notifications
   ["notification.view", "notification", "View and acknowledge the admin notification inbox"],
+  // merchant activation
+  ["waitlist.view", "waitlist", "View waitlist entries and qualification evidence"],
+  ["waitlist.manage", "waitlist", "Assign and transition waitlist entries"],
+  ["business.connect", "business", "Link a waitlist entry to an existing business record without granting ownership"],
+  ["outbox.view", "outbox", "View durable outbound message state and delivery attempts"],
+  ["outbox.create", "outbox", "Queue an attributable outbound message draft"],
+  ["outbox.retry", "outbox", "Retry a failed outbound message (reason required)"],
+  ["signature.view", "signature", "View the current operational signature profile"],
+  ["signature.create", "signature", "Create or rotate the operational signature profile"],
   // supabase browser — read-only table/storage viewer. Deliberately granted
   // only to super_admin (via its "*" wildcard below): no other role lists
   // it, and it is not added to moderator/support/analyst.
@@ -93,6 +104,18 @@ const ROLES: Array<{
     ]
   },
   {
+    slug: "merchant_success",
+    name: "Merchant Success",
+    description: "Moves qualified demand through company connection and trusted listing activation.",
+    permissions: [
+      "business.view", "business.approve", "business.reject", "business.edit", "business.connect",
+      "waitlist.view", "waitlist.manage",
+      "outbox.view", "outbox.create", "outbox.retry",
+      "signature.view", "signature.create",
+      "review.view", "audit.view", "notification.view"
+    ]
+  },
+  {
     slug: "support",
     name: "Support",
     description: "Assists users; can view PII, suspend, and impersonate for support.",
@@ -113,6 +136,19 @@ const ROLES: Array<{
 ];
 
 async function main() {
+  const isLocalDevelopment = process.env.NODE_ENV === "development";
+  const bootstrap = {
+    email: process.env.BOOTSTRAP_ADMIN_EMAIL,
+    clerkId: process.env.BOOTSTRAP_ADMIN_CLERK_ID,
+    name: process.env.BOOTSTRAP_ADMIN_NAME
+  };
+
+  if (!isLocalDevelopment && Object.values(bootstrap).some((value) => !value?.trim())) {
+    throw new Error(
+      "BOOTSTRAP_ADMIN_EMAIL, BOOTSTRAP_ADMIN_CLERK_ID, and BOOTSTRAP_ADMIN_NAME must be set explicitly outside NODE_ENV=development; refusing fallback identity"
+    );
+  }
+
   // 1) Permissions
   for (const [slug, category, description] of PERMISSIONS) {
     await prisma.permission.upsert({
@@ -145,10 +181,10 @@ async function main() {
   }
 
   // 3) Bootstrap super_admin
-  const email = (process.env.BOOTSTRAP_ADMIN_EMAIL ?? "tursunovsunnatilla223@gmail.com").toLowerCase();
-  const name = process.env.BOOTSTRAP_ADMIN_NAME ?? "Sunnatilla Tursunov";
+  const email = (bootstrap.email ?? "tursunovsunnatilla223@gmail.com").toLowerCase();
+  const name = bootstrap.name ?? "Sunnatilla Tursunov";
   const existingUser = await prisma.user.findUnique({ where: { email } });
-  const clerkId = process.env.BOOTSTRAP_ADMIN_CLERK_ID ?? existingUser?.clerkId ?? `bootstrap-${email}`;
+  const clerkId = bootstrap.clerkId ?? existingUser?.clerkId ?? `bootstrap-${email}`;
 
   const superRole = await prisma.role.findUniqueOrThrow({ where: { slug: "super_admin" } });
 

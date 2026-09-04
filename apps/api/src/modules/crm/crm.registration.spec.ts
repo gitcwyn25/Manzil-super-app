@@ -69,7 +69,8 @@ function makeApplicationRepo(existingApplication: unknown | null = null) {
     businessApplication: {
       findFirst: jest.fn().mockResolvedValue(existingApplication),
       findUnique: jest.fn().mockResolvedValue(created),
-      create: jest.fn().mockResolvedValue(created)
+      create: jest.fn().mockResolvedValue(created),
+      update: jest.fn().mockResolvedValue({ ...created, status: "submitted" })
     }
   };
   const repo = new CrmRepository(
@@ -123,6 +124,40 @@ describe("CrmRepository.submitBusinessApplication — application-first boundary
       status: "submitted",
       name: validInput.name,
       submittedAt: existing.submittedAt
+    });
+    expect(prisma.businessApplication.create).not.toHaveBeenCalled();
+  });
+
+  it("resubmits an application that is waiting for changes", async () => {
+    const existing = {
+      id: "app_changes",
+      applicantUserId: actor.userId,
+      status: "changes_requested",
+      name: validInput.name,
+      submittedAt: new Date("2026-09-04T10:00:00.000Z")
+    };
+    const { repo, prisma } = makeApplicationRepo(existing);
+    prisma.businessApplication.findUnique.mockResolvedValue(existing);
+    prisma.businessApplication.update.mockResolvedValue({
+      ...existing,
+      status: "submitted",
+      reviewNote: null,
+      submittedAt: new Date("2026-09-04T11:00:00.000Z")
+    });
+
+    const result = await repo.submitBusinessApplication({ ...validInput, applicationId: "app_changes" }, actor, {
+      acceptedTerms: true,
+      acceptedTermsVersion: "terms-v4"
+    });
+
+    expect(result).toMatchObject({ id: "app_changes", status: "submitted" });
+    expect(prisma.businessApplication.update).toHaveBeenCalledWith({
+      where: { id: "app_changes" },
+      data: expect.objectContaining({
+        status: "submitted",
+        acceptedTermsVersion: "terms-v4",
+        reviewNote: null
+      })
     });
     expect(prisma.businessApplication.create).not.toHaveBeenCalled();
   });

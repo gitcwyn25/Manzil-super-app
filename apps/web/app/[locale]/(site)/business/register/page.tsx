@@ -5,6 +5,7 @@ import { BusinessRegisterWizard } from "../../../../components/business/business
 import { PrimaryCta } from "../../../../components/vm/primary-cta";
 import { BrandPanel, SplitAuthShell } from "../../../../components/vm/split-auth-shell";
 import { getCategories } from "../../../../lib/api";
+import { getBusinessApplication } from "../../../../lib/crm-api";
 import { getCrmCopy } from "../../../../lib/crm-copy";
 import { getRegistrationTerms } from "../../../../lib/legal-api";
 import { routeMetadata } from "../../../../lib/seo";
@@ -24,13 +25,17 @@ export async function generateMetadata({
  * Modern Multi-Step Business Onboarding.
  */
 export default async function RegisterBusinessPage({
-  params
+  params,
+  searchParams
 }: {
   params: Promise<{ locale: Locale }>;
+  searchParams: Promise<{ application?: string }>;
 }) {
   const { locale } = await params;
+  const { application: applicationId } = await searchParams;
   const copy = getCrmCopy(locale);
   const { userId } = await auth();
+  const registerPath = `/${locale}/business/register${applicationId ? `?application=${encodeURIComponent(applicationId)}` : ""}`;
 
   const panel = (
     <BrandPanel
@@ -54,13 +59,13 @@ export default async function RegisterBusinessPage({
           </header>
           <PrimaryCta
             className="vm-auth-submit"
-            href={`/${locale}/sign-in?redirect_url=${encodeURIComponent(`/${locale}/business/register`)}`}
+            href={`/${locale}/sign-in?redirect_url=${encodeURIComponent(registerPath)}`}
           >
             {copy.register.signIn}
           </PrimaryCta>
           <p className="vm-auth-switch">
             <span>{copy.register.signUpPrompt}</span>
-            <a href={`/${locale}/sign-up?redirect_url=${encodeURIComponent(`/${locale}/business/register`)}`}>
+            <a href={`/${locale}/sign-up?redirect_url=${encodeURIComponent(registerPath)}`}>
               {copy.register.signUpCta}
             </a>
           </p>
@@ -69,8 +74,12 @@ export default async function RegisterBusinessPage({
     );
   }
 
-  const categories = await getCategories();
-  const { terms } = await getRegistrationTerms(locale);
+  const [categories, { terms }] = await Promise.all([
+    getCategories(),
+    getRegistrationTerms(locale)
+  ]);
+  const application = applicationId ? await getBusinessApplication(applicationId) : null;
+  const initialApplication = application?.status === "changes_requested" ? application : undefined;
 
   return (
     <SplitAuthShell panel={panel}>
@@ -79,6 +88,7 @@ export default async function RegisterBusinessPage({
           categories={categories}
           locale={locale}
           terms={terms}
+          initialApplication={initialApplication}
         />
       </div>
     </SplitAuthShell>

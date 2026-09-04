@@ -1,9 +1,25 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { consoleSend, getMe } from "./console";
+import { consoleGet, consoleSend, getMeResult } from "./console";
 
 type ActionState = { ok: boolean; error?: string };
+
+export type WaitlistBusinessCandidate = {
+  id: string;
+  slug: string;
+  name: string;
+  status: string;
+  category: string;
+  district: string;
+  address: string;
+  phone: string | null;
+  owner: { email: string | null; displayName: string } | null;
+};
+
+export type BusinessLookupState =
+  | { ok: true; businesses: WaitlistBusinessCandidate[] }
+  | { ok: false; error: string };
 
 /**
  * Step-up guard for destructive actions: re-fetch the admin's live permissions
@@ -11,9 +27,13 @@ type ActionState = { ok: boolean; error?: string };
  * exploited from a stale page/session. The API re-checks again independently.
  */
 async function ensure(permission: string): Promise<string | null> {
-  const me = await getMe();
-  if (!me) return "Your admin session is no longer valid. Please sign in again.";
-  if (!me.permissions.includes(permission)) return `You no longer have the '${permission}' permission.`;
+  const result = await getMeResult();
+  if (!result.ok) {
+    if (result.status === 401 || result.status === 403) return "Your admin session is no longer valid or lacks access. Please sign in again.";
+    return `Console API unavailable (${result.status}). No change was made; retry after the service recovers.`;
+  }
+  const me = result.data;
+  if (!me.permissions.includes(permission) && !me.permissions.includes("*")) return `You no longer have the '${permission}' permission.`;
   return null;
 }
 
@@ -23,6 +43,18 @@ function field(form: FormData, key: string): string {
 }
 
 /* ---------- businesses ---------- */
+
+export async function lookupWaitlistBusinesses(query: string): Promise<BusinessLookupState> {
+  const denied = await ensure("business.view");
+  if (denied) return { ok: false, error: denied };
+  const normalized = query.trim();
+  if (normalized.length < 2) return { ok: true, businesses: [] };
+
+  const result = await consoleGet<{ businesses: WaitlistBusinessCandidate[] }>(
+    `/businesses?q=${encodeURIComponent(normalized)}&take=8`
+  );
+  return result.ok ? { ok: true, businesses: result.data.businesses } : { ok: false, error: result.error };
+}
 
 export async function approveBusiness(_prev: ActionState, form: FormData): Promise<ActionState> {
   const denied = await ensure("business.approve");
@@ -48,6 +80,50 @@ export async function mergeBusiness(_prev: ActionState, form: FormData): Promise
     reason: field(form, "reason")
   });
   revalidatePath("/businesses");
+  return r.ok ? { ok: true } : { ok: false, error: r.error };
+}
+
+/* ---------- business applications ---------- */
+
+function revalidateApplication(id: string) {
+  revalidatePath("/applications");
+  revalidatePath(`/applications/${id}`);
+  revalidatePath("/businesses");
+}
+
+export async function reviewBusinessApplication(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const denied = await ensure("business.approve");
+  if (denied) return { ok: false, error: denied };
+  const id = field(form, "id");
+  const r = await consoleSend(`/business-applications/${id}/under-review`, "POST", { reason: field(form, "reason") });
+  revalidateApplication(id);
+  return r.ok ? { ok: true } : { ok: false, error: r.error };
+}
+
+export async function requestBusinessApplicationChanges(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const denied = await ensure("business.approve");
+  if (denied) return { ok: false, error: denied };
+  const id = field(form, "id");
+  const r = await consoleSend(`/business-applications/${id}/request-changes`, "POST", { reason: field(form, "reason") });
+  revalidateApplication(id);
+  return r.ok ? { ok: true } : { ok: false, error: r.error };
+}
+
+export async function approveBusinessApplication(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const denied = await ensure("business.approve");
+  if (denied) return { ok: false, error: denied };
+  const id = field(form, "id");
+  const r = await consoleSend(`/business-applications/${id}/approve`, "POST", { reason: field(form, "reason") });
+  revalidateApplication(id);
+  return r.ok ? { ok: true } : { ok: false, error: r.error };
+}
+
+export async function rejectBusinessApplication(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const denied = await ensure("business.reject");
+  if (denied) return { ok: false, error: denied };
+  const id = field(form, "id");
+  const r = await consoleSend(`/business-applications/${id}/reject`, "POST", { reason: field(form, "reason") });
+  revalidateApplication(id);
   return r.ok ? { ok: true } : { ok: false, error: r.error };
 }
 
@@ -140,7 +216,8 @@ export async function editBusinessDetail(_prev: ActionState, form: FormData): Pr
   const editable = ["name", "address", "district", "phone", "email", "website", "priceTier"] as const;
   const payload: Record<string, string> = {};
   for (const key of editable) {
-    const value = field(form, key);
+    const rawValue = field(form, key);
+    const value = key === "priceTier" && rawValue === "__none" ? "" : rawValue;
     if (value) payload[key] = value;
   }
 
@@ -201,15 +278,89 @@ export async function upsertCategory(_prev: ActionState, form: FormData): Promis
   const denied = await ensure("category.manage");
   if (denied) return { ok: false, error: denied };
 
-  const id = field(form, "id");
+  const rawId = field(form, "id");
+  const id = rawId === "__create" ? "" : rawId;
+  const rawParentId = field(form, "parentId");
+  const parentId = rawParentId === "__none" ? "" : rawParentId;
   const r = await consoleSend("/categories", "POST", {
     ...(id ? { id } : {}),
     slug: field(form, "slug"),
     nameUz: field(form, "nameUz"),
     nameRu: field(form, "nameRu"),
     nameEn: field(form, "nameEn"),
-    parentId: field(form, "parentId") || null
+    parentId: parentId || null
   });
   revalidatePath("/categories");
+  return r.ok ? { ok: true } : { ok: false, error: r.error };
+}
+
+/* ---------- merchant activation ---------- */
+
+export async function transitionWaitlist(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const denied = await ensure("waitlist.manage");
+  if (denied) return { ok: false, error: denied };
+  const r = await consoleSend(`/waitlist/${field(form, "id")}/transition`, "POST", {
+    status: field(form, "status"),
+    reason: field(form, "reason") || undefined,
+    expectedUpdatedAt: field(form, "expectedUpdatedAt") || undefined
+  });
+  revalidatePath("/waitlist");
+  return r.ok ? { ok: true } : { ok: false, error: r.error };
+}
+
+export async function assignWaitlist(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const denied = await ensure("waitlist.manage");
+  if (denied) return { ok: false, error: denied };
+  const adminId = field(form, "adminId");
+  const r = await consoleSend(`/waitlist/${field(form, "id")}/assignment`, "PATCH", {
+    adminId: adminId || null,
+    expectedUpdatedAt: field(form, "expectedUpdatedAt") || undefined
+  });
+  revalidatePath("/waitlist");
+  return r.ok ? { ok: true } : { ok: false, error: r.error };
+}
+
+export async function connectWaitlistCompany(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const denied = await ensure("business.connect");
+  if (denied) return { ok: false, error: denied };
+  const r = await consoleSend(`/waitlist/${field(form, "id")}/connect`, "POST", {
+    businessId: field(form, "businessId"),
+    reason: field(form, "reason"),
+    expectedUpdatedAt: field(form, "expectedUpdatedAt") || undefined
+  });
+  revalidatePath("/waitlist");
+  return r.ok ? { ok: true } : { ok: false, error: r.error };
+}
+
+export async function queueWaitlistEmailDraft(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const denied = await ensure("outbox.create");
+  if (denied) return { ok: false, error: denied };
+  const subject = field(form, "subject");
+  const body = field(form, "body");
+  const r = await consoleSend(`/waitlist/${field(form, "id")}/email-drafts`, "POST", {
+    ...(subject ? { subject } : {}),
+    ...(body ? { body } : {})
+  });
+  revalidatePath("/waitlist");
+  revalidatePath("/outbox");
+  return r.ok ? { ok: true } : { ok: false, error: r.error };
+}
+
+export async function retryOutboxMessage(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const denied = await ensure("outbox.retry");
+  if (denied) return { ok: false, error: denied };
+  const r = await consoleSend(`/outbox/${field(form, "id")}/retry`, "POST", { reason: field(form, "reason") });
+  revalidatePath("/outbox");
+  revalidatePath("/waitlist");
+  return r.ok ? { ok: true } : { ok: false, error: r.error };
+}
+
+export async function activateSignature(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const denied = await ensure("signature.create");
+  if (denied) return { ok: false, error: denied };
+  const title = field(form, "title");
+  const r = await consoleSend("/signature", "POST", title ? { title } : {});
+  revalidatePath("/signature");
+  revalidatePath("/team");
   return r.ok ? { ok: true } : { ok: false, error: r.error };
 }

@@ -53,10 +53,20 @@ export type CrmBusinessApplication = {
   status: "draft" | "submitted" | "under_review" | "changes_requested" | "approved" | "rejected" | "withdrawn";
   name: string;
   categorySlug: string;
+  descriptionUz: string;
   address: string;
   district: string;
+  city: string;
+  phone: string | null;
+  email: string | null;
+  website: string | null;
+  telegram: string | null;
+  workingHours: unknown;
+  acceptedTermsVersion: string | null;
+  acceptedTermsAt: string | null;
   submittedAt: string | null;
   reviewNote: string | null;
+  business: { id: string; slug: string; name: string; status: string } | null;
 };
 
 export function getBusinessApplication(id: string) {

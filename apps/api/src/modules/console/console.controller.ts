@@ -74,8 +74,8 @@ export class ConsoleController {
 
   @Get("businesses")
   @RequirePermission("business.view")
-  async businesses(@Query("status") status?: string, @Query("q") q?: string) {
-    return { data: { businesses: await this.repo.listBusinesses({ status, q }) } };
+  async businesses(@Query("status") status?: string, @Query("q") q?: string, @Query("take") take?: string) {
+    return { data: { businesses: await this.repo.listBusinesses({ status, q, take: take !== undefined ? Number(take) : undefined }) } };
   }
 
   @Get("businesses/:id/duplicates")
