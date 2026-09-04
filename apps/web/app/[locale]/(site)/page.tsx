@@ -8,7 +8,6 @@ import { CleverFeatures } from "../../components/home/clever-features";
 import { CleverHero } from "../../components/home/clever-hero";
 import { CleverProcess } from "../../components/home/clever-process";
 import { GurmanPreview } from "../../components/home/gurman-preview";
-import { getHomeFeed } from "../../lib/api";
 import { getLandingCopy } from "../../lib/landing-copy";
 import { routeMetadata } from "../../lib/seo";
 
@@ -25,7 +24,7 @@ export async function generateMetadata({
  * Home — one Manzil system with a clear current/future boundary:
  * 1. Hero: Discover is live; Gurman is mobile/future.
  * 2. Benefits: factual directory value.
- * 3. Directory proof: real getHomeFeed data.
+ * 3. Directory boundary: real listings belong to Discover only.
  * 4. GurmanPreview: static mobile planning concept and waitlist path.
  * 5. Features: Discover and business capabilities.
  * 6. Process: how the current directory supports a decision.
@@ -38,12 +37,6 @@ export default async function LandingPage({
 }) {
   const { locale } = await params;
   const copy = getLandingCopy(locale);
-  const feed = await getHomeFeed(locale);
-
-  const ranked = [
-    ...(feed.sections?.featured ?? []),
-    ...(feed.sections?.justJoined ?? [])
-  ].filter((card, i, all) => all.findIndex((other) => other.slug === card.slug) === i);
 
   return (
     <>
@@ -54,7 +47,7 @@ export default async function LandingPage({
 
       <CleverHero copy={copy.hero} locale={locale} />
       <CleverBenefits copy={copy.benefits} />
-      <BentoBusinessGrid businesses={ranked} copy={copy.bento} locale={locale} />
+      <BentoBusinessGrid businesses={[]} copy={copy.bento} locale={locale} />
       <GurmanPreview copy={copy.gurman} locale={locale} />
       <CleverFeatures copy={copy.features} locale={locale} />
       <CleverProcess copy={copy.process} />
