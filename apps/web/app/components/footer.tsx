@@ -217,11 +217,9 @@ export function Footer({ locale }: { locale: Locale }) {
           {/* Social Channels */}
           <div className="manzil-footer-bottom__socials">
             <a
-              aria-label="Telegram"
+              aria-label="Email"
               className="manzil-footer-bottom__social-btn"
-              href="https://t.me/manzilbiz_bot"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="mailto:tursunovsunnatilla223@gmail.com"
             >
               <Image
                 src={`${A}/email.svg`}
@@ -247,14 +245,14 @@ export function Footer({ locale }: { locale: Locale }) {
               />
             </a>
             <a
-              aria-label="LinkedIn"
+              aria-label="YouTube"
               className="manzil-footer-bottom__social-btn"
-              href="https://linkedin.com"
+              href="https://www.youtube.com/@ManzilGroupUz"
               target="_blank"
               rel="noopener noreferrer"
             >
               <Image
-                src={`${A}/linkedin.svg`}
+                src={`${A}/youtube.svg`}
                 alt=""
                 width={18}
                 height={18}
