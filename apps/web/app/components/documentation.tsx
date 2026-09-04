@@ -1,4 +1,5 @@
 import type { Locale } from "@manzil/shared";
+import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { docGroups, docMarkdown, docs, founderProfiles, founderSectionCopy, type DocId } from "../lib/docs";
@@ -188,6 +189,9 @@ function FounderProfiles({ locale }: { locale: Locale }) {
             <div className="founder-card__topline">
               <span className="founder-card__index">0{index + 1}</span>
               <span className="founder-card__mark" aria-hidden="true">{founder.initials}</span>
+            </div>
+            <div className="founder-card__portrait">
+              <Image src={founder.image} alt={founder.name[locale]} fill sizes="(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 25vw" />
             </div>
             <div className="founder-card__identity">
               <h3 id={headingId(founder.name[locale])}>{founder.name[locale]}</h3>
