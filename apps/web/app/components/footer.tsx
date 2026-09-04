@@ -264,7 +264,7 @@ export function Footer({ locale }: { locale: Locale }) {
             <a
               aria-label="X"
               className="manzil-footer-bottom__social-btn"
-              href="https://x.com"
+              href="https://x.com/ManzilUz"
               target="_blank"
               rel="noopener noreferrer"
             >
