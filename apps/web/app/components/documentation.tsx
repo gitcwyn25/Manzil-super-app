@@ -1,7 +1,7 @@
 import type { Locale } from "@manzil/shared";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { docGroups, docMarkdown, docs, type DocId } from "../lib/docs";
+import { docGroups, docMarkdown, docs, founderProfiles, founderSectionCopy, type DocId } from "../lib/docs";
 
 const notice: Record<Locale, string> = {
   uz: "Loyiha — nashrdan oldin malakali O‘zbekiston yuristi ko‘rib chiqishi kerak.",
@@ -155,6 +155,66 @@ function markdown(source: string, locale: Locale) {
   }
 
   return nodes;
+}
+
+function aboutFounderSplit(source: string, locale: Locale) {
+  const lines = source.split(/\r?\n/);
+  const founderHeading = `## ${founderSectionCopy[locale].title}`;
+  const founderIndex = lines.findIndex((line) => line.trim() === founderHeading);
+  if (founderIndex < 0) return null;
+
+  const nextHeadingIndex = lines.findIndex((line, index) => index > founderIndex && /^##\s+/.test(line));
+  const end = nextHeadingIndex < 0 ? lines.length : nextHeadingIndex;
+  return {
+    before: lines.slice(0, founderIndex).join("\n"),
+    after: lines.slice(end).join("\n")
+  };
+}
+
+function FounderProfiles({ locale }: { locale: Locale }) {
+  const section = founderSectionCopy[locale];
+  return (
+    <section className="founders-panel" aria-labelledby={headingId(section.title)}>
+      <div className="founders-panel__intro">
+        <div>
+          <span className="founders-panel__kicker">01 / {locale === "uz" ? "Jamoa" : locale === "ru" ? "Команда" : "Team"}</span>
+          <h2 id={headingId(section.title)}>{section.title}</h2>
+        </div>
+        <p>{section.intro}</p>
+      </div>
+      <div className="founders-grid">
+        {founderProfiles.map((founder, index) => (
+          <article className="founder-card" key={founder.id}>
+            <div className="founder-card__topline">
+              <span className="founder-card__index">0{index + 1}</span>
+              <span className="founder-card__mark" aria-hidden="true">{founder.initials}</span>
+            </div>
+            <div className="founder-card__identity">
+              <h3 id={headingId(founder.name[locale])}>{founder.name[locale]}</h3>
+              <p className="founder-card__role">{founder.role[locale]}</p>
+            </div>
+            <p className="founder-card__bio">{founder.bio[locale]}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ArticleContent({ id, locale, content }: { id: DocId; locale: Locale; content: string }) {
+  if (id === "founders") return <FounderProfiles locale={locale} />;
+  if (id !== "about") return <>{markdown(content, locale)}</>;
+
+  const split = aboutFounderSplit(content, locale);
+  if (!split) return <>{markdown(content, locale)}</>;
+
+  return (
+    <>
+      {markdown(split.before, locale)}
+      <FounderProfiles locale={locale} />
+      {markdown(split.after, locale)}
+    </>
+  );
 }
 
 function businessLinks(locale: Locale) {
@@ -324,9 +384,9 @@ export function DocumentationPage({ id, locale }: { id: DocId; locale: Locale })
               {["uz", "ru", "en"].map((item) => <Link aria-current={item === locale ? "page" : undefined} href={`/${item}${doc.path}`} key={item}>{item.toUpperCase()}</Link>)}
             </div>
             {doc.legal && <p className="docs-notice">{notice[locale]}</p>}
-            <small>{t.updated}: 2 September 2026</small>
+            <small>{t.updated}: {doc.updated?.[locale] ?? "2 September 2026"}</small>
           </header>
-          <div className="docs-article__content">{markdown(content, locale)}</div>
+          <div className="docs-article__content"><ArticleContent id={id} locale={locale} content={content} /></div>
           <Link className="docs-back" href={`/${locale}/docs`}>← {t.back}</Link>
         </main>
         <ArticleToc id={id} locale={locale} />
