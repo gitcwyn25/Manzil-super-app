@@ -262,6 +262,127 @@ export class CrmRepository {
   }
 
   /* ------------------------------------------------------------------ */
+  /**
+   * Phase 1 onboarding boundary. Unlike registerBusiness, this method never
+   * creates a Business, Claim, Contract, or workspace membership. It records
+   * the applicant's submitted snapshot for Manzil review first.
+   */
+  async submitBusinessApplication(
+    input: BusinessRegistrationInput & { workingHours?: string },
+    actor: AuthActor,
+    acceptance: {
+      acceptedTerms: boolean;
+      acceptedTermsVersion: string;
+      ipAddress?: string | null;
+      userAgent?: string | null;
+    }
+  ) {
+    const name = input.name?.trim();
+    const description = input.descriptionUz?.trim();
+    const address = input.address?.trim();
+    const district = input.district?.trim();
+    const categorySlug = input.categorySlug?.trim();
+
+    if (!name || name.length < 2 || name.length > 120) {
+      throw new BadRequestException("Business name must be 2–120 characters");
+    }
+    if (!description || description.length < 10) {
+      throw new BadRequestException("Description must be at least 10 characters");
+    }
+    if (!address || !district) {
+      throw new BadRequestException("Address and district are required");
+    }
+    if (!categorySlug) {
+      throw new BadRequestException("Category is required");
+    }
+    if (!acceptance.acceptedTerms || !acceptance.acceptedTermsVersion) {
+      throw new BadRequestException("You must accept the current terms to submit a business application");
+    }
+    if (input.website && !/^https?:\/\/.+\..+/.test(input.website.trim())) {
+      throw new BadRequestException("Website must be a valid http(s) URL");
+    }
+
+    const category = await this.prisma.category.findUnique({ where: { slug: categorySlug } });
+    if (!category) {
+      throw new BadRequestException("Selected category is not available");
+    }
+
+    const applicant = await this.prisma.user.upsert({
+      where: { id: actor.userId },
+      update: {},
+      create: {
+        id: actor.userId,
+        displayName: "Business Applicant",
+        locale: "uz"
+      }
+    });
+
+    const existing = await this.prisma.businessApplication.findFirst({
+      where: {
+        applicantUserId: applicant.id,
+        name: { equals: name, mode: "insensitive" },
+        status: { notIn: ["rejected", "withdrawn"] }
+      },
+      orderBy: { createdAt: "desc" }
+    });
+    if (existing) {
+      return {
+        id: existing.id,
+        status: existing.status,
+        name: existing.name,
+        submittedAt: existing.submittedAt
+      };
+    }
+
+    const submittedAt = new Date();
+    const application = await this.prisma.businessApplication.create({
+      data: {
+        applicantUserId: applicant.id,
+        status: "submitted",
+        name,
+        categorySlug,
+        descriptionUz: description,
+        address,
+        district,
+        city: input.city?.trim() || "Tashkent",
+        phone: input.phone?.trim() || undefined,
+        email: input.email?.trim() || undefined,
+        website: input.website?.trim() || undefined,
+        telegram: input.telegram?.trim() || undefined,
+        workingHours: input.workingHours?.trim() || undefined,
+        acceptedTermsVersion: acceptance.acceptedTermsVersion,
+        acceptedTermsAt: submittedAt,
+        acceptedTermsIp: acceptance.ipAddress ?? undefined,
+        acceptedTermsUserAgent: acceptance.userAgent ?? undefined,
+        submittedAt
+      }
+    });
+
+    return {
+      id: application.id,
+      status: application.status,
+      name: application.name,
+      submittedAt: application.submittedAt
+    };
+  }
+
+  async getBusinessApplication(id: string, actor: AuthActor) {
+    const application = await this.prisma.businessApplication.findUnique({ where: { id } });
+    if (!application || application.applicantUserId !== actor.userId) {
+      throw new NotFoundException("Business application not found");
+    }
+    return {
+      id: application.id,
+      status: application.status,
+      name: application.name,
+      categorySlug: application.categorySlug,
+      address: application.address,
+      district: application.district,
+      submittedAt: application.submittedAt,
+      reviewNote: application.reviewNote
+    };
+  }
+
   /* Ownership guard                                                     */
   /* ------------------------------------------------------------------ */
 
