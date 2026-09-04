@@ -41,22 +41,32 @@ function applyTheme(preference: ThemePreference): ResolvedTheme {
   return resolvedTheme;
 }
 
+function getInitialPreference(): ThemePreference {
+  if (typeof window === "undefined") return "system";
+
+  try {
+    const stored = window.localStorage.getItem(STORAGE_KEY);
+    return isThemePreference(stored) ? stored : "system";
+  } catch {
+    // Private browsing and blocked storage should not prevent the theme UI.
+    return "system";
+  }
+}
+
+function getInitialResolvedTheme(preference: ThemePreference): ResolvedTheme {
+  if (typeof window === "undefined") return "day";
+  return preference === "system" ? getSystemTheme() : preference;
+}
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [preference, setPreferenceState] = useState<ThemePreference>("system");
-  const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>("day");
+  const [preference, setPreferenceState] = useState<ThemePreference>(getInitialPreference);
+  const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>(() =>
+    getInitialResolvedTheme(getInitialPreference())
+  );
 
   useEffect(() => {
-    let stored: string | null = null;
-    try {
-      stored = window.localStorage.getItem(STORAGE_KEY);
-    } catch {
-      // Private browsing and blocked storage should not prevent the theme UI.
-    }
-
-    const nextPreference = isThemePreference(stored) ? stored : "system";
-    setPreferenceState(nextPreference);
-    setResolvedTheme(applyTheme(nextPreference));
-  }, []);
+    applyTheme(preference);
+  }, [preference]);
 
   useEffect(() => {
     if (preference !== "system") return;

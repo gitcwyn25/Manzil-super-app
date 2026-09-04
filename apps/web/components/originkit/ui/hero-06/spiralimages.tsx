@@ -5,9 +5,27 @@ const RenderTarget = {
     thumbnail: "thumbnail",
     preview: "preview",
 }
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, type CSSProperties } from "react"
 
 const TWO_PI = Math.PI * 2
+
+type SpiralImage = {
+    src?: string
+}
+
+type SpiralImagesProps = {
+    images?: SpiralImage[]
+    turns?: number
+    speed?: number
+    spacing?: number
+    spread?: number
+    sizeAttenuation?: number
+    imageSize?: number
+    fadeIn?: number
+    fadeOut?: number
+    cornerRadius?: number
+    style?: CSSProperties
+}
 
 // 30 stable seeded images (used when no Content is set in Framer).
 const DEFAULT_IMAGES = [
@@ -68,8 +86,7 @@ const DEFAULT_IMAGES = [
  * @framerIntrinsicHeight 600
  * @framerDisableUnlink
  */
-export default function SpiralImages(props: any) {
-    props = { ...COMPONENT_DEFAULTS, ...props }
+export default function SpiralImages(props: SpiralImagesProps = {}) {
     const {
         images = DEFAULT_IMAGES,
         turns = 3.5,
@@ -93,12 +110,12 @@ export default function SpiralImages(props: any) {
 
     const isCanvas = RenderTarget.current() === RenderTarget.canvas
 
-    const items: any[] = images.length > 0 ? images : DEFAULT_IMAGES
+    const items = images.length > 0 ? images : DEFAULT_IMAGES
 
     // Load images whenever the source list changes.
-    const srcKey = items.map((im: any) => im?.src || "").join("|")
+    const srcKey = items.map((im) => im?.src || "").join("|")
     useEffect(() => {
-        imgsRef.current = items.map((im: any) => {
+        imgsRef.current = items.map((im) => {
             if (!im?.src) return null
             const el = new Image()
             el.crossOrigin = "anonymous"
@@ -316,19 +333,6 @@ export default function SpiralImages(props: any) {
             <canvas ref={canvasRef} style={{ display: "block" }} />
         </div>
     )
-}
-
-const COMPONENT_DEFAULTS = {
-    images: DEFAULT_IMAGES,
-    turns: 3.5,
-    speed: 2,
-    spacing: 5,
-    spread: 6,
-    imageSize: 200,
-    sizeAttenuation: 2,
-    fadeIn: 20,
-    fadeOut: 0,
-    cornerRadius: 5,
 }
 
 SpiralImages.displayName = "Spiral Images"

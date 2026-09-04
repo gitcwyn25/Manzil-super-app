@@ -29,11 +29,11 @@ import "./styles/vibrant.scss";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Manzil — Toshkentdagi joylarni Gurman AI bilan toping",
+    default: "Manzil — Toshkentdagi joylarni kashf eting",
     template: "%s | Manzil"
   },
   description:
-    "Toshkentdagi kafe, restoran va xizmatlarni haqiqiy sharhlar asosida toping. Gurman AI so'rovingizga qarab katalogdagi real joylarni tavsiya qiladi.",
+    "Toshkentdagi kafe, restoran va xizmatlarni haqiqiy sharhlar asosida toping.",
   applicationName: "Manzil",
   referrer: "strict-origin-when-cross-origin",
   formatDetection: { telephone: false, address: false, email: false },

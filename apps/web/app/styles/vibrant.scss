@@ -162,10 +162,10 @@
 
 // Discover (task A1): planner hero + category bento + curated rows (browse
 // state) and the filter-sidebar results layout (filtered state). Loads after
-// vm-kit so its .home-card/.home-category/.gurman-hero restatements win.
+// vm-kit so its shared card restatements win.
 @import "discover";
 
-// Home (task A2): green concierge hero, AI feature trio, bento business grid.
+// Home: feature trio and bento business grid.
 // Loads after discover so .home-card.home-featured outranks the shared
 // Master Card recipe where the featured slot's anatomy differs.
 @import "home";
@@ -179,11 +179,6 @@
 // /business/register, /sign-in, /sign-up, including the restyle of the
 // e2e-locked terms/consent markup.
 @import "auth";
-
-// Concierge chat (task E): the .concierge-* re-skin — two-column layout, chat
-// bubbles, typing dots, IconField input bar — plus the grounded package-panel
-// placeholder (the mock's priced itinerary is deferred per D8).
-@import "concierge";
 
 // Workspace shell (task D1): the /dashboard chrome — 256px light rail, mobile
 // top bar + drawer — on new ws-* selectors (shell-boundary contract: no
@@ -389,13 +384,9 @@ h6 {
 
 @import "discover-cinema";
 
-@import "gurman-composer";
-
 @import "discover-marketplace";
 
-@import "gurman-experience";
 @import "docs";
 
-// Appearance is intentionally last: it must be able to retint both the
-// converted marketplace shell and the older global component recipes.
+// Appearance is last so Day/Night/System can retint the active public shells.
 @import "theme";

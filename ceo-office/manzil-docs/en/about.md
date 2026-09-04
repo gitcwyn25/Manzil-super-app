@@ -14,17 +14,22 @@ Gurman AI helps users find suitable options by considering their natural-languag
 
 ## Founders
 
-> This section must be completed before publication with the founders’ verified names, positions, short biographies, and photographs.
+Manzil is being built by a founding team focused on making local places and businesses easier to discover and trust.
 
-### [Ta’sischi 1 — ism-familiya]
-**Position:** [CEO / Co-founder]
+### Sunnatilla Tursunov
+**Position:** Founder
 
-[100–150 so‘zli bio: tajriba, Manzilni yaratish sababi, mahalliy ekotizimga aloqasi.]
+Sunnatilla Tursunov is an International Economist and TSUE alumnus. He founded Manzil and is building it as a platform that makes it easier for people to find real places in Uzbekistan and for local businesses to reach the right customers.
 
-### [Ta’sischi 2 — ism-familiya]
-**Position:** [CTO / Co-founder]
+### Khayitov Muhammadkarim
+**Position:** Co-founder · CMO
 
-[100–150 so‘zli bio.]
+Khayitov Muhammadkarim is an International Economist and TSUE alumnus. He is a member of 605 Marketing Agency and oversees Manzil Group’s marketing and sales.
+
+### Ismoilov Abduqodir
+**Position:** Co-founder · CEO, daraxtkent.uz
+
+Ismoilov Abduqodir is an International Economist and TSUE alumnus. As CEO of daraxtkent.uz, he oversees Manzil’s operations and business relations.
 
 ## Our Mission
 
@@ -56,4 +61,4 @@ To become a trusted, local, and intelligent digital guide for every city—creat
 
 Manzil’s legal documents: [Xizmat shartlari](/en/legal/terms), [Maxfiylik siyosati](/en/legal/privacy), [Cookie siyosati](/en/legal/cookies).
 
-*Last updated: September 2, 2026. Update once the founders’ and legal entity information has been verified.*
+*Last updated: September 4, 2026. Update once the legal entity information has been verified.*

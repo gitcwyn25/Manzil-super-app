@@ -58,7 +58,7 @@ export function CleverWaitlistCard({ copy }: { copy: CleverWaitlistCopy }) {
                   <option value="Buxoro">Buxoro</option>
                   <option value="Namangan">Namangan</option>
                   <option value="Andijon">Andijon</option>
-                  <option value="Farg'ona">Farg'ona</option>
+                  <option value="Farg'ona">Farg&apos;ona</option>
                   <option value="Xiva / Urganch">Xiva / Urganch</option>
                   <option value="Qarshi">Qarshi</option>
                   <option value="Nukus">Nukus</option>

@@ -30,32 +30,32 @@ const BENTO_COPY: Record<
         title: "Biznesingizni rasman tasdiqlang",
         desc: "Kompaniya ma'lumotlari, ish vaqti, menyu, fotosuratlar va telefon raqamlarini o'zingiz to'g'ridan-to'g'ri yangilang.",
         icon: "storefront",
-        metric: "100%",
-        metricLabel: "To'liq boshqaruv"
+        metric: "01",
+        metricLabel: "O'zingiz boshqaring"
       },
       {
-        tag: "AI Konsyerj",
-        title: "Gurman AI tavsiyalarida ustunlik",
-        desc: "Gurman AI foydalanuvchilarga joy tavsiya qilganda sizning tasdiqlangan profilingiz va sharhlaringiz birinchi o'rinda chiqadi.",
+        tag: "Katalog ko'rinishi",
+        title: "Katalogda aniq profil",
+        desc: "Profilingiz va sharhlaringiz Manzil katalogida mijozlarga tushunarli ko'rinadi.",
         icon: "sparkles",
-        metric: "3.2x",
-        metricLabel: "Ko'proq tavsiyalar"
+        metric: "02",
+        metricLabel: "Haqiqiy ma'lumotlar"
       },
       {
         tag: "Obro' Himoyasi",
         title: "Sharhlarga rasmiy egasi sifatida javob bering",
         desc: "Mijozlar fikrini qabul qiling, savollarga tezkor javob yo'llang va yuksak xizmat ko'rsatish madaniyatini namoyish eting.",
         icon: "verified",
-        metric: "4.9 ★",
-        metricLabel: "Ishonch darajasi"
+        metric: "03",
+        metricLabel: "Ochiq muloqot"
       },
       {
         tag: "Chuqur Analitika",
         title: "Mijozlar qiziqishini real vaqtda kuzating",
         desc: "Profil ko'rishlar, yo'nalish olishlar, telefon qo'ng'iroqlari va eng faol kunlar haqida batafsil statistika oling.",
         icon: "chart",
-        metric: "+45%",
-        metricLabel: "Qo'ng'iroqlar o'sishi"
+        metric: "04",
+        metricLabel: "Real faollik"
       }
     ]
   },
@@ -69,32 +69,32 @@ const BENTO_COPY: Record<
         title: "Официально подтвердите компанию",
         desc: "Обновляйте график работы, фотографии, меню и контактные данные в режиме реального времени.",
         icon: "storefront",
-        metric: "100%",
-        metricLabel: "Полный контроль"
+        metric: "01",
+        metricLabel: "Вы управляете"
       },
       {
-        tag: "AI-консьерж",
-        title: "Приоритет в рекомендациях Gurman AI",
-        desc: "При поиске мест искусственный интеллект рекомендует верифицированные компании с высоким рейтингом в первую очередь.",
+        tag: "Каталог",
+        title: "Понятный профиль в каталоге",
+        desc: "Актуальные данные профиля помогают местным клиентам понять, какие услуги вы предлагаете.",
         icon: "sparkles",
-        metric: "3.2x",
-        metricLabel: "Больше рекомендаций"
+        metric: "02",
+        metricLabel: "Реальные данные"
       },
       {
         tag: "Репутация",
         title: "Отвечайте на отзывы гостей официально",
         desc: "Повышайте лояльность клиентов, оперативно реагируя на отзывы и демонстрируя высокий стандарт сервиса.",
         icon: "verified",
-        metric: "4.9 ★",
-        metricLabel: "Уровень доверия"
+        metric: "03",
+        metricLabel: "Открытый диалог"
       },
       {
         tag: "Аналитика",
         title: "Отслеживайте статистику просмотров",
         desc: "Получайте детальные отчеты по просмотрам, маршрутам, звонкам и пиковым часам активности гостей.",
         icon: "chart",
-        metric: "+45%",
-        metricLabel: "Рост обращений"
+        metric: "04",
+        metricLabel: "Реальная активность"
       }
     ]
   },
@@ -108,32 +108,32 @@ const BENTO_COPY: Record<
         title: "Claim and verify your business",
         desc: "Keep opening hours, photo galleries, menus, and contact information accurately updated in real time.",
         icon: "storefront",
-        metric: "100%",
-        metricLabel: "Full Control"
+        metric: "01",
+        metricLabel: "You stay in control"
       },
       {
-        tag: "AI Concierge",
-        title: "Priority Gurman AI recommendations",
-        desc: "Gurman AI prioritizes verified venues with authentic ratings when suggesting places to local guests.",
+        tag: "Catalogue",
+        title: "A clearer catalogue profile",
+        desc: "Accurate profile details help local guests understand what your business offers.",
         icon: "sparkles",
-        metric: "3.2x",
-        metricLabel: "More Recommendations"
+        metric: "02",
+        metricLabel: "Real catalogue data"
       },
       {
         tag: "Reputation Shield",
         title: "Official responses to customer reviews",
         desc: "Build credibility and customer loyalty by responding directly to visitor feedback as the verified business owner.",
         icon: "verified",
-        metric: "4.9 ★",
-        metricLabel: "Trust Score"
+        metric: "03",
+        metricLabel: "Open responses"
       },
       {
         tag: "Deep Analytics",
         title: "Real-time engagement insights",
         desc: "Track profile impressions, navigation route requests, direct phone dials, and peak visitor activity.",
         icon: "chart",
-        metric: "+45%",
-        metricLabel: "Lead Growth"
+        metric: "04",
+        metricLabel: "Real activity"
       }
     ]
   }

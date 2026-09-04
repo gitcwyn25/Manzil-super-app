@@ -1,8 +1,8 @@
 import type { Locale } from "@manzil/shared";
+import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import ScrollHighlight from "../../../../components/originkit/ui/scroll-text-highlight";
-import { docGroups, docMarkdown, docs, type DocId } from "../lib/docs";
+import { docGroups, docMarkdown, docs, founderProfiles, founderSectionCopy, type DocId } from "../lib/docs";
 
 const notice: Record<Locale, string> = {
   uz: "Loyiha — nashrdan oldin malakali O‘zbekiston yuristi ko‘rib chiqishi kerak.",
@@ -158,6 +158,69 @@ function markdown(source: string, locale: Locale) {
   return nodes;
 }
 
+function aboutFounderSplit(source: string, locale: Locale) {
+  const lines = source.split(/\r?\n/);
+  const founderHeading = `## ${founderSectionCopy[locale].title}`;
+  const founderIndex = lines.findIndex((line) => line.trim() === founderHeading);
+  if (founderIndex < 0) return null;
+
+  const nextHeadingIndex = lines.findIndex((line, index) => index > founderIndex && /^##\s+/.test(line));
+  const end = nextHeadingIndex < 0 ? lines.length : nextHeadingIndex;
+  return {
+    before: lines.slice(0, founderIndex).join("\n"),
+    after: lines.slice(end).join("\n")
+  };
+}
+
+function FounderProfiles({ locale }: { locale: Locale }) {
+  const section = founderSectionCopy[locale];
+  return (
+    <section className="founders-panel" aria-labelledby={headingId(section.title)}>
+      <div className="founders-panel__intro">
+        <div>
+          <span className="founders-panel__kicker">01 / {locale === "uz" ? "Jamoa" : locale === "ru" ? "Команда" : "Team"}</span>
+          <h2 id={headingId(section.title)}>{section.title}</h2>
+        </div>
+        <p>{section.intro}</p>
+      </div>
+      <div className="founders-grid">
+        {founderProfiles.map((founder, index) => (
+          <article className="founder-card" key={founder.id}>
+            <div className="founder-card__topline">
+              <span className="founder-card__index">0{index + 1}</span>
+              <span className="founder-card__mark" aria-hidden="true">{founder.initials}</span>
+            </div>
+            <div className="founder-card__portrait">
+              <Image src={founder.image} alt={founder.name[locale]} fill sizes="(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 25vw" />
+            </div>
+            <div className="founder-card__identity">
+              <h3 id={headingId(founder.name[locale])}>{founder.name[locale]}</h3>
+              <p className="founder-card__role">{founder.role[locale]}</p>
+            </div>
+            <p className="founder-card__bio">{founder.bio[locale]}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ArticleContent({ id, locale, content }: { id: DocId; locale: Locale; content: string }) {
+  if (id === "founders") return <FounderProfiles locale={locale} />;
+  if (id !== "about") return <>{markdown(content, locale)}</>;
+
+  const split = aboutFounderSplit(content, locale);
+  if (!split) return <>{markdown(content, locale)}</>;
+
+  return (
+    <>
+      {markdown(split.before, locale)}
+      <FounderProfiles locale={locale} />
+      {markdown(split.after, locale)}
+    </>
+  );
+}
+
 function businessLinks(locale: Locale) {
   return [
     { href: `/${locale}/business/register`, label: locale === "uz" ? "Biznesni qo‘shish" : locale === "ru" ? "Добавить бизнес" : "Add a business" },
@@ -169,7 +232,7 @@ function businessLinks(locale: Locale) {
 function DocsSidebar({ locale, activeId }: { locale: Locale; activeId: DocId | "hub" }) {
   const t = copy[locale];
   const groups: Array<{ label: string; ids: DocId[] }> = [
-    { label: t.company, ids: ["about", "founders", "contact"] },
+    { label: t.company, ids: ["about", "founders", "contact", "trust"] },
     { label: t.trust, ids: ["terms", "privacy", "cookies", "reviews", "ai-transparency"] }
   ];
 
@@ -256,15 +319,9 @@ export function DocumentationHub({ locale }: { locale: Locale }) {
           </header>
 
           <section className="docs-highlight" aria-label={locale === "uz" ? "Manzil tamoyili" : locale === "ru" ? "Принцип Manzil" : "Manzil principle"}>
-            <ScrollHighlight
-              text={locale === "uz" ? "Mahalliy joylarni topishdan tortib, biznes ishonchini tekshirishgacha — Manzil aniqroq yo‘l ko‘rsatadi." : locale === "ru" ? "От поиска мест до доверия к бизнесу — Manzil помогает выбирать увереннее." : "From finding local places to trusting local businesses, Manzil helps you choose with more confidence."}
-              font={{ fontFamily: "inherit", fontSize: "clamp(1.5rem, 3vw, 2.8rem)", fontWeight: 500, letterSpacing: "-0.045em", lineHeight: 1.08, maxWidth: "44rem" }}
-              dimColor="rgb(13 26 28 / 0.18)"
-              highlightColor="var(--ceramic)"
-              scrollStart="top 82%"
-              scrollEnd="bottom 28%"
-              spacer={false}
-            />
+            <p className="docs-highlight__text">
+              {locale === "uz" ? "Mahalliy joylarni topishdan tortib, biznes ishonchini tekshirishgacha — Manzil aniqroq yo‘l ko‘rsatadi." : locale === "ru" ? "От поиска мест до доверия к бизнесу — Manzil помогает выбирать увереннее." : "From finding local places to trusting local businesses, Manzil helps you choose with more confidence."}
+            </p>
           </section>
 
           <div className="docs-groups">
@@ -325,23 +382,15 @@ export function DocumentationPage({ id, locale }: { id: DocId; locale: Locale })
             <div className="docs-article__eyebrow">{doc.legal ? "TRUST & LEGAL" : "MANZIL"}</div>
             <h1>{doc.title[locale]}</h1>
             <div className="docs-article__lead">
-              <ScrollHighlight
-                text={doc.description[locale]}
-                font={{ fontFamily: "inherit", fontSize: "clamp(1rem, 1.5vw, 1.15rem)", fontWeight: 500, letterSpacing: "-0.018em", lineHeight: 1.65, maxWidth: "48rem" }}
-                dimColor="var(--docs-dim)"
-                highlightColor="var(--ceramic)"
-                scrollStart="top 88%"
-                scrollEnd="bottom 36%"
-                spacer={false}
-              />
+              <p>{doc.description[locale]}</p>
             </div>
             <div className="docs-language" aria-label="Language versions">
               {["uz", "ru", "en"].map((item) => <Link aria-current={item === locale ? "page" : undefined} href={`/${item}${doc.path}`} key={item}>{item.toUpperCase()}</Link>)}
             </div>
             {doc.legal && <p className="docs-notice">{notice[locale]}</p>}
-            <small>{t.updated}: 2 September 2026</small>
+            <small>{t.updated}: {doc.updated?.[locale] ?? "2 September 2026"}</small>
           </header>
-          <div className="docs-article__content">{markdown(content, locale)}</div>
+          <div className="docs-article__content"><ArticleContent id={id} locale={locale} content={content} /></div>
           <Link className="docs-back" href={`/${locale}/docs`}>← {t.back}</Link>
         </main>
         <ArticleToc id={id} locale={locale} />

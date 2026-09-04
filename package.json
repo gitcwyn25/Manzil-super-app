@@ -1,7 +1,7 @@
 {
   "name": "manzil-platform",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Manzil local business discovery and reviews platform for Uzbekistan.",
   "workspaces": [
     "packages/shared",

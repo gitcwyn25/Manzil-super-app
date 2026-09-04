@@ -252,7 +252,7 @@ export function getUiCopy(locale: Locale) {
           locale
         ),
       askGurman: localize(
-        L("Bu joy haqida Gurman AI'dan so'rang", "Спросите Gurman AI об этом месте", "Ask Gurman AI about this place"),
+        L("Gurman mobil navbatiga qo'shiling", "Вступить в лист ожидания Gurman", "Join the Gurman mobile waitlist"),
         locale
       ),
       share: localize(L("Ulashish", "Поделиться", "Share"), locale),

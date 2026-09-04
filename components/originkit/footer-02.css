@@ -1,7 +1,5 @@
 /* footer-02 — Manzil footer with the original Tetris composition */
 
-@import url("https://fonts.googleapis.com/css2?family=Hedvig+Letters+Serif:opsz@12..24&display=swap");
-
 @theme {
   --font-hedvig: "Hedvig Letters Serif", Georgia, ui-serif, serif;
 }

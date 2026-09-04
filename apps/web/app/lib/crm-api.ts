@@ -58,6 +58,10 @@ export function getAnnouncements(slug: string) {
   return crmGet<{ announcements: CrmAnnouncement[] }>(`/crm/businesses/${slug}/announcements`);
 }
 
+export function getPublicAnnouncements(slug: string) {
+  return crmGet<{ announcements: CrmAnnouncement[] }>(`/businesses/${slug}/announcements`);
+}
+
 export function getPackages(slug: string) {
   return crmGet<{ packages: CrmPackage[] }>(`/crm/businesses/${slug}/packages`);
 }

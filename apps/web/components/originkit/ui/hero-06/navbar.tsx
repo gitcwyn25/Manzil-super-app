@@ -3,7 +3,7 @@
 
 "use client";
 
-import { useState, type KeyboardEvent } from "react";
+import { useState } from "react";
 import { Button } from "@/components/originkit/ui/hero-06/button";
 
 const NAV_LINKS = [
@@ -24,15 +24,6 @@ export const Navbar = ({ onViewStories }: NavbarProps) => {
     setIsMenuOpen((open) => !open);
   };
 
-  const handleKeyDown = (
-    event: KeyboardEvent<HTMLAnchorElement>,
-    href: string,
-  ) => {
-    if (event.key !== "Enter" && event.key !== " ") return;
-    event.preventDefault();
-    window.location.hash = href;
-    setIsMenuOpen(false);
-  };
 
   return (
     <nav aria-label="Primary" className="absolute inset-x-0 top-0 z-40 w-full">
@@ -55,7 +46,6 @@ export const Navbar = ({ onViewStories }: NavbarProps) => {
                   href={link.href}
                   tabIndex={0}
                   aria-label={link.label}
-                  onKeyDown={(event) => handleKeyDown(event, link.href)}
                   className="inline-flex min-h-11 cursor-pointer items-center font-redhat text-[18px] font-semibold leading-6 text-black touch-manipulation whitespace-nowrap transition-opacity duration-200 ease focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black [-webkit-tap-highlight-color:transparent] [@media(hover:hover)_and_(pointer:fine)]:hover:opacity-70"
                 >
                   {link.label}
@@ -102,7 +92,6 @@ export const Navbar = ({ onViewStories }: NavbarProps) => {
                   href={link.href}
                   tabIndex={0}
                   aria-label={link.label}
-                  onKeyDown={(event) => handleKeyDown(event, link.href)}
                   onClick={() => setIsMenuOpen(false)}
                   className="inline-flex min-h-11 w-full cursor-pointer items-center font-redhat text-[18px] font-semibold leading-6 text-black touch-manipulation focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black [-webkit-tap-highlight-color:transparent]"
                 >

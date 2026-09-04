@@ -2,9 +2,9 @@ import type { Locale } from "@manzil/shared";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { pageMetadata, ROUTE_SEO } from "../../../../lib/seo";
-import { Aperture } from "../../../../components/motion/aperture";
 import { WaitlistForm } from "../../../../components/waitlist/waitlist-form";
 import { API_BASE_URL } from "../../../../lib/api-base-url";
+import { fetchWithTimeout } from "../../../../lib/fetch-with-timeout";
 import { getWaitlistCopy, isWaitlistTopic, WAITLIST_TOPICS } from "../../../../lib/waitlist-copy";
 
 export function generateStaticParams() {
@@ -41,7 +41,7 @@ export async function generateMetadata({
 /** Real demand, not a fabricated counter. Renders nothing if the call fails. */
 async function getCount(topic: string): Promise<number | null> {
   try {
-    const response = await fetch(`${API_BASE_URL}/waitlist/count?topic=${topic}`, {
+    const response = await fetchWithTimeout(`${API_BASE_URL}/waitlist/count?topic=${topic}`, {
       next: { revalidate: 300 }
     });
 
@@ -74,13 +74,10 @@ export default async function WaitlistPage({
       <div className="wl-copy">
         <h1>{copy.title}</h1>
         <p className="wl-lead">{copy.lead}</p>
-        {count !== null && count > 0 ? (
+        {topic !== "gurman" && count !== null && count > 0 ? (
           <p className="wl-count">{copy.countLabel(count)}</p>
         ) : null}
         <WaitlistForm locale={locale} topic={topic} />
-      </div>
-      <div className="wl-aperture">
-        <Aperture live={count !== null && count > 0} />
       </div>
     </section>
   );

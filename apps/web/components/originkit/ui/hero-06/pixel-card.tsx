@@ -186,7 +186,13 @@ const EASE_PRESETS: Record<string, [number, number, number, number]> = {
   easeInOut: [0.42, 0, 0.58, 1],
 };
 
-function makeEase(transition: any): (t: number) => number {
+type TransitionConfig = {
+  type?: string;
+  duration?: number;
+  ease?: string | [number, number, number, number];
+};
+
+function makeEase(transition: TransitionConfig): (t: number) => number {
   const ease = transition?.ease;
   if (Array.isArray(ease) && ease.length === 4)
     return cubicBezier(ease[0], ease[1], ease[2], ease[3]);
@@ -220,7 +226,7 @@ interface PixelCardProps {
   position?: Position;
   /** If false, appear only plays once (no re-trigger). */
   replay?: boolean;
-  transition?: any;
+  transition?: TransitionConfig;
   backgroundColor?: string;
   padding?: number;
   borderColor?: string;
@@ -279,9 +285,7 @@ export default function PixelCard(props: PixelCardProps) {
     null,
   );
   const hasPlayedRef = useRef(false);
-  const timePreviousRef = useRef(
-    typeof performance !== "undefined" ? performance.now() : 0,
-  );
+  const timePreviousRef = useRef(0);
   const reducedMotion = useRef(
     typeof window !== "undefined" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches,
@@ -381,9 +385,10 @@ export default function PixelCard(props: PixelCardProps) {
     }
   };
 
-  const doAnimate = (fnName: "appear" | "disappear") => {
-    animationRef.current = requestAnimationFrame(() => doAnimate(fnName));
-    const timeNow = performance.now();
+  const doAnimate = (fnName: "appear" | "disappear", timeNow: number) => {
+    animationRef.current = requestAnimationFrame((timestamp) =>
+      doAnimate(fnName, timestamp)
+    );
     const timePassed = timeNow - timePreviousRef.current;
     const timeInterval = 1000 / 60;
 
@@ -414,7 +419,9 @@ export default function PixelCard(props: PixelCardProps) {
     if (animationRef.current !== null) {
       cancelAnimationFrame(animationRef.current);
     }
-    animationRef.current = requestAnimationFrame(() => doAnimate(name));
+    animationRef.current = requestAnimationFrame((timestamp) =>
+      doAnimate(name, timestamp)
+    );
   };
 
   const onMouseEnter = () => handleAnimation("appear");

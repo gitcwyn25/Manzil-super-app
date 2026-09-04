@@ -173,7 +173,11 @@
 .g-header .theme-button:hover,
 .g-header .theme-button[aria-expanded="true"] {
   border-color: var(--g-primary);
+<<<<<<<< HEAD:_gurman-experience.scss
   background: rgb(var(--g-primary-rgb) / 0.1);
+========
+  background: rgba(0, 255, 203, 0.1);
+>>>>>>>> origin/feat/frontend-elevation:apps/web/app/styles/_gurman-experience.scss
   color: var(--g-primary);
 }
 
@@ -189,7 +193,11 @@
 
 .g-header .theme-dropdown > button:hover,
 .g-header .theme-dropdown > button.active {
+<<<<<<<< HEAD:_gurman-experience.scss
   background: rgb(var(--g-primary-rgb) / 0.1);
+========
+  background: rgba(0, 255, 203, 0.1);
+>>>>>>>> origin/feat/frontend-elevation:apps/web/app/styles/_gurman-experience.scss
   color: var(--g-primary);
 }
 

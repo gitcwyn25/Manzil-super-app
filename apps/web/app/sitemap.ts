@@ -1,6 +1,7 @@
 import { locales } from "@manzil/shared";
 import type { MetadataRoute } from "next";
 import { API_BASE_URL } from "./lib/api-base-url";
+import { fetchWithTimeout } from "./lib/fetch-with-timeout";
 import { absoluteUrl, languageAlternates, ROUTE_SEO } from "./lib/seo";
 
 /**
@@ -29,7 +30,6 @@ export const revalidate = 3600;
 const STATIC_KEYS = [
   "home",
   "discover",
-  "concierge",
   "lists",
   "occasions",
   "business",
@@ -39,7 +39,6 @@ const STATIC_KEYS = [
 const PRIORITY: Record<(typeof STATIC_KEYS)[number], number> = {
   home: 1,
   discover: 0.9,
-  concierge: 0.8,
   lists: 0.7,
   occasions: 0.7,
   business: 0.8,
@@ -64,7 +63,7 @@ function localizedEntries(
 /** Anonymous GET against the public API. Never throws — callers get []. */
 async function publicList<T>(path: string, pick: (payload: unknown) => T[]): Promise<T[]> {
   try {
-    const response = await fetch(`${API_BASE_URL}${path}`, { next: { revalidate: 3600 } });
+    const response = await fetchWithTimeout(`${API_BASE_URL}${path}`, { next: { revalidate: 3600 } });
     if (!response.ok) return [];
     return pick(await response.json()) ?? [];
   } catch {

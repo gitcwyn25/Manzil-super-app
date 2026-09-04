@@ -521,7 +521,7 @@ nav.mobile-nav a {
   &__subtitle {
     font-size: 1.0625rem;
     line-height: 1.6;
-    color: #64748b;
+    color: #475569;
     max-width: 38rem;
     margin: 0 auto 2.25rem;
   }
@@ -934,7 +934,7 @@ nav.mobile-nav a {
   font-weight: 500;
   background: #f8fafc;
   border: 1px solid #e2e8f0;
-  color: #334155;
+  color: #1e293b;
   text-decoration: none;
   transition: all 0.2s ease;
 
@@ -955,7 +955,7 @@ nav.mobile-nav a {
   gap: 1.5rem;
   border-top: 1px solid #e2e8f0;
   padding-top: 2rem;
-  color: #64748b;
+  color: #334155;
   font-size: 0.875rem;
 
   &__left {
@@ -993,7 +993,7 @@ nav.mobile-nav a {
     gap: 1rem;
 
     a {
-      color: #64748b;
+      color: #334155;
       text-decoration: none;
 
       &:hover {
@@ -1114,5 +1114,257 @@ nav.mobile-nav a {
 @media (max-width: 520px) {
   .clever-nav-wrapper .header-signin {
     display: none;
+  }
+}
+
+
+// Header-only final direction: one long liquid-glass capsule. Keep the
+// public destinations centered and leave only language/theme controls at the
+// far right. Footer styling intentionally remains unchanged.
+.clever-nav-wrapper {
+  padding-top: 12px;
+  background: transparent !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+}
+
+.clever-nav-wrapper .clever-nav-row {
+  width: min(1180px, calc(100% - 32px));
+  max-width: none;
+  min-height: 62px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+  margin-inline: auto;
+  padding: 8px 10px 8px 18px;
+  border: 1px solid rgba(255, 255, 255, .76);
+  border-radius: 999px;
+  background: linear-gradient(105deg, rgba(255, 255, 255, .86), rgba(235, 245, 255, .68));
+  box-shadow: 0 18px 48px rgba(25, 69, 113, .12), inset 0 1px 0 rgba(255, 255, 255, .8);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  backdrop-filter: blur(22px) saturate(150%);
+}
+
+.clever-nav-wrapper .clever-brand {
+  min-width: 32px;
+  gap: 0;
+}
+
+.clever-nav-wrapper .clever-brand .site-nav__logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(0, 88, 188, .2);
+}
+
+.clever-nav-wrapper .clever-brand-text {
+  display: none;
+}
+
+.clever-nav-wrapper nav.desktop-nav {
+  justify-content: center;
+  min-width: 0;
+  gap: 2px;
+  margin-inline: 0;
+}
+
+.clever-nav-wrapper nav.desktop-nav a {
+  padding: 10px 15px;
+  border: 0;
+  border-radius: 999px;
+  color: #3e526d;
+  font-size: .9rem;
+  font-weight: 650;
+  white-space: nowrap;
+  transition: background .18s ease, color .18s ease, transform .18s ease;
+}
+
+.clever-nav-wrapper nav.desktop-nav a::after {
+  display: none;
+}
+
+.clever-nav-wrapper nav.desktop-nav a:hover,
+.clever-nav-wrapper nav.desktop-nav a.active {
+  background: rgba(23, 117, 245, .1);
+  color: #075dc5;
+}
+
+.clever-nav-wrapper nav.desktop-nav a:hover {
+  transform: translateY(-1px);
+}
+
+.clever-nav-wrapper .clever-nav-actions {
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.clever-nav-wrapper .clever-nav-actions .lang-button,
+.clever-nav-wrapper .clever-nav-actions .theme-button {
+  border: 1px solid rgba(111, 142, 177, .32);
+  background: rgba(255, 255, 255, .46);
+  color: #36516f;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .62);
+}
+
+.clever-nav-wrapper .clever-nav-actions .lang-button:hover,
+.clever-nav-wrapper .clever-nav-actions .lang-button[aria-expanded="true"],
+.clever-nav-wrapper .clever-nav-actions .theme-button:hover,
+.clever-nav-wrapper .clever-nav-actions .theme-button[aria-expanded="true"] {
+  border-color: rgba(23, 117, 245, .52);
+  background: rgba(255, 255, 255, .82);
+  color: #075dc5;
+}
+
+.clever-nav-wrapper .clever-nav-actions .theme-button {
+  width: 38px;
+  height: 38px;
+}
+
+@media (max-width: 991.98px) {
+  .clever-nav-wrapper .clever-nav-row {
+    width: min(100% - 24px, 680px);
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 10px;
+    padding-left: 14px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .clever-nav-wrapper {
+    padding-top: 8px;
+  }
+
+  .clever-nav-wrapper .clever-nav-row {
+    width: calc(100% - 20px);
+    min-height: 56px;
+    padding: 6px 8px 6px 12px;
+  }
+
+  .clever-nav-wrapper .clever-brand .site-nav__logo {
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+  }
+
+  .clever-nav-wrapper .clever-nav-actions .lang-button,
+  .clever-nav-wrapper .clever-nav-actions .theme-button,
+  .clever-nav-wrapper .clever-nav-actions .mobile-nav-toggle {
+    min-width: 40px;
+    min-height: 40px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clever-nav-wrapper nav.desktop-nav a {
+    transition: none;
+  }
+}
+
+
+// The language menu is rendered as a semantic button/menu pair. These explicit
+// resets prevent browser-default buttons from leaking through and keep the
+// open panel anchored to the right-side controller.
+.clever-nav-wrapper .site-nav__lang {
+  position: relative;
+  flex: none;
+}
+
+.clever-nav-wrapper .site-nav__lang .lang-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 66px;
+  min-height: 38px;
+  padding: 0 11px;
+  border: 1px solid rgba(111, 142, 177, .32);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .46);
+  color: #36516f;
+  cursor: pointer;
+  font: inherit;
+  font-size: .82rem;
+  font-weight: 700;
+  line-height: 1;
+  appearance: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .62);
+  transition: background .18s ease, border-color .18s ease, color .18s ease, transform .18s ease;
+}
+
+.clever-nav-wrapper .site-nav__lang .lang-button svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+}
+
+.clever-nav-wrapper .site-nav__lang .lang-button:active {
+  transform: scale(.97);
+}
+
+.clever-nav-wrapper .site-nav__lang .lang-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 1060;
+  display: grid;
+  min-width: 164px;
+  gap: 3px;
+  padding: 8px;
+  border: 1px solid rgba(111, 142, 177, .28);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, .92);
+  color: #253c58;
+  box-shadow: 0 18px 42px rgba(25, 69, 113, .18), inset 0 1px 0 rgba(255, 255, 255, .88);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  backdrop-filter: blur(22px) saturate(150%);
+  animation: lang-dropdown-in .18s ease-out both;
+}
+
+.clever-nav-wrapper .site-nav__lang .lang-dropdown button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+  padding: 10px 11px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-size: .84rem;
+  line-height: 1.2;
+  text-align: left;
+  white-space: nowrap;
+  appearance: none;
+  transition: background .18s ease, color .18s ease;
+}
+
+.clever-nav-wrapper .site-nav__lang .lang-dropdown button.active,
+.clever-nav-wrapper .site-nav__lang .lang-dropdown button:hover {
+  background: rgba(23, 117, 245, .1);
+  color: #075dc5;
+}
+
+@keyframes lang-dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-5px) scale(.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clever-nav-wrapper .site-nav__lang .lang-button,
+  .clever-nav-wrapper .site-nav__lang .lang-dropdown,
+  .clever-nav-wrapper .site-nav__lang .lang-dropdown button {
+    transition: none;
+    animation: none;
   }
 }

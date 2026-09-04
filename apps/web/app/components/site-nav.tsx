@@ -6,34 +6,38 @@ import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { getBusinessCopy } from "../lib/business-copy";
 
-// The canonical D5 link set: Discover · Concierge · Events(→/occasions) ·
-// For Business. Home rides on the brand wordmark. Admin is intentionally
-// absent here — its entry point lives in the footer. "Dashboard" is
-// deliberately absent: a visitor with no business has nothing there, and the
-// workspace is reached through the signed-in switch in the header instead.
+// The public header has one deliberate link set: Home, Discover, Docs,
+// and For Business. Authenticated workspace/admin destinations stay out.
 const links = [
+  { key: "home" as const, href: (locale: Locale) => `/${locale}` },
   { key: "discover" as const, href: (locale: Locale) => `/${locale}/discover` },
-  { key: "concierge" as const, href: (locale: Locale) => `/${locale}/gurman` },
   { key: "docs" as const, href: (locale: Locale) => `/${locale}/docs` },
   { key: "forBusiness" as const, href: (locale: Locale) => `/${locale}/business` }
 ];
 
-// `d-none d-lg-flex` is a Bootstrap `!important` utility, so the responsive
-// show/hide split can never lose a cascade tie to globals.css's older
-// same-specificity `.desktop-nav` rules — see _chrome.scss for the rest of
-// this element's restyle.
 export function SiteNav({ locale }: { locale: Locale }) {
   const pathname = usePathname();
   const copy = getBusinessCopy(locale);
 
   return (
-    <nav className="desktop-nav d-none d-lg-flex" aria-label="Asosiy navigatsiya">
+    <nav className="desktop-nav d-none d-lg-flex" aria-label="Main navigation">
       {links.map((link) => {
         const href = link.href(locale);
-        const active = pathname === href || pathname.startsWith(`${href}/`);
+        const active = pathname === href || (link.key !== "home" && pathname.startsWith(`${href}/`));
+        const label =
+          link.key === "home"
+            ? copy.nav.home
+            : link.key === "docs"
+              ? locale === "uz"
+                ? "Hujjatlar"
+                : locale === "ru"
+                  ? "Документы"
+                  : "Docs"
+              : copy.nav[link.key as keyof typeof copy.nav];
+
         return (
           <Link className={active ? "active" : undefined} href={href} key={link.key}>
-            {link.key === "docs" ? (locale === "uz" ? "Hujjatlar" : locale === "ru" ? "Документы" : "Docs") : copy.nav[link.key as keyof typeof copy.nav]}
+            {label}
           </Link>
         );
       })}
@@ -60,10 +64,10 @@ const mobileIcons: Record<string, ReactNode> = {
       <path d="m20 20-3.5-3.5" />
     </svg>
   ),
-  concierge: (
+  docs: (
     <svg aria-hidden="true" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
-      <path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H12l-4.5 4v-4h-1A2.5 2.5 0 0 1 4 13.5v-7Z" />
-      <path d="M9 9.5h.01M15 9.5h.01M9.5 12.5c.7.7 1.6 1 2.5 1s1.8-.3 2.5-1" />
+      <path d="M6 3h9l3 3v15H6z" />
+      <path d="M15 3v4h4M9 12h6M9 16h6" />
     </svg>
   ),
   events: (
@@ -80,9 +84,7 @@ const mobileIcons: Record<string, ReactNode> = {
   )
 };
 
-// `nav.mobile-nav` is the element the shell-boundary e2e suite selects on.
-// It lives inside the offcanvas panel rendered by mobile-nav.tsx, so it stays
-// in the DOM (open or closed) whenever the site shell is mounted.
+// The offcanvas mobile nav remains in the DOM for shell-boundary coverage.
 export function MobileSiteNav({ locale }: { locale: Locale }) {
   const pathname = usePathname();
   const copy = getBusinessCopy(locale);
@@ -90,7 +92,7 @@ export function MobileSiteNav({ locale }: { locale: Locale }) {
   const mobileLinks = [
     { key: "home" as const, href: `/${locale}`, label: copy.nav.home },
     { key: "discover" as const, href: `/${locale}/discover`, label: copy.nav.discover },
-    { key: "concierge" as const, href: `/${locale}/gurman`, label: copy.nav.concierge },
+    { key: "docs" as const, href: `/${locale}/docs`, label: locale === "uz" ? "Hujjatlar" : locale === "ru" ? "Документы" : "Docs" },
     { key: "forBusiness" as const, href: `/${locale}/business`, label: copy.nav.forBusiness }
   ];
 

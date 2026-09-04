@@ -47,10 +47,10 @@ export function CuratedSections({
             </div>
             <span className="curated-band__tagline">
               {locale === "uz"
-                ? "4.8+ yulduzli haqiqiy mijozlar sharhlariga ko'ra"
+                ? "Mavjud 4.8+ baholar asosida"
                 : locale === "ru"
-                ? "На основе честных отзывов 4.8+ звёзд"
-                : "Rated 4.8+ by verified locals"}
+                ? "На основе доступных оценок 4.8+"
+                : "Based on available 4.8+ ratings"}
             </span>
           </div>
 

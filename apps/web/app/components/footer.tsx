@@ -8,21 +8,21 @@ import { Icon } from "./vm/icons";
 
 const A = "/originkit/footer-01";
 
-const FOOTER_DOWNLOAD_TEXT: Record<Locale, { title: string; desc: string; soon: string }> = {
+const FOOTER_MOBILE_TEXT: Record<Locale, { title: string; desc: string; cta: string }> = {
   uz: {
-    title: "Manzil ilovasini yuklab oling",
-    desc: "Toshkentning barcha sara joylari, haqiqiy sharhlar va Gurman AI shaxsiy konsyerji cho'ntagingizda.",
-    soon: "Tez kunda do'konlarda"
+    title: "Gurman mobil ilovasi tayyorlanmoqda",
+    desc: "Gurman mahalliy rejalarni tuzishga yordam beradi. Ilova tayyor bo'lganda birinchi bo'lib xabar oling.",
+    cta: "Gurman yangiliklariga yozilish"
   },
   ru: {
-    title: "Приложение Manzil — скоро",
-    desc: "Лучшие заведения Ташкента, честные отзывы и персональный AI-консьерж Gurman всегда с вами.",
-    soon: "Скоро в магазинах приложений"
+    title: "Мобильное приложение Gurman готовится",
+    desc: "Gurman поможет планировать местные впечатления. Узнайте первым, когда приложение будет готово.",
+    cta: "Получать новости Gurman"
   },
   en: {
-    title: "Download the Manzil App Today",
-    desc: "Discover top verified spots across Tashkent and get tailored recommendations with Gurman AI.",
-    soon: "Coming soon to the stores"
+    title: "Gurman mobile is being built",
+    desc: "Gurman will help people plan local experiences. Hear first when the app is ready.",
+    cta: "Join Gurman updates"
   }
 };
 
@@ -38,7 +38,7 @@ function ManzilPhonesStage() {
         <div className="manzil-phone__screen">
           <div className="manzil-mock-header">
             <span className="manzil-mock-header__brand">Manzil Katalog</span>
-            <span className="manzil-mock-header__status">Toshkent</span>
+            <span className="manzil-mock-header__status">Namuna</span>
           </div>
           <div className="manzil-mock-catalog">
             <div className="manzil-mock-catalog__search">🔍 Qidiruv: kafe, restoran...</div>
@@ -50,45 +50,45 @@ function ManzilPhonesStage() {
             </div>
             <div className="manzil-mock-catalog__item">
               <div className="manzil-mock-catalog__item-name">
-                Iwash Avtomoyka <Icon name="verified" size={12} className="text-primary" />
+                Mahalliy xizmat
               </div>
-              <div className="manzil-mock-catalog__item-sub">⭐ 4.9 (240 sharh) · Yunusobod</div>
+              <div className="manzil-mock-catalog__item-sub">Profil ma&apos;lumotlari · Namuna</div>
             </div>
             <div className="manzil-mock-catalog__item">
               <div className="manzil-mock-catalog__item-name">
-                Rayhon Milliy Taomlar <Icon name="verified" size={12} className="text-primary" />
+                Mahalliy restoran
               </div>
-              <div className="manzil-mock-catalog__item-sub">⭐ 4.8 (512 sharh) · Chilonzor</div>
+              <div className="manzil-mock-catalog__item-sub">Profil ma&apos;lumotlari · Namuna</div>
             </div>
             <div className="manzil-mock-catalog__item">
               <div className="manzil-mock-catalog__item-name">
-                Breadly Bakery <Icon name="verified" size={12} className="text-primary" />
+                Mahalliy kafe
               </div>
-              <div className="manzil-mock-catalog__item-sub">⭐ 4.9 (189 sharh) · Mirobod</div>
+              <div className="manzil-mock-catalog__item-sub">Profil ma&apos;lumotlari · Namuna</div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Center Phone: Gurman AI Concierge Live Chat */}
+      {/* Center Phone: Manzil discovery */}
       <div className="manzil-phone manzil-phone--center">
         <div className="manzil-phone__notch" />
         <div className="manzil-phone__screen">
           <div className="manzil-mock-header">
-            <span className="manzil-mock-header__brand">Gurman AI</span>
-            <span className="manzil-mock-header__status">Online</span>
+            <span className="manzil-mock-header__brand">Manzil Discover</span>
+            <span className="manzil-mock-header__status">Namuna</span>
           </div>
           <div className="manzil-mock-chat">
             <div className="manzil-mock-chat__user">
-              Toshkentda tinch, mazali qahva va desertlari bor joy tavsiya qil.
+              Toshkentda tinch, mazali qahva va desertlari bor joy top.
             </div>
             <div className="manzil-mock-chat__ai-card">
-              <div className="manzil-mock-chat__ai-title">✨ Tavsiya: Breadly Bakery & Café</div>
-              <div className="manzil-mock-chat__ai-meta">⭐ 4.9 (189 sharhlar) · Mirobod tumani</div>
+              <div className="manzil-mock-chat__ai-title">Joy profili namunasi</div>
+              <div className="manzil-mock-chat__ai-meta">Mavjud ma&apos;lumotlar · Namuna</div>
               <div className="manzil-mock-chat__ai-desc">
-                Mehmonlar sharhlariga ko'ra sokin atmosfera, yangi kruassanlar va ajoyib espresso.
+                Joy tavsifi, ish vaqti va aloqa ma&apos;lumotlari shu yerda ko&apos;rinadi.
               </div>
-              <span className="manzil-mock-chat__ai-btn">Marshrutni ko'rish →</span>
+              <span className="manzil-mock-chat__ai-btn">Profilni ko&apos;rish →</span>
             </div>
             <div className="manzil-mock-chat__user">
               Rahmat! Ish vaqti qachongacha?
@@ -97,34 +97,34 @@ function ManzilPhonesStage() {
         </div>
       </div>
 
-      {/* Right Phone: Manzil Business Verified Profile */}
+      {/* Right Phone: Manzil business profile preview */}
       <div className="manzil-phone manzil-phone--right">
         <div className="manzil-phone__notch" />
         <div className="manzil-phone__screen">
           <div className="manzil-mock-header">
             <span className="manzil-mock-header__brand">Biznes Kabinet</span>
-            <span className="manzil-mock-header__status">Verified</span>
+            <span className="manzil-mock-header__status">Namuna</span>
           </div>
           <div className="manzil-mock-profile">
-            <div className="manzil-mock-profile__avatar">VL</div>
-            <div className="manzil-mock-profile__name">Vanilla Lounge Café</div>
+            <div className="manzil-mock-profile__avatar">M</div>
+            <div className="manzil-mock-profile__name">Biznes profili namunasi</div>
             <div className="manzil-mock-profile__stats">
               <div>
-                <div className="manzil-mock-profile__stat-num">4.9 ★</div>
-                <div>Reyting</div>
+                <div className="manzil-mock-profile__stat-num">—</div>
+                <div>Reyting profili</div>
               </div>
               <div>
-                <div className="manzil-mock-profile__stat-num">1.4k</div>
-                <div>Ko'rishlar</div>
+                <div className="manzil-mock-profile__stat-num">—</div>
+                <div>Ko&apos;rishlar</div>
               </div>
               <div>
-                <div className="manzil-mock-profile__stat-num">86</div>
+                <div className="manzil-mock-profile__stat-num">—</div>
                 <div>Sharhlar</div>
               </div>
             </div>
             <div className="manzil-mock-profile__review">
-              <strong>💬 So'nggi sharh:</strong>
-              <div>&ldquo;Gurman AI orqali topib keldik, qahva va xizmat a'lo darajada!&rdquo;</div>
+              <strong>💬 Sharhlar:</strong>
+              <div>Foydalanuvchi sharhlari shu yerda ko&apos;rinadi.</div>
             </div>
           </div>
         </div>
@@ -136,13 +136,12 @@ function ManzilPhonesStage() {
 export function Footer({ locale }: { locale: Locale }) {
   const businessCopy = getBusinessCopy(locale);
   const year = new Date().getFullYear();
-  const t = FOOTER_DOWNLOAD_TEXT[locale] ?? FOOTER_DOWNLOAD_TEXT.uz;
+  const t = FOOTER_MOBILE_TEXT[locale] ?? FOOTER_MOBILE_TEXT.uz;
 
   const navLinks = [
     { label: locale === "uz" ? "Hujjatlar" : locale === "ru" ? "Документы" : "Docs", href: `/${locale}/docs` },
     { label: locale === "uz" ? "Maxfiylik" : locale === "ru" ? "Конфиденциальность" : "Privacy", href: `/${locale}/legal/privacy` },
     { label: businessCopy.nav.discover, href: `/${locale}/discover` },
-    { label: businessCopy.nav.concierge, href: `/${locale}/concierge` },
     { label: businessCopy.nav.forBusiness, href: `/${locale}/business` },
     { label: businessCopy.footer.pricing, href: `/${locale}/business/pricing` },
     { label: businessCopy.footer.dashboard, href: `/${locale}/dashboard` },
@@ -152,44 +151,17 @@ export function Footer({ locale }: { locale: Locale }) {
   return (
     <footer className="manzil-footer">
       <div className="manzil-footer__container">
-        {/* Phones Hero & App Download Showcase */}
-        <div id="download" className="manzil-footer__showcase">
+        {/* Product preview and mobile Gurman waitlist */}
+        <div id="gurman-mobile" className="manzil-footer__showcase">
           <ManzilPhonesStage />
 
           <h2 className="manzil-footer__title">{t.title}</h2>
           <p className="manzil-footer__subtitle">{t.desc}</p>
 
-          <div className="manzil-store-row" aria-label={t.soon}>
-            {/* Store listings are not live yet: these are informational badges, not dead links. */}
-            <span aria-label={`Google Play — ${t.soon}`} className="manzil-store-btn" role="img">
-              <Image
-                src={`${A}/google-play.svg`}
-                alt=""
-                width={28}
-                height={28}
-                aria-hidden="true"
-              />
-              <span className="manzil-store-btn__meta">
-                <span className="manzil-store-btn__eyebrow">GET IT ON</span>
-                <span className="manzil-store-btn__label">Google Play</span>
-              </span>
-            </span>
-
-            <span aria-label={`App Store — ${t.soon}`} className="manzil-store-btn" role="img">
-              <Image
-                src={`${A}/app-store.svg`}
-                alt=""
-                width={28}
-                height={28}
-                aria-hidden="true"
-              />
-              <span className="manzil-store-btn__meta">
-                <span className="manzil-store-btn__eyebrow">Download on the</span>
-                <span className="manzil-store-btn__label">App Store</span>
-              </span>
-            </span>
-          </div>
-          <p className="manzil-store-status">{t.soon}</p>
+          <Link className="clever-btn clever-btn--primary" href={`/${locale}/waitlist/gurman`}>
+            <span>{t.cta}</span>
+            <Icon name="arrow_forward" size={16} />
+          </Link>
         </div>
 
         {/* Contact Bar */}
@@ -245,11 +217,9 @@ export function Footer({ locale }: { locale: Locale }) {
           {/* Social Channels */}
           <div className="manzil-footer-bottom__socials">
             <a
-              aria-label="Telegram"
+              aria-label="Email"
               className="manzil-footer-bottom__social-btn"
-              href="https://t.me/manzilbiz_bot"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="mailto:tursunovsunnatilla223@gmail.com"
             >
               <Image
                 src={`${A}/email.svg`}
@@ -275,14 +245,14 @@ export function Footer({ locale }: { locale: Locale }) {
               />
             </a>
             <a
-              aria-label="LinkedIn"
+              aria-label="YouTube"
               className="manzil-footer-bottom__social-btn"
-              href="https://linkedin.com"
+              href="https://www.youtube.com/@ManzilGroupUz"
               target="_blank"
               rel="noopener noreferrer"
             >
               <Image
-                src={`${A}/linkedin.svg`}
+                src={`${A}/youtube.svg`}
                 alt=""
                 width={18}
                 height={18}
@@ -292,7 +262,7 @@ export function Footer({ locale }: { locale: Locale }) {
             <a
               aria-label="X"
               className="manzil-footer-bottom__social-btn"
-              href="https://x.com"
+              href="https://x.com/ManzilUz"
               target="_blank"
               rel="noopener noreferrer"
             >

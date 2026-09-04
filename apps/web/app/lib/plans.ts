@@ -1,5 +1,6 @@
 import type { Locale } from "@manzil/shared";
 import { API_BASE_URL } from "./api-base-url";
+import { fetchWithTimeout } from "./fetch-with-timeout";
 
 export type ApiPlan = {
   tier: "free" | "pro" | "max";
@@ -20,7 +21,7 @@ export type ApiPlan = {
  */
 export async function getPlans(): Promise<ApiPlan[]> {
   try {
-    const res = await fetch(`${API_BASE_URL}/plans`, { next: { revalidate: 60 } });
+    const res = await fetchWithTimeout(`${API_BASE_URL}/plans`, { next: { revalidate: 60 } });
     if (!res.ok) return [];
     const payload = await res.json();
     return (payload.data?.plans ?? []) as ApiPlan[];

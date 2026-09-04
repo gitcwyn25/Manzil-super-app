@@ -23,7 +23,7 @@ const HERO_COPY: Record<
     chips: [
       { key: "top_rated", label: "Yuqori baholangan", icon: "⭐" },
       { key: "open_now", label: "Hozir ochiq", icon: "🟢" },
-      { key: "verified", label: "Tasdiqlangan", icon: "🛡️" },
+      { key: "verified", label: "Profil egasi tasdiqlagan", icon: "🛡️" },
       { key: "deals", label: "Aksiyalar & Takliflar", icon: "⚡" },
       { key: "new", label: "Yangi maskanlar", icon: "✨" }
     ]
@@ -37,7 +37,7 @@ const HERO_COPY: Record<
     chips: [
       { key: "top_rated", label: "Высокий рейтинг", icon: "⭐" },
       { key: "open_now", label: "Открыто сейчас", icon: "🟢" },
-      { key: "verified", label: "Проверенные", icon: "🛡️" },
+      { key: "verified", label: "Профиль подтверждён владельцем", icon: "🛡️" },
       { key: "deals", label: "Спецпредложения", icon: "⚡" },
       { key: "new", label: "Новые места", icon: "✨" }
     ]
@@ -51,7 +51,7 @@ const HERO_COPY: Record<
     chips: [
       { key: "top_rated", label: "Top Rated", icon: "⭐" },
       { key: "open_now", label: "Open Now", icon: "🟢" },
-      { key: "verified", label: "Verified Only", icon: "🛡️" },
+      { key: "verified", label: "Claimed profiles", icon: "🛡️" },
       { key: "deals", label: "Deals & Offers", icon: "⚡" },
       { key: "new", label: "New Places", icon: "✨" }
     ]
@@ -69,7 +69,7 @@ export function DiscoverHero({
   locale: Locale;
   searchQuery: string;
   onSearchChange: (q: string) => void;
-  onSearchSubmit: () => void;
+  onSearchSubmit: (query: string) => void;
   activeQuickChip: string | null;
   onQuickChipToggle: (chipKey: string) => void;
 }) {
@@ -79,7 +79,7 @@ export function DiscoverHero({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSearchChange(localInput);
-    onSearchSubmit();
+    onSearchSubmit(localInput);
   };
 
   return (

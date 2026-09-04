@@ -17,14 +17,13 @@ type FooterCopy = {
 
 const FOOTER_COPY: Record<Locale, FooterCopy> = {
   uz: {
-    brandDescription: "Toshkentdagi joylarni haqiqiy sharhlar va Gurman AI bilan toping.",
+    brandDescription: "Toshkentdagi joylarni haqiqiy sharhlar bilan toping.",
     columns: [
       {
         title: "Kashf etish",
         links: [
           { label: "Bosh sahifa", href: "/" },
           { label: "Katalog", href: "/discover" },
-          { label: "Gurman AI", href: "/concierge" },
           { label: "Hujjatlar", href: "/docs" }
         ]
       },
@@ -51,14 +50,13 @@ const FOOTER_COPY: Record<Locale, FooterCopy> = {
     footerLabel: "Manzil sayti footer'i"
   },
   ru: {
-    brandDescription: "Находите места в Ташкенте по честным отзывам и с помощью Gurman AI.",
+    brandDescription: "Находите места в Ташкенте по честным отзывам.",
     columns: [
       {
         title: "Открыть",
         links: [
           { label: "Главная", href: "/" },
           { label: "Каталог", href: "/discover" },
-          { label: "Gurman AI", href: "/concierge" },
           { label: "Документы", href: "/docs" }
         ]
       },
@@ -85,14 +83,13 @@ const FOOTER_COPY: Record<Locale, FooterCopy> = {
     footerLabel: "Футер сайта Manzil"
   },
   en: {
-    brandDescription: "Find places across Tashkent through real reviews and Gurman AI.",
+    brandDescription: "Find places across Tashkent through real local reviews.",
     columns: [
       {
         title: "Explore",
         links: [
           { label: "Home", href: "/" },
           { label: "Discover", href: "/discover" },
-          { label: "Gurman AI", href: "/concierge" },
           { label: "Docs", href: "/docs" }
         ]
       },

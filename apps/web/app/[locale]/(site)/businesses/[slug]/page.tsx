@@ -25,8 +25,14 @@ import { Icon } from "../../../../components/vm/icons";
 import { PrimaryCta } from "../../../../components/vm/primary-cta";
 import { RatingLine } from "../../../../components/vm/rating-line";
 import { getBusiness, getBusinessPhotos, getCategories } from "../../../../lib/api";
+import { getPublicAnnouncements, type CrmAnnouncement } from "../../../../lib/crm-api";
+import { getCrmCopy } from "../../../../lib/crm-copy";
 import { formatReviewCount } from "../../../../lib/format";
 import { formatCount, pickLocalized } from "../../../../lib/locale-text";
+
+function isCurrentlyPublished(item: CrmAnnouncement): boolean {
+  return item.status === "published";
+}
 
 /**
  * The one route whose metadata already worked. Extended rather than replaced:
@@ -79,12 +85,17 @@ export default async function BusinessProfilePage({
   }
 
   const { business, reviews } = profile;
-  const [photos, categories] = await Promise.all([
+  const [photos, categories, announcementsData] = await Promise.all([
     getBusinessPhotos(slug),
-    getCategories().catch(() => [])
+    getCategories().catch(() => []),
+    getPublicAnnouncements(slug).catch(() => null)
   ]);
 
   const category = categories.find((item) => item.slug === business.categorySlug);
+  const publishedAnnouncements = (announcementsData?.announcements ?? []).filter(isCurrentlyPublished);
+  const campaigns = publishedAnnouncements.filter((item) => item.kind === "discount");
+  const announcements = publishedAnnouncements.filter((item) => item.kind !== "discount");
+  const crmCopy = getCrmCopy(locale).announcements;
 
   // External navigation is not CSP-constrained (only embedded resources are),
   // so directions can hand off to the user's map app. Coordinates when the
@@ -191,6 +202,55 @@ export default async function BusinessProfilePage({
               </header>
             </Reveal>
 
+            <Reveal variant="fade-up">
+              <section aria-labelledby="offers-title" className="biz-card biz-updates">
+                <header className="biz-card__head">
+                  <h2 className="h3 biz-card__title" id="offers-title">
+                    {crmCopy.campaignsTitle}
+                  </h2>
+                </header>
+                {campaigns.length > 0 ? (
+                  <div className="biz-updates__list">
+                    {campaigns.map((item) => (
+                      <article className="biz-update" key={item.id}>
+                        <h3 className="h4 biz-update__title">{item.title}</h3>
+                        {item.discountPercent != null ? (
+                          <p className="biz-update__meta">
+                            {crmCopy.percentOffMeta.replace("{n}", String(item.discountPercent))}
+                          </p>
+                        ) : null}
+                        <p className="biz-update__body">{item.body}</p>
+                      </article>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="biz-card__sub">{crmCopy.emptyCampaigns}</p>
+                )}
+              </section>
+            </Reveal>
+
+            <Reveal variant="fade-up">
+              <section aria-labelledby="announcements-title" className="biz-card biz-updates">
+                <header className="biz-card__head">
+                  <h2 className="h3 biz-card__title" id="announcements-title">
+                    {crmCopy.updatesTitle}
+                  </h2>
+                </header>
+                {announcements.length > 0 ? (
+                  <div className="biz-updates__list">
+                    {announcements.map((item) => (
+                      <article className="biz-update" key={item.id}>
+                        <h3 className="h4 biz-update__title">{item.title}</h3>
+                        <p className="biz-update__body">{item.body}</p>
+                      </article>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="biz-card__sub">{crmCopy.emptyUpdates}</p>
+                )}
+              </section>
+            </Reveal>
+
             {business.insight ? (
               <Reveal variant="fade-up">
                 <AiSummaryBlock insight={business.insight} locale={locale} />
@@ -233,9 +293,8 @@ export default async function BusinessProfilePage({
           <aside className="biz-rail">
             <Reveal variant="fade-up">
               <section className="biz-card biz-action">
-                {/* Honest AI CTA (D8): routes to the Gurman AI concierge chat —
-                    no packages, no booking promises. */}
-                <PrimaryCta className="biz-action__cta" href={`/${locale}/concierge`}>
+                {/* Gurman is mobile-first; this public CTA only collects waitlist interest. */}
+                <PrimaryCta className="biz-action__cta" href={`/${locale}/waitlist/gurman`}>
                   <Icon name="sparkles" size={18} />
                   {copy.business.askGurman}
                 </PrimaryCta>
