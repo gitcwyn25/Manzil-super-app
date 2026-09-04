@@ -1,4 +1,4 @@
-// Home (task A2): the green concierge hero (D6 — the one green brand moment),
+// Home (task A2): the green concierge hero (D6 ΓÇö the one green brand moment),
 // the AI-concierge feature trio (D9), and the "Experience the Best" bento
 // business grid + partner CTA.
 //
@@ -10,7 +10,7 @@
 // final state under prefers-reduced-motion (block at the end).
 
 // ---------------------------------------------------------------------------
-// Hero — secondary-green gradient, mint accents, CSS orbs, wave divider
+// Hero ΓÇö secondary-green gradient, mint accents, CSS orbs, wave divider
 // ---------------------------------------------------------------------------
 
 .vm-hero {
@@ -161,7 +161,7 @@
   gap: 1rem;
 }
 
-// Mint primary CTA — the hero's own accent, deliberately not the blue
+// Mint primary CTA ΓÇö the hero's own accent, deliberately not the blue
 // .btn-primary (D6: green is the homepage brand moment).
 .vm-hero__cta {
   display: inline-flex;
@@ -483,7 +483,7 @@
     grid-column: span 2;
   }
 
-  // With fewer than two standard cards the partner CTA takes the whole row —
+  // With fewer than two standard cards the partner CTA takes the whole row ΓÇö
   // no dangling empty cell at the current 1-2 business dataset (D10).
   .home-bento .home-partner--wide {
     grid-column: 1 / -1;
@@ -1018,33 +1018,16 @@
     margin: 0 auto 2.5rem;
   }
 
-  &__site-link {
-    display: inline-flex;
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 0.45rem;
-    margin: -1.5rem 0 2rem;
-    color: rgba(255, 255, 255, 0.72);
-    font-size: 0.875rem;
-    font-weight: 600;
-    letter-spacing: 0.01em;
-    text-decoration: none;
-    transition: color 0.2s ease, transform 0.2s ease;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
 
-    span:first-child {
-      color: #00ffcb;
-      font-size: 1rem;
-    }
-
-    &:hover,
-    &:focus-visible {
-      color: #00ffcb;
-      transform: translateY(-1px);
-    }
-
-    &:focus-visible {
-      outline: 2px solid #00ffcb;
-      outline-offset: 4px;
-      border-radius: 0.25rem;
+    @include media-breakpoint-up(lg) {
+      justify-content: flex-start;
     }
   }
 
@@ -1330,7 +1313,7 @@
 }
 
 // ---------------------------------------------------------------------------
-// Gurman mobile preview — static concept, never a web chat
+// Gurman mobile preview ΓÇö static concept, never a web chat
 // ---------------------------------------------------------------------------
 .gurman-preview {
   overflow: hidden;
@@ -2232,70 +2215,150 @@
 }
 
 // ---------------------------------------------------------------------------
-// 8. Clever FAQ Accordion
+// 8. Clever FAQ conversation
 // ---------------------------------------------------------------------------
 .clever-faq {
-  background: $vm-surface;
+  background: #fcfbf8;
+  color: $vm-on-surface;
 
-  &__container {
-    max-width: 52rem;
+  &__container { max-width: 76rem; }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.86fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 4rem;
   }
 
-  &__list {
+  &__intro { max-width: 32rem; padding-top: 0.2rem; }
+
+  &__title {
+    margin: 0;
+    color: $vm-on-surface;
+    font-size: clamp(2.25rem, 4.3vw, 3.35rem);
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    line-height: 1.04;
+  }
+
+  &__subtitle {
+    max-width: 27rem;
+    margin: 1.35rem 0 0;
+    color: $vm-on-surface-variant;
+    font-size: 1.06rem;
+    line-height: 1.5;
+  }
+
+  &__contact {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3.1rem;
+    margin-top: 2rem;
+    padding: 0.78rem 1.35rem;
+    border-radius: 9999px;
+    background: #252523;
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1;
+    text-decoration: none;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+
+    &:hover { background: #111110; box-shadow: 0 0.75rem 1.5rem rgba(37, 37, 35, 0.18); transform: translateY(-1px); }
+    &:focus-visible { outline: 2px solid $vm-primary; outline-offset: 4px; }
+  }
+
+  &__thread {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    align-items: flex-start;
+    gap: 0.95rem;
+    min-width: 0;
+    overflow: visible;
   }
-}
 
-.clever-faq-item {
-  background: #ffffff;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 1rem;
-  overflow: hidden;
-  transition: all 0.2s ease;
+  &__message {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    min-width: 0;
+    overflow: visible;
+  }
 
-  &--open {
-    border-color: rgba($vm-primary, 0.3);
-    box-shadow: 0 4px 20px rgba($vm-primary, 0.06);
+  &__question,
+  &__answer {
+    position: relative;
+    width: fit-content;
+    max-width: 92%;
+    border: 0;
+    border-radius: 2rem;
+    font-family: inherit;
+    font-size: clamp(1rem, 1.25vw, 1.17rem);
+    letter-spacing: -0.012em;
+    line-height: 1.45;
   }
 
   &__question {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 1.25rem 1.5rem;
-    background: transparent;
-    border: none;
-    font-size: 1.0625rem;
-    font-weight: 600;
+    padding: 0.95rem 1.45rem 1rem;
+    background: #ffffff;
     color: $vm-on-surface;
-    text-align: left;
+    box-shadow: 0 0.5rem 1.6rem rgba(37, 37, 35, 0.08);
     cursor: pointer;
+    text-align: left;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
 
-    &:hover {
-      color: $vm-primary;
+    &::after {
+      position: absolute;
+      bottom: -0.45rem;
+      left: 1.35rem;
+      width: 0;
+      height: 0;
+      border-top: 0.65rem solid #ffffff;
+      border-right: 0.7rem solid transparent;
+      content: "";
     }
-  }
 
-  &__toggle {
-    color: $vm-primary;
-    flex: none;
-    transition: transform 0.2s ease;
+    &:hover { box-shadow: 0 0.75rem 1.8rem rgba(37, 37, 35, 0.12); transform: translateY(-1px); }
+    &:focus-visible { outline: 2px solid $vm-primary; outline-offset: 4px; }
   }
 
   &__answer {
-    padding: 0 1.5rem 1.5rem;
-    font-size: 0.9375rem;
-    line-height: 1.65;
-    color: $vm-on-surface-variant;
+    align-self: flex-end;
+    margin-top: 0.7rem;
+    padding: 1rem 1.45rem 1.1rem;
+    background: #252523;
+    color: #ffffff;
+    box-shadow: 0 0.75rem 1.6rem rgba(37, 37, 35, 0.16);
+
+    &::after {
+      position: absolute;
+      right: 1.35rem;
+      bottom: -0.45rem;
+      width: 0;
+      height: 0;
+      border-top: 0.65rem solid #252523;
+      border-left: 0.7rem solid transparent;
+      content: "";
+    }
 
     p { margin: 0; }
   }
-}
 
+  @include media-breakpoint-down(md) {
+    &__grid { grid-template-columns: 1fr; gap: 3rem; }
+    &__intro { max-width: 38rem; }
+    &__subtitle { max-width: 32rem; }
+    &__thread { gap: 0.8rem; }
+    &__question, &__answer { max-width: 90%; }
+  }
+
+  @include media-breakpoint-down(sm) {
+    &__title { font-size: clamp(2rem, 11vw, 2.65rem); }
+    &__question, &__answer { max-width: 96%; font-size: 0.98rem; }
+  }
+}
 // ---------------------------------------------------------------------------
 // 9. Clever Bottom CTA Banner
 // ---------------------------------------------------------------------------
