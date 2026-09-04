@@ -176,24 +176,31 @@
   color: var(--muted) !important;
 }
 
-[data-theme="night"] .clever-pricing-card,
-[data-theme="night"] .clever-faq-item {
+[data-theme="night"] .clever-pricing-card {
   background: #172c30 !important;
   border-color: #4c6663 !important;
   color: #edf6f3 !important;
   box-shadow: var(--soft-shadow);
 }
 
+[data-theme="night"] .clever-faq__question {
+  background: #172c30;
+  color: #edf6f3;
+  box-shadow: var(--soft-shadow);
+}
+
+[data-theme="night"] .clever-faq__question::after {
+  border-top-color: #172c30;
+}
+
 [data-theme="night"] .clever-pricing-card:not(.clever-pricing-card--popular) .clever-pricing-card__name,
-[data-theme="night"] .clever-pricing-card:not(.clever-pricing-card--popular) .clever-pricing-card__features-title,
-[data-theme="night"] .clever-faq-item__question {
+[data-theme="night"] .clever-pricing-card:not(.clever-pricing-card--popular) .clever-pricing-card__features-title {
   color: #edf6f3 !important;
 }
 
 [data-theme="night"] .clever-pricing-card:not(.clever-pricing-card--popular) .clever-pricing-card__tagline,
 [data-theme="night"] .clever-pricing-card:not(.clever-pricing-card--popular) .clever-pricing-card__period,
-[data-theme="night"] .clever-pricing-card:not(.clever-pricing-card--popular) .clever-pricing-card__feature-item,
-[data-theme="night"] .clever-faq-item__answer {
+[data-theme="night"] .clever-pricing-card:not(.clever-pricing-card--popular) .clever-pricing-card__feature-item {
   color: #a6bbb7 !important;
 }
 
