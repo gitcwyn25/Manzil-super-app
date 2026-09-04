@@ -20,6 +20,16 @@ enum BusinessStatus {
   suspended
 }
 
+enum BusinessApplicationStatus {
+  draft
+  submitted
+  under_review
+  changes_requested
+  approved
+  rejected
+  withdrawn
+}
+
 enum ModerationStatus {
   pending
   approved
@@ -152,6 +162,8 @@ model User {
   customers          Customer[]
   reviewHelpfulVotes ReviewHelpfulVote[]
   legalAcceptances   LegalAcceptance[]
+  businessApplications BusinessApplication[] @relation("BusinessApplicationApplicant")
+  reviewedApplications BusinessApplication[] @relation("BusinessApplicationReviewer")
 
   @@index([role])
   @@index([status])
@@ -240,12 +252,50 @@ model Business {
   contracts        Contract[]
   campaigns        Campaign[]
   adminNotifications AdminNotification[]
+  applications      BusinessApplication[]
 
   @@index([categoryId])
   @@index([city, district])
   @@index([status])
   @@index([avgRating, reviewCount])
   @@index([parentBusinessId])
+}
+
+/// Pre-contract business onboarding record. This is intentionally separate from
+/// Business: submitting an application must not create a public listing or
+/// unlock a business workspace before Manzil review and agreement.
+model BusinessApplication {
+  id                    String                    @id @default(cuid())
+  applicantUserId       String
+  businessId            String?                   @unique
+  status                BusinessApplicationStatus @default(draft)
+  name                  String
+  categorySlug          String
+  descriptionUz         String
+  address               String
+  district              String
+  city                  String                    @default("Tashkent")
+  phone                 String?
+  email                 String?
+  website               String?
+  telegram              String?
+  workingHours          Json?
+  acceptedTermsVersion  String?
+  acceptedTermsAt       DateTime?
+  acceptedTermsIp       String?
+  acceptedTermsUserAgent String?
+  submittedAt           DateTime?
+  reviewedByUserId      String?
+  reviewNote            String?
+  createdAt             DateTime                  @default(now())
+  updatedAt             DateTime                  @updatedAt
+
+  applicant User      @relation("BusinessApplicationApplicant", fields: [applicantUserId], references: [id])
+  business  Business? @relation(fields: [businessId], references: [id])
+  reviewer  User?     @relation("BusinessApplicationReviewer", fields: [reviewedByUserId], references: [id])
+
+  @@index([applicantUserId, status])
+  @@index([status, createdAt])
 }
 
 model Review {
