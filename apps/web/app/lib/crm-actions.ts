@@ -83,8 +83,8 @@ function tashkentIso(formData: FormData, key: string): string | undefined {
 /* ---------- Registration + plan ---------- */
 
 /**
- * Business registration — a create, and the write most likely to have produced
- * the duplicate listing in the live catalogue.
+ * Business onboarding — a create of a pending application, never an immediate
+ * public listing or workspace access before Manzil review and contract.
  *
  * Two changes from the previous version, both required by the mutation system
  * (Epic 17) and both about what happens when things go wrong:
@@ -117,11 +117,11 @@ export async function registerBusinessAction(
   // @Equals(true) — the client check is for a fast, clear error, not security.
   const acceptedTerms = formData.get("acceptedTerms") === "on";
 
-  let slug: string;
+  let applicationId: string;
 
   try {
     const payload = await crmSend(
-      "/crm/register",
+      "/crm/applications",
       "POST",
       {
         name: text(formData, "name"),
@@ -133,17 +133,18 @@ export async function registerBusinessAction(
         phone: text(formData, "phone"),
         email: text(formData, "email"),
         website: text(formData, "website"),
-        instagram: text(formData, "instagram"),
+        workingHours: text(formData, "workingHours"),
+
         telegram: text(formData, "telegram"),
-        legalName: text(formData, "legalName"),
-        taxId: text(formData, "taxId"),
+
+
         acceptedTerms,
         acceptedTermsVersion: text(formData, "acceptedTermsVersion")
       },
       idempotencyKeyFrom(formData)
     );
 
-    slug = (payload as { data: { slug: string } }).data.slug;
+    applicationId = (payload as { data: { id: string } }).data.id;
   } catch (error) {
     // Localized only as a last resort: `crmSend` lifts the API's validation
     // messages into `Error.message`, and telling the owner which field is
@@ -151,14 +152,14 @@ export async function registerBusinessAction(
     return formError(
       error,
       locale === "ru"
-        ? "Не удалось зарегистрировать бизнес. Попробуйте ещё раз."
+        ? "Не удалось отправить заявку. Попробуйте ещё раз."
         : locale === "en"
-          ? "Couldn't register the business. Please try again."
-          : "Biznesni ro'yxatdan o'tkazib bo'lmadi. Qayta urinib ko'ring."
+          ? "Couldn't submit the application. Please try again."
+          : "Arizani yuborib bo'lmadi. Qayta urinib ko'ring."
     );
   }
 
-  redirect(`/${locale}/business/plans?business=${slug}`);
+  redirect(`/${locale}/business/application/${applicationId}`);
 }
 
 export async function choosePlanAction(formData: FormData) {
