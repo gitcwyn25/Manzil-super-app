@@ -7,7 +7,7 @@ import { Reveal } from "../motion/reveal";
 import { Icon } from "../vm/icons";
 
 export function CleverFeatures({ copy, locale }: { copy: CleverFeaturesCopy; locale: Locale }) {
-  const tabs = copy.tabs.filter((tab) => tab.id !== "concierge");
+  const tabs = copy.tabs;
   const [activeTab, setActiveTab] = useState(tabs[0]?.id ?? "catalog");
 
   const currentTab = tabs.find((t) => t.id === activeTab) ?? tabs[0];
@@ -82,17 +82,14 @@ export function CleverFeatures({ copy, locale }: { copy: CleverFeaturesCopy; loc
               </div>
             </div>
 
-            {/* Visual preview card / metric stat box */}
+            {/* Factual capability status; never a fabricated performance metric. */}
             <div className="clever-feature-panel__visual">
-              <div className="clever-stat-card">
-                <div className="clever-stat-card__metric">{currentTab.metricValue}</div>
-                <div className="clever-stat-card__label">{currentTab.metricLabel}</div>
-                <div className="clever-stat-card__bars">
-                  <span className="clever-stat-bar clever-stat-bar--1" />
-                  <span className="clever-stat-bar clever-stat-bar--2" />
-                  <span className="clever-stat-bar clever-stat-bar--3" />
-                  <span className="clever-stat-bar clever-stat-bar--4" />
+              <div className="clever-feature-status-card">
+                <div className="clever-feature-status-card__icon">
+                  <Icon name="check_circle" size={24} />
                 </div>
+                <div className="clever-feature-status-card__value">{currentTab.metricValue}</div>
+                <div className="clever-feature-status-card__label">{currentTab.metricLabel}</div>
               </div>
             </div>
           </div>

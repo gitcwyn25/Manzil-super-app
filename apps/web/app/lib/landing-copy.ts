@@ -8,12 +8,28 @@ export type CleverHeroCopy = {
   title2: string;
   subtitle: string;
   explore: string;
-  how: string;
-  chatName: string;
-  chatStatus: string;
-  chatAi: string;
-  chatUser: string;
+  secondaryCta: string;
+  systemAriaLabel: string;
+  systemLiveLabel: string;
+  systemLiveTitle: string;
+  systemFutureLabel: string;
+  systemFutureTitle: string;
+  systemFutureNote: string;
+  systemChips: string[];
   microPerks: string[];
+};
+
+export type GurmanPreviewCopy = {
+  eyebrow: string;
+  title: string;
+  description: string;
+  boundary: string;
+  status: string;
+  cta: string;
+  previewTitle: string;
+  previewSubtitle: string;
+  previewFooter: string;
+  chips: string[];
 };
 
 export type CleverBenefitCard = {
@@ -138,6 +154,7 @@ export type LandingCopy = {
   ios: string;
   android: string;
   hero: CleverHeroCopy;
+  gurman: GurmanPreviewCopy;
   benefits: CleverBenefitsCopy;
   features: CleverFeaturesCopy;
   process: CleverProcessCopy;
@@ -147,6 +164,7 @@ export type LandingCopy = {
   testimonials: CleverTestimonialsCopy;
   faq: CleverFaqCopy;
   finalCta: CleverCtaCopy;
+  homeCta: CleverCtaCopy;
 };
 
 const landing: Record<string, LandingCopy> = {
@@ -156,17 +174,33 @@ const landing: Record<string, LandingCopy> = {
     android: "Google Play",
     hero: {
       memberBadge: "Toshkentdagi haqiqiy maskanlar",
-      title1: "Joy emas,",
-      title2: "tajriba rejalashtiring.",
+      title1: "Haqiqiy joylarni toping.",
+      title2: "Keyingi rejangizni tasavvur qiling.",
       subtitle:
-        "Nima rejalashtirayotganingizni ayting. Manzil katalogi mavjud maskanlarni solishtirishga yordam beradi.",
-      explore: "Rejani boshlash",
-      how: "Katalogni ko'rish",
-      chatName: "Manzil katalogi",
-      chatStatus: "Toshkentdagi joylar",
-      chatAi: "Salom! Toshkentdagi haqiqiy joylar va sharhlarni ko'ring.",
-      chatUser: "Shanba oqshomi uchun sokin, sifatli qahva va desertlari bor joy kerak.",
-      microPerks: ["Katalog ma'lumotlari", "Toshkentdan boshlang", "Bepul boshlash"]
+        "Manzil Toshkentdagi mavjud mahalliy bizneslarni topish va solishtirishga yordam beradi. Gurman AI esa kelajakdagi mobil rejalashtirish tajribasi sifatida ishlab chiqilmoqda.",
+      explore: "Joylarni kashf etish",
+      secondaryCta: "Gurman mobiliga qo'shilish",
+      systemAriaLabel: "Manzil tizimi: hozirgi katalogdan kelajakdagi Gurman mobil tajribasigacha",
+      systemLiveLabel: "Hozir mavjud",
+      systemLiveTitle: "Mavjud joylarni ko'ring",
+      systemFutureLabel: "Mobil preview",
+      systemFutureTitle: "Gurman AI rejalashtirish",
+      systemFutureNote: "Kutish ro'yxati ochiq",
+      systemChips: ["Joy", "Taom", "Tort", "Budjet"],
+      microPerks: ["Mavjud katalog ma'lumotlari", "Toshkentdan boshlang", "Bepul ko'rish"]
+    },
+    gurman: {
+      eyebrow: "Gurman AI · mobil tajriba",
+      title: "“Nima qilamiz?” savolidan aniqroq rejaga.",
+      description:
+        "Gurman AI mahalliy tajribalarni rejalashtirish uchun mobil tajriba sifatida ishlab chiqilmoqda. U joy, taom, tort, transport, budjet, kayfiyat va vaqt kabi afzalliklarni bitta tahrirlanadigan reja atrofida ko'rishga yordam berishi ko'zda tutilgan.",
+      boundary: "Hozir: konsept va kutish ro'yxati. Webda chat yoki bronlash yo'q.",
+      status: "Mobil preview · Kutish ro'yxati ochiq",
+      cta: "Gurman kutish ro'yxatiga qo'shilish",
+      previewTitle: "4 kishilik tug'ilgan kun",
+      previewSubtitle: "Reja konsepti",
+      previewFooter: "Konsept preview · bronlash yoki jonli mavjudlik yo'q",
+      chips: ["Joy", "Taom", "Tort", "Transport", "Budjet", "Kayfiyat", "Vaqt"]
     },
     benefits: {
       badge: "Afzalliklar",
@@ -197,39 +231,39 @@ const landing: Record<string, LandingCopy> = {
         },
         {
           icon: "trending_up",
-          tag: "Biznes Hamkorlik",
-          title: "Biznesingizni yangi bosqichga olib chiqing",
+          tag: "Biznes profili",
+          title: "Biznesingizni katalogda ko'rsating",
           description:
-            "Kompaniyangizni ro'yxatdan o'tkazing, yangi mijozlar oqimiga ega bo'ling va statistikalarni kuzating."
+            "Biznesingizni katalogga qo'shing, xizmatlaringizni ko'rsating va mavjud profil ma'lumotlarini boshqaring."
         }
       ]
     },
     features: {
       badge: "Xususiyatlar",
       title: "Shaharni kashf qilishning yangi usuli",
-      subtitle: "Foydalanuvchilar va biznes egalari uchun qulaylik yaratuvchi zamonaviy funksiyalar.",
+      subtitle: "Katalog foydalanuvchilari va biznes egalari uchun mavjud funksiyalar.",
       tabs: [
         {
-          id: "concierge",
+          id: "discover",
           label: "Katalog",
-          title: "Sizning shaxsiy shahar gid-maslahatchisi",
+          title: "Toshkent katalogini tushunib tanlang",
           description:
-            "Turkumlar, tumanlar va reytinglar bo'yicha kerakli maskanni tez toping.",
+            "Turkumlar, tumanlar va katalogda mavjud ma'lumotlar bo'yicha joylarni toping va solishtiring.",
           bullets: [
-            "Tabiiy tildagi savollarni tushunish (O'zbek, Rus, Ingliz)",
-            "Haqiqiy sharhlardagi muhim jihatlarni umumlashtirish",
+            "Tuman va turkum bo'yicha qidirish",
+            "Mavjud baho, sharh va fotosuratlarni solishtirish",
             "To'g'ridan-to'g'ri bog'lanish va marshrut tuzish"
           ],
-          badge: "Aqlli Tavsiya",
-          metricLabel: "Qidiruv vaqti tejalishi",
-          metricValue: "—"
+          badge: "Mavjud katalog",
+          metricLabel: "Katalog holati",
+          metricValue: "Mavjud maydonlar"
         },
         {
           id: "catalog",
           label: "Aqlli Katalog",
-          title: "Toshkentning eng yaxshi maskanlari bir joyda",
+          title: "Toshkent maskanlarini bir katalogda ko'ring",
           description:
-            "Turkumlar, tumanlar va reytinglar bo'yicha qulay filtrlash tizimi. Mavjud ish vaqti, menyu, fotosuratlar va aloqa ma'lumotlarini bir joyda ko'ring.",
+            "Turkum va tuman bo'yicha joylarni toping, so'ng mavjud ish vaqti, menyu, fotosurat va aloqa ma'lumotlarini solishtiring.",
           bullets: [
             "Tumanlar va lokatsiya bo'yicha tezkor saralash",
             "Mavjud fotosuratlarni ko'rish",
@@ -237,22 +271,22 @@ const landing: Record<string, LandingCopy> = {
           ],
           badge: "Katalog ma'lumotlari",
           metricLabel: "Katalog holati",
-          metricValue: "—"
+          metricValue: "Mavjud maydonlar"
         },
         {
           id: "business",
           label: "Biznes Portali",
-          title: "Mijozlar sizni oson topishsin",
+          title: "Biznesingizni katalogda ko'rsating",
           description:
-            "Biznesingiz profilini yarating, xizmatlaringizni joylashtiring, aksiyalar e'lon qiling va to'g'ridan-to'g'ri mijozlar oqimini qabul qiling.",
+            "Biznesingiz profilini yarating, xizmatlaringizni joylashtiring va katalog foydalanuvchilari uchun to'g'ridan-to'g'ri aloqa kanallarini ko'rsating.",
           bullets: [
-            "Qulay boshqaruv paneli va tahlillar",
-            "Mijozlar sharhlariga tezkor javob berish",
+            "Profil ma'lumotlarini boshqarish",
+            "Mavjud sharhlar bilan ishlash",
             "Katalogda ko'rinish"
           ],
           badge: "Biznes profili",
           metricLabel: "Profil holati",
-          metricValue: "—"
+          metricValue: "Katalogga qo'shilish"
         }
       ]
     },
@@ -272,7 +306,7 @@ const landing: Record<string, LandingCopy> = {
           number: "02",
           title: "Variantlarni solishtiring",
           description:
-            "Mehmonlarning xolisona fikrlari, baholari va haqiqiy fotosuratlarini ko'rib, to'g'ri qaror qabul qiling.",
+            "Mavjud baholar, sharhlar va fotosuratlarni ko'rib, o'zingizga mos qaror qiling.",
           icon: "star"
         },
         {
@@ -285,13 +319,13 @@ const landing: Record<string, LandingCopy> = {
       ]
     },
     bento: {
-      title: "Eng yaxshi joylar",
+      title: "Katalogdagi joylar",
       subtitle: "Manzildagi katalog joylari — mavjud sharhlar va ma'lumotlar bilan.",
       viewAll: "Barcha turkumlarni ko'rish",
       featuredBadge: "Tanlangan",
       partnerTitle: "Biznesingiz bormi?",
       partnerText:
-        "Manzilga qo'shiling — xizmatlaringizni izlayotgan mijozlar sizni oson topishsin.",
+        "Profilingizni Manzil katalogiga qo'shing va xizmatlaringizni katalog foydalanuvchilariga ko'rsating.",
       partnerCta: "Hamkor bo'lish"
     },
     pricing: {
@@ -353,53 +387,22 @@ const landing: Record<string, LandingCopy> = {
       ]
     },
     waitlist: {
-      badge: "Kengayish",
-      title: "O'z shahringizda birinchilardan bo'ling",
+      badge: "Gurman mobil",
+      title: "Gurman mobil tajribasiga qiziqasizmi?",
       subtitle:
-        "Samarqand, Buxoro, Namangan va boshqa shaharlarga tez orada kirib boramiz. Ro'yxatdan o'ting va yangiliklardan birinchi bo'lib xabardor bo'ling.",
-      placeholder: "Telefon raqamingiz yoki emailingiz...",
-      cityPlaceholder: "Shahringizni tanlang...",
-      cta: "Navbatga qo'shilish",
-      note: "Spam yo'q. Faqat shahringizda ishga tushganimizda xabar beramiz.",
-      successTitle: "Rahmat! Siz navbatdasiz.",
-      successBody: "Shahringizda platforma ochilishi bilan sizga birinchi bo'lib maxsus bonus bilan xabar yo'llaymiz."
+        "Email manzilingizni qoldiring — Gurman mobil tajribasi haqida yangiliklar bo'lsa, xabar beramiz.",
+      placeholder: "Email manzilingiz...",
+      cityPlaceholder: "",
+      cta: "Yangiliklardan xabardor bo'lish",
+      note: "Spam yo'q. Faqat Gurman mobil tajribasi haqidagi yangiliklar.",
+      successTitle: "Rahmat — siz ro'yxatdasiz.",
+      successBody: "Gurman mobil tajribasi haqida yangiliklar bo'lsa, sizga xabar beramiz."
     },
     testimonials: {
-      badge: "Fikrlar",
-      title: "Foydalanuvchilarimiz nima deydi?",
-      subtitle: "Manzil orqali qulaylikka erishgan shahar aholisi va biznes egalari fikrlari.",
-      items: [
-        {
-          name: "Jasur Rahimov",
-          role: "Muntazam foydalanuvchi",
-          company: "Toshkent",
-          avatar: "JR",
-          rating: 5,
-          highlight: "Manzil juda qulay!",
-          content:
-            "Kechki ovqat uchun tinch va mazali joy izlayotgandim. Manzil orqali mos qahvaxonani tez topdim."
-        },
-        {
-          name: "Dilnoza Karimova",
-          role: "Kafe asoschisi",
-          company: "Vanilla Lounge",
-          avatar: "DK",
-          rating: 5,
-          highlight: "Mijozlar oqimi sezilarli oshdi",
-          content:
-            "Manzil platformasida ro'yxatdan o'tganimizdan so'ng, yangi mehmonlarimiz safi kengaydi."
-        },
-        {
-          name: "Bobur Mirzayev",
-          role: "Mahalliy sayyoh",
-          company: "Samarqand",
-          avatar: "BM",
-          rating: 5,
-          highlight: "Haqiqiy sharhlar va aniq manzillar",
-          content:
-            "Toshkentga kelganimda sifatli xizmat ko'rsatish joylarini topish juda qiyin edi. Manzil menga eng toza va xizmati yuqori joylarni tezda topishga yordam berdi."
-        }
-      ]
+      badge: "Jamiyat fikrlari",
+      title: "Haqiqiy dalillarni ko'rsatamiz.",
+      subtitle: "Tekshirilgan fikrlar uchun manba va ruxsat bo'lmasa, ularni nashr qilmaymiz.",
+      items: []
     },
     faq: {
       badge: "Ko'p so'raladigan savollar",
@@ -427,9 +430,9 @@ const landing: Record<string, LandingCopy> = {
             "Manzil uch tilda: O'zbekcha (lotin), Ruscha va Inglizcha faoliyat yuritadi."
         },
         {
-          question: "Boshqa shaharlar (Samarqand, Buxoro) qachon qo'shiladi?",
+          question: "Boshqa shaharlar qachon qo'shiladi?",
           answer:
-            "Hozirda Toshkent to'liq qamrab olingan bo'lib, viloyat markazlariga bosqichma-bosqich kengaymoqdamiz. 'Kengayish' bo'limida o'z shahringizni tanlab navbatga yozilishingiz mumkin."
+            "Hozirgi katalog Toshkentga qaratilgan. Boshqa shaharlar bo'yicha ochilish sanasi e'lon qilinmagan."
         }
       ]
     },
@@ -443,6 +446,17 @@ const landing: Record<string, LandingCopy> = {
       secondaryCta: "Biznesni qo'shish",
       secondaryHref: "/uz/business/register",
       perks: ["Tezkor & Oson", "Mavjud sharhlar", "Bepul boshlash"]
+    },
+    homeCta: {
+      badge: "Manzil tizimi",
+      title: "Bugun katalogni ko'ring. Ertangi Gurman mobil tajribasini kuting.",
+      subtitle:
+        "Mavjud joylarni solishtiring yoki Gurman mobil tajribasi haqidagi yangiliklarga yoziling.",
+      primaryCta: "Katalogni ko'rish",
+      primaryHref: "/uz/discover",
+      secondaryCta: "Gurman yangiliklari",
+      secondaryHref: "/uz/waitlist/gurman",
+      perks: ["Hozir: katalog", "Preview: mobil Gurman", "Bronlash simulyatsiya qilinmaydi"]
     }
   },
   ru: {
@@ -451,17 +465,33 @@ const landing: Record<string, LandingCopy> = {
     android: "Google Play",
     hero: {
       memberBadge: "Реальные места Ташкента",
-      title1: "Планируйте впечатления,",
-      title2: "а не просто места.",
+      title1: "Находите реальные места.",
+      title2: "Планируйте то, что будет дальше.",
       subtitle:
-        "Расскажите, что ищете. Каталог Manzil поможет сравнить доступные места и принять решение на основе имеющихся данных.",
-      explore: "Начать планирование",
-      how: "Чат с Gurman AI",
-      chatName: "Gurman AI Консьерж",
-      chatStatus: "Подбирает рекомендацию…",
-      chatAi: "Здравствуйте! Какое место вы ищете? Подберу на основе настоящих отзывов и проверенных данных.",
-      chatUser: "Нужно тихое, атмосферное место с хорошим кофе и десертами на субботний вечер.",
-      microPerks: ["Каталог Manzil", "Данные профилей", "Бесплатный старт"]
+        "Manzil помогает находить и сравнивать доступные локальные бизнесы в Ташкенте. Gurman AI разрабатывается как будущий мобильный помощник для планирования впечатлений.",
+      explore: "Открыть каталог",
+      secondaryCta: "В лист ожидания мобильного Gurman",
+      systemAriaLabel: "Система Manzil: от доступного каталога к будущему мобильному Gurman",
+      systemLiveLabel: "Доступно сейчас",
+      systemLiveTitle: "Смотрите доступные места",
+      systemFutureLabel: "Предпросмотр",
+      systemFutureTitle: "Мобильное планирование Gurman",
+      systemFutureNote: "Лист ожидания открыт",
+      systemChips: ["Место", "Еда", "Торт", "Бюджет"],
+      microPerks: ["Доступные данные каталога", "Начинаем с Ташкента", "Можно изучать бесплатно"]
+    },
+    gurman: {
+      eyebrow: "Gurman AI · мобильный опыт",
+      title: "От «что будем делать?» — к понятному плану.",
+      description:
+        "Gurman AI разрабатывается как мобильный планировщик локальных впечатлений. Он должен помогать собрать в одном редактируемом плане место, еду, торт, транспорт, бюджет, атмосферу и время.",
+      boundary: "Сейчас: концепция и лист ожидания. Веб-чата и бронирования пока нет.",
+      status: "Предпросмотр · мобильный продукт · лист ожидания открыт",
+      cta: "В лист ожидания Gurman",
+      previewTitle: "День рождения для 4 человек",
+      previewSubtitle: "Концепция плана",
+      previewFooter: "Концепт · без бронирования и онлайн-доступности",
+      chips: ["Место", "Еда", "Торт", "Транспорт", "Бюджет", "Атмосфера", "Время"]
     },
     benefits: {
       badge: "Преимущества",
@@ -472,9 +502,9 @@ const landing: Record<string, LandingCopy> = {
         {
           icon: "sparkles",
           tag: "Каталог Manzil",
-          title: "Персональные советы от Gurman AI",
+          title: "Находите реальные места",
           description:
-            "Опишите свои пожелания простыми словами — Gurman AI проанализирует реальные отзывы и подберёт идеальные варианты."
+            "Сравнивайте доступные карточки мест, отзывы, фотографии и другие поля каталога перед своим решением."
         },
         {
           icon: "verified",
@@ -493,38 +523,38 @@ const landing: Record<string, LandingCopy> = {
         {
           icon: "trending_up",
           tag: "Для бизнеса",
-          title: "Новый уровень для вашего бизнеса",
+          title: "Покажите бизнес в каталоге",
           description:
-            "Добавьте свою компанию в каталог, привлекайте платёжеспособную аудиторию и отслеживайте статистику."
+            "Добавьте компанию в каталог, покажите основные услуги и управляйте доступными данными профиля."
         }
       ]
     },
     features: {
       badge: "Возможности",
       title: "Новый взгляд на городскую жизнь",
-      subtitle: "Современные инструменты для удобного поиска и роста локального бизнеса.",
+      subtitle: "Доступные функции для поиска мест и представления локального бизнеса.",
       tabs: [
         {
-          id: "concierge",
-          label: "Gurman AI Консьерж",
-          title: "Ваш личный персональный городской гид",
+          id: "discover",
+          label: "Каталог",
+          title: "Сравнивайте места Ташкента по доступным данным",
           description:
-            "Находите подходящие места за секунды. В отличие от обычных поисковиков, Gurman AI учитывает атмосферу, нюансы из отзывов и соотношение цены и качества.",
+            "Находите места по категориям и районам, а затем сравнивайте те поля каталога, которые доступны сегодня.",
           bullets: [
-            "Понимание запросов на естественном языке (Узбекский, Русский, Английский)",
-            "Сводка ключевых преимуществ из реальных отзывов",
+            "Поиск по районам и категориям",
+            "Доступные оценки, отзывы и фотографии",
             "Прямая связь с заведением и прокладка маршрута"
           ],
-          badge: "Умный выбор",
-          metricLabel: "Экономия времени поиска",
-          metricValue: "—"
+          badge: "Данные каталога",
+          metricLabel: "Статус каталога",
+          metricValue: "Доступные поля"
         },
         {
           id: "catalog",
           label: "Умный каталог",
-          title: "Лучшие локации Ташкента в одном месте",
+          title: "Места Ташкента в одном каталоге",
           description:
-            "Удобные фильтры по категориям, районам и рейтингам. Смотрите доступные часы работы, меню, фотографии и контакты в одном месте.",
+            "Находите места по категориям и районам, затем сравнивайте доступные часы работы, меню, фотографии и контакты.",
           bullets: [
             "Быстрая сортировка по районам и геолокации",
             "Доступные фотографии от посетителей",
@@ -532,22 +562,22 @@ const landing: Record<string, LandingCopy> = {
           ],
           badge: "Данные каталога",
           metricLabel: "Статус каталога",
-          metricValue: "—"
+          metricValue: "Доступные поля"
         },
         {
           id: "business",
           label: "Бизнес-портал",
-          title: "Пусть клиенты находят вас первыми",
+          title: "Покажите бизнес в каталоге",
           description:
-            "Создайте профиль компании, добавляйте услуги, публикуйте акции и получайте поток прямых обращений от клиентов.",
+            "Создайте профиль компании, добавьте услуги и укажите прямые каналы связи для пользователей каталога.",
           bullets: [
-            "Удобный личный кабинет и аналитика просмотров",
-            "Оперативные ответы на отзывы гостей",
+            "Управление данными профиля",
+            "Работа с доступными отзывами",
             "Расширенное представление профиля"
           ],
           badge: "Профиль бизнеса",
           metricLabel: "Статус профиля",
-          metricValue: "—"
+          metricValue: "Добавление в каталог"
         }
       ]
     },
@@ -567,7 +597,7 @@ const landing: Record<string, LandingCopy> = {
           number: "02",
           title: "Изучите честные отзывы",
           description:
-            "Ознакомьтесь с реальными мнениями, рейтингами и фото гостей перед принятием решения.",
+            "Изучите доступные оценки, отзывы и фотографии перед принятием решения.",
           icon: "star"
         },
         {
@@ -580,13 +610,13 @@ const landing: Record<string, LandingCopy> = {
       ]
     },
     bento: {
-      title: "Лучшие места",
+      title: "Места из каталога",
       subtitle: "Места из каталога Manzil — с доступными отзывами и данными.",
       viewAll: "Все категории",
       featuredBadge: "Выбор Manzil",
       partnerTitle: "У вас свой бизнес?",
       partnerText:
-        "Присоединяйтесь к Manzil — пусть вас находят клиенты, которые ищут ваши услуги.",
+        "Добавьте профиль в каталог и покажите услуги пользователям Manzil.",
       partnerCta: "Стать партнёром"
     },
     pricing: {
@@ -648,53 +678,22 @@ const landing: Record<string, LandingCopy> = {
       ]
     },
     waitlist: {
-      badge: "Расширение",
-      title: "Будьте первыми в своём городе",
+      badge: "Gurman mobile",
+      title: "Хотите узнать о мобильном Gurman?",
       subtitle:
-        "Мы скоро запускаемся в Самарканде, Бухаре, Намангане и других регионах. Запишитесь в лист ожидания и получите ранний доступ.",
-      placeholder: "Ваш телефон или email...",
-      cityPlaceholder: "Выберите ваш город...",
-      cta: "Вступить в лист ожидания",
-      note: "Без спама. Сообщим только при запуске в вашем городе.",
-      successTitle: "Спасибо! Вы в списке ожидания.",
-      successBody: "Как только сервис откроется в вашем городе, вы получите персональное уведомление с бонусом."
+        "Оставьте email — мы сообщим новости о мобильном Gurman, когда появятся обновления.",
+      placeholder: "Ваш email...",
+      cityPlaceholder: "",
+      cta: "Узнавать новости",
+      note: "Без спама. Только новости о мобильном Gurman.",
+      successTitle: "Спасибо — вы в списке.",
+      successBody: "Мы сообщим новости о мобильном Gurman, когда появятся обновления."
     },
     testimonials: {
-      badge: "Отзывы",
-      title: "Что говорят наши пользователи?",
-      subtitle: "Истории жителей города и владельцев бизнеса, использующих Manzil.",
-      items: [
-        {
-          name: "Жасур Рахимов",
-          role: "Постоянный пользователь",
-          company: "Ташкент",
-          avatar: "ЖР",
-          rating: 5,
-          highlight: "Gurman AI — это просто находка!",
-          content:
-            "Искал уютное место для семейного ужина. Gurman AI порекомендовал отличный ресторан с прекрасной террасой. Всё совпало с описанием до мелочей."
-        },
-        {
-          name: "Дильноза Каримова",
-          role: "Основательница кофейни",
-          company: "Vanilla Lounge",
-          avatar: "ДК",
-          rating: 5,
-          highlight: "Поток гостей заметно вырос",
-          content:
-            "После регистрации на Manzil к нам стали приходить новые гости, которые отмечают, что нашли нас именно через рекомендации AI-консьержа."
-        },
-        {
-          name: "Бобур Мирзаев",
-          role: "Путешественник",
-          company: "Самарканд",
-          avatar: "БМ",
-          rating: 5,
-          highlight: "Честные отзывы и точные координаты",
-          content:
-            "Приезжая в столицу по работе, всегда открываю Manzil. Очень удобно находить проверенные заведения рядом с местом встречи."
-        }
-      ]
+      badge: "Отзывы сообщества",
+      title: "Показываем реальные доказательства.",
+      subtitle: "Мы не публикуем отзывы без проверенного источника и разрешения.",
+      items: []
     },
     faq: {
       badge: "Часто задаваемые вопросы",
@@ -724,7 +723,7 @@ const landing: Record<string, LandingCopy> = {
         {
           question: "Когда сервис появится в других городах Узбекистана?",
           answer:
-            "Мы уже масштабируемся на Самарканд, Бухару и Ферганскую долину. Вы можете оставить заявку в разделе 'Расширение', чтобы узнать о старте первыми."
+            "Текущий каталог ориентирован на Ташкент. Даты запуска в других городах пока не объявлены."
         }
       ]
     },
@@ -738,6 +737,17 @@ const landing: Record<string, LandingCopy> = {
       secondaryCta: "Зарегистрировать бизнес",
       secondaryHref: "/ru/business/register",
       perks: ["Быстрый старт", "Доступные отзывы", "Бесплатный старт"]
+    },
+    homeCta: {
+      badge: "Система Manzil",
+      title: "Откройте каталог сегодня. Следите за мобильным Gurman завтра.",
+      subtitle:
+        "Сравнивайте доступные места или подписывайтесь на новости о мобильном опыте Gurman.",
+      primaryCta: "Открыть каталог",
+      primaryHref: "/ru/discover",
+      secondaryCta: "Новости Gurman",
+      secondaryHref: "/ru/waitlist/gurman",
+      perks: ["Сейчас: каталог", "Предпросмотр: Gurman mobile", "Бронирование не симулируем"]
     }
   },
   en: {
@@ -746,17 +756,33 @@ const landing: Record<string, LandingCopy> = {
     android: "Google Play",
     hero: {
       memberBadge: "Real places in Tashkent",
-      title1: "Plan experiences,",
-      title2: "not just places.",
+      title1: "Find real places.",
+      title2: "Plan what comes next.",
       subtitle:
-        "Tell us what you are looking for. The Manzil directory helps you compare available places using the data it has.",
-      explore: "Start planning",
-      how: "Chat with Gurman AI",
-      chatName: "Gurman AI Concierge",
-      chatStatus: "Generating real-time recommendation…",
-      chatAi: "Hello! What kind of place are you looking for? I recommend based on authentic reviews and verified data.",
-      chatUser: "Looking for a quiet, high-quality café with great coffee and desserts for Saturday evening.",
-      microPerks: ["Manzil directory", "Profile details", "Free to start"]
+        "Manzil helps you find and compare available local businesses in Tashkent. Gurman AI is being developed as a future mobile planner for local experiences.",
+      explore: "Explore Discover",
+      secondaryCta: "Join the Gurman mobile waitlist",
+      systemAriaLabel: "The Manzil system: from the available directory to future Gurman mobile planning",
+      systemLiveLabel: "Live",
+      systemLiveTitle: "Browse available places",
+      systemFutureLabel: "Mobile preview",
+      systemFutureTitle: "Gurman AI planning",
+      systemFutureNote: "Waitlist open",
+      systemChips: ["Venue", "Food", "Cake", "Budget"],
+      microPerks: ["Available directory data", "Starting in Tashkent", "Free to explore"]
+    },
+    gurman: {
+      eyebrow: "Gurman AI · mobile experience",
+      title: "From “what should we do?” to a clearer plan.",
+      description:
+        "Gurman AI is being developed as a mobile planner for local experiences. It is designed to bring venue, food, cake, transport, budget, atmosphere, and timing into one editable plan.",
+      boundary: "Now: concept and waitlist. No web chat or booking yet.",
+      status: "Mobile preview · Waitlist open",
+      cta: "Join the Gurman waitlist",
+      previewTitle: "Birthday for 4 people",
+      previewSubtitle: "Example planning workspace",
+      previewFooter: "Concept preview · no booking or live availability",
+      chips: ["Venue", "Food", "Cake", "Transport", "Budget", "Atmosphere", "Timing"]
     },
     benefits: {
       badge: "Benefits",
@@ -767,9 +793,9 @@ const landing: Record<string, LandingCopy> = {
         {
           icon: "sparkles",
           tag: "Manzil Directory",
-          title: "Personalized advice with Gurman AI",
+          title: "Find real places",
           description:
-            "Describe what you need in natural language — Gurman AI analyzes authentic guest feedback to deliver tailored options."
+            "Compare available place profiles, reviews, photos, and other directory fields before making your own decision."
         },
         {
           icon: "verified",
@@ -787,39 +813,39 @@ const landing: Record<string, LandingCopy> = {
         },
         {
           icon: "trending_up",
-          tag: "Business Growth",
-          title: "Elevate your local business",
+          tag: "Business Profile",
+          title: "Show your business in the directory",
           description:
-            "List your company on Manzil, reach high-intent customers, and track your audience engagement."
+            "List your company on Manzil, show your services, and manage the profile data available to directory users."
         }
       ]
     },
     features: {
       badge: "Features",
       title: "A smarter way to experience the city",
-      subtitle: "State-of-the-art tools crafted for both visitors and local businesses.",
+      subtitle: "Available features for finding places and presenting local businesses.",
       tabs: [
         {
-          id: "concierge",
-          label: "Gurman AI Concierge",
-          title: "Your personal AI city guide",
+          id: "discover",
+          label: "Discover",
+          title: "Compare Tashkent places using available data",
           description:
-            "Find the perfect venue in seconds. Unlike traditional search engines, Gurman AI factors in ambiance, subtle review nuances, and price-to-quality balance.",
+            "Find places by category and district, then compare the directory fields that are available today.",
           bullets: [
-            "Understands natural queries in Uzbek, Russian, and English",
-            "Synthesizes key takeaways from genuine guest reviews",
-            "Instant directions and direct contact channels"
+            "Search by district and category",
+            "Available ratings, reviews, and photos",
+            "Direct contact channels and directions"
           ],
-          badge: "Smart Match",
-          metricLabel: "Search time saved",
-          metricValue: "—"
+          badge: "Directory data",
+          metricLabel: "Directory status",
+          metricValue: "Available fields"
         },
         {
           id: "catalog",
           label: "Smart Directory",
-          title: "Tashkent's top venues in one place",
+          title: "Tashkent places in one directory",
           description:
-            "Effortless filtering by category, district, and ratings. See available hours, menus, photos, and contact details in one place.",
+            "Find places by category and district, then compare available hours, menus, photos, and contact details.",
           bullets: [
             "Fast district and geolocation filtering",
             "Available visitor photo galleries",
@@ -827,29 +853,29 @@ const landing: Record<string, LandingCopy> = {
           ],
           badge: "Catalogue data",
           metricLabel: "Catalogue status",
-          metricValue: "—"
+          metricValue: "Available fields"
         },
         {
           id: "business",
           label: "Business Portal",
-          title: "Let new customers discover you first",
+          title: "Show your business in the directory",
           description:
-            "Create your business profile, post service listings, announce promotions, and receive direct inquiries from local customers.",
+            "Create a business profile, add service listings, and show direct contact channels for directory users.",
           bullets: [
-            "Intuitive management console and view analytics",
-            "Prompt review responses to build trust",
+            "Manage available profile data",
+            "Work with available reviews",
             "Enhanced catalogue profile"
           ],
           badge: "Business profile",
           metricLabel: "Profile status",
-          metricValue: "—"
+          metricValue: "Join the directory"
         }
       ]
     },
     process: {
       badge: "How it works",
       title: "From an idea to a memory",
-      subtitle: "Gurman clarifies your plan, compares real options, and helps you take the next step.",
+      subtitle: "The Manzil directory helps you compare available options and choose your next step.",
       steps: [
         {
           number: "01",
@@ -862,7 +888,7 @@ const landing: Record<string, LandingCopy> = {
           number: "02",
           title: "Compare real options",
           description:
-            "Review real ratings, genuine opinions, and visitor photos before making your choice.",
+            "Review the ratings, opinions, and visitor photos available on each profile before making your choice.",
           icon: "star"
         },
         {
@@ -875,12 +901,12 @@ const landing: Record<string, LandingCopy> = {
       ]
     },
     bento: {
-      title: "Experience the best",
+      title: "Explore available places",
       subtitle: "Places listed on Manzil, with the reviews and details that are available.",
       viewAll: "View all categories",
       featuredBadge: "Featured",
       partnerTitle: "Own a local business?",
-      partnerText: "Join Manzil and get found by customers who are looking for your services.",
+      partnerText: "List your profile on Manzil and show your services to directory users.",
       partnerCta: "Partner with us"
     },
     pricing: {
@@ -942,58 +968,27 @@ const landing: Record<string, LandingCopy> = {
       ]
     },
     waitlist: {
-      badge: "Expansion",
-      title: "Be the first in your city",
+      badge: "Gurman mobile",
+      title: "Curious about the Gurman mobile experience?",
       subtitle:
-        "We are expanding rapidly to Samarkand, Bukhara, Namangan, and beyond. Join our early waitlist for priority launch benefits.",
-      placeholder: "Your phone or email address...",
-      cityPlaceholder: "Select your city...",
-      cta: "Join Waitlist",
-      note: "No spam. We will only notify you when we launch in your area.",
-      successTitle: "Thank you! You're on the list.",
-      successBody: "We will notify you with special early-access perks as soon as Manzil goes live in your city."
+        "Leave your email and we will share updates about Gurman mobile as they become available.",
+      placeholder: "Your email...",
+      cityPlaceholder: "",
+      cta: "Get updates",
+      note: "No spam. Only updates about Gurman mobile.",
+      successTitle: "Thank you — you are on the list.",
+      successBody: "We will share updates about Gurman mobile as they become available."
     },
     testimonials: {
-      badge: "Testimonials",
-      title: "What our community says",
-      subtitle: "Hear how Manzil helps visitors and local entrepreneurs connect every day.",
-      items: [
-        {
-          name: "Jasur Rahimov",
-          role: "Active Member",
-          company: "Tashkent",
-          avatar: "JR",
-          rating: 5,
-          highlight: "Gurman AI is incredible!",
-          content:
-            "I was searching for a quiet dinner spot. The café recommended by Gurman AI was spot on with its ambiance and coffee quality. Manzil is now my default weekend guide."
-        },
-        {
-          name: "Dilnoza Karimova",
-          role: "Café Founder",
-          company: "Vanilla Lounge",
-          avatar: "DK",
-          rating: 5,
-          highlight: "Customer influx increased significantly",
-          content:
-            "Since listing our venue on Manzil, we've welcomed dozens of new guests who discovered us directly via AI Concierge suggestions."
-        },
-        {
-          name: "Bobur Mirzayev",
-          role: "Local Explorer",
-          company: "Samarkand",
-          avatar: "BM",
-          rating: 5,
-          highlight: "Honest feedback and accurate locations",
-          content:
-            "Whenever I travel to Tashkent on business, Manzil is indispensable for pinpointing high-standard dining and meeting spots near me."
-        }
-      ]
+      badge: "Community evidence",
+      title: "Show the evidence, not invented outcomes.",
+      subtitle: "We do not publish testimonials without a verified source and permission.",
+      items: []
     },
     faq: {
       badge: "FAQ",
       title: "Frequently Asked Questions",
-      subtitle: "Everything you need to know about Manzil and the planned Gurman mobile app.",
+      subtitle: "Everything you need to know about Manzil and the planned Gurman mobile experience.",
       items: [
         {
           question: "What is Manzil?",
@@ -1018,7 +1013,7 @@ const landing: Record<string, LandingCopy> = {
         {
           question: "When will other cities be added?",
           answer:
-            "We are actively expanding across Samarkand, Bukhara, and the Fergana Valley. You can submit your city in the 'Expansion' section to be alerted on launch day."
+            "The current directory is focused on Tashkent. Launch dates for other cities have not been announced."
         }
       ]
     },
@@ -1032,6 +1027,17 @@ const landing: Record<string, LandingCopy> = {
       secondaryCta: "Register Business",
       secondaryHref: "/en/business/register",
       perks: ["Instant Start", "Available reviews", "Free to begin"]
+    },
+    homeCta: {
+      badge: "The Manzil system",
+      title: "Explore the directory today. Follow Gurman mobile tomorrow.",
+      subtitle:
+        "Compare available places or get updates about the Gurman mobile experience.",
+      primaryCta: "Explore Discover",
+      primaryHref: "/en/discover",
+      secondaryCta: "Gurman updates",
+      secondaryHref: "/en/waitlist/gurman",
+      perks: ["Now: directory", "Preview: Gurman mobile", "No booking simulation"]
     }
   }
 };

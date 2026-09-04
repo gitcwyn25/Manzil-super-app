@@ -206,6 +206,20 @@ The content audit found no rendered live web Gurman chat, app-download claim, un
 
 **Status:** Resolved locally. Full Playwright completion, local Git staging/commit, and external release steps remain separate gates.
 
+## Final visual and content pass
+
+A final browser-backed visual pass was completed against the rebuilt static output for `/uz`, `/ru`, `/en`, the Gurman preview section, and `/en/waitlist/gurman`. The available browser viewport was `1145x561` CSS pixels; the responsive layout was exercised at that browser breakpoint, but a true 390px viewport was not available in this session.
+
+Verified:
+
+- The three localized heroes render with the Discover-first / Gurman-mobile-later boundary and the updated system panel.
+- The Gurman concept section renders as a static mobile preview with an explicit no-web-chat, no-booking, no-live-availability boundary.
+- The Gurman waitlist remains email-first with no test submission.
+- Generated static assertions pass for all three localized homepages, both retired-route redirects, and the Gurman waitlist artifact.
+- `npm run typecheck`, lint, and the real-mode production build pass; the build generates `109/109` static pages.
+
+During this pass, remaining homepage phrases that implied ranking, growth, analytics, or customer acquisition were replaced with directory/profile language across Uzbek, Russian, and English. The existing pricing-page copy was not part of this homepage visual pass.
+
 ## Fixes Applied
 
 | Issue | Fix Status | Commit | Files Changed |

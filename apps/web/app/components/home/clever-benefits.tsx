@@ -3,7 +3,7 @@ import { Reveal } from "../motion/reveal";
 import { Icon } from "../vm/icons";
 
 export function CleverBenefits({ copy }: { copy: CleverBenefitsCopy }) {
-  const cards = copy.cards.slice(1);
+  const cards = copy.cards;
 
   return (
     <section className="clever-section clever-benefits" id="benefits">
