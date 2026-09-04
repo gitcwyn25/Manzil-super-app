@@ -36,6 +36,14 @@ The current post-merge build has a verified numeric exit code of `0` and a compl
 - Direct HTTP probes against the completed artifact passed: `/en`, `/uz/discover`, `/uz/docs`, `/uz/business`, and `/uz/waitlist/gurman` returned 200; `/uz/gurman` and `/uz/concierge` returned 308 to `/uz/waitlist/gurman`.
 - `npx playwright test tests/e2e/discover.spec.ts --list`: PASS; 6 tests collected. Full browser execution remains blocked by the missing sandbox Chromium executable.
 
+## Release metadata verification
+
+- Created `VERSION` with `0.2.0` and a dated `CHANGELOG.md` for the verified web/mobile integration release.
+- Updated the root `package.json`, root `package-lock.json`, and lockfile root workspace entry to `0.2.0`; workspace package versions remain unchanged.
+- Restored the complete 24,209-line lockfile before applying the version change; JSON parsing and the retained mobile dependency entries pass validation.
+- Final 0.2.0 production build exited `0`, generated `109/109` static pages, and wrote `.next/BUILD_ID` (`nvz1yyBe8TEaETfvVJR6S`).
+- Final direct HTTP probes passed: `/en`, `/uz/discover`, `/uz/docs`, `/uz/business`, and `/uz/waitlist/gurman` returned 200; `/uz/gurman` and `/uz/concierge` returned 308 to `/uz/waitlist/gurman`.
+
 ## Remaining release gates
 
 - Playwright test collection passes for the selected public Discover smoke file (6 tests), but execution is blocked because the sandbox lacks `chrome-headless-shell.exe`; no browser download was performed.
