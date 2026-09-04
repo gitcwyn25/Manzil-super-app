@@ -14,17 +14,22 @@ Gurman AI foydalanuvchining tabiiy tildagi so‘rovini, joyning atmosferasi, sha
 
 ## Ta’sischilar
 
-> Ushbu bo‘lim nashrdan oldin ta’sischilarning tasdiqlangan ismlari, lavozimlari, qisqa biografiyasi va fotosuratlari bilan to‘ldirilishi kerak.
+Manzilning asoschilari — mahalliy joylar va bizneslar uchun ishonchli raqamli yo‘lko‘rsatkich qurayotgan jamoa.
 
-### [Ta’sischi 1 — ism-familiya]
-**Lavozimi:** [CEO / Co-founder]
+### Sunnatilla Tursunov
+**Lavozimi:** Founder
 
-[100–150 so‘zli bio: tajriba, Manzilni yaratish sababi, mahalliy ekotizimga aloqasi.]
+Sunnatilla Tursunov — TSUE bitiruvchisi, xalqaro iqtisodchi va Manzil asoschisi. U Manzilni odamlar uchun O‘zbekistondagi haqiqiy joylarni topishni, mahalliy bizneslar uchun esa to‘g‘ri mijozlarga yetib borishni osonlashtiradigan platforma sifatida qurmoqda.
 
-### [Ta’sischi 2 — ism-familiya]
-**Lavozimi:** [CTO / Co-founder]
+### Khayitov Muhammadkarim
+**Lavozimi:** Co-founder · CMO
 
-[100–150 so‘zli bio.]
+Khayitov Muhammadkarim — xalqaro iqtisodchi va TSUE bitiruvchisi. U 605 Marketing Agency a’zosi bo‘lib, Manzil Group marketingi va savdosini boshqaradi.
+
+### Ismoilov Abduqodir
+**Lavozimi:** Co-founder · CEO, daraxtkent.uz
+
+Ismoilov Abduqodir — xalqaro iqtisodchi va TSUE bitiruvchisi. U daraxtkent.uz bosh direktori sifatida Manzil operatsiyalari va biznes aloqalarini boshqaradi.
 
 ## Missiyamiz
 
@@ -56,4 +61,4 @@ Har bir shahar uchun ishonchli, mahalliy va aqlli raqamli yo‘lko‘rsatkich bo
 
 Manzilning huquqiy hujjatlari: [Xizmat shartlari](/uz/legal/terms), [Maxfiylik siyosati](/uz/legal/privacy), [Cookie siyosati](/uz/legal/cookies).
 
-*Oxirgi yangilanish: 2 sentyabr 2026. Ta’sischilar va yuridik shaxs ma’lumotlari tasdiqlangach yangilang.*
+*Oxirgi yangilanish: 4 sentyabr 2026. Yuridik shaxs ma’lumotlari tasdiqlangach yangilang.*
