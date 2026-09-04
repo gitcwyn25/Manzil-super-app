@@ -135,6 +135,7 @@ export type CleverFaqCopy = {
   badge: string;
   title: string;
   subtitle: string;
+  contactCta: string;
   items: CleverFaqItem[];
 };
 
@@ -408,6 +409,7 @@ const landing: Record<string, LandingCopy> = {
       badge: "Ko'p so'raladigan savollar",
       title: "Barcha savollaringizga aniq javoblar",
       subtitle: "Manzil platformasi haqida eng ko'p beriladigan savollar.",
+      contactCta: "Bog'lanish",
       items: [
         {
           question: "Manzil nima va u qanday xizmatlarni taqdim etadi?",
@@ -699,6 +701,7 @@ const landing: Record<string, LandingCopy> = {
       badge: "Часто задаваемые вопросы",
       title: "Ответы на популярные вопросы",
       subtitle: "Всё, что нужно знать о платформе Manzil и планах по мобильному Gurman.",
+      contactCta: "Связаться",
       items: [
         {
           question: "Что такое Manzil?",
@@ -989,6 +992,7 @@ const landing: Record<string, LandingCopy> = {
       badge: "FAQ",
       title: "Frequently Asked Questions",
       subtitle: "Everything you need to know about Manzil and the planned Gurman mobile experience.",
+      contactCta: "Have questions? Contact us.",
       items: [
         {
           question: "What is Manzil?",
