@@ -2436,3 +2436,64 @@
     color: #00ffcb;
   }
 }
+
+/* Light-only public homepage: keep the hero readable without an appearance toggle. */
+.clever-hero {
+  background: linear-gradient(180deg, #f8fbff 0%, #edf4fb 100%);
+  color: #0b1f38;
+}
+
+/* Above-the-fold content must never disappear when the client observer is delayed. */
+.clever-hero [data-reveal] {
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+.clever-hero__glow--top { background: radial-gradient(circle, rgba(0, 128, 224, 0.22), transparent 70%); }
+.clever-hero__glow--bottom { background: radial-gradient(circle, rgba(0, 177, 154, 0.18), transparent 70%); }
+.clever-hero__pill {
+  background: rgba(255, 255, 255, 0.78);
+  border-color: rgba(36, 65, 93, 0.18);
+  color: #24415d;
+  box-shadow: 0 12px 32px rgba(40, 77, 112, 0.08);
+}
+.clever-hero__pill:hover { background: rgba(255, 255, 255, 0.96); border-color: rgba(7, 93, 197, 0.34); }
+.clever-hero__avatar { border-color: #f8fbff; }
+.clever-hero__title-line { color: #0b1f38; }
+.clever-hero__title-accent {
+  background: linear-gradient(135deg, #0087c7 0%, #075dc5 60%, #5a3fd6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.clever-hero__subtitle { color: #35516d; }
+.clever-hero__trust-item { color: #42627d; }
+.clever-hero__trust-icon { color: #008f83; }
+.clever-hero .clever-btn--glass {
+  background: rgba(255, 255, 255, 0.78);
+  border-color: rgba(36, 65, 93, 0.2);
+  color: #0b1f38;
+  box-shadow: 0 10px 24px rgba(40, 77, 112, 0.08);
+}
+.clever-hero .clever-btn--glass:hover { background: #fff; border-color: rgba(7, 93, 197, 0.36); color: #075dc5; }
+.clever-hero__system {
+  border-color: rgba(36, 65, 93, 0.16);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(237, 245, 252, 0.88));
+  box-shadow: 0 24px 70px rgba(40, 77, 112, 0.16), 0 0 40px rgba(0, 135, 199, 0.08);
+}
+.clever-hero__system-topline { color: #55718d; }
+.clever-hero__system-line { background: rgba(36, 65, 93, 0.18); }
+.clever-hero__system-card {
+  border-color: rgba(36, 65, 93, 0.14);
+  background: rgba(255, 255, 255, 0.78);
+  color: #0b1f38;
+}
+.clever-hero__system-card--live { border-color: rgba(0, 143, 131, 0.28); background: linear-gradient(145deg, rgba(0, 177, 154, 0.1), rgba(255, 255, 255, 0.78)); }
+.clever-hero__system-card--future { border-color: rgba(7, 93, 197, 0.24); background: linear-gradient(145deg, rgba(7, 93, 197, 0.09), rgba(255, 255, 255, 0.78)); }
+.clever-hero__system-card-head { color: #008f83; }
+.clever-hero__system-card-meta { color: #55718d; }
+.clever-hero__system-connector { border-color: rgba(36, 65, 93, 0.16); color: #42627d; background: rgba(255, 255, 255, 0.78); }
+.clever-hero__system-chip { border-color: rgba(36, 65, 93, 0.16); color: #42627d; background: rgba(255, 255, 255, 0.72); }
+.clever-status--live { color: #008f83; }
+.clever-status--preview { color: #075dc5; }
+
