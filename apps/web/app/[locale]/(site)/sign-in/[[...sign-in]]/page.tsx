@@ -5,6 +5,12 @@ import { BrandPanel, SplitAuthShell } from "../../../../components/vm/split-auth
 import { vmClerkAppearance } from "../../../../lib/clerk-appearance";
 import { routeMetadata } from "../../../../lib/seo";
 
+function safeRedirect(locale: string, candidate?: string | string[]) {
+  const fallback = `/${locale}/discover`;
+  const value = Array.isArray(candidate) ? candidate[0] : candidate;
+  return value?.startsWith(`/${locale}/`) && !value.startsWith("//") ? value : fallback;
+}
+
 export async function generateMetadata({
   params
 }: {
@@ -14,17 +20,17 @@ export async function generateMetadata({
   return routeMetadata("signIn", localeOrDefault(locale));
 }
 
-/**
- * Consumer sign-in in the Vibrant Marketplace split-auth composition: the
- * Clerk widget (appearance synced to the VM tokens) in the form column, the
- * brand panel left (hidden below md).
- */
 export default async function SignInPage({
-  params
+  params,
+  searchParams
 }: {
   params: Promise<{ locale: string }>;
+  searchParams?: Promise<{ redirect_url?: string | string[] }>;
 }) {
   const { locale } = await params;
+  const query = await searchParams;
+  const redirectUrl = safeRedirect(locale, query?.redirect_url);
+  const redirectQuery = `?redirect_url=${encodeURIComponent(redirectUrl)}`;
 
   return (
     <SplitAuthShell panel={<BrandPanel wordmark="Manzil" />}>
@@ -33,8 +39,8 @@ export default async function SignInPage({
           appearance={vmClerkAppearance}
           routing="path"
           path={`/${locale}/sign-in`}
-          signUpUrl={`/${locale}/sign-up`}
-          fallbackRedirectUrl={`/${locale}/discover`}
+          signUpUrl={`/${locale}/sign-up${redirectQuery}`}
+          fallbackRedirectUrl={redirectUrl}
         />
       </div>
     </SplitAuthShell>
