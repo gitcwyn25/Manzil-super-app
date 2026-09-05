@@ -1,6 +1,9 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs";
 
+const configDir = path.dirname(fileURLToPath(import.meta.url));
 const isDev = process.env.NODE_ENV !== "production";
 
 /** Safely extract an origin (scheme://host[:port]) from a URL, or null. */
@@ -106,7 +109,7 @@ const nextConfig: NextConfig = {
     config.resolve.alias = {
       ...(config.resolve.alias ?? {}),
       // Resolve monorepo-root Originkit components from apps/web @/ alias
-      "@/components/originkit": `${__dirname}/../../components/originkit`,
+      "@/components/originkit": path.resolve(configDir, "../../components/originkit"),
     };
     return config;
   },
