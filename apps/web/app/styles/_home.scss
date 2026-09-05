@@ -2346,6 +2346,21 @@
     p { margin: 0; }
   }
 
+  &__companion {
+    display: flex;
+    justify-content: flex-start;
+    pointer-events: none;
+
+    video {
+      display: block;
+      width: min(9rem, 100%);
+      aspect-ratio: 1;
+      border-radius: 1rem;
+      object-fit: cover;
+      box-shadow: 0 0.75rem 2rem rgba(15, 23, 42, 0.12);
+    }
+  }
+
   @include media-breakpoint-down(md) {
     &__grid { grid-template-columns: 1fr; gap: 3rem; }
     &__intro { max-width: 38rem; }
