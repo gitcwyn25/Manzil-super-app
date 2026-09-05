@@ -91,6 +91,11 @@ export function CleverFaq({ copy }: { copy: CleverFaqCopy }) {
                 </motion.div>
               );
             })}
+            <div aria-hidden="true" className="clever-faq__companion">
+              <video autoPlay loop muted playsInline preload="metadata">
+                <source src="/media/gurman/faq-reading.mp4" type="video/mp4" />
+              </video>
+            </div>
           </div>
         </div>
       </div>
