@@ -31,6 +31,16 @@ export function CleverFaq({ copy }: { copy: CleverFaqCopy }) {
             >
               {copy.contactCta}
             </a>
+            <div aria-hidden="true" className="clever-faq__companion">
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="metadata"
+                src="/media/gurman/faq-reading-transparent.webm"
+              />
+            </div>
           </Reveal>
 
           <div

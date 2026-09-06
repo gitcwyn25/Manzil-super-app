@@ -169,6 +169,8 @@
 // Loads after discover so .home-card.home-featured outranks the shared
 // Master Card recipe where the featured slot's anatomy differs.
 @import "home";
+@import "manzil-story";
+@import "gurman-how-it-works";
 
 // Business details /businesses/[slug] (task B): hero photo mosaic, experience
 // feed restyle of the welded review-card/review-form family, action/info rail,

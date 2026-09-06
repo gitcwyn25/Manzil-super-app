@@ -10,6 +10,24 @@ const notice: Record<Locale, string> = {
   en: "Draft — this document must be reviewed by qualified Uzbekistan counsel before publication."
 };
 
+const TOGETHER_COPY: Record<Locale, { eyebrow: string; title: string; description: string }> = {
+  uz: {
+    eyebrow: "Manzil / Jamoa",
+    title: "Hamrohlaringiz bilan tanishing",
+    description: "Manzilni birga qurayotgan jamoa va uning kundalik harakati.",
+  },
+  ru: {
+    eyebrow: "Manzil / Команда",
+    title: "Познакомьтесь с командой",
+    description: "Команда и ежедневная работа, которые создают Manzil вместе.",
+  },
+  en: {
+    eyebrow: "Manzil / Team",
+    title: "Meet your companions",
+    description: "The people and daily work building Manzil together.",
+  },
+};
+
 const copy: Record<Locale, {
   hub: string;
   overview: string;
@@ -191,7 +209,7 @@ function FounderProfiles({ locale }: { locale: Locale }) {
               <span className="founder-card__mark" aria-hidden="true">{founder.initials}</span>
             </div>
             <div className="founder-card__portrait">
-              <Image src={founder.image} alt={founder.name[locale]} fill sizes="(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 25vw" />
+              <Image src={founder.image} alt={founder.name[locale]} fill sizes="(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 33vw" />
             </div>
             <div className="founder-card__identity">
               <h3 id={headingId(founder.name[locale])}>{founder.name[locale]}</h3>
@@ -200,6 +218,9 @@ function FounderProfiles({ locale }: { locale: Locale }) {
             <p className="founder-card__bio">{founder.bio[locale]}</p>
           </article>
         ))}
+      </div>
+      <div className="founder-together-overlay" aria-label={TOGETHER_COPY[locale].title}>
+        <video autoPlay loop muted playsInline preload="metadata" src="/media/founders/together-transparent.webm" aria-hidden="true" />
       </div>
     </section>
   );

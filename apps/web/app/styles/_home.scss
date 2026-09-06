@@ -1,4 +1,4 @@
-// Home (task A2): the green concierge hero (D6 ΓÇö the one green brand moment),
+﻿// Home (task A2): the green concierge hero (D6 Î“Ã‡Ã¶ the one green brand moment),
 // the AI-concierge feature trio (D9), and the "Experience the Best" bento
 // business grid + partner CTA.
 //
@@ -10,7 +10,7 @@
 // final state under prefers-reduced-motion (block at the end).
 
 // ---------------------------------------------------------------------------
-// Hero ΓÇö secondary-green gradient, mint accents, CSS orbs, wave divider
+// Hero Î“Ã‡Ã¶ secondary-green gradient, mint accents, CSS orbs, wave divider
 // ---------------------------------------------------------------------------
 
 .vm-hero {
@@ -161,7 +161,7 @@
   gap: 1rem;
 }
 
-// Mint primary CTA ΓÇö the hero's own accent, deliberately not the blue
+// Mint primary CTA Î“Ã‡Ã¶ the hero's own accent, deliberately not the blue
 // .btn-primary (D6: green is the homepage brand moment).
 .vm-hero__cta {
   display: inline-flex;
@@ -483,7 +483,7 @@
     grid-column: span 2;
   }
 
-  // With fewer than two standard cards the partner CTA takes the whole row ΓÇö
+  // With fewer than two standard cards the partner CTA takes the whole row Î“Ã‡Ã¶
   // no dangling empty cell at the current 1-2 business dataset (D10).
   .home-bento .home-partner--wide {
     grid-column: 1 / -1;
@@ -1169,6 +1169,29 @@
     margin-top: 0.125rem;
   }
 
+  &__companion {
+    position: absolute;
+    z-index: 2;
+    top: -7.75rem;
+    left: 50%;
+    width: min(10.8rem, 32%);
+    pointer-events: none;
+    transform: translateX(-50%);
+
+    video {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1;
+      background: transparent;
+      object-fit: contain;
+    }
+
+    @include media-breakpoint-down(md) {
+      top: -6.25rem;
+      width: min(8rem, 30%);
+    }
+  }
+
   &__system {
     position: relative;
     display: grid;
@@ -1313,7 +1336,7 @@
 }
 
 // ---------------------------------------------------------------------------
-// Gurman mobile preview ΓÇö static concept, never a web chat
+// Gurman mobile preview Î“Ã‡Ã¶ static concept, never a web chat
 // ---------------------------------------------------------------------------
 .gurman-preview {
   overflow: hidden;
@@ -1851,17 +1874,21 @@
 
     @include media-breakpoint-up(lg) {
       grid-template-columns: repeat(3, 1fr);
-      align-items: center;
+      align-items: stretch;
     }
   }
 }
 
 .clever-pricing-card {
   position: relative;
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  overflow: hidden;
   background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 1.5rem;
-  padding: 2.5rem;
+  padding: 2.25rem;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
 
@@ -1870,119 +1897,186 @@
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
   }
 
-  &--popular {
-    background: #0f172a;
-    color: #ffffff;
-    border-color: rgba(0, 255, 203, 0.3);
-    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.3), 0 0 30px rgba(0, 255, 203, 0.1);
-
-    @include media-breakpoint-up(lg) {
-      transform: scale(1.04);
-
-      &:hover {
-        transform: scale(1.04) translateY(-4px);
-      }
-    }
-
-    .clever-pricing-card__name { color: #ffffff; }
-    .clever-pricing-card__tagline { color: rgba(255, 255, 255, 0.65); }
-    .clever-pricing-card__amount { color: #00ffcb; }
-    .clever-pricing-card__period { color: rgba(255, 255, 255, 0.6); }
-    .clever-pricing-card__features-title { color: rgba(255, 255, 255, 0.9); }
-    .clever-pricing-card__feature-item { color: rgba(255, 255, 255, 0.8); }
-    .clever-pricing-card__check { color: #00ffcb; }
-  }
-
-  &__popular-badge {
-    position: absolute;
-    top: -0.875rem;
-    left: 50%;
-    transform: translateX(-50%);
-    background: linear-gradient(135deg, #00ffcb 0%, #00a2ff 100%);
-    color: #030712;
-    padding: 0.25rem 0.875rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 800;
-    display: flex;
-    align-items: center;
-    gap: 0.375rem;
-    box-shadow: 0 4px 14px rgba(0, 255, 203, 0.35);
-  }
-
   &__head {
-    margin-bottom: 1.5rem;
+    margin-bottom: 0;
+    text-align: center;
   }
 
   &__name {
+    margin: 0 0 0.75rem;
+    color: #0b0f14;
     font-size: 1.5rem;
     font-weight: 800;
-    color: $vm-on-surface;
-    margin-bottom: 0.5rem;
+    text-align: center;
   }
 
   &__tagline {
+    min-height: 3.25rem;
+    margin: 0;
+    color: $vm-on-surface-variant;
     font-size: 0.875rem;
     line-height: 1.5;
-    color: $vm-on-surface-variant;
-    margin: 0;
+    text-align: center;
   }
 
   &__price-box {
     display: flex;
     align-items: baseline;
+    justify-content: center;
     gap: 0.5rem;
-    margin-bottom: 1.75rem;
+    margin: 0 0 0.75rem;
   }
 
   &__amount {
+    color: #0b0f14;
     font-size: 2.25rem;
     font-weight: 900;
-    color: $vm-primary;
     line-height: 1;
   }
 
   &__period {
-    font-size: 0.875rem;
     color: $vm-on-surface-variant;
+    font-size: 0.875rem;
   }
 
-  &__cta-wrapper {
-    margin-bottom: 2rem;
+  &__companions {
+    display: flex;
+    min-height: 10.25rem;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 0.15rem;
+    margin: 1.25rem 0 1.5rem;
+    overflow: hidden;
+
+    video {
+      display: block;
+      width: 6.5rem;
+      height: 9.25rem;
+      flex: 0 1 auto;
+      object-fit: contain;
+      background: transparent;
+    }
+
+    &--free video {
+      width: 9rem;
+    }
+
+    &--pro video {
+      width: 7.25rem;
+    }
+
+    &--max video {
+      width: 6.25rem;
+    }
   }
 
   &__features-title {
+    margin-bottom: 1rem;
+    color: $vm-on-surface;
     font-size: 0.8125rem;
     font-weight: 700;
-    text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: $vm-on-surface;
-    margin-bottom: 1rem;
+    text-transform: uppercase;
   }
 
   &__features-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
     display: flex;
+    flex: 1;
     flex-direction: column;
     gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
 
   &__feature-item {
     display: flex;
     align-items: center;
     gap: 0.625rem;
-    font-size: 0.875rem;
     color: $vm-on-surface-variant;
+    font-size: 0.875rem;
   }
 
   &__check {
-    color: $vm-primary;
     flex: none;
+    color: $vm-primary;
+  }
+
+  &__cta-wrapper {
+    margin: 2rem 0 0;
   }
 }
 
+.clever-pricing-plan-button {
+  position: relative;
+  display: flex;
+  min-height: 3.25rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  overflow: hidden;
+  border: 1px solid #0b0f14;
+  border-radius: 9999px;
+  padding: 0.75rem 1.25rem;
+  color: #0b0f14;
+  font-size: 0.9375rem;
+  font-weight: 800;
+  line-height: 1;
+  text-decoration: none;
+  transition: color 0.25s ease, background-color 0.25s ease, transform 0.25s ease;
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  &::before {
+    position: absolute;
+    inset: 50% auto auto 50%;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 9999px;
+    background: #0b0f14;
+    content: "";
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: #ffffff;
+    transform: translateY(-1px);
+    outline: none;
+
+    &::before {
+      transform: translate(-50%, -50%) scale(30);
+    }
+  }
+
+  &--free {
+    border-color: #0b0f14;
+    background: #0b0f14;
+    color: #ffffff;
+
+    &::before {
+      display: none;
+    }
+  }
+
+  &__hover-label {
+    display: none;
+  }
+
+  &:hover &__label,
+  &:focus-visible &__label {
+    display: none;
+  }
+
+  &:hover &__hover-label,
+  &:focus-visible &__hover-label {
+    display: inline;
+  }
+}
 // ---------------------------------------------------------------------------
 // 6. Clever Waitlist Card
 // ---------------------------------------------------------------------------
@@ -2269,6 +2363,23 @@
     &:focus-visible { outline: 2px solid $vm-primary; outline-offset: 4px; }
   }
 
+  &__companion {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 3rem;
+    margin-inline-start: 52%;
+    pointer-events: none;
+
+    video {
+      display: block;
+      width: min(10.8rem, 100%);
+      aspect-ratio: 1;
+      border: 0;
+      background: transparent;
+      object-fit: contain;
+    }
+  }
+
   &__thread {
     display: flex;
     flex-direction: column;
@@ -2496,4 +2607,3 @@
 .clever-hero__system-chip { border-color: rgba(36, 65, 93, 0.16); color: #42627d; background: rgba(255, 255, 255, 0.72); }
 .clever-status--live { color: #008f83; }
 .clever-status--preview { color: #075dc5; }
-

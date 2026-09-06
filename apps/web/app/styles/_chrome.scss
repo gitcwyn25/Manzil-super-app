@@ -496,7 +496,8 @@ nav.mobile-nav a {
   border-top: 1px solid #e2e8f0;
   padding: 4.5rem 0 3rem;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
+  overflow-x: clip;
 
   &__container {
     max-width: 1200px;
@@ -1350,5 +1351,240 @@ nav.mobile-nav a {
   .clever-nav-wrapper .site-nav__lang .lang-dropdown button {
     transition: none;
     animation: none;
+  }
+}
+
+// Footer 01: the reference composition is a deliberate three-step story:
+// Gurman mobile, Follow Us, then the founder companions together.
+.manzil-footer__top {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(17rem, .78fr) minmax(0, 1.05fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: end;
+  margin-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+.manzil-footer__showcase,
+.manzil-footer-follow,
+.manzil-footer-companions {
+  min-width: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.manzil-footer__phones {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: clamp(250px, 25vw, 312px);
+  margin: 0 auto 1.25rem;
+  overflow: visible;
+}
+
+.manzil-footer__phones .manzil-phones-stage {
+  position: absolute;
+  right: auto;
+  bottom: 0;
+  left: 50%;
+  width: 580px;
+  max-width: none;
+  height: 480px;
+  margin: 0;
+  transform: translateX(-50%) scale(.65);
+  transform-origin: bottom center;
+}
+
+.manzil-footer__eyebrow,
+.manzil-footer-follow__eyebrow,
+.manzil-footer-companions__eyebrow {
+  display: block;
+  color: #64748b;
+  font-family: var(--font-data), ui-monospace, monospace;
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.manzil-footer__title,
+.manzil-footer-follow h2,
+.manzil-footer-companions h2 {
+  margin: .55rem 0 .75rem;
+  color: #0f172a;
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  font-weight: 850;
+  letter-spacing: -.04em;
+  line-height: 1.08;
+}
+
+.manzil-footer__subtitle,
+.manzil-footer-follow > p {
+  max-width: 27rem;
+  margin: 0 auto 1.35rem;
+  color: #475569;
+  font-size: .9rem;
+  line-height: 1.55;
+}
+
+.manzil-footer__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .55rem;
+  min-height: 2.75rem;
+  padding: .7rem 1.05rem;
+  border: 1px solid #0f172a;
+  border-radius: 999px;
+  background: #0f172a;
+  color: #ffffff;
+  font-size: .82rem;
+  font-weight: 750;
+  text-decoration: none;
+  transition: background .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+
+.manzil-footer__cta:hover {
+  background: #1e293b;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgb(15 23 42 / .18);
+}
+
+.manzil-footer__cta-icon {
+  display: inline-flex;
+  width: 1.2rem;
+  height: 1.2rem;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: .25rem;
+  background: #ffffff;
+}
+
+.manzil-footer__cta-icon svg {
+  width: .95rem;
+  height: .95rem;
+}
+
+.manzil-footer-follow {
+  align-self: center;
+  padding: 1.25rem 0;
+}
+
+.manzil-footer-follow__links,
+.manzil-footer-follow__contact {
+  display: grid;
+  gap: .65rem;
+  width: min(100%, 19rem);
+  margin-inline: auto;
+}
+
+.manzil-footer-follow__contact {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.manzil-footer-follow__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: .7rem;
+  min-width: 0;
+  color: #334155;
+  font-size: .78rem;
+  line-height: 1.35;
+  text-align: left;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  transition: color .2s ease, transform .2s ease;
+}
+
+.manzil-footer-follow__link:hover {
+  color: #075dc5;
+  transform: translateX(2px);
+}
+
+.manzil-footer-follow__icon {
+  display: inline-flex;
+  width: 2rem;
+  height: 2rem;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: .65rem;
+  background: #0f172a;
+  color: #ffffff;
+}
+
+.manzil-footer-follow__icon svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.manzil-footer-companions {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.manzil-footer-companions h2 {
+  max-width: 18rem;
+  margin-inline: auto;
+}
+
+.manzil-footer-companions__video {
+  width: 100%;
+  max-width: 26rem;
+  margin: .75rem auto 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.manzil-footer-companions__video video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  transform: scale(1.2);
+  transform-origin: center bottom;
+  filter: drop-shadow(0 1rem 1.8rem rgb(15 23 42 / .14));
+}
+
+.manzil-footer-bottom {
+  justify-content: center;
+}
+
+.manzil-footer-bottom__left {
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .manzil-footer__top {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 3.5rem;
+  }
+
+  .manzil-footer-companions {
+    align-self: auto;
+  }
+}
+
+@media (max-width: 520px) {
+  .manzil-footer__phones {
+    height: 250px;
+  }
+
+  .manzil-footer__phones .manzil-phones-stage {
+    transform: translateX(-50%) scale(.6);
+  }
+
+  .manzil-footer-follow__link {
+    font-size: .75rem;
   }
 }

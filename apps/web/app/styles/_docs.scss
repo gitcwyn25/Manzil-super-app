@@ -629,6 +629,7 @@
 }
 
 .founders-panel {
+  position: relative;
   margin: clamp(3.5rem, 7vw, 6rem) 0 clamp(3.5rem, 7vw, 6.5rem);
   padding-top: 1.4rem;
   border-top: 1px solid var(--line);
@@ -670,6 +671,7 @@
 }
 
 .founders-grid {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1px;
@@ -786,6 +788,25 @@
   line-height: 1.65;
 }
 
+.founder-together-overlay {
+  position: absolute;
+  right: clamp(-5rem, -6vw, -2rem);
+  bottom: clamp(-4rem, -4vw, -1.5rem);
+  z-index: 2;
+  width: clamp(17rem, 30vw, 28rem);
+  pointer-events: none;
+}
+
+.founder-together-overlay video {
+  display: block;
+  width: 100%;
+  height: auto;
+  transform: scale(1.2);
+  transform-origin: bottom right;
+  object-fit: contain;
+  filter: drop-shadow(0 1rem 1.8rem rgb(10 26 30 / .16));
+}
+
 .docs-back {
   display: inline-flex;
   margin-top: 3rem;
@@ -803,6 +824,15 @@
 
   .docs-sidebar {
     padding-right: .75rem;
+  }
+
+  .founders-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .founder-together-overlay {
+    right: -1rem;
+    width: clamp(14rem, 34vw, 21rem);
   }
 }
 
@@ -869,6 +899,14 @@
 
   .founder-card {
     min-height: 31rem;
+  }
+
+  .founder-together-overlay {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    width: min(100%, 20rem);
+    margin: -2rem 0 0 auto;
   }
 
   .docs-card {

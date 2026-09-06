@@ -32,6 +32,153 @@ export type GurmanPreviewCopy = {
   chips: string[];
 };
 
+export type ManzilStoryCopy = {
+  title: string;
+  subtitle: string;
+  discover: {
+    eyebrow: string;
+    context: string;
+    districtOne: string;
+    districtTwo: string;
+    placeName: string;
+    placeMeta: string;
+    chipOne: string;
+    chipTwo: string;
+    tag: string;
+    title: string;
+    description: string;
+  };
+  care: {
+    eyebrow: string;
+    context: string;
+    kicker: string;
+    planTitle: string;
+    avatar: string;
+    service: string;
+    preferredTimeLabel: string;
+    preferredTime: string;
+    simplePlan: string;
+    simplePlanNote: string;
+    tag: string;
+    title: string;
+    description: string;
+  };
+  trust: {
+    eyebrow: string;
+    context: string;
+    kicker: string;
+    placeName: string;
+    quote: string;
+    location: string;
+    verdict: string;
+    tag: string;
+    title: string;
+    description: string;
+  };
+  share: {
+    eyebrow: string;
+    context: string;
+    avatar: string;
+    name: string;
+    handle: string;
+    statement: string;
+    chips: string[];
+    tabs: string[];
+    placeName: string;
+    verdict: string;
+    tag: string;
+    title: string;
+    description: string;
+  };
+};
+
+export type GurmanHowItWorksStage =
+  | {
+      id: "intent";
+      kind: "intent";
+      number: string;
+      label: string;
+      title: string;
+      description: string;
+      visualLabel: string;
+      fields: Array<{ label: string; value: string }>;
+    }
+  | {
+      id: "constraints";
+      kind: "constraints";
+      number: string;
+      label: string;
+      title: string;
+      description: string;
+      groups: Array<{ label: string; tone: "must" | "prefer"; items: string[] }>;
+    }
+  | {
+      id: "evidence";
+      kind: "evidence";
+      number: string;
+      label: string;
+      title: string;
+      description: string;
+      visualLabel: string;
+      note: string;
+      items: Array<{
+        label: string;
+        status: string;
+        tone: "supported" | "unknown";
+      }>;
+    }
+  | {
+      id: "decision";
+      kind: "decision";
+      number: string;
+      label: string;
+      title: string;
+      description: string;
+      visualLabel: string;
+      decisionLabel: string;
+      decisionStatus: string;
+      candidates: Array<{
+        label: string;
+        status: string;
+        tone: "suppressed" | "ranked" | "alternative";
+      }>;
+    }
+  | {
+      id: "language";
+      kind: "language";
+      number: string;
+      label: string;
+      title: string;
+      description: string;
+      visualLabel: string;
+      pipeline: string[];
+      ruleLine: string;
+    };
+
+export type GurmanHowItWorksCopy = {
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  truthLabel: string;
+  carouselLabel: string;
+  stepLabel: string;
+  ofLabel: string;
+  previousLabel: string;
+  nextLabel: string;
+  finishLabel: string;
+  stageNavigationLabel: string;
+  requestLabel: string;
+  request: string;
+  waitlistCta: string;
+  discoverCta: string;
+  signature: {
+    label: string;
+    lineOne: string;
+    lineTwo: string;
+  };
+  stages: GurmanHowItWorksStage[];
+};
+
 export type CleverBenefitCard = {
   icon: IconName;
   tag: string;
@@ -84,16 +231,15 @@ export type CleverPricingTier = {
   tagline: string;
   price: string;
   period: string;
-  popular?: boolean;
   features: string[];
   cta: string;
   ctaHref: string;
 };
 
 export type CleverPricingCopy = {
-  badge: string;
   title: string;
   subtitle: string;
+  featuresLabel: string;
   tiers: CleverPricingTier[];
 };
 
@@ -156,6 +302,8 @@ export type LandingCopy = {
   android: string;
   hero: CleverHeroCopy;
   gurman: GurmanPreviewCopy;
+  story: ManzilStoryCopy;
+  gurmanHowItWorks: GurmanHowItWorksCopy;
   benefits: CleverBenefitsCopy;
   features: CleverFeaturesCopy;
   process: CleverProcessCopy;
@@ -202,6 +350,171 @@ const landing: Record<string, LandingCopy> = {
       previewSubtitle: "Reja konsepti",
       previewFooter: "Konsept preview · bronlash yoki jonli mavjudlik yo'q",
       chips: ["Joy", "Taom", "Tort", "Transport", "Budjet", "Kayfiyat", "Vaqt"]
+    },
+    story: {
+      title: "Shahringizdagi hayot bir joyda",
+      subtitle:
+        "Yangi joylarni kashf eting, kundalik ehtiyojlaringizni bir joyda hal qiling, haqiqiy odamlar tajribasi asosida tanlang va o‘z hikoyalaringizni ulashing.",
+      discover: {
+        eyebrow: "Discover",
+        context: "Toshkent · near you",
+        districtOne: "Yunusobod",
+        districtTwo: "Chilonzor",
+        placeName: "Qorasuv Courtyard",
+        placeMeta: "Quiet coffee · Yunusobod",
+        chipOne: "Coffee",
+        chipTwo: "12 min from you",
+        tag: "Kashf etish",
+        title: "Yashirin maskanlarni kashf eting",
+        description: "Siz bilmagan, ammo yoningizda bo‘lgan joylarni toping."
+      },
+      care: {
+        eyebrow: "Everyday care",
+        context: "Mobile concept",
+        kicker: "Your next plan",
+        planTitle: "Find a barber",
+        avatar: "S",
+        service: "Classic cut",
+        preferredTimeLabel: "Preferred time",
+        preferredTime: "Saturday · 16:30",
+        simplePlan: "A simple plan",
+        simplePlanNote: "Choose what works for you",
+        tag: "Kundalik ehtiyojlar",
+        title: "Kundalik ehtiyojlaringizni bir joyda hal qiling",
+        description: "Sartarosh va boshqa mahalliy xizmatlarni bir ilovada toping, tanlang va rejalang."
+      },
+      trust: {
+        eyebrow: "Human experience",
+        context: "Illustrative preview",
+        kicker: "A place to remember",
+        placeName: "Qorasuv Courtyard",
+        quote: "“Quiet, warm, and worth a slower morning.”",
+        location: "Yunusobod",
+        verdict: "Worth the visit",
+        tag: "Haqiqiy tajriba",
+        title: "Haqiqiy tajribalar asosida tanlang",
+        description: "Suratlar, sharhlar va odamlarning shaxsiy fikrlari orqali joy sizga mosligini tushuning."
+      },
+      share: {
+        eyebrow: "John Doe’s story",
+        context: "Illustrative profile",
+        avatar: "JD",
+        name: "John Doe",
+        handle: "@johndoe · Manzil story",
+        statement: "Found a place worth returning to.",
+        chips: ["Local finds", "Tashkent", "Worth the visit"],
+        tabs: ["Stories", "Places", "Saved"],
+        placeName: "Qorasuv Courtyard",
+        verdict: "Worth the visit",
+        tag: "Hikoyalar",
+        title: "John Doe hikoyasi",
+        description: "Joy, suratlar va shaxsiy fikr bilan o‘z shahar hikoyangizni ulashing."
+      }
+    },
+    gurmanHowItWorks: {
+      eyebrow: "GURMAN ALGORITMI",
+      title: "U shunchaki javob bermaydi. U amalda nima mumkinligini aniqlaydi.",
+      subtitle:
+        "Gurman inson niyatini aniq vazifaga aylantirish, uni mahalliy dalillar va haqiqiy cheklovlar bilan tekshirish hamda faktlar asosida reja tuzish uchun yaratilmoqda. Til modeli oxirida ishlaydi — qaror qabul qilish uchun emas, uni tushuntirish uchun.",
+      truthLabel: "Ko‘rib chiqish · Mobil Gurman",
+      carouselLabel: "Bitta so‘rov · besh bosqich",
+      stepLabel: "Bosqich",
+      ofLabel: "dan",
+      previousLabel: "Oldingi bosqich",
+      nextLabel: "Keyingi bosqich",
+      finishLabel: "Yakunlandi",
+      stageNavigationLabel: "Gurman bosqichlari",
+      requestLabel: "Misol vazifa · konsept preview",
+      request: "Juma kuni Yunusobod yaqinida olti kishi uchun sokin tug‘ilgan kun kechasi rejalashtiring. Budjetimdan oshmasin.",
+      waitlistCta: "Mobil Gurman navbatiga qo‘shiling",
+      discoverCta: "Haqiqiy joylarni ko‘rish",
+      signature: {
+        label: "Asosiy qoida",
+        lineOne: "Model ifodalaydi.",
+        lineTwo: "Algoritm qaror qiladi.",
+      },
+      stages: [
+        {
+          id: "intent",
+          kind: "intent",
+          number: "01",
+          label: "NIYATNI KOMPILYATSIYA QILISH",
+          title: "Bir jumla vazifaga aylanadi.",
+          description:
+            "Gurman so‘rovni shunchaki kalit so‘zlar to‘plami deb qabul qilmaydi. U maqsad, odamlar, vaqt, joy, sabab, budjet ma’nosi va ochiq savollarni ajratadi.",
+          visualLabel: "Tuzilgan vazifa",
+          fields: [
+            { label: "Maqsad", value: "Tug‘ilgan kun kechasi" },
+            { label: "Odamlar", value: "6 kishi" },
+            { label: "Vaqt", value: "Juma oqshomi" },
+            { label: "Hudud", value: "Yunusobod" },
+            { label: "Sabab", value: "Tug‘ilgan kun" },
+            { label: "Budjet", value: "Maqsadli oraliq · maksimum aytilmagan" },
+            { label: "Yetishmaydi", value: "Aniq vaqt · joriy mavjudlik" },
+          ],
+        },
+        {
+          id: "constraints",
+          kind: "constraints",
+          number: "02",
+          label: "QOIDALARNI ANIQLASH",
+          title: "Majburiy shartlar afzalliklardan farq qiladi.",
+          description:
+            "Amalga oshadigan reja vaqt, sig‘im va yo‘nalishga mos kelishi kerak. Sokin muhit, taom turi, budjet va kayfiyat variantlarni tartiblashga yordam beradi — agar siz ulardan birini majburiy qilmasangiz.",
+          groups: [
+            { label: "MAJBURİY BAJARILADI", tone: "must", items: ["Vaqt oralig‘i", "Haqiqiy sig‘im", "Yo‘l masofasi"] },
+            { label: "USTUVORLIK BERILADI", tone: "prefer", items: ["Sokin muhit", "Budjet maqsadi", "Oilaga mos xizmat"] },
+          ],
+        },
+        {
+          id: "evidence",
+          kind: "evidence",
+          number: "03",
+          label: "DALILLARNI TEKSHIRISH",
+          title: "Har bir da’voning manbasi bo‘lishi kerak.",
+          description:
+            "Haqiqiy listing uning joriy mavjudligi, xizmat sifati yoki aynan shu so‘rovga mosligini avtomatik isbotlamaydi. Ishonch va bo‘shliqlar ko‘rinib turadi.",
+          visualLabel: "Dalil va ishonch",
+          note: "Yetishmayotgan ma’lumot yashirilmaydi.",
+          items: [
+            { label: "Listing identifikatsiyasi", status: "Tasdiqlangan", tone: "supported" },
+            { label: "Xizmat dalili", status: "Yangi · qo‘llab-quvvatlangan", tone: "supported" },
+            { label: "Olti kishilik sig‘im", status: "Noma’lum · aniqlash kerak", tone: "unknown" },
+            { label: "Yo‘lga mosligi", status: "Qo‘llab-quvvatlangan", tone: "supported" },
+            { label: "Narx", status: "Ko‘rsatilmagan", tone: "unknown" },
+            { label: "Xulq-atvor ishonchi", status: "So‘rovga bog‘liq", tone: "unknown" },
+          ],
+        },
+        {
+          id: "decision",
+          kind: "decision",
+          number: "04",
+          label: "QARORNI HISOBLASH",
+          title: "Algoritm amalga oshadigan variantni tanlaydi.",
+          description:
+            "Gurman imkonsiz variantlarni chiqarib tashlaydi, qolganlarini tartiblaydi, nima uchun mosligini qayd etadi va dalil yoki mavjudlik to‘liq bo‘lmaganda muqobillarni saqlab qoladi.",
+          visualLabel: "Qaror izi",
+          decisionLabel: "Qaror holati",
+          decisionStatus: "Qoralama reja · bron qilinmagan",
+          candidates: [
+            { label: "Nomzod A", status: "Yashirildi · xulq-atvor dalili kerak", tone: "suppressed" },
+            { label: "Nomzod B", status: "Tartiblandi · sig‘imni aniqlash kerak", tone: "ranked" },
+            { label: "Nomzod C", status: "Muqobil · budjet farqi ko‘rsatilgan", tone: "alternative" },
+          ],
+        },
+        {
+          id: "language",
+          kind: "language",
+          number: "05",
+          label: "OXIRIDA IFODALASH",
+          title: "Til modeli bo‘sh sahifadan emas, qarordan boshlaydi.",
+          description:
+            "Algoritm nomzodlar, dalillar, cheklovlar, xavflar va muqobillarni hisoblagandan keyingina til qatlami tuzilgan qarorni tabiiy javobga aylantiradi.",
+          visualLabel: "Qaror paketi",
+          pipeline: ["Qaror paketi", "Ruxsat etilgan da’volar", "Dalil bo‘shliqlari", "Tanlangan variantlar", "Xavflar va muqobillar", "Tabiiy til javobi"],
+          ruleLine: "Model ifodalaydi. Algoritm qaror qiladi.",
+        },
+      ],
     },
     benefits: {
       badge: "Afzalliklar",
@@ -330,9 +643,9 @@ const landing: Record<string, LandingCopy> = {
       partnerCta: "Hamkor bo'lish"
     },
     pricing: {
-      badge: "Biznes tariflari",
       title: "Har qanday biznes uchun mos rejalar",
       subtitle: "Kompaniyangizni Manzil katalogiga qo'shing va maqsadli auditoriyani jalb qiling.",
+      featuresLabel: "Kiritilgan imkoniyatlar:",
       tiers: [
         {
           id: "free",
@@ -347,16 +660,15 @@ const landing: Record<string, LandingCopy> = {
             "Mijozlar sharhlarini qabul qilish",
             "Xaritada ko'rsatilishi"
           ],
-          cta: "Bepul qo'shilish",
+          cta: "Try for Free",
           ctaHref: "/uz/business/register"
         },
         {
           id: "pro",
           name: "Pro",
           tagline: "Ko'proq mijoz jalb qilish va o'z sohasida yetakchi bo'lish uchun.",
-          price: "Tez orada",
-          period: "narx e'lon qilinadi",
-          popular: true,
+          price: "",
+          period: "",
           features: [
             "Free tarifidagi barcha imkoniyatlar",
             "Tasdiqlangan 'Verified' ko'k nishon",
@@ -365,15 +677,15 @@ const landing: Record<string, LandingCopy> = {
             "Cheksiz fotosuratlar va menyu",
             "Batafsil ko'rishlar tahlili (Analytics)"
           ],
-          cta: "Pro tarifini tanlash",
+          cta: "Try Pro",
           ctaHref: "/uz/business/register?plan=pro"
         },
         {
           id: "max",
           name: "Max",
           tagline: "Tarmoqli restoranlar va yirik xizmat ko'rsatuvchilar uchun.",
-          price: "Tez orada",
-          period: "narx e'lon qilinadi",
+          price: "",
+          period: "",
           features: [
             "Pro rejasidagi barcha imkoniyatlar",
             "Bosh sahifada maxsus banner joylashuvi",
@@ -382,7 +694,7 @@ const landing: Record<string, LandingCopy> = {
             "Shaxsiy menejer va 24/7 qo'llab-quvvatlash",
             "Shaxsiy brending va foto-suratga olish"
           ],
-          cta: "Biz bilan bog'lanish",
+          cta: "Try Max",
           ctaHref: "/uz/business/register?plan=max"
         }
       ]
@@ -494,6 +806,171 @@ const landing: Record<string, LandingCopy> = {
       previewSubtitle: "Концепция плана",
       previewFooter: "Концепт · без бронирования и онлайн-доступности",
       chips: ["Место", "Еда", "Торт", "Транспорт", "Бюджет", "Атмосфера", "Время"]
+    },
+    story: {
+      title: "Вся жизнь вашего города — в одном месте",
+      subtitle:
+        "Открывайте новые места, решайте повседневные задачи в одном месте, выбирайте на основе реального опыта людей и делитесь своими историями.",
+      discover: {
+        eyebrow: "Discover",
+        context: "Ташкент · рядом с вами",
+        districtOne: "Юнусабад",
+        districtTwo: "Чиланзар",
+        placeName: "Qorasuv Courtyard",
+        placeMeta: "Тихий кофе · Юнусабад",
+        chipOne: "Кофе",
+        chipTwo: "12 мин от вас",
+        tag: "Открывайте",
+        title: "Находите места, о которых не знали",
+        description: "Открывайте места рядом, которые легко пропустить."
+      },
+      care: {
+        eyebrow: "Повседневные задачи",
+        context: "Мобильная концепция",
+        kicker: "Ваш следующий план",
+        planTitle: "Найти барбера",
+        avatar: "S",
+        service: "Классическая стрижка",
+        preferredTimeLabel: "Удобное время",
+        preferredTime: "Суббота · 16:30",
+        simplePlan: "Простой план",
+        simplePlanNote: "Выберите подходящий вариант",
+        tag: "Повседневные задачи",
+        title: "Решайте повседневные задачи в одном месте",
+        description: "Находите, выбирайте и планируйте услуги рядом — от барбера до других локальных сервисов."
+      },
+      trust: {
+        eyebrow: "Опыт людей",
+        context: "Иллюстративный предпросмотр",
+        kicker: "Место, которое запомнится",
+        placeName: "Qorasuv Courtyard",
+        quote: "«Тихо, тепло и стоит не торопить утро».",
+        location: "Юнусабад",
+        verdict: "Стоит посетить",
+        tag: "Реальный опыт",
+        title: "Выбирайте на основе реального опыта",
+        description: "Понимайте, подходит ли вам место, через фотографии, отзывы и личные впечатления людей."
+      },
+      share: {
+        eyebrow: "История John Doe",
+        context: "Иллюстративный профиль",
+        avatar: "JD",
+        name: "John Doe",
+        handle: "@johndoe · история Manzil",
+        statement: "Нашёл место, куда хочется вернуться.",
+        chips: ["Местные находки", "Ташкент", "Стоит посетить"],
+        tabs: ["Истории", "Места", "Сохранённые"],
+        placeName: "Qorasuv Courtyard",
+        verdict: "Стоит посетить",
+        tag: "Истории",
+        title: "История John Doe",
+        description: "Делитесь своей городской историей — местом, фотографиями и личным мнением."
+      }
+    },
+    gurmanHowItWorks: {
+      eyebrow: "АЛГОРИТМ GURMAN",
+      title: "Он не просто отвечает. Он определяет, что действительно возможно.",
+      subtitle:
+        "Gurman создаётся, чтобы превращать человеческое намерение в структурированную задачу, проверять её по локальным данным и реальным ограничениям и предлагать план только тогда, когда его подтверждают факты. Языковая модель работает в конце — чтобы объяснить решение, а не принять его.",
+      truthLabel: "Предпросмотр · мобильный Gurman",
+      carouselLabel: "Один запрос · пять этапов",
+      stepLabel: "Этап",
+      ofLabel: "из",
+      previousLabel: "Предыдущий этап",
+      nextLabel: "Следующий этап",
+      finishLabel: "Готово",
+      stageNavigationLabel: "Этапы Gurman",
+      requestLabel: "Пример задачи · концепт",
+      request: "Спланируйте тихий праздничный ужин на шестерых в эту пятницу рядом с Юнусабадом. Уложитесь в мой бюджет.",
+      waitlistCta: "Встать в очередь на мобильный Gurman",
+      discoverCta: "Посмотреть реальные места",
+      signature: {
+        label: "Главное правило",
+        lineOne: "Модель формулирует.",
+        lineTwo: "Алгоритм принимает решение.",
+      },
+      stages: [
+        {
+          id: "intent",
+          kind: "intent",
+          number: "01",
+          label: "СОБРАТЬ НАМЕРЕНИЕ",
+          title: "Фраза становится задачей.",
+          description:
+            "Gurman не воспринимает запрос как набор ключевых слов. Он выделяет цель, людей, время, место, повод, смысл бюджета и нерешённые вопросы.",
+          visualLabel: "Структурированная задача",
+          fields: [
+            { label: "Цель", value: "Праздничный ужин" },
+            { label: "Люди", value: "6 человек" },
+            { label: "Время", value: "Пятничный вечер" },
+            { label: "Район", value: "Юнусабад" },
+            { label: "Повод", value: "День рождения" },
+            { label: "Бюджет", value: "Целевой диапазон · максимум не указан" },
+            { label: "Не хватает", value: "Точное время · наличие сейчас" },
+          ],
+        },
+        {
+          id: "constraints",
+          kind: "constraints",
+          number: "02",
+          label: "РАЗОБРАТЬ ПРАВИЛА",
+          title: "Обязательное — не то же самое, что предпочтение.",
+          description:
+            "Рабочий план должен учитывать время, вместимость и маршрут. Тихая атмосфера, кухня, бюджет и настроение помогают ранжировать варианты — если вы не сделали их обязательными.",
+          groups: [
+            { label: "ДОЛЖНО СОБЛЮДАТЬСЯ", tone: "must", items: ["Временное окно", "Реальная вместимость", "Расстояние в пути"] },
+            { label: "ОПТИМИЗИРОВАТЬ", tone: "prefer", items: ["Тихая атмосфера", "Целевой бюджет", "Сервис для семьи"] },
+          ],
+        },
+        {
+          id: "evidence",
+          kind: "evidence",
+          number: "03",
+          label: "ПРОВЕРИТЬ ДАННЫЕ",
+          title: "У каждого утверждения должен быть источник.",
+          description:
+            "Настоящая карточка места не доказывает его текущую доступность, стабильный сервис или соответствие именно этому запросу. Доверие и пробелы остаются видимыми.",
+          visualLabel: "Данные и доверие",
+          note: "Недостающие данные не скрываются.",
+          items: [
+            { label: "Идентичность карточки", status: "Проверено", tone: "supported" },
+            { label: "Данные об услуге", status: "Свежие · подтверждены", tone: "supported" },
+            { label: "Вместимость на шестерых", status: "Неизвестно · уточнить", tone: "unknown" },
+            { label: "Подходит по маршруту", status: "Подтверждено", tone: "supported" },
+            { label: "Цена", status: "Не указана", tone: "unknown" },
+            { label: "Поведенческая уверенность", status: "Зависит от запроса", tone: "unknown" },
+          ],
+        },
+        {
+          id: "decision",
+          kind: "decision",
+          number: "04",
+          label: "ВЫЧИСЛИТЬ РЕШЕНИЕ",
+          title: "Алгоритм выбирает то, что выполнимо.",
+          description:
+            "Gurman отсеивает невозможное, ранжирует оставшееся, фиксирует причины соответствия и сохраняет альтернативы, если данных или наличия недостаточно.",
+          visualLabel: "След решения",
+          decisionLabel: "Состояние решения",
+          decisionStatus: "Черновик плана · не забронировано",
+          candidates: [
+            { label: "Кандидат A", status: "Скрыт · нужны поведенческие данные", tone: "suppressed" },
+            { label: "Кандидат B", status: "В рейтинге · вместимость уточняется", tone: "ranked" },
+            { label: "Кандидат C", status: "Альтернатива · показана разница в бюджете", tone: "alternative" },
+          ],
+        },
+        {
+          id: "language",
+          kind: "language",
+          number: "05",
+          label: "СНАЧАЛА РЕШЕНИЕ, ПОТОМ СЛОВА",
+          title: "Языковая модель получает решение, а не пустую страницу.",
+          description:
+            "Только после расчёта кандидатов, данных, ограничений, рисков и альтернатив языковой слой превращает структурированное решение в естественный ответ.",
+          visualLabel: "Пакет решения",
+          pipeline: ["Пакет решения", "Допустимые утверждения", "Пробелы в данных", "Выбранные варианты", "Риски и альтернативы", "Ответ на естественном языке"],
+          ruleLine: "Модель формулирует. Алгоритм принимает решение.",
+        },
+      ],
     },
     benefits: {
       badge: "Преимущества",
@@ -622,9 +1099,9 @@ const landing: Record<string, LandingCopy> = {
       partnerCta: "Стать партнёром"
     },
     pricing: {
-      badge: "Тарифы для бизнеса",
       title: "Гибкие тарифные планы для любого масштаба",
       subtitle: "Разместите компанию на платформе Manzil и привлекайте новых клиентов.",
+      featuresLabel: "Возможности тарифа:",
       tiers: [
         {
           id: "free",
@@ -646,9 +1123,8 @@ const landing: Record<string, LandingCopy> = {
           id: "pro",
           name: "Pro",
           tagline: "Для активного привлечения клиентов и лидерства в своей категории.",
-          price: "Скоро",
-          period: "цена будет объявлена",
-          popular: true,
+          price: "",
+          period: "",
           features: [
             "Все возможности тарифа Free",
             "Синяя галочка 'Verified'",
@@ -664,8 +1140,8 @@ const landing: Record<string, LandingCopy> = {
           id: "max",
           name: "Max",
           tagline: "Для ресторанных сетей и крупных сервисных компаний.",
-          price: "Скоро",
-          period: "цена будет объявлена",
+          price: "",
+          period: "",
           features: [
             "Все возможности тарифа Pro",
             "Спец-размещение на главной странице",
@@ -786,6 +1262,171 @@ const landing: Record<string, LandingCopy> = {
       previewSubtitle: "Example planning workspace",
       previewFooter: "Concept preview · no booking or live availability",
       chips: ["Venue", "Food", "Cake", "Transport", "Budget", "Atmosphere", "Timing"]
+    },
+    story: {
+      title: "Your city life, all in one place",
+      subtitle:
+        "Discover new places, handle everyday needs in one place, choose from real human experiences, and share your own stories.",
+      discover: {
+        eyebrow: "Discover",
+        context: "Tashkent · near you",
+        districtOne: "Yunusabad",
+        districtTwo: "Chilanzar",
+        placeName: "Qorasuv Courtyard",
+        placeMeta: "Quiet coffee · Yunusabad",
+        chipOne: "Coffee",
+        chipTwo: "12 min from you",
+        tag: "Discover",
+        title: "Find places you did not know were nearby",
+        description: "Find the places near you that are easy to miss."
+      },
+      care: {
+        eyebrow: "Everyday care",
+        context: "Mobile concept",
+        kicker: "Your next plan",
+        planTitle: "Find a barber",
+        avatar: "S",
+        service: "Classic cut",
+        preferredTimeLabel: "Preferred time",
+        preferredTime: "Saturday · 16:30",
+        simplePlan: "A simple plan",
+        simplePlanNote: "Choose what works for you",
+        tag: "Everyday needs",
+        title: "Handle everyday needs in one place",
+        description: "Find, choose, and plan a barber or other local service in one app."
+      },
+      trust: {
+        eyebrow: "Human experience",
+        context: "Illustrative preview",
+        kicker: "A place to remember",
+        placeName: "Qorasuv Courtyard",
+        quote: "“Quiet, warm, and worth a slower morning.”",
+        location: "Yunusabad",
+        verdict: "Worth the visit",
+        tag: "Human experience",
+        title: "Choose from real experiences",
+        description: "Use photos, reviews, and personal perspectives to understand whether a place fits you."
+      },
+      share: {
+        eyebrow: "John Doe’s story",
+        context: "Illustrative profile",
+        avatar: "JD",
+        name: "John Doe",
+        handle: "@johndoe · Manzil story",
+        statement: "Found a place worth returning to.",
+        chips: ["Local finds", "Tashkent", "Worth the visit"],
+        tabs: ["Stories", "Places", "Saved"],
+        placeName: "Qorasuv Courtyard",
+        verdict: "Worth the visit",
+        tag: "Stories",
+        title: "John Doe’s story",
+        description: "Share your city story with a place, photos, and a personal point of view."
+      }
+    },
+    gurmanHowItWorks: {
+      eyebrow: "THE GURMAN ALGORITHM",
+      title: "It doesn’t just answer. It works out what can actually happen.",
+      subtitle:
+        "Gurman is being built to turn a human intention into a structured mission, test it against local evidence and real constraints, and return a plan only when the facts support it. The language model comes last — to explain the decision, not to make it.",
+      truthLabel: "Preview · Mobile Gurman",
+      carouselLabel: "One request · five layers",
+      stepLabel: "Step",
+      ofLabel: "of",
+      previousLabel: "Previous stage",
+      nextLabel: "Next stage",
+      finishLabel: "Finished",
+      stageNavigationLabel: "Gurman stages",
+      requestLabel: "Example mission · concept preview",
+      request: "Plan a quiet birthday dinner for six this Friday near Yunusabad. Keep it within my budget.",
+      waitlistCta: "Join the mobile waitlist",
+      discoverCta: "Explore real places",
+      signature: {
+        label: "The signature rule",
+        lineOne: "The model phrases.",
+        lineTwo: "The algorithm decides.",
+      },
+      stages: [
+        {
+          id: "intent",
+          kind: "intent",
+          number: "01",
+          label: "COMPILE THE INTENTION",
+          title: "A sentence becomes a mission.",
+          description:
+            "Gurman does not treat the request as a bag of keywords. It extracts the goal, people, time, place, occasion, budget meaning, and unresolved questions.",
+          visualLabel: "Structured mission",
+          fields: [
+            { label: "Goal", value: "Birthday dinner" },
+            { label: "People", value: "6" },
+            { label: "Time", value: "Friday evening" },
+            { label: "Area", value: "Yunusabad" },
+            { label: "Occasion", value: "Birthday" },
+            { label: "Budget", value: "Target range · maximum not stated" },
+            { label: "Missing", value: "Exact time · current availability" },
+          ],
+        },
+        {
+          id: "constraints",
+          kind: "constraints",
+          number: "02",
+          label: "RESOLVE THE RULES",
+          title: "Must-haves are not the same as preferences.",
+          description:
+            "A feasible plan must fit the time, capacity, and route. Quiet atmosphere, cuisine, budget target, and mood help Gurman rank the options — unless you make one of them non-negotiable.",
+          groups: [
+            { label: "MUST SATISFY", tone: "must", items: ["Time window", "Genuine capacity", "Travel distance"] },
+            { label: "OPTIMIZE FOR", tone: "prefer", items: ["Quiet atmosphere", "Budget target", "Family-friendly service"] },
+          ],
+        },
+        {
+          id: "evidence",
+          kind: "evidence",
+          number: "03",
+          label: "TEST THE EVIDENCE",
+          title: "Every claim needs a source.",
+          description:
+            "A real listing does not automatically prove current availability, reliable service, or a good fit for this particular request. Evidence gaps stay visible.",
+          visualLabel: "Evidence and trust",
+          note: "Missing information remains part of the result.",
+          items: [
+            { label: "Listing identity", status: "Verified", tone: "supported" },
+            { label: "Service evidence", status: "Recent · supported", tone: "supported" },
+            { label: "Capacity for six", status: "Unknown · confirm", tone: "unknown" },
+            { label: "Travel fit", status: "Supported", tone: "supported" },
+            { label: "Price", status: "Not provided", tone: "unknown" },
+            { label: "Behavioral confidence", status: "Query-dependent", tone: "unknown" },
+          ],
+        },
+        {
+          id: "decision",
+          kind: "decision",
+          number: "04",
+          label: "COMPUTE THE DECISION",
+          title: "The algorithm chooses what is feasible.",
+          description:
+            "Gurman filters impossible options, ranks the remaining candidates, records why they fit, and preserves alternatives when evidence or availability is incomplete.",
+          visualLabel: "Decision trace",
+          decisionLabel: "Decision state",
+          decisionStatus: "Draft plan · not booked",
+          candidates: [
+            { label: "Candidate A", status: "Suppressed · behavioral evidence required", tone: "suppressed" },
+            { label: "Candidate B", status: "Ranked · constraints fit · capacity to confirm", tone: "ranked" },
+            { label: "Candidate C", status: "Alternative · budget delta shown", tone: "alternative" },
+          ],
+        },
+        {
+          id: "language",
+          kind: "language",
+          number: "05",
+          label: "SPEAK LAST",
+          title: "The language model gets a decision — not a blank page.",
+          description:
+            "Only after the algorithm has computed the candidates, evidence, constraints, risks, and alternatives does the language layer turn that structured decision into a natural answer.",
+          visualLabel: "Decision package",
+          pipeline: ["Decision package", "Allowed claims", "Evidence gaps", "Selected options", "Risks and alternatives", "Natural-language response"],
+          ruleLine: "The model phrases. The algorithm decides.",
+        },
+      ],
     },
     benefits: {
       badge: "Benefits",
@@ -913,9 +1554,9 @@ const landing: Record<string, LandingCopy> = {
       partnerCta: "Partner with us"
     },
     pricing: {
-      badge: "Business Pricing",
       title: "Flexible plans for businesses of all sizes",
       subtitle: "Showcase your business on Manzil and attract new high-intent local clients.",
+      featuresLabel: "Included features:",
       tiers: [
         {
           id: "free",
@@ -937,9 +1578,8 @@ const landing: Record<string, LandingCopy> = {
           id: "pro",
           name: "Pro",
           tagline: "For growing businesses looking to dominate search rankings.",
-          price: "Coming soon",
-          period: "pricing to be announced",
-          popular: true,
+          price: "",
+          period: "",
           features: [
             "Everything in Free plan",
             "Verified blue badge",
@@ -955,8 +1595,8 @@ const landing: Record<string, LandingCopy> = {
           id: "max",
           name: "Max",
           tagline: "For restaurant groups, multi-branch chains, and premier venues.",
-          price: "Coming soon",
-          period: "pricing to be announced",
+          price: "",
+          period: "",
           features: [
             "Everything in Pro",
             "Featured placement on homepage banner",
