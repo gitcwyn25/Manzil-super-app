@@ -1,6 +1,7 @@
 "use client";
 
 import type { Locale } from "@manzil/shared";
+import CloudSky from "@/components/originkit/ui/cloud-sky";
 import type { CleverHeroCopy } from "../../lib/landing-copy";
 import { Reveal } from "../motion/reveal";
 import { Icon } from "../vm/icons";
@@ -8,6 +9,29 @@ import { Icon } from "../vm/icons";
 export function CleverHero({ copy, locale }: { copy: CleverHeroCopy; locale: Locale }) {
   return (
     <section className="clever-hero" id="hero">
+      <CloudSky
+        className="clever-hero__cloud-sky"
+        background="#edf6ff"
+        baseColor="#e6f0f9"
+        accentColor="#ffffff"
+        density={68}
+        speed={18}
+        size={105}
+        clouds={{ softness: 125, shadow: 55, cirrus: 28 }}
+        sun={{ x: 78, y: 88, glow: "rgba(255, 249, 222, 0.78)" }}
+        pointer={{ parallax: 26, wind: 22, damping: 18 }}
+        style={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 0,
+          width: "100%",
+          height: "100%",
+          minWidth: 0,
+          minHeight: 0,
+          pointerEvents: "none",
+          borderRadius: 0
+        }}
+      />
       <div aria-hidden="true" className="clever-hero__glow clever-hero__glow--top" />
       <div aria-hidden="true" className="clever-hero__glow clever-hero__glow--bottom" />
 
@@ -66,6 +90,16 @@ export function CleverHero({ copy, locale }: { copy: CleverHeroCopy; locale: Loc
 
         <Reveal as="div" delay={180} variant="fade-up">
           <div aria-label={copy.systemAriaLabel} className="clever-hero__system" role="img">
+            <div aria-hidden="true" className="clever-hero__companion">
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="metadata"
+                src="/media/gurman/wonder-sitting-transparent.webm"
+              />
+            </div>
             <div className="clever-hero__system-topline">
               <span>Manzil</span>
               <span className="clever-hero__system-line" />
