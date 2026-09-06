@@ -79,7 +79,7 @@ export default async function WaitlistPage({
       <div className="wl-copy">
         <h1>{copy.title}</h1>
         <p className="wl-lead">{copy.lead}</p>
-        {topic !== "gurman" && count !== null && count > 0 ? (
+        {count !== null && count > 0 ? (
           <p className="wl-count">{copy.countLabel(count)}</p>
         ) : null}
         <WaitlistForm locale={locale} topic={topic} />
