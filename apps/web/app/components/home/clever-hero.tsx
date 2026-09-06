@@ -3,6 +3,7 @@
 import type { Locale } from "@manzil/shared";
 import CloudSky from "@/components/originkit/ui/cloud-sky";
 import type { CleverHeroCopy } from "../../lib/landing-copy";
+import { CompanionLoop } from "../media/companion-loop";
 import { Reveal } from "../motion/reveal";
 import { Icon } from "../vm/icons";
 
@@ -91,13 +92,9 @@ export function CleverHero({ copy, locale }: { copy: CleverHeroCopy; locale: Loc
         <Reveal as="div" delay={180} variant="fade-up">
           <div aria-label={copy.systemAriaLabel} className="clever-hero__system" role="img">
             <div aria-hidden="true" className="clever-hero__companion">
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                preload="metadata"
-                src="/media/gurman/wonder-sitting-transparent.webm"
+              <CompanionLoop
+                className="companion-loop"
+                src="/media/gurman/wonder-sitting-transparent-alpha.webp"
               />
             </div>
             <div className="clever-hero__system-topline">

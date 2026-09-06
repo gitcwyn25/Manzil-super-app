@@ -2,6 +2,7 @@ import type { Locale } from "@manzil/shared";
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { CompanionLoop } from "./media/companion-loop";
 import { docGroups, docMarkdown, docs, founderProfiles, founderSectionCopy, type DocId } from "../lib/docs";
 
 const notice: Record<Locale, string> = {
@@ -220,7 +221,10 @@ function FounderProfiles({ locale }: { locale: Locale }) {
         ))}
       </div>
       <div className="founder-together-overlay" aria-label={TOGETHER_COPY[locale].title}>
-        <video autoPlay loop muted playsInline preload="metadata" src="/media/founders/together-transparent.webm" aria-hidden="true" />
+        <CompanionLoop
+          className="companion-loop"
+          src="/media/founders/together-transparent-alpha.webp"
+        />
       </div>
     </section>
   );

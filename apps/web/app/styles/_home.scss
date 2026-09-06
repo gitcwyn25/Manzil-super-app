@@ -1178,7 +1178,7 @@
     pointer-events: none;
     transform: translateX(-50%);
 
-    video {
+    .companion-loop {
       display: block;
       width: 100%;
       aspect-ratio: 1;
@@ -1948,7 +1948,7 @@
     margin: 1.25rem 0 1.5rem;
     overflow: hidden;
 
-    video {
+    .companion-loop {
       display: block;
       width: 6.5rem;
       height: 9.25rem;
@@ -1957,15 +1957,15 @@
       background: transparent;
     }
 
-    &--free video {
+    &--free .companion-loop {
       width: 9rem;
     }
 
-    &--pro video {
+    &--pro .companion-loop {
       width: 7.25rem;
     }
 
-    &--max video {
+    &--max .companion-loop {
       width: 6.25rem;
     }
   }
@@ -2370,7 +2370,7 @@
     margin-inline-start: 52%;
     pointer-events: none;
 
-    video {
+    .companion-loop {
       display: block;
       width: min(10.8rem, 100%);
       aspect-ratio: 1;

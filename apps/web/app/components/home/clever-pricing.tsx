@@ -1,39 +1,31 @@
 import type { CleverPricingCopy } from "../../lib/landing-copy";
+import { CompanionLoop } from "../media/companion-loop";
 import { Reveal } from "../motion/reveal";
 import { Icon } from "../vm/icons";
 
-const COMPANION_VIDEOS: Record<string, string[]> = {
-  free: ["/media/business/wonder-transparent.webm"],
+const COMPANION_LOOPS: Record<string, string[]> = {
+  free: ["/media/business/wonder-transparent-alpha.webp"],
   pro: [
-    "/media/business/wonder-transparent.webm",
-    "/media/business/think-transparent.webm"
+    "/media/business/wonder-transparent-alpha.webp",
+    "/media/business/think-transparent-alpha.webp"
   ],
   max: [
-    "/media/business/wonder-transparent.webm",
-    "/media/business/think-transparent.webm",
-    "/media/business/tired-transparent.webm"
+    "/media/business/wonder-transparent-alpha.webp",
+    "/media/business/think-transparent-alpha.webp",
+    "/media/business/tired-transparent-alpha.webp"
   ]
 };
 
 function PricingCompanions({ tierId }: { tierId: string }) {
-  const videos = COMPANION_VIDEOS[tierId] ?? [];
+  const sources = COMPANION_LOOPS[tierId] ?? [];
 
   return (
     <div
       className={`clever-pricing-card__companions clever-pricing-card__companions--${tierId}`}
       aria-label={`${tierId} plan companions`}
     >
-      {videos.map((src) => (
-        <video
-          key={src}
-          aria-hidden="true"
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="metadata"
-          src={src}
-        />
+      {sources.map((src) => (
+        <CompanionLoop className="companion-loop" key={src} src={src} />
       ))}
     </div>
   );

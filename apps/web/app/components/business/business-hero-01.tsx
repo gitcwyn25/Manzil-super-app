@@ -3,6 +3,7 @@
 import type { Locale } from "@manzil/shared";
 import Image from "next/image";
 import Link from "next/link";
+import { CompanionLoop } from "../media/companion-loop";
 import { Reveal } from "../motion/reveal";
 import { Icon } from "../vm/icons";
 
@@ -140,16 +141,16 @@ export function BusinessHero01({ locale }: { locale: Locale }) {
         <Reveal as="div" delay={400} variant="fade-up">
           <div className="bz-hero-01__showcase">
             <div aria-hidden="true" className="bz-hero-01__companion bz-hero-01__companion--left-top">
-              <video autoPlay loop muted playsInline preload="metadata" src="/media/business/wonder-transparent.webm" />
+              <CompanionLoop className="companion-loop" src="/media/business/wonder-transparent-alpha.webp" />
             </div>
             <div aria-hidden="true" className="bz-hero-01__companion bz-hero-01__companion--left-bottom">
-              <video autoPlay loop muted playsInline preload="metadata" src="/media/business/read-transparent.webm" />
+              <CompanionLoop className="companion-loop" src="/media/business/read-transparent-alpha.webp" />
             </div>
             <div aria-hidden="true" className="bz-hero-01__companion bz-hero-01__companion--right-top">
-              <video autoPlay loop muted playsInline preload="metadata" src="/media/business/think-transparent.webm" />
+              <CompanionLoop className="companion-loop" src="/media/business/think-transparent-alpha.webp" />
             </div>
             <div aria-hidden="true" className="bz-hero-01__companion bz-hero-01__companion--right-bottom">
-              <video autoPlay loop muted playsInline preload="metadata" src="/media/business/tired-transparent.webm" />
+              <CompanionLoop className="companion-loop" src="/media/business/tired-transparent-alpha.webp" />
             </div>
             <div className="bz-hero-01__browser-mockup">
             <div className="bz-hero-01__browser-header">

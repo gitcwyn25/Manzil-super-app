@@ -2,6 +2,7 @@
 
 import type { Locale } from "@manzil/shared";
 import Link from "next/link";
+import { CompanionLoop } from "./media/companion-loop";
 import { getBusinessCopy } from "../lib/business-copy";
 import { Icon } from "./vm/icons";
 
@@ -267,7 +268,12 @@ export function Footer({ locale }: { locale: Locale }) {
             <span className="manzil-footer-companions__eyebrow">Manzil / {locale === "uz" ? "Jamoa" : locale === "ru" ? "Команда" : "Team"}</span>
             <h2 id="footer-companions-title">{locale === "uz" ? "Hamrohlaringiz bilan tanishing" : locale === "ru" ? "Познакомьтесь с командой" : "Meet your companions"}</h2>
             <div className="manzil-footer-companions__video">
-              <video autoPlay loop muted playsInline preload="metadata" src="/media/founders/together-transparent.webm" aria-label="Manzil companions together" />
+              <CompanionLoop
+                alt="Manzil companions together"
+                className="companion-loop"
+                decorative={false}
+                src="/media/founders/together-transparent-alpha.webp"
+              />
             </div>
           </section>
         </div>

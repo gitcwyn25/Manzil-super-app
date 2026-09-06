@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import type { CleverFaqCopy } from "../../lib/landing-copy";
+import { CompanionLoop } from "../media/companion-loop";
 import { Reveal } from "../motion/reveal";
 
 export function CleverFaq({ copy }: { copy: CleverFaqCopy }) {
@@ -32,13 +33,9 @@ export function CleverFaq({ copy }: { copy: CleverFaqCopy }) {
               {copy.contactCta}
             </a>
             <div aria-hidden="true" className="clever-faq__companion">
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                preload="metadata"
-                src="/media/gurman/faq-reading-transparent.webm"
+              <CompanionLoop
+                className="companion-loop"
+                src="/media/gurman/faq-reading-transparent-alpha.webp"
               />
             </div>
           </Reveal>
