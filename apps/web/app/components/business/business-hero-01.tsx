@@ -3,6 +3,7 @@
 import type { Locale } from "@manzil/shared";
 import Image from "next/image";
 import Link from "next/link";
+import { CompanionLoop } from "../media/companion-loop";
 import { Reveal } from "../motion/reveal";
 import { Icon } from "../vm/icons";
 
@@ -136,31 +137,38 @@ export function BusinessHero01({ locale }: { locale: Locale }) {
           </div>
         </Reveal>
 
-        {/* Explanatory panorama video */}
+        {/* Interactive Dashboard Browser Showcase */}
         <Reveal as="div" delay={400} variant="fade-up">
-          <div
-            className="bz-hero-01__explanatory-video"
-            style={{
-              width: "100%",
-              aspectRatio: "16 / 9",
-              overflow: "hidden",
-              borderRadius: "clamp(1.25rem, 2.5vw, 2rem)",
-              background: "#07131b",
-              boxShadow: "0 30px 80px rgba(21, 43, 59, 0.22)"
-            }}
-          >
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="metadata"
-              controls
-              aria-label="Manzil explanatory video"
-              style={{ display: "block", width: "100%", height: "100%", objectFit: "cover" }}
-            >
-              <source src="/media/business/mockup-demo.mp4" type="video/mp4" />
-            </video>
+          <div className="bz-hero-01__showcase">
+            <div aria-hidden="true" className="bz-hero-01__companion bz-hero-01__companion--left-top">
+              <CompanionLoop className="companion-loop" src="/media/business/wonder-transparent-alpha.webp" />
+            </div>
+            <div aria-hidden="true" className="bz-hero-01__companion bz-hero-01__companion--left-bottom">
+              <CompanionLoop className="companion-loop" src="/media/business/read-transparent-alpha.webp" />
+            </div>
+            <div aria-hidden="true" className="bz-hero-01__companion bz-hero-01__companion--right-top">
+              <CompanionLoop className="companion-loop" src="/media/business/think-transparent-alpha.webp" />
+            </div>
+            <div aria-hidden="true" className="bz-hero-01__companion bz-hero-01__companion--right-bottom">
+              <CompanionLoop className="companion-loop" src="/media/business/tired-transparent-alpha.webp" />
+            </div>
+            <div className="bz-hero-01__browser-mockup">
+            <div className="bz-hero-01__browser-header">
+              <div className="bz-hero-01__browser-dots">
+                <span className="bz-hero-01__dot bz-hero-01__dot--red" />
+                <span className="bz-hero-01__dot bz-hero-01__dot--yellow" />
+                <span className="bz-hero-01__dot bz-hero-01__dot--green" />
+              </div>
+              <div className="bz-hero-01__browser-address">
+                <span>🔒 business.manzilgroup.uz/dashboard</span>
+              </div>
+              <span className="bz-hero-01__browser-badge">Example workspace</span>
+            </div>
+
+            <div aria-label="Manzil Business live product demo" className="bz-hero-01__demo">
+              <video autoPlay loop muted playsInline preload="auto" src="/media/business/mockup-demo.mp4" />
+            </div>
+            </div>
           </div>
         </Reveal>
 
