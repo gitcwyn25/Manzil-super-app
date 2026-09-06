@@ -21,14 +21,20 @@ test.describe("waitlist", () => {
     await expect(page.locator(".wl-done")).toContainText("number");
   });
 
-  test("gurman signup takes only an email", async ({ page }) => {
+  test("gurman signup captures profile and confirms a position", async ({ page }) => {
     await page.goto("/en/waitlist/gurman");
 
     await expect(page.locator('select[name="city"]')).toHaveCount(0);
+    await page.fill("#gurman-forename", "Test");
+    await page.fill("#gurman-surname", "User");
     await page.fill('input[name="email"]', uniqueEmail());
+    await page.selectOption('select[name="purpose"]', "discover");
+    await page.selectOption('select[name="heardFrom"]', "search");
+    await page.check('input[type="checkbox"]');
     await page.click(".wl-submit");
 
     await expect(page.locator(".wl-done")).toBeVisible();
+    await expect(page.locator(".wl-done")).toContainText("Your place in line");
   });
 
   test("pro signup offers a business name field", async ({ page }) => {
@@ -44,7 +50,12 @@ test.describe("waitlist", () => {
 
   test("a bad email is rejected without leaving the page", async ({ page }) => {
     await page.goto("/en/waitlist/gurman");
+    await page.fill("#gurman-forename", "Test");
+    await page.fill("#gurman-surname", "User");
     await page.fill('input[name="email"]', "nope");
+    await page.selectOption('select[name="purpose"]', "discover");
+    await page.selectOption('select[name="heardFrom"]', "search");
+    await page.check('input[type="checkbox"]');
     await page.click(".wl-submit");
 
     await expect(page.locator(".wl-done")).toHaveCount(0);

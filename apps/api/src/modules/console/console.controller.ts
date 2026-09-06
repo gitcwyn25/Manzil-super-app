@@ -70,6 +70,24 @@ export class ConsoleController {
     return { data: await this.analytics.platformOverview(parseWindow(days)) };
   }
 
+  @Get("waitlist")
+  @RequirePermission("waitlist.view")
+  async waitlist(
+    @Query("topic") topic: string | undefined,
+    @Query("q") q: string | undefined,
+    @Query("limit") limit: string | undefined,
+    @Query("offset") offset: string | undefined,
+    @Req() r: ConsoleRequest,
+    @Ip() ip: string
+  ) {
+    return {
+      data: await this.repo.listWaitlist(
+        { topic, q, limit: limit ? Number(limit) : undefined, offset: offset ? Number(offset) : undefined },
+        this.ctx(r, ip)
+      )
+    };
+  }
+
   /* ---------- businesses ---------- */
 
   @Get("businesses")

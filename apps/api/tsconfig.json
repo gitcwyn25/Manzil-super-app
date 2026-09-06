@@ -10,8 +10,8 @@
     "noEmit": false,
     "types": ["node", "jest"],
     "paths": {
-      "@manzil/shared": ["../../packages/shared/src/index.ts"],
-      "@manzil/shared/*": ["../../packages/shared/src/*"]
+      "@manzil/shared": ["packages/shared/dist/index.d.ts"],
+      "@manzil/shared/*": ["packages/shared/dist/*"]
     }
   },
   "include": ["src/**/*.ts"]

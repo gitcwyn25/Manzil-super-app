@@ -2,6 +2,7 @@ import type { Locale } from "@manzil/shared";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { pageMetadata, ROUTE_SEO } from "../../../../lib/seo";
+import { GurmanWaitlistForm } from "../../../../components/waitlist/gurman-waitlist-form";
 import { WaitlistForm } from "../../../../components/waitlist/waitlist-form";
 import { API_BASE_URL } from "../../../../lib/api-base-url";
 import { fetchWithTimeout } from "../../../../lib/fetch-with-timeout";
@@ -69,12 +70,16 @@ export default async function WaitlistPage({
   const copy = getWaitlistCopy(topic, locale);
   const count = await getCount(topic);
 
+  if (topic === "gurman") {
+    return <GurmanWaitlistForm locale={locale} />;
+  }
+
   return (
     <section className="wl-page">
       <div className="wl-copy">
         <h1>{copy.title}</h1>
         <p className="wl-lead">{copy.lead}</p>
-        {topic !== "gurman" && count !== null && count > 0 ? (
+        {count !== null && count > 0 ? (
           <p className="wl-count">{copy.countLabel(count)}</p>
         ) : null}
         <WaitlistForm locale={locale} topic={topic} />
