@@ -2437,7 +2437,6 @@
 
   &__answer {
     align-self: flex-end;
-    margin-top: 0.7rem;
     padding: 1rem 1.45rem 1.1rem;
     background: #252523;
     color: #ffffff;
@@ -2455,21 +2454,6 @@
     }
 
     p { margin: 0; }
-  }
-
-  &__companion {
-    display: flex;
-    justify-content: flex-start;
-    pointer-events: none;
-
-    video {
-      display: block;
-      width: min(9rem, 100%);
-      aspect-ratio: 1;
-      border-radius: 1rem;
-      object-fit: cover;
-      box-shadow: 0 0.75rem 2rem rgba(15, 23, 42, 0.12);
-    }
   }
 
   @include media-breakpoint-down(md) {

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Features01 from "@/components/originkit/features-01";
 import { BusinessHero01 } from "../../../components/business/business-hero-01";
 import { CleverFaq } from "../../../components/home/clever-faq";
+import { CleverPricing } from "../../../components/home/clever-pricing";
 import { JsonLd } from "../../../components/json-ld";
 import { getLandingCopy } from "../../../lib/landing-copy";
 import { routeMetadata } from "../../../lib/seo";
@@ -38,7 +39,10 @@ export default async function BusinessLandingPage({
       {/* 2. OriginKit Features 01: dashboard-led business capabilities */}
       <Features01 locale={locale} />
 
-      {/* 3. FAQ Accordion */}
+      {/* 3. Approved Free / Pro / Max pricing presentation */}
+      <CleverPricing copy={landingCopy.pricing} />
+
+      {/* 4. FAQ Accordion */}
       <CleverFaq copy={landingCopy.faq} />
 
     </div>

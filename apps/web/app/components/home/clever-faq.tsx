@@ -60,11 +60,12 @@ export function CleverFaq({ copy }: { copy: CleverFaqCopy }) {
                   role="listitem"
                   initial={{ opacity: 0, y: 18 }}
                   key={questionId}
-                  layout
+                  layout="position"
                   transition={{
                     delay: idx * 0.06,
                     duration: 0.45,
-                    ease: [0.16, 1, 0.3, 1]
+                    ease: [0.16, 1, 0.3, 1],
+                    layout: { duration: 0.38, ease: [0.16, 1, 0.3, 1] }
                   }}
                   viewport={{ once: true, amount: 0.2 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -74,7 +75,6 @@ export function CleverFaq({ copy }: { copy: CleverFaqCopy }) {
                     aria-expanded={isOpen}
                     className="clever-faq__question"
                     id={questionId}
-                    layout="position"
                     onClick={() => toggle(idx)}
                     type="button"
                     whileTap={{ scale: 0.99 }}
@@ -82,17 +82,21 @@ export function CleverFaq({ copy }: { copy: CleverFaqCopy }) {
                     {item.question}
                   </motion.button>
 
-                  <AnimatePresence initial={false} mode="sync">
+                  <AnimatePresence initial={false} mode="wait">
                     {isOpen && (
                       <motion.div
                         aria-labelledby={questionId}
                         className="clever-faq__answer"
                         id={answerId}
-                        initial={{ height: 0, opacity: 0, y: -8 }}
+                        initial={{ height: 0, marginTop: 0, opacity: 0 }}
                         role="region"
-                        animate={{ height: "auto", opacity: 1, y: 0 }}
-                        exit={{ height: 0, opacity: 0, y: -8 }}
-                        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                        animate={{ height: "auto", marginTop: "0.7rem", opacity: 1 }}
+                        exit={{ height: 0, marginTop: 0, opacity: 0 }}
+                        transition={{
+                          height: { duration: 0.38, ease: [0.16, 1, 0.3, 1] },
+                          marginTop: { duration: 0.38, ease: [0.16, 1, 0.3, 1] },
+                          opacity: { duration: 0.24, ease: "easeOut" }
+                        }}
                       >
                         <p>{item.answer}</p>
                       </motion.div>

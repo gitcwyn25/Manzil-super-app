@@ -569,7 +569,7 @@ export const subscriptionPlans: SubscriptionPlan[] = [
   {
     slug: "free",
     name: { uz: "Free", ru: "Free", en: "Free" },
-    priceLabel: { uz: "Bepul", ru: "Бесплатно", en: "Free" },
+    priceLabel: { uz: "0 so'm / oy", ru: "0 сум / месяц", en: "0 UZS / month" },
     description: {
       uz: "Asosiy biznes profili va sharhlar.",
       ru: "Базовый профиль и отзывы.",
@@ -587,7 +587,7 @@ export const subscriptionPlans: SubscriptionPlan[] = [
   {
     slug: "pro",
     name: { uz: "Pro", ru: "Pro", en: "Pro" },
-    priceLabel: { uz: "Tez orada", ru: "Скоро", en: "Coming soon" },
+    priceLabel: { uz: "999 999 so'm / oy", ru: "999 999 сум / месяц", en: "999,999 UZS / month" },
     description: {
       uz: "Kafelar, restoranlar va salonlar uchun.",
       ru: "Для кафе, ресторанов и салонов.",
@@ -607,7 +607,7 @@ export const subscriptionPlans: SubscriptionPlan[] = [
   {
     slug: "max",
     name: { uz: "Max", ru: "Max", en: "Max" },
-    priceLabel: { uz: "Tez orada", ru: "Скоро", en: "Coming soon" },
+    priceLabel: { uz: "1 999 999 so'm / oy", ru: "1 999 999 сум / месяц", en: "1,999,999 UZS / month" },
     description: {
       uz: "O'rnatilgan bizneslar va zanjirlar uchun.",
       ru: "Для устоявшихся бизнесов и сетей.",

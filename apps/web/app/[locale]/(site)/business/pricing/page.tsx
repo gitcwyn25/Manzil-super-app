@@ -5,7 +5,7 @@ import { pickLocalized } from "../../../../lib/locale-text";
 import type { Metadata } from "next";
 import { JsonLd } from "../../../../components/json-ld";
 import { getSubscriptionPlans } from "../../../../lib/api";
-import { planFeatureLabel } from "../../../../lib/plans";
+import { formatPrice, getPlans, planFeatureLabel } from "../../../../lib/plans";
 import { routeMetadata } from "../../../../lib/seo";
 import { routeBreadcrumb } from "../../../../lib/structured-data";
 
@@ -25,7 +25,28 @@ export default async function BusinessPricingPage({
 }) {
   const { locale } = await params;
   const copy = getUiCopy(locale);
-  const plans = await getSubscriptionPlans();
+  const [staticPlans, apiPlans] = await Promise.all([getSubscriptionPlans(), getPlans()]);
+  const apiPricing = apiPlans.flatMap((apiPlan) => {
+    const fallback = staticPlans.find((plan) => plan.slug === apiPlan.tier);
+
+    if (!fallback) {
+      return [];
+    }
+
+    return [
+      {
+        ...fallback,
+        name: apiPlan.name,
+        priceLabel: {
+          uz: formatPrice(apiPlan.priceMonthly, apiPlan.currency, "uz"),
+          ru: formatPrice(apiPlan.priceMonthly, apiPlan.currency, "ru"),
+          en: formatPrice(apiPlan.priceMonthly, apiPlan.currency, "en")
+        },
+        features: apiPlan.features
+      }
+    ];
+  });
+  const plans = apiPricing.length ? apiPricing : staticPlans;
 
   return (
     <section className="section-block container pricing-page">
@@ -47,7 +68,7 @@ export default async function BusinessPricingPage({
                   (`crm.segments`) is dropped rather than printed — see
                   planFeatureLabel. */}
               {plan.features.map((feature) => {
-                const label = planFeatureLabel({ label: feature.label }, locale);
+                const label = planFeatureLabel(feature, locale);
 
                 if (!label) {
                   return null;
