@@ -61,7 +61,7 @@ export default async function BusinessPricingPage({
               })}
             </ul>
             <Link className={plan.highlight ? "gold-button" : "secondary-button"} href={`/${locale}/discover`}>
-              {plan.slug === "starter" ? copy.pricing.freeStart : copy.pricing.comingSoon}
+              {String(plan.slug) === "starter" ? copy.pricing.freeStart : copy.pricing.comingSoon}
             </Link>
           </article>
         ))}

@@ -980,6 +980,13 @@ model WaitlistSignup {
   /// Only set for topic=pro, and only when the signup came from an owner who
   /// already has a business.
   businessName String?
+  /// Optional profile and research fields captured by the Gurman Mobile waitlist.
+  firstName    String?
+  lastName     String?
+  purpose      String?
+  heardFrom    String?
+  /// Timestamp recorded when a Gurman signup accepts both linked legal documents.
+  acceptedLegalAt DateTime?
   /// Which page the signup came from, for attribution.
   source       String?
   createdAt    DateTime      @default(now())

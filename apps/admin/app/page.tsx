@@ -5,16 +5,25 @@ import { AccessDenied } from "@/components/access-denied";
 
 export const dynamic = "force-dynamic";
 
-type Overview = { pendingBusinesses: number; flaggedReviews: number; bannedUsers: number; admins: number };
+type Overview = {
+  pendingBusinesses: number;
+  flaggedReviews: number;
+  bannedUsers: number;
+  admins: number;
+  gurmanWaitlist: number;
+};
 
 export default async function DashboardPage() {
   const me = await getMe();
   if (!me) return <AccessDenied />;
 
   const res = await consoleGet<Overview>("/overview");
-  const stats = res.ok ? res.data : { pendingBusinesses: 0, flaggedReviews: 0, bannedUsers: 0, admins: 0 };
+  const stats = res.ok
+    ? res.data
+    : { pendingBusinesses: 0, flaggedReviews: 0, bannedUsers: 0, admins: 0, gurmanWaitlist: 0 };
 
   const cards = [
+    { label: "Gurman waitlist", value: stats.gurmanWaitlist, href: "/waitlist", perm: "waitlist.view" },
     { label: "Pending businesses", value: stats.pendingBusinesses, href: "/businesses?status=pending_claim", perm: "business.view" },
     { label: "Flagged reviews", value: stats.flaggedReviews, href: "/reviews?flagged=true", perm: "review.view" },
     { label: "Banned users", value: stats.bannedUsers, href: "/users?status=banned", perm: "user.view" },
@@ -24,7 +33,7 @@ export default async function DashboardPage() {
   return (
     <>
       <PageHeader title={`Welcome, ${me.name.split(" ")[0]}`} subtitle="Operations overview" />
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-5">
         {cards.map((c) => {
           const allowed = me.permissions.includes(c.perm);
           const inner = (

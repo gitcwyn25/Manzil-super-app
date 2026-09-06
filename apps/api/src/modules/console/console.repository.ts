@@ -544,15 +544,104 @@ export class ConsoleRepository {
     }));
   }
 
+  /* ================= Waitlist ================= */
+
+  async listWaitlist(
+    params: { topic?: string; q?: string; limit?: number; offset?: number },
+    ctx: ActorCtx
+  ) {
+    const allowedTopics = ["city", "gurman", "pro"] as const;
+    const topic = params.topic?.trim();
+    if (topic && !allowedTopics.includes(topic as (typeof allowedTopics)[number])) {
+      throw new BadRequestException("Unknown waitlist topic");
+    }
+
+    const limit = Math.min(Math.max(Number(params.limit ?? 50) || 50, 1), 200);
+    const offset = Math.max(Number(params.offset ?? 0) || 0, 0);
+    const query = params.q?.trim();
+    const where = {
+      ...(topic ? { topic: topic as "city" | "gurman" | "pro" } : {}),
+      ...(query
+        ? {
+            OR: [
+              { email: { contains: query, mode: "insensitive" as const } },
+              { firstName: { contains: query, mode: "insensitive" as const } },
+              { lastName: { contains: query, mode: "insensitive" as const } }
+            ]
+          }
+        : {})
+    };
+
+    return this.prisma.$transaction(async (tx) => {
+      const [rows, total] = await Promise.all([
+        tx.waitlistSignup.findMany({
+          where,
+          orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+          skip: offset,
+          take: limit,
+          select: {
+            id: true,
+            topic: true,
+            email: true,
+            locale: true,
+            city: true,
+            businessName: true,
+            firstName: true,
+            lastName: true,
+            purpose: true,
+            heardFrom: true,
+            acceptedLegalAt: true,
+            source: true,
+            createdAt: true
+          }
+        }),
+        tx.waitlistSignup.count({ where })
+      ]);
+
+      await writeAudit(tx, {
+        actorId: ctx.adminId,
+        action: "waitlist.view",
+        targetType: "waitlist",
+        afterState: { topic: topic ?? "all", query: query ? "provided" : null, offset, limit, returned: rows.length },
+        ipAddress: ctx.ip
+      });
+
+      const entries = await Promise.all(
+        rows.map(async (row) => {
+          const position = await tx.waitlistSignup.count({
+            where: {
+              topic: row.topic,
+              ...(row.city ? { city: row.city } : {}),
+              OR: [
+                { createdAt: { lt: row.createdAt } },
+                { createdAt: row.createdAt, id: { lte: row.id } }
+              ]
+            }
+          });
+
+          return {
+            ...row,
+            position,
+            acceptedLegalAt: row.acceptedLegalAt?.toISOString() ?? null,
+            createdAt: row.createdAt.toISOString()
+          };
+        })
+      );
+
+      return { entries, total, limit, offset };
+    });
+  }
+
   /* ================= Dashboard counts ================= */
 
   async overview() {
-    const [pendingBusinesses, flaggedReviews, bannedUsers, admins] = await this.prisma.$transaction([
+    const [pendingBusinesses, flaggedReviews, bannedUsers, admins, gurmanWaitlist] = await this.prisma.$transaction([
       this.prisma.business.count({ where: { status: "pending_claim" } }),
       this.prisma.review.count({ where: { reports: { some: { status: "open" } } } }),
       this.prisma.user.count({ where: { status: "banned" } }),
-      this.prisma.adminUser.count({ where: { isActive: true } })
+      this.prisma.adminUser.count({ where: { isActive: true } }),
+      this.prisma.waitlistSignup.count({ where: { topic: "gurman" } })
     ]);
-    return { pendingBusinesses, flaggedReviews, bannedUsers, admins };
+    return { pendingBusinesses, flaggedReviews, bannedUsers, admins, gurmanWaitlist };
   }
 }

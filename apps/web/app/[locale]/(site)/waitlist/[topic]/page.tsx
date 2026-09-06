@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { pageMetadata, ROUTE_SEO } from "../../../../lib/seo";
 import { Aperture } from "../../../../components/motion/aperture";
+import { GurmanWaitlistForm } from "../../../../components/waitlist/gurman-waitlist-form";
 import { WaitlistForm } from "../../../../components/waitlist/waitlist-form";
 import { API_BASE_URL } from "../../../../lib/api-base-url";
 import { getWaitlistCopy, isWaitlistTopic, WAITLIST_TOPICS } from "../../../../lib/waitlist-copy";
@@ -68,6 +69,10 @@ export default async function WaitlistPage({
 
   const copy = getWaitlistCopy(topic, locale);
   const count = await getCount(topic);
+
+  if (topic === "gurman") {
+    return <GurmanWaitlistForm locale={locale} />;
+  }
 
   return (
     <section className="wl-page">

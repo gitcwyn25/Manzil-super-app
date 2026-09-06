@@ -1,4 +1,5 @@
 import * as Sentry from "@sentry/nestjs";
+import type { ErrorEvent } from "@sentry/nestjs";
 
 /**
  * Sentry initialisation.
@@ -31,7 +32,7 @@ export function initSentry(): void {
     // here contain phone numbers, addresses, and Clerk tokens.
     sendDefaultPii: false,
 
-    beforeSend(event) {
+    beforeSend(event: ErrorEvent) {
       // Defence in depth: strip credential-bearing headers even if a future
       // integration starts attaching them.
       if (event.request?.headers) {

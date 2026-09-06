@@ -52,6 +52,7 @@ import { HomeController } from "./home/home.controller";
 import { HomeRepository } from "./home/home.repository";
 import { WaitlistController } from "./waitlist/waitlist.controller";
 import { WaitlistRepository } from "./waitlist/waitlist.repository";
+import { WaitlistWelcomeMailService } from "./waitlist/waitlist-welcome-mail.service";
 import { BillingController } from "./billing/billing.controller";
 import { StripeService } from "./billing/stripe.service";
 import { GurmanController } from "./gurman/gurman.controller";
@@ -64,6 +65,9 @@ import { SecurityModule } from "./security/security.module";
 import { RedisThrottlerStorage } from "./security/throttler-redis.storage";
 import { ManzilThrottlerGuard } from "./security/manzil-throttler.guard";
 import { DEFAULT_THROTTLE } from "./security/throttle.config";
+import { GurmanV0Controller } from "./gurman-v0/gurman-v0.controller";
+import { GurmanV0ResponseComposer } from "./gurman-v0/gurman-v0.response-composer";
+import { GurmanV0ScoringService } from "./gurman-v0/gurman-v0.scoring.service";
 
 @Module({
   imports: [
@@ -104,7 +108,8 @@ import { DEFAULT_THROTTLE } from "./security/throttle.config";
     HomeController,
     WaitlistController,
     BillingController,
-    GurmanController
+    GurmanController,
+    GurmanV0Controller
   ],
   providers: [
     // Reports unhandled exceptions to Sentry, then delegates to Nest's default
@@ -147,12 +152,15 @@ import { DEFAULT_THROTTLE } from "./security/throttle.config";
     ReviewTrustRepository,
     HomeRepository,
     WaitlistRepository,
+    WaitlistWelcomeMailService,
     StripeService,
     // Interface + token pair (not a concrete class) so a future VectorRetriever
     // can replace CatalogRetriever without touching GurmanService.
     { provide: GURMAN_RETRIEVER, useClass: CatalogRetriever },
     { provide: GURMAN_LLM, useClass: AnthropicLlm },
-    GurmanService
+    GurmanService,
+    GurmanV0ScoringService,
+    GurmanV0ResponseComposer
   ]
 })
 export class AppModule {}

@@ -43,6 +43,7 @@ const PERMISSIONS: Array<[string, string, string]> = [
   ["media.reject", "media", "Reject pending media (reason required)"],
   // analytics + audit + admin mgmt + payouts (stub)
   ["analytics.view", "analytics", "View analytics dashboards"],
+  ["waitlist.view", "waitlist", "View waitlist signups and contact details"],
   ["audit.view", "audit", "View the full audit log"],
   ["admin.manage", "admin", "Manage admin users, roles, and permissions"],
   ["plan.manage", "plan", "Set plan pricing and feature entitlements (dynamic pricing)"],
