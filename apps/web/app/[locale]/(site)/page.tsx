@@ -1,13 +1,9 @@
 import type { Locale } from "@manzil/shared";
 import type { Metadata } from "next";
-import { BentoBusinessGrid } from "../../components/home/bento-business-grid";
-import { CleverBenefits } from "../../components/home/clever-benefits";
-import { CleverCtaBanner } from "../../components/home/clever-cta-banner";
 import { CleverFaq } from "../../components/home/clever-faq";
-import { CleverFeatures } from "../../components/home/clever-features";
 import { CleverHero } from "../../components/home/clever-hero";
-import { CleverProcess } from "../../components/home/clever-process";
-import { GurmanPreview } from "../../components/home/gurman-preview";
+import { GurmanHowItWorks } from "../../components/home/gurman-how-it-works";
+import { ManzilStory } from "../../components/home/manzil-story";
 import { getLandingCopy } from "../../lib/landing-copy";
 import { routeMetadata } from "../../lib/seo";
 
@@ -23,12 +19,9 @@ export async function generateMetadata({
 /**
  * Home — one Manzil system with a clear current/future boundary:
  * 1. Hero: Discover is live; Gurman is mobile/future.
- * 2. Benefits: factual directory value.
+ * 2. Mobile story: discovery, everyday needs, human experience, and sharing.
  * 3. Directory boundary: real listings belong to Discover only.
- * 4. GurmanPreview: static mobile planning concept and waitlist path.
- * 5. Features: Discover and business capabilities.
- * 6. Process: how the current directory supports a decision.
- * 7. FAQ and final path selection.
+ * 4. FAQ and final path selection.
  */
 export default async function LandingPage({
   params
@@ -46,13 +39,9 @@ export default async function LandingPage({
       </div>
 
       <CleverHero copy={copy.hero} locale={locale} />
-      <CleverBenefits copy={copy.benefits} />
-      <BentoBusinessGrid businesses={[]} copy={copy.bento} locale={locale} />
-      <GurmanPreview copy={copy.gurman} locale={locale} />
-      <CleverFeatures copy={copy.features} locale={locale} />
-      <CleverProcess copy={copy.process} />
+      <ManzilStory copy={copy.story} />
+      <GurmanHowItWorks copy={copy.gurmanHowItWorks} locale={locale} />
       <CleverFaq copy={copy.faq} />
-      <CleverCtaBanner copy={copy.homeCta} />
     </>
   );
 }
