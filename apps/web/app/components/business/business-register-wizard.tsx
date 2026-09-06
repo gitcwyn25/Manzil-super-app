@@ -142,7 +142,7 @@ export function BusinessRegisterWizard({
 }: {
   locale: Locale;
   categories: Category[];
-  terms?: { id?: string; title?: string; body?: string } | null;
+  terms?: { id?: string; version?: string; title?: string; body?: string } | null;
 }) {
   const [currentStep, setCurrentStep] = useState(1);
   const copy = WIZARD_COPY[locale] ?? WIZARD_COPY.uz;
@@ -429,6 +429,12 @@ export function BusinessRegisterWizard({
                 {copy.terms}
               </span>
             </label>
+
+            <input
+              name="acceptedTermsVersion"
+              type="hidden"
+              value={terms?.version ?? terms?.id ?? ""}
+            />
 
             {terms?.title && (
               <details className="bz-terms-details">

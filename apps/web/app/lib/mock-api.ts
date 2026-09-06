@@ -2,7 +2,6 @@ import {
   categories,
   getCommunityList,
   getCommunityLists,
-  getConciergePrompts as loadConciergePrompts,
   getDiscoverableUsers as loadDiscoverableUsers,
   getFeedItems,
   getOccasion,
@@ -96,10 +95,6 @@ export async function getDiscoverableUsers() {
 
 export async function getSubscriptionPlans() {
   return loadSubscriptionPlans();
-}
-
-export async function getConciergePrompts() {
-  return loadConciergePrompts();
 }
 
 export async function getSocialActivities() {

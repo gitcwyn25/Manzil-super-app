@@ -26,10 +26,10 @@ export function AppProviders({
   };
 }) {
   return (
-    <PxsProvider locale={locale}>
-      <UserPreferencesProvider defaults={defaults} locale={locale}>
-        {children}
-      </UserPreferencesProvider>
-    </PxsProvider>
+      <PxsProvider locale={locale}>
+        <UserPreferencesProvider defaults={defaults} locale={locale}>
+          {children}
+        </UserPreferencesProvider>
+      </PxsProvider>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import type { Locale } from "@manzil/shared";
+import Link from "next/link";
 
 export function MarketplaceSkeletons() {
   return (
@@ -29,28 +30,36 @@ export function MarketplaceEmptyState({
 }) {
   return (
     <div className="mp-empty-state">
-      <div className="mp-empty-state__icon">🔍</div>
       <h3 className="mp-empty-state__title">
         {locale === "uz"
-          ? "Hech qanday maskan topilmadi"
+          ? "Bu filtrda hozircha maskan yo'q"
           : locale === "ru"
-          ? "Ничего не найдено"
-          : "No places found"}
+          ? "В этом фильтре пока нет мест"
+          : "No places match these filters"}
       </h3>
       <p className="mp-empty-state__desc">
         {locale === "uz"
-          ? "Filtrlarni o'zgartirib ko'ring yoki boshqa so'rov orqali qidiring."
+          ? "Filtrlarni tozalang yoki sevimli maskaningizni Manzil'ga qo'shishni taklif qiling."
           : locale === "ru"
-          ? "Попробуйте изменить параметры поиска или сбросить активные фильтры."
-          : "Try adjusting your search criteria or resetting active filters."}
+          ? "Сбросьте фильтры или предложите любимое место для каталога Manzil."
+          : "Reset the filters or suggest a favourite place for the Manzil catalogue."}
       </p>
-      <button className="mp-empty-state__btn" onClick={onResetFilters} type="button">
-        {locale === "uz"
-          ? "Barcha filtrlarni tozalash"
-          : locale === "ru"
-          ? "Сбросить все фильтры"
-          : "Reset all filters"}
-      </button>
+      <div className="mp-empty-state__actions">
+        <button className="mp-empty-state__btn" onClick={onResetFilters} type="button">
+          {locale === "uz"
+            ? "Filtrlarni tozalash"
+            : locale === "ru"
+            ? "Сбросить фильтры"
+            : "Reset filters"}
+        </button>
+        <Link className="mp-empty-state__link" href={`/${locale}/business/register`}>
+          {locale === "uz"
+            ? "Biznesni qo'shish"
+            : locale === "ru"
+            ? "Добавить бизнес"
+            : "Add a business"}
+        </Link>
+      </div>
     </div>
   );
 }

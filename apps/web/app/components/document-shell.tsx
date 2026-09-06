@@ -26,12 +26,14 @@ export function DocumentShell({
   lang?: Locale;
 }) {
   return (
-    <html className={fontVariables} lang={lang} suppressHydrationWarning>
+    <html className={fontVariables} lang={lang} data-scroll-behavior="smooth" data-theme="day" data-theme-preference="day" style={{ colorScheme: "light" }} suppressHydrationWarning>
       <body suppressHydrationWarning>
-        {/* Progressive enhancement gate: reveal start-states apply only when
-            JS is present, so content is never hidden for no-JS / crawlers. */}
+        {/* Light is the single public appearance. Keep the JS marker for reveal fallbacks,
+            but never read device or localStorage theme preferences. */}
         <script
-          dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }}
+          dangerouslySetInnerHTML={{
+            __html: "document.documentElement.classList.add('js');"
+          }}
         />
         {/* Safety net for the JS-disabled path: Framer Motion inlines the
             hidden start-state (opacity:0) during SSR, so without this a

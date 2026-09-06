@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { PUBLICLY_VISIBLE_BUSINESS } from "../business-visibility";
 import { PrismaService } from "../prisma.service";
 import type {
   GurmanLocale,
@@ -18,10 +19,7 @@ export const GURMAN_RETRIEVER = "GURMAN_RETRIEVER";
  * appearing in typed search results is a pre-existing inconsistency, but an AI
  * actively recommending it is a different and worse thing.
  */
-export const VISIBLE_BUSINESS_WHERE = {
-  status: { not: "suspended" },
-  mergedIntoId: null
-} as const;
+export const VISIBLE_BUSINESS_WHERE = PUBLICLY_VISIBLE_BUSINESS;
 
 /** Keeps prompt size bounded as the catalog grows toward the pgvector threshold. */
 const MAX_REVIEW_SNIPPETS = 3;

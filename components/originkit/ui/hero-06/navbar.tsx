@@ -4,18 +4,20 @@
 import { useState, type KeyboardEvent } from "react";
 import { Button } from "@/components/originkit/ui/hero-06/button";
 
-const NAV_LINKS = [
-  { label: "Katalog", href: "/uz/discover" },
-  { label: "Gurman AI", href: "/uz/concierge" },
-  { label: "Biznes uchun", href: "/uz/business" },
+const NAV_LINKS = (locale: string) => [
+  { label: locale === "uz" ? "Katalog" : locale === "ru" ? "Каталог" : "Catalogue", href: `/${locale}/discover` },
+  { label: locale === "uz" ? "Gurman AI" : "Gurman AI", href: `/${locale}/concierge` },
+  { label: locale === "uz" ? "Biznes uchun" : locale === "ru" ? "Для бизнеса" : "For Business", href: `/${locale}/business` },
 ] as const;
 
 type NavbarProps = {
   onViewStories: () => void;
+  locale?: string;
 };
 
-export const Navbar = ({ onViewStories }: NavbarProps) => {
+export const Navbar = ({ onViewStories, locale = "uz" }: NavbarProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const links = NAV_LINKS(locale);
 
   const handleToggleMenu = () => {
     setIsMenuOpen((open) => !open);
@@ -46,7 +48,7 @@ export const Navbar = ({ onViewStories }: NavbarProps) => {
 
         <div className="flex items-center gap-3 desktop-sm:gap-[34px]">
           <ul className="hidden items-center gap-[34px] desktop-sm:flex">
-            {NAV_LINKS.map((link) => (
+            {links.map((link) => (
               <li key={link.label}>
                 <a
                   href={link.href}
@@ -64,12 +66,10 @@ export const Navbar = ({ onViewStories }: NavbarProps) => {
           <Button
             variant="nav"
             aria-label="Tavsiya olish"
-            onClick={() => {
-              window.location.href = "/uz/concierge";
-            }}
+            onClick={onViewStories}
             className="!hidden min-w-[44px] desktop-sm:!inline-flex"
           >
-            Tavsiya olish →
+            {locale === "uz" ? "Tavsiya olish" : locale === "ru" ? "Получить совет" : "Get a recommendation"}
           </Button>
 
           <button
@@ -95,7 +95,7 @@ export const Navbar = ({ onViewStories }: NavbarProps) => {
       {isMenuOpen ? (
         <div className="absolute inset-x-0 top-full z-50 border-t border-black/10 bg-[#f8f5ee]/95 px-5 py-4 backdrop-blur-sm desktop-sm:hidden">
           <ul className="flex flex-col gap-1">
-            {NAV_LINKS.map((link) => (
+            {links.map((link) => (
               <li key={link.label}>
                 <a
                   href={link.href}
@@ -114,12 +114,12 @@ export const Navbar = ({ onViewStories }: NavbarProps) => {
                 variant="nav"
                 aria-label="Tavsiya olish"
                 onClick={() => {
-                  window.location.href = "/uz/concierge";
+                  onViewStories();
                   setIsMenuOpen(false);
                 }}
                 className="w-full"
               >
-                Tavsiya olish →
+                {locale === "uz" ? "Tavsiya olish" : locale === "ru" ? "Получить совет" : "Get a recommendation"}
               </Button>
             </li>
           </ul>

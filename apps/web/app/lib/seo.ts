@@ -13,31 +13,30 @@ import type { Metadata } from "next";
  * from the same locale-relative path so they can never drift apart.
  */
 
-/** Last-resort origin: the current production host. Better a slightly stale
- *  absolute URL than a relative canonical or a localhost one. */
-const PRODUCTION_ORIGIN = "https://manzil-business.vercel.app";
+/** Last-resort origin: the intended custom production host. Better a
+ *  slightly stale absolute URL than a relative canonical or a localhost one. */
+const PRODUCTION_ORIGIN = "https://manzilgroup.uz";
 
 /**
  * Deployment origin for canonicals, hreflang and OG URLs.
  *
- * `NEXT_PUBLIC_APP_URL` is `http://localhost:3000` in local `.env.local`, and
- * that value is inlined at build time. A production build that picked it up
- * would ship `<link rel="canonical" href="http://localhost:3000/...">` on every
- * page — worse than having no canonical at all, because it actively tells
- * Google the real pages are duplicates of an unreachable host. So a localhost
- * origin is only honoured outside production; Vercel's own
- * `VERCEL_PROJECT_PRODUCTION_URL` is the next choice, then the literal above.
+ * `NEXT_PUBLIC_SITE_URL` is the explicit production origin and should be set
+ * to `https://manzilgroup.uz` in every deployment environment. The older
+ * `NEXT_PUBLIC_APP_URL` remains useful for local `.env.local` development, but
+ * must not decide production canonicals: it may contain localhost or an old
+ * Vercel alias. This keeps canonical, hreflang, sitemap and OG URLs on the
+ * intended public host even when Vercel's project alias changes.
  */
 function resolveSiteUrl(): string {
-  const configured = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/+$/, "");
-  const isLocal = Boolean(configured && /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(:|$)/.test(configured));
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "");
+  if (siteUrl) return siteUrl;
 
-  if (configured && (!isLocal || process.env.NODE_ENV !== "production")) {
-    return configured;
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/+$/, "");
+  if (appUrl && process.env.NODE_ENV !== "production") {
+    return appUrl;
   }
 
-  const vercel = process.env.VERCEL_PROJECT_PRODUCTION_URL;
-  return vercel ? `https://${vercel.replace(/\/+$/, "")}` : PRODUCTION_ORIGIN;
+  return PRODUCTION_ORIGIN;
 }
 
 export const SITE_URL = resolveSiteUrl();
@@ -45,10 +44,9 @@ export const SITE_URL = resolveSiteUrl();
 export const SITE_NAME = "Manzil";
 
 /** Entity-consistent naming for structured data and AI crawlers — matches
- *  Appendix C of the product bible (Discover · Plan · Experience, Gurman). */
+ *  Appendix C of the product bible (Discover · Plan · Experience). */
 export const BRAND = {
   name: "Manzil",
-  aiName: "Gurman",
   city: "Tashkent",
   country: "UZ"
 } as const;
@@ -108,14 +106,14 @@ export const ROUTE_SEO = {
     path: "",
     absoluteTitle: true,
     title: {
-      uz: "Manzil — Toshkentdagi joylarni Gurman AI bilan toping",
-      ru: "Manzil — места Ташкента вместе с Gurman AI",
-      en: "Manzil — discover Tashkent with Gurman AI"
+      uz: "Manzil — Toshkentdagi joylarni kashf eting",
+      ru: "Manzil — места Ташкента",
+      en: "Manzil — discover Tashkent"
     },
     description: {
-      uz: "Toshkentdagi kafe, restoran va xizmatlarni haqiqiy sharhlar asosida toping. Gurman AI so'rovingizga qarab katalogdagi real joylarni tavsiya qiladi.",
-      ru: "Находите кафе, рестораны и услуги Ташкента по реальным отзывам. Gurman AI подбирает настоящие места из каталога под ваш запрос.",
-      en: "Find cafés, restaurants and services in Tashkent through real reviews. Gurman AI recommends real listed places based on what you ask for."
+      uz: "Toshkentdagi kafe, restoran va xizmatlarni haqiqiy sharhlar asosida toping.",
+      ru: "Находите кафе, рестораны и услуги Ташкента по реальным отзывам.",
+      en: "Find cafés, restaurants and services in Tashkent through real reviews."
     }
   },
   discover: {
@@ -129,19 +127,6 @@ export const ROUTE_SEO = {
       uz: "Kategoriya, tuman va reyting bo'yicha filtrlab Toshkentdagi joylarni qidiring. Har bir kartochka katalogdagi real biznes.",
       ru: "Ищите места в Ташкенте с фильтрами по категории, району и рейтингу. Каждая карточка — реальный бизнес из каталога.",
       en: "Search places in Tashkent with filters for category, district and rating. Every card is a real listed business."
-    }
-  },
-  concierge: {
-    path: "/concierge",
-    title: {
-      uz: "Gurman AI Concierge — tabiiy tilda so'rang",
-      ru: "Gurman AI Concierge — спросите естественно",
-      en: "Gurman AI Concierge — ask naturally"
-    },
-    description: {
-      uz: "Nima izlayotganingizni o'z so'zlaringiz bilan yozing. Gurman AI katalogdagi real joylarni haqiqiy sharhlar asosida tavsiya qiladi.",
-      ru: "Опишите, что ищете, своими словами. Gurman AI подбирает реальные места из каталога по настоящим отзывам.",
-      en: "Describe what you are looking for in your own words. Gurman AI recommends real listed places grounded in real reviews."
     }
   },
   lists: {
@@ -187,9 +172,9 @@ export const ROUTE_SEO = {
   pricing: {
     path: "/business/pricing",
     title: {
-      uz: "Tariflar — Starter, Growth, Premium",
-      ru: "Тарифы — Starter, Growth, Premium",
-      en: "Pricing — Starter, Growth, Premium"
+      uz: "Tariflar — Free, Pro, Max",
+      ru: "Тарифы — Free, Pro, Max",
+      en: "Pricing — Free, Pro, Max"
     },
     description: {
       uz: "Manzil Business tariflari va har biriga kiradigan imkoniyatlar.",
@@ -300,7 +285,6 @@ export type RouteKey = keyof typeof ROUTE_SEO;
 export const CRUMB_LABEL = {
   home: { uz: "Bosh sahifa", ru: "Главная", en: "Home" },
   discover: { uz: "Kashfiyot", ru: "Поиск", en: "Discover" },
-  concierge: { uz: "Concierge", ru: "Concierge", en: "Concierge" },
   lists: { uz: "Ro'yxatlar", ru: "Списки", en: "Lists" },
   occasions: { uz: "Voqealar", ru: "Поводы", en: "Occasions" },
   business: { uz: "Biznes", ru: "Бизнес", en: "Business" },
@@ -323,7 +307,7 @@ const DEFAULT_OG_IMAGE = {
   url: "/opengraph-image",
   width: 1200,
   height: 630,
-  alt: "Manzil — Tashkent business directory with the Gurman AI concierge"
+  alt: "Manzil — Tashkent business directory with a waitlist for mobile Gurman"
 };
 
 /** OG locale tags. Uzbek Latin as used on the site is uz_UZ. */

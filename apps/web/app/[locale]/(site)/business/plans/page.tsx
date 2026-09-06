@@ -46,6 +46,7 @@ export default async function PlanSelectionPage({
         key: p.tier,
         name: p.name[locale] ?? p.name.uz,
         price: formatPrice(p.priceMonthly, p.currency, locale),
+        monthly: true,
         features: p.features
           .filter((f) => f.included)
           .map((f) => planFeatureLabel(f, locale))
@@ -57,6 +58,7 @@ export default async function PlanSelectionPage({
         key: tier,
         name: landing.plans[tier].name,
         price: landing.plans[tier].price,
+        monthly: tier === "free",
         features: [...landing.plans[tier].features],
         highlight: tier === "max",
         badge: tier === "max" ? landing.plans.max.badge : (undefined as string | undefined)
@@ -76,7 +78,7 @@ export default async function PlanSelectionPage({
             <h3>{plan.name}</h3>
             <p className="bz-plan-price">
               {plan.price}
-              <em>{landing.perMonth}</em>
+              {plan.monthly ? <em>{landing.perMonth}</em> : null}
             </p>
             <ul>
               {plan.features.map((feature) => (

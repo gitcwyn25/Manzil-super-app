@@ -1,0 +1,59 @@
+﻿{
+  "ready": true,
+  "results": {
+    "/uz": {
+      "status": 200,
+      "bytes": 121822,
+      "containsLiveGurmanChat": false,
+      "containsAppDownloadClaim": false,
+      "containsUnsupportedMetric": false,
+      "containsLegacyWebGurmanLink": false
+    },
+    "/uz/discover": {
+      "status": 200,
+      "bytes": 94497,
+      "containsLiveGurmanChat": false,
+      "containsAppDownloadClaim": false,
+      "containsUnsupportedMetric": false,
+      "containsLegacyWebGurmanLink": false
+    },
+    "/uz/business": {
+      "status": 200,
+      "bytes": 102540,
+      "containsLiveGurmanChat": false,
+      "containsAppDownloadClaim": false,
+      "containsUnsupportedMetric": false,
+      "containsLegacyWebGurmanLink": false
+    },
+    "/uz/docs": {
+      "status": 200,
+      "bytes": 64843,
+      "containsLiveGurmanChat": false,
+      "containsAppDownloadClaim": false,
+      "containsUnsupportedMetric": false,
+      "containsLegacyWebGurmanLink": false
+    },
+    "/uz/waitlist/gurman": {
+      "status": 200,
+      "bytes": 48716,
+      "containsLiveGurmanChat": false,
+      "containsAppDownloadClaim": false,
+      "containsUnsupportedMetric": false,
+      "containsLegacyWebGurmanLink": false,
+      "waitlistHasEmailField": true,
+      "waitlistHasCityField": false,
+      "waitlistHasBusinessField": false
+    },
+    "/uz/gurman": {
+      "status": 308,
+      "location": "/uz/waitlist/gurman",
+      "bytes": 28291
+    },
+    "/uz/concierge": {
+      "status": 308,
+      "location": "/uz/waitlist/gurman",
+      "bytes": 28312
+    }
+  },
+  "output": "Γû▓ Next.js 16.2.10 (webpack)\n- Local:         http://localhost:3010\n- Network:       http://0.0.0.0:3010\n- Environments: .env.local\nΓ£ô Ready in 1850ms\nΓÜá The \"middleware\" file convention is deprecated. Please use \"proxy\" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy\nΓùï Compiling /instrumentation ...\n\nΓùï Compiling /[locale] ...\nAttention: Clerk collects telemetry data from its SDKs when connected to development instances.\nThe data collected is used to inform Clerk's product roadmap.\nTo learn more, including how to opt-out from the telemetry program, visit: https://clerk.com/docs/telemetry.\n\n GET /uz 200 in 17.5s (next.js: 13.8s, proxy.ts: 1144ms, generate-params: 2.3s, application-code: 2.6s)\n GET /uz 200 in 518ms (next.js: 30ms, proxy.ts: 69ms, generate-params: 11ms, application-code: 418ms)\n GET /uz/discover 200 in 6.6s (next.js: 5.0s, proxy.ts: 54ms, generate-params: 2.5s, application-code: 1489ms)\n GET /uz/business 200 in 6.1s (next.js: 5.0s, proxy.ts: 40ms, generate-params: 2.3s, application-code: 1106ms)\nΓùï Compiling /[locale]/[...path] ...\n GET /uz/docs 200 in 10.4s (next.js: 9.3s, proxy.ts: 26ms, generate-params: 3.2s, application-code: 1087ms)\n GET /uz/waitlist/gurman 200 in 6.5s (next.js: 5.5s, proxy.ts: 38ms, generate-params: 2.7s, application-code: 997ms)\n GET /uz/gurman 308 in 6.1s (next.js: 5.3s, proxy.ts: 24ms, generate-params: 2.2s, application-code: 813ms)\n GET /uz/concierge 308 in 6.3s (next.js: 5.4s, proxy.ts: 28ms, generate-params: 2.4s, application-code: 882ms)\n"
+}

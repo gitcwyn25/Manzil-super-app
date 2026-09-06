@@ -17,7 +17,7 @@ import { ImageResponse } from "next/og";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "Manzil — Tashkent business directory with the Gurman AI concierge";
+export const alt = "Manzil — Tashkent business directory with real local reviews";
 
 export default function OpengraphImage() {
   return new ImageResponse(
@@ -61,8 +61,7 @@ export default function OpengraphImage() {
             Discover · Plan · Experience
           </div>
           <div style={{ fontSize: 34, lineHeight: 1.35, color: "rgba(255,255,255,0.82)" }}>
-            Tashkent places, real reviews, and Gurman — the AI concierge that
-            recommends only what is actually listed.
+            Tashkent places and real local reviews.
           </div>
         </div>
 
@@ -75,7 +74,7 @@ export default function OpengraphImage() {
             color: "rgba(255,255,255,0.7)"
           }}
         >
-          <div style={{ display: "flex" }}>manzil-business.vercel.app</div>
+          <div style={{ display: "flex" }}>manzilgroup.uz</div>
           <div style={{ display: "flex" }}>UZ · RU · EN</div>
         </div>
       </div>

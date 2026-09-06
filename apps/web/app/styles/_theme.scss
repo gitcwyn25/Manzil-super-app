@@ -1,0 +1,452 @@
+// Appearance system — Day is the existing Manzil light surface, Night is a
+// low-glare vault derived from the brand's teal rather than pure black, and
+// System resolves to either one in the client provider.
+
+:root {
+  --docs-dim: rgb(13 26 28 / 0.28);
+}
+
+/* ---------- Day palette ---------- */
+
+:root[data-theme="day"] {
+  --gurman-ink: #f4f8f7;
+  --gurman-deep: #e7f2ef;
+  --gurman-paper: #102426;
+  --gurman-mint: #087f75;
+  --gurman-blue: #267d93;
+  --gurman-line: rgb(16 36 38 / 0.18);
+}
+
+/* Discover marketplace */
+[data-theme="day"] .discover-marketplace-root {
+  background: #f3f7f6 !important;
+  color: #102426;
+}
+
+[data-theme="day"] .discover-hero {
+  background: radial-gradient(circle at 50% -20%, rgb(21 174 154 / 0.12) 0%, rgb(243 247 246 / 0) 70%), linear-gradient(180deg, rgb(231 244 240 / 0.9) 0%, #f3f7f6 100%);
+  border-bottom-color: #d6e5e1;
+}
+
+[data-theme="day"] .discover-hero__title,
+[data-theme="day"] .curated-band__title,
+[data-theme="day"] .mp-results-header__title,
+[data-theme="day"] .tashkent-catalog-head__title {
+  color: #102426;
+}
+
+[data-theme="day"] .discover-hero__subtitle,
+[data-theme="day"] .curated-band__tagline,
+[data-theme="day"] .mp-results-header__count {
+  color: #54706d;
+}
+
+[data-theme="day"] .discover-search-bar {
+  background: rgb(255 255 255 / 0.96);
+  border-color: #c6d9d4;
+  box-shadow: 0 16px 40px rgb(28 74 70 / 0.12), inset 0 1px 0 rgb(255 255 255 / 0.9);
+}
+
+[data-theme="day"] .discover-search-bar__location,
+[data-theme="day"] .discover-search-bar__input {
+  color: #102426;
+}
+
+[data-theme="day"] .discover-search-bar__input::placeholder,
+[data-theme="day"] .discover-search-bar__search-icon,
+[data-theme="day"] .discover-search-bar__clear {
+  color: #6b8581;
+}
+
+[data-theme="day"] .discover-search-bar__divider,
+[data-theme="day"] .category-strip-section,
+[data-theme="day"] .mp-results-header {
+  border-color: #d6e5e1;
+}
+
+[data-theme="day"] .discover-quick-chip,
+[data-theme="day"] .category-tile,
+[data-theme="day"] .mp-rating-pill,
+[data-theme="day"] .mp-price-pill,
+[data-theme="day"] .mp-view-toggle,
+[data-theme="day"] .mp-mobile-filter-bar,
+[data-theme="day"] .mp-mobile-sort-select,
+[data-theme="day"] .mp-sort-select,
+[data-theme="day"] .mp-load-more-btn {
+  background: #ffffff;
+  border-color: #cbded9;
+  color: #355652;
+}
+
+[data-theme="day"] .discover-quick-chip:hover,
+[data-theme="day"] .category-tile:hover,
+[data-theme="day"] .mp-rating-pill:hover,
+[data-theme="day"] .mp-price-pill:hover,
+[data-theme="day"] .mp-load-more-btn:hover {
+  background: #e7f4f0;
+  border-color: #79bdb2;
+  color: #0b625a;
+}
+
+[data-theme="day"] .discover-quick-chip.is-active,
+[data-theme="day"] .category-tile.is-active,
+[data-theme="day"] .mp-rating-pill.is-active,
+[data-theme="day"] .mp-price-pill.is-active {
+  background: #dff3ee;
+  border-color: #087f75;
+  color: #087f75;
+}
+
+[data-theme="day"] .category-tile__icon-wrap {
+  border-color: #d1e2de;
+}
+
+[data-theme="day"] .mp-sort-select,
+[data-theme="day"] .mp-mobile-sort-select {
+  color: #102426;
+}
+
+[data-theme="day"] .mp-sidebar {
+  background: #ffffff;
+  border-color: #d2e1de;
+  box-shadow: 0 14px 34px rgb(28 74 70 / 0.08);
+}
+
+[data-theme="day"] .mp-sidebar__title,
+[data-theme="day"] .mp-filter-group__label,
+[data-theme="day"] .mp-toggle-row {
+  color: #102426;
+}
+
+[data-theme="day"] .mp-sidebar__header {
+  border-bottom-color: #d6e5e1;
+}
+
+[data-theme="day"] .mp-filter-group__label,
+[data-theme="day"] .mp-sidebar__count-badge,
+[data-theme="day"] .mp-active-filters-label,
+[data-theme="day"] .mp-sort-dropdown__label,
+[data-theme="day"] .mp-district-item,
+[data-theme="day"] .mp-card__meta-top,
+[data-theme="day"] .mp-card__reviews-count,
+[data-theme="day"] .mp-card__tag {
+  color: #5f7975;
+}
+
+[data-theme="day"] .mp-card,
+[data-theme="day"] .mp-skeleton-card {
+  background: #ffffff;
+  border-color: #d2e1de;
+  box-shadow: 0 12px 30px rgb(28 74 70 / 0.08);
+}
+
+[data-theme="day"] .mp-card__media {
+  background: #e4efec;
+}
+
+[data-theme="day"] .mp-card__media-overlay {
+  background: linear-gradient(180deg, rgb(16 36 38 / 0.06) 0%, rgb(16 36 38 / 0) 50%, rgb(16 36 38 / 0.48) 100%);
+}
+
+[data-theme="day"] .mp-card__save-btn,
+[data-theme="day"] .mp-status-pill,
+[data-theme="day"] .mp-card__badges-top {
+  background: rgb(255 255 255 / 0.9);
+  border-color: #d2e1de;
+}
+
+[data-theme="day"] .mp-card__name {
+  color: #102426;
+}
+
+[data-theme="day"] .mp-card__desc {
+  color: #54706d;
+}
+
+[data-theme="day"] .mp-card__footer {
+  border-top-color: #e0ebe8;
+}
+
+[data-theme="day"] .mp-status-pill {
+  color: #355652;
+}
+
+[data-theme="day"] .mp-load-more-btn {
+  color: #0b625a;
+}
+
+[data-theme="day"] .mp-skeleton-line,
+[data-theme="day"] .mp-skeleton-card__media {
+  background: #dceae6;
+}
+
+/* Gurman workspace onboarding and live workspace */
+[data-theme="day"] .gurman-concierge-page {
+  background: #f4f8f7 !important;
+  color: #102426;
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-guide,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-guide__stage {
+  background: radial-gradient(circle at 78% 42%, rgb(21 174 154 / 0.12), transparent 32%), #f4f8f7;
+  color: #102426;
+}
+
+[data-theme="day"] .gurman-workspace-guide__stage::before,
+[data-theme="day"] .gurman-workspace-guide__stage::after {
+  border-color: rgb(8 127 117 / 0.16);
+}
+
+[data-theme="day"] .gurman-workspace-guide__devices {
+  opacity: calc(0.28 + (var(--guide-understand) * 0.72));
+}
+
+[data-theme="day"] .gurman-workspace-guide__caption {
+  opacity: calc(0.3 + (var(--guide-decide) * 0.7));
+}
+
+[data-theme="day"] .gurman-workspace-guide h2,
+[data-theme="day"] .gurman-workspace-guide__intro > p,
+[data-theme="day"] .gurman-workspace-guide__caption,
+[data-theme="day"] .gurman-workspace-guide__steps h3,
+[data-theme="day"] .gurman-workspace-guide__steps p {
+  color: #102426;
+}
+
+[data-theme="day"] .gurman-workspace-guide__intro > p,
+[data-theme="day"] .gurman-workspace-guide__steps p,
+[data-theme="day"] .gurman-workspace-guide__caption > p {
+  color: #54706d;
+}
+
+[data-theme="day"] .g-guide-laptop__screen,
+[data-theme="day"] .g-guide-phone__screen {
+  background: #ffffff;
+  border-color: #9bbab3;
+  color: #102426;
+  box-shadow: inset 0 0 0 7px #e0efeb, inset 0 0 0 8px rgb(16 36 38 / 0.1);
+}
+
+[data-theme="day"] .g-guide-laptop__chrome,
+[data-theme="day"] .g-guide-laptop__body aside {
+  border-color: #d1e2de;
+  color: #5f7975;
+}
+
+[data-theme="day"] .g-guide-laptop__body aside strong,
+[data-theme="day"] .g-guide-laptop__content h3,
+[data-theme="day"] .g-guide-laptop__result-head,
+[data-theme="day"] .g-guide-laptop__result strong,
+[data-theme="day"] .g-guide-phone h3 {
+  color: #102426;
+}
+
+[data-theme="day"] .g-guide-laptop__chips span,
+[data-theme="day"] .g-guide-screen__criteria span,
+[data-theme="day"] .g-guide-screen__input {
+  border-color: #b9d4ce;
+  color: #54706d;
+}
+
+[data-theme="day"] .g-guide-laptop__divider,
+[data-theme="day"] .gurman-workspace-guide__steps article {
+  background: #d6e5e1;
+  border-color: #b9d4ce;
+}
+
+[data-theme="day"] .g-guide-laptop__result,
+[data-theme="day"] .g-guide-screen__place {
+  background: #e5f5f0;
+  border-color: #79bdb2;
+}
+
+[data-theme="day"] .g-guide-laptop__result small,
+[data-theme="day"] .g-guide-laptop__result-reason,
+[data-theme="day"] .g-guide-screen__input,
+[data-theme="day"] .g-guide-screen__hint,
+[data-theme="day"] .g-guide-screen__place small,
+[data-theme="day"] .g-guide-screen__place span {
+  color: #5f7975;
+}
+
+[data-theme="day"] .g-guide-laptop__base {
+  background: linear-gradient(#c6dcd7, #a8c5be);
+}
+
+[data-theme="day"] .g-guide-phone {
+  border-color: #b9d4ce;
+  background: #ffffff;
+  box-shadow: 0 28px 34px rgb(28 74 70 / 0.18);
+}
+
+[data-theme="day"] .g-guide-screen__header {
+  color: #5f7975;
+}
+
+[data-theme="day"] .g-guide-screen__place {
+  color: #102426;
+}
+
+[data-theme="day"] .g-guide-screen__button,
+[data-theme="day"] .gurman-workspace-guide__action {
+  background: #0058bc;
+  border-color: #0058bc;
+  color: #ffffff;
+}
+
+[data-theme="day"] .gurman-workspace-guide__action:hover {
+  background: #004493;
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry {
+  background: #f4f8f7;
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-workspace-root {
+  --g-bg-base: #f4f8f7;
+  --g-bg-surface: #ffffff;
+  --g-bg-card: #e7f2ef;
+  --g-text-main: #102426;
+  --g-text-muted: #54706d;
+  --g-text-subtle: #6b8581;
+  --g-border: #cbded9;
+  --g-border-hover: #0058bc;
+  --g-primary-rgb: 0 88 188;
+  --g-primary: #0058bc;
+  --g-primary-bright: #0070eb;
+  --g-primary-glow: rgb(0 88 188 / 0.16);
+  background: #f4f8f7 !important;
+  color: #102426;
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-header {
+  background: rgb(255 255 255 / 0.9);
+  border-bottom-color: #cbded9;
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-header__brand-title,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-hero-title,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-results-title,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-landing-visual__title,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-preview-card__name,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-rec-card__name,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-rec-card__rating-val {
+  color: #102426;
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-composer-card,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-landing-visual,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-results-flow,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-rec-card,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-followup-panel,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-searching-container {
+  background: #ffffff;
+  border-color: #cbded9;
+  box-shadow: 0 14px 32px rgb(28 74 70 / 0.08);
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-composer-textarea {
+  color: #102426;
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-composer-footer,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-results-header {
+  border-top-color: #e0ebe8;
+  border-bottom-color: #d6e5e1;
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-quick-chip,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-followup-chip,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-btn--secondary,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-intent-btn--edit,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-reset-link {
+  background: #ffffff;
+  border-color: #cbded9;
+  color: #355652;
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-quick-chip:hover,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-followup-chip:hover,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-btn--secondary:hover {
+  background: #e7f4f0;
+  color: #087f75;
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-intent-panel,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-rec-card__reason-box,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-landing-visual__badge {
+  background: #e5f5f0;
+  border-color: #a8d1c8;
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-rec-card__reason-val,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-rec-card__desc,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-landing-visual__desc,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-preview-card__district {
+  color: #54706d;
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-rec-card__media {
+  background: #e4efec;
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-rec-card__overlay {
+  background: linear-gradient(180deg, rgb(16 36 38 / 0.06) 0%, rgb(16 36 38 / 0) 50%, rgb(16 36 38 / 0.48) 100%);
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-rec-card__save-btn,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-meta-chip,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-badge--trust {
+  background: rgb(255 255 255 / 0.9);
+  border-color: #cbded9;
+  color: #355652;
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-gurman-searching-state,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-searching-title {
+  color: #102426;
+}
+
+/* Cinematic Gurman variant uses the same Day token family. */
+[data-theme="day"] .gurman-cinematic-page .gurman-cinematic__planner input,
+[data-theme="day"] .gurman-cinematic-page .gurman-cinematic__planner label,
+[data-theme="day"] .gurman-cinematic-page .gurman-cinematic__lead,
+[data-theme="day"] .gurman-cinematic-page .gurman-cinematic__status,
+[data-theme="day"] .gurman-cinematic-page .gurman-cinematic__progress-label,
+[data-theme="day"] .gurman-cinematic-page .gurman-cinematic__planner input::placeholder {
+  color: #54706d;
+}
+
+[data-theme="day"] .gurman-cinematic-page .gurman-cinematic__planner > div {
+  border-bottom-color: #9bbab3;
+}
+
+[data-theme="day"] .gurman-cinematic-page .gurman-cinematic__planner button,
+[data-theme="day"] .gurman-cinematic-page .gurman-cinematic__close-button {
+  color: #ffffff;
+  background: #0058bc;
+}
+
+@media (max-width: 700px) {
+  [data-theme="day"] .gurman-concierge-page .g-header__nav {
+    gap: .65rem;
+  }
+}
+
+
+/* Light-only public chrome: keep text readable on the translucent capsule. */
+:root[data-theme="day"] .clever-nav-wrapper nav.desktop-nav a {
+  color: #24415d;
+}
+
+:root[data-theme="day"] .clever-nav-wrapper nav.desktop-nav a:hover,
+:root[data-theme="day"] .clever-nav-wrapper nav.desktop-nav a.active {
+  color: #075dc5;
+}
+
+:root[data-theme="day"] .clever-nav-wrapper .clever-nav-actions .lang-button,
+:root[data-theme="day"] .clever-nav-wrapper .clever-nav-actions .mobile-nav-toggle {
+  border-color: rgba(55, 88, 120, .42);
+  background: rgba(255, 255, 255, .82);
+  color: #23425f;
+}

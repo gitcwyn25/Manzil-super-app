@@ -1,4 +1,5 @@
 import { API_BASE_URL } from "./api-base-url";
+import { fetchWithTimeout } from "./fetch-with-timeout";
 import { getServerAuthHeaders } from "./auth";
 
 /** Server-side helpers for legal documents and contracts. */
@@ -37,7 +38,7 @@ export type AcceptedDocument = {
  */
 export async function getRegistrationTerms(locale = "uz"): Promise<RegistrationTerms> {
   try {
-    const response = await fetch(`${API_BASE_URL}/legal/registration-terms?locale=${locale}`, {
+    const response = await fetchWithTimeout(`${API_BASE_URL}/legal/registration-terms?locale=${locale}`, {
       cache: "no-store"
     });
 
@@ -53,7 +54,7 @@ export async function getRegistrationTerms(locale = "uz"): Promise<RegistrationT
 }
 
 async function legalGet<T>(path: string): Promise<T | null> {
-  const response = await fetch(`${API_BASE_URL}${path}`, {
+  const response = await fetchWithTimeout(`${API_BASE_URL}${path}`, {
     headers: await getServerAuthHeaders(path),
     cache: "no-store"
   });

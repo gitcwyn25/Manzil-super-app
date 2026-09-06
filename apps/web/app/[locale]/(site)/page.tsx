@@ -6,11 +6,8 @@ import { CleverCtaBanner } from "../../components/home/clever-cta-banner";
 import { CleverFaq } from "../../components/home/clever-faq";
 import { CleverFeatures } from "../../components/home/clever-features";
 import { CleverHero } from "../../components/home/clever-hero";
-import { CleverPricing } from "../../components/home/clever-pricing";
 import { CleverProcess } from "../../components/home/clever-process";
-import { CleverTestimonials } from "../../components/home/clever-testimonials";
-import { CleverWaitlistCard } from "../../components/home/clever-waitlist-card";
-import { getHomeFeed } from "../../lib/api";
+import { GurmanPreview } from "../../components/home/gurman-preview";
 import { getLandingCopy } from "../../lib/landing-copy";
 import { routeMetadata } from "../../lib/seo";
 
@@ -24,19 +21,14 @@ export async function generateMetadata({
 }
 
 /**
- * Home — Originkit "Clever" Template Architecture with Manzil Catalog & AI Grounding.
- *
- * Full section sequence:
- * 1. CleverHero: Avatar badge, headline, dual CTAs, trust perks, Canvas 2D background, chat card.
- * 2. CleverBenefits: 4-card bento grid highlighting AI, verified reviews, speed, business reach.
- * 3. CleverFeatures: Interactive tabbed switcher for Concierge, Smart Directory, and Business Hub.
- * 4. CleverProcess: 3-step numbered workflow timeline.
- * 5. BentoBusinessGrid: Real live business catalog feed from getHomeFeed(locale).
- * 6. CleverPricing: 3-tier business pricing cards (Free / Pro / Enterprise).
- * 7. CleverWaitlistCard: City expansion early-access interactive card.
- * 8. CleverTestimonials: Customer & business partner ratings and quotes.
- * 9. CleverFaq: Interactive collapsible Q&A accordion.
- * 10. CleverCtaBanner: Final high-conversion bottom banner.
+ * Home — one Manzil system with a clear current/future boundary:
+ * 1. Hero: Discover is live; Gurman is mobile/future.
+ * 2. Benefits: factual directory value.
+ * 3. Directory boundary: real listings belong to Discover only.
+ * 4. GurmanPreview: static mobile planning concept and waitlist path.
+ * 5. Features: Discover and business capabilities.
+ * 6. Process: how the current directory supports a decision.
+ * 7. FAQ and final path selection.
  */
 export default async function LandingPage({
   params
@@ -45,16 +37,9 @@ export default async function LandingPage({
 }) {
   const { locale } = await params;
   const copy = getLandingCopy(locale);
-  const feed = await getHomeFeed(locale);
-
-  const ranked = [
-    ...(feed.sections?.featured ?? []),
-    ...(feed.sections?.justJoined ?? [])
-  ].filter((card, i, all) => all.findIndex((other) => other.slug === card.slug) === i);
 
   return (
     <>
-      {/* Shape reveal on load */}
       <div aria-hidden="true" className="page-reveal">
         <span className="page-reveal-panel" />
         <span className="page-reveal-panel second" />
@@ -62,14 +47,12 @@ export default async function LandingPage({
 
       <CleverHero copy={copy.hero} locale={locale} />
       <CleverBenefits copy={copy.benefits} />
+      <BentoBusinessGrid businesses={[]} copy={copy.bento} locale={locale} />
+      <GurmanPreview copy={copy.gurman} locale={locale} />
       <CleverFeatures copy={copy.features} locale={locale} />
       <CleverProcess copy={copy.process} />
-      <BentoBusinessGrid businesses={ranked} copy={copy.bento} locale={locale} />
-      <CleverPricing copy={copy.pricing} />
-      <CleverWaitlistCard copy={copy.waitlist} />
-      <CleverTestimonials copy={copy.testimonials} />
       <CleverFaq copy={copy.faq} />
-      <CleverCtaBanner copy={copy.finalCta} />
+      <CleverCtaBanner copy={copy.homeCta} />
     </>
   );
 }

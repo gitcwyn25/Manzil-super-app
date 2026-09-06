@@ -20,6 +20,7 @@ import { isBusinessOwner } from "../media/business-ownership";
 import { getBusinessCoversBySlug } from "../media/business-cover";
 import { MEDIA_STORAGE, type MediaStorage } from "../media/media-storage";
 import { PresignUploadDto } from "../media/presign-upload.dto";
+import { PUBLICLY_VISIBLE_BUSINESS } from "../business-visibility";
 import { extensionForType, type AllowedImageType } from "../media/upload-policy";
 import { PrismaService } from "../prisma.service";
 import { ThrottleUpload, ThrottleWrite } from "../security/throttle.config";
@@ -255,7 +256,9 @@ export class MediaController {
   @Get("businesses/:slug/photos")
   async getPublicBusinessPhotos(@Param("slug") slug: string) {
     const business = await this.prisma.business.findFirst({
-      where: { OR: [{ id: slug }, { slug }], mergedIntoId: null },
+      // Full visibility predicate, not just the merge check: a suspended
+      // listing 404s on its own URL, so its gallery must 404 too.
+      where: { OR: [{ id: slug }, { slug }], ...PUBLICLY_VISIBLE_BUSINESS },
       select: { id: true }
     });
 

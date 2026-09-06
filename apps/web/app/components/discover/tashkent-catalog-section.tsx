@@ -203,8 +203,8 @@ export function TashkentCatalogSection({
             {filteredBusinesses.map((b) => {
               const desc = pickLocalized(b.description, locale);
               const coverImg = getBusinessCover(b);
-              const rating = b.avgRating ?? (b as any).ratingAverage ?? 4.8;
-              const reviews = b.reviewCount ?? 1;
+              const hasReviews = b.reviewCount > 0;
+              const rating = b.avgRating;
 
               return (
                 <Link
@@ -223,7 +223,7 @@ export function TashkentCatalogSection({
                       <span>Tasdiqlangan</span>
                     </div>
                     <div className="tashkent-biz-card__badge-rating">
-                      <span>★ {rating.toFixed(1)}</span>
+                      {hasReviews ? <span>★ {rating.toFixed(1)}</span> : <span>Hali sharh yo&apos;q</span>}
                     </div>
                   </div>
 
@@ -242,7 +242,7 @@ export function TashkentCatalogSection({
 
                     <div className="tashkent-biz-card__footer">
                       <span className="tashkent-biz-card__reviews">
-                        💬 {reviews} ta sharhlar
+                        {hasReviews ? <>💬 {b.reviewCount} ta sharh</> : <>Hali sharh yo&apos;q</>}
                       </span>
                       <span className="tashkent-biz-card__cta">
                         Batafsil ko&apos;rish →
@@ -255,9 +255,26 @@ export function TashkentCatalogSection({
           </div>
         ) : (
           <div className="tashkent-empty-state">
-            <span className="tashkent-empty-state__icon">🔍</span>
             <h3 className="tashkent-empty-state__title">Mos maskanlar topilmadi</h3>
-            <p className="tashkent-empty-state__sub">Filtrlarni o&apos;zgartirib ko&apos;ring yoki boshqa tuman tanlang.</p>
+            <p className="tashkent-empty-state__sub">
+              Filtrlarni tozalang yoki sevimli maskaningizni katalogga qo&apos;shishni taklif qiling.
+            </p>
+            <div className="tashkent-empty-state__actions">
+              <button
+                className="tashkent-filter-chip tashkent-filter-chip--cat-active"
+                onClick={() => {
+                  setSelectedDistrict("Barchasi");
+                  setSelectedCategory("all");
+                  setSearchQuery("");
+                }}
+                type="button"
+              >
+                Filtrlarni tozalash
+              </button>
+              <Link className="tashkent-empty-state__link" href={`/${locale}/business/register`}>
+                Biznesni qo&apos;shish
+              </Link>
+            </div>
           </div>
         )}
       </div>

@@ -39,9 +39,9 @@ export function getUiCopy(locale: Locale) {
       listsTitle: localize(L("Jamiyat tomonidan tanlangan", "Выбор сообщества", "Curated by the community"), locale),
       allLists: localize(L("Barcha ro'yxatlar", "Все списки", "All lists"), locale),
       businessKicker: localize(L("Biznes egalari", "Для бизнеса", "Business owners"), locale),
-      businessTitle: localize(L("Listingni bepul oling. Growth va Premium keyin.", "Бесплатный профиль. Growth и Premium позже.", "Claim your listing free. Growth and Premium later."), locale),
+      businessTitle: localize(L("Listingni bepul oling. Pro va Max keyin.", "Бесплатный профиль. Pro и Max позже.", "Claim your listing free. Pro and Max later."), locale),
       businessBody: localize(
-        L("Starter bepul. Analytics, menyu va AI javoblar Growth rejada.", "Starter бесплатно. Аналитика, меню и AI-ответы в Growth.", "Starter is free. Analytics, menu, and AI replies in Growth."),
+        L("Free bepul. Analytics, menyu va AI javoblar Pro rejada.", "Free бесплатно. Аналитика, меню и AI-ответы в Pro.", "Free is free. Analytics, menu, and AI replies are in Pro."),
         locale
       ),
       businessCta: localize(L("Biznes rejalarini ko'rish", "Тарифы для бизнеса", "View business plans"), locale)
@@ -204,7 +204,7 @@ export function getUiCopy(locale: Locale) {
     },
     pricing: {
       kicker: localize(L("Biznes egalari", "Для бизнеса", "Business owners"), locale),
-      title: localize(L("Starter, Growth, Premium", "Starter, Growth, Premium", "Starter, Growth, Premium"), locale),
+      title: localize(L("Free, Pro, Max", "Free, Pro, Max", "Free, Pro, Max"), locale),
       body: localize(
         L("Birinchi daromad manbai — biznes obunalari. Hozir marketing sahifasi, keyin to'lov.", "Первый доход — подписки для бизнеса. Сейчас маркетинг, оплата позже.", "First revenue — business subscriptions. Marketing page now, payments later."),
         locale
@@ -252,7 +252,7 @@ export function getUiCopy(locale: Locale) {
           locale
         ),
       askGurman: localize(
-        L("Bu joy haqida Gurman AI'dan so'rang", "Спросите Gurman AI об этом месте", "Ask Gurman AI about this place"),
+        L("Gurman mobil navbatiga qo'shiling", "Вступить в лист ожидания Gurman", "Join the Gurman mobile waitlist"),
         locale
       ),
       share: localize(L("Ulashish", "Поделиться", "Share"), locale),

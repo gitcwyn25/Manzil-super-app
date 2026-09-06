@@ -12,6 +12,36 @@ import { MarketplaceFilterSidebar, type FilterState, TASHKENT_DISTRICTS } from "
 import { MarketplaceMobileFilterDrawer } from "./marketplace-mobile-filter-drawer";
 import { MarketplaceEmptyState } from "./marketplace-states";
 
+function isOpenNow(hours: string | null | undefined): boolean | null {
+  if (!hours) {
+    return null;
+  }
+
+  const match = hours.match(/(\\d{1,2}):(\\d{2})\\s*[-–—]\\s*(\\d{1,2}):(\\d{2})/);
+  if (!match) {
+    return null;
+  }
+
+  const [, startHour, startMinute, endHour, endMinute] = match;
+  const nowParts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Tashkent",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23"
+  }).formatToParts(new Date());
+  const nowHour = Number(nowParts.find((part) => part.type === "hour")?.value);
+  const nowMinute = Number(nowParts.find((part) => part.type === "minute")?.value);
+  const current = nowHour * 60 + nowMinute;
+  const start = Number(startHour) * 60 + Number(startMinute);
+  const end = Number(endHour) * 60 + Number(endMinute);
+
+  if (![current, start, end].every(Number.isFinite)) {
+    return null;
+  }
+
+  return start <= end ? current >= start && current < end : current >= start || current < end;
+}
+
 export function MarketplaceClient({
   locale,
   initialBusinesses,
@@ -85,11 +115,9 @@ export function MarketplaceClient({
   };
 
   const handleFilterChange = (updates: Partial<FilterState>) => {
-    setFilters((prev) => {
-      const next = { ...prev, ...updates };
-      updateUrlParams(updates);
-      return next;
-    });
+    const next = { ...filters, ...updates };
+    setFilters(next);
+    updateUrlParams(updates);
   };
 
   const handleQuickChipToggle = (chipKey: string) => {
@@ -183,7 +211,13 @@ export function MarketplaceClient({
       result = result.filter((b) => b.status === "claimed" || Boolean(b.foundingBusiness));
     }
 
-    // 7. Sorting
+    // 7. Open-now filter. Unknown or malformed hours are excluded rather than
+    // being presented as currently open.
+    if (filters.openNowOnly) {
+      result = result.filter((b) => isOpenNow(b.hours) === true);
+    }
+
+    // 8. Sorting
     if (filters.sortBy === "rating") {
       result.sort((a, b) => (b.avgRating || 0) - (a.avgRating || 0));
     } else if (filters.sortBy === "reviews") {
@@ -274,7 +308,7 @@ export function MarketplaceClient({
         locale={locale}
         onQuickChipToggle={handleQuickChipToggle}
         onSearchChange={setSearchQuery}
-        onSearchSubmit={() => updateUrlParams({})}
+        onSearchSubmit={(query) => updateUrlParams({}, query)}
         searchQuery={searchQuery}
       />
 
@@ -322,10 +356,10 @@ export function MarketplaceClient({
           <div className="mp-results-header__left">
             <h2 className="mp-results-header__title">
               {locale === "uz"
-                ? "Toshkentdagi tasdiqlangan maskanlar"
+                ? "Toshkentdagi maskanlar"
                 : locale === "ru"
-                ? "Проверенные места в Ташкенте"
-                : "Verified Places in Tashkent"}
+                ? "Места в Ташкенте"
+                : "Places in Tashkent"}
             </h2>
             <span className="mp-results-header__count">
               ({totalCount} {locale === "uz" ? "ta maskan" : locale === "ru" ? "мест" : "places"})

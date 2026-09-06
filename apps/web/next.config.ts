@@ -27,6 +27,7 @@ const clerk = "https://*.clerk.accounts.dev https://*.clerk.com https://clerk.co
 const turnstile = "https://challenges.cloudflare.com";
 // Vercel preview comment toolbar (harmless in production).
 const vercel = "https://vercel.live";
+const youtube = "https://www.youtube.com https://www.youtube-nocookie.com";
 
 // Sentry ingest. Derived from the DSN in the same style as the origins above:
 // a hardcoded region host would silently break reporting the moment the project
@@ -65,7 +66,7 @@ const csp = [
     isDev ? " ws://localhost:* http://localhost:*" : ""
   }`,
   `worker-src 'self' blob:`,
-  `frame-src 'self' ${clerk} ${turnstile} ${vercel}`,
+  `frame-src 'self' ${clerk} ${turnstile} ${vercel} ${youtube}`,
   `manifest-src 'self'`,
   // Upgrade http subresources to https in production only (would break the
   // local http://localhost API during development).
@@ -101,6 +102,14 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@manzil/shared"],
+  webpack(config) {
+    config.resolve.alias = {
+      ...(config.resolve.alias ?? {}),
+      // Resolve monorepo-root Originkit components from apps/web @/ alias
+      "@/components/originkit": `${__dirname}/../../components/originkit`,
+    };
+    return config;
+  },
   // Never ship the original sources to the browser. Sentry uploads maps at
   // build time and deletes them from the bundle (see `sourcemaps` below), so
   // stack traces stay readable in monitoring without being readable in

@@ -27,9 +27,9 @@ const ORG_ID = `${SITE_URL}/#organization`;
 const WEBSITE_ID = `${SITE_URL}/#website`;
 
 const ORG_DESCRIPTION: Record<Locale, string> = {
-  uz: "Manzil — Toshkentdagi bizneslarni topish, sharhlar va Gurman AI concierge platformasi.",
-  ru: "Manzil — платформа для поиска бизнесов Ташкента, отзывов и AI-консьержа Gurman.",
-  en: "Manzil is a Tashkent business directory with real reviews and the Gurman AI concierge."
+  uz: "Manzil — Toshkentdagi bizneslarni topish va haqiqiy sharhlar platformasi.",
+  ru: "Manzil — платформа для поиска бизнесов Ташкента и настоящих отзывов.",
+  en: "Manzil is a Tashkent business directory with real local reviews."
 };
 
 /**

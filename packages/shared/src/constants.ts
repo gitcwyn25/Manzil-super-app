@@ -9,20 +9,24 @@ export const BUSINESS_CATEGORIES = [
 
 export const PRICE_TIERS = ['BUDGET', 'MODERATE', 'EXPENSIVE', 'LUXURY'];
 
+/**
+ * Plan names mirror the API tier schema. Paid amounts are deliberately not
+ * duplicated here; the API is the source of truth for active pricing.
+ */
 export const SUBSCRIPTION_TIERS = {
-  STARTER: {
-    name: 'Starter',
+  FREE: {
+    name: 'Free',
     price: 0,
     features: ['Profile', 'Reviews', 'Photos'],
   },
-  GROWTH: {
-    name: 'Growth',
-    price: 9.99,
+  PRO: {
+    name: 'Pro',
+    price: null,
     features: ['Profile', 'Reviews', 'Photos', 'Analytics', 'Messaging'],
   },
-  PREMIUM: {
-    name: 'Premium',
-    price: 29.99,
+  MAX: {
+    name: 'Max',
+    price: null,
     features: [
       'Profile',
       'Reviews',

@@ -1,0 +1,866 @@
+// Appearance system — Day is the existing Manzil light surface, Night is a
+// low-glare vault derived from the brand's teal rather than pure black, and
+// System resolves to either one in the client provider.
+
+:root {
+  --docs-dim: rgb(13 26 28 / 0.28);
+}
+
+:root[data-theme="night"] {
+  color-scheme: dark;
+  --docs-dim: rgb(237 246 243 / 0.62);
+
+  --panel: #0d1b1f;
+  --surface: #0d1b1f;
+  --surface-low: #14272b;
+  --surface-card: #172c30;
+  --surface-high: #213b3e;
+  --inverse-surface: #f1f3f2;
+  --text: #edf6f3;
+  --muted: #a6bbb7;
+  --outline: #4c6663;
+  --line: rgb(237 246 243 / 0.14);
+  --ceramic: #55c8bb;
+  --signal: #62e7c8;
+  --brass: #e1b866;
+  --primary: var(--ceramic);
+  --primary-bright: #79e1d3;
+  --primary-ghost: rgb(85 200 187 / 0.15);
+  --gold: var(--brass);
+  --primary-soft: #245b59;
+  --gold-soft: #594a2d;
+  --gold-dark: #f0cb78;
+  --terracotta: #f09b72;
+  --shadow: 0 24px 60px -18px rgb(0 0 0 / 0.5);
+  --soft-shadow: 0 4px 22px rgb(0 0 0 / 0.26);
+  --hover-shadow: 0 30px 70px -22px rgb(0 0 0 / 0.6);
+  --ring: 0 0 0 4px rgb(85 200 187 / 0.22);
+  --bz-ink: #edf6f3;
+  --bz-teal: #55c8bb;
+  --bz-teal-bright: #79e1d3;
+  --bz-gold: #e1b866;
+  --bz-gold-soft: #594a2d;
+  --bz-line: #2c4749;
+  --bz-muted: #a6bbb7;
+  --bz-panel: #14272b;
+  --bz-surface: #172c30;
+
+  // Bootstrap-facing aliases used by the converted marketplace surfaces.
+  --bs-body-bg: var(--panel);
+  --bs-body-color: var(--text);
+  --bs-secondary-color: var(--muted);
+  --bs-border-color: var(--outline);
+  --bs-tertiary-bg: var(--surface-low);
+  --bs-secondary-bg: var(--surface-low);
+  --vm-surface: var(--panel);
+  --vm-surface-container-lowest: var(--surface-card);
+  --vm-surface-container-low: var(--surface-low);
+  --vm-surface-container: var(--surface-high);
+  --vm-surface-container-high: #294548;
+  --vm-surface-container-highest: #34575a;
+  --vm-surface-variant: var(--surface-high);
+  --vm-on-surface: var(--text);
+  --vm-on-surface-variant: var(--muted);
+  --vm-outline: var(--muted);
+  --vm-outline-variant: var(--outline);
+}
+
+[data-theme="night"] body {
+  background: var(--panel);
+  color: var(--text);
+}
+
+[data-theme="night"] .site-nav,
+[data-theme="night"] .clever-nav-wrapper {
+  animation: none !important;
+  background: rgb(13 27 31 / 0.88) !important;
+  border-bottom-color: rgb(166 187 183 / 0.22) !important;
+}
+
+[data-theme="night"] .clever-brand-text {
+  color: var(--text);
+}
+
+[data-theme="night"] nav.desktop-nav a {
+  color: var(--muted);
+}
+
+[data-theme="night"] nav.desktop-nav a:hover,
+[data-theme="night"] nav.desktop-nav a.active {
+  color: var(--primary);
+}
+
+[data-theme="night"] .site-nav__search {
+  background: var(--surface-low);
+  border-color: var(--outline);
+  color: var(--muted);
+}
+
+[data-theme="night"] .site-nav__search:focus-within {
+  background: var(--surface-card);
+}
+
+[data-theme="night"] .site-nav__search-input {
+  color: var(--text);
+}
+
+[data-theme="night"] .site-nav__search-input::placeholder,
+[data-theme="night"] .header-signin {
+  color: var(--muted);
+}
+
+[data-theme="night"] .site-nav__lang .lang-button,
+[data-theme="night"] .mobile-nav-toggle {
+  color: var(--text);
+}
+
+[data-theme="night"] .site-nav__lang .lang-dropdown,
+[data-theme="night"] #mobile-nav-panel.offcanvas {
+  background: var(--surface-card);
+  border-color: var(--outline);
+  color: var(--text);
+}
+
+[data-theme="night"] .site-nav__lang .lang-dropdown button:hover,
+[data-theme="night"] .mobile-nav a:hover,
+[data-theme="night"] .mobile-nav a.active {
+  background: var(--primary-ghost);
+}
+
+[data-theme="night"] .site-footer,
+[data-theme="night"] .manzil-footer-02-shell,
+[data-theme="night"] .clever-section,
+[data-theme="night"] .clever-pricing,
+[data-theme="night"] .clever-faq,
+[data-theme="night"] .clever-cta {
+  background: var(--panel) !important;
+  color: var(--text);
+}
+
+[data-theme="night"] .site-footer {
+  border-top-color: var(--outline);
+  color: var(--muted);
+}
+
+[data-theme="night"] .manzil-footer-02-shell {
+  color: var(--text);
+}
+
+/* Keep section headings readable in Night mode without recolouring the
+   explicitly light card surfaces below them. The previous `.clever-section
+   h3/p` rule won over card-local colors and produced near-white text on white
+   cards (contrast ratio ~1.1:1). */
+[data-theme="night"] .clever-header,
+[data-theme="night"] .clever-heading,
+[data-theme="night"] .clever-header .clever-heading,
+[data-theme="night"] .clever-header .clever-subheading {
+  color: var(--text);
+}
+
+// Benefit cards stay white in both appearances. Their local ink must outrank
+// any broad Night-mode `.clever-section h3/p` rule from an older build.
+[data-theme="night"] .clever-benefits .clever-benefits__card {
+  color: $vm-on-surface;
+}
+
+[data-theme="night"] .clever-benefits .clever-card__title {
+  color: $vm-on-surface;
+}
+
+[data-theme="night"] .clever-benefits .clever-card__desc {
+  color: $vm-on-surface-variant;
+}
+
+[data-theme="night"] .clever-section .text-muted,
+[data-theme="night"] .clever-section small {
+  color: var(--muted) !important;
+}
+
+[data-theme="night"] .clever-pricing-card,
+[data-theme="night"] .clever-faq-item {
+  background: #172c30 !important;
+  border-color: #4c6663 !important;
+  color: #edf6f3 !important;
+  box-shadow: var(--soft-shadow);
+}
+
+[data-theme="night"] .clever-pricing-card:not(.clever-pricing-card--popular) .clever-pricing-card__name,
+[data-theme="night"] .clever-pricing-card:not(.clever-pricing-card--popular) .clever-pricing-card__features-title,
+[data-theme="night"] .clever-faq-item__question {
+  color: #edf6f3 !important;
+}
+
+[data-theme="night"] .clever-pricing-card:not(.clever-pricing-card--popular) .clever-pricing-card__tagline,
+[data-theme="night"] .clever-pricing-card:not(.clever-pricing-card--popular) .clever-pricing-card__period,
+[data-theme="night"] .clever-pricing-card:not(.clever-pricing-card--popular) .clever-pricing-card__feature-item,
+[data-theme="night"] .clever-faq-item__answer {
+  color: #a6bbb7 !important;
+}
+
+[data-theme="night"] .clever-cta-card,
+[data-theme="night"] .clever-waitlist-card {
+  background: linear-gradient(135deg, #123d42 0%, #091d22 100%);
+}
+
+[data-theme="night"] .clever-pricing-card--popular {
+  background: #0a1a1e;
+}
+
+[data-theme="night"] .site-footer__brand,
+[data-theme="night"] .site-footer__heading {
+  color: var(--text);
+}
+
+[data-theme="night"] .docs-article__head > p,
+[data-theme="night"] .docs-article__lead p,
+[data-theme="night"] .docs-article__content blockquote,
+[data-theme="night"] .docs-notice {
+  color: var(--muted);
+  background: var(--surface-low);
+}
+
+[data-theme="night"] .docs-article__head > p {
+  background: transparent;
+}
+
+// Keep common content surfaces coherent while preserving photographs and
+// intentional colour-field / gradient panels.
+[data-theme="night"] .business-card,
+[data-theme="night"] .home-card,
+[data-theme="night"] .review-card,
+[data-theme="night"] .feed-card,
+[data-theme="night"] .community-list-card,
+[data-theme="night"] .discover-user-card,
+[data-theme="night"] .list-card,
+[data-theme="night"] .occasion-card,
+[data-theme="night"] .admin-card,
+[data-theme="night"] .pricing-card,
+[data-theme="night"] .bz-plan,
+[data-theme="night"] .crm-panel,
+[data-theme="night"] .crm-statcard,
+[data-theme="night"] .glass-panel {
+  background-color: var(--surface-card);
+  border-color: var(--outline);
+  color: var(--text);
+}
+
+[data-theme="night"] input,
+[data-theme="night"] textarea,
+[data-theme="night"] select {
+  background-color: var(--surface-card);
+  border-color: var(--outline);
+  color: var(--text);
+}
+
+[data-theme="night"] input::placeholder,
+[data-theme="night"] textarea::placeholder {
+  color: var(--muted);
+}
+
+/* ---------- Appearance control ---------- */
+
+.theme-menu {
+  position: relative;
+  flex: none;
+}
+
+.theme-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--outline);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, color .15s ease, transform .15s ease;
+}
+
+.theme-button:hover,
+.theme-button[aria-expanded="true"] {
+  border-color: var(--primary);
+  background: var(--primary-ghost);
+  color: var(--primary);
+}
+
+.theme-button:active {
+  transform: scale(.95);
+}
+
+.theme-button > svg:first-child {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
+}
+
+.theme-button__label,
+.theme-button__chevron {
+  display: none;
+}
+
+.theme-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 1060;
+  display: grid;
+  min-width: 238px;
+  gap: 3px;
+  padding: 8px;
+  border: 1px solid var(--outline);
+  border-radius: 16px;
+  background: var(--surface-card);
+  box-shadow: var(--shadow);
+  color: var(--text);
+  animation: theme-dropdown-in .18s var(--ease-out) both;
+}
+
+@keyframes theme-dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-5px) scale(.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.theme-dropdown__eyebrow {
+  margin: 3px 8px 6px;
+  color: var(--muted);
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.theme-dropdown > button {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 9px 8px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  transition: background .15s ease, color .15s ease;
+}
+
+.theme-dropdown > button:hover,
+.theme-dropdown > button.active {
+  background: var(--primary-ghost);
+  color: var(--primary);
+}
+
+.theme-option__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--outline);
+  border-radius: 9px;
+  color: currentColor;
+}
+
+.theme-option__icon svg,
+.theme-option__check {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
+}
+
+.theme-option__copy {
+  display: grid;
+  gap: 1px;
+}
+
+.theme-option__copy strong {
+  font-size: .86rem;
+  font-weight: 700;
+}
+
+.theme-option__copy small {
+  color: var(--muted);
+  font-size: .71rem;
+  line-height: 1.35;
+}
+
+.theme-dropdown > button.active .theme-option__copy small {
+  color: var(--primary);
+  opacity: .82;
+}
+
+.theme-option__check {
+  justify-self: end;
+  color: var(--primary);
+}
+
+@media (max-width: 991.98px) {
+  .theme-button {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .clever-nav-wrapper .theme-button,
+  .clever-nav-wrapper .mobile-nav-toggle,
+  .g-header .theme-button {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-button,
+  .theme-dropdown,
+  .theme-dropdown > button {
+    transition: none;
+    animation: none;
+  }
+}
+
+/* ---------- Day palettes for dark-first product experiences ---------- */
+
+:root[data-theme="day"] {
+  --gurman-ink: #f4f8f7;
+  --gurman-deep: #e7f2ef;
+  --gurman-paper: #102426;
+  --gurman-mint: #087f75;
+  --gurman-blue: #267d93;
+  --gurman-line: rgb(16 36 38 / 0.18);
+}
+
+/* Discover marketplace */
+[data-theme="day"] .discover-marketplace-root {
+  background: #f3f7f6 !important;
+  color: #102426;
+}
+
+[data-theme="day"] .discover-hero {
+  background: radial-gradient(circle at 50% -20%, rgb(21 174 154 / 0.12) 0%, rgb(243 247 246 / 0) 70%), linear-gradient(180deg, rgb(231 244 240 / 0.9) 0%, #f3f7f6 100%);
+  border-bottom-color: #d6e5e1;
+}
+
+[data-theme="day"] .discover-hero__title,
+[data-theme="day"] .curated-band__title,
+[data-theme="day"] .mp-results-header__title,
+[data-theme="day"] .tashkent-catalog-head__title {
+  color: #102426;
+}
+
+[data-theme="day"] .discover-hero__subtitle,
+[data-theme="day"] .curated-band__tagline,
+[data-theme="day"] .mp-results-header__count {
+  color: #54706d;
+}
+
+[data-theme="day"] .discover-search-bar {
+  background: rgb(255 255 255 / 0.96);
+  border-color: #c6d9d4;
+  box-shadow: 0 16px 40px rgb(28 74 70 / 0.12), inset 0 1px 0 rgb(255 255 255 / 0.9);
+}
+
+[data-theme="day"] .discover-search-bar__location,
+[data-theme="day"] .discover-search-bar__input {
+  color: #102426;
+}
+
+[data-theme="day"] .discover-search-bar__input::placeholder,
+[data-theme="day"] .discover-search-bar__search-icon,
+[data-theme="day"] .discover-search-bar__clear {
+  color: #6b8581;
+}
+
+[data-theme="day"] .discover-search-bar__divider,
+[data-theme="day"] .category-strip-section,
+[data-theme="day"] .mp-results-header {
+  border-color: #d6e5e1;
+}
+
+[data-theme="day"] .discover-quick-chip,
+[data-theme="day"] .category-tile,
+[data-theme="day"] .mp-rating-pill,
+[data-theme="day"] .mp-price-pill,
+[data-theme="day"] .mp-view-toggle,
+[data-theme="day"] .mp-mobile-filter-bar,
+[data-theme="day"] .mp-mobile-sort-select,
+[data-theme="day"] .mp-sort-select,
+[data-theme="day"] .mp-load-more-btn {
+  background: #ffffff;
+  border-color: #cbded9;
+  color: #355652;
+}
+
+[data-theme="day"] .discover-quick-chip:hover,
+[data-theme="day"] .category-tile:hover,
+[data-theme="day"] .mp-rating-pill:hover,
+[data-theme="day"] .mp-price-pill:hover,
+[data-theme="day"] .mp-load-more-btn:hover {
+  background: #e7f4f0;
+  border-color: #79bdb2;
+  color: #0b625a;
+}
+
+[data-theme="day"] .discover-quick-chip.is-active,
+[data-theme="day"] .category-tile.is-active,
+[data-theme="day"] .mp-rating-pill.is-active,
+[data-theme="day"] .mp-price-pill.is-active {
+  background: #dff3ee;
+  border-color: #087f75;
+  color: #087f75;
+}
+
+[data-theme="day"] .category-tile__icon-wrap {
+  border-color: #d1e2de;
+}
+
+[data-theme="day"] .mp-sort-select,
+[data-theme="day"] .mp-mobile-sort-select {
+  color: #102426;
+}
+
+[data-theme="day"] .mp-sidebar {
+  background: #ffffff;
+  border-color: #d2e1de;
+  box-shadow: 0 14px 34px rgb(28 74 70 / 0.08);
+}
+
+[data-theme="day"] .mp-sidebar__title,
+[data-theme="day"] .mp-filter-group__label,
+[data-theme="day"] .mp-toggle-row {
+  color: #102426;
+}
+
+[data-theme="day"] .mp-sidebar__header {
+  border-bottom-color: #d6e5e1;
+}
+
+[data-theme="day"] .mp-filter-group__label,
+[data-theme="day"] .mp-sidebar__count-badge,
+[data-theme="day"] .mp-active-filters-label,
+[data-theme="day"] .mp-sort-dropdown__label,
+[data-theme="day"] .mp-district-item,
+[data-theme="day"] .mp-card__meta-top,
+[data-theme="day"] .mp-card__reviews-count,
+[data-theme="day"] .mp-card__tag {
+  color: #5f7975;
+}
+
+[data-theme="day"] .mp-card,
+[data-theme="day"] .mp-skeleton-card {
+  background: #ffffff;
+  border-color: #d2e1de;
+  box-shadow: 0 12px 30px rgb(28 74 70 / 0.08);
+}
+
+[data-theme="day"] .mp-card__media {
+  background: #e4efec;
+}
+
+[data-theme="day"] .mp-card__media-overlay {
+  background: linear-gradient(180deg, rgb(16 36 38 / 0.06) 0%, rgb(16 36 38 / 0) 50%, rgb(16 36 38 / 0.48) 100%);
+}
+
+[data-theme="day"] .mp-card__save-btn,
+[data-theme="day"] .mp-status-pill,
+[data-theme="day"] .mp-card__badges-top {
+  background: rgb(255 255 255 / 0.9);
+  border-color: #d2e1de;
+}
+
+[data-theme="day"] .mp-card__name {
+  color: #102426;
+}
+
+[data-theme="day"] .mp-card__desc {
+  color: #54706d;
+}
+
+[data-theme="day"] .mp-card__footer {
+  border-top-color: #e0ebe8;
+}
+
+[data-theme="day"] .mp-status-pill {
+  color: #355652;
+}
+
+[data-theme="day"] .mp-load-more-btn {
+  color: #0b625a;
+}
+
+[data-theme="day"] .mp-skeleton-line,
+[data-theme="day"] .mp-skeleton-card__media {
+  background: #dceae6;
+}
+
+/* Gurman workspace onboarding and live workspace */
+[data-theme="day"] .gurman-concierge-page {
+  background: #f4f8f7 !important;
+  color: #102426;
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-guide,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-guide__stage {
+  background: radial-gradient(circle at 78% 42%, rgb(21 174 154 / 0.12), transparent 32%), #f4f8f7;
+  color: #102426;
+}
+
+[data-theme="day"] .gurman-workspace-guide__stage::before,
+[data-theme="day"] .gurman-workspace-guide__stage::after {
+  border-color: rgb(8 127 117 / 0.16);
+}
+
+[data-theme="day"] .gurman-workspace-guide__devices {
+  opacity: calc(0.28 + (var(--guide-understand) * 0.72));
+}
+
+[data-theme="day"] .gurman-workspace-guide__caption {
+  opacity: calc(0.3 + (var(--guide-decide) * 0.7));
+}
+
+[data-theme="day"] .gurman-workspace-guide h2,
+[data-theme="day"] .gurman-workspace-guide__intro > p,
+[data-theme="day"] .gurman-workspace-guide__caption,
+[data-theme="day"] .gurman-workspace-guide__steps h3,
+[data-theme="day"] .gurman-workspace-guide__steps p {
+  color: #102426;
+}
+
+[data-theme="day"] .gurman-workspace-guide__intro > p,
+[data-theme="day"] .gurman-workspace-guide__steps p,
+[data-theme="day"] .gurman-workspace-guide__caption > p {
+  color: #54706d;
+}
+
+[data-theme="day"] .g-guide-laptop__screen,
+[data-theme="day"] .g-guide-phone__screen {
+  background: #ffffff;
+  border-color: #9bbab3;
+  color: #102426;
+  box-shadow: inset 0 0 0 7px #e0efeb, inset 0 0 0 8px rgb(16 36 38 / 0.1);
+}
+
+[data-theme="day"] .g-guide-laptop__chrome,
+[data-theme="day"] .g-guide-laptop__body aside {
+  border-color: #d1e2de;
+  color: #5f7975;
+}
+
+[data-theme="day"] .g-guide-laptop__body aside strong,
+[data-theme="day"] .g-guide-laptop__content h3,
+[data-theme="day"] .g-guide-laptop__result-head,
+[data-theme="day"] .g-guide-laptop__result strong,
+[data-theme="day"] .g-guide-phone h3 {
+  color: #102426;
+}
+
+[data-theme="day"] .g-guide-laptop__chips span,
+[data-theme="day"] .g-guide-screen__criteria span,
+[data-theme="day"] .g-guide-screen__input {
+  border-color: #b9d4ce;
+  color: #54706d;
+}
+
+[data-theme="day"] .g-guide-laptop__divider,
+[data-theme="day"] .gurman-workspace-guide__steps article {
+  background: #d6e5e1;
+  border-color: #b9d4ce;
+}
+
+[data-theme="day"] .g-guide-laptop__result,
+[data-theme="day"] .g-guide-screen__place {
+  background: #e5f5f0;
+  border-color: #79bdb2;
+}
+
+[data-theme="day"] .g-guide-laptop__result small,
+[data-theme="day"] .g-guide-laptop__result-reason,
+[data-theme="day"] .g-guide-screen__input,
+[data-theme="day"] .g-guide-screen__hint,
+[data-theme="day"] .g-guide-screen__place small,
+[data-theme="day"] .g-guide-screen__place span {
+  color: #5f7975;
+}
+
+[data-theme="day"] .g-guide-laptop__base {
+  background: linear-gradient(#c6dcd7, #a8c5be);
+}
+
+[data-theme="day"] .g-guide-phone {
+  border-color: #b9d4ce;
+  background: #ffffff;
+  box-shadow: 0 28px 34px rgb(28 74 70 / 0.18);
+}
+
+[data-theme="day"] .g-guide-screen__header {
+  color: #5f7975;
+}
+
+[data-theme="day"] .g-guide-screen__place {
+  color: #102426;
+}
+
+[data-theme="day"] .g-guide-screen__button,
+[data-theme="day"] .gurman-workspace-guide__action {
+  background: #0058bc;
+  border-color: #0058bc;
+  color: #ffffff;
+}
+
+[data-theme="day"] .gurman-workspace-guide__action:hover {
+  background: #004493;
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry {
+  background: #f4f8f7;
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-workspace-root {
+  --g-bg-base: #f4f8f7;
+  --g-bg-surface: #ffffff;
+  --g-bg-card: #e7f2ef;
+  --g-text-main: #102426;
+  --g-text-muted: #54706d;
+  --g-text-subtle: #6b8581;
+  --g-border: #cbded9;
+  --g-border-hover: #0058bc;
+  --g-primary-rgb: 0 88 188;
+  --g-primary: #0058bc;
+  --g-primary-bright: #0070eb;
+  --g-primary-glow: rgb(0 88 188 / 0.16);
+  background: #f4f8f7 !important;
+  color: #102426;
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-header {
+  background: rgb(255 255 255 / 0.9);
+  border-bottom-color: #cbded9;
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-header__brand-title,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-hero-title,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-results-title,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-landing-visual__title,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-preview-card__name,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-rec-card__name,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-rec-card__rating-val {
+  color: #102426;
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-composer-card,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-landing-visual,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-results-flow,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-rec-card,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-followup-panel,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-searching-container {
+  background: #ffffff;
+  border-color: #cbded9;
+  box-shadow: 0 14px 32px rgb(28 74 70 / 0.08);
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-composer-textarea {
+  color: #102426;
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-composer-footer,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-results-header {
+  border-top-color: #e0ebe8;
+  border-bottom-color: #d6e5e1;
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-quick-chip,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-followup-chip,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-btn--secondary,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-intent-btn--edit,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-reset-link {
+  background: #ffffff;
+  border-color: #cbded9;
+  color: #355652;
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-quick-chip:hover,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-followup-chip:hover,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-btn--secondary:hover {
+  background: #e7f4f0;
+  color: #087f75;
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-intent-panel,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-rec-card__reason-box,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-landing-visual__badge {
+  background: #e5f5f0;
+  border-color: #a8d1c8;
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-rec-card__reason-val,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-rec-card__desc,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-landing-visual__desc,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-preview-card__district {
+  color: #54706d;
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-rec-card__media {
+  background: #e4efec;
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-rec-card__overlay {
+  background: linear-gradient(180deg, rgb(16 36 38 / 0.06) 0%, rgb(16 36 38 / 0) 50%, rgb(16 36 38 / 0.48) 100%);
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-rec-card__save-btn,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-meta-chip,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-badge--trust {
+  background: rgb(255 255 255 / 0.9);
+  border-color: #cbded9;
+  color: #355652;
+}
+
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-gurman-searching-state,
+[data-theme="day"] .gurman-concierge-page .gurman-workspace-entry .g-searching-title {
+  color: #102426;
+}
+
+/* Cinematic Gurman variant uses the same Day token family. */
+[data-theme="day"] .gurman-cinematic-page .gurman-cinematic__planner input,
+[data-theme="day"] .gurman-cinematic-page .gurman-cinematic__planner label,
+[data-theme="day"] .gurman-cinematic-page .gurman-cinematic__lead,
+[data-theme="day"] .gurman-cinematic-page .gurman-cinematic__status,
+[data-theme="day"] .gurman-cinematic-page .gurman-cinematic__progress-label,
+[data-theme="day"] .gurman-cinematic-page .gurman-cinematic__planner input::placeholder {
+  color: #54706d;
+}
+
+[data-theme="day"] .gurman-cinematic-page .gurman-cinematic__planner > div {
+  border-bottom-color: #9bbab3;
+}
+
+[data-theme="day"] .gurman-cinematic-page .gurman-cinematic__planner button,
+[data-theme="day"] .gurman-cinematic-page .gurman-cinematic__close-button {
+  color: #ffffff;
+  background: #0058bc;
+}
+
+@media (max-width: 700px) {
+  [data-theme="day"] .gurman-concierge-page .g-header__nav {
+    gap: .65rem;
+  }
+}

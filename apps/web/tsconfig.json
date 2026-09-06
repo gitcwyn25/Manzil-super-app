@@ -6,6 +6,8 @@
     "plugins": [{ "name": "next" }],
     "paths": {
       "@/*": ["./*"],
+      "@/components/originkit": ["components/originkit"],
+      "@/components/originkit/*": ["components/originkit/*"],
       "@manzil/shared": ["../../packages/shared/src/index.ts"],
       "@manzil/shared/*": ["../../packages/shared/src/*"]
     }

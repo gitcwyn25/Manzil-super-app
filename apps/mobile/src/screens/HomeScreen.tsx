@@ -1,112 +1,101 @@
 import React, { useMemo } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import {
-  getFeedItems,
-  getOccasions,
-  getPlatformBusinesses,
-  getSocialActivities,
-  getUiCopy
-} from '@manzil/shared';
+import { getOccasions, getPlatformBusinesses, getUiCopy } from '@manzil/shared';
 import { useAppState } from '../app-state';
-import {
-  Body,
-  BusinessCard,
-  Card,
-  Chip,
-  Kicker,
-  PrimaryButton,
-  Screen,
-  SectionHeader,
-  StatPill,
-  Title
-} from '../components/mobile-ui';
-import { colors, locale, spacing } from '../theme';
+import { Body, BusinessCard, Card, Chip, Kicker, PrimaryButton, Screen, SearchField, SectionHeader, Title } from '../components/mobile-ui';
+import { colors, locale, radius, spacing } from '../theme';
 import type { MainStackParamList } from '../navigation/types';
 
 type Props = NativeStackScreenProps<MainStackParamList, 'Home'>;
 
 export default function HomeScreen({ navigation }: Props) {
   const copy = getUiCopy(locale);
-  const feedItems = getFeedItems();
   const occasions = getOccasions();
   const businesses = getPlatformBusinesses();
-  const activities = getSocialActivities();
-  const businessBySlug = useMemo(() => new Map(businesses.map((business) => [business.slug, business])), [businesses]);
   const { isSaved, toggleSaved } = useAppState();
-
   const heroBusiness = businesses[0];
+  const nearby = useMemo(() => businesses.slice(1, 4), [businesses]);
 
   return (
     <Screen>
-      <Kicker>{copy.brand.tagline} · {copy.brand.city}</Kicker>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <View>
+          <Kicker>Manzil · Toshkent</Kicker>
+          <Text style={{ color: colors.muted, marginTop: 3, fontWeight: '700' }}>Mahalliy tanlovlar, aniqroq qarorlar</Text>
+        </View>
+        <View style={{ width: 42, height: 42, borderRadius: 21, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center' }}>
+          <Text style={{ color: colors.surface, fontWeight: '900', fontSize: 18 }}>M</Text>
+        </View>
+      </View>
+
       <Title>{copy.mobile.homeTitle}</Title>
       <Body style={{ marginTop: spacing.xs }}>{copy.mobile.homeSubtitle}</Body>
 
-      <Card style={{ marginTop: spacing.lg, backgroundColor: colors.primary }}>
-        <Text style={{ color: colors.primarySoft, fontWeight: '900', fontSize: 13 }}>Bugun eng ishonchli tanlov</Text>
-        <Text style={{ color: colors.surface, fontSize: 24, lineHeight: 30, fontWeight: '900', marginTop: 6 }}>
+      <View style={{ marginTop: spacing.lg }}>
+        <SearchField
+          value=""
+          onChangeText={() => undefined}
+          placeholder={copy.mobile.searchPlaceholder}
+          editable={false}
+          onPress={() => navigation.navigate('Search')}
+        />
+      </View>
+
+      <Card style={{ marginTop: spacing.lg, backgroundColor: colors.primary, padding: spacing.lg }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Text style={{ color: colors.primarySoft, fontSize: 12, letterSpacing: 0.7, fontWeight: '900' }}>BUGUNGI TANLOV</Text>
+          <Text style={{ color: colors.gold, fontSize: 20 }}>✦</Text>
+        </View>
+        <Text style={{ color: colors.surface, fontSize: 25, lineHeight: 31, fontWeight: '900', marginTop: spacing.sm }}>
           {heroBusiness.name}
         </Text>
-        <Text style={{ color: '#D8ECE8', lineHeight: 21, marginTop: 6 }}>
-          {heroBusiness.insight?.aiSummary.uz}
+        <Text style={{ color: '#D9EFEB', lineHeight: 21, marginTop: spacing.xs }} numberOfLines={3}>
+          {heroBusiness.insight?.aiSummary.uz ?? heroBusiness.description.uz}
         </Text>
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.md }}>
-          <StatPill value={heroBusiness.avgRating.toFixed(1)} label="reyting" />
-          <StatPill value={heroBusiness.liveStatus?.waitMinutes ?? 0} label="daq. kutish" />
-          <StatPill value={heroBusiness.insight?.trendingRank ? `#${heroBusiness.insight.trendingRank}` : 'Top'} label="trend" />
+        <View style={{ flexDirection: 'row', gap: spacing.sm, marginTop: spacing.lg }}>
+          <View style={{ flex: 1, backgroundColor: 'rgba(255,255,255,0.12)', borderRadius: radius.md, padding: spacing.sm }}>
+            <Text style={{ color: colors.gold, fontSize: 18, fontWeight: '900' }}>{heroBusiness.avgRating.toFixed(1)}</Text>
+            <Text style={{ color: '#D9EFEB', fontSize: 11, fontWeight: '700' }}>reyting</Text>
+          </View>
+          <View style={{ flex: 1, backgroundColor: 'rgba(255,255,255,0.12)', borderRadius: radius.md, padding: spacing.sm }}>
+            <Text style={{ color: colors.surface, fontSize: 18, fontWeight: '900' }}>{heroBusiness.priceTier}</Text>
+            <Text style={{ color: '#D9EFEB', fontSize: 11, fontWeight: '700' }}>narx darajasi</Text>
+          </View>
         </View>
         <View style={{ marginTop: spacing.md }}>
           <PrimaryButton label="Batafsil ko'rish" tone="gold" onPress={() => navigation.navigate('BusinessDetail', { slug: heroBusiness.slug })} />
         </View>
       </Card>
 
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: spacing.lg }}>
-        <View style={{ flexDirection: 'row', gap: spacing.sm }}>
-          {occasions.map((occasion) => (
-            <Chip key={occasion.slug} label={`${occasion.emoji} ${occasion.name[locale]}`} />
-          ))}
-        </View>
+      <SectionHeader title="Bugun rejangiz nima?" kicker="Tezkor yo'nalish" />
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: spacing.sm }}>
+        {occasions.slice(0, 6).map((occasion) => (
+          <Chip key={occasion.slug} label={`${occasion.emoji} ${occasion.name[locale]}`} onPress={() => navigation.navigate('Search')} />
+        ))}
       </ScrollView>
 
-      <SectionHeader title="Sizga yaqin g'oyalar" kicker="Kashfiyot feed" />
-      {feedItems.slice(0, 4).map((item) => (
-        <Card key={item.id} style={{ marginBottom: spacing.md }}>
-          <Text style={{ color: colors.ink, fontSize: 20, lineHeight: 26, fontWeight: '900' }}>
-            {item.emoji} {item.title[locale]}
-          </Text>
-          {item.subtitle ? <Body style={{ marginTop: 4 }}>{item.subtitle[locale]}</Body> : null}
-          <View style={{ marginTop: spacing.md }}>
-            {item.businessSlugs.map((slug) => {
-              const business = businessBySlug.get(slug);
-              if (!business) return null;
-              return (
-                <BusinessCard
-                  key={slug}
-                  business={business}
-                  saved={isSaved(slug)}
-                  onSave={() => toggleSaved(slug)}
-                  onPress={() => navigation.navigate('BusinessDetail', { slug })}
-                />
-              );
-            })}
-          </View>
-        </Card>
+      <SectionHeader
+        title="Yaqin atrofdagi tanlovlar"
+        kicker="Katalogdan"
+        action={<Pressable onPress={() => navigation.navigate('Search')} accessibilityRole="button"><Text style={{ color: colors.primary, fontWeight: '900' }}>Barchasi</Text></Pressable>}
+      />
+      {nearby.map((business) => (
+        <BusinessCard
+          key={business.slug}
+          business={business}
+          saved={isSaved(business.slug)}
+          onSave={() => toggleSaved(business.slug)}
+          onPress={() => navigation.navigate('BusinessDetail', { slug: business.slug })}
+        />
       ))}
 
-      <SectionHeader title={copy.mobile.friendActivity} kicker="Jamiyat" />
-      {activities.map((activity) => (
-        <Card key={activity.id} style={{ marginBottom: spacing.sm }}>
-          <Text style={{ color: colors.ink, fontWeight: '900' }}>
-            {activity.actorName} {activity.action[locale]}
-          </Text>
-          <Text style={{ color: colors.primary, fontWeight: '900', marginTop: 4 }}>
-            {businessBySlug.get(activity.businessSlug)?.name}
-          </Text>
-        </Card>
-      ))}
-
-      <PrimaryButton label={copy.mobile.continueDiscover} onPress={() => navigation.navigate('Search')} />
+      <Card style={{ marginTop: spacing.sm, backgroundColor: colors.surfaceSoft }}>
+        <Text style={{ color: colors.primary, fontWeight: '900', fontSize: 12, letterSpacing: 0.7 }}>GURMAN YORDAMCHI</Text>
+        <Text style={{ color: colors.ink, fontSize: 19, lineHeight: 25, fontWeight: '900', marginTop: spacing.xs }}>Aniq nima kerakligini bilmayapsizmi?</Text>
+        <Body style={{ marginTop: spacing.xs }}>Byudjet, muhit yoki voqeani ayting — katalogdan boshlaymiz.</Body>
+        <View style={{ marginTop: spacing.md }}><PrimaryButton label="Gurmandan so'rash" onPress={() => navigation.navigate('Concierge')} /></View>
+      </Card>
     </Screen>
   );
 }

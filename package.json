@@ -1,7 +1,7 @@
 {
   "name": "manzil-platform",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Manzil local business discovery and reviews platform for Uzbekistan.",
   "workspaces": [
     "packages/shared",
@@ -16,7 +16,7 @@
     "dev": "npm run dev --workspace @manzil/web",
     "dev:web": "npm run dev --workspace @manzil/web",
     "dev:api": "npm run start:dev --workspace @manzil/api",
-    "build": "npm run build --workspaces --if-present",
+    "build": "npm run db:generate && npm run build --workspaces --if-present",
     "build:shared": "npm run build --workspace @manzil/shared",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
@@ -46,6 +46,11 @@
   },
   "dependencies": {
     "@openrouter/sdk": "^0.13.20",
-    "@prisma/client": "^6.19.3"
+    "@prisma/client": "^6.19.3",
+    "@tailwindcss/postcss": "^4.3.3",
+    "gsap": "^3.15.0",
+    "motion": "^13.1.1",
+    "postcss": "^8.5.26",
+    "tailwindcss": "^4.3.3"
   }
 }
