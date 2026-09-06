@@ -86,19 +86,27 @@ export function CleverFaq({ copy }: { copy: CleverFaqCopy }) {
                     {isOpen && (
                       <motion.div
                         aria-labelledby={questionId}
-                        className="clever-faq__answer"
+                        className="clever-faq__answer-shell"
                         id={answerId}
-                        initial={{ height: 0, marginTop: 0, opacity: 0 }}
+                        initial={{ height: 0, marginTop: 0, opacity: 0, paddingBottom: 0 }}
                         role="region"
-                        animate={{ height: "auto", marginTop: "0.7rem", opacity: 1 }}
-                        exit={{ height: 0, marginTop: 0, opacity: 0 }}
+                        animate={{
+                          height: "auto",
+                          marginTop: "0.7rem",
+                          opacity: 1,
+                          paddingBottom: "0.45rem"
+                        }}
+                        exit={{ height: 0, marginTop: 0, opacity: 0, paddingBottom: 0 }}
                         transition={{
-                          height: { duration: 0.38, ease: [0.16, 1, 0.3, 1] },
-                          marginTop: { duration: 0.38, ease: [0.16, 1, 0.3, 1] },
-                          opacity: { duration: 0.24, ease: "easeOut" }
+                          height: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+                          marginTop: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+                          opacity: { duration: 0.28, ease: "easeOut" },
+                          paddingBottom: { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
                         }}
                       >
-                        <p>{item.answer}</p>
+                        <div className="clever-faq__answer">
+                          <p>{item.answer}</p>
+                        </div>
                       </motion.div>
                     )}
                   </AnimatePresence>

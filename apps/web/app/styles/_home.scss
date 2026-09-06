@@ -2435,8 +2435,14 @@
     &:focus-visible { outline: 2px solid $vm-primary; outline-offset: 4px; }
   }
 
-  &__answer {
+  &__answer-shell {
     align-self: flex-end;
+    width: fit-content;
+    max-width: 92%;
+    overflow: hidden;
+  }
+
+  &__answer {
     padding: 1rem 1.45rem 1.1rem;
     background: #252523;
     color: #ffffff;
