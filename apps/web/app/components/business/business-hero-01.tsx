@@ -11,7 +11,6 @@ const H = "/originkit/hero-01";
 const HERO_COPY: Record<
   Locale,
   {
-    badge: string;
     title1: string;
     title2: string;
     subtitle: string;
@@ -23,7 +22,6 @@ const HERO_COPY: Record<
   }
 > = {
   uz: {
-    badge: "Manzil Biznes Portali",
     title1: "Biznesingizni yangi bosqichga olib chiqing,",
     title2: "Manzil bilan.",
     subtitle:
@@ -35,7 +33,6 @@ const HERO_COPY: Record<
     proofItems: ["Listingni tasdiqlash", "Ma'lumotlarni yangilash", "Sharhlarga javob berish"]
   },
   ru: {
-    badge: "Бизнес-портал Manzil",
     title1: "Выведите ваш бизнес на новый уровень,",
     title2: "вместе с Manzil.",
     subtitle:
@@ -47,7 +44,6 @@ const HERO_COPY: Record<
     proofItems: ["Подтверждение профиля", "Обновление данных", "Ответы на отзывы"]
   },
   en: {
-    badge: "Manzil Business Portal",
     title1: "Scale your local business to new heights,",
     title2: "with Manzil.",
     subtitle:
@@ -78,16 +74,6 @@ export function BusinessHero01({ locale }: { locale: Locale }) {
       </div>
 
       <div className="container bz-hero-01__container">
-        {/* Eyebrow Live Badge */}
-        <Reveal as="div" variant="fade-up">
-          <div className="bz-hero-01__pill-wrapper">
-            <span className="bz-hero-01__pill">
-              <span className="bz-hero-01__live-dot" />
-              <span>{copy.badge}</span>
-            </span>
-          </div>
-        </Reveal>
-
         {/* Main Title */}
         <Reveal as="div" delay={80} variant="fade-up">
           <h1 className="bz-hero-01__title">
@@ -152,7 +138,20 @@ export function BusinessHero01({ locale }: { locale: Locale }) {
 
         {/* Interactive Dashboard Browser Showcase */}
         <Reveal as="div" delay={400} variant="fade-up">
-          <div className="bz-hero-01__browser-mockup">
+          <div className="bz-hero-01__showcase">
+            <div aria-hidden="true" className="bz-hero-01__companion bz-hero-01__companion--left-top">
+              <video autoPlay loop muted playsInline preload="metadata" src="/media/business/wonder-transparent.webm" />
+            </div>
+            <div aria-hidden="true" className="bz-hero-01__companion bz-hero-01__companion--left-bottom">
+              <video autoPlay loop muted playsInline preload="metadata" src="/media/business/read-transparent.webm" />
+            </div>
+            <div aria-hidden="true" className="bz-hero-01__companion bz-hero-01__companion--right-top">
+              <video autoPlay loop muted playsInline preload="metadata" src="/media/business/think-transparent.webm" />
+            </div>
+            <div aria-hidden="true" className="bz-hero-01__companion bz-hero-01__companion--right-bottom">
+              <video autoPlay loop muted playsInline preload="metadata" src="/media/business/tired-transparent.webm" />
+            </div>
+            <div className="bz-hero-01__browser-mockup">
             <div className="bz-hero-01__browser-header">
               <div className="bz-hero-01__browser-dots">
                 <span className="bz-hero-01__dot bz-hero-01__dot--red" />
@@ -160,88 +159,14 @@ export function BusinessHero01({ locale }: { locale: Locale }) {
                 <span className="bz-hero-01__dot bz-hero-01__dot--green" />
               </div>
               <div className="bz-hero-01__browser-address">
-                <span>🔒 business.manzil.uz/dashboard</span>
+                <span>🔒 business.manzilgroup.uz/dashboard</span>
               </div>
               <span className="bz-hero-01__browser-badge">Example workspace</span>
             </div>
 
-            <div className="bz-hero-01__dashboard-inner">
-              <p className="bz-mock-disclaimer">Illustrative preview — live activity appears after a listing is claimed.</p>
-              {/* Dashboard Top Stats */}
-              <div className="bz-mock-stats-row">
-                <div className="bz-mock-stat-tile">
-                  <div className="bz-mock-stat-tile__head">
-                    <span>Oylik Ko&apos;rishlar</span>
-                    <Icon name="trending_up" size={16} className="text-success" />
-                  </div>
-                  <div className="bz-mock-stat-tile__val">—</div>
-                  <div className="bz-mock-stat-tile__growth">Profil ko&apos;rishlari shu yerda ko&apos;rsatiladi</div>
-                </div>
-
-                <div className="bz-mock-stat-tile">
-                  <div className="bz-mock-stat-tile__head">
-                    <span>Manzil katalogi</span>
-                    <Icon name="sparkles" size={16} className="text-primary" />
-                  </div>
-                  <div className="bz-mock-stat-tile__val">—</div>
-                  <div className="bz-mock-stat-tile__growth">Mijozlar so&apos;rovlari shu yerda ko&apos;rsatiladi</div>
-                </div>
-
-                <div className="bz-mock-stat-tile">
-                  <div className="bz-mock-stat-tile__head">
-                    <span>O&apos;rtacha Reyting</span>
-                    <Icon name="star" size={16} className="text-warning" />
-                  </div>
-                  <div className="bz-mock-stat-tile__val">—</div>
-                  <div className="bz-mock-stat-tile__growth">Sharhlar shu yerda ko&apos;rsatiladi</div>
-                </div>
-              </div>
-
-              {/* Dashboard Chart & Review Management Row */}
-              <div className="bz-mock-content-row">
-                <div className="bz-mock-chart-card">
-                  <div className="bz-mock-card-head">
-                    <span className="bz-mock-card-title">Faollik ko&apos;rinishi</span>
-                    <span className="bz-mock-card-tag">Namuna</span>
-                  </div>
-                  <div className="bz-mock-bars">
-                    {[45, 60, 52, 78, 90, 85, 95].map((h, idx) => (
-                      <div className="bz-mock-bar-col" key={idx}>
-                        <div
-                          className="bz-mock-bar-fill"
-                          style={{ height: `${h}%` }}
-                        />
-                        <span className="bz-mock-bar-day">
-                          {["Dush", "Sesh", "Chor", "Pay", "Juma", "Shan", "Yak"][idx]}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="bz-mock-reviews-card">
-                  <div className="bz-mock-card-head">
-                    <span className="bz-mock-card-title">So&apos;nggi sharhlar va javoblar</span>
-                    <span className="bz-mock-badge-verified">Namuna</span>
-                  </div>
-                  <div className="bz-mock-review-item">
-                    <div className="bz-mock-review-user">
-                      <div className="bz-mock-user-avatar">M</div>
-                      <div className="bz-mock-user-info">
-                        <strong>Mijoz sharhi</strong>
-                        <span>Tashrif ma&apos;lumoti · Namuna</span>
-                      </div>
-                    </div>
-                    <p className="bz-mock-review-text">
-                      &ldquo;Yangi sharhlar shu yerda ko&apos;rinadi.&rdquo;
-                    </p>
-                    <div className="bz-mock-reply-box">
-                      <strong>Javob maydoni:</strong>
-                      <span>Bu yerda biznes egasining javobi ko&apos;rinadi.</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div aria-label="Manzil Business live product demo" className="bz-hero-01__demo">
+              <video autoPlay loop muted playsInline preload="auto" src="/media/business/mockup-demo.mp4" />
+            </div>
             </div>
           </div>
         </Reveal>
