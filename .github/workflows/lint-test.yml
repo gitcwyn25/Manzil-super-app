@@ -22,7 +22,7 @@ jobs:
         node-version: [20.x, 22.x]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
@@ -90,7 +90,7 @@ jobs:
       SKIP_AUTH_SETUP: ${{ secrets.CLERK_TEST_SECRET_KEY == '' && '1' || '' }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
