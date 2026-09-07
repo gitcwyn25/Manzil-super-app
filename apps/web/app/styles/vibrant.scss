@@ -205,6 +205,9 @@
 // untouched.
 @import "site-sweep";
 
+// Product Experience System: shared loading, action, and state primitives.
+@import "pxs";
+
 // Workspace sweep (task D5): bookings, analytics (+ relocated overview
 // panels), reviews, customers (+ detail), settings — composes the overview
 // partial's ws-* primitives; loads after site-sweep because it reuses its
