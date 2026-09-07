@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { API_BASE_URL } from "../lib/api-base-url";
 import { PhotoUpload, type UploadedPhoto } from "./photo-upload";
+import { CoinLoader } from "../pxs/coin-loader";
 
 export type ManagedPhoto = {
   id: string;
@@ -102,7 +103,7 @@ export function BusinessPhotoManager({
                   onClick={() => makeCover(photo.id)}
                   type="button"
                 >
-                  {copy.makeCover}
+                  {pendingCoverId === photo.id ? <><CoinLoader decorative label={copy.makeCover} size={16} /><span>{copy.makeCover}</span></> : copy.makeCover}
                 </button>
               ) : (
                 <span className="photo-manager__badge photo-manager__badge--pending">{copy.pendingLabel}</span>
