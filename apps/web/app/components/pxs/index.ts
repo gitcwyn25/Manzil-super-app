@@ -29,6 +29,7 @@ export { Dialog, ConfirmDialog, type DialogProps, type ConfirmDialogProps } from
 // Loading & progress
 export { Skeleton, SkeletonText, SkeletonCard, SkeletonGrid, SkeletonRegion } from "./skeleton";
 export { ProgressBar, Spinner, UploadProgress } from "./progress";
+export { CoinLoader, type CoinLoaderProps } from "./coin-loader";
 
 // Process reporting — see the binding rule in ./stage-list
 export { StageList, type StageListProps } from "./stage-list";
