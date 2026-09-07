@@ -6,6 +6,8 @@ import { getUiCopy } from "@manzil/shared";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 import { API_BASE_URL } from "../lib/api-base-url";
+import { getPxsCopy } from "../lib/pxs/copy";
+import { CoinLoader } from "./pxs/coin-loader";
 import { revalidateBusinessProfile } from "../lib/revalidate-actions";
 
 /**
@@ -90,6 +92,7 @@ export function ReviewForm({ businessSlug, locale }: { businessSlug: string; loc
   // that window would be bounced to sign-in for no reason.
   const { getToken, isSignedIn, isLoaded } = useAuth();
   const copy = getUiCopy(locale);
+  const pendingLabel = getPxsCopy(locale).async.pending;
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -256,7 +259,7 @@ export function ReviewForm({ businessSlug, locale }: { businessSlug: string; loc
       </label>
 
       <button className="primary-button" type="submit" disabled={submitting || !isLoaded}>
-        {submitting ? "Yuborilmoqda..." : "Sharhni yuborish"}
+        {submitting ? <><CoinLoader decorative label={pendingLabel} size={18} /><span>{pendingLabel}</span></> : "Sharhni yuborish"}
       </button>
       <p className="form-note" style={{ color: error ? "var(--error)" : "var(--primary)" }} role="status">
         {message}
