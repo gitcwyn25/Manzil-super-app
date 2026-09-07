@@ -740,11 +740,20 @@
 }
 
 // ---------------------------------------------------------------------------
-// /waitlist/[topic] — one white L1 card, planner-style email field
+// /waitlist/[topic] — centered, planner-style capture card
 // ---------------------------------------------------------------------------
 
+.wl-page {
+  display: grid;
+  min-height: min(860px, calc(100svh - 92px));
+  place-items: center;
+  padding: clamp(2rem, 7vw, 6.5rem) 20px;
+}
+
 .wl-page .wl-copy {
-  padding: clamp(1.5rem, 4vw, 2.75rem);
+  width: min(100%, 760px);
+  margin: 0 auto;
+  padding: clamp(1.5rem, 4vw, 3rem);
   border: 1px solid rgba($vm-outline-variant, .5);
   border-radius: $card-border-radius;
   background: $vm-surface-container-lowest;
@@ -752,34 +761,86 @@
 }
 
 .wl-page .wl-copy h1 {
-  font-size: clamp(1.75rem, 3.8vw, 2.5rem);
+  max-width: 640px;
+  margin: 0 auto;
+  font-size: clamp(1.75rem, 3.8vw, 2.75rem);
   font-weight: 800;
-  letter-spacing: -.02em;
+  letter-spacing: -.03em;
+  line-height: 1.08;
+  text-align: center;
 }
 
-// Inputs keep the 8px control radius (cards-only 12px stays on the card).
+.wl-page .wl-lead {
+  max-width: 600px;
+  margin: 1rem auto 0;
+  color: $vm-on-surface-variant;
+  text-align: center;
+}
+
+.wl-page .wl-count {
+  margin: 1rem auto 0;
+  letter-spacing: .02em;
+  font-weight: 600;
+  text-align: center;
+}
+
+.wl-page .wl-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: clamp(1.75rem, 4vw, 2.5rem) auto 0;
+  text-align: left;
+}
+
+.wl-page .wl-field { min-width: 0; }
+.wl-page .wl-field--full { grid-column: 1 / -1; }
+
+.wl-page .wl-field > span,
+.wl-page .wl-choice-group legend {
+  color: $vm-on-surface;
+  font-size: .875rem;
+  font-weight: 700;
+}
+
 .wl-page .wl-field input,
 .wl-page .wl-field select {
+  min-height: 3.25rem;
   border-radius: $border-radius;
   background: $vm-surface-container-lowest;
 }
 
-.wl-page .wl-field > span {
-  color: $vm-on-surface;
-  font-size: .875rem;
-  font-weight: 600;
+.wl-page .wl-choice-group { margin: 0; padding: 0; border: 0; }
+.wl-page .wl-choice-group legend { margin-bottom: .75rem; }
+.wl-page .wl-choice-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; }
+.wl-page .wl-choice {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  min-height: 3.1rem;
+  margin: 0;
+  padding: .7rem .85rem;
+  border: 1px solid rgba($vm-outline-variant, .65);
+  border-radius: $border-radius;
+  background: $vm-surface-container-lowest;
+  cursor: pointer;
+  transition: border-color .2s ease, background .2s ease, transform .2s ease;
+}
+.wl-page .wl-choice:hover,
+.wl-page .wl-choice:has(input:checked) { border-color: $primary; background: rgba($primary, .06); }
+.wl-page .wl-choice input { width: 1rem; min-height: 1rem; flex: 0 0 auto; }
+.wl-page .wl-choice span { margin: 0; color: $vm-on-surface; font-size: .9rem; font-weight: 500; letter-spacing: 0; text-transform: none; }
+.wl-page .wl-error,
+.wl-page .wl-done { text-align: center; }
+.wl-page .wl-submit { @include vm-primary-cta-paint; justify-self: center; min-width: min(100%, 280px); min-height: 3.25rem; }
+
+@media (max-width: 640px) {
+  .wl-page { min-height: auto; padding: 2rem 16px 4rem; }
+  .wl-page .wl-copy { padding: 1.25rem; }
+  .wl-page .wl-form,
+  .wl-page .wl-choice-grid { grid-template-columns: 1fr; }
+  .wl-page .wl-field--full { grid-column: auto; }
 }
 
-.wl-page .wl-submit {
-  @include vm-primary-cta-paint;
-}
-
-.wl-page .wl-count {
-  letter-spacing: .02em;
-  font-weight: 600;
-}
-
-// ---------------------------------------------------------------------------
 // Reduced motion: every lift/zoom this partial introduces lands on its final
 // state instantly (the shadows alone keep the hover affordance).
 // ---------------------------------------------------------------------------
