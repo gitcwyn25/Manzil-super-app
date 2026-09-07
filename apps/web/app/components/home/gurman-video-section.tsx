@@ -45,7 +45,7 @@ export function GurmanVideoSection({
             playsInline
             preload="metadata"
           >
-            <source src="/media/gurman/gurman-how-it-works.mp4" type="video/mp4" />
+            <source src="/media/gurman/gurman-how-it-works-exact.mp4" type="video/mp4" />
           </video>
         </Reveal>
       </div>
