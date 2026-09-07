@@ -18,6 +18,12 @@ export type WaitlistCopy = {
   successBody: (position: number) => string;
   countLabel: (count: number) => string;
   errorGeneric: string;
+  firstNameLabel?: string;
+  lastNameLabel?: string;
+  heardAboutLabel?: string;
+  heardAboutOptions?: Array<{ value: string; label: string }>;
+  featureInterestLabel?: string;
+  featureInterestOptions?: Array<{ value: string; label: string }>;
 };
 
 const CITY_OPTIONS = ["Samarqand", "Buxoro", "Namangan", "Andijon", "Farg'ona", "Nukus", "Qarshi"];
@@ -70,6 +76,24 @@ const COPY: Record<WaitlistTopic, Record<string, WaitlistCopy>> = {
       title: "Gurman mobil ilovasi tayyorlanmoqda",
       lead: "Gurman sizga mahalliy reja tuzishda yordam beradi. Ilova ishga tushganda birinchi bo'lib xabar olish uchun emailingizni qoldiring.",
       emailLabel: "Email",
+      firstNameLabel: "Ism",
+      lastNameLabel: "Familiya",
+      heardAboutLabel: "Manzil haqida qayerdan bildingiz?",
+      heardAboutOptions: [
+        { value: "friend", label: "Do'stim tavsiya qildi" },
+        { value: "instagram", label: "Instagram yoki TikTok" },
+        { value: "telegram", label: "Telegram" },
+        { value: "search", label: "Google yoki qidiruv" },
+        { value: "other", label: "Boshqa" }
+      ],
+      featureInterestLabel: "Qaysi imkoniyat sizni qiziqtiradi?",
+      featureInterestOptions: [
+        { value: "discover", label: "Yangi joylarni kashf etish" },
+        { value: "planning", label: "Kundalik reja tuzish" },
+        { value: "recommendations", label: "Shaxsiy tavsiyalar" },
+        { value: "bookings", label: "Buyurtma va bron qilish" },
+        { value: "all", label: "Barchasi" }
+      ],
       submit: "Gurman yangiliklariga yozilish",
       successTitle: "Ro'yxatdasiz",
       successBody: (position) => `Siz ${position}-o'rindasiz. Ilova tayyor bo'lganda xabar beramiz.`,
@@ -80,6 +104,24 @@ const COPY: Record<WaitlistTopic, Record<string, WaitlistCopy>> = {
       title: "Мобильное приложение Gurman готовится",
       lead: "Gurman поможет планировать местные впечатления. Оставьте email, чтобы первым узнать о запуске приложения.",
       emailLabel: "Email",
+      firstNameLabel: "Имя",
+      lastNameLabel: "Фамилия",
+      heardAboutLabel: "Как вы узнали о Manzil?",
+      heardAboutOptions: [
+        { value: "friend", label: "Посоветовал друг" },
+        { value: "instagram", label: "Instagram или TikTok" },
+        { value: "telegram", label: "Telegram" },
+        { value: "search", label: "Google или поиск" },
+        { value: "other", label: "Другое" }
+      ],
+      featureInterestLabel: "Какая возможность вам интересна?",
+      featureInterestOptions: [
+        { value: "discover", label: "Находить новые места" },
+        { value: "planning", label: "Составлять планы на день" },
+        { value: "recommendations", label: "Персональные рекомендации" },
+        { value: "bookings", label: "Заказы и бронирования" },
+        { value: "all", label: "Всё сразу" }
+      ],
       submit: "Получать новости Gurman",
       successTitle: "Вы в списке",
       successBody: (position) => `Вы ${position}-й в списке. Мы напишем, когда приложение будет готово.`,
@@ -90,6 +132,24 @@ const COPY: Record<WaitlistTopic, Record<string, WaitlistCopy>> = {
       title: "Gurman mobile is being built",
       lead: "Gurman will help people plan local experiences. Leave your email to hear first when the app is ready.",
       emailLabel: "Email",
+      firstNameLabel: "Name",
+      lastNameLabel: "Surname",
+      heardAboutLabel: "How did you hear about Manzil?",
+      heardAboutOptions: [
+        { value: "friend", label: "A friend recommended it" },
+        { value: "instagram", label: "Instagram or TikTok" },
+        { value: "telegram", label: "Telegram" },
+        { value: "search", label: "Google or search" },
+        { value: "other", label: "Other" }
+      ],
+      featureInterestLabel: "What feature are you interested in?",
+      featureInterestOptions: [
+        { value: "discover", label: "Discovering new places" },
+        { value: "planning", label: "Planning everyday experiences" },
+        { value: "recommendations", label: "Personal recommendations" },
+        { value: "bookings", label: "Bookings and orders" },
+        { value: "all", label: "Everything" }
+      ],
       submit: "Join Gurman updates",
       successTitle: "You're on the list",
       successBody: (position) => `You're number ${position}. We'll write when the app is ready.`,
