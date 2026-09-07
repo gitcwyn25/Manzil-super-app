@@ -1,4 +1,5 @@
 import { formatBytes } from "../../lib/pxs/copy";
+import { CoinLoader } from "./coin-loader";
 import type { PxsIntent } from "../../lib/pxs/types";
 
 /**
@@ -90,12 +91,11 @@ export function Spinner({
   decorative?: boolean;
 }) {
   return (
-    <span
-      aria-hidden={decorative ? true : undefined}
-      aria-label={decorative ? undefined : label}
+    <CoinLoader
       className={`pxs-spinner${className ? ` ${className}` : ""}`}
-      role={decorative ? undefined : "status"}
-      style={{ width: size, height: size }}
+      decorative={decorative}
+      label={label}
+      size={size}
     />
   );
 }
