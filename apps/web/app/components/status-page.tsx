@@ -1,5 +1,6 @@
 import { defaultLocale, type Locale } from "@manzil/shared";
 import Link from "next/link";
+import { StatePanel } from "./pxs/state-panel";
 
 /**
  * Shared layout for the 404 and 500 pages.
@@ -69,19 +70,23 @@ export function StatusPage({
   action?: React.ReactNode;
 }) {
   return (
-    <main className="section-block container" style={{ textAlign: "center", paddingBlock: "6rem" }}>
+    <main className="section-block container pxs-status-page">
       <p className="section-kicker" style={{ letterSpacing: "0.18em" }}>
         {copy.code}
       </p>
-      <h1 className="display-4" style={{ marginBottom: "0.75rem" }}>
-        {copy.title}
-      </h1>
-      <p style={{ margin: "0 auto 2rem", maxWidth: "46ch" }}>{copy.body}</p>
-      {action ?? (
-        <Link className="btn btn-primary vm-cta" href={`/${locale}`}>
-          {copy.action}
-        </Link>
-      )}
+      <StatePanel
+        actions={
+          action ?? (
+            <Link className="btn btn-primary vm-cta" href={`/${locale}`}>
+              {copy.action}
+            </Link>
+          )
+        }
+        body={copy.body}
+        intent={copy.code === "500" ? "danger" : "neutral"}
+        title={copy.title}
+        variant="inline"
+      />
     </main>
   );
 }
