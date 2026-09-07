@@ -9,6 +9,10 @@ export type WaitlistJoinInput = {
   locale: string;
   city: string | null;
   businessName: string | null;
+  firstName: string | null;
+  lastName: string | null;
+  heardAbout: string | null;
+  featureInterest: string | null;
   source: string | null;
 };
 
@@ -16,18 +20,17 @@ export type WaitlistJoinInput = {
 export class WaitlistRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  /**
-   * Idempotent by (topic, email): re-submitting returns the existing entry
-   * rather than creating a second one, so a double-click cannot push someone
-   * behind themselves.
-   */
   async join(input: WaitlistJoinInput): Promise<{ position: number }> {
     const signup = await this.prisma.waitlistSignup.upsert({
       where: { topic_email: { topic: input.topic, email: input.email } },
       update: {
         locale: input.locale,
         city: input.city,
-        businessName: input.businessName
+        businessName: input.businessName,
+        firstName: input.firstName,
+        lastName: input.lastName,
+        heardAbout: input.heardAbout,
+        featureInterest: input.featureInterest
       },
       create: {
         topic: input.topic,
@@ -35,6 +38,10 @@ export class WaitlistRepository {
         locale: input.locale,
         city: input.city,
         businessName: input.businessName,
+        firstName: input.firstName,
+        lastName: input.lastName,
+        heardAbout: input.heardAbout,
+        featureInterest: input.featureInterest,
         source: input.source
       }
     });
