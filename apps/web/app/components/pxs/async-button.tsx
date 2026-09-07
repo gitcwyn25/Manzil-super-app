@@ -78,7 +78,7 @@ export function AsyncButton({
     >
       {pending ? (
         <>
-          <Spinner label={pendingLabel ?? copy.async.pending} size={16} />
+          <Spinner decorative label={pendingLabel ?? copy.async.pending} size={16} />
           {pendingLabel ?? copy.async.pending}
         </>
       ) : (
@@ -138,7 +138,7 @@ export function FormSubmitButton({
     >
       {pending ? (
         <>
-          <Spinner label={pendingLabel} size={16} />
+          <Spinner decorative label={pendingLabel} size={16} />
           {pendingLabel}
         </>
       ) : (
