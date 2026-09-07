@@ -980,6 +980,11 @@ model WaitlistSignup {
   /// Only set for topic=pro, and only when the signup came from an owner who
   /// already has a business.
   businessName String?
+  /// Gurman profile and discovery research fields. Optional for legacy rows and non-Gurman topics; required by the Gurman form/API.
+  firstName String?
+  lastName String?
+  heardAbout String?
+  featureInterest String?
   /// Which page the signup came from, for attribution.
   source       String?
   createdAt    DateTime      @default(now())
