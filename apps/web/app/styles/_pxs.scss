@@ -1,0 +1,142 @@
+// Product Experience System: shared feedback primitives.
+// Keep these styles local to PXS so loading and empty states remain consistent.
+
+.pxs-coin-loader {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 2px solid color-mix(in srgb, var(--vm-primary-container) 78%, white);
+  border-radius: 50%;
+  background: linear-gradient(145deg, var(--vm-primary-container), var(--vm-inverse-primary));
+  color: var(--vm-on-primary-container);
+  box-shadow: 0 2px 8px rgba(11, 74, 118, .22), inset 0 1px 0 rgba(255, 255, 255, .38);
+  perspective: 120px;
+  transform-style: preserve-3d;
+  animation: pxs-coin-flip .9s cubic-bezier(.37, 0, .2, 1) infinite;
+}
+
+.pxs-coin-loader__face {
+  display: block;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 800;
+  line-height: 1;
+  transform: translateZ(1px);
+}
+
+@keyframes pxs-coin-flip {
+  0%,
+  100% {
+    transform: rotateY(0deg) translateY(0);
+  }
+
+  45% {
+    transform: rotateY(180deg) translateY(-1px);
+  }
+
+  70% {
+    transform: rotateY(270deg) translateY(0);
+  }
+}
+
+.pxs-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  min-height: 2.75rem;
+  padding: .7rem 1rem;
+  border: 1px solid transparent;
+  border-radius: .75rem;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity .18s ease, transform .18s ease, box-shadow .18s ease;
+}
+
+.pxs-btn--solid {
+  background: linear-gradient(180deg, var(--vm-primary-container), var(--vm-inverse-primary));
+  color: var(--vm-on-primary-container);
+  box-shadow: 0 5px 14px rgba(11, 74, 118, .16);
+}
+
+.pxs-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.pxs-btn:disabled {
+  cursor: wait;
+  opacity: .72;
+}
+
+.pxs-state {
+  display: grid;
+  justify-items: center;
+  gap: .65rem;
+  width: 100%;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border: 1px solid var(--vm-outline-variant);
+  border-radius: 1rem;
+  background: var(--vm-surface-container-lowest);
+  color: var(--vm-on-surface);
+  text-align: center;
+}
+
+.pxs-state--inline {
+  border: 0;
+  background: transparent;
+}
+
+.pxs-state__icon {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: var(--vm-surface-container);
+  color: var(--vm-primary-container);
+}
+
+.pxs-state__title {
+  margin: 0;
+  color: inherit;
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  font-weight: 750;
+}
+
+.pxs-state__body {
+  max-width: 46ch;
+  margin: 0;
+  color: var(--vm-on-surface-variant);
+}
+
+.pxs-state__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .65rem;
+  margin-top: .35rem;
+}
+
+.pxs-state--danger .pxs-state__icon {
+  background: color-mix(in srgb, var(--bs-danger) 12%, transparent);
+  color: var(--bs-danger);
+}
+
+.pxs-state--success .pxs-state__icon {
+  background: color-mix(in srgb, var(--bs-success) 14%, transparent);
+  color: var(--bs-success);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pxs-coin-loader {
+    animation: none;
+  }
+
+  .pxs-btn {
+    transition: none;
+  }
+
+  .pxs-btn:hover:not(:disabled) {
+    transform: none;
+  }
+}
