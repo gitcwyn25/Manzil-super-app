@@ -3,9 +3,12 @@
 import type { Locale } from "@manzil/shared";
 import { useState } from "react";
 import { WAITLIST_CITIES, getWaitlistCopy, type WaitlistTopic } from "../../lib/waitlist-copy";
+import { getPxsCopy } from "../../lib/pxs/copy";
+import { CoinLoader } from "../pxs/coin-loader";
 
 export function WaitlistForm({ topic, locale }: { topic: WaitlistTopic; locale: Locale }) {
   const copy = getWaitlistCopy(topic, locale);
+  const pendingLabel = getPxsCopy(locale).async.saving;
   const [state, setState] = useState<"idle" | "sending" | "done">("idle");
   const [position, setPosition] = useState(0);
   const [error, setError] = useState("");
@@ -62,7 +65,7 @@ export function WaitlistForm({ topic, locale }: { topic: WaitlistTopic; locale: 
         <fieldset className="wl-field wl-choice-group wl-field--full"><legend>{copy.featureInterestLabel}</legend><div className="wl-choice-grid">{copy.featureInterestOptions.map((option) => <label className="wl-choice" key={option.value}><input name="featureInterest" required type="radio" value={option.value} /><span>{option.label}</span></label>)}</div></fieldset>
       </> : null}
       {error ? <p className="wl-error wl-field--full" role="alert">{error}</p> : null}
-      <button className="wl-submit wl-field--full" disabled={state === "sending"} type="submit">{state === "sending" ? "…" : copy.submit}</button>
+      <button className="wl-submit wl-field--full" disabled={state === "sending"} type="submit">{state === "sending" ? <><CoinLoader decorative label={pendingLabel} size={18} /><span>{pendingLabel}</span></> : copy.submit}</button>
     </form>
   );
 }
