@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { API_BASE_URL } from "../../../lib/api-base-url";
-import { fetchWithTimeout } from "../../../lib/fetch-with-timeout";
+import { API_BASE_URL } from "../../lib/api-base-url";
+import { fetchWithTimeout } from "../../lib/fetch-with-timeout";
 
 export const dynamic = "force-dynamic";
 
