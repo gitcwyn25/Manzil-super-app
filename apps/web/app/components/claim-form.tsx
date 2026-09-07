@@ -4,6 +4,8 @@ import { useAuth } from "@clerk/nextjs";
 import type { Locale } from "@manzil/shared";
 import { type FormEvent, useState } from "react";
 import { API_BASE_URL } from "../lib/api-base-url";
+import { getPxsCopy } from "../lib/pxs/copy";
+import { CoinLoader } from "./pxs/coin-loader";
 
 export function ClaimForm({
   businessName,
@@ -18,6 +20,7 @@ export function ClaimForm({
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const pendingLabel = getPxsCopy(locale).async.pending;
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -87,7 +90,7 @@ export function ClaimForm({
         <input name="phone" type="tel" placeholder="+998 90 000 00 00" />
       </label>
       <button className="gold-button" type="submit" disabled={submitting}>
-        {submitting ? "Yuborilmoqda..." : "Claim so'rovini boshlash"}
+        {submitting ? <><CoinLoader decorative label={pendingLabel} size={18} /><span>{pendingLabel}</span></> : "Claim so'rovini boshlash"}
       </button>
       <p className="form-note" style={{ color: error ? "var(--error)" : "var(--primary)" }} role="status">
         {message}
