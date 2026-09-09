@@ -5,6 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { CategoryStrip, MARKETPLACE_CATEGORIES } from "./category-strip";
 import { CuratedSections } from "./curated-sections";
+import { DealsOfTheDay } from "./deals-of-the-day";
 import { DiscoverHero } from "./discover-hero";
 import { ExploreTashkentCompact } from "./explore-tashkent-compact";
 import { MarketplaceCard } from "./marketplace-card";
@@ -333,7 +334,10 @@ export function MarketplaceClient({
 
       {/* 3. Curated Sections: Best of Tashkent & Weekend Highlights (Shows on default view) */}
       {!searchQuery && filters.category === "all" && filters.district === "all" && (
-        <CuratedSections businesses={initialBusinesses} locale={locale} />
+        <>
+          <CuratedSections businesses={initialBusinesses} locale={locale} />
+          <DealsOfTheDay businesses={initialBusinesses} locale={locale} />
+        </>
       )}
 
       {/* 4. Main Marketplace Results Area with Filter Sidebar */}
