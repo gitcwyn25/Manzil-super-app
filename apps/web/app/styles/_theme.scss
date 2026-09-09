@@ -455,3 +455,44 @@
   background: rgba(255, 255, 255, .82);
   color: #23425f;
 }
+
+
+/* Deals of the day — Day theme */
+[data-theme="day"] .deals-of-the-day__title,
+[data-theme="day"] .offer-carousel__title,
+[data-theme="day"] .offer-carousel__brand-name {
+  color: #102426;
+}
+
+[data-theme="day"] .deals-of-the-day__tagline,
+[data-theme="day"] .offer-carousel__tag,
+[data-theme="day"] .offer-carousel__description,
+[data-theme="day"] .offer-carousel__promo-code {
+  color: #54706d;
+}
+
+[data-theme="day"] .offer-carousel__card,
+[data-theme="day"] .offer-carousel__body {
+  background: #ffffff;
+  border-color: #d2e1de;
+  box-shadow: 0 12px 30px rgb(28 74 70 / 0.08);
+}
+
+[data-theme="day"] .offer-carousel__footer {
+  border-top-color: #e0ebe8;
+}
+
+[data-theme="day"] .offer-carousel__arrow {
+  background: #e7f4f0;
+  color: #087f75;
+}
+
+[data-theme="day"] .offer-carousel__control {
+  background: rgb(255 255 255 / 0.9);
+  border-color: #cbded9;
+  color: #102426;
+}
+
+[data-theme="day"] .offer-carousel__control:hover {
+  background: #ffffff;
+}
