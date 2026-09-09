@@ -10,6 +10,7 @@ import { ExploreTashkentCompact } from "./explore-tashkent-compact";
 import { MarketplaceCard } from "./marketplace-card";
 import { MarketplaceFilterSidebar, type FilterState, TASHKENT_DISTRICTS } from "./marketplace-filter-sidebar";
 import { MarketplaceMobileFilterDrawer } from "./marketplace-mobile-filter-drawer";
+import { DotPattern } from "../../../components/ui/dot-pattern";
 import { MarketplaceEmptyState } from "./marketplace-states";
 
 function isOpenNow(hours: string | null | undefined): boolean | null {
@@ -302,7 +303,18 @@ export function MarketplaceClient({
 
   return (
     <div className="discover-marketplace-root">
-      {/* 1. Compact Discovery Hero */}
+      <DotPattern
+        className="discover-dot-pattern"
+        width={24}
+        height={24}
+        x={1}
+        y={1}
+        cx={1}
+        cy={1}
+        cr={0.9}
+      />
+      <div className="discover-marketplace-content">
+        {/* 1. Compact Discovery Hero */}
       <DiscoverHero
         activeQuickChip={activeQuickChip}
         locale={locale}
@@ -502,6 +514,7 @@ export function MarketplaceClient({
         onResetFilters={handleResetFilters}
         totalCount={totalCount}
       />
+      </div>
     </div>
   );
 }
