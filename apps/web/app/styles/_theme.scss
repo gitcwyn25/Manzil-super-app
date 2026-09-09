@@ -23,6 +23,11 @@
   color: #102426;
 }
 
+[data-theme="day"] .discover-dot-pattern {
+  fill: rgba(0, 112, 107, 0.16);
+  opacity: 0.6;
+}
+
 [data-theme="day"] .discover-hero {
   background: radial-gradient(circle at 50% -20%, rgb(21 174 154 / 0.12) 0%, rgb(243 247 246 / 0) 70%), linear-gradient(180deg, rgb(231 244 240 / 0.9) 0%, #f3f7f6 100%);
   border-bottom-color: #d6e5e1;
