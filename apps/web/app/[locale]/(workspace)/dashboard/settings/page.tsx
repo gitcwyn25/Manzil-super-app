@@ -14,7 +14,7 @@ export const dynamic = "force-dynamic";
 
 /**
  * Settings (Vibrant Marketplace, task D5): PageHeaderCard + the IconField
- * recipe applied to the existing profile form. Zero behavior change — every
+ * recipe applied to the existing profile form. Zero behavior change - every
  * input keeps its name, type, defaultValue and validation attributes, the
  * photo manager and legal sections keep their markup (incl. the
  * .crm-terms-doc/.crm-contract-body classes the contract viewer styles).
@@ -36,7 +36,7 @@ export default async function SettingsPage({
   const subscription = subscriptionData?.subscription;
 
   // Both return null when absent (no contract generated, or the endpoint
-  // failed) — the section renders its own empty state rather than erroring.
+  // failed) - the section renders its own empty state rather than erroring.
   const [contract, acceptances, photosData] = await Promise.all([
     getBusinessContract(business.slug),
     getBusinessAcceptances(business.slug),
@@ -201,7 +201,7 @@ export default async function SettingsPage({
                 </div>
               </dl>
 
-              {/* The stored, frozen text — not a re-render of the current
+              {/* The stored, frozen text - not a re-render of the current
                   template, which may have changed since this was agreed. */}
               <details className="crm-terms-doc">
                 <summary>{copy.terms.download}</summary>
