@@ -11,7 +11,6 @@ const HERO_COPY: Record<
     searchPlaceholder: string;
     locationLabel: string;
     searchBtn: string;
-    chips: { key: string; label: string; icon: string }[];
   }
 > = {
   uz: {
@@ -19,42 +18,21 @@ const HERO_COPY: Record<
     subtitle: "Tasdiqlangan restoranlar, sifatli xizmatlar, go'zallik salonlari va unutilmas tajribalar.",
     searchPlaceholder: "Restoran, kafe, go'zallik saloni, avtoservis yoki xizmat qidiring…",
     locationLabel: "Toshkent shahri",
-    searchBtn: "Qidirish",
-    chips: [
-      { key: "top_rated", label: "Yuqori baholangan", icon: "⭐" },
-      { key: "open_now", label: "Hozir ochiq", icon: "🟢" },
-      { key: "verified", label: "Profil egasi tasdiqlagan", icon: "🛡️" },
-      { key: "deals", label: "Aksiyalar & Takliflar", icon: "⚡" },
-      { key: "new", label: "Yangi maskanlar", icon: "✨" }
-    ]
+    searchBtn: "Qidirish"
   },
   ru: {
     headline: "Найдите лучшее место в Ташкенте",
     subtitle: "Проверенные рестораны, надежные сервисы, салоны красоты и яркие впечатления.",
     searchPlaceholder: "Поиск ресторанов, кафе, салонов красоты, автосервисов…",
     locationLabel: "Ташкент",
-    searchBtn: "Найти",
-    chips: [
-      { key: "top_rated", label: "Высокий рейтинг", icon: "⭐" },
-      { key: "open_now", label: "Открыто сейчас", icon: "🟢" },
-      { key: "verified", label: "Профиль подтверждён владельцем", icon: "🛡️" },
-      { key: "deals", label: "Спецпредложения", icon: "⚡" },
-      { key: "new", label: "Новые места", icon: "✨" }
-    ]
+    searchBtn: "Найти"
   },
   en: {
     headline: "Find your next place in Tashkent",
     subtitle: "Verified restaurants, services, salons, experiences, and local gems.",
     searchPlaceholder: "Search restaurants, salons, repairs, events, cafes…",
     locationLabel: "Tashkent",
-    searchBtn: "Search",
-    chips: [
-      { key: "top_rated", label: "Top Rated", icon: "⭐" },
-      { key: "open_now", label: "Open Now", icon: "🟢" },
-      { key: "verified", label: "Claimed profiles", icon: "🛡️" },
-      { key: "deals", label: "Deals & Offers", icon: "⚡" },
-      { key: "new", label: "New Places", icon: "✨" }
-    ]
+    searchBtn: "Search"
   }
 };
 
@@ -62,16 +40,12 @@ export function DiscoverHero({
   locale,
   searchQuery,
   onSearchChange,
-  onSearchSubmit,
-  activeQuickChip,
-  onQuickChipToggle
+  onSearchSubmit
 }: {
   locale: Locale;
   searchQuery: string;
   onSearchChange: (q: string) => void;
   onSearchSubmit: (query: string) => void;
-  activeQuickChip: string | null;
-  onQuickChipToggle: (chipKey: string) => void;
 }) {
   const t = HERO_COPY[locale] ?? HERO_COPY.en;
   const [localInput, setLocalInput] = useState(searchQuery);
@@ -166,23 +140,6 @@ export function DiscoverHero({
           </button>
         </form>
 
-        {/* Quick Filter Chips */}
-        <div className="discover-quick-chips" aria-label="Tezkor filtrlar">
-          {t.chips.map((chip) => {
-            const isActive = activeQuickChip === chip.key;
-            return (
-              <button
-                key={chip.key}
-                className={`discover-quick-chip ${isActive ? "is-active" : ""}`}
-                onClick={() => onQuickChipToggle(chip.key)}
-                type="button"
-              >
-                <span className="discover-quick-chip__icon">{chip.icon}</span>
-                <span className="discover-quick-chip__label">{chip.label}</span>
-              </button>
-            );
-          })}
-        </div>
       </div>
     </section>
   );
