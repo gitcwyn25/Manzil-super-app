@@ -84,7 +84,7 @@ const copy = {
       emptyTitle: "Hozircha bandlovlar yo'q",
       emptyBody:
         "Mijoz telefon qilib yoki do'konga kelib navbat olganda, shu yerga yozib qo'ying. Bandlov \"Bajarildi\" deb belgilanganda mijoz avtomatik ravishda Mijozlar ro'yxatiga qo'shiladi va keyin sharh qoldirsa \"tasdiqlangan tashrif\" belgisini oladi.",
-      noEndsAt: "—"
+      noEndsAt: "-"
     },
     announcements: {
       title: "E'lonlar",
@@ -201,15 +201,15 @@ const copy = {
       submit: "Ro'yxatdan o'tkazish",
       submitting: "Yuborilmoqda…",
       failedTitle: "Ro'yxatdan o'tkazib bo'lmadi",
-      failedBody: "Ma'lumotlar saqlanmadi. Qaytadan urinib ko'ring — takroriy biznes yaratilmaydi.",
+      failedBody: "Ma'lumotlar saqlanmadi. Qaytadan urinib ko'ring - takroriy biznes yaratilmaydi.",
       retry: "Qaytadan urinish",
       signInFirst: "Avval tizimga kiring",
       signInText: "Biznesni ro'yxatdan o'tkazish uchun hisob talab qilinadi.",
       signIn: "Kirish",
-      brandWordmark: "Manzil — biznes uchun",
+      brandWordmark: "Manzil - biznes uchun",
       brandTagline: "Mahalliy biznesingizni rivojlantiring.",
       brandSubline:
-        "Manzil'da profil oching — mijozlar sizni topadi, sharh qoldiradi va siz bilan bog'lanadi.",
+        "Manzil'da profil oching - mijozlar sizni topadi, sharh qoldiradi va siz bilan bog'lanadi.",
       mobileKicker: "Hamkorlar portalida ro'yxatdan o'tish",
       namePlaceholder: "Masalan: Chinor Kafe",
       categoryPlaceholder: "Kategoriyani tanlang",
@@ -322,7 +322,7 @@ const copy = {
       signIn: "Kirish",
       kicker: "Admin konsoli",
       title: "Platforma boshqaruv markazi",
-      subtitle: "Kompaniyalar navbati, kontent moderatsiyasi va bildirishnomalar — barchasi shu yerda.",
+      subtitle: "Kompaniyalar navbati, kontent moderatsiyasi va bildirishnomalar - barchasi shu yerda.",
       statBusinesses: "Database listinglari",
       statPendingClaims: "Pending claimlar",
       statReviews: "Sharhlar",
@@ -530,7 +530,7 @@ const copy = {
         colPublished: "Chop etilgan",
         colAcceptances: "Qabullar",
         publishTitle: "Yangi versiya chop etish",
-        publishHint: "Qabul qilishlar aniq versiyaga bog'lanadi — mavjud matn tahrirlanmaydi, faqat yangi versiya chop etiladi.",
+        publishHint: "Qabul qilishlar aniq versiyaga bog'lanadi - mavjud matn tahrirlanmaydi, faqat yangi versiya chop etiladi.",
         publishKind: "Hujjat turi",
         publishVersion: "Versiya",
         publishLocale: "Til",
@@ -576,7 +576,7 @@ const copy = {
         kindReviewReported: "Sharhga shikoyat qilindi",
         kindPhotoPending: "Rasm ko'rib chiqilishi kerak",
         kindContractPending: "Shartnoma chop etilishi kerak",
-        noBusinessLink: "—"
+        noBusinessLink: "-"
       },
       loginPage: {
         title: "Admin konsoliga kirish",
@@ -610,7 +610,7 @@ const copy = {
         prevPage: "Oldingi",
         nextPage: "Keyingi",
         totalRowsLabel: "Jami",
-        truncatedNotice: "Hajm katta bo'lgani uchun hisoblash to'liq emas — bu pastki chegara.",
+        truncatedNotice: "Hajm katta bo'lgani uchun hisoblash to'liq emas - bu pastki chegara.",
         redactedNotice: "Maxfiy ustunlar (parol, email, telefon va h.k.) niqoblangan."
       }
     }
@@ -698,7 +698,7 @@ const copy = {
       emptyTitle: "Пока нет броней",
       emptyBody:
         "Записывайте сюда брони, когда клиент звонит или приходит лично. Когда бронь отмечена «Выполнена», клиент автоматически появляется в списке клиентов, а после отзыва получает отметку «подтверждённый визит».",
-      noEndsAt: "—"
+      noEndsAt: "-"
     },
     announcements: {
       title: "Объявления",
@@ -815,7 +815,7 @@ const copy = {
       submit: "Зарегистрировать",
       submitting: "Отправляем…",
       failedTitle: "Не удалось зарегистрировать",
-      failedBody: "Данные не сохранены. Попробуйте ещё раз — дубликат бизнеса не создастся.",
+      failedBody: "Данные не сохранены. Попробуйте ещё раз - дубликат бизнеса не создастся.",
       retry: "Повторить",
       signInFirst: "Сначала войдите",
       signInText: "Для регистрации бизнеса требуется аккаунт.",
@@ -823,7 +823,7 @@ const copy = {
       brandWordmark: "Manzil для бизнеса",
       brandTagline: "Развивайте свой локальный бизнес.",
       brandSubline:
-        "Создайте профиль в Manzil — клиенты найдут вас, оставят отзывы и свяжутся с вами.",
+        "Создайте профиль в Manzil - клиенты найдут вас, оставят отзывы и свяжутся с вами.",
       mobileKicker: "Регистрация в портале для партнёров",
       namePlaceholder: "Например: Chinor Kafe",
       categoryPlaceholder: "Выберите категорию",
@@ -936,7 +936,7 @@ const copy = {
       signIn: "Войти",
       kicker: "Админ-консоль",
       title: "Центр управления платформой",
-      subtitle: "Очередь компаний, модерация контента и уведомления — всё в одном месте.",
+      subtitle: "Очередь компаний, модерация контента и уведомления - всё в одном месте.",
       statBusinesses: "Записи в базе",
       statPendingClaims: "Заявки на рассмотрении",
       statReviews: "Отзывы",
@@ -1144,7 +1144,7 @@ const copy = {
         colPublished: "Опубликован",
         colAcceptances: "Принятий",
         publishTitle: "Опубликовать новую версию",
-        publishHint: "Принятия привязаны к точной версии — текст не редактируется, публикуется только новая версия.",
+        publishHint: "Принятия привязаны к точной версии - текст не редактируется, публикуется только новая версия.",
         publishKind: "Тип документа",
         publishVersion: "Версия",
         publishLocale: "Язык",
@@ -1190,7 +1190,7 @@ const copy = {
         kindReviewReported: "Жалоба на отзыв",
         kindPhotoPending: "Фото требует проверки",
         kindContractPending: "Договор требует публикации",
-        noBusinessLink: "—"
+        noBusinessLink: "-"
       },
       loginPage: {
         title: "Вход в админ-консоль",
@@ -1224,7 +1224,7 @@ const copy = {
         prevPage: "Назад",
         nextPage: "Далее",
         totalRowsLabel: "Всего",
-        truncatedNotice: "Из-за большого объёма подсчёт неполный — это нижняя оценка.",
+        truncatedNotice: "Из-за большого объёма подсчёт неполный - это нижняя оценка.",
         redactedNotice: "Конфиденциальные столбцы (пароль, email, телефон и т.д.) замаскированы."
       }
     }
@@ -1312,7 +1312,7 @@ const copy = {
       emptyTitle: "No bookings yet",
       emptyBody:
         "Record a booking here whenever a customer calls or walks in. Once it's marked \"Completed\", the customer is added to your customer list automatically, and picks up a \"verified visit\" badge if they leave a review.",
-      noEndsAt: "—"
+      noEndsAt: "-"
     },
     announcements: {
       title: "Announcements",
@@ -1429,7 +1429,7 @@ const copy = {
       submit: "Register",
       submitting: "Submitting…",
       failedTitle: "Registration didn't go through",
-      failedBody: "Nothing was saved. Try again — this will not create a duplicate business.",
+      failedBody: "Nothing was saved. Try again - this will not create a duplicate business.",
       retry: "Try again",
       signInFirst: "Sign in first",
       signInText: "An account is required to register a business.",
@@ -1437,7 +1437,7 @@ const copy = {
       brandWordmark: "Manzil for Business",
       brandTagline: "Empower your local business.",
       brandSubline:
-        "Create your Manzil profile — customers find you, leave reviews, and get in touch.",
+        "Create your Manzil profile - customers find you, leave reviews, and get in touch.",
       mobileKicker: "Partner portal registration",
       namePlaceholder: "e.g. Chinor Cafe",
       categoryPlaceholder: "Select a category",
@@ -1550,7 +1550,7 @@ const copy = {
       signIn: "Sign in",
       kicker: "Admin console",
       title: "Platform control center",
-      subtitle: "Company queue, content moderation, and notifications — all in one place.",
+      subtitle: "Company queue, content moderation, and notifications - all in one place.",
       statBusinesses: "Database listings",
       statPendingClaims: "Pending claims",
       statReviews: "Reviews",
@@ -1757,7 +1757,7 @@ const copy = {
         colPublished: "Published",
         colAcceptances: "Acceptances",
         publishTitle: "Publish a new version",
-        publishHint: "Acceptances are bound to an exact version — existing text is never edited, only a new version is published.",
+        publishHint: "Acceptances are bound to an exact version - existing text is never edited, only a new version is published.",
         publishKind: "Document type",
         publishVersion: "Version",
         publishLocale: "Language",
@@ -1803,7 +1803,7 @@ const copy = {
         kindReviewReported: "Review reported",
         kindPhotoPending: "Photo needs review",
         kindContractPending: "Contract needs publishing",
-        noBusinessLink: "—"
+        noBusinessLink: "-"
       },
       loginPage: {
         title: "Sign in to the admin console",
@@ -1837,7 +1837,7 @@ const copy = {
         prevPage: "Previous",
         nextPage: "Next",
         totalRowsLabel: "Total",
-        truncatedNotice: "The count is incomplete because the table is large — this is a lower bound.",
+        truncatedNotice: "The count is incomplete because the table is large - this is a lower bound.",
         redactedNotice: "Sensitive columns (password, email, phone, and so on) are masked."
       }
     }
