@@ -398,19 +398,19 @@ export function BusinessRegisterWizard({
           <div className="bz-wizard-summary">
             <div className="bz-summary-item">
               <span className="bz-summary-lbl">Biznes nomi:</span>
-              <strong className="bz-summary-val">{name || "—"}</strong>
+              <strong className="bz-summary-val">{name || "-"}</strong>
             </div>
             <div className="bz-summary-item">
               <span className="bz-summary-lbl">Turkum:</span>
-              <span className="bz-summary-val">{categorySlug || "—"}</span>
+              <span className="bz-summary-val">{categorySlug || "-"}</span>
             </div>
             <div className="bz-summary-item">
               <span className="bz-summary-lbl">Manzil:</span>
-              <span className="bz-summary-val">{district}, {address || "—"}</span>
+              <span className="bz-summary-val">{district}, {address || "-"}</span>
             </div>
             <div className="bz-summary-item">
               <span className="bz-summary-lbl">Telefon:</span>
-              <span className="bz-summary-val">{phone || "—"}</span>
+              <span className="bz-summary-val">{phone || "-"}</span>
             </div>
           </div>
 
