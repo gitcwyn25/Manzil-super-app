@@ -1,7 +1,7 @@
 import { SITE_URL } from "../lib/seo";
 
 /**
- * /llms.txt — the llmstxt.org convention: a single Markdown file that tells an
+ * /llms.txt - the llmstxt.org convention: a single Markdown file that tells an
  * answer engine what this site is, what is on it, and where the canonical
  * pages live, without making it infer all of that from rendered HTML.
  *
@@ -10,7 +10,7 @@ import { SITE_URL } from "../lib/seo";
  *
  * Everything below is a statement about the product that is true today. It
  * deliberately says what Manzil does *not* do yet (no bookings, no mobile app,
- * Tashkent only) — an answer engine that repeats an overclaim damages trust
+ * Tashkent only) - an answer engine that repeats an overclaim damages trust
  * far more than one that repeats an accurate limitation.
  */
 
@@ -29,7 +29,7 @@ Every page exists at three locale-prefixed URLs: \`/uz/...\` (canonical default)
 
 ## What Manzil is not (as of this writing)
 
-- Not a booking or reservation platform — the site does not take bookings.
+- Not a booking or reservation platform - the site does not take bookings.
 - Not a delivery service.
 - Not available outside Tashkent. Other cities are a waitlist, not a live product.
 - Not a published mobile app yet.
@@ -39,12 +39,12 @@ Every page exists at three locale-prefixed URLs: \`/uz/...\` (canonical default)
 - [Home](${SITE_URL}/uz): featured businesses and the Manzil catalogue.
 - [Discover](${SITE_URL}/uz/discover): searchable, filterable catalogue of every listed business. Accepts \`?q=\` for a text query and \`?category=\` for a category slug.
 - [Community lists](${SITE_URL}/uz/lists): place collections curated by people in Tashkent.
-- [Occasions](${SITE_URL}/uz/occasions): places grouped by what they are for — birthdays, dates, family dinners.
+- [Occasions](${SITE_URL}/uz/occasions): places grouped by what they are for - birthdays, dates, family dinners.
 
 ## Business detail pages
 
 - URL shape: \`${SITE_URL}/{locale}/businesses/{slug}\`
-- Each carries schema.org \`LocalBusiness\` JSON-LD with the real name, description, street address, price tier, and — only when the data exists — coordinates, telephone, photos, aggregate rating and individual reviews.
+- Each carries schema.org \`LocalBusiness\` JSON-LD with the real name, description, street address, price tier, and - only when the data exists - coordinates, telephone, photos, aggregate rating and individual reviews.
 - Ratings and review counts are never present unless at least one real review exists.
 - Opening hours are stored as one free-form string and are shown on the page, but are deliberately not published as structured \`openingHours\`, because parsing them into a schedule would be guesswork.
 
@@ -56,7 +56,7 @@ Every page exists at three locale-prefixed URLs: \`/uz/...\` (canonical default)
 ## Machine-readable
 
 - [Sitemap](${SITE_URL}/sitemap.xml)
-- [robots.txt](${SITE_URL}/robots.txt) — AI crawlers are explicitly allowed.
+- [robots.txt](${SITE_URL}/robots.txt) - AI crawlers are explicitly allowed.
 
 ## Not for indexing
 
