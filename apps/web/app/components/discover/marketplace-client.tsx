@@ -346,7 +346,7 @@ export function MarketplaceClient({
       {/* 3. Editorial poster-led discovery CTA */}
       <DiscoverPosterCarousel locale={locale} />
 
-      {/* 4. Curated Sections: Best of Tashkent & Weekend Highlights (Shows on default view) */
+      {/* 4. Curated Sections: Best of Tashkent & Weekend Highlights (Shows on default view) */}
       {!searchQuery && filters.category === "all" && filters.district === "all" && (
         <>
           <CuratedSections businesses={presentableBusinesses} locale={locale} />
@@ -354,7 +354,7 @@ export function MarketplaceClient({
         </>
       )}
 
-      {/* 5. Main Marketplace Results Area with Filter Sidebar */
+      {/* 5. Main Marketplace Results Area with Filter Sidebar */}
       <section className="mp-results-section container" id="results" aria-label="Natijalar">
         {/* Mobile Sticky Filter / Sort Bar */}
         <div className="mp-mobile-filter-bar">
