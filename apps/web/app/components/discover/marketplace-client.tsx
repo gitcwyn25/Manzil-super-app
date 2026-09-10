@@ -3,7 +3,11 @@
 import type { BusinessPlatform, Category, Locale } from "@manzil/shared";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
-import { CategoryStrip, MARKETPLACE_CATEGORIES } from "./category-strip";
+import {
+  CategoryStrip,
+  MARKETPLACE_CATEGORIES,
+  MARKETPLACE_PARENT_CATEGORY_SLUGS
+} from "./category-strip";
 import { CuratedSections } from "./curated-sections";
 import { DealsOfTheDay } from "./deals-of-the-day";
 import { DiscoverHero } from "./discover-hero";
@@ -192,6 +196,10 @@ export function MarketplaceClient({
         }
         if (filters.category === "auto") {
           return b.categorySlug === "auto" || b.name.toLowerCase().includes("moyka") || b.name.toLowerCase().includes("avto");
+        }
+        const parentCategorySlugs = MARKETPLACE_PARENT_CATEGORY_SLUGS[filters.category];
+        if (parentCategorySlugs) {
+          return parentCategorySlugs.includes(b.categorySlug || "");
         }
         return b.categorySlug === filters.category;
       });
