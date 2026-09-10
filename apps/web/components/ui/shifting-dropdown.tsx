@@ -20,6 +20,7 @@ export interface ShiftingDropDownGroup {
   description?: Record<Locale, string>;
   icon: ReactNode;
   accent: string;
+  rootSlug?: string;
   categories: ShiftingDropDownCategory[];
 }
 
@@ -117,7 +118,7 @@ function Tabs({
 
       {groups.map((group) => {
         const isOpen = selected === group.id;
-        const isActive = group.categories.some((category) => category.slug === selectedCategory);
+        const isActive = selectedCategory === group.rootSlug || group.categories.some((category) => category.slug === selectedCategory);
 
         return (
           <button
@@ -246,6 +247,27 @@ function DropdownContent({
             {groupDescription ? <p>{groupDescription}</p> : null}
           </div>
         </div>
+
+        {group.rootSlug ? (
+          <button
+            className="category-menu__group-link"
+            onClick={() => {
+              onSelectCategory(group.rootSlug as string);
+              onClose();
+            }}
+            role="menuitem"
+            type="button"
+          >
+            <span>
+              {locale === "uz"
+                ? groupLabel + " bo'yicha barcha joylar"
+                : locale === "ru"
+                ? "Все места: " + groupLabel
+                : "Browse all " + groupLabel}
+            </span>
+            <ArrowRight aria-hidden="true" size={16} />
+          </button>
+        ) : null}
 
         <div className="category-menu__items">
           {group.categories.map((category) => (
