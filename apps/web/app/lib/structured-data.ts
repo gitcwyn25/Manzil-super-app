@@ -17,7 +17,7 @@ import {
  * Honesty rule (binding, project-wide): every field here is either read from
  * real API data or is a stable fact about the product. Nothing is estimated,
  * rounded up, or invented. When a value is absent the property is omitted
- * rather than defaulted — an omitted `aggregateRating` costs a rich-result
+ * rather than defaulted - an omitted `aggregateRating` costs a rich-result
  * star; a fabricated one is a lie to both users and Google.
  */
 
@@ -27,14 +27,14 @@ const ORG_ID = `${SITE_URL}/#organization`;
 const WEBSITE_ID = `${SITE_URL}/#website`;
 
 const ORG_DESCRIPTION: Record<Locale, string> = {
-  uz: "Manzil — Toshkentdagi bizneslarni topish va haqiqiy sharhlar platformasi.",
-  ru: "Manzil — платформа для поиска бизнесов Ташкента и настоящих отзывов.",
+  uz: "Manzil - Toshkentdagi bizneslarni topish va haqiqiy sharhlar platformasi.",
+  ru: "Manzil - платформа для поиска бизнесов Ташкента и настоящих отзывов.",
   en: "Manzil is a Tashkent business directory with real local reviews."
 };
 
 /**
  * Publisher entity. `sameAs` lists only channels the company actually
- * operates and already publishes in the site footer — no speculative social
+ * operates and already publishes in the site footer - no speculative social
  * profiles, which is what usually poisons an Organization node.
  */
 export function organizationSchema(locale: Locale): JsonLdNode {
@@ -69,7 +69,7 @@ export function organizationSchema(locale: Locale): JsonLdNode {
 
 /**
  * WebSite node with the SearchAction that lets a search engine offer a
- * sitelinks search box. The target is the real discover route — it already
+ * sitelinks search box. The target is the real discover route - it already
  * reads `?q=` server-side, so the action resolves to a working page rather
  * than a decorative declaration.
  */
@@ -151,11 +151,11 @@ export function itemListSchema(
  * LocalBusiness for a claimed or listed place.
  *
  * Deliberately omitted, with reasons:
- * - `openingHours` / `openingHoursSpecification` — the API stores hours as one
+ * - `openingHours` / `openingHoursSpecification` - the API stores hours as one
  *   free-form string ("09:00–23:00, dam olish kunlari 10:00 dan"). Parsing it
  *   into a day/time schema would be guessing, and a wrong schedule is worse
  *   than none.
- * - `aggregateRating` when `reviewCount` is 0 — a 0-review rating is not a
+ * - `aggregateRating` when `reviewCount` is 0 - a 0-review rating is not a
  *   rating. Google also rejects it.
  * - `priceRange` is the real `$`/`$$`/`$$$` tier the catalogue stores; no
  *   currency amounts are implied because none are recorded.
