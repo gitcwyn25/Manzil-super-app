@@ -21,13 +21,13 @@ export const dynamic = "force-dynamic";
  * and profile-completeness panels the Stitch overview layout dropped (D2
  * relocated them here, per the critic's no-regression rule).
  *
- * Honest data (D7): every number below is an API fact — analytics is
+ * Honest data (D7): every number below is an API fact - analytics is
  * entitlement-gated (null on the free plan's 403) and renders the upgrade
  * path instead; the relocated panels ride the ungated /stats endpoint so
  * they render on every plan.
  */
 
-/** Simple horizontal bar rows (funnel, booking statuses) — server-rendered, no JS. */
+/** Simple horizontal bar rows (funnel, booking statuses) - server-rendered, no JS. */
 function BarRows({
   rows,
   emptyLabel
@@ -81,7 +81,7 @@ export default async function AnalyticsPage({
     notFound();
   }
 
-  // Analytics may 403 on the free plan; /stats is ungated — fetch both so the
+  // Analytics may 403 on the free plan; /stats is ungated - fetch both so the
   // relocated overview panels render regardless of entitlement.
   const [analytics, stats] = await Promise.all([
     getBusinessAnalytics(business.slug, 30),
@@ -120,7 +120,7 @@ export default async function AnalyticsPage({
     : [];
   const visitAxis = axisLabels(visitPoints);
 
-  // Days without reviews carry value:null — they are skipped, not plotted as
+  // Days without reviews carry value:null - they are skipped, not plotted as
   // zero (a 0-star day would be an invented rating).
   const ratingPoints = analytics
     ? analytics.reviews.trend
@@ -204,7 +204,7 @@ export default async function AnalyticsPage({
               accent="tertiary"
               caption={text.revenue}
               icon="banknote"
-              value={revenueValue ?? "—"}
+              value={revenueValue ?? "-"}
             />
           </div>
 
@@ -261,7 +261,7 @@ export default async function AnalyticsPage({
           ) : null}
         </>
       ) : (
-        // The API refused — almost always the plan entitlement (403). Show
+        // The API refused - almost always the plan entitlement (403). Show
         // the upgrade path rather than an error the owner cannot act on.
         <section className="card ws-panel">
           <div className="card-body ws-panel__body ws-locked">
