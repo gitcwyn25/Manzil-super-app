@@ -6,9 +6,9 @@ import { CompanionLoop } from "./media/companion-loop";
 import { docGroups, docMarkdown, docs, founderProfiles, founderSectionCopy, type DocId } from "../lib/docs";
 
 const notice: Record<Locale, string> = {
-  uz: "Loyiha — nashrdan oldin malakali O‘zbekiston yuristi ko‘rib chiqishi kerak.",
-  ru: "Черновик — документ должен быть рассмотрен квалифицированным юристом Узбекистана до публикации.",
-  en: "Draft — this document must be reviewed by qualified Uzbekistan counsel before publication."
+  uz: "Loyiha - nashrdan oldin malakali O‘zbekiston yuristi ko‘rib chiqishi kerak.",
+  ru: "Черновик - документ должен быть рассмотрен квалифицированным юристом Узбекистана до публикации.",
+  en: "Draft - this document must be reviewed by qualified Uzbekistan counsel before publication."
 };
 
 const TOGETHER_COPY: Record<Locale, { eyebrow: string; title: string; description: string }> = {
@@ -333,7 +333,7 @@ export function DocumentationHub({ locale }: { locale: Locale }) {
             </div>
             <div className="docs-hero__copy">
               <p>{t.hub}</p>
-              <h1>{locale === "uz" ? "Manzil haqida bilishingiz kerak bo‘lgan hamma narsa." : locale === "ru" ? "Всё главное о Manzil — в одном месте." : "Everything you need to know about Manzil."}</h1>
+              <h1>{locale === "uz" ? "Manzil haqida bilishingiz kerak bo‘lgan hamma narsa." : locale === "ru" ? "Всё главное о Manzil - в одном месте." : "Everything you need to know about Manzil."}</h1>
               <span>{locale === "uz" ? "Kompaniya, xizmat, ishonch va biznes bo‘yicha qisqa va aniq ma’lumotlar." : locale === "ru" ? "Короткие и понятные материалы о компании, сервисе, доверии и работе с бизнесом." : "Short, clear guidance about the company, the service, trust, and working with businesses."}</span>
             </div>
             <div className="docs-hero__footer">
@@ -345,7 +345,7 @@ export function DocumentationHub({ locale }: { locale: Locale }) {
 
           <section className="docs-highlight" aria-label={locale === "uz" ? "Manzil tamoyili" : locale === "ru" ? "Принцип Manzil" : "Manzil principle"}>
             <p className="docs-highlight__text">
-              {locale === "uz" ? "Mahalliy joylarni topishdan tortib, biznes ishonchini tekshirishgacha — Manzil aniqroq yo‘l ko‘rsatadi." : locale === "ru" ? "От поиска мест до доверия к бизнесу — Manzil помогает выбирать увереннее." : "From finding local places to trusting local businesses, Manzil helps you choose with more confidence."}
+              {locale === "uz" ? "Mahalliy joylarni topishdan tortib, biznes ishonchini tekshirishgacha - Manzil aniqroq yo‘l ko‘rsatadi." : locale === "ru" ? "От поиска мест до доверия к бизнесу - Manzil помогает выбирать увереннее." : "From finding local places to trusting local businesses, Manzil helps you choose with more confidence."}
             </p>
           </section>
 
