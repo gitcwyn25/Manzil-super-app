@@ -295,14 +295,6 @@ export function CategoryStrip({
       className="category-strip-section"
     >
       <div className="container">
-        <div className="category-strip-heading">
-          <span className="category-strip-eyebrow">
-            {locale === "uz" ? "Biznes kategoriyalari" : locale === "ru" ? "Категории бизнеса" : "Business categories"}
-          </span>
-          <span className="category-strip-hint">
-            {locale === "uz" ? "Yo'nalishni tanlang" : locale === "ru" ? "Выберите направление" : "Choose a direction"}
-          </span>
-        </div>
         <ShiftingDropDown
           groups={MARKETPLACE_CATEGORY_GROUPS}
           locale={locale}
