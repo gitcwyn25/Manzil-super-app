@@ -4,7 +4,7 @@ import { ImageResponse } from "next/og";
  * Site-wide Open Graph / Twitter card image.
  *
  * The audit found zero Open Graph tags in production, and there was no shareable
- * image asset in the repo at all — only square PWA icons, which social cards
+ * image asset in the repo at all - only square PWA icons, which social cards
  * crop badly. This generates the 1200×630 card Next then attaches to every
  * route that does not override it.
  *
@@ -17,7 +17,7 @@ import { ImageResponse } from "next/og";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "Manzil — Tashkent business directory with real local reviews";
+export const alt = "Manzil - Tashkent business directory with real local reviews";
 
 export default function OpengraphImage() {
   return new ImageResponse(
