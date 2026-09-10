@@ -519,10 +519,10 @@ export function MarketplaceClient({
         </div>
       </section>
 
-      {/* 6. Compact Explore Tashkent Cultural & Heritage Showcase */
+      {/* 6. Compact Explore Tashkent Cultural & Heritage Showcase */}
       <ExploreTashkentCompact locale={locale} />
 
-      {/* 7. Mobile Bottom Sheet Filter Drawer */
+      {/* 7. Mobile Bottom Sheet Filter Drawer */}
       <MarketplaceMobileFilterDrawer
         filters={filters}
         isOpen={isMobileDrawerOpen}
