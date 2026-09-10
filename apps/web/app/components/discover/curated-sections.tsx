@@ -50,10 +50,10 @@ export function CuratedSections({
             </div>
             <span className="curated-band__tagline">
               {locale === "uz"
-                ? "Mavjud 4.8+ baholar asosida"
+                ? "Mavjud reytinglar va sharhlar asosida"
                 : locale === "ru"
-                ? "На основе доступных оценок 4.8+"
-                : "Based on available 4.8+ ratings"}
+                ? "На основе доступных оценок и отзывов"
+                : "Based on available ratings and reviews"}
             </span>
           </div>
 
