@@ -2,19 +2,20 @@
 
 import type { Locale } from "@manzil/shared";
 import {
-  CalendarDays,
   Car,
-  Coffee,
-  Gamepad2,
-  Hotel,
-  PartyPopper,
-  ShoppingBag,
-  Sparkles,
-  Utensils,
-  Wrench
+  Circle,
+  Compass,
+  HeartPulse,
+  Home,
+  Layers,
+  Utensils
 } from "lucide-react";
 import type { ReactNode } from "react";
-import { ShiftingDropDown, type ShiftingDropDownCategory, type ShiftingDropDownGroup } from "../../../components/ui/shifting-dropdown";
+import {
+  ShiftingDropDown,
+  type ShiftingDropDownCategory,
+  type ShiftingDropDownGroup
+} from "../../../components/ui/shifting-dropdown";
 
 export interface CategoryItem {
   id: string;
@@ -25,261 +26,237 @@ export interface CategoryItem {
   bgGradient: string;
 }
 
-export const MARKETPLACE_CATEGORIES: CategoryItem[] = [
+type LocalizedCopy = Record<Locale, string>;
+
+type LeafDefinition = {
+  id: string;
+  slug: string;
+  label: LocalizedCopy;
+  color?: string;
+};
+
+type GroupDefinition = {
+  id: string;
+  rootSlug: string;
+  label: LocalizedCopy;
+  description: LocalizedCopy;
+  icon: ReactNode;
+  accent: string;
+  categories: LeafDefinition[];
+};
+
+const copy = (uz: string, ru: string, en: string): LocalizedCopy => ({ uz, ru, en });
+const leaf = (slug: string, uz: string, ru: string, en: string): LeafDefinition => ({
+  id: slug,
+  slug,
+  label: copy(uz, ru, en)
+});
+
+const GROUP_DEFINITIONS: GroupDefinition[] = [
   {
     id: "restaurants",
-    slug: "restaurants",
-    name: {
-      uz: "Restoranlar",
-      ru: "Рестораны",
-      en: "Restaurants"
-    },
-    icon: "🍽️",
-    color: "#f97316",
-    bgGradient: "linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(249, 115, 22, 0.03))"
+    rootSlug: "restaurants",
+    label: copy("Restoranlar", "Рестораны", "Restaurants"),
+    description: copy(
+      "Ovqatlanishning barcha yo'nalishlari",
+      "Все форматы питания",
+      "Every way to eat and drink"
+    ),
+    icon: <Utensils aria-hidden="true" size={18} strokeWidth={1.8} />,
+    accent: "#f97316",
+    categories: [
+      leaf("takeout", "Olib ketish", "На вынос", "Takeout"),
+      leaf("delivery", "Yetkazib berish", "Доставка", "Delivery"),
+      leaf("hot-trendy", "Mashhur va trenddagi", "Популярные и модные", "Hot & Trendy"),
+      leaf("new-restaurants", "Yangi restoranlar", "Новые рестораны", "New Restaurants"),
+      leaf("breakfast-brunch", "Nonushta va brunch", "Завтраки и бранчи", "Breakfast & Brunch"),
+      leaf("lunch", "Tushlik", "Обеды", "Lunch"),
+      leaf("dinner", "Kechki ovqat", "Ужин", "Dinner"),
+      leaf("coffee-cafes", "Qahva va kafelar", "Кофе и кафе", "Coffee & Cafes"),
+      leaf("pizza", "Pitsa", "Пицца", "Pizza"),
+      leaf("chinese", "Xitoy taomlari", "Китайская кухня", "Chinese"),
+      leaf("mexican", "Meksika taomlari", "Мексиканская кухня", "Mexican"),
+      leaf("bakeries", "Nonvoyxonalar", "Пекарни", "Bakeries"),
+      leaf("italian", "Italyan taomlari", "Итальянская кухня", "Italian"),
+      leaf("food-trucks", "Ko'cha taomlari", "Фудтраки", "Food Trucks"),
+      leaf("sports-bars-pubs", "Sport barlar va pablar", "Спорт-бары и пабы", "Sports Bars & Pubs")
+    ]
   },
   {
-    id: "cafes",
-    slug: "cafes",
-    name: {
-      uz: "Qahvaxonalar",
-      ru: "Кафе и кофейни",
-      en: "Cafes & Bakeries"
-    },
-    icon: "☕",
-    color: "#eab308",
-    bgGradient: "linear-gradient(135deg, rgba(234, 179, 8, 0.15), rgba(234, 179, 8, 0.03))"
+    id: "home-garden",
+    rootSlug: "home-garden",
+    label: copy("Uy va bog'", "Дом и сад", "Home & Garden"),
+    description: copy(
+      "Uy, bog' va kundalik xizmatlar",
+      "Дом, сад и бытовые услуги",
+      "Home, garden, and everyday help"
+    ),
+    icon: <Home aria-hidden="true" size={18} strokeWidth={1.8} />,
+    accent: "#10b981",
+    categories: [
+      leaf("contractors-handymen", "Quruvchilar va ustalar", "Подрядчики и мастера", "Contractors & Handymen"),
+      leaf("plumbers", "Santexniklar", "Сантехники", "Plumbers"),
+      leaf("electricians", "Elektriklar", "Электрики", "Electricians"),
+      leaf("heating-air-conditioning", "Isitish va konditsioner", "Отопление и кондиционирование", "Heating & Air Conditioning"),
+      leaf("appliances-repair", "Maishiy texnika va ta'mirlash", "Техника и ремонт", "Appliances and Repair"),
+      leaf("roofing", "Tom yopish", "Кровельные работы", "Roofing"),
+      leaf("locksmiths", "Qulf ustalari", "Слесари и замки", "Locksmiths"),
+      leaf("painters", "Bo'yoqchilar", "Малярные работы", "Painters"),
+      leaf("landscaping", "Obodonlashtirish", "Ландшафтный дизайн", "Landscaping"),
+      leaf("nurseries-gardening", "Ko'chatlar va bog'dorchilik", "Питомники и садоводство", "Nurseries & Gardening"),
+      leaf("florists", "Gul do'konlari", "Флористы", "Florists"),
+      leaf("tree-services", "Daraxt xizmatlari", "Уход за деревьями", "Tree Services"),
+      leaf("home-cleaning", "Uy tozalash", "Уборка дома", "Home Cleaning"),
+      leaf("furniture-stores", "Mebel do'konlari", "Мебельные магазины", "Furniture Stores"),
+      leaf("movers", "Ko'chirish xizmatlari", "Переезды", "Movers")
+    ]
   },
   {
-    id: "beauty",
-    slug: "beauty",
-    name: {
-      uz: "Go'zallik & Spa",
-      ru: "Красота и SPA",
-      en: "Beauty & Spa"
-    },
-    icon: "✨",
-    color: "#ec4899",
-    bgGradient: "linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(236, 72, 153, 0.03))"
+    id: "auto-services",
+    rootSlug: "auto-services",
+    label: copy("Avto va xizmatlar", "Авто и услуги", "Auto & Services"),
+    description: copy(
+      "Mashina va yo'l bo'yicha xizmatlar",
+      "Автомобильные и дорожные услуги",
+      "Cars, roads, and mobility services"
+    ),
+    icon: <Car aria-hidden="true" size={18} strokeWidth={1.8} />,
+    accent: "#3b82f6",
+    categories: [
+      leaf("auto-repair", "Avto ta'mirlash", "Автосервис", "Auto Repair"),
+      leaf("body-shops", "Kuzov ta'miri", "Кузовной ремонт", "Body Shops"),
+      leaf("oil-change", "Moy almashtirish", "Замена масла", "Oil Change"),
+      leaf("tires", "Shinalar", "Шины", "Tires"),
+      leaf("towing", "Evakuator", "Эвакуатор", "Towing"),
+      leaf("car-wash", "Avtomoyka", "Автомойка", "Car Wash"),
+      leaf("auto-detailing", "Avtodeteyling", "Автодетейлинг", "Auto Detailing"),
+      leaf("parking", "Avtoturargoh", "Парковки", "Parking"),
+      leaf("car-dealers", "Avtosalonlar", "Автодилеры", "Car Dealers"),
+      leaf("junkyards", "Avto razborkalar", "Авторазборки", "Junkyards")
+    ]
   },
   {
-    id: "auto",
-    slug: "auto",
-    name: {
-      uz: "Avtoservis & Moyka",
-      ru: "Автосервис и мойка",
-      en: "Auto Services"
-    },
-    icon: "🚗",
-    color: "#3b82f6",
-    bgGradient: "linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.03))"
+    id: "health-beauty",
+    rootSlug: "health-beauty",
+    label: copy("Salomatlik va go'zallik", "Здоровье и красота", "Health & Beauty"),
+    description: copy(
+      "Sog'liq, parvarish va go'zallik",
+      "Здоровье, уход и красота",
+      "Health, care, and beauty"
+    ),
+    icon: <HeartPulse aria-hidden="true" size={18} strokeWidth={1.8} />,
+    accent: "#ec4899",
+    categories: [
+      leaf("dentists", "Stomatologlar", "Стоматологи", "Dentists"),
+      leaf("doctors", "Shifokorlar", "Врачи", "Doctors"),
+      leaf("chiropractors", "Chiropraktorlar", "Хиропрактики", "Chiropractors"),
+      leaf("optometrists", "Optometristlar", "Оптометристы", "Optometrists"),
+      leaf("dermatologists", "Dermatologlar", "Дерматологи", "Dermatologists"),
+      leaf("podiatrists", "Oyoq shifokorlari", "Подологи", "Podiatrists"),
+      leaf("massage", "Massaj", "Массаж", "Massage"),
+      leaf("hair-salons", "Sartaroshxonalar", "Парикмахерские", "Hair Salons"),
+      leaf("nail-salons", "Tirnoq salonlari", "Ногтевые салоны", "Nail Salons"),
+      leaf("barbers", "Barberlar", "Барбершопы", "Barbers"),
+      leaf("spas", "SPA", "SPA", "Spas"),
+      leaf("physical-therapy", "Fizioterapiya", "Физиотерапия", "Physical Therapy")
+    ]
   },
   {
-    id: "repairs",
-    slug: "repairs",
-    name: {
-      uz: "Usta & Ta'mirlash",
-      ru: "Ремонт и мастера",
-      en: "Repairs & Home"
-    },
-    icon: "🔧",
-    color: "#10b981",
-    bgGradient: "linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.03))"
+    id: "travel-activities",
+    rootSlug: "travel-activities",
+    label: copy("Sayohat va faoliyat", "Путешествия и досуг", "Travel & Activities"),
+    description: copy(
+      "Sayohat, hordiq va ko'ngilochar",
+      "Путешествия, отдых и впечатления",
+      "Travel, leisure, and things to do"
+    ),
+    icon: <Compass aria-hidden="true" size={18} strokeWidth={1.8} />,
+    accent: "#8b5cf6",
+    categories: [
+      leaf("things-to-do", "Qiziqarli mashg'ulotlar", "Чем заняться", "Things to Do"),
+      leaf("kids-activities-camps", "Bolalar mashg'ulotlari va lagerlar", "Детские занятия и лагеря", "Kids Activities & Camps"),
+      leaf("venues-events", "Tadbir joylari", "Площадки и мероприятия", "Venues & Events"),
+      leaf("mosques", "Masjidlar", "Мечети", "Mosques"),
+      leaf("shopping-malls", "Savdo markazlari", "Торговые центры", "Shopping Malls"),
+      leaf("bookstores", "Kitob do'konlari", "Книжные магазины", "Bookstores"),
+      leaf("mini-golf", "Mini golf", "Мини-гольф", "Mini Golf"),
+      leaf("bowling", "Bouling", "Боулинг", "Bowling"),
+      leaf("hotels", "Mehmonxonalar", "Отели", "Hotels"),
+      leaf("taxis", "Taksi", "Такси", "Taxis"),
+      leaf("bike-rentals", "Velosiped ijarasi", "Прокат велосипедов", "Bike Rentals"),
+      leaf("campgrounds", "Kempinglar", "Кемпинги", "Campgrounds"),
+      leaf("beaches", "Plyajlar", "Пляжи", "Beaches"),
+      leaf("swimming-pools", "Basseynlar", "Бассейны", "Swimming Pools"),
+      leaf("bars-nightlife", "Barlar va tungi hayot", "Бары и ночная жизнь", "Bars & Nightlife")
+    ]
   },
   {
-    id: "entertainment",
-    slug: "entertainment",
-    name: {
-      uz: "Ko'ngilochar",
-      ru: "Развлечения",
-      en: "Things to Do"
-    },
-    icon: "🎯",
-    color: "#8b5cf6",
-    bgGradient: "linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.03))"
-  },
-  {
-    id: "events",
-    slug: "events",
-    name: {
-      uz: "Tadbirlar & To'yxona",
-      ru: "Банкеты и свадьбы",
-      en: "Events & Venues"
-    },
-    icon: "🎉",
-    color: "#00ffcb",
-    bgGradient: "linear-gradient(135deg, rgba(0, 255, 203, 0.15), rgba(0, 255, 203, 0.03))"
-  },
-  {
-    id: "resort",
-    slug: "resort",
-    name: {
-      uz: "Mehmonxona & Dacha",
-      ru: "Отели и зоны отдыха",
-      en: "Hotels & Stays"
-    },
-    icon: "🏨",
-    color: "#06b6d4",
-    bgGradient: "linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(6, 182, 212, 0.03))"
-  },
-  {
-    id: "shopping",
-    slug: "shopping",
-    name: {
-      uz: "Savdo & Bozorlar",
-      ru: "Шопинг и базары",
-      en: "Shopping & Malls"
-    },
-    icon: "🛍️",
-    color: "#f43f5e",
-    bgGradient: "linear-gradient(135deg, rgba(244, 63, 94, 0.15), rgba(244, 63, 94, 0.03))"
+    id: "more",
+    rootSlug: "more",
+    label: copy("Ko'proq", "Ещё", "More"),
+    description: copy(
+      "Kundalik hayot va maxsus xizmatlar",
+      "Повседневные и специальные услуги",
+      "Everyday and specialist services"
+    ),
+    icon: <Layers aria-hidden="true" size={18} strokeWidth={1.8} />,
+    accent: "#f43f5e",
+    categories: [
+      leaf("dry-cleaning", "Kimyoviy tozalash", "Химчистка", "Dry Cleaning"),
+      leaf("laundromats", "Kir yuvish joylari", "Прачечные", "Laundromats"),
+      leaf("thrift-stores", "Sekond-hand do'konlar", "Комиссионные магазины", "Thrift Stores"),
+      leaf("tailors-alterations", "Tikuv va kiyim tuzatish", "Ателье и ремонт одежды", "Tailors & Alterations"),
+      leaf("apartments", "Kvartiralar", "Квартиры", "Apartments"),
+      leaf("junk-removal", "Chiqindi olib ketish", "Вывоз мусора", "Junk Removal"),
+      leaf("gyms", "Fitnes zallari", "Спортзалы", "Gyms"),
+      leaf("yoga-pilates", "Yoga va Pilates", "Йога и пилатес", "Yoga & Pilates"),
+      leaf("pet-groomers", "Uy hayvonlari parvarishi", "Груминг", "Pet Groomers"),
+      leaf("veterinarians", "Veterinariya", "Ветеринары", "Veterinarians"),
+      leaf("pet-services", "Uy hayvonlari xizmatlari", "Услуги для животных", "Pet Services"),
+      leaf("banks-credit-unions", "Banklar va kredit uyushmalari", "Банки и кредитные союзы", "Banks & Credit Unions"),
+      leaf("real-estate-agents", "Ko'chmas mulk agentlari", "Агентства недвижимости", "Real Estate Agents"),
+      leaf("language-learning", "Til o'rganish markazlari", "Языковые центры", "Language Learning Centres"),
+      leaf("catering", "Keytering", "Кейтеринг", "Catering"),
+      leaf("event-organizers", "Tadbir tashkilotchilari", "Организаторы мероприятий", "Event Organizers"),
+      leaf("parking-more", "Avtoturargoh", "Парковки", "Parking")
+    ]
   }
 ];
 
-const CATEGORY_ICONS: Record<string, ReactNode> = {
-  restaurants: <Utensils aria-hidden="true" size={17} strokeWidth={1.8} />,
-  cafes: <Coffee aria-hidden="true" size={17} strokeWidth={1.8} />,
-  beauty: <Sparkles aria-hidden="true" size={17} strokeWidth={1.8} />,
-  auto: <Car aria-hidden="true" size={17} strokeWidth={1.8} />,
-  repairs: <Wrench aria-hidden="true" size={17} strokeWidth={1.8} />,
-  entertainment: <Gamepad2 aria-hidden="true" size={17} strokeWidth={1.8} />,
-  events: <PartyPopper aria-hidden="true" size={17} strokeWidth={1.8} />,
-  resort: <Hotel aria-hidden="true" size={17} strokeWidth={1.8} />,
-  shopping: <ShoppingBag aria-hidden="true" size={17} strokeWidth={1.8} />
-};
+function toCategoryItem(slug: string, label: LocalizedCopy, color: string, id = slug): CategoryItem {
+  return { id, slug, name: label, icon: "•", color, bgGradient: "none" };
+}
 
-const CATEGORY_DESCRIPTIONS: Record<string, Record<Locale, string>> = {
-  restaurants: {
-    uz: "Milliy va zamonaviy taomlar",
-    ru: "Национальная и современная кухня",
-    en: "Local and modern dining"
-  },
-  cafes: {
-    uz: "Qahva, nonushta va shirinliklar",
-    ru: "Кофе, завтраки и десерты",
-    en: "Coffee, breakfast, and treats"
-  },
-  beauty: {
-    uz: "Salonlar, spa va parvarish",
-    ru: "Салоны, SPA и уход",
-    en: "Salons, spas, and care"
-  },
-  auto: {
-    uz: "Avtoservis, shina va moyka",
-    ru: "Автосервис, шины и мойка",
-    en: "Service, tyres, and car wash"
-  },
-  repairs: {
-    uz: "Uy uchun ustalar va ta'mirlash",
-    ru: "Мастера и ремонт для дома",
-    en: "Home services and repairs"
-  },
-  entertainment: {
-    uz: "Dam olish va qiziqarli tajribalar",
-    ru: "Отдых и яркие впечатления",
-    en: "Leisure and experiences"
-  },
-  events: {
-    uz: "Tadbirlar, to'yxonalar va zallar",
-    ru: "Мероприятия, банкетные залы и площадки",
-    en: "Events, venues, and celebrations"
-  },
-  resort: {
-    uz: "Mehmonxonalar va dam olish maskanlari",
-    ru: "Отели и зоны отдыха",
-    en: "Hotels and weekend stays"
-  },
-  shopping: {
-    uz: "Do'konlar, bozorlar va savdo markazlari",
-    ru: "Магазины, рынки и торговые центры",
-    en: "Shops, markets, and malls"
-  }
-};
+export const MARKETPLACE_CATEGORIES: CategoryItem[] = GROUP_DEFINITIONS.flatMap((group) => [
+  toCategoryItem(group.rootSlug, group.label, group.accent),
+  ...group.categories.map((category) =>
+    toCategoryItem(category.slug, category.label, category.color ?? group.accent, category.id)
+  )
+]);
 
-function toDropdownCategory(slug: string): ShiftingDropDownCategory {
-  const category = MARKETPLACE_CATEGORIES.find((item) => item.slug === slug);
-  if (!category) {
-    throw new Error(`Unknown marketplace category: ${slug}`);
-  }
-
-  return {
+export const MARKETPLACE_CATEGORY_GROUPS: ShiftingDropDownGroup[] = GROUP_DEFINITIONS.map((group) => ({
+  id: group.id,
+  rootSlug: group.rootSlug,
+  label: group.label,
+  description: group.description,
+  icon: group.icon,
+  accent: group.accent,
+  categories: group.categories.map((category) => ({
     id: category.id,
     slug: category.slug,
-    label: category.name,
-    icon: CATEGORY_ICONS[slug] ?? category.icon,
-    color: category.color,
-    description: CATEGORY_DESCRIPTIONS[slug]
-  };
-}
+    label: category.label,
+    icon: <Circle aria-hidden="true" size={11} strokeWidth={2.2} />,
+    color: category.color ?? group.accent
+  } satisfies ShiftingDropDownCategory))
+}));
 
-function createGroup(
-  id: string,
-  label: Record<Locale, string>,
-  description: Record<Locale, string>,
-  icon: ReactNode,
-  accent: string,
-  categorySlugs: string[]
-): ShiftingDropDownGroup {
-  return {
-    id,
-    label,
-    description,
-    icon,
-    accent,
-    categories: categorySlugs.map(toDropdownCategory)
-  };
-}
-
-export const MARKETPLACE_CATEGORY_GROUPS: ShiftingDropDownGroup[] = [
-  createGroup(
-    "eat-drink",
-    { uz: "Ovqatlanish", ru: "Еда и напитки", en: "Eat & drink" },
-    {
-      uz: "Toshkentdagi mazali manzillarni toping",
-      ru: "Найдите вкусные места в Ташкенте",
-      en: "Find your next Tashkent favourite"
-    },
-    <Utensils aria-hidden="true" size={18} strokeWidth={1.8} />,
-    "#f97316",
-    ["restaurants", "cafes"]
-  ),
-  createGroup(
-    "care-services",
-    { uz: "Xizmatlar", ru: "Сервисы", en: "Care & services" },
-    {
-      uz: "Kundalik ishlar uchun ishonchli ustalar",
-      ru: "Надёжные специалисты на каждый день",
-      en: "Trusted help for everyday needs"
-    },
-    <Wrench aria-hidden="true" size={18} strokeWidth={1.8} />,
-    "#ec4899",
-    ["beauty", "auto", "repairs"]
-  ),
-  createGroup(
-    "go-out",
-    { uz: "Dam olish", ru: "Отдых", en: "Go out" },
-    {
-      uz: "Shaharni yangi taassurotlar bilan kashf eting",
-      ru: "Откройте город с новыми впечатлениями",
-      en: "Discover new ways to spend the day"
-    },
-    <CalendarDays aria-hidden="true" size={18} strokeWidth={1.8} />,
-    "#8b5cf6",
-    ["entertainment", "events", "resort"]
-  ),
-  createGroup(
-    "shopping",
-    { uz: "Savdo", ru: "Шопинг", en: "Shopping" },
-    {
-      uz: "Yaqin atrofdagi savdo joylarini ko'ring",
-      ru: "Магазины и рынки рядом с вами",
-      en: "Browse shops and markets nearby"
-    },
-    <ShoppingBag aria-hidden="true" size={18} strokeWidth={1.8} />,
-    "#f43f5e",
-    ["shopping"]
-  )
-];
+export const MARKETPLACE_PARENT_CATEGORY_SLUGS: Record<string, string[]> = {
+  "home-garden": ["repairs"],
+  "auto-services": ["auto"],
+  "health-beauty": ["beauty"],
+  "travel-activities": ["entertainment", "events", "resort", "shopping"],
+  more: ["shopping"]
+};
 
 export function CategoryStrip({
   locale,
@@ -291,7 +268,10 @@ export function CategoryStrip({
   onSelectCategory: (slug: string) => void;
 }) {
   return (
-    <section className="category-strip-section" aria-label="Kategoriyalar">
+    <section
+      aria-label={locale === "uz" ? "Biznes kategoriyalari" : locale === "ru" ? "Категории бизнеса" : "Business categories"}
+      className="category-strip-section"
+    >
       <div className="container">
         <div className="category-strip-heading">
           <span className="category-strip-eyebrow">
