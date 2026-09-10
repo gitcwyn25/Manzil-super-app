@@ -2,7 +2,7 @@
 
 import type { Locale } from "@manzil/shared";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 
 type PosterCopy = { headline: string; cta: string; label: string };
 type PosterSlide = { slug: string; image: string; alt: string; copy: Record<Locale, PosterCopy> };
@@ -26,7 +26,7 @@ const POSTER_SLIDES: PosterSlide[] = [
   { slug: "takeout", image: "/discover/posters/image-d6d630d9-6f3e-4d4c-87eb-800523b88046.png", alt: "A neighborhood takeout counter handing over a fresh meal", copy: copy({ headline: "Mazali taom, kutishsiz", cta: "Olib ketish", label: "Restoranlar" }, { headline: "Вкусная еда без ожидания", cta: "Еда с собой", label: "Рестораны" }, { headline: "Good food, no waiting", cta: "Takeout", label: "Restaurants" }) }
 ];
 
-export function DiscoverPosterCarousel({ locale }: { locale: Locale }) {
+export function DiscoverPosterCarousel({ locale, children }: { locale: Locale; children?: ReactNode }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const active = POSTER_SLIDES[activeIndex];
   const activeCopy = active.copy[locale] ?? active.copy.en;
@@ -41,9 +41,10 @@ export function DiscoverPosterCarousel({ locale }: { locale: Locale }) {
   }
 
   return (
-    <section className="discover-poster-section container" aria-label={locale === "uz" ? "Tavsiya etilgan yo'nalishlar" : locale === "ru" ? "Рекомендуемые направления" : "Featured directions"}>
+    <section className="discover-poster-section" aria-label={locale === "uz" ? "Tavsiya etilgan yo'nalishlar" : locale === "ru" ? "Рекомендуемые направления" : "Featured directions"}>
       <div className="discover-poster-carousel">
         <div className="discover-poster-carousel__media">
+          {children ? <div className="discover-poster-carousel__chrome">{children}</div> : null}
           <img src={active.image} alt={active.alt} className="discover-poster-carousel__image" />
           <div className="discover-poster-carousel__shade" aria-hidden="true" />
           <div className="discover-poster-carousel__copy">
