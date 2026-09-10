@@ -207,23 +207,32 @@ function DropdownContent({
   tabId: string;
 }) {
   const overlayRef = useRef<HTMLDivElement>(null);
+  const [dropdownLeft, setDropdownLeft] = useState(0);
   const [nubLeft, setNubLeft] = useState(0);
 
   useEffect(() => {
-    const moveNub = () => {
+    const positionDropdown = () => {
       const hoveredTab = document.getElementById(tabId);
       const overlay = overlayRef.current;
+      const menu = overlay?.parentElement;
 
-      if (!hoveredTab || !overlay) return;
+      if (!hoveredTab || !overlay || !menu) return;
 
       const tabRect = hoveredTab.getBoundingClientRect();
+      const menuRect = menu.getBoundingClientRect();
+      const overlayWidth = overlay.offsetWidth;
+      const centeredLeft = tabRect.left + tabRect.width / 2 - menuRect.left - overlayWidth / 2;
+      const maxLeft = Math.max(0, menuRect.width - overlayWidth);
+      const nextLeft = Math.max(0, Math.min(centeredLeft, maxLeft));
+
+      setDropdownLeft(nextLeft);
       const overlayRect = overlay.getBoundingClientRect();
       setNubLeft(tabRect.left + tabRect.width / 2 - overlayRect.left);
     };
 
-    moveNub();
-    window.addEventListener("resize", moveNub);
-    return () => window.removeEventListener("resize", moveNub);
+    positionDropdown();
+    window.addEventListener("resize", positionDropdown);
+    return () => window.removeEventListener("resize", positionDropdown);
   }, [tabId]);
 
   const groupLabel = localize(group.label, locale);
@@ -241,6 +250,7 @@ function DropdownContent({
       key={group.id}
       role="menu"
       transition={{ duration: 0.2, ease: "easeOut" }}
+      style={{ left: dropdownLeft }}
     >
       <div className="category-menu__bridge" aria-hidden="true" />
       <span
