@@ -1,16 +1,7 @@
 "use client";
 
 import type { Locale } from "@manzil/shared";
-import {
-  Car,
-  Circle,
-  Compass,
-  HeartPulse,
-  Home,
-  Layers,
-  Utensils
-} from "lucide-react";
-import type { ReactNode } from "react";
+import { type IconName } from "../vm/icons";
 import {
   ShiftingDropDown,
   type ShiftingDropDownCategory,
@@ -21,7 +12,7 @@ export interface CategoryItem {
   id: string;
   slug: string;
   name: Record<Locale, string>;
-  icon: string;
+  icon: IconName;
   color: string;
   bgGradient: string;
 }
@@ -32,15 +23,39 @@ type LeafDefinition = {
   id: string;
   slug: string;
   label: LocalizedCopy;
+  icon?: IconName;
   color?: string;
 };
 
+
+const CATEGORY_ICONS: Partial<Record<string, IconName>> = {
+  takeout: "utensils", delivery: "send", "hot-trendy": "trending_up", "new-restaurants": "sparkles",
+  "breakfast-brunch": "coffee", lunch: "utensils", dinner: "utensils", "coffee-cafes": "coffee", pizza: "tag",
+  chinese: "utensils", mexican: "utensils", bakeries: "coffee", italian: "utensils", "food-trucks": "storefront",
+  "sports-bars-pubs": "users", "contractors-handymen": "wrench", plumbers: "settings", electricians: "settings",
+  "heating-air-conditioning": "settings", "appliances-repair": "settings", roofing: "home", locksmiths: "lock",
+  painters: "sparkles", landscaping: "globe", "nurseries-gardening": "globe", florists: "sparkles",
+  "tree-services": "trending_up", "home-cleaning": "sparkles", "furniture-stores": "home", movers: "arrow_forward",
+  "auto-repair": "wrench", "body-shops": "car", "oil-change": "settings", tires: "circle", towing: "car",
+  "car-wash": "car", "auto-detailing": "sparkles", parking: "location", "car-dealers": "storefront", junkyards: "trash",
+  dentists: "heart_pulse", doctors: "heart_pulse", chiropractors: "heart_pulse", optometrists: "search",
+  dermatologists: "heart_pulse", podiatrists: "heart_pulse", massage: "sparkles", "hair-salons": "scissors",
+  "nail-salons": "sparkles", barbers: "scissors", spas: "sparkles", "physical-therapy": "heart_pulse",
+  "things-to-do": "compass", "kids-activities-camps": "users", "venues-events": "calendar", mosques: "home",
+  "shopping-malls": "storefront", bookstores: "book_open", "mini-golf": "circle", bowling: "circle", hotels: "home",
+  taxis: "car", "bike-rentals": "globe", campgrounds: "globe", beaches: "compass", "swimming-pools": "compass",
+  "bars-nightlife": "users", "dry-cleaning": "sparkles", laundromats: "settings", "thrift-stores": "storefront",
+  "tailors-alterations": "scissors", apartments: "home", "junk-removal": "trash", gyms: "trending_up",
+  "yoga-pilates": "compass", "pet-groomers": "sparkles", veterinarians: "heart_pulse", "pet-services": "heart_pulse",
+  "banks-credit-unions": "banknote", "real-estate-agents": "home", "language-learning": "book_open",
+  catering: "utensils", "event-organizers": "calendar", "parking-more": "location"
+};
 type GroupDefinition = {
   id: string;
   rootSlug: string;
   label: LocalizedCopy;
   description: LocalizedCopy;
-  icon: ReactNode;
+  icon: IconName;
   accent: string;
   categories: LeafDefinition[];
 };
@@ -49,7 +64,8 @@ const copy = (uz: string, ru: string, en: string): LocalizedCopy => ({ uz, ru, e
 const leaf = (slug: string, uz: string, ru: string, en: string): LeafDefinition => ({
   id: slug,
   slug,
-  label: copy(uz, ru, en)
+  label: copy(uz, ru, en),
+  icon: CATEGORY_ICONS[slug] ?? "circle"
 });
 
 const GROUP_DEFINITIONS: GroupDefinition[] = [
@@ -62,7 +78,7 @@ const GROUP_DEFINITIONS: GroupDefinition[] = [
       "Все форматы питания",
       "Every way to eat and drink"
     ),
-    icon: <Utensils aria-hidden="true" size={18} strokeWidth={1.8} />,
+    icon: "utensils",
     accent: "#f97316",
     categories: [
       leaf("takeout", "Olib ketish", "На вынос", "Takeout"),
@@ -91,7 +107,7 @@ const GROUP_DEFINITIONS: GroupDefinition[] = [
       "Дом, сад и бытовые услуги",
       "Home, garden, and everyday help"
     ),
-    icon: <Home aria-hidden="true" size={18} strokeWidth={1.8} />,
+    icon: "home",
     accent: "#10b981",
     categories: [
       leaf("contractors-handymen", "Quruvchilar va ustalar", "Подрядчики и мастера", "Contractors & Handymen"),
@@ -120,7 +136,7 @@ const GROUP_DEFINITIONS: GroupDefinition[] = [
       "Автомобильные и дорожные услуги",
       "Cars, roads, and mobility services"
     ),
-    icon: <Car aria-hidden="true" size={18} strokeWidth={1.8} />,
+    icon: "car",
     accent: "#3b82f6",
     categories: [
       leaf("auto-repair", "Avto ta'mirlash", "Автосервис", "Auto Repair"),
@@ -144,7 +160,7 @@ const GROUP_DEFINITIONS: GroupDefinition[] = [
       "Здоровье, уход и красота",
       "Health, care, and beauty"
     ),
-    icon: <HeartPulse aria-hidden="true" size={18} strokeWidth={1.8} />,
+    icon: "heart_pulse",
     accent: "#ec4899",
     categories: [
       leaf("dentists", "Stomatologlar", "Стоматологи", "Dentists"),
@@ -170,7 +186,7 @@ const GROUP_DEFINITIONS: GroupDefinition[] = [
       "Путешествия, отдых и впечатления",
       "Travel, leisure, and things to do"
     ),
-    icon: <Compass aria-hidden="true" size={18} strokeWidth={1.8} />,
+    icon: "compass",
     accent: "#8b5cf6",
     categories: [
       leaf("things-to-do", "Qiziqarli mashg'ulotlar", "Чем заняться", "Things to Do"),
@@ -199,7 +215,7 @@ const GROUP_DEFINITIONS: GroupDefinition[] = [
       "Повседневные и специальные услуги",
       "Everyday and specialist services"
     ),
-    icon: <Layers aria-hidden="true" size={18} strokeWidth={1.8} />,
+    icon: "layers",
     accent: "#f43f5e",
     categories: [
       leaf("dry-cleaning", "Kimyoviy tozalash", "Химчистка", "Dry Cleaning"),
@@ -223,14 +239,20 @@ const GROUP_DEFINITIONS: GroupDefinition[] = [
   }
 ];
 
-function toCategoryItem(slug: string, label: LocalizedCopy, color: string, id = slug): CategoryItem {
-  return { id, slug, name: label, icon: "•", color, bgGradient: "none" };
+function toCategoryItem(
+  slug: string,
+  label: LocalizedCopy,
+  color: string,
+  id = slug,
+  icon: IconName = "circle"
+): CategoryItem {
+  return { id, slug, name: label, icon, color, bgGradient: "none" };
 }
 
 export const MARKETPLACE_CATEGORIES: CategoryItem[] = GROUP_DEFINITIONS.flatMap((group) => [
-  toCategoryItem(group.rootSlug, group.label, group.accent),
+  toCategoryItem(group.rootSlug, group.label, group.accent, group.id, group.icon),
   ...group.categories.map((category) =>
-    toCategoryItem(category.slug, category.label, category.color ?? group.accent, category.id)
+    toCategoryItem(category.slug, category.label, category.color ?? group.accent, category.id, category.icon ?? "circle")
   )
 ]);
 
@@ -245,7 +267,7 @@ export const MARKETPLACE_CATEGORY_GROUPS: ShiftingDropDownGroup[] = GROUP_DEFINI
     id: category.id,
     slug: category.slug,
     label: category.label,
-    icon: <Circle aria-hidden="true" size={11} strokeWidth={2.2} />,
+    icon: category.icon ?? "circle",
     color: category.color ?? group.accent
   } satisfies ShiftingDropDownCategory))
 }));
