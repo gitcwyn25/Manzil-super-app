@@ -54,7 +54,7 @@ export const BRAND = {
 export const PUBLIC_CONTACT = {
   // Already published in the site footer; nothing new is disclosed here.
   telephone: "+998885861124",
-  email: "tursunovsunnatilla223@gmail.com",
+  email: "hello.manzil.co@gmail.com",
   telegram: "https://t.me/manzilbiz_bot"
 } as const;
 
