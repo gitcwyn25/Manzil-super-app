@@ -1,15 +1,15 @@
 "use client";
 
 import type { Locale } from "@manzil/shared";
-import { ArrowRight, ChevronDown, Compass } from "lucide-react";
+import { Icon, type IconName } from "../../app/components/vm/icons";
 import { AnimatePresence, motion } from "motion/react";
-import { type CSSProperties, type ReactNode, useEffect, useId, useRef, useState } from "react";
+import { type CSSProperties, useEffect, useId, useRef, useState } from "react";
 
 export interface ShiftingDropDownCategory {
   id: string;
   slug: string;
   label: Record<Locale, string>;
-  icon: ReactNode;
+  icon: IconName;
   color: string;
   description?: Record<Locale, string>;
 }
@@ -18,7 +18,7 @@ export interface ShiftingDropDownGroup {
   id: string;
   label: Record<Locale, string>;
   description?: Record<Locale, string>;
-  icon: ReactNode;
+  icon: IconName;
   accent: string;
   rootSlug?: string;
   categories: ShiftingDropDownCategory[];
@@ -79,6 +79,7 @@ function Tabs({
 }: ShiftingDropDownProps & { instanceId: string }) {
   const [selected, setSelected] = useState<string | null>(null);
   const [direction, setDirection] = useState<Direction>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const handleSetSelected = (value: string | null) => {
     if (selected && value) {
@@ -92,19 +93,36 @@ function Tabs({
     setSelected(value);
   };
 
+  useEffect(() => {
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!menuRef.current?.contains(event.target as Node)) {
+        setSelected(null);
+        setDirection(null);
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => document.removeEventListener("pointerdown", handlePointerDown);
+  }, []);
+
   const tabId = (id: string) => `${instanceId}-category-tab-${id}`;
   const overlayId = `${instanceId}-category-overlay`;
   const selectedGroup = groups.find((group) => group.id === selected) ?? null;
 
   return (
     <div
+      ref={menuRef}
       className="category-menu"
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+          handleSetSelected(null);
+        }
+      }}
       onKeyDown={(event) => {
         if (event.key === "Escape") {
           handleSetSelected(null);
         }
       }}
-      onMouseLeave={() => handleSetSelected(null)}
     >
       <button
         aria-current={selectedCategory === "all" ? "page" : undefined}
@@ -112,7 +130,7 @@ function Tabs({
         onClick={() => onSelectCategory("all")}
         type="button"
       >
-        <Compass aria-hidden="true" size={17} strokeWidth={1.8} />
+        <Icon name="compass" aria-hidden="true" size={17} strokeWidth={1.8} />
         <span>{ALL_LABEL[locale]}</span>
       </button>
 
@@ -124,6 +142,7 @@ function Tabs({
           <button
             aria-controls={isOpen ? overlayId : undefined}
             aria-expanded={isOpen}
+            aria-haspopup="menu"
             aria-current={isActive ? "page" : undefined}
             className={`category-menu__tab ${isOpen || isActive ? "is-active" : ""}`}
             id={tabId(group.id)}
@@ -135,10 +154,11 @@ function Tabs({
             type="button"
           >
             <span className="category-menu__tab-icon" aria-hidden="true">
-              {group.icon}
+              <Icon name={group.icon} aria-hidden="true" size={18} />
             </span>
             <span>{localize(group.label, locale)}</span>
-            <ChevronDown
+            <Icon
+              name="chevron_down"
               aria-hidden="true"
               className={`category-menu__chevron ${isOpen ? "is-open" : ""}`}
               size={15}
@@ -239,7 +259,7 @@ function DropdownContent({
             className="category-menu__dropdown-icon"
             style={{ "--category-accent": group.accent } as CSSProperties}
           >
-            {group.icon}
+            <Icon name={group.icon} aria-hidden="true" size={18} />
           </span>
           <div>
             <p className="category-menu__dropdown-kicker">Manzil</p>
@@ -265,7 +285,7 @@ function DropdownContent({
                 ? "Все места: " + groupLabel
                 : "Browse all " + groupLabel}
             </span>
-            <ArrowRight aria-hidden="true" size={16} />
+            <Icon name="arrow_forward" aria-hidden="true" size={16} />
           </button>
         ) : null}
 
@@ -286,13 +306,13 @@ function DropdownContent({
                 className="category-menu__item-icon"
                 style={{ "--category-accent": category.color } as CSSProperties}
               >
-                {category.icon}
+                <Icon name={category.icon} aria-hidden="true" size={16} />
               </span>
               <span className="category-menu__item-copy">
                 <strong>{localize(category.label, locale)}</strong>
                 {category.description ? <small>{localize(category.description, locale)}</small> : null}
               </span>
-              <ArrowRight aria-hidden="true" size={16} />
+              <Icon name="arrow_forward" aria-hidden="true" size={16} />
             </button>
           ))}
         </div>
@@ -306,7 +326,7 @@ function DropdownContent({
           type="button"
         >
           <span>{VIEW_ALL_LABEL[locale]}</span>
-          <ArrowRight aria-hidden="true" size={16} />
+          <Icon name="arrow_forward" aria-hidden="true" size={16} />
         </button>
       </motion.div>
     </motion.div>
