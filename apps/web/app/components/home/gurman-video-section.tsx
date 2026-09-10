@@ -8,12 +8,6 @@ const titleByLocale: Record<Locale, string> = {
   en: "How Gurman works"
 };
 
-const eyebrowByLocale: Record<Locale, string> = {
-  uz: "Gurman AI · mobil tajriba",
-  ru: "Gurman AI · мобильный опыт",
-  en: "Gurman AI · mobile concept"
-};
-
 export function GurmanVideoSection({
   copy,
   locale
@@ -22,13 +16,11 @@ export function GurmanVideoSection({
   locale: Locale;
 }) {
   const title = titleByLocale[locale] ?? titleByLocale.uz;
-  const eyebrow = eyebrowByLocale[locale] ?? eyebrowByLocale.uz;
 
   return (
     <section aria-labelledby="gurman-video-title" className="gurman-video" id="gurman-video">
       <div className="container">
         <Reveal as="div" className="gurman-video__header" variant="fade-up">
-          <span className="gurman-video__eyebrow">{eyebrow}</span>
           <h2 className="gurman-video__title" id="gurman-video-title">
             {title}
           </h2>
