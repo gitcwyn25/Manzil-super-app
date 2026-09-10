@@ -496,3 +496,96 @@
 [data-theme="day"] .offer-carousel__control:hover {
   background: #ffffff;
 }
+
+
+/* Shifting business-category navbar — Day theme */
+[data-theme="day"] .category-strip-eyebrow {
+  color: #102426;
+}
+
+[data-theme="day"] .category-strip-hint {
+  color: #6b8581;
+}
+
+[data-theme="day"] .category-menu {
+  border-color: #cbded9;
+  background: rgb(255 255 255 / 0.86);
+  box-shadow: 0 14px 32px rgb(28 74 70 / 0.09), inset 0 1px 0 rgb(255 255 255 / 0.92);
+}
+
+[data-theme="day"] .category-menu__all,
+[data-theme="day"] .category-menu__tab {
+  color: #54706d;
+}
+
+[data-theme="day"] .category-menu__all:hover,
+[data-theme="day"] .category-menu__tab:hover,
+[data-theme="day"] .category-menu__all:focus-visible,
+[data-theme="day"] .category-menu__tab:focus-visible {
+  border-color: #b9d4ce;
+  background: #e7f4f0;
+  color: #0b625a;
+}
+
+[data-theme="day"] .category-menu__all.is-active,
+[data-theme="day"] .category-menu__tab.is-active {
+  border-color: color-mix(in srgb, var(--category-accent, #087f75) 35%, transparent);
+  background: color-mix(in srgb, var(--category-accent, #087f75) 11%, white);
+  color: var(--category-accent, #087f75);
+}
+
+[data-theme="day"] .category-menu__chevron {
+  color: #6b8581;
+}
+
+[data-theme="day"] .category-menu__dropdown {
+  border-color: #cbded9;
+  background: rgb(255 255 255 / 0.98);
+  color: #102426;
+  box-shadow: 0 24px 70px rgb(28 74 70 / 0.16), inset 0 1px 0 rgb(255 255 255 / 0.96);
+}
+
+[data-theme="day"] .category-menu__nub {
+  border-color: #cbded9;
+  background: #ffffff;
+}
+
+[data-theme="day"] .category-menu__dropdown-header,
+[data-theme="day"] .category-menu__view-all {
+  border-color: #d6e5e1;
+}
+
+[data-theme="day"] .category-menu__dropdown-kicker,
+[data-theme="day"] .category-menu__item-copy small {
+  color: #6b8581;
+}
+
+[data-theme="day"] .category-menu__dropdown-header h3 {
+  color: #102426;
+}
+
+[data-theme="day"] .category-menu__dropdown-header p:last-child {
+  color: #54706d;
+}
+
+[data-theme="day"] .category-menu__item {
+  color: #355652;
+}
+
+[data-theme="day"] .category-menu__item:hover {
+  border-color: #cbded9;
+  background: #e7f4f0;
+  color: #0b625a;
+}
+
+[data-theme="day"] .category-menu__item > svg {
+  color: #6b8581;
+}
+
+[data-theme="day"] .category-menu__view-all {
+  color: #087f75;
+}
+
+[data-theme="day"] .category-menu__view-all:hover {
+  color: #0058bc;
+}
