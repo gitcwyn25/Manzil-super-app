@@ -2263,3 +2263,253 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+/* Poster-led Discover hero: search first, editorial CTA second. */
+.discover-search-hero {
+  position: relative;
+  z-index: 5;
+  padding: 1.1rem 0 0.65rem;
+  background: linear-gradient(180deg, rgba(18, 42, 48, 0.92), rgba(7, 10, 17, 0.72));
+}
+
+.discover-search-hero__inner {
+  max-width: 1240px;
+  padding-inline: 1.25rem;
+}
+
+.discover-poster-section {
+  position: relative;
+  z-index: 1;
+  max-width: 1240px;
+  padding-top: 1.25rem;
+  padding-bottom: 2.25rem;
+  padding-inline: 1.25rem;
+}
+
+.discover-poster-carousel {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.discover-poster-carousel__media {
+  position: relative;
+  min-height: clamp(25rem, 58vw, 38rem);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1.35rem;
+  background: #18242a;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+}
+
+.discover-poster-carousel__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  animation: discover-poster-enter 500ms var(--ease-out) both;
+}
+
+.discover-poster-carousel__shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(3, 10, 13, 0.9) 0%, rgba(3, 10, 13, 0.58) 28%, rgba(3, 10, 13, 0.08) 62%, rgba(3, 10, 13, 0.16) 100%), linear-gradient(0deg, rgba(3, 10, 13, 0.48), transparent 42%);
+  pointer-events: none;
+}
+
+.discover-poster-carousel__copy {
+  position: absolute;
+  top: 50%;
+  left: clamp(1.25rem, 5vw, 4rem);
+  width: min(32rem, calc(100% - 2.5rem));
+  transform: translateY(-50%);
+  color: #fff;
+}
+
+.discover-poster-carousel__label {
+  display: inline-flex;
+  margin-bottom: 0.85rem;
+  color: #9efbea;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.discover-poster-carousel__copy h1 {
+  max-width: 11ch;
+  margin: 0 0 1.35rem;
+  color: #fff;
+  font-size: clamp(2.15rem, 5.2vw, 4.65rem);
+  font-weight: 850;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+.discover-poster-carousel__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 1rem 0.7rem 1.05rem;
+  border: 1px solid rgba(0, 255, 203, 0.25);
+  border-radius: 999px;
+  background: #00ffcb;
+  color: #071115;
+  font-size: 0.84rem;
+  font-weight: 800;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+  transition: transform 180ms ease, filter 180ms ease;
+}
+
+.discover-poster-carousel__cta:hover {
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+}
+
+.discover-poster-carousel__controls {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem;
+  border: 1px solid rgba(255, 255, 255, 0.17);
+  border-radius: 999px;
+  background: rgba(7, 10, 17, 0.56);
+  color: #d9fffa;
+  font-size: 0.72rem;
+  font-weight: 750;
+  backdrop-filter: blur(12px);
+}
+
+.discover-poster-carousel__controls button {
+  display: inline-grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  cursor: pointer;
+}
+
+.discover-poster-carousel__controls button:hover {
+  background: #00ffcb;
+  color: #071115;
+}
+
+.discover-poster-carousel__rail {
+  display: flex;
+  gap: 0.55rem;
+  overflow-x: auto;
+  padding: 0.15rem 0.1rem 0.35rem;
+  scrollbar-width: none;
+}
+
+.discover-poster-carousel__rail::-webkit-scrollbar {
+  display: none;
+}
+
+.discover-poster-carousel__thumb {
+  position: relative;
+  display: grid;
+  flex: 0 0 7.5rem;
+  min-height: 4.3rem;
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0.75rem;
+  background: #121a26;
+  color: #f8fafc;
+  cursor: pointer;
+  text-align: left;
+}
+
+.discover-poster-carousel__thumb img {
+  width: 100%;
+  height: 100%;
+  min-height: 4.3rem;
+  object-fit: cover;
+  opacity: 0.62;
+}
+
+.discover-poster-carousel__thumb span {
+  position: absolute;
+  right: 0.45rem;
+  bottom: 0.38rem;
+  left: 0.45rem;
+  overflow: hidden;
+  color: #fff;
+  font-size: 0.64rem;
+  font-weight: 750;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
+}
+
+.discover-poster-carousel__thumb.is-active {
+  border-color: #00ffcb;
+  box-shadow: 0 0 0 2px rgba(0, 255, 203, 0.24);
+}
+
+.discover-poster-carousel__thumb.is-active img,
+.discover-poster-carousel__thumb:hover img {
+  opacity: 0.9;
+}
+
+@keyframes discover-poster-enter {
+  from { opacity: 0.35; transform: scale(1.025); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 720px) {
+  .discover-search-hero {
+    padding-top: 0.65rem;
+  }
+
+  .discover-poster-section {
+    padding-top: 0.85rem;
+    padding-inline: 0.85rem;
+  }
+
+  .discover-poster-carousel__media {
+    min-height: 30rem;
+    border-radius: 1.1rem;
+  }
+
+  .discover-poster-carousel__shade {
+    background: linear-gradient(180deg, rgba(3, 10, 13, 0.08) 0%, rgba(3, 10, 13, 0.24) 34%, rgba(3, 10, 13, 0.92) 86%);
+  }
+
+  .discover-poster-carousel__copy {
+    top: auto;
+    bottom: 4.8rem;
+    left: 1.15rem;
+    width: calc(100% - 2.3rem);
+    transform: none;
+  }
+
+  .discover-poster-carousel__copy h1 {
+    max-width: 13ch;
+    font-size: clamp(2rem, 11vw, 3.4rem);
+  }
+
+  .discover-poster-carousel__controls {
+    right: 0.75rem;
+    bottom: 0.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .discover-poster-carousel__image,
+  .discover-poster-carousel__cta {
+    animation: none;
+    transition: none;
+  }
+}
