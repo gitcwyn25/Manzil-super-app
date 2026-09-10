@@ -41,10 +41,10 @@ const copy: Record<string, BusinessLandingCopy> = {
     heroTitle1: "Ko'proq mijoz.",
     heroTitle2: "Bitta oddiy kabinet.",
     heroText:
-      "Profilingizni yangilang, sharhlarga javob bering, aksiya e'lon qiling va statistikani kuzating — Toshkentdagi mijozlaringiz uchun barchasi bir joyda.",
+      "Profilingizni yangilang, sharhlarga javob bering, aksiya e'lon qiling va statistikani kuzating - Toshkentdagi mijozlaringiz uchun barchasi bir joyda.",
     ctaPrimary: "Bepul boshlash",
     ctaSecondary: "Kabinetga kirish",
-    trustLine: "Yangi platforma — birinchilardan bo'ling.",
+    trustLine: "Yangi platforma - birinchilardan bo'ling.",
     proofTitle: "Toshkentning ishonchli joylari Manzil'da",
     features: [
       {
@@ -57,14 +57,14 @@ const copy: Record<string, BusinessLandingCopy> = {
       {
         eyebrow: "Sotuv",
         title: "Aksiya va setlarni bir daqiqada e'lon qiling",
-        text: "Tushlik seti, chegirma yoki maxsus taklif — yarating, muddatini belgilang, mijozlar darhol ko'radi.",
+        text: "Tushlik seti, chegirma yoki maxsus taklif - yarating, muddatini belgilang, mijozlar darhol ko'radi.",
         bullets: ["Chegirma va setlar", "Amal qilish muddati", "Qidiruvda ko'rinadi"],
         mock: "promos"
       },
       {
         eyebrow: "O'sish",
         title: "Nima ishlayotganini aniq biling",
-        text: "Ko'rishlar, sharhlar va eng ko'p so'ralgan xizmatlar — har kuni yangilanadigan statistika bilan qaror qabul qiling.",
+        text: "Ko'rishlar, sharhlar va eng ko'p so'ralgan xizmatlar - har kuni yangilanadigan statistika bilan qaror qabul qiling.",
         bullets: ["Haftalik va oylik dinamika", "Eng mashhur xizmatlar", "Reyting o'zgarishi"],
         mock: "analytics"
       }
@@ -104,11 +104,11 @@ const copy: Record<string, BusinessLandingCopy> = {
     heroTitle1: "Больше клиентов.",
     heroTitle2: "Один простой кабинет.",
     heroText:
-      "Обновляйте профиль, отвечайте на отзывы, запускайте акции и следите за статистикой — всё для ваших клиентов в Ташкенте в одном месте.",
+      "Обновляйте профиль, отвечайте на отзывы, запускайте акции и следите за статистикой - всё для ваших клиентов в Ташкенте в одном месте.",
     ctaPrimary: "Начать бесплатно",
     ctaSecondary: "Войти в кабинет",
-    trustLine: "Новая платформа — станьте одними из первых.",
-    proofTitle: "Надёжные места Ташкента — на Manzil",
+    trustLine: "Новая платформа - станьте одними из первых.",
+    proofTitle: "Надёжные места Ташкента - на Manzil",
     features: [
       {
         eyebrow: "Репутация",
@@ -120,14 +120,14 @@ const copy: Record<string, BusinessLandingCopy> = {
       {
         eyebrow: "Продажи",
         title: "Запускайте акции и сеты за минуту",
-        text: "Бизнес-ланч, скидка или спецпредложение — создайте, задайте срок, и клиенты сразу увидят.",
+        text: "Бизнес-ланч, скидка или спецпредложение - создайте, задайте срок, и клиенты сразу увидят.",
         bullets: ["Скидки и сеты", "Срок действия", "Видно в поиске"],
         mock: "promos"
       },
       {
         eyebrow: "Рост",
         title: "Точно знайте, что работает",
-        text: "Просмотры, отзывы и самые популярные услуги — принимайте решения на основе ежедневной статистики.",
+        text: "Просмотры, отзывы и самые популярные услуги - принимайте решения на основе ежедневной статистики.",
         bullets: ["Недельная и месячная динамика", "Популярные услуги", "Изменение рейтинга"],
         mock: "analytics"
       }
@@ -167,10 +167,10 @@ const copy: Record<string, BusinessLandingCopy> = {
     heroTitle1: "More customers.",
     heroTitle2: "One simple dashboard.",
     heroText:
-      "Update your profile, reply to reviews, launch promotions, and track performance — everything for your Tashkent customers in one place.",
+      "Update your profile, reply to reviews, launch promotions, and track performance - everything for your Tashkent customers in one place.",
     ctaPrimary: "Start free",
     ctaSecondary: "Open dashboard",
-    trustLine: "A new platform — be among the first.",
+    trustLine: "A new platform - be among the first.",
     proofTitle: "Trusted places across Tashkent are on Manzil",
     features: [
       {
@@ -183,14 +183,14 @@ const copy: Record<string, BusinessLandingCopy> = {
       {
         eyebrow: "Sales",
         title: "Launch deals and sets in a minute",
-        text: "A lunch set, a discount, or a special offer — create it, set the dates, and customers see it instantly.",
+        text: "A lunch set, a discount, or a special offer - create it, set the dates, and customers see it instantly.",
         bullets: ["Discounts and sets", "Validity period", "Shows up in search"],
         mock: "promos"
       },
       {
         eyebrow: "Growth",
         title: "Know exactly what works",
-        text: "Views, reviews, and your most-requested services — decide with statistics that update every day.",
+        text: "Views, reviews, and your most-requested services - decide with statistics that update every day.",
         bullets: ["Weekly and monthly trends", "Top services", "Rating changes over time"],
         mock: "analytics"
       }
