@@ -15,6 +15,7 @@ export type IconName =
   | "banknote"
   | "bell"
   | "bookmark"
+  | "book_open"
   | "calendar"
   | "call"
   | "campaign"
@@ -24,12 +25,17 @@ export type IconName =
   | "check_circle"
   | "chevron_down"
   | "chevron_right"
+  | "circle"
   | "close"
   | "coffee"
+  | "compass"
   | "globe"
   | "grid"
   | "help_circle"
+  | "heart_pulse"
+  | "home"
   | "image"
+  | "layers"
   | "location"
   | "lock"
   | "mail"
@@ -96,6 +102,12 @@ const PATHS: Record<IconName, ReactNode> = {
     </>
   ),
   bookmark: <path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />,
+  book_open: (
+    <>
+      <path d="M2 4.5A2.5 2.5 0 0 1 4.5 2H11a2 2 0 0 1 2 2v17a2 2 2 0 0 0-2-2H4.5A2.5 2.5 0 0 0 2 21.5z" />
+      <path d="M22 4.5A2.5 2.5 0 0 0 19.5 2H13a2 2 0 0 0-2 2v17a2 2 0 0 1 2-2h6.5a2 2 0 0 1 2.5 2.5z" />
+    </>
+  ),
   calendar: (
     <>
       <rect height="18" rx="2" width="18" x="3" y="4" />
@@ -137,6 +149,7 @@ const PATHS: Record<IconName, ReactNode> = {
   ),
   chevron_down: <path d="m6 9 6 6 6-6" />,
   chevron_right: <path d="m9 18 6-6-6-6" />,
+  circle: <circle cx="12" cy="12" r="4.25" />,
   close: (
     <>
       <path d="M18 6 6 18" />
@@ -150,6 +163,12 @@ const PATHS: Record<IconName, ReactNode> = {
       <path d="M6 1v3" />
       <path d="M10 1v3" />
       <path d="M14 1v3" />
+    </>
+  ),
+  compass: (
+    <>
+      <circle cx="12" cy="12" r="10" />
+      <path d="m15.5 8.5-2.2 4.8-4.8 2.2 2.2-4.8 4.8-2.2z" />
     </>
   ),
   globe: (
@@ -167,6 +186,12 @@ const PATHS: Record<IconName, ReactNode> = {
       <rect height="7" rx="1" width="7" x="3" y="14" />
     </>
   ),
+  heart_pulse: (
+    <>
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" />
+      <path d="M5.5 12h3l1.5-3 2.2 6 1.5-3h3.8" />
+    </>
+  ),
   help_circle: (
     <>
       <circle cx="12" cy="12" r="10" />
@@ -174,11 +199,25 @@ const PATHS: Record<IconName, ReactNode> = {
       <path d="M12 17h.01" />
     </>
   ),
+  home: (
+    <>
+      <path d="m3 10 9-7 9 7" />
+      <path d="M5 9v11h14V9" />
+      <path d="M9 20v-6h6v6" />
+    </>
+  ),
   image: (
     <>
       <rect height="18" rx="2" width="18" x="3" y="3" />
       <circle cx="8.5" cy="8.5" r="1.5" />
       <path d="m21 15-5-5L5 21" />
+    </>
+  ),
+  layers: (
+    <>
+      <path d="m12 3 9 5-9 5-9-5 9-5z" />
+      <path d="m3 12 9 5 9-5" />
+      <path d="m3 16 9 5 9-5" />
     </>
   ),
   location: (
