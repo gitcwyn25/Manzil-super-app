@@ -151,10 +151,12 @@ function Tabs({
         {selectedGroup ? (
           <DropdownContent
             direction={direction}
+            key={selectedGroup.id}
             group={selectedGroup}
             locale={locale}
             onClose={() => handleSetSelected(null)}
             onSelectCategory={onSelectCategory}
+            selectedCategory={selectedCategory}
             overlayId={overlayId}
             tabId={tabId(selectedGroup.id)}
           />
@@ -170,6 +172,7 @@ function DropdownContent({
   locale,
   onClose,
   onSelectCategory,
+  selectedCategory,
   overlayId,
   tabId
 }: {
@@ -178,6 +181,7 @@ function DropdownContent({
   locale: Locale;
   onClose: () => void;
   onSelectCategory: (slug: string) => void;
+  selectedCategory: string;
   overlayId: string;
   tabId: string;
 }) {
@@ -246,7 +250,7 @@ function DropdownContent({
         <div className="category-menu__items">
           {group.categories.map((category) => (
             <button
-              aria-current={selectedCategoryFor(group, category.slug) ? "page" : undefined}
+              aria-current={selectedCategory === category.slug ? "page" : undefined}
               className="category-menu__item"
               key={category.id}
               onClick={() => {
@@ -287,6 +291,3 @@ function DropdownContent({
   );
 }
 
-function selectedCategoryFor(group: ShiftingDropDownGroup, slug: string) {
-  return group.categories.some((category) => category.slug === slug);
-}
