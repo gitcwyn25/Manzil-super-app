@@ -7,12 +7,12 @@ import type { MetadataRoute } from "next";
  * (`manifest-src 'self'`).
  *
  * `start_url` is "/uz" rather than "/": every route is locale-prefixed, and a
- * bare "/" only redirects — an installed app that opens on a redirect flashes
+ * bare "/" only redirects - an installed app that opens on a redirect flashes
  * a blank frame on launch and breaks the offline start-URL cache.
  */
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Manzil — Toshkent biznes katalogi",
+    name: "Manzil - Toshkent biznes katalogi",
     short_name: "Manzil",
     description:
       "Toshkentdagi bizneslarni toping, sharhlarni o'qing va o'z biznesingizni boshqaring.",
