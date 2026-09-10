@@ -7,7 +7,7 @@ import { InitialsAvatar } from "./vm/initials-avatar";
 
 /**
  * Per-review star row. Ratings are integers 1-5, so this renders filled vs
- * outline stars in the canonical tertiary-orange accent (D3) — the numeric
+ * outline stars in the canonical tertiary-orange accent (D3) - the numeric
  * value stays available to assistive tech via the aria-label.
  */
 function ReviewStars({ rating }: { rating: number }) {
@@ -40,7 +40,7 @@ export function ReviewList({
   if (reviews.length === 0) {
     return (
       <div className="review-list">
-        {/* Distinct modifier so the empty state is not mistaken for a review —
+        {/* Distinct modifier so the empty state is not mistaken for a review -
             it shares the card styling but carries no review, no author, and no
             helpful control. */}
         <article className="review-card review-card--empty">
@@ -75,7 +75,7 @@ export function ReviewList({
                   <p className="review-card__meta">
                     {[when, review.authorBadge].filter(Boolean).join(" • ")}
                     {/* Only shown when the review is linked to a completed booking
-                        by this reviewer at this business — never inferred. */}
+                        by this reviewer at this business - never inferred. */}
                     {review.verifiedVisit ? (
                       <span className="verified-visit">
                         <Icon name="check_circle" size={12} />
