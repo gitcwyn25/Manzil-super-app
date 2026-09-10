@@ -26,7 +26,7 @@ export const dynamic = "force-dynamic";
  * so the whole screen works without JS.
  *
  * Honest-data contract (D7 + api-map): CrmAnnouncement has NO redemption
- * counts, NO discount codes, NO per-post views/likes, and NO media field —
+ * counts, NO discount codes, NO per-post views/likes, and NO media field -
  * campaign rows therefore show the real facts (title, percent, expiry,
  * status), timeline posts show text only, and the mock's image-attach button
  * is not rendered. The old table's publish/archive/delete and draft-save
@@ -40,7 +40,7 @@ const STATUS_VARIANTS: Record<CrmAnnouncement["status"], StatusPillVariant> = {
 };
 
 // Same static slug map the consumer screens use (Category/Business carry no
-// icon field — api-map gap): campaign tiles show the business's own trade.
+// icon field - api-map gap): campaign tiles show the business's own trade.
 const CATEGORY_ICONS: Record<string, IconName> = {
   auto: "car",
   beauty: "scissors",
@@ -58,7 +58,7 @@ function isExpired(item: CrmAnnouncement): boolean {
 }
 
 // List order inside the campaigns panel: running discounts first, then
-// drafts, then expired, then archived — newest-first within each group
+// drafts, then expired, then archived - newest-first within each group
 // (Array#sort is stable, the list arrives pre-sorted by createdAt).
 function campaignRank(item: CrmAnnouncement): number {
   if (item.status === "published") return isExpired(item) ? 2 : 0;
@@ -251,7 +251,7 @@ export default async function AnnouncementsPage({
               <form action={createAnnouncementAction} className="ws-mkt-form">
                 <input name="business" type="hidden" value={business.slug} />
                 <input name="kind" type="hidden" value="news" />
-                {/* Title is derived server-side from the text — the approved
+                {/* Title is derived server-side from the text - the approved
                     screen has no title field. */}
                 <label className="ws-mkt-field">
                   <span className="visually-hidden">{a.formBody}</span>
