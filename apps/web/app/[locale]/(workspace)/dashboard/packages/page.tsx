@@ -43,7 +43,7 @@ export default async function PackagesPage({
     deleteAria: copy.packages.deleteAria,
     empty: copy.packages.empty,
     noMatches: copy.packages.noMatches,
-    // Same aggregate the overview KPI reports — one wording for one number.
+    // Same aggregate the overview KPI reports - one wording for one number.
     metricActive: copy.overview.activePackages,
     searchLabel: copy.packages.searchLabel,
     searchPlaceholder: copy.packages.searchPlaceholder,
