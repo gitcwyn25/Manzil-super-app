@@ -6,7 +6,7 @@ import { StatePanel } from "./pxs/state-panel";
  * Shared layout for the 404 and 500 pages.
  *
  * Both used to be Next's unstyled defaults. A crash page that looks like the
- * product — and offers a way back into it — is the difference between "the
+ * product - and offers a way back into it - is the difference between "the
  * site is broken" and "that page isn't there".
  *
  * Trilingual copy is inlined rather than read from `getUiCopy`: these pages
@@ -42,19 +42,19 @@ export const ERROR_COPY: Record<Locale, StatusCopy> = {
   uz: {
     code: "500",
     title: "Nimadir noto'g'ri ketdi",
-    body: "Bu sahifani yuklashda xatolik yuz berdi. Qayta urinib ko'ring — muammo bizning tomonda.",
+    body: "Bu sahifani yuklashda xatolik yuz berdi. Qayta urinib ko'ring - muammo bizning tomonda.",
     action: "Qayta urinish"
   },
   ru: {
     code: "500",
     title: "Что-то пошло не так",
-    body: "Не удалось загрузить страницу. Попробуйте ещё раз — проблема на нашей стороне.",
+    body: "Не удалось загрузить страницу. Попробуйте ещё раз - проблема на нашей стороне.",
     action: "Повторить"
   },
   en: {
     code: "500",
     title: "Something went wrong",
-    body: "This page failed to load. Try again — the problem is on our side.",
+    body: "This page failed to load. Try again - the problem is on our side.",
     action: "Try again"
   }
 };
