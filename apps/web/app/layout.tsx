@@ -7,7 +7,7 @@ import "./styles/vibrant.scss";
  * Pass-through root layout.
  *
  * `<html>` and `<body>` moved to `app/components/document-shell.tsx`, rendered
- * by `app/[locale]/layout.tsx` — the first layout that actually knows the
+ * by `app/[locale]/layout.tsx` - the first layout that actually knows the
  * locale. Keeping the document here is what forced `lang="uz"` onto `/ru` and
  * `/en` in the server-rendered HTML, which the production audit flagged.
  *
@@ -20,7 +20,7 @@ import "./styles/vibrant.scss";
  * Site-wide metadata defaults only.
  *
  * This object used to carry the *Manzil Business* title verbatim, so every
- * route that did not export its own metadata inherited it — which is why the
+ * route that did not export its own metadata inherited it - which is why the
  * consumer home page introduced itself as the business product in production.
  * The title is now a template with a neutral brand default, and each route
  * supplies its own through `app/lib/seo.ts`. `metadataBase` is what makes
@@ -29,7 +29,7 @@ import "./styles/vibrant.scss";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Manzil — Toshkentdagi joylarni kashf eting",
+    default: "Manzil - Toshkentdagi joylarni kashf eting",
     template: "%s | Manzil"
   },
   description:
