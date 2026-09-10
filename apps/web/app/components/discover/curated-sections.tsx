@@ -15,6 +15,8 @@ export function CuratedSections({
     .filter((b) => (b.avgRating ?? 0) >= 4.7 || (b.reviewCount ?? 0) > 80)
     .slice(0, 4);
 
+  const bestOfTashkentIds = new Set(bestOfTashkent.map((business) => business.id || business.slug));
+
   // 2. Weekend Picks: leisure, cafes, dining
   const weekendPicks = businesses
     .filter(
@@ -24,6 +26,7 @@ export function CuratedSections({
         b.categorySlug === "entertainment" ||
         b.categorySlug === "resort"
     )
+    .filter((business) => !bestOfTashkentIds.has(business.id || business.slug))
     .slice(0, 4);
 
   return (
