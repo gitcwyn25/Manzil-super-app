@@ -38,20 +38,6 @@ export function CleverHero({ copy, locale }: { copy: CleverHeroCopy; locale: Loc
 
       <div className="container clever-hero__container">
         <div className="clever-hero__content">
-          <Reveal as="div" variant="fade-up">
-            <div className="clever-hero__pill-wrapper">
-              <span className="clever-hero__pill">
-                <span aria-hidden="true" className="clever-hero__avatar-stack">
-                  <span className="clever-hero__avatar clever-hero__avatar--1">UZ</span>
-                  <span className="clever-hero__avatar clever-hero__avatar--2">M</span>
-                  <span className="clever-hero__avatar clever-hero__avatar--3">★</span>
-                </span>
-                <span className="clever-hero__pill-text">{copy.memberBadge}</span>
-                <Icon name="arrow_forward" size={14} className="clever-hero__pill-arrow" />
-              </span>
-            </div>
-          </Reveal>
-
           <Reveal as="div" delay={80} variant="fade-up">
             <h1 className="clever-hero__title">
               <span className="clever-hero__title-line">{copy.title1}</span>
@@ -77,16 +63,6 @@ export function CleverHero({ copy, locale }: { copy: CleverHeroCopy; locale: Loc
             </div>
           </Reveal>
 
-          <Reveal as="div" delay={320} variant="fade-up">
-            <div className="clever-hero__trust">
-              {copy.microPerks.map((perk, i) => (
-                <span className="clever-hero__trust-item" key={i}>
-                  <Icon name="verified" size={16} className="clever-hero__trust-icon" />
-                  <span>{perk}</span>
-                </span>
-              ))}
-            </div>
-          </Reveal>
         </div>
 
         <Reveal as="div" delay={180} variant="fade-up">
