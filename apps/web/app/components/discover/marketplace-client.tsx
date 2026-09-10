@@ -68,7 +68,6 @@ export function MarketplaceClient({
   const initialOpenNow = searchParams.get("opennow") === "true";
 
   const [searchQuery, setSearchQuery] = useState(initialQuery);
-  const [activeQuickChip, setActiveQuickChip] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(12);
@@ -122,23 +121,8 @@ export function MarketplaceClient({
     updateUrlParams(updates);
   };
 
-  const handleQuickChipToggle = (chipKey: string) => {
-    if (activeQuickChip === chipKey) {
-      setActiveQuickChip(null);
-      if (chipKey === "top_rated") handleFilterChange({ ratingMin: 0 });
-      if (chipKey === "verified") handleFilterChange({ verifiedOnly: false });
-      if (chipKey === "open_now") handleFilterChange({ openNowOnly: false });
-    } else {
-      setActiveQuickChip(chipKey);
-      if (chipKey === "top_rated") handleFilterChange({ ratingMin: 4.8 });
-      if (chipKey === "verified") handleFilterChange({ verifiedOnly: true });
-      if (chipKey === "open_now") handleFilterChange({ openNowOnly: true });
-    }
-  };
-
   const handleResetFilters = () => {
     setSearchQuery("");
-    setActiveQuickChip(null);
     const resetState: FilterState = {
       category: "all",
       district: "all",
@@ -317,9 +301,7 @@ export function MarketplaceClient({
       <div className="discover-marketplace-content">
         {/* 1. Compact Discovery Hero */}
       <DiscoverHero
-        activeQuickChip={activeQuickChip}
         locale={locale}
-        onQuickChipToggle={handleQuickChipToggle}
         onSearchChange={setSearchQuery}
         onSearchSubmit={(query) => updateUrlParams({}, query)}
         searchQuery={searchQuery}
