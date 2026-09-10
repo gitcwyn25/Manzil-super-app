@@ -60,7 +60,6 @@ export function DiscoverPosterCarousel({ locale, children }: { locale: Locale; c
             <button type="button" onClick={() => move(1)} aria-label={locale === "uz" ? "Keyingi poster" : locale === "ru" ? "Следующий постер" : "Next poster"}>→</button>
           </div>
         </div>
-        </div>
       </div>
     </section>
   );
