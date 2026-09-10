@@ -25,7 +25,7 @@ const STATUS_VARIANTS: Record<BookingStatus, StatusPillVariant> = {
 };
 
 // Active discounts: CrmStats.announcements is keyed by status, not kind, so
-// the count comes from the announcements list itself — published
+// the count comes from the announcements list itself - published
 // discount-kind entries whose date window covers now.
 function countActiveDiscounts(announcements: CrmAnnouncement[]): number {
   const now = Date.now();
@@ -55,7 +55,7 @@ export default async function OverviewPage({
   }
 
   // Analytics is entitlement-gated (null on the free plan's 403) and the
-  // other feeds degrade to null on failure — every consumer below has an
+  // other feeds degrade to null on failure - every consumer below has an
   // absent-state, none fabricates a number (D7).
   const [stats, bookingsData, announcementsData, analytics] = await Promise.all([
     getStats(business.slug),
@@ -136,7 +136,7 @@ export default async function OverviewPage({
         <StatCard
           caption={copy.overview.totalBookings}
           icon="calendar"
-          value={bookingsData ? formatNumber(bookingsData.total, locale) : "—"}
+          value={bookingsData ? formatNumber(bookingsData.total, locale) : "-"}
         />
         {revenueValue ? (
           <StatCard caption={copy.overview.revenue} icon="trending_up" value={revenueValue} />
@@ -158,7 +158,7 @@ export default async function OverviewPage({
           accent="tertiary"
           caption={copy.overview.activeDiscounts}
           icon="tag"
-          value={activeDiscounts === null ? "—" : formatNumber(activeDiscounts, locale)}
+          value={activeDiscounts === null ? "-" : formatNumber(activeDiscounts, locale)}
         />
       </div>
 
