@@ -2628,3 +2628,80 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+/* Final hero navbar treatment — transparent labels, no helper copy, no white slab. */
+.discover-poster-carousel__chrome .category-strip-section,
+.discover-poster-carousel__chrome .category-strip-section > .container {
+  background: transparent;
+}
+
+.discover-poster-carousel__chrome .category-strip-heading {
+  display: none;
+}
+
+.discover-poster-carousel__chrome .category-menu {
+  justify-content: flex-start;
+  max-width: none;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.discover-poster-carousel__chrome .category-menu__all,
+.discover-poster-carousel__chrome .category-menu__tab {
+  min-height: 2.25rem;
+  padding: 0.35rem 0.65rem;
+  border-color: transparent;
+  border-radius: 0.55rem;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.94);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7);
+}
+
+.discover-poster-carousel__chrome .category-menu__all:hover,
+.discover-poster-carousel__chrome .category-menu__tab:hover,
+.discover-poster-carousel__chrome .category-menu__all:focus-visible,
+.discover-poster-carousel__chrome .category-menu__tab:focus-visible {
+  border-color: rgba(255, 255, 255, 0.26);
+  background: rgba(7, 17, 21, 0.25);
+  color: #fff;
+}
+
+.discover-poster-carousel__chrome .category-menu__all.is-active,
+.discover-poster-carousel__chrome .category-menu__tab.is-active {
+  border-color: transparent;
+  background: rgba(7, 17, 21, 0.28);
+  color: var(--category-accent, #9efbea);
+}
+
+.discover-poster-carousel__chrome .category-menu__chevron {
+  color: currentColor;
+}
+
+.discover-poster-carousel__chrome .category-menu__dropdown {
+  top: calc(100% + 0.5rem);
+  width: min(40rem, calc(100vw - 2rem));
+}
+
+.discover-poster-carousel__chrome .category-menu__tab-icon {
+  filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.55));
+}
+
+.discover-poster-carousel__chrome .discover-poster-carousel__rail {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  .discover-poster-carousel__chrome .category-menu {
+    justify-content: flex-start;
+  }
+
+  .discover-poster-carousel__chrome .category-menu__all,
+  .discover-poster-carousel__chrome .category-menu__tab {
+    flex: 0 1 auto;
+  }
+}
