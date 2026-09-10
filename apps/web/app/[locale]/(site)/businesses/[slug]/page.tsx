@@ -41,7 +41,7 @@ function isCurrentlyPublished(item: CrmAnnouncement): boolean {
  * hreflang, Open Graph and Twitter tags every page was missing.
  *
  * The description falls back to a composed one-liner from real fields when a
- * business has no written description — an empty meta description is a wasted
+ * business has no written description - an empty meta description is a wasted
  * snippet, and address + district + price tier are facts already on the page.
  */
 export async function generateMetadata({
@@ -60,7 +60,7 @@ export async function generateMetadata({
   const description =
     business.description[locale] ??
     business.description.uz ??
-    `${business.name} — ${business.district}, ${business.city}. ${business.priceTier}`;
+    `${business.name} - ${business.district}, ${business.city}. ${business.priceTier}`;
 
   return pageMetadata({
     locale,
@@ -107,7 +107,7 @@ export default async function BusinessProfilePage({
           `${business.address}, ${business.district}, ${business.city}`
         )}`;
 
-  // Only real, approved photos plus a real cover reach the schema — never a
+  // Only real, approved photos plus a real cover reach the schema - never a
   // placeholder or a gradient stand-in.
   const schemaImages = [
     ...(business.coverPhotoUrl ? [business.coverPhotoUrl] : []),
@@ -167,7 +167,7 @@ export default async function BusinessProfilePage({
                     {business.district}
                   </span>
                   {/* hours is a free-form string; the optional live label is the
-                      only "current" signal — open/closed is never computed. */}
+                      only "current" signal - open/closed is never computed. */}
                   <span className="biz-head__meta-item">
                     <Icon name="schedule" size={16} />
                     {business.liveStatus
@@ -321,7 +321,7 @@ export default async function BusinessProfilePage({
                   </div>
                 </div>
                 {/* Styled placeholder: CSP blocks external tile servers, so no
-                    fake map imagery — directions above are the real affordance. */}
+                    fake map imagery - directions above are the real affordance. */}
                 <div aria-hidden="true" className="biz-map">
                   <Icon name="location" size={28} />
                   <span className="biz-map__label">{business.district}</span>
