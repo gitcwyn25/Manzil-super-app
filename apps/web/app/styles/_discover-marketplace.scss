@@ -2167,3 +2167,99 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+/* Nested business taxonomy navigation — six groups and dense subcategory menus */
+.category-menu {
+  max-width: 74rem;
+  gap: 0.25rem;
+  overflow: visible;
+}
+
+.category-menu__tab {
+  min-width: 0;
+  padding-inline: 0.65rem;
+  font-size: 0.74rem;
+}
+
+.category-menu__dropdown {
+  width: min(56rem, calc(100vw - 2rem));
+  max-height: min(38rem, calc(100vh - 10rem));
+  overflow-y: auto;
+}
+
+.category-menu__group-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 0.75rem;
+  padding: 0.7rem 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--category-accent, #00ffcb) 28%, transparent);
+  border-radius: 0.8rem;
+  background: color-mix(in srgb, var(--category-accent, #00ffcb) 9%, transparent);
+  color: var(--category-accent, #00ffcb);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-align: left;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.category-menu__group-link:hover,
+.category-menu__group-link:focus-visible {
+  border-color: color-mix(in srgb, var(--category-accent, #00ffcb) 52%, transparent);
+  background: color-mix(in srgb, var(--category-accent, #00ffcb) 16%, transparent);
+  outline: none;
+  transform: translateX(2px);
+}
+
+.category-menu__items {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.35rem;
+  max-height: 23rem;
+  overflow-y: auto;
+  padding-right: 0.2rem;
+}
+
+.category-menu__item {
+  min-height: 2.8rem;
+}
+
+.category-menu__item-copy strong {
+  font-size: 0.73rem;
+}
+
+@media (max-width: 980px) {
+  .category-menu {
+    max-width: 100%;
+  }
+
+  .category-menu__tab {
+    padding-inline: 0.45rem;
+    font-size: 0.7rem;
+  }
+
+  .category-menu__dropdown {
+    width: min(50rem, calc(100vw - 2rem));
+  }
+}
+
+@media (max-width: 767.98px) {
+  .category-menu__dropdown {
+    max-height: min(70vh, 34rem);
+  }
+
+  .category-menu__items {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-height: none;
+    overflow-y: visible;
+  }
+}
+
+@media (max-width: 520px) {
+  .category-menu__items {
+    grid-template-columns: 1fr;
+  }
+}
