@@ -43,7 +43,7 @@ export const SITE_URL = resolveSiteUrl();
 
 export const SITE_NAME = "Manzil";
 
-/** Entity-consistent naming for structured data and AI crawlers — matches
+/** Entity-consistent naming for structured data and AI crawlers - matches
  *  Appendix C of the product bible (Discover · Plan · Experience). */
 export const BRAND = {
   name: "Manzil",
@@ -91,7 +91,7 @@ export type RouteSeo = {
   description: Trio;
   /** Auth-gated or personal surfaces: real page, but nothing to index. */
   noIndex?: boolean;
-  /** Skip the root layout's `%s | Manzil` template — set on the titles that
+  /** Skip the root layout's `%s | Manzil` template - set on the titles that
    *  already name the brand, so they do not read "… | Manzil | Manzil". */
   absoluteTitle?: boolean;
 };
@@ -106,9 +106,9 @@ export const ROUTE_SEO = {
     path: "",
     absoluteTitle: true,
     title: {
-      uz: "Manzil — Toshkentdagi joylarni kashf eting",
-      ru: "Manzil — места Ташкента",
-      en: "Manzil — discover Tashkent"
+      uz: "Manzil - Toshkentdagi joylarni kashf eting",
+      ru: "Manzil - места Ташкента",
+      en: "Manzil - discover Tashkent"
     },
     description: {
       uz: "Toshkentdagi kafe, restoran va xizmatlarni haqiqiy sharhlar asosida toping.",
@@ -119,22 +119,22 @@ export const ROUTE_SEO = {
   discover: {
     path: "/discover",
     title: {
-      uz: "Kashfiyot — Toshkentdagi joylarni qidiring",
-      ru: "Поиск — места Ташкента",
-      en: "Discover — search places in Tashkent"
+      uz: "Kashfiyot - Toshkentdagi joylarni qidiring",
+      ru: "Поиск - места Ташкента",
+      en: "Discover - search places in Tashkent"
     },
     description: {
       uz: "Kategoriya, tuman va reyting bo'yicha filtrlab Toshkentdagi joylarni qidiring. Har bir kartochka katalogdagi real biznes.",
-      ru: "Ищите места в Ташкенте с фильтрами по категории, району и рейтингу. Каждая карточка — реальный бизнес из каталога.",
+      ru: "Ищите места в Ташкенте с фильтрами по категории, району и рейтингу. Каждая карточка - реальный бизнес из каталога.",
       en: "Search places in Tashkent with filters for category, district and rating. Every card is a real listed business."
     }
   },
   lists: {
     path: "/lists",
     title: {
-      uz: "Jamiyat ro'yxatlari — odamlar yig'gan joylar",
-      ru: "Списки сообщества — подборки мест",
-      en: "Community lists — places curated by people"
+      uz: "Jamiyat ro'yxatlari - odamlar yig'gan joylar",
+      ru: "Списки сообщества - подборки мест",
+      en: "Community lists - places curated by people"
     },
     description: {
       uz: "Toshkent aholisi tuzgan joy ro'yxatlari: kofe, kechki ovqat, ishlash uchun joylar.",
@@ -145,9 +145,9 @@ export const ROUTE_SEO = {
   occasions: {
     path: "/occasions",
     title: {
-      uz: "Voqealar — tug'ilgan kun, uchrashuv, oilaviy kechki ovqat",
-      ru: "Поводы — день рождения, свидание, семейный ужин",
-      en: "Occasions — birthdays, dates, family dinners"
+      uz: "Voqealar - tug'ilgan kun, uchrashuv, oilaviy kechki ovqat",
+      ru: "Поводы - день рождения, свидание, семейный ужин",
+      en: "Occasions - birthdays, dates, family dinners"
     },
     description: {
       uz: "Voqeaga qarab tanlangan joylar: tug'ilgan kun, uchrashuv, oilaviy kechki ovqat va boshqalar.",
@@ -159,9 +159,9 @@ export const ROUTE_SEO = {
     path: "/business",
     absoluteTitle: true,
     title: {
-      uz: "Manzil Business — biznesingizni Manzil'da boshqaring",
-      ru: "Manzil Business — управляйте бизнесом в Manzil",
-      en: "Manzil Business — manage your business on Manzil"
+      uz: "Manzil Business - biznesingizni Manzil'da boshqaring",
+      ru: "Manzil Business - управляйте бизнесом в Manzil",
+      en: "Manzil Business - manage your business on Manzil"
     },
     description: {
       uz: "Listingingizni tasdiqlang, sharhlarga javob bering va Manzil'dagi obro'ingizni boshqaring.",
@@ -172,9 +172,9 @@ export const ROUTE_SEO = {
   pricing: {
     path: "/business/pricing",
     title: {
-      uz: "Tariflar — Free, Pro, Max",
-      ru: "Тарифы — Free, Pro, Max",
-      en: "Pricing — Free, Pro, Max"
+      uz: "Tariflar - Free, Pro, Max",
+      ru: "Тарифы - Free, Pro, Max",
+      en: "Pricing - Free, Pro, Max"
     },
     description: {
       uz: "Manzil Business tariflari va har biriga kiradigan imkoniyatlar.",
@@ -277,7 +277,7 @@ export const ROUTE_SEO = {
 export type RouteKey = keyof typeof ROUTE_SEO;
 
 /**
- * Short breadcrumb labels — the nav name, not the SEO title. Kept identical to
+ * Short breadcrumb labels - the nav name, not the SEO title. Kept identical to
  * the wording in `@manzil/shared`'s `getUiCopy().nav` so the breadcrumb trail,
  * the header link and the schema.org node all name the same thing (the
  * cross-locale glossary rule in the launch checklist).
@@ -300,14 +300,14 @@ export type CrumbKey = keyof typeof CRUMB_LABEL;
  * Next only auto-attaches a file-based `opengraph-image` to segments that do
  * not declare their own `openGraph` object. Every route here declares one (for
  * og:url, og:locale and the alternates), which suppressed the automatic
- * attachment — verified in the built HTML, where `/uz` carried no `og:image`
+ * attachment - verified in the built HTML, where `/uz` carried no `og:image`
  * at all. Naming it explicitly is deterministic and survives that merge rule.
  */
 const DEFAULT_OG_IMAGE = {
   url: "/opengraph-image",
   width: 1200,
   height: 630,
-  alt: "Manzil — Tashkent business directory with a waitlist for mobile Gurman"
+  alt: "Manzil - Tashkent business directory with a waitlist for mobile Gurman"
 };
 
 /** OG locale tags. Uzbek Latin as used on the site is uz_UZ. */
