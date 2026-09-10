@@ -28,7 +28,7 @@ export function CleverFaq({ copy }: { copy: CleverFaqCopy }) {
             <p className="clever-faq__subtitle">{copy.subtitle}</p>
             <a
               className="clever-faq__contact"
-              href="mailto:tursunovsunnatilla223@gmail.com"
+              href="mailto:hello.manzil.co@gmail.com"
             >
               {copy.contactCta}
             </a>
