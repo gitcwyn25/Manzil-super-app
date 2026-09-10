@@ -441,7 +441,7 @@ const landing: Record<string, LandingCopy> = {
     },
     bento: {
       title: "Katalogdagi joylar",
-      subtitle: "Manzildagi katalog joylari — mavjud sharhlar va ma'lumotlar bilan.",
+      subtitle: "Manzildagi katalog joylari - mavjud sharhlar va ma'lumotlar bilan.",
       viewAll: "Barcha turkumlarni ko'rish",
       featuredBadge: "Tanlangan",
       partnerTitle: "Biznesingiz bormi?",
@@ -510,12 +510,12 @@ const landing: Record<string, LandingCopy> = {
       badge: "Gurman mobil",
       title: "Gurman mobil tajribasiga qiziqasizmi?",
       subtitle:
-        "Email manzilingizni qoldiring — Gurman mobil tajribasi haqida yangiliklar bo'lsa, xabar beramiz.",
+        "Email manzilingizni qoldiring - Gurman mobil tajribasi haqida yangiliklar bo'lsa, xabar beramiz.",
       placeholder: "Email manzilingiz...",
       cityPlaceholder: "",
       cta: "Yangiliklardan xabardor bo'lish",
       note: "Spam yo'q. Faqat Gurman mobil tajribasi haqidagi yangiliklar.",
-      successTitle: "Rahmat — siz ro'yxatdasiz.",
+      successTitle: "Rahmat - siz ro'yxatdasiz.",
       successBody: "Gurman mobil tajribasi haqida yangiliklar bo'lsa, sizga xabar beramiz."
     },
     testimonials: {
@@ -533,7 +533,7 @@ const landing: Record<string, LandingCopy> = {
         {
           question: "Manzil nima va u qanday xizmatlarni taqdim etadi?",
           answer:
-            "Manzil — Toshkentdagi mahalliy bizneslarni topish va solishtirish uchun shahar katalogi. Gurman esa kelajakdagi mobil rejalashtirish tajribasi sifatida ishlab chiqilmoqda."
+            "Manzil - Toshkentdagi mahalliy bizneslarni topish va solishtirish uchun shahar katalogi. Gurman esa kelajakdagi mobil rejalashtirish tajribasi sifatida ishlab chiqilmoqda."
         },
         {
           question: "Manzildagi joylar qanday tanlanadi?",
@@ -603,7 +603,7 @@ const landing: Record<string, LandingCopy> = {
     },
     gurman: {
       eyebrow: "Gurman AI · мобильный опыт",
-      title: "От «что будем делать?» — к понятному плану.",
+      title: "От «что будем делать?» - к понятному плану.",
       description:
         "Gurman AI разрабатывается как мобильный планировщик локальных впечатлений. Он должен помогать собрать в одном редактируемом плане место, еду, торт, транспорт, бюджет, атмосферу и время.",
       boundary: "Сейчас: концепция и лист ожидания. Веб-чата и бронирования пока нет.",
@@ -615,7 +615,7 @@ const landing: Record<string, LandingCopy> = {
       chips: ["Место", "Еда", "Торт", "Транспорт", "Бюджет", "Атмосфера", "Время"]
     },
     story: {
-      title: "Вся жизнь вашего города — в одном месте",
+      title: "Вся жизнь вашего города - в одном месте",
       subtitle:
         "Открывайте новые места, решайте повседневные задачи в одном месте, выбирайте на основе реального опыта людей и делитесь своими историями.",
       discover: {
@@ -644,7 +644,7 @@ const landing: Record<string, LandingCopy> = {
         simplePlanNote: "Выберите подходящий вариант",
         tag: "Повседневные задачи",
         title: "Решайте повседневные задачи в одном месте",
-        description: "Находите, выбирайте и планируйте услуги рядом — от барбера до других локальных сервисов."
+        description: "Находите, выбирайте и планируйте услуги рядом - от барбера до других локальных сервисов."
       },
       trust: {
         eyebrow: "Опыт людей",
@@ -671,7 +671,7 @@ const landing: Record<string, LandingCopy> = {
         verdict: "Стоит посетить",
         tag: "Истории",
         title: "История John Doe",
-        description: "Делитесь своей городской историей — местом, фотографиями и личным мнением."
+        description: "Делитесь своей городской историей - местом, фотографиями и личным мнением."
       }
     },
     benefits: {
@@ -792,7 +792,7 @@ const landing: Record<string, LandingCopy> = {
     },
     bento: {
       title: "Места из каталога",
-      subtitle: "Места из каталога Manzil — с доступными отзывами и данными.",
+      subtitle: "Места из каталога Manzil - с доступными отзывами и данными.",
       viewAll: "Все категории",
       featuredBadge: "Выбор Manzil",
       partnerTitle: "У вас свой бизнес?",
@@ -861,12 +861,12 @@ const landing: Record<string, LandingCopy> = {
       badge: "Gurman mobile",
       title: "Хотите узнать о мобильном Gurman?",
       subtitle:
-        "Оставьте email — мы сообщим новости о мобильном Gurman, когда появятся обновления.",
+        "Оставьте email - мы сообщим новости о мобильном Gurman, когда появятся обновления.",
       placeholder: "Ваш email...",
       cityPlaceholder: "",
       cta: "Узнавать новости",
       note: "Без спама. Только новости о мобильном Gurman.",
-      successTitle: "Спасибо — вы в списке.",
+      successTitle: "Спасибо - вы в списке.",
       successBody: "Мы сообщим новости о мобильном Gurman, когда появятся обновления."
     },
     testimonials: {
@@ -884,12 +884,12 @@ const landing: Record<string, LandingCopy> = {
         {
           question: "Что такое Manzil?",
           answer:
-            "Manzil — это городской каталог для поиска и сравнения локальных бизнесов в Ташкенте. Gurman разрабатывается как будущий мобильный помощник для планирования впечатлений."
+            "Manzil - это городской каталог для поиска и сравнения локальных бизнесов в Ташкенте. Gurman разрабатывается как будущий мобильный помощник для планирования впечатлений."
         },
         {
           question: "Что такое Gurman?",
           answer:
-            "Gurman — будущий мобильный помощник для планирования локальных впечатлений. Сейчас он находится в разработке; о запуске можно узнать через лист ожидания."
+            "Gurman - будущий мобильный помощник для планирования локальных впечатлений. Сейчас он находится в разработке; о запуске можно узнать через лист ожидания."
         },
         {
           question: "Бесплатно ли добавлять бизнес на платформу?",
@@ -1216,7 +1216,7 @@ const landing: Record<string, LandingCopy> = {
       cityPlaceholder: "",
       cta: "Get updates",
       note: "No spam. Only updates about Gurman mobile.",
-      successTitle: "Thank you — you are on the list.",
+      successTitle: "Thank you - you are on the list.",
       successBody: "We will share updates about Gurman mobile as they become available."
     },
     testimonials: {
