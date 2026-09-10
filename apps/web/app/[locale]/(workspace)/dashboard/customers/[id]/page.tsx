@@ -71,7 +71,7 @@ export default async function CustomerDetailPage({
 
   const formatMoney = (amount: string): string => {
     const value = Number.parseFloat(amount);
-    if (!Number.isFinite(value) || value === 0) return "—";
+    if (!Number.isFinite(value) || value === 0) return "-";
     return formatUzs(Math.round(value), locale);
   };
 
@@ -103,7 +103,7 @@ export default async function CustomerDetailPage({
           accent="secondary"
           caption={listText.colSpend}
           icon="banknote"
-          value={Number.isFinite(spend) && spend > 0 ? formatUzs(Math.round(spend), locale) : "—"}
+          value={Number.isFinite(spend) && spend > 0 ? formatUzs(Math.round(spend), locale) : "-"}
         />
         <StatCard
           caption={listText.colLastVisit}
@@ -131,7 +131,7 @@ export default async function CustomerDetailPage({
               </div>
               <div className="ws-fact">
                 <dt>{listText.colTags}</dt>
-                <dd>{customer.tags.length > 0 ? customer.tags.join(", ") : "—"}</dd>
+                <dd>{customer.tags.length > 0 ? customer.tags.join(", ") : "-"}</dd>
               </div>
               <div className="ws-fact">
                 <dt>{listText.colConsent}</dt>
@@ -164,7 +164,7 @@ export default async function CustomerDetailPage({
                       <span className="ws-mini-row__title">{booking.serviceName}</span>
                       <span className="ws-mini-row__meta ws-num">
                         {dateFormat.format(new Date(booking.startsAt))}
-                        {formatMoney(booking.amount) !== "—"
+                        {formatMoney(booking.amount) !== "-"
                           ? ` • ${formatMoney(booking.amount)}`
                           : ""}
                       </span>
@@ -188,7 +188,7 @@ export default async function CustomerDetailPage({
             <div className="ws-panel__head">
               <h2 className="ws-panel__title">{text.reviews}</h2>
             </div>
-            {/* An unlinked customer *cannot* have reviews — say that, rather
+            {/* An unlinked customer *cannot* have reviews - say that, rather
                 than showing an empty state that reads as "left no review". */}
             {!customer.hasAccount ? (
               <p className="ws-empty__body">{text.noAccountHint}</p>
