@@ -11,28 +11,48 @@ const HERO_COPY: Record<
     searchPlaceholder: string;
     locationLabel: string;
     searchBtn: string;
+    badge: string;
+    signals: Array<{ title: string; detail: string }>;
   }
 > = {
   uz: {
     headline: "Toshkentdagi sara maskanlarni kashf eting",
-    subtitle: "Tasdiqlangan restoranlar, sifatli xizmatlar, go'zallik salonlari va unutilmas tajribalar.",
+    subtitle: "Restoranlar, xizmatlar, go'zallik salonlari va unutilmas tajribalarni bir joydan qidiring.",
     searchPlaceholder: "Restoran, kafe, go'zallik saloni, avtoservis yoki xizmat qidiring…",
     locationLabel: "Toshkent shahri",
-    searchBtn: "Qidirish"
+    searchBtn: "Qidirish",
+    badge: "Toshkent local discovery",
+    signals: [
+      { title: "Shahar bo'ylab", detail: "Toshkentdagi maskanlar" },
+      { title: "Bir joyda", detail: "Ovqat, xizmat va dam olish" },
+      { title: "O'zingizga mosini toping", detail: "Qidiruv va kategoriyalar bilan" }
+    ]
   },
   ru: {
     headline: "Найдите лучшее место в Ташкенте",
-    subtitle: "Проверенные рестораны, надежные сервисы, салоны красоты и яркие впечатления.",
+    subtitle: "Ищите рестораны, сервисы, салоны красоты и яркие впечатления в одном месте.",
     searchPlaceholder: "Поиск ресторанов, кафе, салонов красоты, автосервисов…",
     locationLabel: "Ташкент",
-    searchBtn: "Найти"
+    searchBtn: "Найти",
+    badge: "Локальные места Ташкента",
+    signals: [
+      { title: "По всему городу", detail: "Места в Ташкенте" },
+      { title: "В одном месте", detail: "Еда, сервисы и отдых" },
+      { title: "Выберите своё", detail: "Поиск и категории" }
+    ]
   },
   en: {
     headline: "Find your next place in Tashkent",
-    subtitle: "Verified restaurants, services, salons, experiences, and local gems.",
+    subtitle: "Search restaurants, services, salons, experiences, and local gems in one place.",
     searchPlaceholder: "Search restaurants, salons, repairs, events, cafes…",
     locationLabel: "Tashkent",
-    searchBtn: "Search"
+    searchBtn: "Search",
+    badge: "Tashkent local discovery",
+    signals: [
+      { title: "Across the city", detail: "Places in Tashkent" },
+      { title: "All in one place", detail: "Food, services, and leisure" },
+      { title: "Find your fit", detail: "Search and browse by category" }
+    ]
   }
 };
 
@@ -63,7 +83,7 @@ export function DiscoverHero({
         <div className="discover-hero__header">
           <div className="discover-hero__badge">
             <span className="discover-hero__badge-dot" />
-            <span>Manzil Verified Local Commerce</span>
+            <span>{t.badge}</span>
           </div>
           <h1 className="discover-hero__title">{t.headline}</h1>
           <p className="discover-hero__subtitle">{t.subtitle}</p>
@@ -140,6 +160,17 @@ export function DiscoverHero({
           </button>
         </form>
 
+        <div className="discover-hero__signals" aria-label={t.badge}>
+          {t.signals.map((signal, index) => (
+            <div className="discover-hero__signal" key={signal.title}>
+              <span className="discover-hero__signal-index">0{index + 1}</span>
+              <span className="discover-hero__signal-copy">
+                <strong>{signal.title}</strong>
+                <small>{signal.detail}</small>
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
