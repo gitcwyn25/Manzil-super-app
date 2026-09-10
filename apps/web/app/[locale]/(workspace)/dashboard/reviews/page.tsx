@@ -14,7 +14,7 @@ export const dynamic = "force-dynamic";
 /**
  * Workspace reviews (Vibrant Marketplace, task D5): the business-details
  * review-tile treatment (quiet surface tiles, initials avatar, orange star
- * row) in workspace density. Helpful counts are read-only here — voting is a
+ * row) in workspace density. Helpful counts are read-only here - voting is a
  * consumer affordance; the owner only sees the tally (D7: the count is a real
  * API fact on Review.helpfulCount).
  */
