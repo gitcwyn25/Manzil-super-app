@@ -7,7 +7,7 @@ import type { ReactNode } from "react";
  * keeps them fast on the mobile connections most Manzil merchants use and keeps
  * them inside the app's strict CSP (no inline script, no CDN).
  *
- * Hover tooltips use native SVG `<title>` rather than a JS overlay — it works
+ * Hover tooltips use native SVG `<title>` rather than a JS overlay - it works
  * without hydration, is exposed to screen readers, and cannot break the page.
  * Every chart is paired with a `<details>` table so no value is available only
  * through color or hover.
@@ -60,7 +60,7 @@ export function StatTile({
       {/* Proportional figures: tabular-nums makes a large standalone number
           look loose, and is reserved for aligned columns. `valueClassName`
           is opt-in so callers outside the workspace density layer are
-          unaffected — the tile itself stays proportional by default. */}
+          unaffected - the tile itself stays proportional by default. */}
       <strong className={valueClassName ? `mz-stat__value ${valueClassName}` : "mz-stat__value"}>
         {value}
       </strong>
@@ -74,14 +74,14 @@ export function StatRow({ children }: { children: ReactNode }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Line / area trend — single series                                   */
+/* Line / area trend - single series                                   */
 /* ------------------------------------------------------------------ */
 
 /**
  * Single-series trend. No legend box: with one series the title already names
  * what is plotted, and a one-swatch legend just restates it.
  *
- * Only the final point is labelled — a value on every point is unreadable and
+ * Only the final point is labelled - a value on every point is unreadable and
  * goes unread; the axis, tooltips, and table carry the rest.
  */
 export function TrendChart({
@@ -137,7 +137,7 @@ export function TrendChart({
   const lastIndex = points.reduce((acc, p, i) => (p.value !== null ? i : acc), -1);
   const lastPoint = lastIndex >= 0 ? points[lastIndex] : null;
 
-  // Area wash only when the series is contiguous — a fill under a broken line
+  // Area wash only when the series is contiguous - a fill under a broken line
   // implies continuity that the data does not have.
   const contiguous = segments.length === 1 && points.every((p) => p.value !== null);
   const areaPath = contiguous
@@ -162,7 +162,7 @@ export function TrendChart({
       >
         {ticks.map((tick) => (
           <g key={tick.value}>
-            {/* Hairline, solid, recessive — never dashed. */}
+            {/* Hairline, solid, recessive - never dashed. */}
             <line
               x1={PAD.left}
               x2={width - PAD.right}
@@ -193,7 +193,7 @@ export function TrendChart({
             height={plotHeight}
             fill="transparent"
           >
-            <title>{`${formatDay(point.date)}: ${point.value ?? "—"}${valueSuffix}`}</title>
+            <title>{`${formatDay(point.date)}: ${point.value ?? "-"}${valueSuffix}`}</title>
           </rect>
         ))}
 
@@ -223,7 +223,7 @@ export function TrendChart({
 
       <ChartTable
         head={["Date", "Value"]}
-        rows={points.map((p) => [formatDay(p.date), p.value === null ? "—" : `${p.value}${valueSuffix}`])}
+        rows={points.map((p) => [formatDay(p.date), p.value === null ? "-" : `${p.value}${valueSuffix}`])}
       />
     </figure>
   );
@@ -239,7 +239,7 @@ export type BarDatum = { label: string; value: number; note?: string };
  * Horizontal bars for ranked magnitude and ordered stages (the funnel).
  *
  * Horizontal because the labels are words ("photo_view", search queries in
- * Uzbek/Russian) — rotated column labels are unreadable.
+ * Uzbek/Russian) - rotated column labels are unreadable.
  *
  * `ramp` walks the validated ordinal blue ramp so an ordered sequence reads as
  * ordered; ranked lists use a single step instead, because rank is not magnitude
@@ -310,7 +310,7 @@ export function BarList({
 }
 
 /* ------------------------------------------------------------------ */
-/* Table view — the non-visual channel                                 */
+/* Table view - the non-visual channel                                 */
 /* ------------------------------------------------------------------ */
 
 /** Collapsed table behind every chart, so no value is locked behind color or hover. */
