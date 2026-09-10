@@ -2975,3 +2975,27 @@
     width: min(24rem, calc(100vw - 1rem));
   }
 }
+
+
+/* Correct hero chrome alignment — compact category row centered under search. */
+.discover-poster-carousel__chrome .category-menu-shell {
+  width: min(44rem, 100%);
+  margin: 0 auto;
+}
+
+.discover-poster-carousel__chrome .category-menu {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  justify-content: center;
+}
+
+@media (max-width: 720px) {
+  .discover-poster-carousel__chrome .category-menu-shell {
+    width: 100%;
+  }
+
+  .discover-poster-carousel__chrome .category-menu {
+    justify-content: center;
+  }
+}
