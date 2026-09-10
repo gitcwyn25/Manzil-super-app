@@ -12,12 +12,12 @@ import { formatNumber, formatUzs, intlLocale } from "../../../../lib/format";
 
 export const dynamic = "force-dynamic";
 
-/** Business timezone — a UTC-rendered date shows the wrong day to a Tashkent owner. */
+/** Business timezone - a UTC-rendered date shows the wrong day to a Tashkent owner. */
 const TIME_ZONE = "Asia/Tashkent";
 
 /**
  * Customer directory (Vibrant Marketplace, task D5): the table becomes an
- * InitialsAvatar card-list — each row is the same L1 recipe as the bookings
+ * InitialsAvatar card-list - each row is the same L1 recipe as the bookings
  * list, with per-fact captions replacing the column headers and the
  * marketing-consent flag as a StatusPill.
  */
@@ -68,7 +68,7 @@ export default async function CustomersPage({
                   <li className="ws-booking ws-cust" key={customer.id}>
                     <InitialsAvatar name={name} />
                     <div className="ws-booking__text">
-                      {/* The name is the row's affordance into the profile — a
+                      {/* The name is the row's affordance into the profile - a
                           separate "view" column would add a cell for nothing. */}
                       <Link
                         className="ws-booking__name ws-booking__profile-link"
@@ -99,7 +99,7 @@ export default async function CustomersPage({
                         <b className="ws-num">
                           {Number.isFinite(spend) && spend > 0
                             ? formatUzs(Math.round(spend), locale)
-                            : "—"}
+                            : "-"}
                         </b>
                       </span>
                       <StatusPill variant={customer.consentMarketing ? "success" : "neutral"}>
