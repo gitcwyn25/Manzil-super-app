@@ -117,7 +117,7 @@ const FOOTER_COPY: Record<Locale, FooterCopy> = {
   }
 };
 
-type SocialIconName = "youtube" | "gmail" | "telegram";
+type SocialIconName = "youtube" | "instagram" | "gmail" | "telegram";
 
 const SOCIAL_LINKS: Array<{
   label: string;
@@ -130,8 +130,13 @@ const SOCIAL_LINKS: Array<{
     icon: "youtube"
   },
   {
+    label: "Instagram",
+    href: "https://www.instagram.com/manzil.finds",
+    icon: "instagram"
+  },
+  {
     label: "Gmail",
-    href: "mailto:tursunovsunnatilla223@gmail.com",
+    href: "mailto:hello.manzil.co@gmail.com",
     icon: "gmail"
   },
   {
@@ -146,6 +151,16 @@ function SocialIcon({ name }: { name: SocialIconName }) {
     return (
       <svg viewBox="0 0 24 24" aria-hidden="true" className="size-full" fill="currentColor">
         <path d="M21.6 7.2a2.8 2.8 0 0 0-2-2C17.8 4.7 12 4.7 12 4.7s-5.8 0-7.6.5a2.8 2.8 0 0 0-2 2C1.9 8.9 1.9 12 1.9 12s0 3.1.5 4.8a2.8 2.8 0 0 0 2 2c1.8.5 7.6.5 7.6.5s5.8 0 7.6-.5a2.8 2.8 0 0 0 2-2c.5-1.7.5-4.8.5-4.8s0-3.1-.5-4.8ZM10 15.4V8.6l5.8 3.4-5.8 3.4Z" />
+      </svg>
+    );
+  }
+
+  if (name === "instagram") {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true" className="size-full" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3.5" y="3.5" width="17" height="17" rx="4.5" />
+        <circle cx="12" cy="12" r="4" />
+        <circle cx="17.7" cy="6.4" r=".8" fill="currentColor" stroke="none" />
       </svg>
     );
   }
