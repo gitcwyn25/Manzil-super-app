@@ -199,42 +199,6 @@
   }
 }
 
-/* Quick Filter Chips */
-.discover-quick-chips {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.discover-quick-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.4rem 0.85rem;
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  color: #cbd5e1;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.09);
-    color: #ffffff;
-    border-color: rgba(255, 255, 255, 0.18);
-  }
-
-  &.is-active {
-    background: rgba(0, 255, 203, 0.12);
-    border-color: #00ffcb;
-    color: #00ffcb;
-  }
-}
-
 /* ==========================================================================
    2. Shifting business-category navbar
    ========================================================================== */
