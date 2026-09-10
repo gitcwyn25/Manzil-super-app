@@ -191,15 +191,15 @@ function ManzilPhonesStage() {
             <div className="manzil-mock-profile__name">Biznes profili namunasi</div>
             <div className="manzil-mock-profile__stats">
               <div>
-                <div className="manzil-mock-profile__stat-num">—</div>
+                <div className="manzil-mock-profile__stat-num">-</div>
                 <div>Reyting profili</div>
               </div>
               <div>
-                <div className="manzil-mock-profile__stat-num">—</div>
+                <div className="manzil-mock-profile__stat-num">-</div>
                 <div>Ko&apos;rishlar</div>
               </div>
               <div>
-                <div className="manzil-mock-profile__stat-num">—</div>
+                <div className="manzil-mock-profile__stat-num">-</div>
                 <div>Sharhlar</div>
               </div>
             </div>
@@ -253,12 +253,12 @@ export function Footer({ locale }: { locale: Locale }) {
             <h2 id="footer-follow-title">{follow.title}</h2>
             <p>{follow.description}</p>
             <div className="manzil-footer-follow__links">
-              <FooterAddress icon="instagram" label="instagram.com" href="https://instagram.com" external />
+              <FooterAddress icon="instagram" label="@manzil.finds" href="https://www.instagram.com/manzil.finds" external />
               <FooterAddress icon="youtube" label="youtube.com/@ManzilGroupUz" href="https://www.youtube.com/@ManzilGroupUz" external />
               <FooterAddress icon="x" label="x.com/ManzilUz" href="https://x.com/ManzilUz" external />
             </div>
             <div className="manzil-footer-follow__contact">
-              <FooterAddress icon="gmail" label="tursunovsunnatilla223@gmail.com" href="mailto:tursunovsunnatilla223@gmail.com" />
+              <FooterAddress icon="gmail" label="hello.manzil.co@gmail.com" href="mailto:hello.manzil.co@gmail.com" />
               <FooterAddress icon="telegram" label="@manzilbiz_bot" href="https://t.me/manzilbiz_bot" external />
               <FooterAddress icon="phone" label="+998 88 586 11 24" href="tel:+998885861124" />
             </div>
