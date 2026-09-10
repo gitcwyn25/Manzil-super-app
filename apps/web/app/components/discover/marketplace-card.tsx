@@ -18,6 +18,18 @@ const CATEGORY_FALLBACK_IMAGES: Record<string, string> = {
   shopping: "https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg?auto=compress&cs=tinysrgb&w=800"
 };
 
+const CATEGORY_LABELS: Record<string, { uz: string; ru: string; en: string }> = {
+  restaurants: { uz: "Restoran", ru: "Ресторан", en: "Restaurant" },
+  cafes: { uz: "Qahvaxona", ru: "Кафе", en: "Cafe" },
+  auto: { uz: "Avtoservis", ru: "Автосервис", en: "Auto service" },
+  beauty: { uz: "Go'zallik", ru: "Красота", en: "Beauty" },
+  repairs: { uz: "Ta'mirlash", ru: "Ремонт", en: "Repairs" },
+  resort: { uz: "Dam olish", ru: "Отдых", en: "Leisure" },
+  events: { uz: "Tadbirlar", ru: "События", en: "Events" },
+  entertainment: { uz: "Ko'ngilochar", ru: "Развлечения", en: "Entertainment" },
+  shopping: { uz: "Savdo", ru: "Покупки", en: "Shopping" }
+};
+
 function resolveCoverPhoto(business: BusinessPlatform): string {
   if (business.coverPhotoUrl && business.coverPhotoUrl.trim() !== "") {
     return business.coverPhotoUrl;
@@ -54,6 +66,7 @@ export function MarketplaceCard({
   const isClaimed = business.status === "claimed";
   const isFounding = Boolean(business.foundingBusiness);
   const isPopular = hasReviews && ((business.avgRating ?? 0) >= 4.8 || (business.reviewCount ?? 0) > 100);
+  const categoryLabel = business.categorySlug ? CATEGORY_LABELS[business.categorySlug]?.[locale] ?? CATEGORY_LABELS[business.categorySlug]?.en : null;
 
   const handleSave = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -88,13 +101,13 @@ export function MarketplaceCard({
                 <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor">
                   <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" />
                 </svg>
-                <span>{isClaimed ? (locale === "uz" ? "Claimed" : locale === "ru" ? "Заявлен" : "Claimed") : (locale === "uz" ? "Asoschi" : locale === "ru" ? "Основатель" : "Founding")}</span>
+                <span>{isClaimed ? (locale === "uz" ? "Tasdiqlangan" : locale === "ru" ? "Заявлен" : "Claimed") : (locale === "uz" ? "Asoschi" : locale === "ru" ? "Основатель" : "Founding")}</span>
               </span>
             )}
 
             {isPopular && (
               <span className="mp-badge mp-badge--popular">
-                <span>🔥 Popular</span>
+                <span>{locale === "uz" ? "Mashhur" : locale === "ru" ? "Популярное" : "Popular"}</span>
               </span>
             )}
           </div>
@@ -132,6 +145,7 @@ export function MarketplaceCard({
         <div className="mp-card__body">
           {/* Category & District Header */}
           <div className="mp-card__meta-top">
+            {categoryLabel ? <span className="mp-card__category">{categoryLabel}</span> : null}
             {business.district ? <span className="mp-card__district">📍 {business.district}</span> : null}
             {business.priceTier ? <span className="mp-card__price-tier">{business.priceTier}</span> : null}
           </div>
