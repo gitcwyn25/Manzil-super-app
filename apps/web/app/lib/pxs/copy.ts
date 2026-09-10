@@ -1,7 +1,7 @@
 import type { Locale } from "@manzil/shared";
 
 /**
- * Product Experience System — user-facing copy, uz / ru / en.
+ * Product Experience System - user-facing copy, uz / ru / en.
  *
  * Every string a PXS component can put on screen lives here, hand-written in
  * all three languages (no machine translation), following the same shape as
@@ -9,7 +9,7 @@ import type { Locale } from "@manzil/shared";
  * `apps/web` rather than `packages/shared`.
  *
  * What is deliberately NOT here: any stage label. Stage text is emitted by the
- * process doing the work and arrives as data — see `PxsStage` in `./types`.
+ * process doing the work and arrives as data - see `PxsStage` in `./types`.
  * The only stage-adjacent strings below are `stagesWaiting` and `stagesFailed`,
  * which describe the *request* ("waiting for a reply"), not invented steps
  * inside it.
@@ -60,7 +60,7 @@ const copy = {
       revertedBody: "Avvalgi holat qaytarildi. Qayta urinib ko'ring.",
       storageBlockedTitle: "Brauzer saqlashga ruxsat bermadi",
       storageBlockedBody:
-        "Saqlangan joylar shu brauzerda xotiraga yozilmadi — maxfiy rejim yoki joy yetishmasligi sabab bo'lishi mumkin."
+        "Saqlangan joylar shu brauzerda xotiraga yozilmadi - maxfiy rejim yoki joy yetishmasligi sabab bo'lishi mumkin."
     },
     loading: {
       label: "Yuklanmoqda",
@@ -152,7 +152,7 @@ const copy = {
       revertedBody: "Вернули как было. Попробуйте ещё раз.",
       storageBlockedTitle: "Браузер не разрешил сохранение",
       storageBlockedBody:
-        "Сохранённые места не записались в память этого браузера — возможно, приватный режим или нехватка места."
+        "Сохранённые места не записались в память этого браузера - возможно, приватный режим или нехватка места."
     },
     loading: {
       label: "Загрузка",
@@ -236,7 +236,7 @@ const copy = {
       revertedBody: "Put back the way it was. Try again.",
       storageBlockedTitle: "Your browser blocked saving",
       storageBlockedBody:
-        "Saved places couldn't be written to this browser — private mode or a full storage quota are the usual reasons."
+        "Saved places couldn't be written to this browser - private mode or a full storage quota are the usual reasons."
     },
     loading: {
       label: "Loading",
@@ -283,7 +283,7 @@ const copy = {
   }
 };
 
-// No `as const` — matching `crm-copy.ts`. Const-asserting would give each
+// No `as const` - matching `crm-copy.ts`. Const-asserting would give each
 // locale its own literal string types, so `copy[locale]` would be a union of
 // three mutually unassignable shapes rather than one localized `PxsCopy`.
 export type PxsCopy = (typeof copy)["uz"];
@@ -297,7 +297,7 @@ export function getPxsCopy(locale: Locale): PxsCopy {
  *
  * Both operands come from a real `ProgressEvent` (`loaded` / `total`), so this
  * is formatting, not estimation. Returns an empty string when the transport
- * reported no total — an unknown size is shown as unknown, not guessed.
+ * reported no total - an unknown size is shown as unknown, not guessed.
  */
 export function formatBytes(bytes: number): string {
   if (!Number.isFinite(bytes) || bytes < 0) {
