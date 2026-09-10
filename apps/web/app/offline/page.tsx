@@ -37,15 +37,15 @@ export default function OfflinePage() {
       >
         <h1 style={{ fontSize: "1.5rem", fontWeight: 600 }}>Internet aloqasi yo&apos;q</h1>
         <p style={{ maxWidth: "42ch", color: "#414755" }}>
-          Siz oflaynsiz. Avval ochilgan sahifalar hali ham mavjud — aloqa tiklangach sahifani
+          Siz oflaynsiz. Avval ochilgan sahifalar hali ham mavjud - aloqa tiklangach sahifani
           yangilang.
         </p>
         <p lang="ru" style={{ maxWidth: "42ch", color: "#414755" }}>
-          Нет подключения к интернету. Ранее открытые страницы по-прежнему доступны — обновите
+          Нет подключения к интернету. Ранее открытые страницы по-прежнему доступны - обновите
           страницу, когда связь восстановится.
         </p>
         <p lang="en" style={{ maxWidth: "42ch", color: "#414755" }}>
-          You are offline. Pages you already opened are still available — reload once your
+          You are offline. Pages you already opened are still available - reload once your
           connection is back.
         </p>
       </main>
