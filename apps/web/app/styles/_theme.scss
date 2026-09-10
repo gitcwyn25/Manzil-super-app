@@ -639,3 +639,17 @@
   background: #e7f4f0;
   color: #087f75;
 }
+
+
+/* Nested business taxonomy navigation — day theme */
+[data-theme="day"] .category-menu__group-link {
+  border-color: #b9d4ce;
+  background: #e7f4f0;
+  color: #087f75;
+}
+
+[data-theme="day"] .category-menu__group-link:hover,
+[data-theme="day"] .category-menu__group-link:focus-visible {
+  border-color: #087f75;
+  background: #d8eee8;
+}
