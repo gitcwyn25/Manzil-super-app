@@ -323,23 +323,21 @@ export function MarketplaceClient({
         cr={0.9}
       />
       <div className="discover-marketplace-content">
-        {/* 1. Compact Discovery Hero */}
-      <DiscoverHero
-        locale={locale}
-        onSearchChange={setSearchQuery}
-        onSearchSubmit={(query) => updateUrlParams({}, query)}
-        searchQuery={searchQuery}
-      />
+      {/* 1–3. Full-bleed editorial hero: poster background with search and categories layered on top. */}
+      <DiscoverPosterCarousel locale={locale}>
+        <DiscoverHero
+          locale={locale}
+          onSearchChange={setSearchQuery}
+          onSearchSubmit={(query) => updateUrlParams({}, query)}
+          searchQuery={searchQuery}
+        />
 
-      {/* 2. Responsive 9-Category Discovery Strip */}
-      <CategoryStrip
-        locale={locale}
-        onSelectCategory={(catSlug) => handleFilterChange({ category: catSlug })}
-        selectedCategory={filters.category}
-      />
-
-      {/* 3. Editorial poster-led discovery CTA */}
-      <DiscoverPosterCarousel locale={locale} />
+        <CategoryStrip
+          locale={locale}
+          onSelectCategory={(catSlug) => handleFilterChange({ category: catSlug })}
+          selectedCategory={filters.category}
+        />
+      </DiscoverPosterCarousel>
 
       {/* 4. Compact Explore Tashkent Cultural & Heritage Showcase */}
       <ExploreTashkentCompact locale={locale} />
