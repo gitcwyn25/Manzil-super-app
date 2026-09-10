@@ -14,6 +14,21 @@ import { MarketplaceMobileFilterDrawer } from "./marketplace-mobile-filter-drawe
 import { DotPattern } from "../../../components/ui/dot-pattern";
 import { MarketplaceEmptyState } from "./marketplace-states";
 
+function isPresentableBusiness(business: BusinessPlatform): boolean {
+  const searchable = [
+    business.name,
+    business.description?.uz,
+    business.description?.ru,
+    business.description?.en
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+
+  // Keep explicit test fixtures out of the public discovery experience.
+  return !searchable.includes("synthetic qa") && !searchable.includes("e2e sample business");
+}
+
 function isOpenNow(hours: string | null | undefined): boolean | null {
   if (!hours) {
     return null;
@@ -66,6 +81,11 @@ export function MarketplaceClient({
   const initialPrice = searchParams.get("price") || "all";
   const initialVerified = searchParams.get("verified") === "true";
   const initialOpenNow = searchParams.get("opennow") === "true";
+
+  const presentableBusinesses = useMemo(
+    () => initialBusinesses.filter(isPresentableBusiness),
+    [initialBusinesses]
+  );
 
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
@@ -138,7 +158,7 @@ export function MarketplaceClient({
 
   // Filter and Sort Engine
   const filteredAndSortedBusinesses = useMemo(() => {
-    let result = [...initialBusinesses];
+    let result = [...presentableBusinesses];
 
     // 1. Text Search Query
     if (searchQuery.trim()) {
@@ -213,7 +233,7 @@ export function MarketplaceClient({
     }
 
     return result;
-  }, [initialBusinesses, searchQuery, filters]);
+  }, [presentableBusinesses, searchQuery, filters]);
 
   const displayedBusinesses = filteredAndSortedBusinesses.slice(0, visibleCount);
   const totalCount = filteredAndSortedBusinesses.length;
@@ -317,8 +337,8 @@ export function MarketplaceClient({
       {/* 3. Curated Sections: Best of Tashkent & Weekend Highlights (Shows on default view) */}
       {!searchQuery && filters.category === "all" && filters.district === "all" && (
         <>
-          <CuratedSections businesses={initialBusinesses} locale={locale} />
-          <DealsOfTheDay businesses={initialBusinesses} locale={locale} />
+          <CuratedSections businesses={presentableBusinesses} locale={locale} />
+          <DealsOfTheDay businesses={presentableBusinesses} locale={locale} />
         </>
       )}
 
