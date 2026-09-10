@@ -8,16 +8,11 @@ import {
   MARKETPLACE_CATEGORIES,
   MARKETPLACE_PARENT_CATEGORY_SLUGS
 } from "./category-strip";
-import { CuratedSections } from "./curated-sections";
-import { DealsOfTheDay } from "./deals-of-the-day";
 import { DiscoverHero } from "./discover-hero";
 import { DiscoverPosterCarousel } from "./poster-carousel";
 import { ExploreTashkentCompact } from "./explore-tashkent-compact";
-import { MarketplaceCard } from "./marketplace-card";
-import { MarketplaceFilterSidebar, type FilterState, TASHKENT_DISTRICTS } from "./marketplace-filter-sidebar";
-import { MarketplaceMobileFilterDrawer } from "./marketplace-mobile-filter-drawer";
+import { type FilterState, TASHKENT_DISTRICTS } from "./marketplace-filter-sidebar";
 import { DotPattern } from "../../../components/ui/dot-pattern";
-import { MarketplaceEmptyState } from "./marketplace-states";
 
 function isPresentableBusiness(business: BusinessPlatform): boolean {
   const searchable = [
@@ -346,192 +341,9 @@ export function MarketplaceClient({
       {/* 3. Editorial poster-led discovery CTA */}
       <DiscoverPosterCarousel locale={locale} />
 
-      {/* 4. Curated Sections: Best of Tashkent & Weekend Highlights (Shows on default view) */}
-      {!searchQuery && filters.category === "all" && filters.district === "all" && (
-        <>
-          <CuratedSections businesses={presentableBusinesses} locale={locale} />
-          <DealsOfTheDay businesses={presentableBusinesses} locale={locale} />
-        </>
-      )}
-
-      {/* 5. Main Marketplace Results Area with Filter Sidebar */}
-      <section className="mp-results-section container" id="results" aria-label="Natijalar">
-        {/* Mobile Sticky Filter / Sort Bar */}
-        <div className="mp-mobile-filter-bar">
-          <button
-            className="mp-mobile-filter-btn"
-            onClick={() => setIsMobileDrawerOpen(true)}
-            type="button"
-          >
-            <span>⚙️</span>
-            <span>{locale === "uz" ? "Filtrlar" : locale === "ru" ? "Фильтры" : "Filters"}</span>
-            {activeChips.length > 0 && <span className="mp-mobile-filter-count">{activeChips.length}</span>}
-          </button>
-
-          <select
-            aria-label="Tartiblash"
-            className="mp-mobile-sort-select"
-            onChange={(e) => handleFilterChange({ sortBy: e.target.value })}
-            value={filters.sortBy}
-          >
-            <option value="recommended">{locale === "uz" ? "Tavsiya etilgan" : "Recommended"}</option>
-            <option value="rating">{locale === "uz" ? "Reyting bo'yicha" : "Highest Rating"}</option>
-            <option value="reviews">{locale === "uz" ? "Eng ko'p sharh" : "Most Reviews"}</option>
-            <option value="newest">{locale === "uz" ? "Yangi qo'shilganlar" : "Newest"}</option>
-          </select>
-        </div>
-
-        {/* Results Header Toolbar (Desktop & Mobile) */}
-        <div className="mp-results-header">
-          <div className="mp-results-header__left">
-            <h2 className="mp-results-header__title">
-              {locale === "uz"
-                ? "Toshkentdagi maskanlar"
-                : locale === "ru"
-                ? "Места в Ташкенте"
-                : "Places in Tashkent"}
-            </h2>
-            <span className="mp-results-header__count">
-              ({totalCount} {locale === "uz" ? "ta maskan" : locale === "ru" ? "мест" : "places"})
-            </span>
-          </div>
-
-          <div className="mp-results-header__controls d-none d-md-flex">
-            {/* Sort Selector */}
-            <div className="mp-sort-dropdown">
-              <span className="mp-sort-dropdown__label">
-                {locale === "uz" ? "Saralash:" : locale === "ru" ? "Сортировка:" : "Sort by:"}
-              </span>
-              <select
-                aria-label="Saralash"
-                className="mp-sort-select"
-                onChange={(e) => handleFilterChange({ sortBy: e.target.value })}
-                value={filters.sortBy}
-              >
-                <option value="recommended">{locale === "uz" ? "Tavsiya etilgan" : "Recommended"}</option>
-                <option value="rating">{locale === "uz" ? "Reyting (Yuqori)" : "Rating: High to Low"}</option>
-                <option value="reviews">{locale === "uz" ? "Ko'p sharhlar" : "Most Reviewed"}</option>
-                <option value="newest">{locale === "uz" ? "Yangi maskanlar" : "Newest"}</option>
-              </select>
-            </div>
-
-            {/* View Mode Toggle (Grid / List) */}
-            <div className="mp-view-toggle">
-              <button
-                aria-label="Grid ko'rinishi"
-                className={`mp-view-btn ${viewMode === "grid" ? "is-active" : ""}`}
-                onClick={() => setViewMode("grid")}
-                type="button"
-              >
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                  <path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z" />
-                </svg>
-              </button>
-              <button
-                aria-label="Ro'yxat ko'rinishi"
-                className={`mp-view-btn ${viewMode === "list" ? "is-active" : ""}`}
-                onClick={() => setViewMode("list")}
-                type="button"
-              >
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                  <path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z" />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Active Filter Removable Chips */}
-        {activeChips.length > 0 && (
-          <div className="mp-active-filters-row">
-            <span className="mp-active-filters-label">
-              {locale === "uz" ? "Faol filtrlar:" : locale === "ru" ? "Активные:" : "Active:"}
-            </span>
-            <div className="mp-active-chips-list">
-              {activeChips.map((chip) => (
-                <button
-                  key={chip.id}
-                  className="mp-active-chip"
-                  onClick={chip.onRemove}
-                  title="O'chirish"
-                  type="button"
-                >
-                  <span>{chip.label}</span>
-                  <span className="mp-active-chip__remove">✕</span>
-                </button>
-              ))}
-              <button className="mp-clear-all-btn" onClick={handleResetFilters} type="button">
-                {locale === "uz" ? "Barchasini tozalash" : locale === "ru" ? "Очистить всё" : "Clear all"}
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Two-Column Marketplace Layout */}
-        <div className="mp-layout-grid">
-          {/* Left Desktop Filter Sidebar */}
-          <MarketplaceFilterSidebar
-            filters={filters}
-            locale={locale}
-            onFilterChange={handleFilterChange}
-            onResetFilters={handleResetFilters}
-            totalCount={totalCount}
-          />
-
-          {/* Right Cards Results Grid */}
-          <main className="mp-cards-area">
-            {totalCount === 0 ? (
-              <MarketplaceEmptyState locale={locale} onResetFilters={handleResetFilters} />
-            ) : (
-              <>
-                <div className={`mp-cards-grid mp-cards-grid--${viewMode}`}>
-                  {displayedBusinesses.map((biz) => (
-                    <MarketplaceCard
-                      key={biz.id || biz.slug}
-                      business={biz}
-                      locale={locale}
-                      viewMode={viewMode}
-                    />
-                  ))}
-                </div>
-
-                {/* Load More Button */}
-                {hasMore && (
-                  <div className="mp-load-more-wrap">
-                    <button
-                      className="mp-load-more-btn"
-                      onClick={() => setVisibleCount((prev) => prev + 12)}
-                      type="button"
-                    >
-                      <span>
-                        {locale === "uz"
-                          ? `Yana ko'rsatish (${totalCount - visibleCount} ta qoldi)`
-                          : locale === "ru"
-                          ? `Загрузить ещё (${totalCount - visibleCount})`
-                          : `Load More (${totalCount - visibleCount} remaining)`}
-                      </span>
-                    </button>
-                  </div>
-                )}
-              </>
-            )}
-          </main>
-        </div>
-      </section>
-
-      {/* 6. Compact Explore Tashkent Cultural & Heritage Showcase */}
+      {/* 4. Compact Explore Tashkent Cultural & Heritage Showcase */}
       <ExploreTashkentCompact locale={locale} />
 
-      {/* 7. Mobile Bottom Sheet Filter Drawer */}
-      <MarketplaceMobileFilterDrawer
-        filters={filters}
-        isOpen={isMobileDrawerOpen}
-        locale={locale}
-        onClose={() => setIsMobileDrawerOpen(false)}
-        onFilterChange={handleFilterChange}
-        onResetFilters={handleResetFilters}
-        totalCount={totalCount}
-      />
       </div>
     </div>
   );
