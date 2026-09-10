@@ -57,7 +57,7 @@ export default async function ListsPage({
           ))}
         </div>
       ) : (
-        /* Reached when no list exists yet *or* when the API is unavailable —
+        /* Reached when no list exists yet *or* when the API is unavailable -
            `getListsPage` degrades to [] rather than throwing a 500. Either way
            the visitor gets a next step instead of an empty page. */
         <div className="vm-empty-state">
