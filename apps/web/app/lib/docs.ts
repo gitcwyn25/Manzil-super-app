@@ -23,8 +23,8 @@ export const founderProfiles: FounderProfile[] = [
     name: { uz: "Sunnatilla Tursunov", ru: "Sunnatilla Tursunov", en: "Sunnatilla Tursunov" },
     role: { uz: "Founder · CEO · CTO", ru: "Основатель · CEO · CTO", en: "Founder · CEO · CTO" },
     bio: {
-      uz: "Sunnatilla Tursunov — TSUE bitiruvchisi, xalqaro iqtisodchi va Manzil asoschisi. U Manzilni odamlar uchun O‘zbekistondagi haqiqiy joylarni topishni, mahalliy bizneslar uchun esa to‘g‘ri mijozlarga yetib borishni osonlashtiradigan platforma sifatida qurmoqda.",
-      ru: "Суннатилла Турсунов — международный экономист и выпускник TSUE. Он основал Manzil и создаёт платформу, которая помогает людям находить реальные места в Узбекистане, а местным компаниям — привлекать подходящих клиентов.",
+      uz: "Sunnatilla Tursunov - TSUE bitiruvchisi, xalqaro iqtisodchi va Manzil asoschisi. U Manzilni odamlar uchun O‘zbekistondagi haqiqiy joylarni topishni, mahalliy bizneslar uchun esa to‘g‘ri mijozlarga yetib borishni osonlashtiradigan platforma sifatida qurmoqda.",
+      ru: "Суннатилла Турсунов - международный экономист и выпускник TSUE. Он основал Manzil и создаёт платформу, которая помогает людям находить реальные места в Узбекистане, а местным компаниям - привлекать подходящих клиентов.",
       en: "Sunnatilla Tursunov is an International Economist and TSUE alumnus. He founded Manzil and is building it as a platform that makes it easier for people to find real places in Uzbekistan and for local businesses to reach the right customers."
     }
   },
@@ -35,8 +35,8 @@ export const founderProfiles: FounderProfile[] = [
     name: { uz: "Khayitov Muhammadkarim", ru: "Khayitov Muhammadkarim", en: "Khayitov Muhammadkarim" },
     role: { uz: "Co-founder · CMO", ru: "Сооснователь · CMO", en: "Co-founder · CMO" },
     bio: {
-      uz: "Khayitov Muhammadkarim — xalqaro iqtisodchi va TSUE bitiruvchisi. U 605 Marketing Agency a’zosi bo‘lib, Manzil Group marketingi va savdosini boshqaradi.",
-      ru: "Хайитов Мухаммадкарим — международный экономист и выпускник TSUE. Он является участником 605 Marketing Agency и отвечает за маркетинг и продажи Manzil Group.",
+      uz: "Khayitov Muhammadkarim - xalqaro iqtisodchi va TSUE bitiruvchisi. U 605 Marketing Agency a’zosi bo‘lib, Manzil Group marketingi va savdosini boshqaradi.",
+      ru: "Хайитов Мухаммадкарим - международный экономист и выпускник TSUE. Он является участником 605 Marketing Agency и отвечает за маркетинг и продажи Manzil Group.",
       en: "Khayitov Muhammadkarim is an International Economist and TSUE alumnus. He is a member of 605 Marketing Agency and oversees Manzil Group’s marketing and sales."
     }
   },
@@ -47,8 +47,8 @@ export const founderProfiles: FounderProfile[] = [
     name: { uz: "Ismoilov Abduqodir", ru: "Ismoilov Abduqodir", en: "Ismoilov Abduqodir" },
     role: { uz: "Co-founder · COO", ru: "Сооснователь · COO", en: "Co-founder · COO" },
     bio: {
-      uz: "Ismoilov Abduqodir — xalqaro iqtisodchi va TSUE bitiruvchisi. U daraxtkent.uz bosh direktori sifatida Manzil operatsiyalari va biznes aloqalarini boshqaradi.",
-      ru: "Измоилов Абдукодир — международный экономист и выпускник TSUE. Как CEO daraxtkent.uz, он отвечает за операционную работу Manzil и деловые отношения.",
+      uz: "Ismoilov Abduqodir - xalqaro iqtisodchi va TSUE bitiruvchisi. U daraxtkent.uz bosh direktori sifatida Manzil operatsiyalari va biznes aloqalarini boshqaradi.",
+      ru: "Измоилов Абдукодир - международный экономист и выпускник TSUE. Как CEO daraxtkent.uz, он отвечает за операционную работу Manzil и деловые отношения.",
       en: "Ismoilov Abduqodir is an International Economist and TSUE alumnus. As CEO of daraxtkent.uz, he oversees Manzil’s operations and business relations."
     }
   }
@@ -57,11 +57,11 @@ export const founderProfiles: FounderProfile[] = [
 export const founderSectionCopy: Record<Locale, { title: string; intro: string }> = {
   uz: {
     title: "Ta’sischilar",
-    intro: "Manzilning asoschilari — mahalliy joylar va bizneslar uchun ishonchli raqamli yo‘lko‘rsatkich qurayotgan jamoa."
+    intro: "Manzilning asoschilari - mahalliy joylar va bizneslar uchun ishonchli raqamli yo‘lko‘rsatkich qurayotgan jamoa."
   },
   ru: {
     title: "Основатели",
-    intro: "Manzil создаёт команда, которая помогает людям находить местные места и компаниям — понятнее рассказывать о своих услугах."
+    intro: "Manzil создаёт команда, которая помогает людям находить местные места и компаниям - понятнее рассказывать о своих услугах."
   },
   en: {
     title: "Founders",
