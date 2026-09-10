@@ -27,7 +27,7 @@ const copy = {
         "Toshkentdagi minglab mijozlar biznesingizni Manzil ilovasida topadi. Listinggizni tasdiqlang, sharhlarga javob bering va obro'ingizni bitta kabinetdan boshqaring.",
       ctaPrimary: "Biznesni tasdiqlash",
       ctaSecondary: "Kabinetga kirish",
-      trustLine: "Bepul boshlang — kredit karta talab qilinmaydi"
+      trustLine: "Bepul boshlang - kredit karta talab qilinmaydi"
     },
     stats: {
       title: "Platforma raqamlarda",
@@ -78,7 +78,7 @@ const copy = {
       kicker: "Qanday ishlaydi",
       title: "3 qadamda boshlang",
       steps: [
-        { title: "Ro'yxatdan o'ting", text: "Clerk orqali xavfsiz kirish — 1 daqiqa." },
+        { title: "Ro'yxatdan o'ting", text: "Clerk orqali xavfsiz kirish - 1 daqiqa." },
         { title: "Biznesingizni tasdiqlang", text: "Listingni toping va egalik so'rovini yuboring." },
         { title: "Boshqaring va o'sing", text: "Admin tasdiqlagach, kabinet to'liq ochiladi." }
       ]
@@ -95,7 +95,7 @@ const copy = {
     adminBand: {
       kicker: "Platforma nazorati",
       title: "Adminlar uchun boshqaruv markazi",
-      text: "Claim navbati, kontent moderatsiyasi, kategoriyalar va butun ma'lumotlar bazasi — hammasi bitta konsolda.",
+      text: "Claim navbati, kontent moderatsiyasi, kategoriyalar va butun ma'lumotlar bazasi - hammasi bitta konsolda.",
       cta: "Admin konsoli"
     },
     footer: {
@@ -155,7 +155,7 @@ const copy = {
         "Тысячи клиентов в Ташкенте находят ваш бизнес в приложении Manzil. Подтвердите листинг, отвечайте на отзывы и управляйте репутацией из одного кабинета.",
       ctaPrimary: "Подтвердить бизнес",
       ctaSecondary: "Войти в кабинет",
-      trustLine: "Начните бесплатно — банковская карта не нужна"
+      trustLine: "Начните бесплатно - банковская карта не нужна"
     },
     stats: {
       title: "Платформа в цифрах",
@@ -182,14 +182,14 @@ const copy = {
       kicker: "Как это работает",
       title: "Начните за 3 шага",
       steps: [
-        { title: "Зарегистрируйтесь", text: "Безопасный вход через Clerk — 1 минута." },
+        { title: "Зарегистрируйтесь", text: "Безопасный вход через Clerk - 1 минута." },
         { title: "Подтвердите бизнес", text: "Найдите листинг и отправьте заявку на владение." },
         { title: "Управляйте и растите", text: "После одобрения админом кабинет открыт полностью." }
       ]
     },
     app: {
       kicker: "Где ваши клиенты?",
-      title: "Клиенты — в приложении Manzil",
+      title: "Клиенты - в приложении Manzil",
       subtitle:
         "Наши приложения для iOS и Android помогают клиентам находить лучшие места рядом. Пусть ваш бизнес будет там.",
       ios: "App Store",
@@ -199,7 +199,7 @@ const copy = {
     adminBand: {
       kicker: "Контроль платформы",
       title: "Центр управления для админов",
-      text: "Очередь заявок, модерация контента, категории и вся база данных — в одной консоли.",
+      text: "Очередь заявок, модерация контента, категории и вся база данных - в одной консоли.",
       cta: "Админ-консоль"
     },
     footer: {
@@ -225,7 +225,7 @@ const copy = {
       yourBusinesses: "Ваши бизнесы",
       noBusinesses: "У вас пока нет подтверждённого бизнеса",
       noBusinessesText:
-        "Если ваш бизнес есть в базе Manzil — подтвердите владение. После проверки админом кабинет откроется.",
+        "Если ваш бизнес есть в базе Manzil - подтвердите владение. После проверки админом кабинет откроется.",
       claimCta: "Подтвердить бизнес",
       recentReviews: "Последние отзывы",
       noReviews: "Отзывов пока нет.",
@@ -259,7 +259,7 @@ const copy = {
         "Thousands of customers in Tashkent discover your business in the Manzil app. Claim your listing, respond to reviews, and manage your reputation from one dashboard.",
       ctaPrimary: "Claim your business",
       ctaSecondary: "Open dashboard",
-      trustLine: "Start free — no credit card required"
+      trustLine: "Start free - no credit card required"
     },
     stats: {
       title: "The platform in numbers",
@@ -286,7 +286,7 @@ const copy = {
       kicker: "How it works",
       title: "Get started in 3 steps",
       steps: [
-        { title: "Create an account", text: "Secure sign-in with Clerk — takes a minute." },
+        { title: "Create an account", text: "Secure sign-in with Clerk - takes a minute." },
         { title: "Claim your business", text: "Find your listing and submit an ownership request." },
         { title: "Manage and grow", text: "Once an admin approves, your dashboard unlocks." }
       ]
@@ -303,7 +303,7 @@ const copy = {
     adminBand: {
       kicker: "Platform control",
       title: "A command center for admins",
-      text: "Claim queue, content moderation, categories, and the entire database — in one console.",
+      text: "Claim queue, content moderation, categories, and the entire database - in one console.",
       cta: "Admin console"
     },
     footer: {
