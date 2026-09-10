@@ -39,7 +39,7 @@ const COPY: Record<WaitlistTopic, Record<string, WaitlistCopy>> = {
   city: {
     uz: {
       title: "Manzil hozircha faqat Toshkentda",
-      lead: "Keyingi shahar — eng ko'p so'ralgani. Shahringizni tanlang, ochilganda birinchi bo'lib xabar beramiz.",
+      lead: "Keyingi shahar - eng ko'p so'ralgani. Shahringizni tanlang, ochilganda birinchi bo'lib xabar beramiz.",
       emailLabel: "Email",
       cityLabel: "Shahar",
       submit: "Shahrimni so'rash",
@@ -50,7 +50,7 @@ const COPY: Record<WaitlistTopic, Record<string, WaitlistCopy>> = {
     },
     ru: {
       title: "Manzil пока работает только в Ташкенте",
-      lead: "Следующий город — тот, который просят чаще всего. Выберите свой, и мы напишем первым, когда откроемся.",
+      lead: "Следующий город - тот, который просят чаще всего. Выберите свой, и мы напишем первым, когда откроемся.",
       emailLabel: "Email",
       cityLabel: "Город",
       submit: "Запросить мой город",
