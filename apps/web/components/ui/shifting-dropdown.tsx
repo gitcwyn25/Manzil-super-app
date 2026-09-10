@@ -3,7 +3,7 @@
 import type { Locale } from "@manzil/shared";
 import { ArrowRight, ChevronDown, Compass } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { type ReactNode, useEffect, useId, useRef, useState } from "react";
+import { type CSSProperties, type ReactNode, useEffect, useId, useRef, useState } from "react";
 
 export interface ShiftingDropDownCategory {
   id: string;
@@ -130,7 +130,7 @@ function Tabs({
             onClick={() => handleSetSelected(isOpen ? null : group.id)}
             onFocus={() => handleSetSelected(group.id)}
             onMouseEnter={() => handleSetSelected(group.id)}
-            style={{ "--category-accent": group.accent } as React.CSSProperties}
+            style={{ "--category-accent": group.accent } as CSSProperties}
             type="button"
           >
             <span className="category-menu__tab-icon" aria-hidden="true">
@@ -152,7 +152,6 @@ function Tabs({
           <DropdownContent
             direction={direction}
             group={selectedGroup}
-            instanceId={instanceId}
             locale={locale}
             onClose={() => handleSetSelected(null)}
             onSelectCategory={onSelectCategory}
@@ -168,7 +167,6 @@ function Tabs({
 function DropdownContent({
   direction,
   group,
-  instanceId,
   locale,
   onClose,
   onSelectCategory,
@@ -177,7 +175,6 @@ function DropdownContent({
 }: {
   direction: Direction;
   group: ShiftingDropDownGroup;
-  instanceId: string;
   locale: Locale;
   onClose: () => void;
   onSelectCategory: (slug: string) => void;
@@ -235,7 +232,7 @@ function DropdownContent({
         <div className="category-menu__dropdown-header">
           <span
             className="category-menu__dropdown-icon"
-            style={{ "--category-accent": group.accent } as React.CSSProperties}
+            style={{ "--category-accent": group.accent } as CSSProperties}
           >
             {group.icon}
           </span>
@@ -261,7 +258,7 @@ function DropdownContent({
             >
               <span
                 className="category-menu__item-icon"
-                style={{ "--category-accent": category.color } as React.CSSProperties}
+                style={{ "--category-accent": category.color } as CSSProperties}
               >
                 {category.icon}
               </span>
