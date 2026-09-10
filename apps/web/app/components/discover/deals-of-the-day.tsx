@@ -23,6 +23,10 @@ function getTag(locale: Locale) {
   return locale === "uz" ? "Bugungi tanlov" : locale === "ru" ? "Выбор дня" : "Today's pick";
 }
 
+function getTitle(locale: Locale) {
+  return locale === "uz" ? "Bugungi tanlovlar" : locale === "ru" ? "Выбор дня" : "Today's picks";
+}
+
 function getTagline(locale: Locale) {
   return locale === "uz"
     ? "Bugun sinab ko'rishga arziydigan mahalliy maskanlar"
@@ -73,13 +77,13 @@ export function DealsOfTheDay({
             <span>{getTag(locale)}</span>
           </div>
           <h2 className="deals-of-the-day__title" id="deals-of-the-day-title">
-            Deals of the day
+            {getTitle(locale)}
           </h2>
         </div>
         <p className="deals-of-the-day__tagline">{getTagline(locale)}</p>
       </div>
 
-      <OfferCarousel aria-label="Deals of the day" offers={offers} />
+      <OfferCarousel aria-label={getTitle(locale)} offers={offers} />
     </section>
   );
 }
