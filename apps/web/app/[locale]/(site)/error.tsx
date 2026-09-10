@@ -16,7 +16,7 @@ import { ERROR_COPY, StatusPage } from "../../components/status-page";
  * layout tree itself.
  *
  * `/business/register` and `/business/plans` keep their own, more specific
- * boundaries — this one does not replace them.
+ * boundaries - this one does not replace them.
  */
 export default function SiteError({
   error,
