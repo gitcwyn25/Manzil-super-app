@@ -16,7 +16,7 @@ import { formatNumber, formatUzs, intlLocale } from "../../../../lib/format";
 
 export const dynamic = "force-dynamic";
 
-/** Business timezone, matching the customer list — a UTC-rendered time shows the wrong hour to a Tashkent owner. */
+/** Business timezone, matching the customer list - a UTC-rendered time shows the wrong hour to a Tashkent owner. */
 const TIME_ZONE = "Asia/Tashkent";
 
 const STATUS_FILTERS: BookingStatus[] = ["pending", "confirmed", "completed", "canceled", "no_show"];
@@ -32,7 +32,7 @@ const STATUS_VARIANTS: Record<BookingStatus, StatusPillVariant> = {
 };
 
 /**
- * Which status actions are offered from a given status — mirrors the API's
+ * Which status actions are offered from a given status - mirrors the API's
  * transition rule exactly (BookingsRepository: any non-terminal status may
  * move to any other status; completed/canceled/no_show are terminal and get
  * no actions at all).
@@ -136,7 +136,7 @@ export default async function BookingsPage({
         ))}
       </nav>
 
-      {/* Manual booking intake — same form semantics as before, IconField skin. */}
+      {/* Manual booking intake - same form semantics as before, IconField skin. */}
       <section className="card ws-panel">
         <div className="card-body ws-panel__body">
           <div className="ws-panel__head">
