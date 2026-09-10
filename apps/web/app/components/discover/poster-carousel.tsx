@@ -60,11 +60,6 @@ export function DiscoverPosterCarousel({ locale, children }: { locale: Locale; c
             <button type="button" onClick={() => move(1)} aria-label={locale === "uz" ? "Keyingi poster" : locale === "ru" ? "Следующий постер" : "Next poster"}>→</button>
           </div>
         </div>
-        <div className="discover-poster-carousel__rail" aria-label={locale === "uz" ? "Posterlar" : locale === "ru" ? "Постеры" : "Posters"}>
-          {POSTER_SLIDES.map((slide, index) => {
-            const slideCopy = slide.copy[locale] ?? slide.copy.en;
-            return <button type="button" key={slide.slug} className={"discover-poster-carousel__thumb " + (index === activeIndex ? "is-active" : "")} onClick={() => setActiveIndex(index)} aria-label={slideCopy.cta} aria-pressed={index === activeIndex}><img src={slide.image} alt="" aria-hidden="true" /><span>{slideCopy.cta}</span></button>;
-          })}
         </div>
       </div>
     </section>
