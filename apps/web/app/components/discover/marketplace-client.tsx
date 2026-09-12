@@ -4,6 +4,7 @@ import type { BusinessPlatform, Category, Locale } from "@manzil/shared";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import {
+  BUSINESS_CATEGORY_PARENT_BY_SLUG,
   CategoryStrip,
   MARKETPLACE_CATEGORIES,
   MARKETPLACE_PARENT_CATEGORY_SLUGS
@@ -11,7 +12,10 @@ import {
 import { DiscoverHero } from "./discover-hero";
 import { DiscoverPosterCarousel } from "./poster-carousel";
 import { ExploreTashkentCompact } from "./explore-tashkent-compact";
-import { type FilterState, TASHKENT_DISTRICTS } from "./marketplace-filter-sidebar";
+import { MarketplaceEmptyState } from "./marketplace-states";
+import { MarketplaceFilterSidebar, type FilterState } from "./marketplace-filter-sidebar";
+import { MarketplaceMobileFilterDrawer } from "./marketplace-mobile-filter-drawer";
+import { ResultsGrid } from "./results-grid";
 import { DotPattern } from "../../../components/ui/dot-pattern";
 
 function isPresentableBusiness(business: BusinessPlatform): boolean {
@@ -87,10 +91,19 @@ export function MarketplaceClient({
     [initialBusinesses]
   );
 
+  const categoryNames = useMemo(
+    () =>
+      Object.fromEntries(
+        categories.map((category) => [
+          category.slug,
+          category.name[locale] ?? category.name.uz
+        ])
+      ),
+    [categories, locale]
+  );
+
   const [searchQuery, setSearchQuery] = useState(initialQuery);
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
-  const [visibleCount, setVisibleCount] = useState(12);
 
   const [filters, setFilters] = useState<FilterState>({
     category: initialCategory,
@@ -154,6 +167,19 @@ export function MarketplaceClient({
     };
     setFilters(resetState);
     router.replace(pathname, { scroll: false });
+  };
+
+  const handleCategorySelect = (categorySlug: string) => {
+    if (categorySlug === "all") {
+      router.push(`/${locale}/categories`);
+      return;
+    }
+
+    const groupSlug = BUSINESS_CATEGORY_PARENT_BY_SLUG[categorySlug] ?? categorySlug;
+    const destination = categorySlug === groupSlug
+      ? `/${locale}/categories/${groupSlug}`
+      : `/${locale}/categories/${groupSlug}/${categorySlug}`;
+    router.push(destination);
   };
 
   // Filter and Sort Engine
@@ -239,9 +265,7 @@ export function MarketplaceClient({
     return result;
   }, [presentableBusinesses, searchQuery, filters]);
 
-  const displayedBusinesses = filteredAndSortedBusinesses.slice(0, visibleCount);
   const totalCount = filteredAndSortedBusinesses.length;
-  const hasMore = visibleCount < totalCount;
 
   // Active filter badges
   const activeChips = useMemo(() => {
@@ -310,6 +334,23 @@ export function MarketplaceClient({
     return list;
   }, [searchQuery, filters, locale]);
 
+  const sortValue = filters.sortBy === "rating" ? "rating" : "recommended";
+  const resultsTitle = searchQuery
+    ? locale === "uz"
+      ? "Qidiruv natijalari"
+      : locale === "ru"
+      ? "Результаты поиска"
+      : "Search results"
+    : locale === "uz"
+    ? "Toshkentdagi maskanlar"
+    : locale === "ru"
+    ? "Места в Ташкенте"
+    : "Places in Tashkent";
+  const sortLabel = locale === "uz" ? "Saralash" : locale === "ru" ? "Сортировка" : "Sort by";
+  const recommendedLabel = locale === "uz" ? "Tavsiya etilgan" : locale === "ru" ? "Рекомендуемые" : "Recommended";
+  const ratingLabel = locale === "uz" ? "Eng yuqori baho" : locale === "ru" ? "Высокий рейтинг" : "Highest rated";
+  const filterLabel = locale === "uz" ? "Filtrlar" : locale === "ru" ? "Фильтры" : "Filters";
+
   return (
     <div className="discover-marketplace-root">
       <DotPattern
@@ -323,25 +364,122 @@ export function MarketplaceClient({
         cr={0.9}
       />
       <div className="discover-marketplace-content">
-      {/* 1–3. Full-bleed editorial hero: poster background with search and categories layered on top. */}
-      <DiscoverPosterCarousel locale={locale}>
-        <DiscoverHero
+        {/* 1–3. Full-bleed editorial hero: poster background with search and categories layered on top. */}
+        <DiscoverPosterCarousel locale={locale}>
+          <DiscoverHero
+            locale={locale}
+            onSearchChange={setSearchQuery}
+            onSearchSubmit={(query) => updateUrlParams({}, query)}
+            searchQuery={searchQuery}
+          />
+
+          <CategoryStrip
+            locale={locale}
+            onSelectCategory={handleCategorySelect}
+            onViewAll={() => router.push(`/${locale}/categories/places`)}
+            selectedCategory={filters.category}
+          />
+        </DiscoverPosterCarousel>
+
+        <section aria-labelledby="discover-results-title" className="mp-results-section">
+          <div className="mp-mobile-filter-bar">
+            <button
+              className="mp-mobile-filter-btn"
+              onClick={() => setIsMobileDrawerOpen(true)}
+              type="button"
+            >
+              <span>{filterLabel}</span>
+              {activeChips.length > 0 ? (
+                <span className="mp-mobile-filter-count">{activeChips.length}</span>
+              ) : null}
+            </button>
+            <label className="mp-sort-dropdown">
+              <span className="sr-only">{sortLabel}</span>
+              <select
+                aria-label={sortLabel}
+                className="mp-mobile-sort-select"
+                onChange={(event) => handleFilterChange({ sortBy: event.target.value })}
+                value={sortValue}
+              >
+                <option value="recommended">{recommendedLabel}</option>
+                <option value="rating">{ratingLabel}</option>
+              </select>
+            </label>
+          </div>
+
+          {activeChips.length > 0 ? (
+            <div className="mp-active-filters-row">
+              <span className="mp-active-filters-label">{filterLabel}:</span>
+              <div className="mp-active-chips-list">
+                {activeChips.map((chip) => (
+                  <button className="mp-active-chip" key={chip.id} onClick={chip.onRemove} type="button">
+                    <span>{chip.label}</span>
+                    <span aria-hidden="true" className="mp-active-chip__remove">×</span>
+                  </button>
+                ))}
+                <button className="mp-clear-all-btn" onClick={handleResetFilters} type="button">
+                  {locale === "uz" ? "Barchasini tozalash" : locale === "ru" ? "Сбросить всё" : "Clear all"}
+                </button>
+              </div>
+            </div>
+          ) : null}
+
+          <div className="mp-results-header">
+            <div className="mp-results-header__left">
+              <h2 className="mp-results-header__title" id="discover-results-title">{resultsTitle}</h2>
+              <span className="mp-results-header__count">
+                {locale === "uz" ? `${totalCount} ta natija` : locale === "ru" ? `Найдено: ${totalCount}` : `${totalCount} results`}
+              </span>
+            </div>
+            <label className="mp-sort-dropdown d-none d-sm-flex">
+              <span className="mp-sort-dropdown__label">{sortLabel}:</span>
+              <select
+                aria-label={sortLabel}
+                className="mp-sort-select"
+                onChange={(event) => handleFilterChange({ sortBy: event.target.value })}
+                value={sortValue}
+              >
+                <option value="recommended">{recommendedLabel}</option>
+                <option value="rating">{ratingLabel}</option>
+              </select>
+            </label>
+          </div>
+
+          <div className="mp-layout-grid">
+            <MarketplaceFilterSidebar
+              filters={filters}
+              locale={locale}
+              onFilterChange={handleFilterChange}
+              onResetFilters={handleResetFilters}
+              totalCount={totalCount}
+            />
+            <div className="mp-cards-area">
+              {totalCount > 0 ? (
+                <ResultsGrid
+                  businesses={filteredAndSortedBusinesses}
+                  categoryNames={categoryNames}
+                  loadMoreLabel={locale === "uz" ? "Yana ko'rsatish" : locale === "ru" ? "Показать ещё" : "Load more"}
+                  locale={locale}
+                />
+              ) : (
+                <MarketplaceEmptyState locale={locale} onResetFilters={handleResetFilters} />
+              )}
+            </div>
+          </div>
+        </section>
+
+        <MarketplaceMobileFilterDrawer
+          filters={filters}
+          isOpen={isMobileDrawerOpen}
           locale={locale}
-          onSearchChange={setSearchQuery}
-          onSearchSubmit={(query) => updateUrlParams({}, query)}
-          searchQuery={searchQuery}
+          onClose={() => setIsMobileDrawerOpen(false)}
+          onFilterChange={handleFilterChange}
+          onResetFilters={handleResetFilters}
+          totalCount={totalCount}
         />
 
-        <CategoryStrip
-          locale={locale}
-          onSelectCategory={(catSlug) => handleFilterChange({ category: catSlug })}
-          selectedCategory={filters.category}
-        />
-      </DiscoverPosterCarousel>
-
-      {/* 4. Compact Explore Tashkent Cultural & Heritage Showcase */}
-      <ExploreTashkentCompact locale={locale} />
-
+        {/* Compact Explore Tashkent Cultural & Heritage Showcase */}
+        <ExploreTashkentCompact locale={locale} />
       </div>
     </div>
   );
