@@ -165,6 +165,10 @@
 // vm-kit so its shared card restatements win.
 @import "discover";
 
+// Standalone business-category hub and landing pages. Kept separate from
+// Discover so category pages can grow independently of the catalog.
+@import "travel-activities";
+
 // Home: feature trio and bento business grid.
 // Loads after discover so .home-card.home-featured outranks the shared
 // Master Card recipe where the featured slot's anatomy differs.
