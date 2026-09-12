@@ -45,7 +45,10 @@ jobs:
       - name: Generate Prisma client
         run: npm run db:generate
 
-      - name: Build API
+      - name: Build shared package
+              run: npm run build:shared
+              
+              - name: Build API
         run: npm run build --workspace @manzil/api
 
       - name: Run migrations (staging)
