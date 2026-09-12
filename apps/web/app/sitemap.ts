@@ -3,6 +3,7 @@ import type { MetadataRoute } from "next";
 import { API_BASE_URL } from "./lib/api-base-url";
 import { fetchWithTimeout } from "./lib/fetch-with-timeout";
 import { absoluteUrl, languageAlternates, ROUTE_SEO } from "./lib/seo";
+import { BUSINESS_CATEGORY_GROUPS } from "./lib/business-categories";
 
 /**
  * /sitemap.xml
@@ -90,6 +91,38 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })
   );
 
+  const categoryEntries = [
+    ...localizedEntries("/categories", {
+      priority: 0.85,
+      changeFrequency: "weekly",
+      lastModified: now
+    }),
+    ...localizedEntries("/categories/places", {
+      priority: 0.8,
+      changeFrequency: "weekly",
+      lastModified: now
+    }),
+    ...BUSINESS_CATEGORY_GROUPS.flatMap((group) => [
+      ...localizedEntries(`/categories/${group.rootSlug}`, {
+        priority: 0.75,
+        changeFrequency: "weekly",
+        lastModified: now
+      }),
+      ...localizedEntries(`/categories/${group.rootSlug}/places`, {
+        priority: 0.7,
+        changeFrequency: "weekly",
+        lastModified: now
+      }),
+      ...group.categories.flatMap((category) =>
+        localizedEntries(`/categories/${group.rootSlug}/${category.slug}`, {
+          priority: 0.6,
+          changeFrequency: "weekly",
+          lastModified: now
+        })
+      )
+    ])
+  ];
+
   const [businesses, lists, occasions] = await Promise.all([
     publicList("/search", (payload) => slugsFrom(payload, "businesses")),
     publicList("/lists", (payload) => slugsFrom(payload, "lists")),
@@ -126,5 +159,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     )
   ];
 
-  return [...staticEntries, ...dynamicEntries];
+  return [...staticEntries, ...categoryEntries, ...dynamicEntries];
 }
