@@ -29,6 +29,7 @@ interface ShiftingDropDownProps {
   groups: ShiftingDropDownGroup[];
   selectedCategory: string;
   onSelectCategory: (slug: string) => void;
+  onViewAll?: () => void;
 }
 
 type Direction = "l" | "r" | null;
@@ -53,7 +54,8 @@ export function ShiftingDropDown({
   locale,
   groups,
   selectedCategory,
-  onSelectCategory
+  onSelectCategory,
+  onViewAll
 }: ShiftingDropDownProps) {
   const instanceId = useId().replace(/:/g, "");
 
@@ -64,6 +66,7 @@ export function ShiftingDropDown({
         groups={groups}
         locale={locale}
         onSelectCategory={onSelectCategory}
+        onViewAll={onViewAll}
         selectedCategory={selectedCategory}
       />
     </div>
@@ -75,6 +78,7 @@ function Tabs({
   groups,
   locale,
   onSelectCategory,
+  onViewAll,
   selectedCategory
 }: ShiftingDropDownProps & { instanceId: string }) {
   const [selected, setSelected] = useState<string | null>(null);
@@ -177,6 +181,7 @@ function Tabs({
             locale={locale}
             onClose={() => handleSetSelected(null)}
             onSelectCategory={onSelectCategory}
+            onViewAll={onViewAll}
             selectedCategory={selectedCategory}
             overlayId={overlayId}
             tabId={tabId(selectedGroup.id)}
@@ -193,6 +198,7 @@ function DropdownContent({
   locale,
   onClose,
   onSelectCategory,
+  onViewAll,
   selectedCategory,
   overlayId,
   tabId
@@ -202,6 +208,7 @@ function DropdownContent({
   locale: Locale;
   onClose: () => void;
   onSelectCategory: (slug: string) => void;
+  onViewAll?: () => void;
   selectedCategory: string;
   overlayId: string;
   tabId: string;
@@ -250,7 +257,7 @@ function DropdownContent({
       key={group.id}
       role="menu"
       transition={{ duration: 0.2, ease: "easeOut" }}
-      style={{ left: dropdownLeft }}
+      style={{ left: dropdownLeft } as CSSProperties}
     >
       <div className="category-menu__bridge" aria-hidden="true" />
       <span
@@ -330,7 +337,8 @@ function DropdownContent({
         <button
           className="category-menu__view-all"
           onClick={() => {
-            onSelectCategory("all");
+            if (onViewAll) onViewAll();
+            else onSelectCategory("all");
             onClose();
           }}
           type="button"
