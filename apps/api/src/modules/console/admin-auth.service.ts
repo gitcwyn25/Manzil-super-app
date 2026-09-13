@@ -15,10 +15,10 @@ export type ResolvedAdmin = {
 /**
  * Identity signals a request can carry.
  *
- * `actor` is accepted purely for source compatibility with existing callers
- * (`PermissionGuard`, `ConsoleAuthController#session`) that still resolve a
- * Clerk actor upstream before calling in here — `resolveAdmin` never reads
- * it. See the comment on `resolveAdmin` for why.
+ * A session id is accepted only after the caller verifies the signed session
+ * cookie. A Clerk actor is accepted only after `ClerkAuthService` verifies
+ * the bearer token. In both cases the identity must resolve to an active
+ * `AdminUser`; authentication alone never grants console access.
  */
 export type AdminIdentity = {
   actor?: ManzilActor;
@@ -49,29 +49,32 @@ export class AdminAuthService {
   constructor(private readonly prisma: PrismaService) {}
 
   /**
-   * Resolves the current admin from a verified session cookie ONLY.
-   *
-   * The admin console used to also accept a Clerk actor here (matched by
-   * `clerkId`/`userId`) as a second way in. Product decision: exactly one
-   * door. `identity.actor`, even though callers upstream (`PermissionGuard`,
-   * `ConsoleAuthController#session`) still resolve and pass one, is
-   * deliberately never consulted below.
-   *
-   * `AdminUser.clerkId` stays in the schema — existing rows carry it, and
-   * dropping a column is not reversible — but it is no longer a credential.
-   *
-   * Recovery: there is now no "forgot password" flow for the credential
-   * admin. Losing the password is recovered by re-running
-   * `packages/db/prisma/seed-admin-credentials.ts` with a new
-   * `ADMIN_BOOTSTRAP_PASSWORD` in the root `.env` — it upserts by
-   * `username` and overwrites `passwordHash`, so re-running it is safe.
+   * Resolves the current admin from either a verified credential session or a
+   * verified Clerk actor. The two paths are deliberately fail-closed: a
+   * verified identity still needs an active AdminUser row and assigned roles.
    */
   async resolveAdmin(identity: AdminIdentity): Promise<ResolvedAdmin | null> {
-    if (!identity.sessionAdminId) {
+    if (identity.sessionAdminId) {
+      return this.loadResolvedAdminById(identity.sessionAdminId);
+    }
+
+    if (!identity.actor) {
       return null;
     }
 
-    return this.loadResolvedAdminById(identity.sessionAdminId);
+    const identityFilters: Prisma.AdminUserWhereInput[] = [
+      { userId: identity.actor.userId }
+    ];
+    if (identity.actor.clerkId) {
+      identityFilters.push({ clerkId: identity.actor.clerkId });
+    }
+
+    const admin = await this.prisma.adminUser.findFirst({
+      where: { isActive: true, OR: identityFilters },
+      include: ADMIN_WITH_ROLES
+    });
+
+    return admin ? this.toResolvedAdmin(admin) : null;
   }
 
   /**
