@@ -50,7 +50,7 @@
     "@tailwindcss/postcss": "^4.3.3",
     "gsap": "^3.15.0",
     "motion": "^13.1.1",
-    "postcss": "^8.5.26",
+    "postcss": "^8.5.29",
     "tailwindcss": "^4.3.3"
   }
 }
