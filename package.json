@@ -37,12 +37,12 @@
     "seed": "tsx packages/db/prisma/seed.ts"
   },
   "devDependencies": {
-    "@clerk/testing": "^2.2.13",
-    "@playwright/test": "^1.61.1",
+    "@clerk/testing": "^2.2.46",
+    "@playwright/test": "^1.64.1",
     "prisma": "6.19.3",
     "tsx": "latest",
     "typescript": "latest",
-    "wait-on": "^9.1.0"
+    "wait-on": "^9.5.1"
   },
   "dependencies": {
     "@openrouter/sdk": "^0.13.20",
