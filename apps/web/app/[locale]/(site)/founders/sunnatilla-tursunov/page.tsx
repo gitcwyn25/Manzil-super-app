@@ -84,6 +84,7 @@ export default async function FounderProfilePage({ params }: Props) {
         <section id="education" className={styles.section} aria-labelledby="education-heading">
           <h2 id="education-heading">{copy.educationTitle}</h2>
           <div>
+            <p>{copy.currentStudies}</p>
             <p className={styles.eyebrow}><time dateTime="2026-07">{copy.graduation}</time></p>
             <p>{copy.educationBody}</p>
           </div>

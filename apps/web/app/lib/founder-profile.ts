@@ -6,6 +6,7 @@ export const FOUNDER_PROFILE = {
   image: "/founders/sunnatilla.jpg",
   linkedIn: "https://www.linkedin.com/in/sunnatilla-tursunov",
   university: "Tashkent State University of Economics",
+  mastersUniversity: "University of World Economy and Diplomacy",
   publication: {
     title: "Challenges and Prospects for Expanding Access to Promising Foreign Labor Markets for Citizens of Uzbekistan",
     url: "https://www.gejournal.net/index.php/IJSSIR/article/view/2706",
@@ -46,6 +47,7 @@ type FounderCopy = {
   startupBody: string;
   explore: string;
   educationTitle: string;
+  currentStudies: string;
   educationBody: string;
   graduation: string;
   researchTitle: string;
@@ -61,9 +63,9 @@ type FounderCopy = {
 export const FOUNDER_COPY: Record<Locale, FounderCopy> = {
   en: {
     title: "Sunnatilla Tursunov | Founder of Manzil Group",
-    description: "Meet Sunnatilla Tursunov, founder of Manzil Group and TSUE graduate. Explore his work on local discovery in Tashkent and international labor-market research.",
+    description: "Sunnatilla Tursunov, founder of Manzil Group and master's student in World Economy at the University of World Economy and Diplomacy. TSUE graduate.",
     role: "Founder of Manzil Group",
-    bio: "Sunnatilla Tursunov is the founder of Manzil Group, a startup developing a personal assistant for discovering local businesses and services in Tashkent based on people's preferences. He graduated from Tashkent State University of Economics in July 2026. His published research examines international labor markets and opportunities for citizens of Uzbekistan.",
+    bio: "Sunnatilla Tursunov is the founder of Manzil Group, a startup developing a personal assistant for discovering local businesses and services in Tashkent based on people's preferences. He is currently pursuing a master's degree in World Economy at the University of World Economy and Diplomacy. He completed his undergraduate degree in World Economy and International Economic Relations at Tashkent State University of Economics in July 2026. His published research examines international labor markets and opportunities for citizens of Uzbekistan.",
     founders: "Meet the founders",
     linkedIn: "Connect on LinkedIn",
     onThisPage: "On this page",
@@ -71,7 +73,8 @@ export const FOUNDER_COPY: Record<Locale, FounderCopy> = {
     startupBody: "From cafes to car services, Manzil Group is developing a personal assistant to help people find places and services that fit their preferences. It is designed for residents exploring their own neighborhoods, visitors to Tashkent, and anyone looking for a local business in an unfamiliar part of the city.",
     explore: "Explore Manzil",
     educationTitle: "Education",
-    educationBody: "Graduated from Tashkent State University of Economics in July 2026.",
+    currentStudies: "Currently pursuing a master's degree in World Economy at the University of World Economy and Diplomacy.",
+    educationBody: "Completed an undergraduate degree in World Economy and International Economic Relations at Tashkent State University of Economics in July 2026.",
     graduation: "July 2026",
     researchTitle: "Published research",
     researchBody: "This co-authored study examines overseas employment opportunities for Uzbek citizens, including migration trends, bilateral labor agreements, and vocational preparation.",
@@ -84,9 +87,9 @@ export const FOUNDER_COPY: Record<Locale, FounderCopy> = {
   },
   uz: {
     title: "Sunnatilla Tursunov | Manzil Group asoschisi",
-    description: "Manzil Group asoschisi va TDIU bitiruvchisi Sunnatilla Tursunov bilan tanishing. Toshkentdagi mahalliy xizmatlar va xalqaro mehnat bozorlari bo‘yicha faoliyati.",
+    description: "Sunnatilla Tursunov — Manzil Group asoschisi, Jahon iqtisodiyoti va diplomatiya universitetining Jahon iqtisodiyoti magistratura yo‘nalishi talabasi, TDIU bitiruvchisi.",
     role: "Manzil Group asoschisi",
-    bio: "Sunnatilla Tursunov — Manzil Group asoschisi. Startap odamlarning shaxsiy afzalliklariga mos ravishda Toshkentdagi mahalliy biznes va xizmatlarni topishga yordam beradigan shaxsiy yordamchini ishlab chiqmoqda. U 2026-yil iyul oyida Toshkent davlat iqtisodiyot universitetini tamomlagan. Uning chop etilgan tadqiqoti xalqaro mehnat bozorlari va O‘zbekiston fuqarolari uchun imkoniyatlarga bag‘ishlangan.",
+    bio: "Sunnatilla Tursunov — Manzil Group asoschisi. Startap odamlarning shaxsiy afzalliklariga mos ravishda Toshkentdagi mahalliy biznes va xizmatlarni topishga yordam beradigan shaxsiy yordamchini ishlab chiqmoqda. U hozirda Jahon iqtisodiyoti va diplomatiya universitetida Jahon iqtisodiyoti yo‘nalishi bo‘yicha magistraturada tahsil olmoqda. 2026-yil iyul oyida Toshkent davlat iqtisodiyot universitetining Jahon iqtisodiyoti va xalqaro iqtisodiy munosabatlar yo‘nalishini tamomlagan. Uning chop etilgan tadqiqoti xalqaro mehnat bozorlari va O‘zbekiston fuqarolari uchun imkoniyatlarga bag‘ishlangan.",
     founders: "Asoschilar bilan tanishing",
     linkedIn: "LinkedIn orqali bog‘lanish",
     onThisPage: "Sahifa bo‘limlari",
@@ -94,7 +97,8 @@ export const FOUNDER_COPY: Record<Locale, FounderCopy> = {
     startupBody: "Kafelardan tortib avtoservislargacha — Manzil Group odamlarga o‘z afzalliklariga mos joy va xizmatlarni topishda yordam beradigan shaxsiy yordamchini ishlab chiqmoqda. U o‘z mahallasini o‘rganayotgan aholi, Toshkent mehmonlari va shaharning notanish hududida mahalliy biznes izlayotganlar uchun mo‘ljallangan.",
     explore: "Manzilni kashf eting",
     educationTitle: "Ta’lim",
-    educationBody: "2026-yil iyul oyida Toshkent davlat iqtisodiyot universitetini tamomlagan.",
+    currentStudies: "Hozirda Jahon iqtisodiyoti va diplomatiya universitetida Jahon iqtisodiyoti yo‘nalishi bo‘yicha magistraturada tahsil olmoqda.",
+    educationBody: "2026-yil iyul oyida Toshkent davlat iqtisodiyot universitetining Jahon iqtisodiyoti va xalqaro iqtisodiy munosabatlar yo‘nalishini tamomlagan.",
     graduation: "2026-yil iyul",
     researchTitle: "Chop etilgan tadqiqot",
     researchBody: "Hammualliflikdagi ushbu tadqiqot O‘zbekiston fuqarolarining xorijda ish bilan band bo‘lish imkoniyatlarini, jumladan migratsiya tendensiyalari, ikki tomonlama mehnat shartnomalari va kasbiy tayyorgarlikni o‘rganadi.",
@@ -107,9 +111,9 @@ export const FOUNDER_COPY: Record<Locale, FounderCopy> = {
   },
   ru: {
     title: "Sunnatilla Tursunov | Основатель Manzil Group",
-    description: "Sunnatilla Tursunov — основатель Manzil Group и выпускник ТГЭУ. Поиск мест и услуг в Ташкенте, образование и исследования международных рынков труда.",
+    description: "Sunnatilla Tursunov — основатель Manzil Group, магистрант по мировой экономике Университета мировой экономики и дипломатии и выпускник ТГЭУ.",
     role: "Основатель Manzil Group",
-    bio: "Sunnatilla Tursunov — основатель Manzil Group, стартапа, который разрабатывает персонального помощника для поиска местных компаний и услуг в Ташкенте с учётом предпочтений человека. В июле 2026 года он окончил Ташкентский государственный экономический университет. Его опубликованное исследование посвящено международным рынкам труда и возможностям для граждан Узбекистана.",
+    bio: "Sunnatilla Tursunov — основатель Manzil Group, стартапа, который разрабатывает персонального помощника для поиска местных компаний и услуг в Ташкенте с учётом предпочтений человека. Сейчас он обучается в магистратуре по направлению «Мировая экономика» в Университете мировой экономики и дипломатии. В июле 2026 года он завершил обучение по направлению «Мировая экономика и международные экономические отношения» в Ташкентском государственном экономическом университете. Его опубликованное исследование посвящено международным рынкам труда и возможностям для граждан Узбекистана.",
     founders: "Познакомиться с основателями",
     linkedIn: "Связаться в LinkedIn",
     onThisPage: "На этой странице",
@@ -117,7 +121,8 @@ export const FOUNDER_COPY: Record<Locale, FounderCopy> = {
     startupBody: "От кафе до автосервисов — Manzil Group разрабатывает персонального помощника, который помогает находить места и услуги с учётом предпочтений человека. Он предназначен для жителей, изучающих свой район, гостей Ташкента и тех, кто ищет местные компании в незнакомой части города.",
     explore: "Открыть Manzil",
     educationTitle: "Образование",
-    educationBody: "Окончил Ташкентский государственный экономический университет в июле 2026 года.",
+    currentStudies: "Сейчас обучается в магистратуре по направлению «Мировая экономика» в Университете мировой экономики и дипломатии.",
+    educationBody: "В июле 2026 года завершил обучение по направлению «Мировая экономика и международные экономические отношения» в Ташкентском государственном экономическом университете.",
     graduation: "Июль 2026",
     researchTitle: "Опубликованное исследование",
     researchBody: "Исследование, подготовленное в соавторстве, рассматривает возможности трудоустройства граждан Узбекистана за рубежом, включая миграционные тенденции, двусторонние трудовые соглашения и профессиональную подготовку.",

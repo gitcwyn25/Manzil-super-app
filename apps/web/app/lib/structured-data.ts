@@ -125,6 +125,7 @@ export function founderProfileSchema(locale: Locale): JsonLdNode {
       jobTitle: FOUNDER_COPY[locale].role,
       worksFor: { "@id": ORG_ID },
       alumniOf: { "@type": "CollegeOrUniversity", name: FOUNDER_PROFILE.university },
+      affiliation: { "@type": "CollegeOrUniversity", name: FOUNDER_PROFILE.mastersUniversity },
       sameAs: [FOUNDER_PROFILE.linkedIn]
     },
     citation: {
