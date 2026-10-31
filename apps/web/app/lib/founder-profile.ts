@@ -1,0 +1,131 @@
+import type { Locale } from "@manzil/shared";
+
+export const FOUNDER_PROFILE = {
+  name: "Sunnatilla Tursunov",
+  path: "/founders/sunnatilla-tursunov",
+  image: "/founders/sunnatilla.jpg",
+  linkedIn: "https://www.linkedin.com/in/sunnatilla-tursunov",
+  university: "Tashkent State University of Economics",
+  publication: {
+    title: "Challenges and Prospects for Expanding Access to Promising Foreign Labor Markets for Citizens of Uzbekistan",
+    url: "https://www.gejournal.net/index.php/IJSSIR/article/view/2706",
+    coauthor: "Farkhod Abdurakhmonov",
+    journal: "International Journal of Social Science & Interdisciplinary Research",
+    published: "2025-06-29",
+    citation: "14(06), 275–290"
+  },
+  coverage: [
+    {
+      url: "https://tsue.uz/oz/news/tdiu-talabalari-ozbekistonning-qator-xorijiy-elchixonalarida-amaliyot-otab-xalqaro-tajribaga-ega-bolishmoqda",
+      title: {
+        uz: "TDIU talabalarining xorijdagi amaliyoti",
+        ru: "Зарубежная практика студентов ТГЭУ",
+        en: "International internships for TSUE students"
+      }
+    },
+    {
+      url: "https://tsue.uz/oz/news/tdiu-vakillari-uxan-universiteti-yozgi-maktab-dasturida-ishtirok-etmoqda",
+      title: {
+        uz: "Uxan universitetidagi yozgi maktab",
+        ru: "Летняя школа Уханьского университета",
+        en: "Wuhan University summer school"
+      }
+    }
+  ]
+} as const;
+
+type FounderCopy = {
+  title: string;
+  description: string;
+  role: string;
+  bio: string;
+  founders: string;
+  linkedIn: string;
+  onThisPage: string;
+  startupTitle: string;
+  startupBody: string;
+  explore: string;
+  educationTitle: string;
+  educationBody: string;
+  graduation: string;
+  researchTitle: string;
+  researchBody: string;
+  coauthor: string;
+  publicationDate: string;
+  readResearch: string;
+  coverageTitle: string;
+  coverageBody: string;
+  readCoverage: string;
+};
+
+export const FOUNDER_COPY: Record<Locale, FounderCopy> = {
+  en: {
+    title: "Sunnatilla Tursunov | Founder of Manzil Group",
+    description: "Meet Sunnatilla Tursunov, founder of Manzil Group and TSUE graduate. Explore his work on local discovery in Tashkent and international labor-market research.",
+    role: "Founder of Manzil Group",
+    bio: "Sunnatilla Tursunov is the founder of Manzil Group, a startup developing a personal assistant for discovering local businesses and services in Tashkent based on people's preferences. He graduated from Tashkent State University of Economics in July 2026. His published research examines international labor markets and opportunities for citizens of Uzbekistan.",
+    founders: "Meet the founders",
+    linkedIn: "Connect on LinkedIn",
+    onThisPage: "On this page",
+    startupTitle: "Building Manzil Group",
+    startupBody: "From cafes to car services, Manzil Group is developing a personal assistant to help people find places and services that fit their preferences. It is designed for residents exploring their own neighborhoods, visitors to Tashkent, and anyone looking for a local business in an unfamiliar part of the city.",
+    explore: "Explore Manzil",
+    educationTitle: "Education",
+    educationBody: "Graduated from Tashkent State University of Economics in July 2026.",
+    graduation: "July 2026",
+    researchTitle: "Published research",
+    researchBody: "This co-authored study examines overseas employment opportunities for Uzbek citizens, including migration trends, bilateral labor agreements, and vocational preparation.",
+    coauthor: "Co-authored with",
+    publicationDate: "29 June 2025",
+    readResearch: "Read the research article",
+    coverageTitle: "University coverage",
+    coverageBody: "Official university articles shared by Sunnatilla Tursunov documenting international learning and internship programs.",
+    readCoverage: "Read on the TSUE website"
+  },
+  uz: {
+    title: "Sunnatilla Tursunov | Manzil Group asoschisi",
+    description: "Manzil Group asoschisi va TDIU bitiruvchisi Sunnatilla Tursunov bilan tanishing. Toshkentdagi mahalliy xizmatlar va xalqaro mehnat bozorlari bo‘yicha faoliyati.",
+    role: "Manzil Group asoschisi",
+    bio: "Sunnatilla Tursunov — Manzil Group asoschisi. Startap odamlarning shaxsiy afzalliklariga mos ravishda Toshkentdagi mahalliy biznes va xizmatlarni topishga yordam beradigan shaxsiy yordamchini ishlab chiqmoqda. U 2026-yil iyul oyida Toshkent davlat iqtisodiyot universitetini tamomlagan. Uning chop etilgan tadqiqoti xalqaro mehnat bozorlari va O‘zbekiston fuqarolari uchun imkoniyatlarga bag‘ishlangan.",
+    founders: "Asoschilar bilan tanishing",
+    linkedIn: "LinkedIn orqali bog‘lanish",
+    onThisPage: "Sahifa bo‘limlari",
+    startupTitle: "Manzil Group ustida ishlash",
+    startupBody: "Kafelardan tortib avtoservislargacha — Manzil Group odamlarga o‘z afzalliklariga mos joy va xizmatlarni topishda yordam beradigan shaxsiy yordamchini ishlab chiqmoqda. U o‘z mahallasini o‘rganayotgan aholi, Toshkent mehmonlari va shaharning notanish hududida mahalliy biznes izlayotganlar uchun mo‘ljallangan.",
+    explore: "Manzilni kashf eting",
+    educationTitle: "Ta’lim",
+    educationBody: "2026-yil iyul oyida Toshkent davlat iqtisodiyot universitetini tamomlagan.",
+    graduation: "2026-yil iyul",
+    researchTitle: "Chop etilgan tadqiqot",
+    researchBody: "Hammualliflikdagi ushbu tadqiqot O‘zbekiston fuqarolarining xorijda ish bilan band bo‘lish imkoniyatlarini, jumladan migratsiya tendensiyalari, ikki tomonlama mehnat shartnomalari va kasbiy tayyorgarlikni o‘rganadi.",
+    coauthor: "Hammuallif",
+    publicationDate: "2025-yil 29-iyun",
+    readResearch: "Ilmiy maqolani o‘qish",
+    coverageTitle: "Universitet xabarlari",
+    coverageBody: "Sunnatilla Tursunov ulashgan xalqaro ta’lim va amaliyot dasturlari haqidagi universitetning rasmiy maqolalari.",
+    readCoverage: "TDIU saytida o‘qish"
+  },
+  ru: {
+    title: "Sunnatilla Tursunov | Основатель Manzil Group",
+    description: "Sunnatilla Tursunov — основатель Manzil Group и выпускник ТГЭУ. Поиск мест и услуг в Ташкенте, образование и исследования международных рынков труда.",
+    role: "Основатель Manzil Group",
+    bio: "Sunnatilla Tursunov — основатель Manzil Group, стартапа, который разрабатывает персонального помощника для поиска местных компаний и услуг в Ташкенте с учётом предпочтений человека. В июле 2026 года он окончил Ташкентский государственный экономический университет. Его опубликованное исследование посвящено международным рынкам труда и возможностям для граждан Узбекистана.",
+    founders: "Познакомиться с основателями",
+    linkedIn: "Связаться в LinkedIn",
+    onThisPage: "На этой странице",
+    startupTitle: "Создание Manzil Group",
+    startupBody: "От кафе до автосервисов — Manzil Group разрабатывает персонального помощника, который помогает находить места и услуги с учётом предпочтений человека. Он предназначен для жителей, изучающих свой район, гостей Ташкента и тех, кто ищет местные компании в незнакомой части города.",
+    explore: "Открыть Manzil",
+    educationTitle: "Образование",
+    educationBody: "Окончил Ташкентский государственный экономический университет в июле 2026 года.",
+    graduation: "Июль 2026",
+    researchTitle: "Опубликованное исследование",
+    researchBody: "Исследование, подготовленное в соавторстве, рассматривает возможности трудоустройства граждан Узбекистана за рубежом, включая миграционные тенденции, двусторонние трудовые соглашения и профессиональную подготовку.",
+    coauthor: "Соавтор",
+    publicationDate: "29 июня 2025 года",
+    readResearch: "Прочитать научную статью",
+    coverageTitle: "Публикации университета",
+    coverageBody: "Официальные статьи университета о международных образовательных программах и стажировках, которыми поделился Sunnatilla Tursunov.",
+    readCoverage: "Читать на сайте ТГЭУ"
+  }
+};

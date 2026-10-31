@@ -217,6 +217,12 @@ function FounderProfiles({ locale }: { locale: Locale }) {
               <p className="founder-card__role">{founder.role[locale]}</p>
             </div>
             <p className="founder-card__bio">{founder.bio[locale]}</p>
+            {founder.profilePath && (
+              <Link href={`/${locale}${founder.profilePath}`} className="btn btn-outline-primary align-self-start">
+                {locale === "uz" ? "To‘liq profil" : locale === "ru" ? "Полный профиль" : "Full profile"}
+                <span className="visually-hidden">: {founder.name[locale]}</span>
+              </Link>
+            )}
           </article>
         ))}
       </div>

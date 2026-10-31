@@ -5,6 +5,7 @@ import Link from "next/link";
 import { CompanionLoop } from "./media/companion-loop";
 import { getBusinessCopy } from "../lib/business-copy";
 import { Icon } from "./vm/icons";
+import { FOUNDER_PROFILE } from "../lib/founder-profile";
 
 const FOOTER_MOBILE_TEXT: Record<Locale, { title: string; desc: string; cta: string }> = {
   uz: {
@@ -221,6 +222,7 @@ export function Footer({ locale }: { locale: Locale }) {
   const follow = FOOTER_FOLLOW_TEXT[locale] ?? FOOTER_FOLLOW_TEXT.uz;
 
   const navLinks = [
+    { label: FOUNDER_PROFILE.name, href: `/${locale}${FOUNDER_PROFILE.path}` },
     { label: locale === "uz" ? "Hujjatlar" : locale === "ru" ? "Документы" : "Docs", href: `/${locale}/docs` },
     { label: locale === "uz" ? "Maxfiylik" : locale === "ru" ? "Конфиденциальность" : "Privacy", href: `/${locale}/legal/privacy` },
     { label: businessCopy.nav.discover, href: `/${locale}/discover` },

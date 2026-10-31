@@ -4,6 +4,7 @@ import { API_BASE_URL } from "./lib/api-base-url";
 import { fetchWithTimeout } from "./lib/fetch-with-timeout";
 import { absoluteUrl, languageAlternates, ROUTE_SEO } from "./lib/seo";
 import { BUSINESS_CATEGORY_GROUPS } from "./lib/business-categories";
+import { FOUNDER_PROFILE } from "./lib/founder-profile";
 
 /**
  * /sitemap.xml
@@ -159,5 +160,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     )
   ];
 
-  return [...staticEntries, ...categoryEntries, ...dynamicEntries];
+  const founderEntries = localizedEntries(FOUNDER_PROFILE.path, {
+    priority: 0.5,
+    changeFrequency: "monthly"
+  });
+  return [...staticEntries, ...categoryEntries, ...founderEntries, ...dynamicEntries];
 }
