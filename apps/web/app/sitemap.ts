@@ -4,6 +4,8 @@ import { API_BASE_URL } from "./lib/api-base-url";
 import { fetchWithTimeout } from "./lib/fetch-with-timeout";
 import { absoluteUrl, languageAlternates, ROUTE_SEO } from "./lib/seo";
 import { BUSINESS_CATEGORY_GROUPS } from "./lib/business-categories";
+import { FOUNDER_PROFILE } from "./lib/founder-profile";
+import { docs } from "./lib/docs";
 
 /**
  * /sitemap.xml
@@ -51,7 +53,7 @@ type Entry = MetadataRoute.Sitemap[number];
 /** One row per locale for a locale-relative path, each carrying the hreflang set. */
 function localizedEntries(
   path: string,
-  options: { priority?: number; changeFrequency?: Entry["changeFrequency"]; lastModified?: Date }
+  options: { priority?: number; changeFrequency?: Entry["changeFrequency"] }
 ): MetadataRoute.Sitemap {
   const languages = languageAlternates(path);
   return locales.map((locale) => ({
@@ -81,43 +83,37 @@ function slugsFrom(payload: unknown, key: string): SlugRow[] {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const now = new Date();
-
+  // A sitemap refresh is not a content update. Omit lastModified until the
+  // source provides a real modification timestamp rather than inventing one.
   const staticEntries = STATIC_KEYS.flatMap((key) =>
     localizedEntries(ROUTE_SEO[key].path, {
       priority: PRIORITY[key],
-      changeFrequency: key === "home" || key === "discover" ? "daily" : "weekly",
-      lastModified: now
+      changeFrequency: key === "home" || key === "discover" ? "daily" : "weekly"
     })
   );
 
   const categoryEntries = [
     ...localizedEntries("/categories", {
       priority: 0.85,
-      changeFrequency: "weekly",
-      lastModified: now
+      changeFrequency: "weekly"
     }),
     ...localizedEntries("/categories/places", {
       priority: 0.8,
-      changeFrequency: "weekly",
-      lastModified: now
+      changeFrequency: "weekly"
     }),
     ...BUSINESS_CATEGORY_GROUPS.flatMap((group) => [
       ...localizedEntries(`/categories/${group.rootSlug}`, {
         priority: 0.75,
-        changeFrequency: "weekly",
-        lastModified: now
+        changeFrequency: "weekly"
       }),
       ...localizedEntries(`/categories/${group.rootSlug}/places`, {
         priority: 0.7,
-        changeFrequency: "weekly",
-        lastModified: now
+        changeFrequency: "weekly"
       }),
       ...group.categories.flatMap((category) =>
         localizedEntries(`/categories/${group.rootSlug}/${category.slug}`, {
           priority: 0.6,
-          changeFrequency: "weekly",
-          lastModified: now
+          changeFrequency: "weekly"
         })
       )
     ])
@@ -134,8 +130,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       row.slug
         ? localizedEntries(`/businesses/${row.slug}`, {
             priority: 0.8,
-            changeFrequency: "weekly",
-            lastModified: now
+            changeFrequency: "weekly"
           })
         : []
     ),
@@ -143,8 +138,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       row.slug
         ? localizedEntries(`/lists/${row.slug}`, {
             priority: 0.6,
-            changeFrequency: "weekly",
-            lastModified: now
+            changeFrequency: "weekly"
           })
         : []
     ),
@@ -152,12 +146,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       row.slug
         ? localizedEntries(`/occasions/${row.slug}`, {
             priority: 0.6,
-            changeFrequency: "monthly",
-            lastModified: now
+            changeFrequency: "monthly"
           })
         : []
     )
   ];
 
-  return [...staticEntries, ...categoryEntries, ...dynamicEntries];
+  const founderEntries = localizedEntries(FOUNDER_PROFILE.path, {
+    priority: 0.5,
+    changeFrequency: "monthly"
+  });
+  const companyEntries = [
+    ...localizedEntries("/docs", { changeFrequency: "monthly", priority: 0.4 }),
+    ...Object.values(docs)
+      .filter((document) => !document.legal)
+      .flatMap((document) => localizedEntries(document.path, {
+        changeFrequency: "monthly",
+        priority: 0.5
+      }))
+  ];
+  return [...staticEntries, ...companyEntries, ...categoryEntries, ...founderEntries, ...dynamicEntries];
 }

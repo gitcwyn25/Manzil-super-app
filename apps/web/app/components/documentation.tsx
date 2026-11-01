@@ -146,7 +146,8 @@ function markdown(source: string, locale: Locale) {
 
     const heading = /^(#{1,3})\s+(.+)$/.exec(line);
     if (heading) {
-      const Tag = `h${heading[1].length}` as "h1" | "h2" | "h3";
+      // The page shell owns h1; document content starts at h2.
+      const Tag = `h${Math.max(2, heading[1].length)}` as "h2" | "h3";
       nodes.push(<Tag id={headingId(heading[2])} key={`heading-${index}`}>{inlineContent(heading[2], locale)}</Tag>);
       index += 1;
       continue;
@@ -217,6 +218,12 @@ function FounderProfiles({ locale }: { locale: Locale }) {
               <p className="founder-card__role">{founder.role[locale]}</p>
             </div>
             <p className="founder-card__bio">{founder.bio[locale]}</p>
+            {founder.profilePath && (
+              <Link href={`/${locale}${founder.profilePath}`} className="btn btn-outline-primary align-self-start">
+                {locale === "uz" ? "To‘liq profil" : locale === "ru" ? "Полный профиль" : "Full profile"}
+                <span className="visually-hidden">: {founder.name[locale]}</span>
+              </Link>
+            )}
           </article>
         ))}
       </div>
@@ -393,7 +400,8 @@ export function DocumentationHub({ locale }: { locale: Locale }) {
 export function DocumentationPage({ id, locale }: { id: DocId; locale: Locale }) {
   const doc = docs[id];
   const t = copy[locale];
-  const content = docMarkdown(id, locale);
+  // Source documents repeat their title, already rendered by the page header.
+  const content = docMarkdown(id, locale).replace(/^(?:\uFEFF)?\s*# [^\r\n]+(?:\r?\n|$)/, "");
 
   return (
     <article className="docs-page docs-article">

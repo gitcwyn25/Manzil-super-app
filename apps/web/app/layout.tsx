@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { SITE_URL } from "./lib/seo";
+import { ROUTE_SEO, SITE_URL } from "./lib/seo";
 import "./globals.css";
 import "./styles/vibrant.scss";
 
@@ -26,14 +26,16 @@ import "./styles/vibrant.scss";
  * supplies its own through `app/lib/seo.ts`. `metadataBase` is what makes
  * every canonical, hreflang and OG URL resolve absolutely.
  */
+const googleSiteVerification = process.env.GOOGLE_SITE_VERIFICATION?.trim();
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Manzil - Toshkentdagi joylarni kashf eting",
+    default: ROUTE_SEO.home.title.uz,
     template: "%s | Manzil"
   },
-  description:
-    "Toshkentdagi kafe, restoran va xizmatlarni haqiqiy sharhlar asosida toping.",
+  description: ROUTE_SEO.home.description.uz,
+  ...(googleSiteVerification ? { verification: { google: googleSiteVerification } } : {}),
   applicationName: "Manzil",
   referrer: "strict-origin-when-cross-origin",
   formatDetection: { telephone: false, address: false, email: false },
