@@ -17,6 +17,21 @@ Public accessibility does not establish Google index status. That must be inspec
 
 ## Complete Google Search Console verification
 
+The supplied Google verification uses the **HTML file** method. The repository now includes:
+
+`apps/web/public/google59f31b8e52736256.html`
+
+Its exact content is `google-site-verification: google59f31b8e52736256.html`. After this revision is deployed to production:
+
+1. Confirm `https://manzilgroup.uz/google59f31b8e52736256.html` returns HTTP 200 with that content, without a sign-in requirement or locale redirect.
+2. Return to the matching HTML-file verification dialog in Search Console and click **Verify**.
+3. Keep the verification file deployed after verification succeeds.
+4. Submit `https://manzilgroup.uz/sitemap.xml` in Search Console's Sitemaps section, then inspect the homepage and founder-profile URLs.
+
+No `GOOGLE_SITE_VERIFICATION` environment value is needed for this file method.
+
+### Alternative: HTML tag
+
 1. Open https://search.google.com/search-console/welcome using the Google account that should own the property.
 2. Add a **URL-prefix** property for `https://manzilgroup.uz/`.
 3. Choose **HTML tag** and copy its `content` value. For example, from `<meta name="google-site-verification" content="YOUR_VALUE" />`, use only `YOUR_VALUE`.
