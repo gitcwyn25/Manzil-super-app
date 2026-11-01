@@ -45,6 +45,7 @@ export function organizationSchema(locale: Locale): JsonLdNode {
     "@type": "Organization",
     "@id": ORG_ID,
     name: BRAND.name,
+    alternateName: "Manzil Group",
     founder: {
       "@type": "Person",
       "@id": FOUNDER_ID,

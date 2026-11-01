@@ -106,14 +106,14 @@ export const ROUTE_SEO = {
     path: "",
     absoluteTitle: true,
     title: {
-      uz: "Manzil - Toshkentdagi joylarni kashf eting",
-      ru: "Manzil - места Ташкента",
-      en: "Manzil - discover Tashkent"
+      uz: "Manzil | Toshkentdagi kafe, restoran va xizmatlar",
+      ru: "Manzil | Кафе, рестораны и услуги в Ташкенте",
+      en: "Manzil | Cafés, Restaurants & Local Services in Tashkent"
     },
     description: {
-      uz: "Toshkentdagi kafe, restoran va xizmatlarni haqiqiy sharhlar asosida toping.",
-      ru: "Находите кафе, рестораны и услуги Ташкента по реальным отзывам.",
-      en: "Find cafés, restaurants and services in Tashkent through real reviews."
+      uz: "Manzil bilan Toshkentdagi kafe, restoran, avtoservis va mahalliy xizmatlarni toping. Kategoriya, tuman va shaxsiy afzalliklaringizga mos joylarni solishtiring.",
+      ru: "Находите кафе, рестораны, автосервисы и местные услуги в Ташкенте с Manzil. Сравнивайте места по категории, району и вашим предпочтениям.",
+      en: "Find cafés, restaurants, car services and local businesses in Tashkent with Manzil. Compare places by category, district and your preferences."
     }
   },
   discover: {
