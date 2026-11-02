@@ -32,7 +32,6 @@ export const revalidate = 3600;
  *  them. */
 const STATIC_KEYS = [
   "home",
-  "discover",
   "lists",
   "occasions",
   "business",
@@ -41,7 +40,6 @@ const STATIC_KEYS = [
 
 const PRIORITY: Record<(typeof STATIC_KEYS)[number], number> = {
   home: 1,
-  discover: 0.9,
   lists: 0.7,
   occasions: 0.7,
   business: 0.8,
@@ -88,7 +86,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticEntries = STATIC_KEYS.flatMap((key) =>
     localizedEntries(ROUTE_SEO[key].path, {
       priority: PRIORITY[key],
-      changeFrequency: key === "home" || key === "discover" ? "daily" : "weekly"
+      changeFrequency: key === "home" ? "daily" : "weekly"
     })
   );
 

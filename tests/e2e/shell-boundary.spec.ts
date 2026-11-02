@@ -12,10 +12,10 @@ test.describe("shell boundary", () => {
     await expect(page.locator('[data-shell="workspace"]')).toHaveCount(0);
   });
 
-  test("discover renders the site shell", async ({ page }) => {
-    await page.goto("/en/discover");
-    await expect(page.locator('[data-shell="site"]')).toBeVisible();
-    await expect(page.locator("nav.mobile-nav")).toHaveCount(1);
+  test("discover leaves the site shell for its independent app", async ({ request }) => {
+    const response = await request.get("/en/discover", { maxRedirects: 0 });
+    expect(response.status()).toBe(308);
+    expect(response.headers().location).toBe("https://discover.manzilgroup.uz/");
   });
 
   test("the workspace renders no consumer chrome", async ({ page }) => {
