@@ -10,7 +10,7 @@ const copy = {
     nav: {
       home: "Bosh sahifa",
       pricing: "Narxlar",
-      forBusiness: "Biznes uchun",
+      forBusiness: "Hamkorlik",
       discover: "Kashf eting",
       concierge: "Katalog",
       events: "Tadbirlar",
@@ -138,7 +138,7 @@ const copy = {
     nav: {
       home: "Главная",
       pricing: "Тарифы",
-      forBusiness: "Для бизнеса",
+      forBusiness: "Сотрудничество",
       discover: "Найти",
       concierge: "Каталог",
       events: "События",
@@ -242,7 +242,7 @@ const copy = {
     nav: {
       home: "Home",
       pricing: "Pricing",
-      forBusiness: "For business",
+      forBusiness: "Cooperation",
       discover: "Discover",
       concierge: "Catalogue",
       events: "Events",
