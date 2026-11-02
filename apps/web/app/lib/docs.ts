@@ -1,6 +1,7 @@
 import type { Locale } from "@manzil/shared";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { FOUNDER_COPY, FOUNDER_PROFILE } from "./founder-profile";
 
 export type DocId = "about" | "contact" | "trust" | "terms" | "privacy" | "cookies" | "reviews" | "ai-transparency" | "founders";
 
@@ -13,19 +14,21 @@ export type FounderProfile = {
   name: Record<Locale, string>;
   role: Record<Locale, string>;
   bio: Record<Locale, string>;
+  profilePath?: string;
 };
 
 export const founderProfiles: FounderProfile[] = [
   {
     id: "sunnatilla-tursunov",
+    profilePath: FOUNDER_PROFILE.path,
     initials: "ST",
     image: "/founders/sunnatilla.jpg",
     name: { uz: "Sunnatilla Tursunov", ru: "Sunnatilla Tursunov", en: "Sunnatilla Tursunov" },
     role: { uz: "Founder · CEO · CTO", ru: "Основатель · CEO · CTO", en: "Founder · CEO · CTO" },
     bio: {
-      uz: "Sunnatilla Tursunov - TSUE bitiruvchisi, xalqaro iqtisodchi va Manzil asoschisi. U Manzilni odamlar uchun O‘zbekistondagi haqiqiy joylarni topishni, mahalliy bizneslar uchun esa to‘g‘ri mijozlarga yetib borishni osonlashtiradigan platforma sifatida qurmoqda.",
-      ru: "Суннатилла Турсунов - международный экономист и выпускник TSUE. Он основал Manzil и создаёт платформу, которая помогает людям находить реальные места в Узбекистане, а местным компаниям - привлекать подходящих клиентов.",
-      en: "Sunnatilla Tursunov is an International Economist and TSUE alumnus. He founded Manzil and is building it as a platform that makes it easier for people to find real places in Uzbekistan and for local businesses to reach the right customers."
+      uz: FOUNDER_COPY.uz.bio,
+      ru: FOUNDER_COPY.ru.bio,
+      en: FOUNDER_COPY.en.bio
     }
   },
   {

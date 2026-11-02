@@ -1,4 +1,5 @@
 import type { Business, Locale, Review } from "@manzil/shared";
+import { FOUNDER_COPY, FOUNDER_PROFILE } from "./founder-profile";
 import {
   absoluteUrl,
   BRAND,
@@ -25,6 +26,7 @@ export type JsonLdNode = Record<string, unknown>;
 
 const ORG_ID = `${SITE_URL}/#organization`;
 const WEBSITE_ID = `${SITE_URL}/#website`;
+const FOUNDER_ID = `${canonicalUrl("en", FOUNDER_PROFILE.path)}#person`;
 
 const ORG_DESCRIPTION: Record<Locale, string> = {
   uz: "Manzil - Toshkentdagi bizneslarni topish va haqiqiy sharhlar platformasi.",
@@ -43,6 +45,13 @@ export function organizationSchema(locale: Locale): JsonLdNode {
     "@type": "Organization",
     "@id": ORG_ID,
     name: BRAND.name,
+    alternateName: "Manzil Group",
+    founder: {
+      "@type": "Person",
+      "@id": FOUNDER_ID,
+      name: FOUNDER_PROFILE.name,
+      url: canonicalUrl(locale, FOUNDER_PROFILE.path)
+    },
     url: SITE_URL,
     description: ORG_DESCRIPTION[locale],
     logo: {
@@ -94,6 +103,46 @@ export function websiteSchema(locale: Locale): JsonLdNode {
 }
 
 export type Crumb = { name: string; path: string };
+
+/** The biography and publication details are also visible on the profile. */
+export function founderProfileSchema(locale: Locale): JsonLdNode {
+  const url = canonicalUrl(locale, FOUNDER_PROFILE.path);
+  const publication = FOUNDER_PROFILE.publication;
+  return {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    "@id": `${url}#profile`,
+    url,
+    name: FOUNDER_COPY[locale].title,
+    inLanguage: locale,
+    isPartOf: { "@id": WEBSITE_ID },
+    mainEntity: {
+      "@type": "Person",
+      "@id": FOUNDER_ID,
+      name: FOUNDER_PROFILE.name,
+      url,
+      image: absoluteUrl(FOUNDER_PROFILE.image),
+      description: FOUNDER_COPY[locale].bio,
+      jobTitle: FOUNDER_COPY[locale].role,
+      worksFor: { "@id": ORG_ID },
+      alumniOf: { "@type": "CollegeOrUniversity", name: FOUNDER_PROFILE.university },
+      affiliation: { "@type": "CollegeOrUniversity", name: FOUNDER_PROFILE.mastersUniversity },
+      sameAs: [FOUNDER_PROFILE.linkedIn]
+    },
+    citation: {
+      "@type": "ScholarlyArticle",
+      name: publication.title,
+      url: publication.url,
+      datePublished: publication.published,
+      inLanguage: "en",
+      author: [
+        { "@type": "Person", name: publication.coauthor },
+        { "@id": FOUNDER_ID }
+      ],
+      isPartOf: { "@type": "Periodical", name: publication.journal }
+    }
+  };
+}
 
 /** BreadcrumbList from locale-relative paths. */
 export function breadcrumbSchema(locale: Locale, crumbs: Crumb[]): JsonLdNode {

@@ -1,7 +1,6 @@
 import type { Locale } from "@manzil/shared";
 import type { Metadata } from "next";
 import { CleverFaq } from "../../components/home/clever-faq";
-import { CleverHero } from "../../components/home/clever-hero";
 import { GurmanVideoSection } from "../../components/home/gurman-video-section";
 import { ManzilStory } from "../../components/home/manzil-story";
 import { getLandingCopy } from "../../lib/landing-copy";
@@ -18,10 +17,9 @@ export async function generateMetadata({
 
 /**
  * Home — one Manzil system with a clear current/future boundary:
- * 1. Hero: Discover is live; Gurman is mobile/future.
- * 2. Mobile story: discovery, everyday needs, human experience, and sharing.
- * 3. Directory boundary: real listings belong to Discover only.
- * 4. FAQ and final path selection.
+ * 1. Mobile story: discovery, everyday needs, human experience, and sharing.
+ * 2. Directory boundary: real listings belong to Discover only.
+ * 3. FAQ and final path selection.
  */
 export default async function LandingPage({
   params
@@ -38,7 +36,6 @@ export default async function LandingPage({
         <span className="page-reveal-panel second" />
       </div>
 
-      <CleverHero copy={copy.hero} locale={locale} />
       <ManzilStory copy={copy.story} />
       <GurmanVideoSection copy={copy.gurman} locale={locale} />
       <CleverFaq copy={copy.faq} />
