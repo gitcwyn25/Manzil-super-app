@@ -85,11 +85,11 @@ system; Manzil/Clerk sessions are not shared implicitly.
 - Volume: `e55b622c-dc7e-484c-82e7-0b73d9176034`, mounted at `/persist`
 - Initial deployment: `25908533-c8d4-4e7b-af07-17b9f802c46a`
 
-The initial administrator email is `hello.manzil.co@gmail.com`. Its unique
-bootstrap password is stored only in the service's `ADMIN_PASSWORD` Railway
-variable. Retrieve it from the authenticated Railway dashboard, sign in, and
-choose your own password in the app. These variables only seed an empty
-database; changing them later does not change an existing user's password.
+The administrator email is `hello.manzil.co@gmail.com`. The owner completed
+the initial password change on 2 November 2026. Use the password the owner
+chose in the app; the old `ADMIN_PASSWORD` bootstrap variable is not the
+current password. These variables only seed an empty database; changing them
+later does not change an existing user's password.
 
 To deploy future changes to this hosting wrapper from the repository root:
 
