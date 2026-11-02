@@ -14,9 +14,9 @@ export function ManzilStory({ copy }: { copy: ManzilStoryCopy }) {
       <div className="container">
         <div className="manzil-story__header">
           <Reveal as="div" delay={80} variant="fade-up">
-            <h2 className="manzil-story__title" id="manzil-story-title">
+            <h1 className="manzil-story__title" id="manzil-story-title">
               {copy.title}
-            </h2>
+            </h1>
           </Reveal>
           <Reveal as="div" delay={160} variant="fade-up">
             <p className="manzil-story__subtitle">{copy.subtitle}</p>
