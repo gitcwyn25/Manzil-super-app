@@ -5,7 +5,7 @@ import { Bookmark, ChevronDown, MapPin, Menu, UserRound, X } from "lucide-react"
 import { useState } from "react";
 import { useApp } from "./providers";
 import type { Locale } from "../lib/api";
-export function Mark() { return <svg width="38" height="38" viewBox="0 0 48 48" fill="none" aria-hidden="true"><rect width="48" height="48" rx="14" fill="currentColor"/><path d="M13 35V22C13 15.9 17.9 11 24 11S35 15.9 35 22V35H28V22A4 4 0 0 0 20 22V35H13Z" fill="white"/><path d="M20 35H28" stroke="#70D4FF" strokeWidth="3"/></svg>; }
+export function Mark() { return <svg width="38" height="38" viewBox="0 0 48 48" fill="none" aria-hidden="true"><rect width="48" height="48" rx="14" fill="currentColor"/><path d="M13 35V22C13 15.9 17.9 11 24 11S35 15.9 35 22V35H28V22A4 4 0 0 0 20 22V35H13Z" fill="white"/><path d="M20 35H28" stroke="#83FD90" strokeWidth="3"/></svg>; }
 export function Shell({ children }: { children: React.ReactNode }) {
   const { t, locale, setLocale, user, authReady, signOut } = useApp();
   const [menu, setMenu] = useState(false);

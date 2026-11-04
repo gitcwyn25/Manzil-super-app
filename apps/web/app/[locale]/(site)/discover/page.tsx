@@ -74,34 +74,45 @@ export default async function DiscoverPage({ params }: { params: Promise<{ local
         })) }
       }} />
       <section className={styles.hero} aria-labelledby="discover-hub-title">
+        <img className={styles.heroImage} src="/discover/tashkent-metro.png" alt="" fetchPriority="high" />
+        <div className={styles.heroShade} aria-hidden="true" />
         <div className={styles.heroInner}>
-          <div>
+          <div className={styles.heroCopy}>
             <p className={styles.eyebrow}><span aria-hidden="true" />{text.eyebrow}</p>
             <h1 id="discover-hub-title">{text.title.split("\n").map(line => <span key={line}>{line}</span>)}</h1>
             <p className={styles.intro}>{text.intro}</p>
-            <a className={styles.heroLink} href="#manzil-apps">{text.section}<ArrowRight aria-hidden="true" size={18} /></a>
+            <div className={styles.heroActions}>
+              <a className={styles.heroLink} href={DISCOVER_URL}>{text.discoverAction}<ArrowUpRight aria-hidden="true" size={21} /></a>
+              <a className={styles.heroSecondary} href={REVIEWS_URL}>{text.reviewsAction}<ArrowUpRight aria-hidden="true" size={21} /></a>
+            </div>
           </div>
-          <div className={styles.portal} aria-hidden="true">
-            <div className={styles.portalOrbit} /><div className={styles.portalMark}><span /></div>
-            <span className={styles.portalPin}><MapPin size={24} /></span>
-            <span className={styles.portalStar}><Star size={23} /></span>
-            <span className={styles.portalWord}>MANZIL</span>
-          </div>
+          <span className={styles.heroStamp} aria-hidden="true">M.</span>
+        </div>
+        <div className={styles.heroBottom}>
+          <span><MapPin aria-hidden="true" size={15} /> TOSHKENT / MANZIL</span>
+          <a href="#manzil-apps">{text.section}<ArrowRight aria-hidden="true" size={18} /></a>
         </div>
       </section>
       <section className={styles.apps} id="manzil-apps" aria-label={text.section}>
+        <div className={styles.sectionHeading}><p className={styles.eyebrow}>{text.section}</p><span aria-hidden="true">01 — 02</span></div>
         <div className={styles.cardGrid}>
           <article className={styles.card} data-manzil-app="discover">
-            <div className={styles.cardHeading}><span className={styles.appIcon}><Compass aria-hidden="true" size={29} /></span><span className={styles.appCategory}>{text.discoverLabel}</span></div>
+            <div className={styles.cardImage}><img src="/discover/tashkent-metro.png" alt="" loading="lazy" /><span aria-hidden="true">01</span></div>
+            <div className={styles.cardBody}>
+            <div className={styles.cardHeading}><span className={styles.appIcon}><Compass aria-hidden="true" size={21} /></span><span className={styles.appCategory}>{text.discoverLabel}</span></div>
             <h2>Manzil Discover</h2><p>{text.discoverDescription}</p>
             <ul>{text.discoverFeatures.map(feature => <li key={feature}>{feature}</li>)}</ul>
             <a className={styles.appLink} href={DISCOVER_URL}><span>{text.discoverAction}<small>discover.manzilgroup.uz</small></span><ArrowUpRight aria-hidden="true" size={24} /></a>
+            </div>
           </article>
           <article className={`${styles.card} ${styles.reviewCard}`} data-manzil-app="reviews">
-            <div className={styles.cardHeading}><span className={styles.appIcon}><Star aria-hidden="true" size={28} /></span><span className={styles.appCategory}>{text.reviewsLabel}</span></div>
+            <div className={styles.cardImage}><img src="/discover/tashkent-avenue.png" alt="" loading="lazy" /><span aria-hidden="true">02</span></div>
+            <div className={styles.cardBody}>
+            <div className={styles.cardHeading}><span className={styles.appIcon}><Star aria-hidden="true" size={21} /></span><span className={styles.appCategory}>{text.reviewsLabel}</span></div>
             <h2>Manzil Reviews</h2><p>{text.reviewsDescription}</p>
             <ul>{text.reviewsFeatures.map(feature => <li key={feature}>{feature}</li>)}</ul>
             <a className={styles.appLink} href={REVIEWS_URL}><span>{text.reviewsAction}<small>review.manzilgroup.uz</small></span><ArrowUpRight aria-hidden="true" size={24} /></a>
+            </div>
           </article>
         </div>
         <aside className={styles.cooperation}>
