@@ -28,6 +28,18 @@ The API deployment archive is exported from an exact Git commit, including only
 the root build inputs, API, shared package and database package. This keeps
 unfinished frontend work and local configuration outside the API release.
 
+Published frontend source: `a319ab1c762d178d535120b4821365a4edb15f24`.
+Reviews production deployment `dpl_8gmXVV9EcZWsoztrV8Az2f1XUh8V` and main hub
+deployment `dpl_Bwvb6DWJtPVHT41hzVPVS4oendWc` are READY. The API deployment is
+`e3711d3a-9e9a-4415-ac2e-27d3b11f1b4d` from `a908840b842d`.
+
+Live checks passed for Reviews pages, real cards/details, signup entry, browser
+public configuration, sitemap, responsive CSS and unknown-business 404. All nine
+hub HTTP checks passed. Temporary confirmed-account API checks verified private
+saved-list persistence/idempotency and account isolation; both test accounts were
+removed. Browser interaction, actual email inbox delivery and browser uploads
+remain unverified because the browser host is unavailable.
+
 ## Accounts, data and moderation
 
 Public Reviews settings are `NEXT_PUBLIC_SUPABASE_URL`,
