@@ -5,13 +5,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { getBusinessCopy } from "../lib/business-copy";
-import { DISCOVER_URL } from "../lib/discover";
 
 // The public header has one deliberate link set: Home, Discover, Docs,
-// and Cooperation. Discover opens its independent application.
+// and Cooperation. Discover is the public hub for the independent apps.
 const links = [
   { key: "home" as const, href: (locale: Locale) => `/${locale}` },
-  { key: "discover" as const, href: (_locale: Locale) => DISCOVER_URL },
+  { key: "discover" as const, href: (locale: Locale) => `/${locale}/discover` },
   { key: "docs" as const, href: (locale: Locale) => `/${locale}/docs` },
   { key: "forBusiness" as const, href: (locale: Locale) => `/${locale}/business` }
 ];
@@ -36,12 +35,8 @@ export function SiteNav({ locale }: { locale: Locale }) {
                   : "Docs"
               : copy.nav[link.key as keyof typeof copy.nav];
 
-        if (link.key === "discover") {
-          return <a href={href} key={link.key}>{label}</a>;
-        }
-
         return (
-          <Link className={active ? "active" : undefined} href={href} key={link.key}>
+          <Link aria-current={active ? "page" : undefined} className={active ? "active" : undefined} href={href} key={link.key}>
             {label}
           </Link>
         );
@@ -96,21 +91,17 @@ export function MobileSiteNav({ locale }: { locale: Locale }) {
 
   const mobileLinks = [
     { key: "home" as const, href: `/${locale}`, label: copy.nav.home },
-    { key: "discover" as const, href: DISCOVER_URL, label: copy.nav.discover },
+    { key: "discover" as const, href: `/${locale}/discover`, label: copy.nav.discover },
     { key: "docs" as const, href: `/${locale}/docs`, label: locale === "uz" ? "Hujjatlar" : locale === "ru" ? "Документы" : "Docs" },
     { key: "forBusiness" as const, href: `/${locale}/business`, label: copy.nav.forBusiness }
   ];
 
   return (
     <nav className="mobile-nav" aria-label="Mobil navigatsiya">
-      {mobileLinks.map((link) => link.key === "discover" ? (
-        <a href={link.href} key={link.key}>
-          {mobileIcons[link.key]}
-          {link.label}
-        </a>
-      ) : (
+      {mobileLinks.map((link) => (
         <Link
-          className={pathname === link.href || (link.key === "home" && pathname === `/${locale}`) ? "active" : undefined}
+          aria-current={pathname === link.href || (link.key !== "home" && pathname.startsWith(`${link.href}/`)) ? "page" : undefined}
+          className={pathname === link.href || (link.key !== "home" && pathname.startsWith(`${link.href}/`)) ? "active" : undefined}
           href={link.href}
           key={link.key}
         >

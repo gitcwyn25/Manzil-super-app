@@ -119,14 +119,14 @@ export const ROUTE_SEO = {
   discover: {
     path: "/discover",
     title: {
-      uz: "Kashfiyot - Toshkentdagi joylarni qidiring",
-      ru: "Поиск - места Ташкента",
-      en: "Discover - search places in Tashkent"
+      uz: "Manzil ilovalari — joylar, rejalar va sharhlar",
+      ru: "Приложения Manzil — места, планы и отзывы",
+      en: "Manzil apps — places, plans and reviews"
     },
     description: {
-      uz: "Kategoriya, tuman va reyting bo'yicha filtrlab Toshkentdagi joylarni qidiring. Har bir kartochka katalogdagi real biznes.",
-      ru: "Ищите места в Ташкенте с фильтрами по категории, району и рейтингу. Каждая карточка - реальный бизнес из каталога.",
-      en: "Search places in Tashkent with filters for category, district and rating. Every card is a real listed business."
+      uz: "Manzil ilovalariga bitta sahifadan o'ting. Discover bilan sayohat va kunlik rejalaringizni tuzing, Reviews bilan mahalliy bizneslar va sharhlarni o'rganing.",
+      ru: "Все приложения Manzil на одной странице. Планируйте поездки с Discover, находите местные компании и читайте отзывы в Reviews.",
+      en: "Find the Manzil app for your next step. Plan places and trips with Discover, or explore local businesses, reviews and saved places with Reviews."
     }
   },
   lists: {

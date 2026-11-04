@@ -37,7 +37,7 @@ Every page exists at three locale-prefixed URLs: \`/uz/...\` (canonical default)
 ## Core pages
 
 - [Home](${SITE_URL}/uz): featured businesses and the Manzil catalogue.
-- [Discover](${SITE_URL}/uz/discover): searchable, filterable catalogue of every listed business. Accepts \`?q=\` for a text query and \`?category=\` for a category slug.
+- [Discover hub](${SITE_URL}/uz/discover): the public starting point for the separate Manzil apps. Each app retains its own interface and account session.
 - [Community lists](${SITE_URL}/uz/lists): place collections curated by people in Tashkent.
 - [Occasions](${SITE_URL}/uz/occasions): places grouped by what they are for - birthdays, dates, family dinners.
 

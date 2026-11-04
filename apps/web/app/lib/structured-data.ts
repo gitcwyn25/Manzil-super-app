@@ -76,12 +76,7 @@ export function organizationSchema(locale: Locale): JsonLdNode {
   };
 }
 
-/**
- * WebSite node with the SearchAction that lets a search engine offer a
- * sitelinks search box. The target is the real discover route - it already
- * reads `?q=` server-side, so the action resolves to a working page rather
- * than a decorative declaration.
- */
+/** The public website introduces the independent apps through its hub. */
 export function websiteSchema(locale: Locale): JsonLdNode {
   return {
     "@context": "https://schema.org",
@@ -90,15 +85,7 @@ export function websiteSchema(locale: Locale): JsonLdNode {
     url: SITE_URL,
     name: SITE_NAME,
     inLanguage: locale,
-    publisher: { "@id": ORG_ID },
-    potentialAction: {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: `${canonicalUrl(locale, "/discover")}?q={search_term_string}`
-      },
-      "query-input": "required name=search_term_string"
-    }
+    publisher: { "@id": ORG_ID }
   };
 }
 

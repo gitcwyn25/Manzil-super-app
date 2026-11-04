@@ -1,0 +1,67 @@
+.hub {
+  --surface: var(--vm-surface);
+  --surface-card: var(--vm-surface-container-lowest);
+  --text: var(--vm-on-surface);
+  --muted: var(--vm-on-surface-variant);
+  --line: var(--vm-outline-variant);
+  --ceramic: var(--bs-primary);
+  --primary-ghost: color-mix(in srgb, var(--bs-primary) 8%, transparent);
+  --radius-lg: var(--vm-radius-md);
+  --radius-md: var(--vm-radius-md);
+  background: var(--surface);
+  color: var(--text);
+}
+.hero { overflow: hidden; background: var(--void); color: #f4f8f7; padding: clamp(65px, 8vw, 116px) 24px 100px; }
+.heroInner { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(230px, 1fr); align-items: center; gap: 60px; max-width: 1140px; margin: auto; }
+.eyebrow { display: flex; align-items: center; gap: 12px; margin: 0 0 25px; font: 500 12px/1.5 var(--font-data), monospace; letter-spacing: 0.07em; text-transform: uppercase; color: #c1d1cf; }
+.eyebrow > span { height: 1px; width: 28px; background: currentColor; }
+.hero h1 { margin: 0; font: 650 clamp(34px, 4.4vw, 60px)/1.1 var(--font-display), sans-serif; letter-spacing: -0.045em; }
+.hero h1 > span { display: block; }
+.intro { max-width: 590px; margin: 26px 0; color: #c1d1cf; font-size: 17px; line-height: 1.75; }
+.heroLink { display: inline-flex; gap: 12px; align-items: center; color: #f4f8f7; font-weight: 600; text-underline-offset: 6px; }
+.portal { position: relative; width: 290px; height: 290px; justify-self: center; border: 1px solid rgb(244 248 247 / 0.18); border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle, rgb(0 112 107 / 0.28), transparent 70%); }
+.portalOrbit { position: absolute; inset: -28px; border: 1px dashed rgb(244 248 247 / 0.12); border-radius: 50%; }
+.portalMark { display: grid; place-items: center; width: 120px; height: 120px; border-radius: 31px; background: var(--ceramic); transform: rotate(-8deg); }
+.portalMark > span { width: 49px; height: 72px; border-radius: 28px 28px 0 0; background: #f4f8f7; }
+.portalPin, .portalStar { position: absolute; display: grid; place-items: center; width: 53px; height: 53px; border: 1px solid rgb(244 248 247 / 0.25); background: var(--void); border-radius: 16px; }
+.portalPin { left: -14px; top: 53px; }
+.portalStar { right: -10px; bottom: 58px; color: var(--brass); }
+.portalWord { position: absolute; bottom: 26px; font: 500 10px var(--font-data), monospace; letter-spacing: 0.28em; color: #c1d1cf; }
+.apps { max-width: 1140px; margin: -40px auto 0; padding: 0 24px 60px; position: relative; scroll-margin-top: 100px; }
+.cardGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.card { display: flex; flex-direction: column; padding: clamp(24px, 3vw, 38px); border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface-card); box-shadow: var(--soft-shadow); }
+.cardHeading { display: flex; gap: 16px; align-items: center; margin-bottom: 34px; }
+.appIcon { display: grid; place-items: center; height: 62px; width: 62px; border-radius: 18px; color: var(--ceramic); background: var(--primary-ghost); }
+.reviewCard .appIcon { color: var(--gold-dark); background: var(--gold-soft); }
+.appCategory { color: var(--muted); font-size: 13px; font-weight: 500; }
+.card h2 { margin: 0 0 15px; font: 650 clamp(25px, 3vw, 33px)/1.2 var(--font-display), sans-serif; letter-spacing: -0.035em; }
+.card > p { color: var(--muted); font-size: 16px; line-height: 1.75; margin: 0; max-width: 460px; }
+.card ul { display: flex; flex-wrap: wrap; list-style: none; padding: 0; gap: 8px; margin: 25px 0 38px; }
+.card li { padding: 7px 10px; border: 1px solid var(--line); border-radius: 8px; font-size: 12px; color: var(--muted); }
+.appLink { display: flex; align-items: center; justify-content: space-between; gap: 18px; color: var(--text); border-top: 1px solid var(--line); padding-top: 24px; margin-top: auto; font-weight: 600; text-decoration: none; }
+.appLink small { display: block; margin-top: 6px; font: 400 11px/1.5 var(--font-data), monospace; color: var(--muted); }
+.appLink > svg { flex-shrink: 0; color: var(--ceramic); transition: transform 160ms ease; }
+.appLink:hover > svg { transform: translate(3px, -3px); }
+.appLink:hover { color: var(--ceramic); }
+.heroLink:focus-visible, .appLink:focus-visible, .cooperation a:focus-visible { outline: 3px solid var(--brass); outline-offset: 7px; border-radius: 4px; }
+.cooperation { display: flex; align-items: center; justify-content: space-between; gap: 28px; margin-top: 30px; padding: 28px 32px; border: 1px solid var(--line); border-radius: var(--radius-md); }
+.cooperation h2 { margin: 0 0 7px; font-size: 18px; font-weight: 600; }
+.cooperation p { margin: 0; color: var(--muted); line-height: 1.6; font-size: 14px; }
+.cooperation a { display: inline-flex; align-items: center; gap: 12px; color: var(--ceramic); font-weight: 600; white-space: nowrap; text-decoration: none; }
+.closing { margin: 36px 0 0; color: var(--muted); font-size: 13px; text-align: center; }
+@media (max-width: 760px) {
+  .hero { padding: 56px 24px 82px; }
+  .heroInner { grid-template-columns: 1fr; gap: 38px; }
+  .portal { width: 180px; height: 180px; justify-self: end; margin-right: 20px; }
+  .portalOrbit { inset: -17px; }
+  .portalMark { width: 76px; height: 76px; border-radius: 21px; }
+  .portalMark > span { width: 32px; height: 46px; }
+  .portalPin, .portalStar { width: 40px; height: 40px; border-radius: 12px; }
+  .portalPin { top: 20px; }
+  .portalStar { bottom: 30px; }
+  .portalWord { bottom: 15px; font-size: 8px; }
+  .cardGrid { grid-template-columns: 1fr; gap: 18px; }
+  .cardHeading { margin-bottom: 24px; }
+  .cooperation { align-items: flex-start; flex-direction: column; padding: 24px; gap: 18px; }
+}
+@media (prefers-reduced-motion: reduce) { .appLink > svg { transition: none; } .appLink:hover > svg { transform: none; } }
