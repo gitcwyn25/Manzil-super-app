@@ -28,10 +28,19 @@ The API deployment archive is exported from an exact Git commit, including only
 the root build inputs, API, shared package and database package. This keeps
 unfinished frontend work and local configuration outside the API release.
 
-Published frontend source: `a319ab1c762d178d535120b4821365a4edb15f24`.
-Reviews production deployment `dpl_8gmXVV9EcZWsoztrV8Az2f1XUh8V` and main hub
-deployment `dpl_Bwvb6DWJtPVHT41hzVPVS4oendWc` are READY. The API deployment is
+Published frontend source: `a405d5e9cf1152fdf42b7f1f5b1f770000b1601a`.
+Reviews production deployment `dpl_DX1RKJZ1R6xABskshkCHns8xBZFj` and main-site
+deployment `dpl_9n9YFNAzsoEZNCTy2ar3DF9aWpy2` are READY. The API deployment is
 `e3711d3a-9e9a-4415-ac2e-27d3b11f1b4d` from `a908840b842d`.
+
+The 5 November 2026 visual release gives the landing page `#F0F0F0`, `#105BFF`
+and a small `#FE8500` accent; the localized Discover hub uses `#0009FF`,
+`#FDFDFE` and a small `#F42902` accent; Reviews uses `#F42902`, `#FDFDFF`
+and `#83FD90`. All three use viewport-sized photo headers and simpler actions.
+Approved business cover photos also extend across the Reviews detail page.
+Main web and Reviews typechecks, both Vercel production builds, nine live hub
+HTTP checks, and public palette/image checks passed. Browser visual and
+interaction QA remain unverified because the browser host is unavailable.
 
 Live checks passed for Reviews pages, real cards/details, signup entry, browser
 public configuration, sitemap, responsive CSS and unknown-business 404. All nine
