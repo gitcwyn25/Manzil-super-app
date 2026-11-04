@@ -1,6 +1,7 @@
 import type { Locale } from "@manzil/shared";
 import { ArrowRight, ArrowUpRight, Compass, MapPin, Star } from "lucide-react";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { JsonLd } from "../../../components/json-ld";
 import { DISCOVER_URL, REVIEWS_URL } from "../../../lib/discover";
@@ -74,7 +75,7 @@ export default async function DiscoverPage({ params }: { params: Promise<{ local
         })) }
       }} />
       <section className={styles.hero} aria-labelledby="discover-hub-title">
-        <img className={styles.heroImage} src="/discover/tashkent-metro.png" alt="" fetchPriority="high" />
+        <Image className={styles.heroImage} src="/discover/tashkent-metro-4k.jpg" alt="" fill sizes="100vw" preload />
         <div className={styles.heroShade} aria-hidden="true" />
         <div className={styles.heroInner}>
           <div className={styles.heroCopy}>
@@ -97,7 +98,7 @@ export default async function DiscoverPage({ params }: { params: Promise<{ local
         <div className={styles.sectionHeading}><p className={styles.eyebrow}>{text.section}</p><span aria-hidden="true">01 — 02</span></div>
         <div className={styles.cardGrid}>
           <article className={styles.card} data-manzil-app="discover">
-            <div className={styles.cardImage}><img src="/discover/tashkent-metro.png" alt="" loading="lazy" /><span aria-hidden="true">01</span></div>
+            <div className={styles.cardImage}><Image src="/discover/tashkent-metro-4k.jpg" alt="" fill sizes="(max-width: 600px) 100vw, 50vw" /><span aria-hidden="true">01</span></div>
             <div className={styles.cardBody}>
             <div className={styles.cardHeading}><span className={styles.appIcon}><Compass aria-hidden="true" size={21} /></span><span className={styles.appCategory}>{text.discoverLabel}</span></div>
             <h2>Manzil Discover</h2><p>{text.discoverDescription}</p>
@@ -106,7 +107,7 @@ export default async function DiscoverPage({ params }: { params: Promise<{ local
             </div>
           </article>
           <article className={`${styles.card} ${styles.reviewCard}`} data-manzil-app="reviews">
-            <div className={styles.cardImage}><img src="/discover/tashkent-avenue.png" alt="" loading="lazy" /><span aria-hidden="true">02</span></div>
+            <div className={styles.cardImage}><Image src="/discover/neighbourhood-cafe-4k.jpg" alt="" fill sizes="(max-width: 600px) 100vw, 50vw" /><span aria-hidden="true">02</span></div>
             <div className={styles.cardBody}>
             <div className={styles.cardHeading}><span className={styles.appIcon}><Star aria-hidden="true" size={21} /></span><span className={styles.appCategory}>{text.reviewsLabel}</span></div>
             <h2>Manzil Reviews</h2><p>{text.reviewsDescription}</p>
@@ -119,7 +120,7 @@ export default async function DiscoverPage({ params }: { params: Promise<{ local
           <div><h2>{text.businessTitle}</h2><p>{text.businessDescription}</p></div>
           <Link href={`/${locale}/business`}>{text.businessAction}<ArrowRight aria-hidden="true" size={18} /></Link>
         </aside>
-        <p className={styles.closing}>{text.footer}</p>
+        <p className={styles.closing}>{text.footer} <a href="/photography.html">{locale === "uz" ? "Foto mualliflari" : locale === "ru" ? "Авторы фото" : "Photo credits"}</a></p>
       </section>
     </div>
   );

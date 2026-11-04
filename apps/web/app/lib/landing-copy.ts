@@ -282,7 +282,7 @@ const landing: Record<string, LandingCopy> = {
       },
       care: {
         eyebrow: "Everyday care",
-        context: "Mobile concept",
+        context: "Ishlab chiqilmoqda",
         kicker: "Your next plan",
         planTitle: "Find a barber",
         avatar: "S",
@@ -319,7 +319,7 @@ const landing: Record<string, LandingCopy> = {
         placeName: "Qorasuv Courtyard",
         verdict: "Worth the visit",
         tag: "Hikoyalar",
-        title: "John Doe hikoyasi",
+        title: "O‘z kashfiyotlaringizni ulashing",
         description: "Joy, suratlar va shaxsiy fikr bilan o‘z shahar hikoyangizni ulashing."
       }
     },
@@ -633,7 +633,7 @@ const landing: Record<string, LandingCopy> = {
       },
       care: {
         eyebrow: "Повседневные задачи",
-        context: "Мобильная концепция",
+        context: "В разработке",
         kicker: "Ваш следующий план",
         planTitle: "Найти барбера",
         avatar: "S",
@@ -670,7 +670,7 @@ const landing: Record<string, LandingCopy> = {
         placeName: "Qorasuv Courtyard",
         verdict: "Стоит посетить",
         tag: "Истории",
-        title: "История John Doe",
+        title: "Делитесь своими открытиями",
         description: "Делитесь своей городской историей - местом, фотографиями и личным мнением."
       }
     },
@@ -984,7 +984,7 @@ const landing: Record<string, LandingCopy> = {
       },
       care: {
         eyebrow: "Everyday care",
-        context: "Mobile concept",
+        context: "In development",
         kicker: "Your next plan",
         planTitle: "Find a barber",
         avatar: "S",
@@ -1021,7 +1021,7 @@ const landing: Record<string, LandingCopy> = {
         placeName: "Qorasuv Courtyard",
         verdict: "Worth the visit",
         tag: "Stories",
-        title: "John Doe’s story",
+        title: "Share your local discoveries",
         description: "Share your city story with a place, photos, and a personal point of view."
       }
     },
