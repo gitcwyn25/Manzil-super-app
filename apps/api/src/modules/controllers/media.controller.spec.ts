@@ -119,9 +119,9 @@ describe("MediaController.createPresignedUpload — moderation and cover", () =>
     expect(prisma.photo.findFirst).not.toHaveBeenCalled();
   });
 
-  it("leaves a review photo pending regardless of who uploaded it", async () => {
+  it("leaves a reviewer's own review photo pending", async () => {
     const prisma = makePrisma();
-    prisma.review.findUnique.mockResolvedValue({ id: "rev_1" });
+    prisma.review.findUnique.mockResolvedValue({ id: "rev_1", userId: "owner_1" });
 
     const controller = makeController(prisma);
     const result = await controller.createPresignedUpload(
@@ -131,6 +131,17 @@ describe("MediaController.createPresignedUpload — moderation and cover", () =>
 
     expect(result.data.moderationStatus).toBe("pending");
     expect(prisma.business.findFirst).not.toHaveBeenCalled();
+  });
+
+  it("rejects attaching a photo to another user's review before allocating storage", async () => {
+    const prisma = makePrisma();
+    prisma.review.findUnique.mockResolvedValue({ id: "rev_1", userId: "someone_else" });
+    const controller = makeController(prisma);
+    await expect(controller.createPresignedUpload(
+      { ownerType: "review", ownerId: "rev_1", contentType: "image/jpeg", contentLength: 1000 },
+      requestFor("owner_1")
+    )).rejects.toMatchObject({ status: 403 });
+    expect(prisma.photo.create).not.toHaveBeenCalled();
   });
 
   it("makes the first approved business photo the cover", async () => {

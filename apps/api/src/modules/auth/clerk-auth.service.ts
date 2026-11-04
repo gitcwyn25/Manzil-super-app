@@ -3,6 +3,7 @@ import { createClerkClient, verifyToken } from "@clerk/backend";
 import type { UserRole } from "@manzil/shared";
 import type { ManzilActor, ManzilRequest } from "./auth.types";
 import { DatabaseRepository } from "../repositories/database.repository";
+import { hasSupabaseIssuer, supabaseConfig, verifySupabaseIdentity } from "./supabase-identity";
 
 @Injectable()
 export class ClerkAuthService {
@@ -22,11 +23,17 @@ export class ClerkAuthService {
   }
 
   allowsDevHeaders() {
-    return this.devAuthEnabled && !this.isClerkConfigured();
+    return this.devAuthEnabled && !this.isClerkConfigured() && !supabaseConfig();
   }
 
   async resolveActorFromRequest(request: ManzilRequest): Promise<ManzilActor | undefined> {
     const bearerToken = this.getBearerToken(request);
+
+    if (bearerToken && hasSupabaseIssuer(bearerToken)) {
+      const identity = await verifySupabaseIdentity(bearerToken);
+      const user = await this.repository.syncSupabaseUser(identity);
+      return { userId: user.id, role: user.role, clerkId: `supabase:${identity.subject}` };
+    }
 
     if (bearerToken && this.clerk) {
       return this.resolveFromClerkToken(bearerToken);
@@ -67,6 +74,8 @@ export class ClerkAuthService {
       email,
       displayName
     });
+
+    await this.repository.assertActiveUser(user.id);
 
     return {
       userId: user.id,
