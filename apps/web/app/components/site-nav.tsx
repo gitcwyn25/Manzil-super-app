@@ -7,7 +7,7 @@ import type { ReactNode } from "react";
 import { getBusinessCopy } from "../lib/business-copy";
 
 // The public header has one deliberate link set: Home, Discover, Docs,
-// and For Business. Authenticated workspace/admin destinations stay out.
+// and Cooperation. Discover is the public hub for the independent apps.
 const links = [
   { key: "home" as const, href: (locale: Locale) => `/${locale}` },
   { key: "discover" as const, href: (locale: Locale) => `/${locale}/discover` },
@@ -36,7 +36,7 @@ export function SiteNav({ locale }: { locale: Locale }) {
               : copy.nav[link.key as keyof typeof copy.nav];
 
         return (
-          <Link className={active ? "active" : undefined} href={href} key={link.key}>
+          <Link aria-current={active ? "page" : undefined} className={active ? "active" : undefined} href={href} key={link.key}>
             {label}
           </Link>
         );
@@ -100,7 +100,8 @@ export function MobileSiteNav({ locale }: { locale: Locale }) {
     <nav className="mobile-nav" aria-label="Mobil navigatsiya">
       {mobileLinks.map((link) => (
         <Link
-          className={pathname === link.href || (link.key === "home" && pathname === `/${locale}`) ? "active" : undefined}
+          aria-current={pathname === link.href || (link.key !== "home" && pathname.startsWith(`${link.href}/`)) ? "page" : undefined}
+          className={pathname === link.href || (link.key !== "home" && pathname.startsWith(`${link.href}/`)) ? "active" : undefined}
           href={link.href}
           key={link.key}
         >

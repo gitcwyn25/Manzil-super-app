@@ -74,7 +74,8 @@ export class CrmRepository {
   async registerBusiness(
     input: BusinessRegistrationInput,
     actor: AuthActor,
-    acceptance?: { acceptedTerms: boolean; ipAddress?: string | null; userAgent?: string | null }
+    acceptance?: { acceptedTerms: boolean; ipAddress?: string | null; userAgent?: string | null },
+    options: { approvalRequired?: boolean } = {}
   ) {
     const name = input.name?.trim();
     const description = input.descriptionUz?.trim();
@@ -156,12 +157,12 @@ export class CrmRepository {
     const business = await this.prisma.$transaction(async (tx) => {
       await tx.user.upsert({
         where: { id: actor.userId },
-        update: actor.role === "admin" ? {} : { role: "business_owner" },
+        update: options.approvalRequired || actor.role === "admin" ? {} : { role: "business_owner" },
         create: {
           id: actor.userId,
           displayName: "Business Owner",
           locale: "uz",
-          role: "business_owner"
+          role: options.approvalRequired ? "consumer" : "business_owner"
         }
       });
 
@@ -181,39 +182,24 @@ export class CrmRepository {
           telegram: input.telegram?.trim() || null,
           legalName: input.legalName?.trim() || null,
           taxId: input.taxId?.trim() || null,
-          priceTier: input.priceTier ?? "$$",
+          priceTier: input.priceTier?.trim() || (options.approvalRequired ? null : "$$"),
           lat: geo?.lat,
           lng: geo?.lng,
-          /**
-           * Self-registration claims the listing immediately.
-           *
-           * Every public surface — the home feed, category counts, search —
-           * filters on `status: "claimed"`, and `claimedAt` drives "Just
-           * joined". Registering as `pending_claim` therefore made a new
-           * business invisible everywhere until an admin approved it, and
-           * there is no admin queue being worked. Owners were paying for Pro
-           * on listings nobody could see.
-           *
-           * This is safe precisely because the owner *created* this record:
-           * there is no prior party to impersonate. Claiming an existing
-           * pre-seeded listing is the different, riskier case and still goes
-           * through admin review — that path is untouched.
-           */
-          status: "claimed",
-          claimedByUserId: actor.userId,
-          claimedAt: new Date(),
+          // Reviews submissions require manual approval. The existing CRM
+          // self-registration flow retains its immediate ownership policy.
+          status: options.approvalRequired ? "pending_claim" : "claimed",
+          ...(options.approvalRequired ? {} : { claimedByUserId: actor.userId, claimedAt: new Date() }),
           createdByUserId: actor.userId
         }
       });
 
-      // Recorded as an approved claim so the audit trail still shows who took
-      // ownership and how, even though self-registration needs no review.
+      // Approval policy is a server-side caller option, never a DTO field.
       await tx.claim.create({
         data: {
           businessId: created.id,
           userId: actor.userId,
           verificationMethod: "registration",
-          status: "approved",
+          status: options.approvalRequired ? "pending" : "approved",
           note: input.taxId ? `STIR: ${input.taxId}` : undefined
         }
       });

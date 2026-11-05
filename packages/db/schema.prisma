@@ -152,6 +152,7 @@ model User {
   customers          Customer[]
   reviewHelpfulVotes ReviewHelpfulVote[]
   legalAcceptances   LegalAcceptance[]
+  savedPlaces        SavedPlace[]
 
   @@index([role])
   @@index([status])
@@ -240,6 +241,7 @@ model Business {
   contracts        Contract[]
   campaigns        Campaign[]
   adminNotifications AdminNotification[]
+  savedPlaces        SavedPlace[]
 
   @@index([categoryId])
   @@index([city, district])
@@ -276,6 +278,27 @@ model Review {
   @@unique([businessId, userId])
   @@index([businessId, createdAt])
   @@index([moderationStatus])
+}
+
+enum SavedPlaceList {
+  favorites
+  want_to_try
+  visited
+}
+
+model SavedPlace {
+  id         String         @id @default(cuid())
+  userId     String
+  businessId String
+  listType   SavedPlaceList @default(favorites)
+  createdAt  DateTime       @default(now())
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, businessId, listType])
+  @@index([userId, createdAt])
+  @@index([businessId])
 }
 
 /**

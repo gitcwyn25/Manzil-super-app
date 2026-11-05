@@ -19,6 +19,7 @@ import type {
 } from "@manzil/shared";
 import type {
   Business as PrismaBusiness,
+  BusinessStatus,
   Category as PrismaCategory,
   ClaimStatus,
   ModerationStatus,
@@ -62,6 +63,16 @@ const CACHE_TTL = {
  * core repository importing it introduces no feature-module coupling.
  */
 const PUBLICLY_VISIBLE = PUBLICLY_VISIBLE_BUSINESS;
+// New submissions stay in the owner's dashboard until a moderator approves them.
+const DIRECTORY_VISIBLE = { ...PUBLICLY_VISIBLE, status: { in: ["unclaimed", "claimed"] as BusinessStatus[] } };
+
+// Demo imports are useful locally, but must never become public testimony.
+const REAL_REVIEW_AUTHOR = {
+  OR: [{ email: null }, { NOT: { email: { endsWith: "@seed.manzil.local", mode: "insensitive" as const } } }]
+};
+const SAVED_LISTS = ["favorites", "want_to_try", "visited"] as const;
+type SavedList = typeof SAVED_LISTS[number];
+type DirectoryBusiness = Omit<Business, "priceTier"> & { priceTier?: Business["priceTier"]; hoursSchedule: Record<string, string> };
 
 type BusinessWithCategory = PrismaBusiness & {
   category: PrismaCategory;
@@ -195,17 +206,20 @@ export class DatabaseRepository {
     const reviews = await this.prisma.review.findMany({
       where: {
         businessId: { in: owned.map((business) => business.id) },
-        moderationStatus: "approved"
+        moderationStatus: "approved",
+        user: REAL_REVIEW_AUTHOR
       },
       include: { user: true, reply: true },
       orderBy: { createdAt: "desc" },
       take: 50
     });
 
+    const ratings = await this.directoryRatings(owned.map(item => item.id));
     return {
       // Owner-scoped read: the dashboard's settings form prefills legalName and
       // taxId, so this is one of the two places they are allowed out.
-      businesses: owned.map((business) => this.mapBusiness(business, { includeLegalIdentity: true })),
+      businesses: owned.map((business) => ({ ...this.mapBusiness(business, { includeLegalIdentity: true }),
+        ...(ratings.get(business.id) ?? { avgRating: 0, reviewCount: 0 }) })),
       reviews: reviews.map((review) => this.mapReview(review, slugByBusinessId.get(review.businessId) ?? ""))
     };
   }
@@ -310,6 +324,111 @@ export class DatabaseRepository {
     return reviews.map((review) => this.mapReview(review, review.business.slug));
   }
 
+  /** A separate facade avoids the legacy demo feed and denormalised seed ratings. */
+  async listReviewsDirectory(query = "", category = "all") {
+    const term = query.trim().slice(0, 120);
+    const businesses = await this.prisma.business.findMany({
+      where: {
+        ...DIRECTORY_VISIBLE,
+        ...(category !== "all" ? { category: { slug: category } } : {}),
+        ...(term ? { OR: ["name", "district", "address", "descriptionUz", "descriptionRu", "descriptionEn"].map(
+          field => ({ [field]: { contains: term, mode: "insensitive" as const } })
+        ) } : {})
+      },
+      include: { category: true },
+      orderBy: { name: "asc" },
+      take: 500
+    });
+    const ratings = await this.directoryRatings(businesses.map(item => item.id));
+    return {
+      businesses: businesses.map(item => this.directoryBusiness(item, ratings)).sort(
+        (a, b) => b.avgRating - a.avgRating || b.reviewCount - a.reviewCount || a.name.localeCompare(b.name)
+      ),
+      categories: await this.listCategories()
+    };
+  }
+
+  async getReviewsDirectoryBusiness(slug: string) {
+    const business = await this.prisma.business.findFirst({ where: { slug, ...DIRECTORY_VISIBLE }, include: { category: true } });
+    if (!business) throw new NotFoundException("Business not found");
+    const [ratings, reviews] = await Promise.all([
+      this.directoryRatings([business.id]),
+      this.prisma.review.findMany({
+        where: { businessId: business.id, moderationStatus: "approved", user: REAL_REVIEW_AUTHOR },
+        include: { user: true, reply: true }, orderBy: { createdAt: "desc" }, take: 200
+      })
+    ]);
+    return { business: this.directoryBusiness(business, ratings), reviews: reviews.map(item => this.mapReview(item, business.slug)) };
+  }
+
+  async getReviewsDirectoryProfile(actor: AuthActor) {
+    const [user, reviews] = await Promise.all([
+      this.getUserById(actor.userId),
+      this.prisma.review.findMany({
+        where: { userId: actor.userId, business: DIRECTORY_VISIBLE },
+        include: { user: true, business: { select: { slug: true } }, reply: true },
+        orderBy: { createdAt: "desc" }, take: 200
+      })
+    ]);
+    return { user, reviews: reviews.map(item => ({ ...this.mapReview(item, item.business.slug), moderationStatus: item.moderationStatus })) };
+  }
+
+  async listSavedPlaces(actor: AuthActor) {
+    const saved = await this.prisma.savedPlace.findMany({
+      where: { userId: actor.userId, business: DIRECTORY_VISIBLE },
+      include: { business: { include: { category: true } } },
+      orderBy: { createdAt: "desc" }, take: 1000
+    });
+    const ratings = await this.directoryRatings(saved.map(item => item.businessId));
+    return { items: saved.map(item => ({ id: item.id, businessId: item.businessId, listType: item.listType,
+      createdAt: item.createdAt.toISOString(), business: this.directoryBusiness(item.business, ratings) })) };
+  }
+
+  async savePlace(businessId: string, listType: string, actor: AuthActor) {
+    this.assertSavedList(listType);
+    const business = await this.prisma.business.findFirst({ where: { id: businessId, ...DIRECTORY_VISIBLE }, select: { id: true } });
+    if (!business) throw new NotFoundException("Business not found");
+    const saved = await this.prisma.savedPlace.upsert({
+      where: { userId_businessId_listType: { userId: actor.userId, businessId, listType } },
+      create: { userId: actor.userId, businessId, listType }, update: {}
+    });
+    return { id: saved.id, businessId, listType, createdAt: saved.createdAt.toISOString() };
+  }
+
+  async removeSavedPlace(businessId: string, listType: string, actor: AuthActor) {
+    this.assertSavedList(listType);
+    await this.prisma.savedPlace.deleteMany({ where: { userId: actor.userId, businessId, listType } });
+    return { removed: true };
+  }
+
+  private assertSavedList(value: string): asserts value is SavedList {
+    if (!SAVED_LISTS.includes(value as SavedList)) throw new BadRequestException("Unknown saved list");
+  }
+
+  private async directoryRatings(businessIds: string[]) {
+    if (!businessIds.length) return new Map<string, { avgRating: number; reviewCount: number }>();
+    const rows = await this.prisma.review.groupBy({
+      by: ["businessId"], where: { businessId: { in: businessIds }, moderationStatus: "approved", user: REAL_REVIEW_AUTHOR },
+      _avg: { rating: true }, _count: { rating: true }
+    });
+    return new Map(rows.map(row => [row.businessId, { avgRating: Number((row._avg.rating ?? 0).toFixed(2)), reviewCount: row._count.rating }]));
+  }
+
+  private directoryBusiness(business: BusinessWithCategory, ratings: Map<string, { avgRating: number; reviewCount: number }>): DirectoryBusiness {
+    const knownPrice = business.priceTier && ["$", "$$", "$$$"].includes(business.priceTier);
+    const hoursSchedule = this.directoryHours(business.hoursJson);
+    return { ...this.mapBusiness(business), priceTier: knownPrice ? this.mapPriceTier(business.priceTier) : undefined,
+      hoursSchedule,
+      ...(ratings.get(business.id) ?? { avgRating: 0, reviewCount: 0 }) };
+  }
+
+  private directoryHours(value: unknown): Record<string, string> {
+    if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+    const knownKeys = new Set(["daily", "weekdays", "weekend", "weekends", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday", "mon", "tue", "wed", "thu", "fri", "sat", "sun"]);
+    return Object.fromEntries(Object.entries(value).filter(([key, range]) => knownKeys.has(key.toLowerCase()) && typeof range === "string" && range.length <= 160)
+      .map(([key, range]) => [key.toLowerCase(), range as string]));
+  }
+
   async getUserById(userId: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId }
@@ -328,7 +447,7 @@ export class DatabaseRepository {
     };
   }
 
-  async createReview(input: ReviewCreateRequest, actor: AuthActor): Promise<Review> {
+  async createReview(input: ReviewCreateRequest, actor: AuthActor): Promise<Review & { moderationStatus: ModerationStatus }> {
     const rating = Math.round(Number(input.rating));
     const text = input.text?.trim();
 
@@ -344,8 +463,8 @@ export class DatabaseRepository {
       throw new BadRequestException("Review text must be at most 4000 characters");
     }
 
-    const business = await this.prisma.business.findUnique({
-      where: { slug: input.businessSlug }
+    const business = await this.prisma.business.findFirst({
+      where: { slug: input.businessSlug, ...DIRECTORY_VISIBLE }
     });
 
     if (!business) {
@@ -362,14 +481,14 @@ export class DatabaseRepository {
       update: {
         rating,
         text,
-        moderationStatus: "approved"
+        moderationStatus: "pending"
       },
       create: {
         businessId: business.id,
         userId: actor.userId,
         rating,
         text,
-        moderationStatus: "approved"
+        moderationStatus: "pending"
       },
       include: { user: true }
     });
@@ -377,7 +496,7 @@ export class DatabaseRepository {
     await this.refreshBusinessRating(business.id);
     await this.cache.invalidate(CACHE_NS.businesses, CACHE_NS.admin);
 
-    return this.mapReview(review, business.slug);
+    return { ...this.mapReview(review, business.slug), moderationStatus: review.moderationStatus };
   }
 
   async createReviewReply(reviewId: string, rawText: string, actor: AuthActor): Promise<ReviewReply> {
@@ -665,6 +784,37 @@ export class DatabaseRepository {
     }
 
     throw new BadRequestException("An authenticated identity is required to sync a user");
+  }
+
+  async assertActiveUser(id: string): Promise<void> {
+    const user = await this.prisma.user.findUnique({ where: { id }, select: { status: true } });
+    if (!user || user.status !== "active") throw new ForbiddenException("This account is unavailable");
+  }
+
+  /** Provider subjects are namespaced; email is never authority to link an existing account. */
+  async syncSupabaseUser(identity: { subject: string; email: string; displayName: string }) {
+    const clerkId = `supabase:${identity.subject}`;
+    const existing = await this.prisma.user.findUnique({ where: { clerkId } });
+    if (existing) {
+      if (existing.status !== "active") throw new ForbiddenException("This account is unavailable");
+      return existing;
+    }
+    if (await this.prisma.user.findUnique({ where: { email: identity.email } })) {
+      throw new ConflictException("This email already belongs to an existing account. Contact support to link it securely.");
+    }
+    try {
+      return await this.prisma.user.create({ data: { clerkId, email: identity.email, displayName: identity.displayName, role: "consumer", locale: "uz" } });
+    } catch (error) {
+      if (this.isUniqueViolation(error)) {
+        const raced = await this.prisma.user.findUnique({ where: { clerkId } });
+        if (raced) {
+          if (raced.status !== "active") throw new ForbiddenException("This account is unavailable");
+          return raced;
+        }
+        throw new ConflictException("This account could not be linked automatically. Contact support.");
+      }
+      throw error;
+    }
   }
 
   private async upsertUserByClerkId(
@@ -1231,8 +1381,9 @@ export class DatabaseRepository {
       return "Hours not listed";
     }
 
-    const hours = hoursJson as Record<string, string>;
-    return hours.weekdays ?? hours.daily ?? Object.values(hours)[0] ?? "Hours not listed";
+    const hours = hoursJson as Record<string, unknown>;
+    const values = [hours.weekdays, hours.daily, ...Object.values(hours)];
+    return values.find((value): value is string => typeof value === "string" && value.trim().length > 0) ?? "Hours not listed";
   }
 
   private mapPriceTier(priceTier: string | null): Business["priceTier"] {

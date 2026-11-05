@@ -87,7 +87,7 @@ export const docs: Record<DocId, DocMeta> = {
 export const docGroups: Array<{ title: Record<Locale, string>; ids: DocId[] }> = [
   { title: { uz: "Kompaniya", ru: "Компания", en: "Company" }, ids: ["about", "founders", "contact", "trust"] },
   { title: { uz: "Ishonch va huquqiy", ru: "Доверие и право", en: "Trust & Legal" }, ids: ["terms", "privacy", "cookies", "reviews", "ai-transparency"] },
-  { title: { uz: "Bizneslar uchun", ru: "Для бизнеса", en: "For Businesses" }, ids: [] }
+  { title: { uz: "Hamkorlik", ru: "Сотрудничество", en: "Cooperation" }, ids: [] }
 ];
 
 function documentationRoot() {

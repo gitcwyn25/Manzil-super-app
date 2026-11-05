@@ -12,10 +12,14 @@ test.describe("shell boundary", () => {
     await expect(page.locator('[data-shell="workspace"]')).toHaveCount(0);
   });
 
-  test("discover renders the site shell", async ({ page }) => {
-    await page.goto("/en/discover");
-    await expect(page.locator('[data-shell="site"]')).toBeVisible();
-    await expect(page.locator("nav.mobile-nav")).toHaveCount(1);
+  test("the app hub keeps the site shell and links to the independent apps", async ({ request }) => {
+    const response = await request.get("/en/discover", { maxRedirects: 0 });
+    expect(response.status()).toBe(200);
+    const html = await response.text();
+    expect(html).toContain('data-shell="site"');
+    expect(html).not.toContain('data-shell="workspace"');
+    expect(html).toContain('href="https://discover.manzilgroup.uz/"');
+    expect(html).toContain('href="https://review.manzilgroup.uz/"');
   });
 
   test("the workspace renders no consumer chrome", async ({ page }) => {

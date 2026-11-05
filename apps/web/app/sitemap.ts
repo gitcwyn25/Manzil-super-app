@@ -88,7 +88,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticEntries = STATIC_KEYS.flatMap((key) =>
     localizedEntries(ROUTE_SEO[key].path, {
       priority: PRIORITY[key],
-      changeFrequency: key === "home" || key === "discover" ? "daily" : "weekly"
+      changeFrequency: key === "home" ? "daily" : "weekly"
     })
   );
 

@@ -13,6 +13,7 @@ import { ListsController } from "./controllers/lists.controller";
 import { MediaController } from "./controllers/media.controller";
 import { OccasionsController } from "./controllers/occasions.controller";
 import { ReviewsController } from "./controllers/reviews.controller";
+import { ReviewsDirectoryController } from "./controllers/reviews-directory.controller";
 import { SearchController } from "./controllers/search.controller";
 import { PrismaService } from "./prisma.service";
 import { DatabaseRepository } from "./repositories/database.repository";
@@ -98,6 +99,7 @@ import { GurmanV0ScoringService } from "./gurman-v0/gurman-v0.scoring.service";
     MediaController,
     OccasionsController,
     ReviewsController,
+    ReviewsDirectoryController,
     SearchController,
     ConsoleController,
     ConsoleAuthController,
