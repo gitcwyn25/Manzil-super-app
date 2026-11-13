@@ -1,0 +1,338 @@
+/*
+ * Tailwind v4 entry: config lives here, with no tailwind.config.js or PostCSS plugin.
+ * Keep every @import in this top block. Web fonts load via <link> in src/routes/__root.tsx.
+ */
+@import "./assets/fonts.css";
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * MANZIL DESIGN SYSTEM — "The Living Intelligence Layer"
+ * Paper (warm white) editorial panels + Ink (near-black) cinematic moments.
+ * Lime is a precise interactive signal, never a background wash.
+ * Wrap any section in .theme-ink to flip semantic tokens to the dark context.
+ */
+
+@theme inline {
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+
+  /* Brand primitives (context-independent) */
+  --color-ink: var(--ink);
+  --color-ink-elevated: var(--ink-elevated);
+  --color-paper: var(--paper);
+  --color-paper-muted: var(--paper-muted);
+  --color-lime: var(--lime);
+  --color-lime-hover: var(--lime-hover);
+  --color-signal: var(--signal);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --animate-signal-draw: signal-draw 2.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  --animate-signal-pulse: signal-pulse 3.2s ease-in-out infinite;
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+:root {
+  --radius: 0.5rem;
+
+  /* Brand primitives */
+  --ink: oklch(0.13 0.005 150); /* #080A09 */
+  --ink-elevated: oklch(0.18 0.009 145); /* #101410 */
+  --paper: oklch(0.983 0.009 105); /* #FAFAF5 */
+  --paper-muted: oklch(0.958 0.013 120); /* #F1F3EB */
+  --lime: oklch(0.915 0.205 123); /* #C9F64A */
+  --lime-hover: oklch(0.875 0.205 124); /* #B8E838 */
+
+  /* Light / paper context (default) */
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: var(--paper-muted);
+  --card-foreground: var(--ink);
+  --popover: var(--paper);
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: var(--paper);
+  --secondary: var(--paper-muted);
+  --secondary-foreground: var(--ink);
+  --muted: var(--paper-muted);
+  --muted-foreground: oklch(0.52 0.02 150); /* #6D786E, darkened for AA on paper */
+  --accent: var(--paper-muted);
+  --accent-foreground: var(--ink);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: var(--paper);
+  --border: oklch(0.9 0.016 135); /* #DCE2D7 */
+  --input: oklch(0.9 0.016 135);
+  --ring: oklch(0.55 0.15 128);
+  /* On paper, lime lacks contrast for lines/text: use a deep olive signal */
+  --signal: oklch(0.55 0.15 128);
+
+  --chart-1: var(--lime);
+  --chart-2: oklch(0.55 0.15 128);
+  --chart-3: oklch(0.4 0.05 150);
+  --chart-4: oklch(0.75 0.1 120);
+  --chart-5: oklch(0.3 0.02 150);
+  --sidebar: var(--paper);
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--ink);
+  --sidebar-primary-foreground: var(--paper);
+  --sidebar-accent: var(--paper-muted);
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: oklch(0.9 0.016 135);
+  --sidebar-ring: oklch(0.55 0.15 128);
+
+  --gradient-hero-shade: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--ink) 55%, transparent) 0%,
+    color-mix(in oklab, var(--ink) 35%, transparent) 40%,
+    color-mix(in oklab, var(--ink) 92%, transparent) 88%,
+    var(--ink) 100%
+  );
+  --gradient-side-shade: linear-gradient(
+    90deg,
+    color-mix(in oklab, var(--ink) 85%, transparent) 0%,
+    color-mix(in oklab, var(--ink) 20%, transparent) 70%
+  );
+  --shadow-frame:
+    0 40px 80px -40px color-mix(in oklab, var(--ink) 45%, transparent),
+    0 0 0 1px color-mix(in oklab, var(--ink) 8%, transparent);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Dark / ink context: apply to any section */
+.theme-ink {
+  --background: var(--ink);
+  --foreground: var(--paper);
+  --card: var(--ink-elevated);
+  --card-foreground: var(--paper);
+  --popover: var(--ink-elevated);
+  --popover-foreground: var(--paper);
+  --primary: var(--paper);
+  --primary-foreground: var(--ink);
+  --secondary: var(--ink-elevated);
+  --secondary-foreground: var(--paper);
+  --muted: var(--ink-elevated);
+  --muted-foreground: oklch(0.72 0.015 140);
+  --accent: var(--ink-elevated);
+  --accent-foreground: var(--paper);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 16%);
+  --ring: var(--lime);
+  --signal: var(--lime);
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+  }
+  ::selection {
+    background: var(--lime);
+    color: var(--ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+  }
+}
+
+/* ---------- Typography utilities ---------- */
+@utility display-hero {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.75rem, 7.5vw, 8rem);
+  line-height: 0.94;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+@utility display-xl {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.25rem, 5.4vw, 5.5rem);
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+@utility display-lg {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.9rem, 3.6vw, 3.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+@utility lede {
+  font-size: clamp(1.05rem, 1.35vw, 1.3rem);
+  line-height: 1.55;
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+}
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+@utility label-status {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+  line-height: 1;
+}
+
+/* ---------- Layout ---------- */
+@utility shell {
+  width: 100%;
+  max-width: 88rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4vw, 3.5rem);
+}
+
+/* The signature thin signal line */
+@utility signal-rule {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    var(--signal),
+    color-mix(in oklab, var(--signal) 0%, transparent)
+  );
+}
+
+/* Film grain overlay for cinematic panels */
+@utility grain {
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.08;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+}
+
+/* ---------- Reveal motion (driven by useReveal) ---------- */
+@utility reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.7s var(--ease-out-expo),
+    transform 0.9s var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+  &[data-visible="true"] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes signal-draw {
+  from {
+    stroke-dashoffset: var(--len, 1200);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes signal-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.35);
+  }
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}

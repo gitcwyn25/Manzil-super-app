@@ -1,0 +1,4 @@
+# Keep upstream policy text and license files byte-identical. Markdown's two
+# trailing spaces are intentional hard line breaks; retain upstream license text.
+src/content/*.md whitespace=-blank-at-eol
+public/fonts/*-OFL.txt whitespace=-blank-at-eol
