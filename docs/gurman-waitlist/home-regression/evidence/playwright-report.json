@@ -1,0 +1,494 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\nuobe\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.19.0-win-x64\\node.exe",
+      "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\apps\\marketing\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "tests/playwright.config.cjs"
+    ],
+    "configFile": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\apps\\marketing\\tests\\playwright.config.cjs",
+    "rootDir": "D:/Desktop/Desktop/Projects/SEO/manzil-v3-review/apps/marketing/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/Desktop/Desktop/Projects/SEO/manzil-v3-review/docs/gurman-waitlist/home-regression/evidence/browser-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "375x812",
+        "name": "375x812",
+        "testDir": "D:/Desktop/Desktop/Projects/SEO/manzil-v3-review/apps/marketing/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "marketing.smoke.spec.cjs"
+        ],
+        "timeout": 45000
+      },
+      {
+        "outputDir": "D:/Desktop/Desktop/Projects/SEO/manzil-v3-review/docs/gurman-waitlist/home-regression/evidence/browser-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "768x1024",
+        "name": "768x1024",
+        "testDir": "D:/Desktop/Desktop/Projects/SEO/manzil-v3-review/apps/marketing/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "marketing.smoke.spec.cjs"
+        ],
+        "timeout": 45000
+      },
+      {
+        "outputDir": "D:/Desktop/Desktop/Projects/SEO/manzil-v3-review/docs/gurman-waitlist/home-regression/evidence/browser-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "1440x900",
+        "name": "1440x900",
+        "testDir": "D:/Desktop/Desktop/Projects/SEO/manzil-v3-review/apps/marketing/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "marketing.smoke.spec.cjs"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\home-regression\\evidence\\playwright-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.61.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "marketing.smoke.spec.cjs",
+      "file": "marketing.smoke.spec.cjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "home imagery, navigation, destinations and responsive screenshots",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "375x812",
+              "projectName": "375x812",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4151,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T04:45:46.899Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "viewport screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\home-regression\\evidence\\browser-artifacts\\marketing.smoke-home-image-6f066--and-responsive-screenshots-375x812\\attachments\\viewport-screenshot-49ac3f54253f36b79fe062f2d2f93574cbca8198.png"
+                    },
+                    {
+                      "name": "browser observations",
+                      "contentType": "application/json",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\home-regression\\evidence\\browser-artifacts\\marketing.smoke-home-image-6f066--and-responsive-screenshots-375x812\\attachments\\browser-observations-1cff3ba3952284e69f43cea4f9ee3527ab8f6c95.json"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1527a74a6c0fc1dd4e73-241c2ac3290e23ee61ad",
+          "file": "marketing.smoke.spec.cjs",
+          "line": 108,
+          "column": 1
+        },
+        {
+          "title": "responsive menu, keyboard containment, close and section navigation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "375x812",
+              "projectName": "375x812",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2258,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T04:45:52.086Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "browser observations",
+                      "contentType": "application/json",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\home-regression\\evidence\\browser-artifacts\\marketing.smoke-responsive-7880c-lose-and-section-navigation-375x812\\attachments\\browser-observations-e9c2f7f5cd78e7bae727baf207c590433a0b68c9.json"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1527a74a6c0fc1dd4e73-76ee7d227b7cdf59194d",
+          "file": "marketing.smoke.spec.cjs",
+          "line": 247,
+          "column": 1
+        },
+        {
+          "title": "reduced motion preserves readable content and local legal pages",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "375x812",
+              "projectName": "375x812",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5295,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T04:45:54.365Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "browser observations",
+                      "contentType": "application/json",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\home-regression\\evidence\\browser-artifacts\\marketing.smoke-reduced-mo-412c2-ntent-and-local-legal-pages-375x812\\attachments\\browser-observations-c9f8e3c3708d2e4d880abb296722b706058d57c1.json"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1527a74a6c0fc1dd4e73-2759ab38874e87c465c6",
+          "file": "marketing.smoke.spec.cjs",
+          "line": 292,
+          "column": 1
+        },
+        {
+          "title": "home imagery, navigation, destinations and responsive screenshots",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "768x1024",
+              "projectName": "768x1024",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8185,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T04:46:04.327Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "viewport screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\home-regression\\evidence\\browser-artifacts\\marketing.smoke-home-image-6f066--and-responsive-screenshots-768x1024\\attachments\\viewport-screenshot-3bc9d1cff3c92c06a08d550fc07a2bda20071b00.png"
+                    },
+                    {
+                      "name": "browser observations",
+                      "contentType": "application/json",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\home-regression\\evidence\\browser-artifacts\\marketing.smoke-home-image-6f066--and-responsive-screenshots-768x1024\\attachments\\browser-observations-084d6783f224dc7182135e0a5362f44dab35642b.json"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1527a74a6c0fc1dd4e73-8a623a47f2453a0da275",
+          "file": "marketing.smoke.spec.cjs",
+          "line": 108,
+          "column": 1
+        },
+        {
+          "title": "responsive menu, keyboard containment, close and section navigation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "768x1024",
+              "projectName": "768x1024",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3147,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T04:46:17.448Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "browser observations",
+                      "contentType": "application/json",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\home-regression\\evidence\\browser-artifacts\\marketing.smoke-responsive-7880c-lose-and-section-navigation-768x1024\\attachments\\browser-observations-4638a20be70ff191288972624e05b4b857c31995.json"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1527a74a6c0fc1dd4e73-4cd6b667378588fcc7bc",
+          "file": "marketing.smoke.spec.cjs",
+          "line": 247,
+          "column": 1
+        },
+        {
+          "title": "reduced motion preserves readable content and local legal pages",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "768x1024",
+              "projectName": "768x1024",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6768,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T04:46:20.624Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "browser observations",
+                      "contentType": "application/json",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\home-regression\\evidence\\browser-artifacts\\marketing.smoke-reduced-mo-412c2-ntent-and-local-legal-pages-768x1024\\attachments\\browser-observations-b49ada793afcb5305b1dc44138bbb8ea2a559f14.json"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1527a74a6c0fc1dd4e73-8de40dfb44659e7cec8b",
+          "file": "marketing.smoke.spec.cjs",
+          "line": 292,
+          "column": 1
+        },
+        {
+          "title": "home imagery, navigation, destinations and responsive screenshots",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "1440x900",
+              "projectName": "1440x900",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8018,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T04:46:30.095Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "viewport screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\home-regression\\evidence\\browser-artifacts\\marketing.smoke-home-image-6f066--and-responsive-screenshots-1440x900\\attachments\\viewport-screenshot-59ff6be5bd341796617964795aa8583e49621699.png"
+                    },
+                    {
+                      "name": "browser observations",
+                      "contentType": "application/json",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\home-regression\\evidence\\browser-artifacts\\marketing.smoke-home-image-6f066--and-responsive-screenshots-1440x900\\attachments\\browser-observations-d3a3a451d71c74d61b9b203b767a04370f6c12b5.json"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1527a74a6c0fc1dd4e73-14f6b05ff08b131cdf47",
+          "file": "marketing.smoke.spec.cjs",
+          "line": 108,
+          "column": 1
+        },
+        {
+          "title": "responsive menu, keyboard containment, close and section navigation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "1440x900",
+              "projectName": "1440x900",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1340,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T04:46:39.980Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "browser observations",
+                      "contentType": "application/json",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\home-regression\\evidence\\browser-artifacts\\marketing.smoke-responsive-7880c-lose-and-section-navigation-1440x900\\attachments\\browser-observations-5c4f7656e2b8a558417dcdb7b602eea5285d2eaf.json"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1527a74a6c0fc1dd4e73-2fd49ae3a3df65008445",
+          "file": "marketing.smoke.spec.cjs",
+          "line": 247,
+          "column": 1
+        },
+        {
+          "title": "reduced motion preserves readable content and local legal pages",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "1440x900",
+              "projectName": "1440x900",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5364,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T04:46:41.341Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "browser observations",
+                      "contentType": "application/json",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\home-regression\\evidence\\browser-artifacts\\marketing.smoke-reduced-mo-412c2-ntent-and-local-legal-pages-1440x900\\attachments\\browser-observations-4a351907dafee2dc2d371d27d57bdd98e7e0fb9e.json"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1527a74a6c0fc1dd4e73-ba24da658b983181f2fc",
+          "file": "marketing.smoke.spec.cjs",
+          "line": 292,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-14T04:45:46.003Z",
+    "duration": 61085.319,
+    "expected": 9,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

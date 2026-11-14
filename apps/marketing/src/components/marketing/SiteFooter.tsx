@@ -24,6 +24,8 @@ const COLUMNS = [
     items: [
       { label: "About", href: links.about },
       { label: "Contact", href: links.contact },
+      { label: "Docs", href: links.docs },
+      { label: "Gurman", href: links.gurman },
       { label: "Instagram", href: links.instagram },
       { label: "YouTube", href: links.youtube },
       { label: "X", href: links.x },

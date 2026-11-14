@@ -1,0 +1,20 @@
+{
+  "checkedAt": "2026-11-14T04:54:39.002Z",
+  "project": "375x812",
+  "test": "Docs is an honest responsive overview with noindex and working section anchors",
+  "browser": "156.0.8078.4",
+  "viewport": {
+    "width": 375,
+    "height": 812
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "failedLocalResponses": [],
+  "externalRequests": [],
+  "layout": {
+    "viewport": 375,
+    "document": 375,
+    "body": 375
+  },
+  "screenshot": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\screenshots\\docs-375x812.png"
+}

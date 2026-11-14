@@ -1,0 +1,7 @@
+{
+  "checkedAt": "2026-11-14T04:47:09.641Z",
+  "schema": "https://openapi.vercel.sh/vercel.json",
+  "scope": "Configured property definitions only; full upstream schema contains inconsistent draft-04 metadata.",
+  "valid": true,
+  "errors": null
+}

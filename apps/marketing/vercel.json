@@ -5,20 +5,76 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist/client",
   "cleanUrls": true,
+  "routes": [
+    {
+      "src": "^/(?:(?:en|uz|ru)/)?gurman/waitlist/?$",
+      "status": 307,
+      "headers": {
+        "Location": "https://tally.so/r/eqJLdQ",
+        "Cache-Control": "no-store",
+        "X-Robots-Tag": "noindex, nofollow"
+      }
+    }
+  ],
   "redirects": [
+    {
+      "source": "/business",
+      "destination": "https://business.manzilgroup.uz/",
+      "permanent": false
+    },
+    {
+      "source": "/businesses",
+      "destination": "https://business.manzilgroup.uz/",
+      "permanent": false
+    },
+    {
+      "source": "/business/:path*",
+      "destination": "https://business.manzilgroup.uz/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/businesses/:path*",
+      "destination": "https://business.manzilgroup.uz/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/:locale(en|uz|ru)/business",
+      "destination": "https://business.manzilgroup.uz/:locale/business",
+      "permanent": false
+    },
+    {
+      "source": "/:locale(en|uz|ru)/businesses",
+      "destination": "https://business.manzilgroup.uz/:locale/business",
+      "permanent": false
+    },
+    {
+      "source": "/:locale(en|uz|ru)/business/:path*",
+      "destination": "https://business.manzilgroup.uz/:locale/business/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/:locale(en|uz|ru)/businesses/:path*",
+      "destination": "https://business.manzilgroup.uz/:locale/business/:path*",
+      "permanent": false
+    },
     { "source": "/en/privacy", "destination": "/en/legal/privacy", "permanent": true },
     { "source": "/en/terms", "destination": "/en/legal/terms", "permanent": true },
     { "source": "/en/review-rules", "destination": "/en/legal/reviews", "permanent": true },
     {
-      "source": "/en/waitlist/gurman",
-      "destination": "https://manzil-business.vercel.app/en/waitlist/gurman",
+      "source": "/:locale(en|uz|ru)/waitlist/gurman",
+      "destination": "/gurman",
       "permanent": false
     },
+    { "source": "/waitlist/gurman", "destination": "/gurman", "permanent": false },
     { "source": "/en", "destination": "/", "permanent": true },
     { "source": "/uz", "destination": "/", "permanent": true },
     { "source": "/ru", "destination": "/", "permanent": true }
   ],
   "headers": [
+    {
+      "source": "/docs",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, follow" }]
+    },
     {
       "source": "/(.*)",
       "headers": [

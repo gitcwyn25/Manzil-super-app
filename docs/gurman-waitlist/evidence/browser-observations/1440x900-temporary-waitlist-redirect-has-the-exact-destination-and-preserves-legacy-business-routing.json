@@ -1,0 +1,106 @@
+{
+  "checkedAt": "2026-11-14T04:54:57.003Z",
+  "project": "1440x900",
+  "test": "temporary waitlist redirect has the exact destination and preserves legacy business routing",
+  "browser": "156.0.8078.4",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "failedLocalResponses": [],
+  "externalRequests": [],
+  "redirects": [
+    {
+      "pathname": "/gurman/waitlist",
+      "status": 307,
+      "location": "https://tally.so/r/eqJLdQ"
+    },
+    {
+      "pathname": "/gurman/waitlist?email=qa%40example.invalid&source=qa",
+      "status": 307,
+      "location": "https://tally.so/r/eqJLdQ"
+    },
+    {
+      "pathname": "/gurman/waitlist/",
+      "status": 307,
+      "location": "https://tally.so/r/eqJLdQ"
+    },
+    {
+      "pathname": "/en/gurman/waitlist?source=qa",
+      "status": 307,
+      "location": "https://tally.so/r/eqJLdQ"
+    },
+    {
+      "pathname": "/uz/gurman/waitlist?source=qa",
+      "status": 307,
+      "location": "https://tally.so/r/eqJLdQ"
+    },
+    {
+      "pathname": "/ru/gurman/waitlist?source=qa",
+      "status": 307,
+      "location": "https://tally.so/r/eqJLdQ"
+    },
+    {
+      "pathname": "/business",
+      "status": 307,
+      "location": "https://business.manzilgroup.uz/"
+    },
+    {
+      "pathname": "/businesses",
+      "status": 307,
+      "location": "https://business.manzilgroup.uz/"
+    },
+    {
+      "pathname": "/business/plans",
+      "status": 307,
+      "location": "https://business.manzilgroup.uz/plans"
+    },
+    {
+      "pathname": "/businesses/register/photos",
+      "status": 307,
+      "location": "https://business.manzilgroup.uz/register/photos"
+    },
+    {
+      "pathname": "/en/business",
+      "status": 307,
+      "location": "https://business.manzilgroup.uz/en/business"
+    },
+    {
+      "pathname": "/uz/businesses",
+      "status": 307,
+      "location": "https://business.manzilgroup.uz/uz/business"
+    },
+    {
+      "pathname": "/ru/business/plans",
+      "status": 307,
+      "location": "https://business.manzilgroup.uz/ru/business/plans"
+    },
+    {
+      "pathname": "/en/businesses/register/photos",
+      "status": 307,
+      "location": "https://business.manzilgroup.uz/en/business/register/photos"
+    },
+    {
+      "pathname": "/waitlist/gurman",
+      "status": 307,
+      "location": "/gurman"
+    },
+    {
+      "pathname": "/en/waitlist/gurman",
+      "status": 307,
+      "location": "/gurman"
+    },
+    {
+      "pathname": "/uz/waitlist/gurman",
+      "status": 307,
+      "location": "/gurman"
+    },
+    {
+      "pathname": "/ru/waitlist/gurman",
+      "status": 307,
+      "location": "/gurman"
+    }
+  ]
+}

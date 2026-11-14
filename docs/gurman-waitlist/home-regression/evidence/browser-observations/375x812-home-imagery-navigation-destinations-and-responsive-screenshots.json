@@ -1,0 +1,242 @@
+{
+  "checkedAt": "2026-11-14T04:45:48.202Z",
+  "project": "375x812",
+  "test": "home imagery, navigation, destinations and responsive screenshots",
+  "browser": "156.0.8078.4",
+  "viewport": {
+    "width": 375,
+    "height": 812
+  },
+  "consoleErrors": [],
+  "consoleWarnings": [],
+  "pageErrors": [],
+  "failedLocalResponses": [],
+  "externalResources": [],
+  "blockedExternalNavigations": [],
+  "layout": {
+    "viewport": 375,
+    "document": 375,
+    "body": 375
+  },
+  "images": [
+    {
+      "alt": "Illustrative Manzil mobile community feed with local conversations.",
+      "naturalWidth": 941,
+      "naturalHeight": 1672,
+      "width": 941,
+      "height": 1672,
+      "currentSrc": "http://127.0.0.1:4176/images/v3/community-ios-preview.avif",
+      "objectFit": "contain",
+      "renderedWidth": 335,
+      "renderedHeight": 595.234375
+    },
+    {
+      "alt": "Illustrative Manzil mobile discovery view for places in Tashkent.",
+      "naturalWidth": 941,
+      "naturalHeight": 1672,
+      "width": 941,
+      "height": 1672,
+      "currentSrc": "http://127.0.0.1:4176/images/v3/discover-ios-preview.avif",
+      "objectFit": "contain",
+      "renderedWidth": 335,
+      "renderedHeight": 595.234375
+    },
+    {
+      "alt": "Product concept connecting a community post, a place and shared experiences.",
+      "naturalWidth": 1672,
+      "naturalHeight": 941,
+      "width": 1672,
+      "height": 941,
+      "currentSrc": "http://127.0.0.1:4176/images/v3/connected-context-preview.avif",
+      "objectFit": "contain",
+      "renderedWidth": 335,
+      "renderedHeight": 188.53125
+    },
+    {
+      "alt": "Illustrative Manzil desktop community dashboard.",
+      "naturalWidth": 1536,
+      "naturalHeight": 1024,
+      "width": 1536,
+      "height": 1024,
+      "currentSrc": "http://127.0.0.1:4176/images/v3/desktop-community-dashboard-preview.avif",
+      "objectFit": "contain",
+      "renderedWidth": 335,
+      "renderedHeight": 223.328125
+    }
+  ],
+  "destinations": [
+    {
+      "text": "Skip to content",
+      "href": "#main"
+    },
+    {
+      "text": "Manzil",
+      "href": "/#top"
+    },
+    {
+      "text": "Platform",
+      "href": "/#platform"
+    },
+    {
+      "text": "Community",
+      "href": "/#community"
+    },
+    {
+      "text": "Discover",
+      "href": "/#discover"
+    },
+    {
+      "text": "Why Manzil",
+      "href": "/#why"
+    },
+    {
+      "text": "Vision",
+      "href": "/#vision"
+    },
+    {
+      "text": "For Businesses",
+      "href": "https://business.manzilgroup.uz"
+    },
+    {
+      "text": "Log In",
+      "href": "https://app.manzilgroup.uz/auth?next=%2F"
+    },
+    {
+      "text": "Get Started",
+      "href": "https://app.manzilgroup.uz/auth?mode=signup&next=%2F"
+    },
+    {
+      "text": "Get Started",
+      "href": "https://app.manzilgroup.uz/auth?mode=signup&next=%2F"
+    },
+    {
+      "text": "How Manzil works",
+      "href": "#how"
+    },
+    {
+      "text": "CC BY-SA 4.0",
+      "href": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "text": "Join Manzil",
+      "href": "https://app.manzilgroup.uz/auth?mode=signup&next=%2F"
+    },
+    {
+      "text": "Read the rules",
+      "href": "/en/legal/reviews"
+    },
+    {
+      "text": "Privacy policy",
+      "href": "/en/legal/privacy"
+    },
+    {
+      "text": "CC BY 4.0",
+      "href": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    {
+      "text": "Interested in Gurman? Join the waitlist",
+      "href": "/gurman"
+    },
+    {
+      "text": "For Businesses",
+      "href": "https://business.manzilgroup.uz"
+    },
+    {
+      "text": "Get Started",
+      "href": "https://app.manzilgroup.uz/auth?mode=signup&next=%2F"
+    },
+    {
+      "text": "Log In",
+      "href": "https://app.manzilgroup.uz/auth?next=%2F"
+    },
+    {
+      "text": "Platform",
+      "href": "/#platform"
+    },
+    {
+      "text": "Community",
+      "href": "/#community"
+    },
+    {
+      "text": "Discover",
+      "href": "/#discover"
+    },
+    {
+      "text": "Vision",
+      "href": "/#vision"
+    },
+    {
+      "text": "Join Manzil",
+      "href": "https://app.manzilgroup.uz/auth?mode=signup&next=%2F"
+    },
+    {
+      "text": "Log In",
+      "href": "https://app.manzilgroup.uz/auth?next=%2F"
+    },
+    {
+      "text": "For Businesses",
+      "href": "https://business.manzilgroup.uz"
+    },
+    {
+      "text": "About",
+      "href": "/en/about"
+    },
+    {
+      "text": "Contact",
+      "href": "/en/contact"
+    },
+    {
+      "text": "Docs",
+      "href": "/docs"
+    },
+    {
+      "text": "Gurman",
+      "href": "/gurman"
+    },
+    {
+      "text": "Instagram",
+      "href": "https://www.instagram.com/manzil.finds"
+    },
+    {
+      "text": "YouTube",
+      "href": "https://www.youtube.com/@ManzilGroupUz"
+    },
+    {
+      "text": "X",
+      "href": "https://x.com/ManzilUz"
+    },
+    {
+      "text": "Privacy",
+      "href": "/en/legal/privacy"
+    },
+    {
+      "text": "Terms",
+      "href": "/en/legal/terms"
+    },
+    {
+      "text": "Community rules",
+      "href": "/en/legal/reviews"
+    },
+    {
+      "text": "Chorsu Bazaar, Tashkent",
+      "href": "https://commons.wikimedia.org/wiki/File:Chorsu_Bazaar_in_Tashkent.jpg"
+    },
+    {
+      "text": "CC BY-SA 4.0",
+      "href": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "text": "Mustaqillik Maydoni metro station, Tashkent",
+      "href": "https://commons.wikimedia.org/wiki/File:Mustaqillik_Maydoni_station_of_Chilanzar_Line_of_Tashkent_Metro_in_Tashkent_Uzbekistan.jpg"
+    },
+    {
+      "text": "CC BY 4.0",
+      "href": "https://creativecommons.org/licenses/by/4.0/"
+    }
+  ],
+  "screenshots": {
+    "viewport": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\home-regression\\screenshots\\home-375x812.png",
+    "fullPage": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\home-regression\\screenshots\\home-375x812-full.png",
+    "reducedMotion": true
+  }
+}

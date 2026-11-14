@@ -1,0 +1,43 @@
+{
+  "checkedAt": "2026-11-14T04:46:41.601Z",
+  "project": "1440x900",
+  "test": "reduced motion preserves readable content and local legal pages",
+  "browser": "156.0.8078.4",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "consoleErrors": [],
+  "consoleWarnings": [],
+  "pageErrors": [],
+  "failedLocalResponses": [],
+  "externalResources": [],
+  "blockedExternalNavigations": [],
+  "legalPages": [
+    {
+      "pathname": "/en/legal/privacy",
+      "status": 200,
+      "title": "Privacy Policy | Manzil"
+    },
+    {
+      "pathname": "/en/legal/terms",
+      "status": 200,
+      "title": "Terms of Use for Manzil Services | Manzil"
+    },
+    {
+      "pathname": "/en/legal/reviews",
+      "status": 200,
+      "title": "Reviews and Community Guidelines | Manzil"
+    },
+    {
+      "pathname": "/en/contact",
+      "status": 200,
+      "title": "Contact | Manzil"
+    },
+    {
+      "pathname": "/en/about",
+      "status": 200,
+      "title": "About Manzil | Manzil"
+    }
+  ]
+}

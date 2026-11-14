@@ -2,7 +2,8 @@ const fs = require("node:fs/promises");
 const path = require("node:path");
 const { test: base, expect } = require(process.env.MANZIL_PLAYWRIGHT_TEST || "@playwright/test");
 
-const docsDirectory = path.resolve(__dirname, "../../../docs/v3");
+const docsDirectory =
+  process.env.MANZIL_QA_DIRECTORY || path.resolve(__dirname, "../../../docs/v3");
 const localHosts = new Set(["127.0.0.1", "localhost", "[::1]"]);
 const concepts = [
   ["Illustrative Manzil mobile community feed with local conversations.", 941, 1672],

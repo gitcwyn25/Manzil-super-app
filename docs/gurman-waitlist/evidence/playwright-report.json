@@ -1,0 +1,749 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\nuobe\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.19.0-win-x64\\node.exe",
+      "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\apps\\marketing\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "tests/gurman-waitlist.config.cjs"
+    ],
+    "configFile": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\apps\\marketing\\tests\\gurman-waitlist.config.cjs",
+    "rootDir": "D:/Desktop/Desktop/Projects/SEO/manzil-v3-review/apps/marketing/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/Desktop/Desktop/Projects/SEO/manzil-v3-review/docs/gurman-waitlist/evidence/browser-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "375x812",
+        "name": "375x812",
+        "testDir": "D:/Desktop/Desktop/Projects/SEO/manzil-v3-review/apps/marketing/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "gurman-waitlist.spec.cjs"
+        ],
+        "timeout": 45000
+      },
+      {
+        "outputDir": "D:/Desktop/Desktop/Projects/SEO/manzil-v3-review/docs/gurman-waitlist/evidence/browser-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "768x1024",
+        "name": "768x1024",
+        "testDir": "D:/Desktop/Desktop/Projects/SEO/manzil-v3-review/apps/marketing/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "gurman-waitlist.spec.cjs"
+        ],
+        "timeout": 45000
+      },
+      {
+        "outputDir": "D:/Desktop/Desktop/Projects/SEO/manzil-v3-review/docs/gurman-waitlist/evidence/browser-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "1440x900",
+        "name": "1440x900",
+        "testDir": "D:/Desktop/Desktop/Projects/SEO/manzil-v3-review/apps/marketing/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "gurman-waitlist.spec.cjs"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\evidence\\playwright-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.61.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "gurman-waitlist.spec.cjs",
+      "file": "gurman-waitlist.spec.cjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Docs is an honest responsive overview with noindex and working section anchors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "375x812",
+              "projectName": "375x812",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1491,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T04:54:38.066Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "docs screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\evidence\\browser-artifacts\\gurman-waitlist-Docs-is-an-1096b-and-working-section-anchors-375x812\\attachments\\docs-screenshot-9233187d4779ff8d4f49a1dea1ce75e64d37ceba.png"
+                    },
+                    {
+                      "name": "browser observations",
+                      "contentType": "application/json",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\evidence\\browser-artifacts\\gurman-waitlist-Docs-is-an-1096b-and-working-section-anchors-375x812\\attachments\\browser-observations-2785e765f9ffe6d5fdf43af7e414176cfffcb4b1.json"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1aef8c562da5386cfa61-5be1bfc0497bce7593d2",
+          "file": "gurman-waitlist.spec.cjs",
+          "line": 94,
+          "column": 1
+        },
+        {
+          "title": "Gurman offers the real waitlist link without a signup form or premature success",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "375x812",
+              "projectName": "375x812",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1201,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T04:54:40.232Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "gurman screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\evidence\\browser-artifacts\\gurman-waitlist-Gurman-off-e332a-p-form-or-premature-success-375x812\\attachments\\gurman-screenshot-8608a622135008b619b145f8a92159a41a1345c9.png"
+                    },
+                    {
+                      "name": "browser observations",
+                      "contentType": "application/json",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\evidence\\browser-artifacts\\gurman-waitlist-Gurman-off-e332a-p-form-or-premature-success-375x812\\attachments\\browser-observations-bb8ad26232080a0cecfbd76f73678c2165d46093.json"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1aef8c562da5386cfa61-f6fb76480047f190f0f3",
+          "file": "gurman-waitlist.spec.cjs",
+          "line": 121,
+          "column": 1
+        },
+        {
+          "title": "temporary waitlist redirect has the exact destination and preserves legacy business routing",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "375x812",
+              "projectName": "375x812",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 345,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T04:54:41.447Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "browser observations",
+                      "contentType": "application/json",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\evidence\\browser-artifacts\\gurman-waitlist-temporary--31fd3-ves-legacy-business-routing-375x812\\attachments\\browser-observations-d623039176845285644bfb58432fe5a513aaced7.json"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1aef8c562da5386cfa61-cd0c3696c17c54c52d4e",
+          "file": "gurman-waitlist.spec.cjs",
+          "line": 150,
+          "column": 1
+        },
+        {
+          "title": "JavaScript-disabled CTA reaches the real temporary server redirect",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "375x812",
+              "projectName": "375x812",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1434,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T04:54:41.810Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "browser observations",
+                      "contentType": "application/json",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\evidence\\browser-artifacts\\gurman-waitlist-JavaScript-0ccdb-l-temporary-server-redirect-375x812\\attachments\\browser-observations-38d11560fb52228d709e80d14de77e8714c6fc91.json"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1aef8c562da5386cfa61-fb03ee1d1c234ac495a9",
+          "file": "gurman-waitlist.spec.cjs",
+          "line": 212,
+          "column": 1
+        },
+        {
+          "title": "corporate footer exposes Docs and Gurman while account and business destinations stay intact",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "375x812",
+              "projectName": "375x812",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1307,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T04:54:43.258Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "browser observations",
+                      "contentType": "application/json",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\evidence\\browser-artifacts\\gurman-waitlist-corporate--93a9e-ss-destinations-stay-intact-375x812\\attachments\\browser-observations-d96a90b28acc53876991a88a0e53339d8eb9aa9c.json"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1aef8c562da5386cfa61-414233f317e25685c254",
+          "file": "gurman-waitlist.spec.cjs",
+          "line": 272,
+          "column": 1
+        },
+        {
+          "title": "Docs is an honest responsive overview with noindex and working section anchors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "768x1024",
+              "projectName": "768x1024",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1546,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T04:54:45.485Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "docs screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\evidence\\browser-artifacts\\gurman-waitlist-Docs-is-an-1096b-and-working-section-anchors-768x1024\\attachments\\docs-screenshot-811545d8ce5d6da088e1c9f35421dd655f73f1ee.png"
+                    },
+                    {
+                      "name": "browser observations",
+                      "contentType": "application/json",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\evidence\\browser-artifacts\\gurman-waitlist-Docs-is-an-1096b-and-working-section-anchors-768x1024\\attachments\\browser-observations-a322a8e9f1a015f1728ef72cf424411c0656bc10.json"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1aef8c562da5386cfa61-60f6670b960a29664827",
+          "file": "gurman-waitlist.spec.cjs",
+          "line": 94,
+          "column": 1
+        },
+        {
+          "title": "Gurman offers the real waitlist link without a signup form or premature success",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "768x1024",
+              "projectName": "768x1024",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1272,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T04:54:47.653Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "gurman screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\evidence\\browser-artifacts\\gurman-waitlist-Gurman-off-e332a-p-form-or-premature-success-768x1024\\attachments\\gurman-screenshot-4b7a0ed047d6125ba7d90d90c3cf1e0277a5075e.png"
+                    },
+                    {
+                      "name": "browser observations",
+                      "contentType": "application/json",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\evidence\\browser-artifacts\\gurman-waitlist-Gurman-off-e332a-p-form-or-premature-success-768x1024\\attachments\\browser-observations-4228c92f1d7440d084e8c8c3840c7a80b996931d.json"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1aef8c562da5386cfa61-bb1336aa53eb21c749a4",
+          "file": "gurman-waitlist.spec.cjs",
+          "line": 121,
+          "column": 1
+        },
+        {
+          "title": "temporary waitlist redirect has the exact destination and preserves legacy business routing",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "768x1024",
+              "projectName": "768x1024",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 402,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T04:54:48.940Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "browser observations",
+                      "contentType": "application/json",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\evidence\\browser-artifacts\\gurman-waitlist-temporary--31fd3-ves-legacy-business-routing-768x1024\\attachments\\browser-observations-864bca7b1d8df6bcd743395ef6cda6ad16a1f598.json"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1aef8c562da5386cfa61-e6f20e50c711027cb822",
+          "file": "gurman-waitlist.spec.cjs",
+          "line": 150,
+          "column": 1
+        },
+        {
+          "title": "JavaScript-disabled CTA reaches the real temporary server redirect",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "768x1024",
+              "projectName": "768x1024",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1480,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T04:54:49.361Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "browser observations",
+                      "contentType": "application/json",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\evidence\\browser-artifacts\\gurman-waitlist-JavaScript-0ccdb-l-temporary-server-redirect-768x1024\\attachments\\browser-observations-5689c9bf033ab2bcf75e47a2e7e80d44a21c06a2.json"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1aef8c562da5386cfa61-d91d08c5f3a9cf59b56f",
+          "file": "gurman-waitlist.spec.cjs",
+          "line": 212,
+          "column": 1
+        },
+        {
+          "title": "corporate footer exposes Docs and Gurman while account and business destinations stay intact",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "768x1024",
+              "projectName": "768x1024",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1482,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T04:54:50.861Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "browser observations",
+                      "contentType": "application/json",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\evidence\\browser-artifacts\\gurman-waitlist-corporate--93a9e-ss-destinations-stay-intact-768x1024\\attachments\\browser-observations-54638e15c548ea46c327ee072ac946b02a382892.json"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1aef8c562da5386cfa61-3ba02d767fbf7f3ad01f",
+          "file": "gurman-waitlist.spec.cjs",
+          "line": 272,
+          "column": 1
+        },
+        {
+          "title": "Docs is an honest responsive overview with noindex and working section anchors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "1440x900",
+              "projectName": "1440x900",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1795,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T04:54:53.105Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "docs screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\evidence\\browser-artifacts\\gurman-waitlist-Docs-is-an-1096b-and-working-section-anchors-1440x900\\attachments\\docs-screenshot-e11253dbcfc9d6e49fdffafe7923664020048b37.png"
+                    },
+                    {
+                      "name": "browser observations",
+                      "contentType": "application/json",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\evidence\\browser-artifacts\\gurman-waitlist-Docs-is-an-1096b-and-working-section-anchors-1440x900\\attachments\\browser-observations-eb2930abc561cdd7f4c9986a17eb5e3af54086ae.json"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1aef8c562da5386cfa61-2af8356ad4a0e8baf878",
+          "file": "gurman-waitlist.spec.cjs",
+          "line": 94,
+          "column": 1
+        },
+        {
+          "title": "Gurman offers the real waitlist link without a signup form or premature success",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "1440x900",
+              "projectName": "1440x900",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1370,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T04:54:55.433Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "gurman screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\evidence\\browser-artifacts\\gurman-waitlist-Gurman-off-e332a-p-form-or-premature-success-1440x900\\attachments\\gurman-screenshot-0c2798bb331ca7d88b1adba9fcc30b4488944ee6.png"
+                    },
+                    {
+                      "name": "browser observations",
+                      "contentType": "application/json",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\evidence\\browser-artifacts\\gurman-waitlist-Gurman-off-e332a-p-form-or-premature-success-1440x900\\attachments\\browser-observations-bae170bf32d207fbc87181e33a7d8e0f311cdde3.json"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1aef8c562da5386cfa61-6601f81ade851ad788ad",
+          "file": "gurman-waitlist.spec.cjs",
+          "line": 121,
+          "column": 1
+        },
+        {
+          "title": "temporary waitlist redirect has the exact destination and preserves legacy business routing",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "1440x900",
+              "projectName": "1440x900",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 414,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T04:54:56.821Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "browser observations",
+                      "contentType": "application/json",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\evidence\\browser-artifacts\\gurman-waitlist-temporary--31fd3-ves-legacy-business-routing-1440x900\\attachments\\browser-observations-98d9d30141b51498132dde834f9b385c8b6ae408.json"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1aef8c562da5386cfa61-27353a1e2208b5b8eef4",
+          "file": "gurman-waitlist.spec.cjs",
+          "line": 150,
+          "column": 1
+        },
+        {
+          "title": "JavaScript-disabled CTA reaches the real temporary server redirect",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "1440x900",
+              "projectName": "1440x900",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1653,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T04:54:57.254Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "browser observations",
+                      "contentType": "application/json",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\evidence\\browser-artifacts\\gurman-waitlist-JavaScript-0ccdb-l-temporary-server-redirect-1440x900\\attachments\\browser-observations-0296db030b332cd7e7ae88f9c7910832a9017273.json"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1aef8c562da5386cfa61-4878b6e356665a02dc9b",
+          "file": "gurman-waitlist.spec.cjs",
+          "line": 212,
+          "column": 1
+        },
+        {
+          "title": "corporate footer exposes Docs and Gurman while account and business destinations stay intact",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "1440x900",
+              "projectName": "1440x900",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1799,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T04:54:58.922Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "browser observations",
+                      "contentType": "application/json",
+                      "path": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\evidence\\browser-artifacts\\gurman-waitlist-corporate--93a9e-ss-destinations-stay-intact-1440x900\\attachments\\browser-observations-eead872593f8dc8c50fda3bfe83c2a32fb642fe6.json"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1aef8c562da5386cfa61-703f2cf0f24536c5e73d",
+          "file": "gurman-waitlist.spec.cjs",
+          "line": 272,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-14T04:54:37.434Z",
+    "duration": 23610.552,
+    "expected": 15,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

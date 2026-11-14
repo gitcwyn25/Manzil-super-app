@@ -10,11 +10,19 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DocsRouteImport } from './routes/docs'
 import { Route as EnSplatRouteImport } from './routes/en.$'
+import { Route as GurmanIndexRouteImport } from './routes/gurman.index'
+import { Route as GurmanWaitlistRouteImport } from './routes/gurman.waitlist'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocsRoute = DocsRouteImport.update({
+  id: '/docs',
+  path: '/docs',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EnSplatRoute = EnSplatRouteImport.update({
@@ -22,31 +30,53 @@ const EnSplatRoute = EnSplatRouteImport.update({
   path: '/en/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GurmanIndexRoute = GurmanIndexRouteImport.update({
+  id: '/gurman/',
+  path: '/gurman/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GurmanWaitlistRoute = GurmanWaitlistRouteImport.update({
+  id: '/gurman/waitlist',
+  path: '/gurman/waitlist',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/docs': typeof DocsRoute
   '/en/$': typeof EnSplatRoute
+  '/gurman/waitlist': typeof GurmanWaitlistRoute
+  '/gurman/': typeof GurmanIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/docs': typeof DocsRoute
   '/en/$': typeof EnSplatRoute
+  '/gurman/waitlist': typeof GurmanWaitlistRoute
+  '/gurman': typeof GurmanIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/docs': typeof DocsRoute
   '/en/$': typeof EnSplatRoute
+  '/gurman/waitlist': typeof GurmanWaitlistRoute
+  '/gurman/': typeof GurmanIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/en/$'
+  fullPaths: '/' | '/docs' | '/en/$' | '/gurman/waitlist' | '/gurman/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/en/$'
-  id: '__root__' | '/' | '/en/$'
+  to: '/' | '/docs' | '/en/$' | '/gurman/waitlist' | '/gurman'
+  id: '__root__' | '/' | '/docs' | '/en/$' | '/gurman/waitlist' | '/gurman/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DocsRoute: typeof DocsRoute
   EnSplatRoute: typeof EnSplatRoute
+  GurmanWaitlistRoute: typeof GurmanWaitlistRoute
+  GurmanIndexRoute: typeof GurmanIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -58,6 +88,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/docs': {
+      id: '/docs'
+      path: '/docs'
+      fullPath: '/docs'
+      preLoaderRoute: typeof DocsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/en/$': {
       id: '/en/$'
       path: '/en/$'
@@ -65,12 +102,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/gurman/': {
+      id: '/gurman/'
+      path: '/gurman'
+      fullPath: '/gurman/'
+      preLoaderRoute: typeof GurmanIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gurman/waitlist': {
+      id: '/gurman/waitlist'
+      path: '/gurman/waitlist'
+      fullPath: '/gurman/waitlist'
+      preLoaderRoute: typeof GurmanWaitlistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DocsRoute: DocsRoute,
   EnSplatRoute: EnSplatRoute,
+  GurmanWaitlistRoute: GurmanWaitlistRoute,
+  GurmanIndexRoute: GurmanIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
