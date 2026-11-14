@@ -117,6 +117,22 @@ function localeRedirect(request: NextRequest): NextResponse | null {
 }
 
 async function handle(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // Direct 307 temporary redirect for Gurman waitlist to exact Tally form
+  if (
+    pathname === "/gurman/waitlist" ||
+    pathname === "/gurman/waitlist/" ||
+    pathname === "/uz/gurman/waitlist" ||
+    pathname === "/uz/gurman/waitlist/" ||
+    pathname === "/ru/gurman/waitlist" ||
+    pathname === "/ru/gurman/waitlist/" ||
+    pathname === "/en/gurman/waitlist" ||
+    pathname === "/en/gurman/waitlist/"
+  ) {
+    return NextResponse.redirect("https://tally.so/r/eqJLdQ", 307);
+  }
+
   // robots.txt / sitemap.xml / llms.txt are crawler entry points. Running the
   // Supabase session refresh for them would put a third-party network call in
   // front of the two files a crawler fetches first — precisely the shape of

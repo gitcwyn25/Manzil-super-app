@@ -223,6 +223,7 @@ export function Footer({ locale }: { locale: Locale }) {
 
   const navLinks = [
     { label: FOUNDER_PROFILE.name, href: `/${locale}${FOUNDER_PROFILE.path}` },
+    { label: "Gurman", href: `/${locale}/gurman` },
     { label: locale === "uz" ? "Hujjatlar" : locale === "ru" ? "Документы" : "Docs", href: `/${locale}/docs` },
     { label: locale === "uz" ? "Maxfiylik" : locale === "ru" ? "Конфиденциальность" : "Privacy", href: `/${locale}/legal/privacy` },
     { label: businessCopy.nav.discover, href: `/${locale}/discover` },
@@ -243,7 +244,7 @@ export function Footer({ locale }: { locale: Locale }) {
             <h2 id="footer-gurman-title" className="manzil-footer__title">Gurman mobile</h2>
             <p className="manzil-footer__subtitle">{t.desc}</p>
 
-            <Link className="manzil-footer__cta" href={`/${locale}/waitlist/gurman`}>
+            <Link className="manzil-footer__cta" href={`/${locale}/gurman`}>
               <span className="manzil-footer__cta-icon"><FooterIcon name="gmail" /></span>
               <span>{t.cta}</span>
               <Icon name="arrow_forward" size={16} />

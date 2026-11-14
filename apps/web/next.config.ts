@@ -121,6 +121,30 @@ const nextConfig: NextConfig = {
   // The framework version is free reconnaissance for an attacker fingerprinting
   // known CVEs; nothing in the app reads it.
   poweredByHeader: false,
+  async redirects() {
+    return [
+      {
+        source: "/gurman/waitlist",
+        destination: "https://tally.so/r/eqJLdQ",
+        permanent: false
+      },
+      {
+        source: "/:locale(uz|ru|en)/gurman/waitlist",
+        destination: "https://tally.so/r/eqJLdQ",
+        permanent: false
+      },
+      {
+        source: "/business",
+        destination: "https://business.manzilgroup.uz/",
+        permanent: false
+      },
+      {
+        source: "/businesses",
+        destination: "https://business.manzilgroup.uz/",
+        permanent: false
+      }
+    ];
+  },
   async headers() {
     return [
       {

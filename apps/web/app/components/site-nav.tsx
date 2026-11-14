@@ -11,6 +11,7 @@ import { getBusinessCopy } from "../lib/business-copy";
 const links = [
   { key: "home" as const, href: (locale: Locale) => `/${locale}` },
   { key: "discover" as const, href: (locale: Locale) => `/${locale}/discover` },
+  { key: "gurman" as const, href: (locale: Locale) => `/${locale}/gurman` },
   { key: "docs" as const, href: (locale: Locale) => `/${locale}/docs` },
   { key: "forBusiness" as const, href: (locale: Locale) => `/${locale}/business` }
 ];
@@ -27,13 +28,15 @@ export function SiteNav({ locale }: { locale: Locale }) {
         const label =
           link.key === "home"
             ? copy.nav.home
-            : link.key === "docs"
-              ? locale === "uz"
-                ? "Hujjatlar"
-                : locale === "ru"
-                  ? "Документы"
-                  : "Docs"
-              : copy.nav[link.key as keyof typeof copy.nav];
+            : link.key === "gurman"
+              ? "Gurman"
+              : link.key === "docs"
+                ? locale === "uz"
+                  ? "Hujjatlar"
+                  : locale === "ru"
+                    ? "Документы"
+                    : "Docs"
+                : copy.nav[link.key as keyof typeof copy.nav];
 
         return (
           <Link aria-current={active ? "page" : undefined} className={active ? "active" : undefined} href={href} key={link.key}>
@@ -64,6 +67,12 @@ const mobileIcons: Record<string, ReactNode> = {
       <path d="m20 20-3.5-3.5" />
     </svg>
   ),
+  gurman: (
+    <svg aria-hidden="true" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+      <path d="M12 2a10 10 0 0 0-7.07 17.07l1.41-1.41A8 8 0 1 1 12 4V2z" />
+      <path d="M12 8a4 4 0 1 0 4 4" />
+    </svg>
+  ),
   docs: (
     <svg aria-hidden="true" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
       <path d="M6 3h9l3 3v15H6z" />
@@ -92,6 +101,7 @@ export function MobileSiteNav({ locale }: { locale: Locale }) {
   const mobileLinks = [
     { key: "home" as const, href: `/${locale}`, label: copy.nav.home },
     { key: "discover" as const, href: `/${locale}/discover`, label: copy.nav.discover },
+    { key: "gurman" as const, href: `/${locale}/gurman`, label: "Gurman" },
     { key: "docs" as const, href: `/${locale}/docs`, label: locale === "uz" ? "Hujjatlar" : locale === "ru" ? "Документы" : "Docs" },
     { key: "forBusiness" as const, href: `/${locale}/business`, label: copy.nav.forBusiness }
   ];

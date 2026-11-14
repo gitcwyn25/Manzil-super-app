@@ -156,8 +156,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.5,
     changeFrequency: "monthly"
   });
+  const gurmanEntries = localizedEntries("/gurman", {
+    priority: 0.7,
+    changeFrequency: "weekly"
+  });
+  // /docs and /gurman/thanks are excluded from public sitemap while under placeholder/flow status
   const companyEntries = [
-    ...localizedEntries("/docs", { changeFrequency: "monthly", priority: 0.4 }),
     ...Object.values(docs)
       .filter((document) => !document.legal)
       .flatMap((document) => localizedEntries(document.path, {
@@ -165,5 +169,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.5
       }))
   ];
-  return [...staticEntries, ...companyEntries, ...categoryEntries, ...founderEntries, ...dynamicEntries];
+  return [...staticEntries, ...gurmanEntries, ...companyEntries, ...categoryEntries, ...founderEntries, ...dynamicEntries];
 }

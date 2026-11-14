@@ -8,7 +8,6 @@ import { pageMetadata } from "../../../lib/seo";
 type RouteParams = { locale: Locale; path: string[] };
 
 const documentPaths: Array<string[]> = [
-  ["docs"],
   ["about"],
   ["founders"],
   ["contact"],
