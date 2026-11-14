@@ -34,7 +34,8 @@ npm run build
 npm run preview
 ```
 
-The preview serves `http://127.0.0.1:4173`. The build prerenders eight pages to
+The preview serves `http://127.0.0.1:4173`. The build prerenders the corporate
+page, Docs, Gurman and seven retained company/legal documents to
 `dist/client` and adds the sitemap, robots policy and static 404. Deploy only
 `dist/client`; no runtime server, database or auth/API secret is required.
 Build-time SSR output is not part of the deployed frontend.
@@ -58,6 +59,9 @@ and actual performance/accessibility audit results are in the QA report.
 | Location | Responsibility |
 | --- | --- |
 | `src/routes/index.tsx` | Corporate route, metadata and section composition. |
+| `src/routes/docs.tsx`, `src/lib/docs.ts` | Unfinished Docs overview and maintainable planned section keys; always noindex. |
+| `src/routes/gurman.index.tsx` | Gurman preview and plain-anchor waitlist CTA. |
+| `src/routes/gurman.waitlist.tsx` | Development/SSR redirect; the static host issues the production 307. |
 | `src/routes/en.$.tsx` | Retained owned English company/legal routes and waitlist redirect. |
 | `src/components/marketing/` | Original marketing layout, responsive header/footer, concept figures and document renderer. |
 | `src/components/brand/ManzilMark.tsx` | Approved vector geometry; preserve three layers and square. |
@@ -86,11 +90,23 @@ query parameters. All For Businesses links target
 503 during preflight; a healthy destination or approved interim treatment is a
 release gate, not a frontend status claim.
 
-The existing Gurman waitlist remains at the verified owned alias
-`https://manzil-business.vercel.app/en/waitlist/gurman`, keeping its original
-form and API together. Both the route loader and static host/preview config
-preserve `/en/waitlist/gurman` as a temporary redirect. Preserve that old
-deployment, alias and API until its flow is intentionally migrated.
+The Gurman CTA goes through `/gurman/waitlist`, which issues a temporary 307
+to exactly `https://tally.so/r/eqJLdQ`. The Vercel rule uses an explicit
+`Location` header so incoming query parameters are discarded. The local
+preview reads the same rule. Existing localized waitlist bookmarks lead to
+`/gurman`, matching observed production routing. No form, submission API or
+database is introduced, and no old backend is removed.
+
+`/business` and `/businesses`, including the verified suffix/localized
+variants, retain their separate business destination. Current route evidence,
+screenshots, notification state and release/rollback details are in
+[the Docs/Gurman review](../../docs/gurman-waitlist/PR_DESCRIPTION.md).
+Telegram is pending operator access and a real submission/receipt test; follow
+[the operator setup](../../docs/gurman-waitlist/TELEGRAM_SETUP.md).
+
+No `/gurman/thanks` page is included. Retain Tally's own completion experience
+until the form owner approves and configures an on-site completion destination.
+CTA clicks never show a submitted state.
 
 Existing `/en/privacy`, `/en/terms` and `/en/review-rules` URLs permanently
 redirect to the retained `/en/legal/*` documents; `/en`, `/uz` and `/ru` redirect
@@ -106,10 +122,11 @@ reviewed release, production indexing must be enabled explicitly at build time
 with `MANZIL_INDEXING=production`; otherwise production would remain blocked
 from indexing. Do not change this setting merely to improve a preview SEO score.
 
-Current corporate production belongs to Vercel project `manzil-web` in team
-`manzil-group`. Its verified immutable rollback deployment is recorded in
-[RELEASE_PLAN.md](../../docs/v3/RELEASE_PLAN.md); provider metadata did not include
-a production Git SHA. A new V3 preview does not replace that deployment.
+The earlier `docs/v3` release records are historical. The 14 November
+[read-only audit](../../docs/gurman-waitlist/AUDIT.md) identifies current
+corporate production as Vercel project `manzil-v3-marketing` in team
+`manzil-group`, serving static files. No exact production Git SHA was exposed.
+The Docs/Gurman review records the current immutable rollback deployment.
 
 No production cutover, DNS/domain reassignment, old-host shutdown or shared
 service deletion is authorized by this package's creation. The owner must review

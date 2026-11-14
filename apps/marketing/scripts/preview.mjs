@@ -27,10 +27,33 @@ const types = {
 };
 createServer(async (request, response) => {
   const requestPath = new URL(request.url ?? "/", "http://localhost").pathname;
-  const redirect = routing.redirects.find((item) => item.source === requestPath);
+  const exactRedirect = routing.routes.find((item) => new RegExp(item.src).test(requestPath));
+  if (exactRedirect) {
+    response.writeHead(exactRedirect.status, exactRedirect.headers);
+    response.end();
+    return;
+  }
+  // Mirror the subset of Vercel's path patterns used by this static package.
+  // All rules are trusted, checked-in configuration; URL input is never a regex.
+  let destination;
+  const redirect = routing.redirects.find((item) => {
+    const pattern = item.source
+      .replace(":locale(en|uz|ru)", "(?<locale>en|uz|ru)")
+      .replace("/:path*", "(?:/(?<path>.*))?");
+    const match = new RegExp(`^${pattern}/?$`).exec(requestPath);
+    if (!match) return false;
+    destination = item.destination
+      .replace(":locale", match.groups?.locale ?? "")
+      .replace(":path*", match.groups?.path ?? "");
+    // Vercel's high-level redirects preserve query strings. The waitlist uses
+    // the literal Location rule above specifically to discard them.
+    const query = new URL(request.url ?? "/", "http://localhost").search;
+    destination += query;
+    return true;
+  });
   if (redirect) {
     response.writeHead(redirect.permanent ? 308 : 307, {
-      Location: redirect.destination,
+      Location: destination,
       "X-Robots-Tag": "noindex, nofollow",
     });
     response.end();

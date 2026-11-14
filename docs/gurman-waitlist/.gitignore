@@ -1,0 +1,5 @@
+# Regenerable runner copies and large homepage captures stay local. The six
+# entry-page review screenshots, reports and normalized observations are kept.
+evidence/browser-artifacts/
+home-regression/evidence/browser-artifacts/
+home-regression/screenshots/

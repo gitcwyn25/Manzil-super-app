@@ -1,0 +1,503 @@
+{
+  "checkedAt": "2026-11-14T04:40:32.251Z",
+  "method": "Read-only Node.js fetch GET, manual redirects with six-hop bound and host allowlist; no credentials, submissions, authentication, or provider mutations.",
+  "results": [
+    {
+      "name": "corporate",
+      "requestedUrl": "https://manzilgroup.uz/",
+      "checkedAt": "2026-11-14T04:40:30.168Z",
+      "chain": [
+        {
+          "url": "https://manzilgroup.uz/",
+          "status": 200,
+          "location": null,
+          "server": "Vercel",
+          "robotsHeader": "noindex, nofollow",
+          "vercelError": null
+        }
+      ],
+      "finalUrl": "https://manzilgroup.uz/",
+      "finalStatus": 200,
+      "title": "Manzil — The intelligence layer for local markets",
+      "canonical": "https://manzilgroup.uz/",
+      "robotsMeta": "noindex, nofollow",
+      "scriptSources": [
+        "/assets/index-C3Ukyj1P.js"
+      ],
+      "bodySha256": "38e04cd57dc7b460d3a178d4c38f356a71e1596c76a2622634e7165b6f1bf929",
+      "bodyBytes": 48999,
+      "submissionAttempted": false
+    },
+    {
+      "name": "docs",
+      "requestedUrl": "https://manzilgroup.uz/docs",
+      "checkedAt": "2026-11-14T04:40:30.199Z",
+      "chain": [
+        {
+          "url": "https://manzilgroup.uz/docs",
+          "status": 200,
+          "location": null,
+          "server": "Vercel",
+          "robotsHeader": "noindex, nofollow",
+          "vercelError": null
+        }
+      ],
+      "finalUrl": "https://manzilgroup.uz/docs",
+      "finalStatus": 200,
+      "title": "Manzil Documentation | Manzil",
+      "canonical": null,
+      "robotsMeta": "noindex, nofollow",
+      "scriptSources": [],
+      "bodySha256": "17d2be41d19e421030cbdbb70bcfd1ebc7e61faaab42bd082c6113b048845b5d",
+      "bodyBytes": 10507,
+      "submissionAttempted": false
+    },
+    {
+      "name": "gurman",
+      "requestedUrl": "https://manzilgroup.uz/gurman",
+      "checkedAt": "2026-11-14T04:40:30.199Z",
+      "chain": [
+        {
+          "url": "https://manzilgroup.uz/gurman",
+          "status": 200,
+          "location": null,
+          "server": "Vercel",
+          "robotsHeader": "noindex, nofollow",
+          "vercelError": null
+        }
+      ],
+      "finalUrl": "https://manzilgroup.uz/gurman",
+      "finalStatus": 200,
+      "title": "Gurman — Forthcoming Manzil Experience | Waitlist",
+      "canonical": "https://manzilgroup.uz/gurman",
+      "robotsMeta": null,
+      "scriptSources": [],
+      "bodySha256": "ccd83978d3603fdaa490ba7c7e99ffd4c0d364c7877b98688d53e020b1485eef",
+      "bodyBytes": 7594,
+      "submissionAttempted": false
+    },
+    {
+      "name": "thanks-existing",
+      "requestedUrl": "https://manzilgroup.uz/gurman/thanks",
+      "checkedAt": "2026-11-14T04:40:30.199Z",
+      "chain": [
+        {
+          "url": "https://manzilgroup.uz/gurman/thanks",
+          "status": 200,
+          "location": null,
+          "server": "Vercel",
+          "robotsHeader": "noindex, nofollow",
+          "vercelError": null
+        }
+      ],
+      "finalUrl": "https://manzilgroup.uz/gurman/thanks",
+      "finalStatus": 200,
+      "title": "Thank You | Gurman Waitlist",
+      "canonical": null,
+      "robotsMeta": "noindex, nofollow",
+      "scriptSources": [],
+      "bodySha256": "c03070c2326b3ef4473e6ba84d7fb569d21c3f93c7a54a0fc310747a6a480c90",
+      "bodyBytes": 1290,
+      "submissionAttempted": false
+    },
+    {
+      "name": "waitlist",
+      "requestedUrl": "https://manzilgroup.uz/gurman/waitlist",
+      "checkedAt": "2026-11-14T04:40:30.612Z",
+      "chain": [
+        {
+          "url": "https://manzilgroup.uz/gurman/waitlist",
+          "status": 307,
+          "location": "https://tally.so/r/eqJLdQ",
+          "server": "Vercel",
+          "robotsHeader": null,
+          "vercelError": null
+        },
+        {
+          "url": "https://tally.so/r/eqJLdQ",
+          "status": 200,
+          "location": null,
+          "server": "cloudflare",
+          "robotsHeader": null,
+          "vercelError": null
+        }
+      ],
+      "finalUrl": "https://tally.so/r/eqJLdQ",
+      "finalStatus": 200,
+      "title": "Gurman AI early access",
+      "canonical": "https://tally.so/r/eqJLdQ",
+      "robotsMeta": null,
+      "scriptSources": [
+        "/_next/static/chunks/polyfills-42372ed130431b0a.js",
+        "/_next/static/chunks/webpack-e5573faca2ad6a52.js",
+        "/_next/static/chunks/framework-396f35bf20174c3a.js",
+        "/_next/static/chunks/main-3dd944905be246e6.js",
+        "/_next/static/chunks/pages/_app-6e3e1b842d8444fe.js",
+        "/_next/static/chunks/98441-34df34e2b5d0fac9.js",
+        "/_next/static/chunks/66170-99bb3111db315c25.js",
+        "/_next/static/chunks/24607-aaa6e4d941576859.js",
+        "/_next/static/chunks/7832-c124d06b88565d73.js",
+        "/_next/static/chunks/29594-ef4a2337bbd4125e.js",
+        "/_next/static/chunks/36852-ed2565fdf1be036a.js",
+        "/_next/static/chunks/2027-c2c58f8d81ce257b.js"
+      ],
+      "bodySha256": "bdb93d9b75e953f4bcc19bc0bc366a7f42379bac23b9a0cea3cf812fcc8598d1",
+      "bodyBytes": 66197,
+      "submissionAttempted": false
+    },
+    {
+      "name": "waitlist-query",
+      "requestedUrl": "https://manzilgroup.uz/gurman/waitlist?source=route-audit&next=%2Fdocs",
+      "checkedAt": "2026-11-14T04:40:30.406Z",
+      "chain": [
+        {
+          "url": "https://manzilgroup.uz/gurman/waitlist?source=route-audit&next=%2Fdocs",
+          "status": 307,
+          "location": "https://tally.so/r/eqJLdQ?source=route-audit&next=%2Fdocs",
+          "server": "Vercel",
+          "robotsHeader": null,
+          "vercelError": null
+        },
+        {
+          "url": "https://tally.so/r/eqJLdQ?source=route-audit&next=%2Fdocs",
+          "status": 200,
+          "location": null,
+          "server": "cloudflare",
+          "robotsHeader": null,
+          "vercelError": null
+        }
+      ],
+      "finalUrl": "https://tally.so/r/eqJLdQ?source=route-audit&next=%2Fdocs",
+      "finalStatus": 200,
+      "title": "Gurman AI early access",
+      "canonical": "https://tally.so/r/eqJLdQ",
+      "robotsMeta": null,
+      "scriptSources": [
+        "/_next/static/chunks/polyfills-42372ed130431b0a.js",
+        "/_next/static/chunks/webpack-e5573faca2ad6a52.js",
+        "/_next/static/chunks/framework-396f35bf20174c3a.js",
+        "/_next/static/chunks/main-3dd944905be246e6.js",
+        "/_next/static/chunks/pages/_app-6e3e1b842d8444fe.js",
+        "/_next/static/chunks/98441-34df34e2b5d0fac9.js",
+        "/_next/static/chunks/66170-99bb3111db315c25.js",
+        "/_next/static/chunks/24607-aaa6e4d941576859.js",
+        "/_next/static/chunks/7832-c124d06b88565d73.js",
+        "/_next/static/chunks/29594-ef4a2337bbd4125e.js",
+        "/_next/static/chunks/36852-ed2565fdf1be036a.js",
+        "/_next/static/chunks/2027-c2c58f8d81ce257b.js"
+      ],
+      "bodySha256": "ac3cd6d1628a55f49ee3776a64144dd27dd265d45ada3927085bd148d57a7685",
+      "bodyBytes": 66322,
+      "submissionAttempted": false
+    },
+    {
+      "name": "business",
+      "requestedUrl": "https://manzilgroup.uz/business",
+      "checkedAt": "2026-11-14T04:40:31.058Z",
+      "chain": [
+        {
+          "url": "https://manzilgroup.uz/business",
+          "status": 307,
+          "location": "https://business.manzilgroup.uz/",
+          "server": "Vercel",
+          "robotsHeader": null,
+          "vercelError": null
+        },
+        {
+          "url": "https://business.manzilgroup.uz/",
+          "status": 307,
+          "location": "/uz",
+          "server": "Vercel",
+          "robotsHeader": null,
+          "vercelError": null
+        },
+        {
+          "url": "https://business.manzilgroup.uz/uz",
+          "status": 200,
+          "location": null,
+          "server": "Vercel",
+          "robotsHeader": null,
+          "vercelError": null
+        }
+      ],
+      "finalUrl": "https://business.manzilgroup.uz/uz",
+      "finalStatus": 200,
+      "title": "Manzil | Toshkentdagi kafe, restoran va xizmatlar",
+      "canonical": "https://manzilgroup.uz/uz",
+      "robotsMeta": "index, follow",
+      "scriptSources": [
+        "/_next/static/chunks/e3c40c1d-000f81d57753e222.js",
+        "/_next/static/chunks/87c73c54-014124adcece3495.js",
+        "/_next/static/chunks/8082-87f2e6ed3bc25574.js",
+        "/_next/static/chunks/main-app-37ddd271f2671a62.js",
+        "/_next/static/chunks/6887-3dd31f154bab2b82.js",
+        "/_next/static/chunks/755-54d5cf5ac947051a.js",
+        "/_next/static/chunks/3120-668bb02d2d9800dc.js",
+        "/_next/static/chunks/8011-2b8741492e703c66.js",
+        "/_next/static/chunks/301-7f38e6545cdf7143.js",
+        "/_next/static/chunks/app/%5Blocale%5D/layout-548aee182727932e.js",
+        "/_next/static/chunks/5587-a7b27532d27336d1.js",
+        "/_next/static/chunks/5604-b5f204aa4a23ec29.js"
+      ],
+      "bodySha256": "4ad7c6b3289d77493b4c915f49510ee8ad38bfd6dcd31338cc4a98ee7f7c9748",
+      "bodyBytes": 56566,
+      "submissionAttempted": false
+    },
+    {
+      "name": "businesses",
+      "requestedUrl": "https://manzilgroup.uz/businesses",
+      "checkedAt": "2026-11-14T04:40:31.013Z",
+      "chain": [
+        {
+          "url": "https://manzilgroup.uz/businesses",
+          "status": 307,
+          "location": "https://business.manzilgroup.uz/",
+          "server": "Vercel",
+          "robotsHeader": null,
+          "vercelError": null
+        },
+        {
+          "url": "https://business.manzilgroup.uz/",
+          "status": 307,
+          "location": "/uz",
+          "server": "Vercel",
+          "robotsHeader": null,
+          "vercelError": null
+        },
+        {
+          "url": "https://business.manzilgroup.uz/uz",
+          "status": 200,
+          "location": null,
+          "server": "Vercel",
+          "robotsHeader": null,
+          "vercelError": null
+        }
+      ],
+      "finalUrl": "https://business.manzilgroup.uz/uz",
+      "finalStatus": 200,
+      "title": "Manzil | Toshkentdagi kafe, restoran va xizmatlar",
+      "canonical": "https://manzilgroup.uz/uz",
+      "robotsMeta": "index, follow",
+      "scriptSources": [
+        "/_next/static/chunks/e3c40c1d-000f81d57753e222.js",
+        "/_next/static/chunks/87c73c54-014124adcece3495.js",
+        "/_next/static/chunks/8082-87f2e6ed3bc25574.js",
+        "/_next/static/chunks/main-app-37ddd271f2671a62.js",
+        "/_next/static/chunks/6887-3dd31f154bab2b82.js",
+        "/_next/static/chunks/755-54d5cf5ac947051a.js",
+        "/_next/static/chunks/3120-668bb02d2d9800dc.js",
+        "/_next/static/chunks/8011-2b8741492e703c66.js",
+        "/_next/static/chunks/301-7f38e6545cdf7143.js",
+        "/_next/static/chunks/app/%5Blocale%5D/layout-548aee182727932e.js",
+        "/_next/static/chunks/5587-a7b27532d27336d1.js",
+        "/_next/static/chunks/5604-b5f204aa4a23ec29.js"
+      ],
+      "bodySha256": "4ad7c6b3289d77493b4c915f49510ee8ad38bfd6dcd31338cc4a98ee7f7c9748",
+      "bodyBytes": 56566,
+      "submissionAttempted": false
+    },
+    {
+      "name": "customer",
+      "requestedUrl": "https://app.manzilgroup.uz/",
+      "checkedAt": "2026-11-14T04:40:31.553Z",
+      "chain": [
+        {
+          "url": "https://app.manzilgroup.uz/",
+          "status": 307,
+          "location": "/community",
+          "server": "Vercel",
+          "robotsHeader": null,
+          "vercelError": null
+        },
+        {
+          "url": "https://app.manzilgroup.uz/community",
+          "status": 200,
+          "location": null,
+          "server": "Vercel",
+          "robotsHeader": null,
+          "vercelError": null
+        }
+      ],
+      "finalUrl": "https://app.manzilgroup.uz/community",
+      "finalStatus": 200,
+      "title": "Manzil — Where local knowledge becomes useful",
+      "canonical": null,
+      "robotsMeta": null,
+      "scriptSources": [
+        "/assets/index-B2OBa5DQ.js"
+      ],
+      "bodySha256": "3d85a776c37c875fcdcfce598b15ae8bc5b5d674ac0d4b59ae84fbb49da90cd5",
+      "bodyBytes": 124573,
+      "submissionAttempted": false
+    },
+    {
+      "name": "customer-auth",
+      "requestedUrl": "https://app.manzilgroup.uz/auth",
+      "checkedAt": "2026-11-14T04:40:31.013Z",
+      "chain": [
+        {
+          "url": "https://app.manzilgroup.uz/auth",
+          "status": 307,
+          "location": "/auth?mode=login&next=%2Fcommunity",
+          "server": "Vercel",
+          "robotsHeader": null,
+          "vercelError": null
+        },
+        {
+          "url": "https://app.manzilgroup.uz/auth?mode=login&next=%2Fcommunity",
+          "status": 200,
+          "location": null,
+          "server": "Vercel",
+          "robotsHeader": null,
+          "vercelError": null
+        }
+      ],
+      "finalUrl": "https://app.manzilgroup.uz/auth?mode=login&next=%2Fcommunity",
+      "finalStatus": 200,
+      "title": "Manzil — Where local knowledge becomes useful",
+      "canonical": null,
+      "robotsMeta": null,
+      "scriptSources": [
+        "/assets/index-B2OBa5DQ.js"
+      ],
+      "bodySha256": "44fbb6f138df764f0f2ace0db7522b774a2ad8227e97b406e08a13fcdaf4708c",
+      "bodyBytes": 9747,
+      "submissionAttempted": false
+    },
+    {
+      "name": "business-platform",
+      "requestedUrl": "https://business.manzilgroup.uz/",
+      "checkedAt": "2026-11-14T04:40:31.013Z",
+      "chain": [
+        {
+          "url": "https://business.manzilgroup.uz/",
+          "status": 307,
+          "location": "/uz",
+          "server": "Vercel",
+          "robotsHeader": null,
+          "vercelError": null
+        },
+        {
+          "url": "https://business.manzilgroup.uz/uz",
+          "status": 200,
+          "location": null,
+          "server": "Vercel",
+          "robotsHeader": null,
+          "vercelError": null
+        }
+      ],
+      "finalUrl": "https://business.manzilgroup.uz/uz",
+      "finalStatus": 200,
+      "title": "Manzil | Toshkentdagi kafe, restoran va xizmatlar",
+      "canonical": "https://manzilgroup.uz/uz",
+      "robotsMeta": "index, follow",
+      "scriptSources": [
+        "/_next/static/chunks/e3c40c1d-000f81d57753e222.js",
+        "/_next/static/chunks/87c73c54-014124adcece3495.js",
+        "/_next/static/chunks/8082-87f2e6ed3bc25574.js",
+        "/_next/static/chunks/main-app-37ddd271f2671a62.js",
+        "/_next/static/chunks/6887-3dd31f154bab2b82.js",
+        "/_next/static/chunks/755-54d5cf5ac947051a.js",
+        "/_next/static/chunks/3120-668bb02d2d9800dc.js",
+        "/_next/static/chunks/8011-2b8741492e703c66.js",
+        "/_next/static/chunks/301-7f38e6545cdf7143.js",
+        "/_next/static/chunks/app/%5Blocale%5D/layout-548aee182727932e.js",
+        "/_next/static/chunks/5587-a7b27532d27336d1.js",
+        "/_next/static/chunks/5604-b5f204aa4a23ec29.js"
+      ],
+      "bodySha256": "4ad7c6b3289d77493b4c915f49510ee8ad38bfd6dcd31338cc4a98ee7f7c9748",
+      "bodyBytes": 56566,
+      "submissionAttempted": false
+    },
+    {
+      "name": "tally",
+      "requestedUrl": "https://tally.so/r/eqJLdQ",
+      "checkedAt": "2026-11-14T04:40:30.120Z",
+      "chain": [
+        {
+          "url": "https://tally.so/r/eqJLdQ",
+          "status": 200,
+          "location": null,
+          "server": "cloudflare",
+          "robotsHeader": null,
+          "vercelError": null
+        }
+      ],
+      "finalUrl": "https://tally.so/r/eqJLdQ",
+      "finalStatus": 200,
+      "title": "Gurman AI early access",
+      "canonical": "https://tally.so/r/eqJLdQ",
+      "robotsMeta": null,
+      "scriptSources": [
+        "/_next/static/chunks/polyfills-42372ed130431b0a.js",
+        "/_next/static/chunks/webpack-e5573faca2ad6a52.js",
+        "/_next/static/chunks/framework-396f35bf20174c3a.js",
+        "/_next/static/chunks/main-3dd944905be246e6.js",
+        "/_next/static/chunks/pages/_app-6e3e1b842d8444fe.js",
+        "/_next/static/chunks/98441-34df34e2b5d0fac9.js",
+        "/_next/static/chunks/66170-99bb3111db315c25.js",
+        "/_next/static/chunks/24607-aaa6e4d941576859.js",
+        "/_next/static/chunks/7832-c124d06b88565d73.js",
+        "/_next/static/chunks/29594-ef4a2337bbd4125e.js",
+        "/_next/static/chunks/36852-ed2565fdf1be036a.js",
+        "/_next/static/chunks/2027-c2c58f8d81ce257b.js"
+      ],
+      "bodySha256": "e04960ad8fa70ebecd13b11b10c21bf28a6ef4c32ce7681c819f9006acbf932f",
+      "bodyBytes": 66197,
+      "submissionAttempted": false
+    }
+  ],
+  "frameworkEvidence": {
+    "liveRootAssets": [
+      {
+        "asset": "/assets/index-C3Ukyj1P.js",
+        "status": 200,
+        "sha256": "a4e74092257284336eb0bbac400fb46f29700619bc86635e186db6f9185de237",
+        "bytes": 394373,
+        "localSamePath": {
+          "path": "apps/marketing/dist/client/assets/index-C3Ukyj1P.js",
+          "sha256": "59d095fa649c300f9ce519d4503d4c171c19a51cf698c48e1ffd36dcbbde4518",
+          "bytes": 394386
+        },
+        "matchesLocalSamePath": false
+      }
+    ],
+    "localMarketingIndex": {
+      "title": "Manzil — The intelligence layer for local markets",
+      "scripts": [
+        "/assets/index-C3Ukyj1P.js"
+      ],
+      "sha256": "f267fa5c9ec8f067f50800d1768b04851d605ce22e509615098e30ab55667b8f"
+    },
+    "interpretation": "Live root uses a static /assets/index-*.js bundle; this fingerprint is consistent with the imported Vite/TanStack marketing build, distinct from the legacy Next.js apps/web /_next assets. Framework alone is an inference; exact matching asset hashes provide stronger source correspondence.",
+    "bundleDifference": {
+      "method": "Direct live/local UTF-8 comparison isolates one differing minified substring; the remainder matches.",
+      "local": "gurmanWaitlist:`${ed}/en/waitlist/gurman`",
+      "live": "gurmanWaitlist:`${Y}/gurman`",
+      "inference": "Production is based on the local V3 artifact with a different waitlist destination; this does not prove an exact Git SHA."
+    }
+  },
+  "providerObservation": {
+    "checkedAt": "2026-11-14",
+    "method": "Read-only Vercel CLI inspect https://manzilgroup.uz --scope manzil-group --format=json; only public deployment and routing metadata retained.",
+    "deploymentId": "dpl_G71QGF62PVNxbvH22ATqAvvauEPw",
+    "project": "manzil-v3-marketing",
+    "immutableUrl": "https://manzil-v3-marketing-7luruup93-manzil-group.vercel.app",
+    "target": "production",
+    "state": "READY",
+    "createdAt": 1794620280786,
+    "serving": "Static outputDirectory \".\", framework null, no server middleware",
+    "configurationNotes": [
+      "Apex/www aliases already attached before this task audit.",
+      "Global X-Robots-Tag: noindex, nofollow is currently present.",
+      "Temporary waitlist redirects already exist in provider config.",
+      "Deployment metadata does not prove a Git source SHA."
+    ]
+  },
+  "limitations": [
+    "HTTP reachability is not a verified submission or customer authentication journey.",
+    "Telegram notification setup/receipt not tested; no form owner, Make, or intended chat access verified.",
+    "Historical docs/v3 provider records from 13 November are stale for current live hosting identity.",
+    "No browser rendering assessment in this HTTP evidence."
+  ]
+}

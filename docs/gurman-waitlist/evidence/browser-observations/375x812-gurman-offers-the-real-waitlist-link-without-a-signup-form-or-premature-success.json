@@ -1,0 +1,20 @@
+{
+  "checkedAt": "2026-11-14T04:54:40.386Z",
+  "project": "375x812",
+  "test": "Gurman offers the real waitlist link without a signup form or premature success",
+  "browser": "156.0.8078.4",
+  "viewport": {
+    "width": 375,
+    "height": 812
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "failedLocalResponses": [],
+  "externalRequests": [],
+  "layout": {
+    "viewport": 375,
+    "document": 375,
+    "body": 375
+  },
+  "screenshot": "D:\\Desktop\\Desktop\\Projects\\SEO\\manzil-v3-review\\docs\\gurman-waitlist\\screenshots\\gurman-375x812.png"
+}

@@ -6,7 +6,9 @@ if (!["127.0.0.1", "localhost", "[::1]"].includes(new URL(baseURL).hostname)) {
   throw new Error("Marketing smoke tests may target a local preview only.");
 }
 
-const evidenceDirectory = path.resolve(__dirname, "../../../docs/v3/evidence");
+const reviewDirectory =
+  process.env.MANZIL_QA_DIRECTORY || path.resolve(__dirname, "../../../docs/v3");
+const evidenceDirectory = path.join(reviewDirectory, "evidence");
 
 module.exports = defineConfig({
   testDir: __dirname,

@@ -45,4 +45,12 @@ describe("customer entry points", () => {
   it("For Businesses goes to the separate business page, not customer sign-up", () => {
     expect(links.forBusinesses).toBe("https://business.manzilgroup.uz");
   });
+
+  it("uses corporate entry points and the owner's exact Tally form", () => {
+    expect(links.docs).toBe("/docs");
+    expect(links.gurman).toBe("/gurman");
+    expect(links.gurmanWaitlist).toBe("/gurman");
+    expect(links.gurmanWaitlistEntry).toBe("/gurman/waitlist");
+    expect(links.tallyGurmanWaitlist).toBe("https://tally.so/r/eqJLdQ");
+  });
 });

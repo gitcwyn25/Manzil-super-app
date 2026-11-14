@@ -7,6 +7,7 @@ await access(new URL("index.html", directory));
 const production = process.env.MANZIL_INDEXING === "production";
 const routes = [
   "/",
+  "/gurman",
   "/en/about",
   "/en/contact",
   "/en/legal/privacy",
@@ -24,7 +25,9 @@ async function visit(path) {
       const html = await readFile(file, "utf8");
       await writeFile(
         file,
-        html.replace("</head>", '<meta name="robots" content="noindex, nofollow" /></head>'),
+        html
+          .replace(/<meta\s+name="robots"[^>]*>/gi, "")
+          .replace("</head>", '<meta name="robots" content="noindex, nofollow" /></head>'),
       );
     }
   }

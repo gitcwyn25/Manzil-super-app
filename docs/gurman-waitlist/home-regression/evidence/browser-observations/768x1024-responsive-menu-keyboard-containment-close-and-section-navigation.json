@@ -1,0 +1,16 @@
+{
+  "checkedAt": "2026-11-14T04:46:17.716Z",
+  "project": "768x1024",
+  "test": "responsive menu, keyboard containment, close and section navigation",
+  "browser": "156.0.8078.4",
+  "viewport": {
+    "width": 768,
+    "height": 1024
+  },
+  "consoleErrors": [],
+  "consoleWarnings": [],
+  "pageErrors": [],
+  "failedLocalResponses": [],
+  "externalResources": [],
+  "blockedExternalNavigations": []
+}

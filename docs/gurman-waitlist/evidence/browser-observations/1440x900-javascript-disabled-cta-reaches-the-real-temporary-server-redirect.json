@@ -1,0 +1,20 @@
+{
+  "checkedAt": "2026-11-14T04:54:57.485Z",
+  "project": "1440x900",
+  "test": "JavaScript-disabled CTA reaches the real temporary server redirect",
+  "browser": "156.0.8078.4",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "failedLocalResponses": [],
+  "externalRequests": [],
+  "noJavaScriptRedirect": {
+    "status": 307,
+    "location": "https://tally.so/r/eqJLdQ",
+    "cacheControl": "no-store",
+    "interceptedBeforeExternalNavigation": true
+  }
+}

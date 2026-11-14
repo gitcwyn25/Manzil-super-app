@@ -23,6 +23,22 @@ $env:MANZIL_CHROMIUM_EXECUTABLE = Join-Path $env:LOCALAPPDATA 'ms-playwright/chr
 node (Join-Path $env:MANZIL_PLAYWRIGHT_TEST 'cli.js') test --config tests/playwright.config.cjs
 ```
 
+For the Docs/Gurman extension, run the dedicated configuration as well:
+
+```powershell
+npx --no-install playwright test --config tests/gurman-waitlist.config.cjs
+```
+
+It checks desktop/mobile layout, canonical/noindex/sitemap rules, business and
+legacy route continuity, and the plain-anchor waitlist flow with JavaScript
+disabled. The CTA test reads the real local 307 response and stops navigation
+before the external form is requested. It does not submit a Tally response.
+Screenshots and JSON evidence are saved in `docs/gurman-waitlist`.
+
+Set `MANZIL_QA_DIRECTORY` to an absolute review directory when running the
+original homepage suite to preserve historical evidence. The dedicated
+Docs/Gurman suite always uses its own review directory.
+
 `MANZIL_PREVIEW_URL` optionally changes the default `http://127.0.0.1:4173`. The configuration rejects public hostnames. `MANZIL_PLAYWRIGHT_TEST` and `MANZIL_CHROMIUM_EXECUTABLE` are optional overrides for a separately installed QA tool and browser; ordinary installations need neither.
 
 The three projects cover 375×812, 768×1024 and 1440×900. They check content/asset loading and dimensions, overflow, anchor ownership, customer/business/legal destinations, responsive menu behavior, keyboard focus, Escape/close behavior, reduced-motion visibility, local legal content and runtime/network errors. No external product account flow is tested.

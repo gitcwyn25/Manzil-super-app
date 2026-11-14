@@ -20,6 +20,8 @@ export default defineConfig({
       },
       pages: [
         { path: "/" },
+        { path: "/docs" },
+        { path: "/gurman" },
         ...[
           "about",
           "contact",

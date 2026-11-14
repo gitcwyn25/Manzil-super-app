@@ -7,9 +7,6 @@
 export const APP_ORIGIN = "https://app.manzilgroup.uz";
 export const CORPORATE_ORIGIN = "https://manzilgroup.uz";
 export const BUSINESS_ORIGIN = "https://business.manzilgroup.uz";
-// Provider ownership verified; this surviving alias serves the existing form/API
-// without routing visitors back through the corporate domain after its cutover.
-export const LEGACY_CONTENT_ORIGIN = "https://manzil-business.vercel.app";
 
 /** Where the customer lands after auth: the Community feed (app root). */
 const COMMUNITY_HOME = "/";
@@ -52,7 +49,11 @@ export const links = {
   privacy: "/en/legal/privacy",
   terms: "/en/legal/terms",
   communityRules: "/en/legal/reviews",
-  gurmanWaitlist: `${LEGACY_CONTENT_ORIGIN}/en/waitlist/gurman`,
+  docs: "/docs",
+  gurman: "/gurman",
+  gurmanWaitlistEntry: "/gurman/waitlist",
+  tallyGurmanWaitlist: "https://tally.so/r/eqJLdQ",
+  gurmanWaitlist: "/gurman",
   instagram: "https://www.instagram.com/manzil.finds",
   youtube: "https://www.youtube.com/@ManzilGroupUz",
   x: "https://x.com/ManzilUz",
