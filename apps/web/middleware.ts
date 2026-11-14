@@ -53,6 +53,48 @@ function isRootPath(pathname: string) {
  * change) and a genuinely unknown path becomes `/uz/xyz` — a real 404 page
  * with a 404 status, never a 500.
  */
+function businessHostRedirect(request: NextRequest): NextResponse | null {
+  const host = request.headers.get("x-forwarded-host") || request.headers.get("host") || request.nextUrl.hostname;
+  const hostname = host.split(":")[0].toLowerCase();
+  const isBusinessHost = hostname.startsWith("business.") || hostname.includes("manzil-business");
+
+  if (!isBusinessHost) return null;
+
+  const { pathname } = request.nextUrl;
+  const segments = pathname.split("/").filter(Boolean);
+  const first = segments[0];
+
+  // If path is root:
+  if (!first || pathname === "/") {
+    const url = request.nextUrl.clone();
+    url.pathname = `/${defaultLocale}/business`;
+    return NextResponse.redirect(url, 307);
+  }
+
+  // If path is bare locale (e.g. /uz, /ru, /en):
+  if (isLocale(first) && segments.length === 1) {
+    const url = request.nextUrl.clone();
+    url.pathname = `/${first}/business`;
+    return NextResponse.redirect(url, 307);
+  }
+
+  // If path starts with /dashboard without locale prefix:
+  if (first === "dashboard") {
+    const url = request.nextUrl.clone();
+    url.pathname = `/${defaultLocale}${pathname}`;
+    return NextResponse.redirect(url, 307);
+  }
+
+  // If path starts with /business without locale prefix:
+  if (first === "business") {
+    const url = request.nextUrl.clone();
+    url.pathname = `/${defaultLocale}${pathname}`;
+    return NextResponse.redirect(url, 307);
+  }
+
+  return null;
+}
+
 function localeRedirect(request: NextRequest): NextResponse | null {
   const { pathname } = request.nextUrl;
   const [, first] = pathname.split("/");
@@ -72,6 +114,9 @@ async function handle(request: NextRequest) {
   if (isRootPath(request.nextUrl.pathname)) {
     return NextResponse.next();
   }
+
+  const businessRedirect = businessHostRedirect(request);
+  if (businessRedirect) return businessRedirect;
 
   return localeRedirect(request) ?? (await updateSession(request));
 }
