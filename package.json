@@ -8,6 +8,7 @@
     "packages/db",
     "apps/api",
     "apps/web",
+    "apps/reviews",
     "apps/admin",
     "apps/mobile",
     "marketing-office/telegram-bot"
@@ -15,6 +16,7 @@
   "scripts": {
     "dev": "npm run dev --workspace @manzil/web",
     "dev:web": "npm run dev --workspace @manzil/web",
+    "dev:reviews": "npm run dev --workspace @manzil/reviews",
     "dev:api": "npm run start:dev --workspace @manzil/api",
     "build": "npm run db:generate && npm run build --workspaces --if-present",
     "build:shared": "npm run build --workspace @manzil/shared",

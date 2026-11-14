@@ -3,6 +3,7 @@
 #   docker build -f apps/api/Dockerfile .
 
 FROM node:22-alpine AS builder
+RUN apk add --no-cache openssl
 WORKDIR /repo
 
 # Install workspace dependencies with the root lockfile.
@@ -25,6 +26,7 @@ RUN npx prisma generate --schema packages/db/schema.prisma \
 
 # ---------- Runtime ----------
 FROM node:22-alpine AS runner
+RUN apk add --no-cache openssl
 ENV NODE_ENV=production
 WORKDIR /repo
 

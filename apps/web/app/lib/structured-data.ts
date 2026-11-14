@@ -1,4 +1,5 @@
 import type { Business, Locale, Review } from "@manzil/shared";
+import { FOUNDER_COPY, FOUNDER_PROFILE } from "./founder-profile";
 import {
   absoluteUrl,
   BRAND,
@@ -25,6 +26,7 @@ export type JsonLdNode = Record<string, unknown>;
 
 const ORG_ID = `${SITE_URL}/#organization`;
 const WEBSITE_ID = `${SITE_URL}/#website`;
+const FOUNDER_ID = `${canonicalUrl("en", FOUNDER_PROFILE.path)}#person`;
 
 const ORG_DESCRIPTION: Record<Locale, string> = {
   uz: "Manzil - Toshkentdagi bizneslarni topish va haqiqiy sharhlar platformasi.",
@@ -43,6 +45,13 @@ export function organizationSchema(locale: Locale): JsonLdNode {
     "@type": "Organization",
     "@id": ORG_ID,
     name: BRAND.name,
+    alternateName: "Manzil Group",
+    founder: {
+      "@type": "Person",
+      "@id": FOUNDER_ID,
+      name: FOUNDER_PROFILE.name,
+      url: canonicalUrl(locale, FOUNDER_PROFILE.path)
+    },
     url: SITE_URL,
     description: ORG_DESCRIPTION[locale],
     logo: {
@@ -67,12 +76,7 @@ export function organizationSchema(locale: Locale): JsonLdNode {
   };
 }
 
-/**
- * WebSite node with the SearchAction that lets a search engine offer a
- * sitelinks search box. The target is the real discover route - it already
- * reads `?q=` server-side, so the action resolves to a working page rather
- * than a decorative declaration.
- */
+/** The public website introduces the independent apps through its hub. */
 export function websiteSchema(locale: Locale): JsonLdNode {
   return {
     "@context": "https://schema.org",
@@ -81,19 +85,51 @@ export function websiteSchema(locale: Locale): JsonLdNode {
     url: SITE_URL,
     name: SITE_NAME,
     inLanguage: locale,
-    publisher: { "@id": ORG_ID },
-    potentialAction: {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: `${canonicalUrl(locale, "/discover")}?q={search_term_string}`
-      },
-      "query-input": "required name=search_term_string"
-    }
+    publisher: { "@id": ORG_ID }
   };
 }
 
 export type Crumb = { name: string; path: string };
+
+/** The biography and publication details are also visible on the profile. */
+export function founderProfileSchema(locale: Locale): JsonLdNode {
+  const url = canonicalUrl(locale, FOUNDER_PROFILE.path);
+  const publication = FOUNDER_PROFILE.publication;
+  return {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    "@id": `${url}#profile`,
+    url,
+    name: FOUNDER_COPY[locale].title,
+    inLanguage: locale,
+    isPartOf: { "@id": WEBSITE_ID },
+    mainEntity: {
+      "@type": "Person",
+      "@id": FOUNDER_ID,
+      name: FOUNDER_PROFILE.name,
+      url,
+      image: absoluteUrl(FOUNDER_PROFILE.image),
+      description: FOUNDER_COPY[locale].bio,
+      jobTitle: FOUNDER_COPY[locale].role,
+      worksFor: { "@id": ORG_ID },
+      alumniOf: { "@type": "CollegeOrUniversity", name: FOUNDER_PROFILE.university },
+      affiliation: { "@type": "CollegeOrUniversity", name: FOUNDER_PROFILE.mastersUniversity },
+      sameAs: [FOUNDER_PROFILE.linkedIn]
+    },
+    citation: {
+      "@type": "ScholarlyArticle",
+      name: publication.title,
+      url: publication.url,
+      datePublished: publication.published,
+      inLanguage: "en",
+      author: [
+        { "@type": "Person", name: publication.coauthor },
+        { "@id": FOUNDER_ID }
+      ],
+      isPartOf: { "@type": "Periodical", name: publication.journal }
+    }
+  };
+}
 
 /** BreadcrumbList from locale-relative paths. */
 export function breadcrumbSchema(locale: Locale, crumbs: Crumb[]): JsonLdNode {

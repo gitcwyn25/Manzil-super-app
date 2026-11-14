@@ -7,10 +7,11 @@ import type { ReactNode } from "react";
 import { getBusinessCopy } from "../lib/business-copy";
 
 // The public header has one deliberate link set: Home, Discover, Docs,
-// and For Business. Authenticated workspace/admin destinations stay out.
+// and Cooperation. Discover is the public hub for the independent apps.
 const links = [
   { key: "home" as const, href: (locale: Locale) => `/${locale}` },
   { key: "discover" as const, href: (locale: Locale) => `/${locale}/discover` },
+  { key: "gurman" as const, href: (locale: Locale) => `/${locale}/gurman` },
   { key: "docs" as const, href: (locale: Locale) => `/${locale}/docs` },
   { key: "forBusiness" as const, href: (locale: Locale) => `/${locale}/business` }
 ];
@@ -27,16 +28,18 @@ export function SiteNav({ locale }: { locale: Locale }) {
         const label =
           link.key === "home"
             ? copy.nav.home
-            : link.key === "docs"
-              ? locale === "uz"
-                ? "Hujjatlar"
-                : locale === "ru"
-                  ? "Документы"
-                  : "Docs"
-              : copy.nav[link.key as keyof typeof copy.nav];
+            : link.key === "gurman"
+              ? "Gurman"
+              : link.key === "docs"
+                ? locale === "uz"
+                  ? "Hujjatlar"
+                  : locale === "ru"
+                    ? "Документы"
+                    : "Docs"
+                : copy.nav[link.key as keyof typeof copy.nav];
 
         return (
-          <Link className={active ? "active" : undefined} href={href} key={link.key}>
+          <Link aria-current={active ? "page" : undefined} className={active ? "active" : undefined} href={href} key={link.key}>
             {label}
           </Link>
         );
@@ -62,6 +65,12 @@ const mobileIcons: Record<string, ReactNode> = {
     <svg aria-hidden="true" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
       <circle cx="11" cy="11" r="7" />
       <path d="m20 20-3.5-3.5" />
+    </svg>
+  ),
+  gurman: (
+    <svg aria-hidden="true" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+      <path d="M12 2a10 10 0 0 0-7.07 17.07l1.41-1.41A8 8 0 1 1 12 4V2z" />
+      <path d="M12 8a4 4 0 1 0 4 4" />
     </svg>
   ),
   docs: (
@@ -92,6 +101,7 @@ export function MobileSiteNav({ locale }: { locale: Locale }) {
   const mobileLinks = [
     { key: "home" as const, href: `/${locale}`, label: copy.nav.home },
     { key: "discover" as const, href: `/${locale}/discover`, label: copy.nav.discover },
+    { key: "gurman" as const, href: `/${locale}/gurman`, label: "Gurman" },
     { key: "docs" as const, href: `/${locale}/docs`, label: locale === "uz" ? "Hujjatlar" : locale === "ru" ? "Документы" : "Docs" },
     { key: "forBusiness" as const, href: `/${locale}/business`, label: copy.nav.forBusiness }
   ];
@@ -100,7 +110,8 @@ export function MobileSiteNav({ locale }: { locale: Locale }) {
     <nav className="mobile-nav" aria-label="Mobil navigatsiya">
       {mobileLinks.map((link) => (
         <Link
-          className={pathname === link.href || (link.key === "home" && pathname === `/${locale}`) ? "active" : undefined}
+          aria-current={pathname === link.href || (link.key !== "home" && pathname.startsWith(`${link.href}/`)) ? "page" : undefined}
+          className={pathname === link.href || (link.key !== "home" && pathname.startsWith(`${link.href}/`)) ? "active" : undefined}
           href={link.href}
           key={link.key}
         >

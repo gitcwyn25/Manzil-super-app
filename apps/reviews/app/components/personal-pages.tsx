@@ -1,0 +1,27 @@
+"use client";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { ArrowRight, Bookmark, MessageSquare, Store } from "lucide-react";
+import { api, type Favorite, type ListType, type Review } from "../lib/api";
+import { useApp } from "./providers";
+import { BusinessCard, Empty, Notice, SignInPrompt } from "./ui";
+import { ReviewItem } from "./business-view";
+type Profile = { user: { id: string; email: string; displayName: string; locale: string; role: string }; reviews: Review[] };
+export function SavedPage() {
+  const { user, authReady, token, t } = useApp();
+  const [items, setItems] = useState<Favorite[]>([]), [error, setError] = useState(""), [loading, setLoading] = useState(true), [filter, setFilter] = useState<ListType | "all">("all"), [busy, setBusy] = useState("");
+  useEffect(() => { if (!user) return; let live = true; void token().then(access => api<{ items: Favorite[] }>("/reviews-directory/favorites", {}, access)).then(data => { if (live) setItems(data.items); }).catch(e => { if (live) setError((e as Error).message); }).finally(() => { if (live) setLoading(false); }); return () => { live = false; }; }, [user?.id]);
+  async function remove(item: Favorite) { setBusy(item.id); setError(""); try { await api(`/reviews-directory/favorites/${encodeURIComponent(item.businessId)}?listType=${item.listType}`, { method: "DELETE" }, await token()); setItems(previous => previous.filter(i => i.id !== item.id)); } catch (e) { setError((e as Error).message); } finally { setBusy(""); } }
+  if (!authReady) return <div className="container page-section" role="status">Loading your account…</div>;
+  if (!user) return <div className="container page-section"><SignInPrompt/></div>;
+  const filtered = items.filter(item => filter === "all" || item.listType === filter);
+  return <section className="container page-section"><span className="eyebrow">YOUR PERSONAL CITY GUIDE</span><div className="section-heading"><div><h1>{t.saved}</h1><p>Good finds, kept close. Save places for whatever comes next.</p></div><Bookmark size={32}/></div><div className="tabs" aria-label="Saved lists">{(["all", "favorites", "want_to_try", "visited"] as const).map(type => <button key={type} onClick={() => setFilter(type)} aria-pressed={filter === type}>{type === "all" ? "All places" : t[type]} <span>{items.filter(i => type === "all" || i.listType === type).length}</span></button>)}</div>{error && <Notice error>{error}</Notice>}{loading ? <p role="status">Loading your saved places…</p> : filtered.length ? <div className="saved-grid">{filtered.map(item => <div key={item.id}><BusinessCard business={item.business}/><div className="saved-item-footer"><span>{t[item.listType]}</span><button disabled={busy === item.id} onClick={() => void remove(item)}>{busy === item.id ? "Removing…" : "Remove"}</button></div></div>)}</div> : !error && <Empty title={t.noSaved}><p>Choose a place and save it to a list. Your choices stay with your account.</p><Link className="button" href="/">{t.browse}<ArrowRight size={17}/></Link></Empty>}</section>;
+}
+export function ProfilePage() {
+  const { user, authReady, token, signOut } = useApp();
+  const [profile, setProfile] = useState<Profile | null>(null), [error, setError] = useState(""), [loading, setLoading] = useState(true);
+  useEffect(() => { if (!user) return; let live = true; void token().then(access => api<Profile>("/reviews-directory/profile", {}, access)).then(data => { if (live) setProfile(data); }).catch(e => { if (live) setError((e as Error).message); }).finally(() => { if (live) setLoading(false); }); return () => { live = false; }; }, [user?.id]);
+  if (!authReady) return <div className="container page-section" role="status">Loading your account…</div>;
+  if (!user) return <div className="container page-section"><SignInPrompt/></div>;
+  return <section className="container page-section profile-page"><div className="profile-header"><div className="avatar large">{(profile?.user.displayName || user.email || "M").slice(0,1).toUpperCase()}</div><div><span className="eyebrow">YOUR MANZIL</span><h1>{profile?.user.displayName || "Your profile"}</h1><p>{profile?.user.email || user.email}</p></div><button className="button secondary small" onClick={() => void signOut()}>Sign out</button></div><div className="profile-shortcuts"><Link className="surface" href="/saved"><Bookmark size={23}/><h2>Saved places</h2><p>Favourites, wish lists, and places you have visited.</p><ArrowRight size={18}/></Link><Link className="surface" href="/owners"><Store size={23}/><h2>Your business</h2><p>Manage a business, claim a listing, or add a new place.</p><ArrowRight size={18}/></Link></div><div className="section-heading"><div><span className="eyebrow">YOUR CONTRIBUTIONS</span><h2>Review history</h2></div><MessageSquare size={24}/></div>{error && <Notice error>{error} <a href="/profile">Reload profile</a></Notice>}{loading ? <p role="status">Loading your reviews…</p> : profile?.reviews.length ? <div className="surface">{profile.reviews.map(r => <div key={r.id}><Link className="text-link" href={`/business/${encodeURIComponent(r.businessSlug)}`}>View place ↗</Link><ReviewItem review={r}/></div>)}</div> : !error && <Empty title="Your local perspective matters"><p>Find a place you know and share your first review. Submitted reviews appear here with their moderation status.</p><Link className="button" href="/">Explore places</Link></Empty>}</section>;
+}

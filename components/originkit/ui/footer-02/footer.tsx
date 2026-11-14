@@ -4,6 +4,7 @@
 import type { Locale } from "@manzil/shared";
 import Link from "next/link";
 import Tetris from "./tetris";
+import { FOUNDER_PROFILE } from "../../../../apps/web/app/lib/founder-profile";
 
 type FooterCopy = {
   brandDescription: string;
@@ -32,6 +33,7 @@ const FOOTER_COPY: Record<Locale, FooterCopy> = {
         links: [
           { label: "Manzil haqida", href: "/about" },
           { label: "Asoschilar", href: "/founders" },
+          { label: FOUNDER_PROFILE.name, href: FOUNDER_PROFILE.path },
           { label: "Bog'lanish", href: "/contact" },
           { label: "Biznes uchun", href: "/business" }
         ]
@@ -65,6 +67,7 @@ const FOOTER_COPY: Record<Locale, FooterCopy> = {
         links: [
           { label: "О Manzil", href: "/about" },
           { label: "Основатели", href: "/founders" },
+          { label: FOUNDER_PROFILE.name, href: FOUNDER_PROFILE.path },
           { label: "Контакты", href: "/contact" },
           { label: "Для бизнеса", href: "/business" }
         ]
@@ -98,6 +101,7 @@ const FOOTER_COPY: Record<Locale, FooterCopy> = {
         links: [
           { label: "About Manzil", href: "/about" },
           { label: "Founders", href: "/founders" },
+          { label: FOUNDER_PROFILE.name, href: FOUNDER_PROFILE.path },
           { label: "Contact", href: "/contact" },
           { label: "For business", href: "/business" }
         ]

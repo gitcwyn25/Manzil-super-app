@@ -106,27 +106,27 @@ export const ROUTE_SEO = {
     path: "",
     absoluteTitle: true,
     title: {
-      uz: "Manzil - Toshkentdagi joylarni kashf eting",
-      ru: "Manzil - места Ташкента",
-      en: "Manzil - discover Tashkent"
+      uz: "Manzil | Toshkentdagi kafe, restoran va xizmatlar",
+      ru: "Manzil | Кафе, рестораны и услуги в Ташкенте",
+      en: "Manzil | Cafés, Restaurants & Local Services in Tashkent"
     },
     description: {
-      uz: "Toshkentdagi kafe, restoran va xizmatlarni haqiqiy sharhlar asosida toping.",
-      ru: "Находите кафе, рестораны и услуги Ташкента по реальным отзывам.",
-      en: "Find cafés, restaurants and services in Tashkent through real reviews."
+      uz: "Manzil bilan Toshkentdagi kafe, restoran, avtoservis va mahalliy xizmatlarni toping. Kategoriya, tuman va shaxsiy afzalliklaringizga mos joylarni solishtiring.",
+      ru: "Находите кафе, рестораны, автосервисы и местные услуги в Ташкенте с Manzil. Сравнивайте места по категории, району и вашим предпочтениям.",
+      en: "Find cafés, restaurants, car services and local businesses in Tashkent with Manzil. Compare places by category, district and your preferences."
     }
   },
   discover: {
     path: "/discover",
     title: {
-      uz: "Kashfiyot - Toshkentdagi joylarni qidiring",
-      ru: "Поиск - места Ташкента",
-      en: "Discover - search places in Tashkent"
+      uz: "Manzil ilovalari — joylar, rejalar va sharhlar",
+      ru: "Приложения Manzil — места, планы и отзывы",
+      en: "Manzil apps — places, plans and reviews"
     },
     description: {
-      uz: "Kategoriya, tuman va reyting bo'yicha filtrlab Toshkentdagi joylarni qidiring. Har bir kartochka katalogdagi real biznes.",
-      ru: "Ищите места в Ташкенте с фильтрами по категории, району и рейтингу. Каждая карточка - реальный бизнес из каталога.",
-      en: "Search places in Tashkent with filters for category, district and rating. Every card is a real listed business."
+      uz: "Manzil ilovalariga bitta sahifadan o'ting. Discover bilan sayohat va kunlik rejalaringizni tuzing, Reviews bilan mahalliy bizneslar va sharhlarni o'rganing.",
+      ru: "Все приложения Manzil на одной странице. Планируйте поездки с Discover, находите местные компании и читайте отзывы в Reviews.",
+      en: "Find the Manzil app for your next step. Plan places and trips with Discover, or explore local businesses, reviews and saved places with Reviews."
     }
   },
   lists: {

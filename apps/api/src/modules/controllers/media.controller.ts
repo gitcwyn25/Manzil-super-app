@@ -66,10 +66,13 @@ export class MediaController {
     } else {
       const review = await this.prisma.review.findUnique({
         where: { id: ownerId },
-        select: { id: true }
+        select: { id: true, userId: true }
       });
       if (!review) {
         throw new BadRequestException("Target review not found");
+      }
+      if (review.userId !== actor.userId) {
+        throw new ForbiddenException("Only the reviewer can attach photos to this review");
       }
       reviewId = review.id;
     }

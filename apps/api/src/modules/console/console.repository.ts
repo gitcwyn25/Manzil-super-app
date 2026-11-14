@@ -188,14 +188,29 @@ export class ConsoleRepository {
       if (!before) throw new NotFoundException("Business not found");
       if (before.status === "claimed") throw new ConflictException("Business already approved/claimed");
 
-      const after = await tx.business.update({ where: { id }, data: { status: "claimed" } });
+      // This is approval of the registrant's own new listing, not a transfer
+      // based on an unrelated manual claim. Credential-only console admins
+      // are recorded by AuditLog; their AdminUser id is not a ClaimReviewer User id.
+      const registrationClaim = before.status === "pending_claim" && before.createdByUserId && !before.claimedByUserId
+        ? await tx.claim.findFirst({ where: { businessId: id, userId: before.createdByUserId, verificationMethod: "registration", status: "pending" }, select: { id: true, userId: true } })
+        : null;
+      if (registrationClaim) {
+        const approved = await tx.claim.updateMany({ where: { id: registrationClaim.id, status: "pending" }, data: { status: "approved" } });
+        if (approved.count !== 1) throw new ConflictException("Registration claim was already reviewed");
+        // Do not demote an admin or overwrite an existing business-owner role.
+        await tx.user.updateMany({ where: { id: registrationClaim.userId, role: "consumer" }, data: { role: "business_owner" } });
+      }
+      const after = await tx.business.update({ where: { id }, data: {
+        status: "claimed",
+        ...(registrationClaim ? { claimedByUserId: registrationClaim.userId, claimedAt: before.claimedAt ?? new Date() } : {})
+      } });
       await writeAudit(tx, {
         actorId: ctx.adminId,
         action: "business.approve",
         targetType: "business",
         targetId: id,
         beforeState: { status: before.status },
-        afterState: { status: after.status },
+        afterState: { status: after.status, ...(registrationClaim ? { claimedByUserId: registrationClaim.userId, registrationClaimId: registrationClaim.id } : {}) },
         ipAddress: ctx.ip
       });
       return { id, status: after.status };
