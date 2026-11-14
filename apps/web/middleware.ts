@@ -78,6 +78,16 @@ function businessHostRedirect(request: NextRequest): NextResponse | null {
     return NextResponse.redirect(url, 307);
   }
 
+  // On business subdomain, ensure any old consumer routes redirect to the business landing page:
+  if (isLocale(first)) {
+    const second = segments[1];
+    if (second !== "business" && second !== "dashboard") {
+      const url = request.nextUrl.clone();
+      url.pathname = `/${first}/business`;
+      return NextResponse.redirect(url, 307);
+    }
+  }
+
   // If path starts with /dashboard without locale prefix:
   if (first === "dashboard") {
     const url = request.nextUrl.clone();
